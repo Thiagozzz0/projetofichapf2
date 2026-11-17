@@ -1,0 +1,3 @@
+Nosso objetivo é criar um gerador procedural de fichas de jogadores para Pathfinder 2E, irá desde a matemática básica dos atributos até os últimos detalhes para a finalização de personagem, deixando a ficha pronta para o jogador usar.
+Use apenas o "ref\P Basic 2.0 Teste.pdf" para extrair as informações que precisamos e ignore os demais pdfs da pasta.
+Use a pasta "templates" para colocar os arquivos do Front End, e use a pasta "dados" para colocar as informações, convertidas em json, da ficha, classe, raça, atributos, habilidades, talentos, magias, equipamentos e quaisquer demais características que sejam ligadas a ficha do jogador.
