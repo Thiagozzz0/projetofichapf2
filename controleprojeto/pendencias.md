@@ -17,7 +17,7 @@ Lista viva de todas as entregas e tarefas que ainda precisam ser realizadas até
 - [ ] **`ref/Class Multi.pdf` → `dados/classes.json`**
   - Todas as 12 Classes do Livro Básico (Alquimista, Bárbaro, Bardo, Campeão, Clérigo, Druida, Feiticeiro, Guerreiro, Ladino, Mago, Monge, Patrulheiro).
   - Atributo-chave, PV por nível, proficiências iniciais (Percepção, Fortitude, Reflexos, Vontade, Perícias, Ataques, Defesas, CD de Classe), tabela de progressão, características de classe, subclasses oficiais da classe (doutrinas, linhagens, instintos, etc.), talentos de classe e arquétipos multiclasse.
-- [ ] **`ref/Skill sfots.pdf` → `dados/pericias.json`**
+- [x] **`ref/Skill sfots.pdf` → `dados/pericias.json`** *(Concluído em `18/11/2026 — 17:25` — ver [05.md](finalizado/05.md))*
   - Lista completa de perícias e atributo associado.
   - Ações destreinadas e treinadas de cada perícia, graus de proficiência (Destreinado, Treinado, Especialista, Mestre, Lendário) e regras de Saber.
 - [ ] **`ref/Gifts.pdf` → `dados/talentos.json`**

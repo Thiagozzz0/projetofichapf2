@@ -1,0 +1,2991 @@
+{
+  "meta": {
+    "titulo": "Capítulo 4: Perícias — Pathfinder 2E Livro Básico",
+    "arquivo_origem": "ref/Skill sfots.pdf",
+    "paginas_livro_basico": "233-253",
+    "versao": "1.0.0",
+    "observacoes": "Conversão completa do Capítulo 4: Perícias, incluindo regras gerais de testes, proficiências, CDs simples, penalidades de armadura, Tabelas 4–1 a 4–4, ações gerais de perícia e todas as 17 perícias com suas ações destreinadas, treinadas e subcategorias de Saber."
+  },
+  "regras_gerais_pericias": {
+    "conceito": "Enquanto os atributos representam talento e potencial bruto, perícias representam treinamento e experiência em realizar determinadas tarefas. Cada perícia é vinculada a um atributo chave e utilizada para uma gama de ações relacionadas.",
+    "fontes_treinamento_nivel_1": {
+      "descricao": "Um personagem adquire treinamento em determinadas perícias no 1º nível: normalmente duas perícias por sua biografia, uma pequena quantidade de perícias pré-determinadas por sua classe e algumas perícias à escolha concedidas por sua classe (além de seu modificador de Inteligência, conforme o Capítulo 1).",
+      "efeito": "Aumenta a graduação de proficiência nessas perícias de destreinado para treinado e permite usar as ações treinadas dessas perícias.",
+      "regra_redundancia_treinado": "Cada vez após a primeira em que você fosse receber a graduação de proficiência de treinado em uma determinada perícia (por exemplo, biografia e classe concedendo ambas Manufatura), em vez disso você aloca a proficiência de treinado em qualquer outra perícia à sua escolha."
+    },
+    "atributo_chave": {
+      "regra": "Cada perícia é ligada a um atributo chave cujo modificador é somado aos testes e CDs ao utilizar essa perícia.",
+      "flexibilidade_mj": "Se julgar apropriado para uma determinada situação (como usar Recordar Conhecimento com uma perícia física), o MJ pode determinar que você utilize um modificador de atributo diferente para um teste de perícia ou para determinar sua CD de perícia."
+    },
+    "acoes_de_pericia": {
+      "destreinadas": "Qualquer um pode usar as ações destreinadas de uma perícia, independentemente de ser treinado ou não.",
+      "treinadas": "Podem ser usadas somente se possuir graduação de proficiência de treinado ou melhor nessa perícia.",
+      "restricoes_e_graduacao_superior": "Uma circunstância, condição ou efeito pode impedi-lo de realizar uma ação de perícia independentemente da proficiência. Às vezes o MJ pode exigir uma graduação de proficiência superior à listada na Tabela 4–1 para uma tarefa específica."
+    },
+    "aprimorando_pericias": {
+      "incrementos_de_pericia": {
+        "descricao": "Incrementos de perícia aprimoram sua proficiência nas perícias escolhidas nos níveis indicados pela sua classe.",
+        "niveis_desbloqueio": {
+          "treinado": "Qualquer nível (1º+)",
+          "especialista": "Qualquer nível (a partir do 1º/progressão de classe; tipicamente a partir do 3º pelos incrementos padrão)",
+          "mestre": "A partir do 7º nível",
+          "lendario": "A partir do 15º nível"
+        },
+        "regra_redundancia_superior": "Ao contrário de quando se torna treinado em uma perícia, se duas habilidades diferentes lhe tornariam especialista, mestre ou lendário em uma perícia, você não escolhe uma segunda perícia para aprimorar — o benefício redundante simplesmente não tem efeito."
+      },
+      "talentos_de_pericia": "Tipo de talento geral (sempre com o traço perícia) que frequentemente concede uma nova forma de usar uma perícia ou melhora um uso específico (apresentados no Capítulo 5)."
+    },
+    "testes_e_cds": {
+      "formula_modificador_pericia": "modificador_atributo_chave + bonus_proficiencia + outros_bonus + penalidades",
+      "formula_cd_pericia": "10 + modificador_pericia",
+      "regra_ficha": "Ao escrever o modificador na ficha de personagem, anote somente os números que sempre se aplicam (normalmente modificador de atributo + bônus de proficiência no 1º nível, e bônus de item contínuos em níveis superiores).",
+      "graduacoes_proficiencia": {
+        "destreinado": {
+          "nome": "Destreinado",
+          "codigo": "D",
+          "bonus_base": 0,
+          "soma_nivel": false,
+          "nivel_minimo_incremento": 1
+        },
+        "treinado": {
+          "nome": "Treinado",
+          "codigo": "T",
+          "bonus_base": 2,
+          "soma_nivel": true,
+          "nivel_minimo_incremento": 1
+        },
+        "especialista": {
+          "nome": "Especialista",
+          "codigo": "E",
+          "bonus_base": 4,
+          "soma_nivel": true,
+          "nivel_minimo_incremento": 1
+        },
+        "mestre": {
+          "nome": "Mestre",
+          "codigo": "M",
+          "bonus_base": 6,
+          "soma_nivel": true,
+          "nivel_minimo_incremento": 7
+        },
+        "lendario": {
+          "nome": "Lendário",
+          "codigo": "L",
+          "bonus_base": 8,
+          "soma_nivel": true,
+          "nivel_minimo_incremento": 15
+        }
+      },
+      "cds_simples": [
+        {
+          "dificuldade": "Destreinado",
+          "cd": 10
+        },
+        {
+          "dificuldade": "Treinado",
+          "cd": 15
+        },
+        {
+          "dificuldade": "Especialista",
+          "cd": 20
+        },
+        {
+          "dificuldade": "Mestre",
+          "cd": 30
+        },
+        {
+          "dificuldade": "Lendário",
+          "cd": 40
+        }
+      ]
+    },
+    "armaduras_e_pericias": {
+      "regra": "Se uma criatura estiver vestindo uma armadura que impõe penalidade em perícia, essa penalidade é aplicada a seus testes e CDs de perícia baseados em Força e Destreza — exceto se a ação possuir o traço ataque.",
+      "atributos_afetados": [
+        "Força",
+        "Destreza"
+      ],
+      "pericias_afetadas": [
+        "Acrobatismo",
+        "Atletismo",
+        "Furtividade",
+        "Ladroagem"
+      ],
+      "excecao_traco": "ataque",
+      "acoes_isentas_atletismo": [
+        "Agarrar",
+        "Derrubar",
+        "Empurrar",
+        "Forçar",
+        "Desarmar"
+      ],
+      "referencia": "Capítulo 6: Equipamentos, página 274"
+    },
+    "testes_secretos": {
+      "regra": "Se uma ação possuir o traço secreto, o MJ rola o teste para o jogador em segredo e informa o efeito sem revelar o resultado da rolagem ou o grau de sucesso (regra padrão, embora o MJ possa optar por rolagens públicas)."
+    },
+    "atividades_exploracao_e_recesso": {
+      "exploracao": "Normalmente levam um minuto ou mais; geralmente não podem ser usadas em encontros.",
+      "recesso": "Podem levar um dia ou mais; geralmente não podem ser usadas em encontros."
+    },
+    "resultados_criticos_padrao": "A maioria das perícias inclui seções para sucesso e falha, além de sucesso crítico e falha crítica. Se qualquer das seções de resultados críticos estiver ausente, trate esses resultados como um sucesso ou falha normal."
+  },
+  "tabelas": {
+    "tabela_4_1_pericias_atributos_acoes": [
+      {
+        "pericia": "Acrobatismo",
+        "atributo_chave": "Destreza",
+        "acoes_destreinadas": [
+          {
+            "id": "atravessar_acrobaticamente",
+            "nome": "Atravessar Acrobaticamente",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": false
+          },
+          {
+            "id": "equilibrar",
+            "nome": "Equilibrar",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": false
+          }
+        ],
+        "acoes_treinadas": [
+          {
+            "id": "espremer",
+            "nome": "Espremer",
+            "custo_acoes": "Exploração",
+            "exploracao": true,
+            "acao_geral": false,
+            "recesso": false
+          },
+          {
+            "id": "manobrar_em_voo",
+            "nome": "Manobrar em Voo",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": false
+          }
+        ]
+      },
+      {
+        "pericia": "Arcanismo",
+        "atributo_chave": "Inteligência",
+        "acoes_destreinadas": [
+          {
+            "id": "recordar_conhecimento",
+            "nome": "Recordar Conhecimento",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": true,
+            "recesso": false
+          }
+        ],
+        "acoes_treinadas": [
+          {
+            "id": "aprender_uma_magia",
+            "nome": "Aprender uma Magia",
+            "custo_acoes": "Exploração",
+            "exploracao": true,
+            "acao_geral": true,
+            "recesso": false
+          },
+          {
+            "id": "decifrar_escrita",
+            "nome": "Decifrar Escrita",
+            "custo_acoes": "Exploração",
+            "exploracao": true,
+            "acao_geral": true,
+            "recesso": false
+          },
+          {
+            "id": "emprestar_uma_magia_arcana",
+            "nome": "Emprestar uma Magia Arcana",
+            "custo_acoes": "Exploração",
+            "exploracao": true,
+            "acao_geral": false,
+            "recesso": false
+          },
+          {
+            "id": "identificar_magia",
+            "nome": "Identificar Magia",
+            "custo_acoes": "Exploração",
+            "exploracao": true,
+            "acao_geral": true,
+            "recesso": false
+          }
+        ]
+      },
+      {
+        "pericia": "Atletismo",
+        "atributo_chave": "Força",
+        "acoes_destreinadas": [
+          {
+            "id": "agarrar",
+            "nome": "Agarrar",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": false
+          },
+          {
+            "id": "derrubar",
+            "nome": "Derrubar",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": false
+          },
+          {
+            "id": "empurrar",
+            "nome": "Empurrar",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": false
+          },
+          {
+            "id": "escalar",
+            "nome": "Escalar",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": false
+          },
+          {
+            "id": "forcar",
+            "nome": "Forçar",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": false
+          },
+          {
+            "id": "nadar",
+            "nome": "Nadar",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": false
+          },
+          {
+            "id": "salto_em_altura",
+            "nome": "Salto em Altura",
+            "custo_acoes": "2 ações",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": false
+          },
+          {
+            "id": "salto_em_distancia",
+            "nome": "Salto em Distância",
+            "custo_acoes": "2 ações",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": false
+          }
+        ],
+        "acoes_treinadas": [
+          {
+            "id": "desarmar",
+            "nome": "Desarmar",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": false
+          }
+        ]
+      },
+      {
+        "pericia": "Diplomacia",
+        "atributo_chave": "Carisma",
+        "acoes_destreinadas": [
+          {
+            "id": "impressionar",
+            "nome": "Impressionar",
+            "custo_acoes": "Exploração",
+            "exploracao": true,
+            "acao_geral": false,
+            "recesso": false
+          },
+          {
+            "id": "obter_informacao",
+            "nome": "Obter Informação",
+            "custo_acoes": "Exploração",
+            "exploracao": true,
+            "acao_geral": false,
+            "recesso": false
+          },
+          {
+            "id": "pedir",
+            "nome": "Pedir",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": false
+          }
+        ],
+        "acoes_treinadas": []
+      },
+      {
+        "pericia": "Dissimulação",
+        "atributo_chave": "Carisma",
+        "acoes_destreinadas": [
+          {
+            "id": "criar_uma_distracao",
+            "nome": "Criar uma Distração",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": false
+          },
+          {
+            "id": "mentir",
+            "nome": "Mentir",
+            "custo_acoes": "Pelo menos 1 rodada",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": false
+          },
+          {
+            "id": "personificar",
+            "nome": "Personificar",
+            "custo_acoes": "Exploração",
+            "exploracao": true,
+            "acao_geral": false,
+            "recesso": false
+          }
+        ],
+        "acoes_treinadas": [
+          {
+            "id": "fintar",
+            "nome": "Fintar",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": false
+          }
+        ]
+      },
+      {
+        "pericia": "Furtividade",
+        "atributo_chave": "Destreza",
+        "acoes_destreinadas": [
+          {
+            "id": "esconder",
+            "nome": "Esconder",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": false
+          },
+          {
+            "id": "esgueirar",
+            "nome": "Esgueirar",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": false
+          },
+          {
+            "id": "ocultar_um_objeto",
+            "nome": "Ocultar um Objeto",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": false
+          }
+        ],
+        "acoes_treinadas": []
+      },
+      {
+        "pericia": "Intimidação",
+        "atributo_chave": "Carisma",
+        "acoes_destreinadas": [
+          {
+            "id": "coagir",
+            "nome": "Coagir",
+            "custo_acoes": "Exploração",
+            "exploracao": true,
+            "acao_geral": false,
+            "recesso": false
+          },
+          {
+            "id": "desmoralizar",
+            "nome": "Desmoralizar",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": false
+          }
+        ],
+        "acoes_treinadas": []
+      },
+      {
+        "pericia": "Ladroagem",
+        "atributo_chave": "Destreza",
+        "acoes_destreinadas": [
+          {
+            "id": "empalmar_um_objeto",
+            "nome": "Empalmar um Objeto",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": false
+          },
+          {
+            "id": "furtar",
+            "nome": "Furtar",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": false
+          }
+        ],
+        "acoes_treinadas": [
+          {
+            "id": "abrir_uma_fechadura",
+            "nome": "Abrir uma Fechadura",
+            "custo_acoes": "2 ações",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": false
+          },
+          {
+            "id": "desabilitar_um_dispositivo",
+            "nome": "Desabilitar um Dispositivo",
+            "custo_acoes": "2 ações",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": false
+          }
+        ]
+      },
+      {
+        "pericia": "Manufatura",
+        "atributo_chave": "Inteligência",
+        "acoes_destreinadas": [
+          {
+            "id": "recordar_conhecimento",
+            "nome": "Recordar Conhecimento",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": true,
+            "recesso": false
+          },
+          {
+            "id": "reparar",
+            "nome": "Reparar",
+            "custo_acoes": "Exploração",
+            "exploracao": true,
+            "acao_geral": false,
+            "recesso": false
+          }
+        ],
+        "acoes_treinadas": [
+          {
+            "id": "ganhar_proventos",
+            "nome": "Ganhar Proventos",
+            "custo_acoes": "Recesso",
+            "exploracao": false,
+            "acao_geral": true,
+            "recesso": true
+          },
+          {
+            "id": "identificar_alquimia",
+            "nome": "Identificar Alquimia",
+            "custo_acoes": "Exploração",
+            "exploracao": true,
+            "acao_geral": false,
+            "recesso": false
+          },
+          {
+            "id": "manufaturar",
+            "nome": "Manufaturar",
+            "custo_acoes": "Recesso",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": true
+          }
+        ]
+      },
+      {
+        "pericia": "Medicina",
+        "atributo_chave": "Sabedoria",
+        "acoes_destreinadas": [
+          {
+            "id": "administrar_primeiros_socorros",
+            "nome": "Administrar Primeiros Socorros",
+            "custo_acoes": "2 ações",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": false,
+            "nota": "Na Tabela 4–1 (p. 235) aparece impresso com ícone de 1 ação, porém o bloco oficial da ação (p. 249) define 2 ações."
+          },
+          {
+            "id": "recordar_conhecimento",
+            "nome": "Recordar Conhecimento",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": true,
+            "recesso": false
+          }
+        ],
+        "acoes_treinadas": [
+          {
+            "id": "tratar_doenca",
+            "nome": "Tratar Doença",
+            "custo_acoes": "Recesso",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": true
+          },
+          {
+            "id": "tratar_ferimentos",
+            "nome": "Tratar Ferimentos",
+            "custo_acoes": "Exploração",
+            "exploracao": true,
+            "acao_geral": false,
+            "recesso": false
+          },
+          {
+            "id": "tratar_veneno",
+            "nome": "Tratar Veneno",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": false
+          }
+        ]
+      },
+      {
+        "pericia": "Natureza",
+        "atributo_chave": "Sabedoria",
+        "acoes_destreinadas": [
+          {
+            "id": "comandar_um_animal",
+            "nome": "Comandar um Animal",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": false
+          },
+          {
+            "id": "recordar_conhecimento",
+            "nome": "Recordar Conhecimento",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": true,
+            "recesso": false
+          }
+        ],
+        "acoes_treinadas": [
+          {
+            "id": "aprender_uma_magia",
+            "nome": "Aprender uma Magia",
+            "custo_acoes": "Exploração",
+            "exploracao": true,
+            "acao_geral": true,
+            "recesso": false
+          },
+          {
+            "id": "identificar_magia",
+            "nome": "Identificar Magia",
+            "custo_acoes": "Exploração",
+            "exploracao": true,
+            "acao_geral": true,
+            "recesso": false
+          }
+        ]
+      },
+      {
+        "pericia": "Ocultismo",
+        "atributo_chave": "Inteligência",
+        "acoes_destreinadas": [
+          {
+            "id": "recordar_conhecimento",
+            "nome": "Recordar Conhecimento",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": true,
+            "recesso": false
+          }
+        ],
+        "acoes_treinadas": [
+          {
+            "id": "aprender_uma_magia",
+            "nome": "Aprender uma Magia",
+            "custo_acoes": "Exploração",
+            "exploracao": true,
+            "acao_geral": true,
+            "recesso": false
+          },
+          {
+            "id": "decifrar_escrita",
+            "nome": "Decifrar Escrita",
+            "custo_acoes": "Exploração",
+            "exploracao": true,
+            "acao_geral": true,
+            "recesso": false
+          },
+          {
+            "id": "identificar_magia",
+            "nome": "Identificar Magia",
+            "custo_acoes": "Exploração",
+            "exploracao": true,
+            "acao_geral": true,
+            "recesso": false
+          }
+        ]
+      },
+      {
+        "pericia": "Performance",
+        "atributo_chave": "Carisma",
+        "acoes_destreinadas": [
+          {
+            "id": "performar",
+            "nome": "Performar",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": false
+          }
+        ],
+        "acoes_treinadas": [
+          {
+            "id": "ganhar_proventos",
+            "nome": "Ganhar Proventos",
+            "custo_acoes": "Recesso",
+            "exploracao": false,
+            "acao_geral": true,
+            "recesso": true
+          }
+        ]
+      },
+      {
+        "pericia": "Religião",
+        "atributo_chave": "Sabedoria",
+        "acoes_destreinadas": [
+          {
+            "id": "recordar_conhecimento",
+            "nome": "Recordar Conhecimento",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": true,
+            "recesso": false
+          }
+        ],
+        "acoes_treinadas": [
+          {
+            "id": "aprender_uma_magia",
+            "nome": "Aprender uma Magia",
+            "custo_acoes": "Exploração",
+            "exploracao": true,
+            "acao_geral": true,
+            "recesso": false
+          },
+          {
+            "id": "decifrar_escrita",
+            "nome": "Decifrar Escrita",
+            "custo_acoes": "Exploração",
+            "exploracao": true,
+            "acao_geral": true,
+            "recesso": false
+          },
+          {
+            "id": "identificar_magia",
+            "nome": "Identificar Magia",
+            "custo_acoes": "Exploração",
+            "exploracao": true,
+            "acao_geral": true,
+            "recesso": false
+          }
+        ]
+      },
+      {
+        "pericia": "Saber",
+        "atributo_chave": "Inteligência",
+        "acoes_destreinadas": [
+          {
+            "id": "recordar_conhecimento",
+            "nome": "Recordar Conhecimento",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": true,
+            "recesso": false
+          }
+        ],
+        "acoes_treinadas": [
+          {
+            "id": "ganhar_proventos",
+            "nome": "Ganhar Proventos",
+            "custo_acoes": "Recesso",
+            "exploracao": false,
+            "acao_geral": true,
+            "recesso": true
+          }
+        ]
+      },
+      {
+        "pericia": "Sobrevivência",
+        "atributo_chave": "Sabedoria",
+        "acoes_destreinadas": [
+          {
+            "id": "intuir_direcao",
+            "nome": "Intuir Direção",
+            "custo_acoes": "Exploração",
+            "exploracao": true,
+            "acao_geral": false,
+            "recesso": false
+          },
+          {
+            "id": "subsistir",
+            "nome": "Subsistir",
+            "custo_acoes": "Recesso",
+            "exploracao": false,
+            "acao_geral": true,
+            "recesso": true
+          }
+        ],
+        "acoes_treinadas": [
+          {
+            "id": "cobrir_rastros",
+            "nome": "Cobrir Rastros",
+            "custo_acoes": "Exploração",
+            "exploracao": true,
+            "acao_geral": false,
+            "recesso": false
+          },
+          {
+            "id": "rastrear",
+            "nome": "Rastrear",
+            "custo_acoes": "Exploração",
+            "exploracao": true,
+            "acao_geral": false,
+            "recesso": false
+          }
+        ]
+      },
+      {
+        "pericia": "Sociedade",
+        "atributo_chave": "Inteligência",
+        "acoes_destreinadas": [
+          {
+            "id": "recordar_conhecimento",
+            "nome": "Recordar Conhecimento",
+            "custo_acoes": "1 ação",
+            "exploracao": false,
+            "acao_geral": true,
+            "recesso": false
+          },
+          {
+            "id": "subsistir",
+            "nome": "Subsistir",
+            "custo_acoes": "Recesso",
+            "exploracao": false,
+            "acao_geral": true,
+            "recesso": true
+          }
+        ],
+        "acoes_treinadas": [
+          {
+            "id": "criar_falsificacao",
+            "nome": "Criar Falsificação",
+            "custo_acoes": "Recesso",
+            "exploracao": false,
+            "acao_geral": false,
+            "recesso": true
+          },
+          {
+            "id": "decifrar_escrita",
+            "nome": "Decifrar Escrita",
+            "custo_acoes": "Exploração",
+            "exploracao": true,
+            "acao_geral": true,
+            "recesso": false
+          }
+        ]
+      }
+    ],
+    "tabela_4_2_aprender_uma_magia": [
+      {
+        "nivel_magia": "1º ou truque mágico",
+        "nivel_numerico": 1,
+        "preco_texto": "2 po",
+        "preco_pc": 200,
+        "cd_tipica": 15
+      },
+      {
+        "nivel_magia": "2º",
+        "nivel_numerico": 2,
+        "preco_texto": "6 po",
+        "preco_pc": 600,
+        "cd_tipica": 18
+      },
+      {
+        "nivel_magia": "3º",
+        "nivel_numerico": 3,
+        "preco_texto": "16 po",
+        "preco_pc": 1600,
+        "cd_tipica": 20
+      },
+      {
+        "nivel_magia": "4º",
+        "nivel_numerico": 4,
+        "preco_texto": "36 po",
+        "preco_pc": 3600,
+        "cd_tipica": 23
+      },
+      {
+        "nivel_magia": "5º",
+        "nivel_numerico": 5,
+        "preco_texto": "70 po",
+        "preco_pc": 7000,
+        "cd_tipica": 26
+      },
+      {
+        "nivel_magia": "6º",
+        "nivel_numerico": 6,
+        "preco_texto": "140 po",
+        "preco_pc": 14000,
+        "cd_tipica": 28
+      },
+      {
+        "nivel_magia": "7º",
+        "nivel_numerico": 7,
+        "preco_texto": "300 po",
+        "preco_pc": 30000,
+        "cd_tipica": 31
+      },
+      {
+        "nivel_magia": "8º",
+        "nivel_numerico": 8,
+        "preco_texto": "650 po",
+        "preco_pc": 65000,
+        "cd_tipica": 34
+      },
+      {
+        "nivel_magia": "9º",
+        "nivel_numerico": 9,
+        "preco_texto": "1.500 po",
+        "preco_pc": 150000,
+        "cd_tipica": 36
+      },
+      {
+        "nivel_magia": "10º",
+        "nivel_numerico": 10,
+        "preco_texto": "7.000 po",
+        "preco_pc": 700000,
+        "cd_tipica": 41
+      }
+    ],
+    "tabela_4_3_proventos_ganhos": [
+      {
+        "nivel_tarefa": "0",
+        "nivel_numerico": 0,
+        "sucesso_critico_nivel_20": false,
+        "falha": "1 pc",
+        "falha_pc": 1,
+        "treinado": "5 pc",
+        "treinado_pc": 5,
+        "especialista": "5 pc",
+        "especialista_pc": 5,
+        "mestre": "5 pc",
+        "mestre_pc": 5,
+        "lendario": "5 pc",
+        "lendario_pc": 5
+      },
+      {
+        "nivel_tarefa": "1",
+        "nivel_numerico": 1,
+        "sucesso_critico_nivel_20": false,
+        "falha": "2 pc",
+        "falha_pc": 2,
+        "treinado": "2 pp",
+        "treinado_pc": 20,
+        "especialista": "2 pp",
+        "especialista_pc": 20,
+        "mestre": "2 pp",
+        "mestre_pc": 20,
+        "lendario": "2 pp",
+        "lendario_pc": 20
+      },
+      {
+        "nivel_tarefa": "2",
+        "nivel_numerico": 2,
+        "sucesso_critico_nivel_20": false,
+        "falha": "4 pc",
+        "falha_pc": 4,
+        "treinado": "3 pp",
+        "treinado_pc": 30,
+        "especialista": "3 pp",
+        "especialista_pc": 30,
+        "mestre": "3 pp",
+        "mestre_pc": 30,
+        "lendario": "3 pp",
+        "lendario_pc": 30
+      },
+      {
+        "nivel_tarefa": "3",
+        "nivel_numerico": 3,
+        "sucesso_critico_nivel_20": false,
+        "falha": "8 pc",
+        "falha_pc": 8,
+        "treinado": "5 pp",
+        "treinado_pc": 50,
+        "especialista": "5 pp",
+        "especialista_pc": 50,
+        "mestre": "5 pp",
+        "mestre_pc": 50,
+        "lendario": "5 pp",
+        "lendario_pc": 50
+      },
+      {
+        "nivel_tarefa": "4",
+        "nivel_numerico": 4,
+        "sucesso_critico_nivel_20": false,
+        "falha": "1 pp",
+        "falha_pc": 10,
+        "treinado": "7 pp",
+        "treinado_pc": 70,
+        "especialista": "8 pp",
+        "especialista_pc": 80,
+        "mestre": "8 pp",
+        "mestre_pc": 80,
+        "lendario": "8 pp",
+        "lendario_pc": 80
+      },
+      {
+        "nivel_tarefa": "5",
+        "nivel_numerico": 5,
+        "sucesso_critico_nivel_20": false,
+        "falha": "2 pp",
+        "falha_pc": 20,
+        "treinado": "9 pp",
+        "treinado_pc": 90,
+        "especialista": "1 po",
+        "especialista_pc": 100,
+        "mestre": "1 po",
+        "mestre_pc": 100,
+        "lendario": "1 po",
+        "lendario_pc": 100
+      },
+      {
+        "nivel_tarefa": "6",
+        "nivel_numerico": 6,
+        "sucesso_critico_nivel_20": false,
+        "falha": "3 pp",
+        "falha_pc": 30,
+        "treinado": "1 po, 5 pp",
+        "treinado_pc": 150,
+        "especialista": "2 po",
+        "especialista_pc": 200,
+        "mestre": "2 po",
+        "mestre_pc": 200,
+        "lendario": "2 po",
+        "lendario_pc": 200
+      },
+      {
+        "nivel_tarefa": "7",
+        "nivel_numerico": 7,
+        "sucesso_critico_nivel_20": false,
+        "falha": "4 pp",
+        "falha_pc": 40,
+        "treinado": "2 po",
+        "treinado_pc": 200,
+        "especialista": "2 po, 5 pp",
+        "especialista_pc": 250,
+        "mestre": "2 po, 5 pp",
+        "mestre_pc": 250,
+        "lendario": "2 po, 5 pp",
+        "lendario_pc": 250
+      },
+      {
+        "nivel_tarefa": "8",
+        "nivel_numerico": 8,
+        "sucesso_critico_nivel_20": false,
+        "falha": "5 pp",
+        "falha_pc": 50,
+        "treinado": "2 po, 5 pp",
+        "treinado_pc": 250,
+        "especialista": "3 po",
+        "especialista_pc": 300,
+        "mestre": "3 po",
+        "mestre_pc": 300,
+        "lendario": "3 po",
+        "lendario_pc": 300
+      },
+      {
+        "nivel_tarefa": "9",
+        "nivel_numerico": 9,
+        "sucesso_critico_nivel_20": false,
+        "falha": "6 pp",
+        "falha_pc": 60,
+        "treinado": "3 po",
+        "treinado_pc": 300,
+        "especialista": "4 po",
+        "especialista_pc": 400,
+        "mestre": "4 po",
+        "mestre_pc": 400,
+        "lendario": "4 po",
+        "lendario_pc": 400
+      },
+      {
+        "nivel_tarefa": "10",
+        "nivel_numerico": 10,
+        "sucesso_critico_nivel_20": false,
+        "falha": "7 pp",
+        "falha_pc": 70,
+        "treinado": "4 po",
+        "treinado_pc": 400,
+        "especialista": "5 po",
+        "especialista_pc": 500,
+        "mestre": "6 po",
+        "mestre_pc": 600,
+        "lendario": "6 po",
+        "lendario_pc": 600
+      },
+      {
+        "nivel_tarefa": "11",
+        "nivel_numerico": 11,
+        "sucesso_critico_nivel_20": false,
+        "falha": "8 pp",
+        "falha_pc": 80,
+        "treinado": "5 po",
+        "treinado_pc": 500,
+        "especialista": "6 po",
+        "especialista_pc": 600,
+        "mestre": "8 po",
+        "mestre_pc": 800,
+        "lendario": "8 po",
+        "lendario_pc": 800
+      },
+      {
+        "nivel_tarefa": "12",
+        "nivel_numerico": 12,
+        "sucesso_critico_nivel_20": false,
+        "falha": "9 pp",
+        "falha_pc": 90,
+        "treinado": "6 po",
+        "treinado_pc": 600,
+        "especialista": "8 po",
+        "especialista_pc": 800,
+        "mestre": "10 po",
+        "mestre_pc": 1000,
+        "lendario": "10 po",
+        "lendario_pc": 1000
+      },
+      {
+        "nivel_tarefa": "13",
+        "nivel_numerico": 13,
+        "sucesso_critico_nivel_20": false,
+        "falha": "1 po",
+        "falha_pc": 100,
+        "treinado": "7 po",
+        "treinado_pc": 700,
+        "especialista": "10 po",
+        "especialista_pc": 1000,
+        "mestre": "15 po",
+        "mestre_pc": 1500,
+        "lendario": "15 po",
+        "lendario_pc": 1500
+      },
+      {
+        "nivel_tarefa": "14",
+        "nivel_numerico": 14,
+        "sucesso_critico_nivel_20": false,
+        "falha": "1 po, 5 pp",
+        "falha_pc": 150,
+        "treinado": "8 po",
+        "treinado_pc": 800,
+        "especialista": "15 po",
+        "especialista_pc": 1500,
+        "mestre": "20 po",
+        "mestre_pc": 2000,
+        "lendario": "20 po",
+        "lendario_pc": 2000
+      },
+      {
+        "nivel_tarefa": "15",
+        "nivel_numerico": 15,
+        "sucesso_critico_nivel_20": false,
+        "falha": "2 po",
+        "falha_pc": 200,
+        "treinado": "10 po",
+        "treinado_pc": 1000,
+        "especialista": "20 po",
+        "especialista_pc": 2000,
+        "mestre": "28 po",
+        "mestre_pc": 2800,
+        "lendario": "28 po",
+        "lendario_pc": 2800
+      },
+      {
+        "nivel_tarefa": "16",
+        "nivel_numerico": 16,
+        "sucesso_critico_nivel_20": false,
+        "falha": "2 po, 5 pp",
+        "falha_pc": 250,
+        "treinado": "13 po",
+        "treinado_pc": 1300,
+        "especialista": "25 po",
+        "especialista_pc": 2500,
+        "mestre": "36 po",
+        "mestre_pc": 3600,
+        "lendario": "40 po",
+        "lendario_pc": 4000
+      },
+      {
+        "nivel_tarefa": "17",
+        "nivel_numerico": 17,
+        "sucesso_critico_nivel_20": false,
+        "falha": "3 po",
+        "falha_pc": 300,
+        "treinado": "15 po",
+        "treinado_pc": 1500,
+        "especialista": "30 po",
+        "especialista_pc": 3000,
+        "mestre": "45 po",
+        "mestre_pc": 4500,
+        "lendario": "55 po",
+        "lendario_pc": 5500
+      },
+      {
+        "nivel_tarefa": "18",
+        "nivel_numerico": 18,
+        "sucesso_critico_nivel_20": false,
+        "falha": "4 po",
+        "falha_pc": 400,
+        "treinado": "20 po",
+        "treinado_pc": 2000,
+        "especialista": "45 po",
+        "especialista_pc": 4500,
+        "mestre": "70 po",
+        "mestre_pc": 7000,
+        "lendario": "90 po",
+        "lendario_pc": 9000
+      },
+      {
+        "nivel_tarefa": "19",
+        "nivel_numerico": 19,
+        "sucesso_critico_nivel_20": false,
+        "falha": "6 po",
+        "falha_pc": 600,
+        "treinado": "30 po",
+        "treinado_pc": 3000,
+        "especialista": "60 po",
+        "especialista_pc": 6000,
+        "mestre": "100 po",
+        "mestre_pc": 10000,
+        "lendario": "130 po",
+        "lendario_pc": 13000
+      },
+      {
+        "nivel_tarefa": "20",
+        "nivel_numerico": 20,
+        "sucesso_critico_nivel_20": false,
+        "falha": "8 po",
+        "falha_pc": 800,
+        "treinado": "40 po",
+        "treinado_pc": 4000,
+        "especialista": "75 po",
+        "especialista_pc": 7500,
+        "mestre": "150 po",
+        "mestre_pc": 15000,
+        "lendario": "200 po",
+        "lendario_pc": 20000
+      },
+      {
+        "nivel_tarefa": "20 (sucesso crítico)",
+        "nivel_numerico": 20,
+        "sucesso_critico_nivel_20": true,
+        "falha": "—",
+        "falha_pc": null,
+        "treinado": "50 po",
+        "treinado_pc": 5000,
+        "especialista": "90 po",
+        "especialista_pc": 9000,
+        "mestre": "175 po",
+        "mestre_pc": 17500,
+        "lendario": "300 po",
+        "lendario_pc": 30000
+      }
+    ],
+    "tradicoes_magicas_e_pericias": [
+      {
+        "tradicao_magica": "Arcana",
+        "pericia_correspondente": "Arcanismo"
+      },
+      {
+        "tradicao_magica": "Divina",
+        "pericia_correspondente": "Religião"
+      },
+      {
+        "tradicao_magica": "Ocultista",
+        "pericia_correspondente": "Ocultismo"
+      },
+      {
+        "tradicao_magica": "Primal",
+        "pericia_correspondente": "Natureza"
+      }
+    ],
+    "tabela_4_4_distancia_escalar_e_nadar": [
+      {
+        "velocidade": "1,5–4,5 metros",
+        "escalar_sucesso": "1,5 m",
+        "escalar_sucesso_critico": "1,5 m",
+        "nadar_sucesso": "1,5 m",
+        "nadar_sucesso_critico": "3 m"
+      },
+      {
+        "velocidade": "6–10,5 metros",
+        "escalar_sucesso": "1,5 m",
+        "escalar_sucesso_critico": "3 m",
+        "nadar_sucesso": "3 m",
+        "nadar_sucesso_critico": "4,5 m"
+      },
+      {
+        "velocidade": "12–16,5 metros",
+        "escalar_sucesso": "3 m",
+        "escalar_sucesso_critico": "4,5 m",
+        "nadar_sucesso": "4,5 m",
+        "nadar_sucesso_critico": "6 m"
+      },
+      {
+        "velocidade": "18–19,5 metros",
+        "escalar_sucesso": "4,5 m",
+        "escalar_sucesso_critico": "6 m",
+        "nadar_sucesso": "6 m",
+        "nadar_sucesso_critico": "7,5 m"
+      }
+    ],
+    "tracos_de_performance": [
+      {
+        "performance": "Atuação ou comédia",
+        "tracos_adicionais": [
+          "auditivo",
+          "linguístico",
+          "visual"
+        ]
+      },
+      {
+        "performance": "Canto ou oração",
+        "tracos_adicionais": [
+          "auditivo",
+          "linguístico"
+        ]
+      },
+      {
+        "performance": "Dança",
+        "tracos_adicionais": [
+          "movimento",
+          "visual"
+        ]
+      },
+      {
+        "performance": "Tocar um instrumento",
+        "tracos_adicionais": [
+          "auditivo",
+          "manuseio"
+        ]
+      }
+    ]
+  },
+  "acoes_gerais_pericia": [
+    {
+      "id": "aprender_uma_magia",
+      "nome": "Aprender uma Magia",
+      "proficiencia_minima": "treinado",
+      "pagina": "234-236",
+      "custo_acoes": null,
+      "tracos": [
+        "concentração",
+        "exploração"
+      ],
+      "pericias_aplicaveis": [
+        "Arcanismo",
+        "Natureza",
+        "Ocultismo",
+        "Religião"
+      ],
+      "requerimentos": "Você possui uma característica de classe de conjuração, e a magia que pretende aprender está na lista de magias de sua tradição mágica.",
+      "descricao": "Você pode obter acesso a uma nova magia de sua tradição com alguém que conheça essa magia ou de uma escrita mágica como um grimório ou pergaminho. Se puder conjurar magias de várias tradições, deve utilizar a perícia correspondente à tradição da magia.",
+      "passos": [
+        "Gastar 1 hora por nível da magia conversando com uma pessoa que a conheça ou examinando uma escrita mágica em sua posse.",
+        "Ter materiais com o Preço indicado na Tabela 4–2: Aprender uma Magia.",
+        "Fazer um teste de perícia para a perícia correspondente à sua tradição (CD determinada pelo MJ, frequentemente próxima à CD da Tabela 4–2/4–3; magias incomuns ou raras possuem CDs maiores)."
+      ],
+      "efeito_por_tipo_conjurador": "Se possuir um grimório, acrescenta a magia ao grimório; se preparar magias de uma lista, acrescenta à lista; se possuir um repertório de magias, pode selecioná-la quando acrescentar ou trocar magias.",
+      "resultados": {
+        "sucesso_critico": "Você gasta metade dos materiais e aprende a magia.",
+        "sucesso": "Você gasta os materiais e aprende a magia.",
+        "falha": "Você falha em aprender a magia, mas pode tentar novamente após subir um nível. Os materiais não são gastos.",
+        "falha_critica": "Como falha, mas você gasta metade dos materiais."
+      }
+    },
+    {
+      "id": "decifrar_escrita",
+      "nome": "Decifrar Escrita",
+      "proficiencia_minima": "treinado",
+      "pagina": "236-237",
+      "custo_acoes": null,
+      "tracos": [
+        "concentração",
+        "exploração",
+        "secreto"
+      ],
+      "pericias_aplicaveis": [
+        "Arcanismo",
+        "Ocultismo",
+        "Religião",
+        "Sociedade"
+      ],
+      "uso_por_pericia": {
+        "Arcanismo": "Escritas sobre magia ou ciência.",
+        "Ocultismo": "Textos esotéricos sobre mistérios e filosofia.",
+        "Religião": "Escrituras.",
+        "Sociedade": "Mensagens codificadas, documentos arcaicos ou texto em idioma desconhecido (a critério do MJ)."
+      },
+      "descricao": "Você tenta decifrar uma escrita ou literatura complicada sobre um tópico obscuro. Isto normalmente leva 1 minuto por página de texto, mas pode levar mais tempo (normalmente uma hora por página para decifrar cifras ou similares). O texto deve estar em um idioma que você é capaz de ler, embora o MJ possa permitir decifrar idioma desconhecido com Sociedade.",
+      "resultados": {
+        "sucesso_critico": "Você compreende o verdadeiro significado do texto.",
+        "sucesso": "Você compreende o verdadeiro significado do texto. Se ele for um documento codificado, você descobre o significado geral, mas não consegue uma tradução palavra por palavra.",
+        "falha": "Você é incapaz de compreender o texto e sofre –2 de penalidade em testes posteriores para decifrá-lo.",
+        "falha_critica": "Você acredita que compreendeu o texto nessa página, mas na verdade interpretou sua mensagem erroneamente."
+      },
+      "exemplos_tarefas": {
+        "treinado": "dissertação básica de filosofia",
+        "especialista": "código complexo, como cifras",
+        "mestre": "código de um mestre espião ou anotações de pesquisa avançadas",
+        "lendario": "texto planar esotérico escrito em metáforas por um celestial antigo"
+      }
+    },
+    {
+      "id": "ganhar_proventos",
+      "nome": "Ganhar Proventos",
+      "proficiencia_minima": "treinado",
+      "pagina": "237-238",
+      "custo_acoes": null,
+      "tracos": [
+        "recesso"
+      ],
+      "pericias_principais": [
+        "Manufatura",
+        "Performance",
+        "Saber"
+      ],
+      "pericias_alternativas_mj": "Em alguns casos, o MJ pode permitir utilizar outra perícia através de trabalho especializado (como Religião para estudar textos antigos, Acrobatismo em um circo ou Ladroagem para bater carteiras), normalmente com CD significativamente maior.",
+      "descricao": "Você utiliza uma de suas perícias para fazer dinheiro durante o recesso. O MJ designa um nível de tarefa representando o trabalho mais lucrativo disponível e determina secretamente a CD. Após o primeiro dia de trabalho, role para determinar os proventos diários conforme a Tabela 4–3: Proventos Ganhos, mantendo o mesmo valor nos dias subsequentes da mesma tarefa.",
+      "regras_adicionais": {
+        "preparacao_extra": "Gastar alguns dias de recesso se preparando para uma tarefa ajusta a CD do teste (determinado pelo MJ); mais útil para tarefas de nível superior ao seu.",
+        "encerrando_ou_interrompendo_tarefas": "Ao parar no meio ou completar uma tarefa, normalmente leva 1 dia ou mais de recesso para encontrar novo emprego. Uma tarefa pode ser pausada para aventurar-se; rolagens boas podem ser mantidas, rolagens ruins não podem ser melhoradas apenas pausando, e se suas estatísticas mudarem (como subir de nível), você pode fazer um novo teste.",
+        "manufaturar_mercadorias_para_mercado": "Usando Manufatura, cria itens comuns de nível 1 ou 2 abaixo do nível do assentamento, ou comissões especiais usando a atividade Manufaturar.",
+        "encenar_uma_performance": "Usando Performance, o nível da tarefa é determinado pelas audiências disponíveis (plebeus na rua nível 0, artesãos 2º–3º nível, mercadores/nobres/realeza superiores).",
+        "exercer_profissao": "Usando Saber, aplica noções práticas de uma especialidade (administração, leis, navegação etc.); especialidades obscuras podem ter CD maior ou apenas tarefas de nível inferior, e ferramentas especializadas podem ser necessárias."
+      },
+      "resultados": {
+        "sucesso_critico": "Você faz um trabalho excepcional. Ganhe a quantidade de dinheiro listada para o nível da tarefa + 1 e sua graduação de proficiência.",
+        "sucesso": "Você faz um trabalho competente. Ganhe a quantidade de dinheiro listada para o nível da tarefa e sua graduação de proficiência.",
+        "falha": "Você faz um trabalho mal feito e recebe o mínimo pelo seu tempo. Ganhe a quantidade de dinheiro listada na coluna de falha para o nível da tarefa. O MJ provavelmente reduzirá quanto tempo você pode continuar fazendo a tarefa.",
+        "falha_critica": "Você não ganha nada pelo seu trabalho e é demitido imediatamente. Você não pode continuar a tarefa. Sua reputação é prejudicada, o que provavelmente dificultará que você encontre outros trabalhos recompensadores nessa comunidade."
+      },
+      "exemplos_tarefas": {
+        "treinado": "copeiro, fazer pesquisa legal",
+        "especialista": "cuidar de uma adega, defender casos menores na corte",
+        "mestre": "administrar uma grande cervejaria, defender casos importantes na corte",
+        "lendario": "administrar uma franquia internacional de bebida, defender um caso nas cortes do Inferno"
+      },
+      "exemplos_ilustrativos": [
+        "Harsk Faz Chá (nível 3, especialista em Saber de Chá)",
+        "Lem Se Apresenta (nível 16, lendário em Performance)"
+      ]
+    },
+    {
+      "id": "identificar_magia",
+      "nome": "Identificar Magia",
+      "proficiencia_minima": "treinado",
+      "pagina": "238",
+      "custo_acoes": null,
+      "tracos": [
+        "concentração",
+        "exploração",
+        "secreto"
+      ],
+      "pericias_aplicaveis": [
+        "Arcanismo",
+        "Natureza",
+        "Ocultismo",
+        "Religião"
+      ],
+      "descricao": "Após descobrir que um efeito contínuo, item ou local é mágico, você pode gastar 10 minutos para tentar identificar as particularidades de sua magia utilizando a perícia da tradição correspondente (ou qualquer uma das quatro se o alvo possuir apenas o traço mágico sem tradição específica; tradições diferentes podem ser tentadas com CD maior a critério do MJ). Se interrompida, deve começar novamente. Elevar uma magia não aumenta a CD para identificá-la.",
+      "resultados": {
+        "sucesso_critico": "Você descobre todas as características da magia, incluindo seu nome (para um efeito), o que ela faz, quaisquer meios de ativá-la (para um item ou local) e se ela é amaldiçoada.",
+        "sucesso": "Para um item ou local, você tem uma sensação do que ele faz e descobre quaisquer meios de ativá-lo. Para um efeito contínuo (como uma magia com duração), você descobre o nome do efeito e o que ele faz. Você não pode tentar novamente na esperança de obter um sucesso crítico.",
+        "falha": "Você falha em identificar a magia e não pode tentar novamente por 1 dia.",
+        "falha_critica": "Você identifica a magia incorretamente como alguma outra coisa à escolha do MJ."
+      }
+    },
+    {
+      "id": "recordar_conhecimento",
+      "nome": "Recordar Conhecimento",
+      "proficiencia_minima": "destreinado",
+      "pagina": "239-240",
+      "custo_acoes": "1 ação",
+      "tracos": [
+        "concentração",
+        "secreto"
+      ],
+      "pericias_aplicaveis": [
+        "Arcanismo",
+        "Manufatura",
+        "Medicina",
+        "Natureza",
+        "Ocultismo",
+        "Religião",
+        "Saber",
+        "Sociedade"
+      ],
+      "topicos_por_pericia": {
+        "Arcanismo": "Teorias arcanas, tradições mágicas, criaturas de significância arcana e planos arcanos.",
+        "Manufatura": "Reações e criaturas alquímicas, valor de itens, engenharia, materiais inusitados e constructos.",
+        "Medicina": "Doenças, venenos, ferimentos e ciência forense.",
+        "Natureza": "O ambiente, flora, geografia, clima, criaturas de origem natural e planos naturais.",
+        "Ocultismo": "Mistérios antigos, filosofia obscura, criaturas de significância ocultista e planos esotéricos.",
+        "Religião": "Agentes divinos, planos divinos, teologia, mitos obscuros e criaturas de significância religiosa.",
+        "Saber": "O assunto da subcategoria da perícia Saber.",
+        "Sociedade": "História local, personalidades principais, instituições legais, estrutura social e cultura humanoide."
+      },
+      "descricao": "Você faz um teste de perícia para tentar lembrar algum conhecimento específico sobre um tópico relacionado a ela e aplicá-lo à situação presente. Em alguns casos pode ser necessário investigar primeiro (como conduzir uma autópsia com Medicina) ou utilizar outra perícia a critério do MJ (usando um atributo mental, normalmente Inteligência, caso seja uma perícia física).",
+      "resultados": {
+        "sucesso_critico": "Você recorda o conhecimento precisamente e obtém informações ou contexto adicional.",
+        "sucesso": "Você recorda o conhecimento precisamente ou recebe uma pista útil sobre sua situação atual.",
+        "falha_critica": "Você recorda informações incorretas ou recebe uma pista errônea ou enganosa."
+      },
+      "exemplos_tarefas": {
+        "destreinado": "nome de um governante, nobre principal ou divindade maior",
+        "treinado": "linha de sucessão de uma família nobre maior, doutrinas principais de uma divindade maior",
+        "especialista": "genealogia de um nobre menor, ensinamentos de um sacerdote antigo",
+        "mestre": "hierarquia de uma nobre corte de gênios, templos extraplanares maiores de uma divindade",
+        "lendario": "existência de um herdeiro nobre desaparecido há tempos, doutrinas secretas de uma religião"
+      }
+    },
+    {
+      "id": "subsistir",
+      "nome": "Subsistir",
+      "proficiencia_minima": "destreinado",
+      "pagina": "240",
+      "custo_acoes": null,
+      "tracos": [
+        "recesso"
+      ],
+      "pericias_aplicaveis": [
+        "Sobrevivência",
+        "Sociedade"
+      ],
+      "uso_por_pericia": {
+        "Sociedade": "Em um assentamento (encontrando abrigo e surrupiando ou pedindo comida).",
+        "Sobrevivência": "Nos ermos (forrageando comida e montando abrigo)."
+      },
+      "descricao": "Você tenta providenciar comida e abrigo para si, e possivelmente também para outros, com um padrão de vida descrito na página 294. Ao contrário da maioria das atividades de recesso, você pode Subsistir após 8 horas ou menos de exploração, mas sofre –5 de penalidade se o fizer.",
+      "resultados": {
+        "sucesso_critico": "Você fornece subsistência para você e uma criatura adicional, ou melhora sua própria comida e abrigo, concedendo a si um padrão de vida confortável.",
+        "sucesso": "Você encontra alimentos e um abrigo com proteção básica contra as condições climáticas, conseguindo um padrão de vida de subsistência para si mesmo.",
+        "falha": "Você se expõe às condições climáticas e não consegue alimentos suficientes, ficando fatigado até obter alimentos e abrigo melhores.",
+        "falha_critica": "Você atrai problemas, come algo que não deveria ou de alguma outra forma piora sua situação. Você sofre –2 de penalidade em testes de Subsistir por 1 semana. Você não encontra qualquer alimento; se não possuir qualquer comida armazenada, você corre risco de passar fome ou morrer de sede se continuar falhando."
+      },
+      "exemplos_tarefas": {
+        "destreinado": "floresta exuberante com clima calmo ou cidade grande com plenitude de recursos",
+        "treinado": "aldeia ou encosta típica",
+        "especialista": "montanhas típicas ou vilarejo insular",
+        "mestre": "deserto típico ou cidade sob cerco",
+        "lendario": "deserto estéril ou cidade de mortos-vivos"
+      }
+    }
+  ],
+  "pericias": [
+    {
+      "id": "acrobatismo",
+      "nome": "Acrobatismo",
+      "atributo_chave": "Destreza",
+      "atributo_sigla": "Des",
+      "sofre_penalidade_armadura": true,
+      "pagina": "240-241",
+      "descricao": "Acrobatismo mede sua habilidade de realizar tarefas que exigem coordenação e graça.",
+      "nota_uso_basico": "Quando usar a ação básica Escapar (página 470), você pode utilizar seu modificador de Acrobatismo em vez de seu modificador de ataque desarmado.",
+      "acoes_destreinadas": [
+        {
+          "id": "atravessar_acrobaticamente",
+          "nome": "Atravessar Acrobaticamente",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": false,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "movimento"
+          ],
+          "cd_alvo": "CD de Reflexos do inimigo",
+          "descricao": "Você Anda até sua Velocidade. Durante este movimento, pode tentar mover-se através do espaço de um inimigo fazendo um teste de Acrobatismo contra a CD de Reflexos dele assim que tentar entrar no espaço dele. Pode usar Escalar, Nadar, Voar ou outra ação em vez de Andar no ambiente apropriado.",
+          "resultados": {
+            "sucesso": "Você se move através do espaço do inimigo, tratando os quadrados no espaço dele como terreno difícil (cada 1,5 metros custam 3 metros de movimento). Se não possuir Velocidade suficiente para mover-se por todo o espaço dele, você obtém o mesmo efeito que em uma falha.",
+            "falha": "Seu movimento é encerrado e você aciona reações como se tivesse se movido para fora do quadrado em que iniciou seu movimento."
+          }
+        },
+        {
+          "id": "equilibrar",
+          "nome": "Equilibrar",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": false,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "movimento"
+          ],
+          "requerimentos": "Você está em um quadrado que contém uma superfície estreita, solo irregular ou outra característica similar.",
+          "cd_alvo": "CD de Equilibrar do local",
+          "descricao": "Você se move por uma superfície estreita ou solo irregular, fazendo um teste de Acrobatismo contra a CD de Equilibrar do local. Você fica desprevenido enquanto estiver em uma superfície estreita ou solo irregular.",
+          "resultados": {
+            "sucesso_critico": "Você se move até sua Velocidade.",
+            "sucesso": "Você se move até sua Velocidade, tratando o local como terreno difícil (cada 1,5 metros custam 3 metros de movimento).",
+            "falha": "Você deve permanecer parado para manter seu equilíbrio (desperdiçando a ação) ou cai. Se cair, seu turno se encerra.",
+            "falha_critica": "Você cai e seu turno se encerra."
+          },
+          "exemplos_tarefas": {
+            "destreinado": "raízes emaranhadas, calçada irregular",
+            "treinado": "viga de madeira",
+            "especialista": "cascalho solto e fundo",
+            "mestre": "corda bamba, camada de gelo macia",
+            "lendario": "fio de navalha, pedaços de chão caindo pelo ar"
+          }
+        }
+      ],
+      "acoes_treinadas": [
+        {
+          "id": "espremer",
+          "nome": "Espremer",
+          "proficiencia_minima": "treinado",
+          "acao_geral": false,
+          "custo_acoes": null,
+          "tracos": [
+            "exploração",
+            "movimento"
+          ],
+          "descricao": "Você se contorce para espremer-se através de um espaço tão pequeno em que mal pode passar. Usada para espaços excepcionalmente pequenos; muitos espaços apertados são apenas terreno difícil (página 475) por onde se move mais rápido sem teste.",
+          "resultados": {
+            "sucesso_critico": "Você se espreme através do espaço apertado em 1 minuto para cada 3 metros atravessados.",
+            "sucesso": "Você se espreme por 1 minuto para cada 1,5 metros.",
+            "falha_critica": "Você fica preso no espaço apertado. Enquanto estiver preso, você pode gastar 1 minuto fazendo outro teste de Acrobatismo contra a mesma CD. Qualquer resultado nesse teste diferente de uma falha crítica faz com que deixe de estar preso."
+          },
+          "exemplos_tarefas": {
+            "treinado": "espaço mal cabe seus ombros",
+            "mestre": "espaço mal cabe sua cabeça"
+          }
+        },
+        {
+          "id": "manobrar_em_voo",
+          "nome": "Manobrar em Voo",
+          "proficiencia_minima": "treinado",
+          "acao_geral": false,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "movimento"
+          ],
+          "requerimentos": "Você possui Velocidade de voo.",
+          "descricao": "Você tenta uma manobra difícil enquanto voa. Faça um teste de Acrobatismo. O MJ determina quais manobras são possíveis, mas raramente permitem mover-se mais que sua Velocidade de voo.",
+          "resultados": {
+            "sucesso": "Você obtém sucesso na manobra.",
+            "falha": "Sua manobra falha. O MJ escolhe se você simplesmente não consegue se mover ou se ocorre algum outro efeito prejudicial apropriado para a manobra (por exemplo, ser tirado de curso se tentar voar contra um vento forte).",
+            "falha_critica": "Como falha, mas a consequência é bem pior."
+          },
+          "exemplos_tarefas": {
+            "treinado": "subida ou descida íngreme",
+            "especialista": "voar contra o vento, pairar no ar",
+            "mestre": "inverter sua direção",
+            "lendario": "voar através de um vendaval"
+          }
+        }
+      ]
+    },
+    {
+      "id": "arcanismo",
+      "nome": "Arcanismo",
+      "atributo_chave": "Inteligência",
+      "atributo_sigla": "Int",
+      "sofre_penalidade_armadura": false,
+      "pagina": "241",
+      "descricao": "Arcanismo mede o quanto você sabe sobre magia e criaturas arcanas.",
+      "acoes_destreinadas": [
+        {
+          "id": "recordar_conhecimento",
+          "nome": "Recordar Conhecimento",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": true,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "concentração",
+            "secreto"
+          ],
+          "descricao": "Sobre teorias arcanas, tradições mágicas, criaturas de significância arcana (como dragões e bestas) e dos Planos Astral, Elementais e das Sombras."
+        }
+      ],
+      "acoes_treinadas": [
+        {
+          "id": "aprender_uma_magia",
+          "nome": "Aprender uma Magia",
+          "proficiencia_minima": "treinado",
+          "acao_geral": true,
+          "custo_acoes": null,
+          "tracos": [
+            "concentração",
+            "exploração"
+          ],
+          "descricao": "Aprender uma Magia da tradição arcana (página 234)."
+        },
+        {
+          "id": "decifrar_escrita",
+          "nome": "Decifrar Escrita",
+          "proficiencia_minima": "treinado",
+          "acao_geral": true,
+          "custo_acoes": null,
+          "tracos": [
+            "concentração",
+            "exploração",
+            "secreto"
+          ],
+          "descricao": "Decifrar Escrita sobre teoria arcana (página 236)."
+        },
+        {
+          "id": "identificar_magia",
+          "nome": "Identificar Magia",
+          "proficiencia_minima": "treinado",
+          "acao_geral": true,
+          "custo_acoes": null,
+          "tracos": [
+            "concentração",
+            "exploração",
+            "secreto"
+          ],
+          "descricao": "Identificar Magia, particularmente magia arcana (página 238)."
+        },
+        {
+          "id": "emprestar_uma_magia_arcana",
+          "nome": "Emprestar uma Magia Arcana",
+          "proficiencia_minima": "treinado",
+          "acao_geral": false,
+          "custo_acoes": null,
+          "tracos": [
+            "concentração",
+            "exploração"
+          ],
+          "descricao": "Se for um conjurador arcano que prepara magias de um grimório, você pode tentar preparar uma magia do grimório de outra pessoa. O MJ determina a CD para o teste baseado no nível e raridade da magia; essa CD normalmente é um pouco mais fácil que Aprender uma Magia.",
+          "resultados": {
+            "sucesso": "Você prepara a magia emprestada como parte de sua preparação de magia normal.",
+            "falha": "Você falha em preparar a magia, mas o espaço de magia permanece disponível para preparar uma magia diferente. Você não pode tentar preparar esta magia até a próxima vez em que preparar magias."
+          }
+        }
+      ]
+    },
+    {
+      "id": "atletismo",
+      "nome": "Atletismo",
+      "atributo_chave": "Força",
+      "atributo_sigla": "For",
+      "sofre_penalidade_armadura": true,
+      "pagina": "241-243",
+      "descricao": "Atletismo permite que você realize proezas físicas.",
+      "nota_uso_basico": "Quando usar a ação básica Escapar (página 470), você pode utilizar seu modificador de Atletismo em vez de seu modificador de ataque desarmado. Ações de Atletismo com o traço ataque não sofrem a penalidade em testes por armadura.",
+      "quadros_e_regras_especiais": {
+        "movimento_forcado": "A ação Empurrar pode forçar uma criatura a se mover. Quando um efeito lhe forçar um movimento, ou se começar a cair, a distância é definida pelo efeito que lhe moveu, não por sua Velocidade, e não aciona reações acionadas por movimento.",
+        "saltar": "A ação básica Saltar é usada para Salto em Altura e Salto em Distância. Saltar horizontalmente permite até 3 m (Velocidade >= 4,5 m) ou 4,5 m (Velocidade >= 9 m); verticalmente até 90 cm verticalmente e 1,5 m horizontalmente.",
+        "queda": "Ao cair mais de 1,5 metros, sofre 1 de dano contundente para cada 60 cm caídos (2,5 de dano a cada 1,5 m, arredondado para baixo) e fica prostrado se sofrer qualquer dano por queda. Água, neve ou substância macia reduz o cálculo em até 6 m (limitado à profundidade). Segurar-se numa Beirada como reação (p. 472) pode reduzir ou eliminar o dano."
+      },
+      "acoes_destreinadas": [
+        {
+          "id": "agarrar",
+          "nome": "Agarrar",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": false,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "ataque"
+          ],
+          "requerimentos": "Você tem pelo menos uma mão livre. Seu alvo não pode ser mais de um tamanho maior que você.",
+          "cd_alvo": "CD de Fortitude do alvo",
+          "descricao": "Você tenta agarrar um oponente com sua mão livre (ou continuar segurando uma criatura que já tenha agarrado) contra a CD de Fortitude dele.",
+          "resultados": {
+            "sucesso_critico": "Seu oponente fica restringido até o final do seu próximo turno a menos que você se mova ou seu oponente Escape (página 470).",
+            "sucesso": "Seu oponente fica agarrado até o final do seu próximo turno a menos que você se mova ou seu oponente Escape.",
+            "falha": "Você falha em agarrar seu oponente. Se já tiver agarrado ou restringido o oponente usando Agarrar, essas condições são encerradas para a criatura.",
+            "falha_critica": "Se você já tiver agarrado ou restringido o oponente, ele se liberta. Seu alvo pode agarrá-lo como se tivesse obtido sucesso em usar a ação Agarrar contra você, ou forçá-lo a cair e ficar prostrado."
+          }
+        },
+        {
+          "id": "derrubar",
+          "nome": "Derrubar",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": false,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "ataque"
+          ],
+          "requerimentos": "Você tem pelo menos uma mão livre. Seu alvo não pode ser mais de um tamanho maior que você.",
+          "cd_alvo": "CD de Reflexos do alvo",
+          "descricao": "Você tenta derrubar um oponente no chão contra a CD de Reflexos dele.",
+          "resultados": {
+            "sucesso_critico": "O alvo cai, fica prostrado e sofre 1d6 de dano contundente.",
+            "sucesso": "O alvo cai e fica prostrado.",
+            "falha_critica": "Você perde o equilíbrio, cai e fica prostrado."
+          }
+        },
+        {
+          "id": "empurrar",
+          "nome": "Empurrar",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": false,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "ataque"
+          ],
+          "requerimentos": "Você tem pelo menos uma mão livre. Seu alvo não pode ser mais de um tamanho maior que você.",
+          "cd_alvo": "CD de Fortitude do alvo",
+          "descricao": "Você tenta empurrar um oponente para longe contra a CD de Fortitude dele.",
+          "resultados": {
+            "sucesso_critico": "Você empurra seu oponente até 3 metros para longe de você. Você pode Andar após isso, mas deve mover-se a mesma distância e na mesma direção.",
+            "sucesso": "Você empurra seu oponente 1,5 metros para trás. Você pode Andar após isso, mas deve mover-se a mesma distância e na mesma direção.",
+            "falha_critica": "Você perde o equilíbrio, cai e fica prostrado."
+          }
+        },
+        {
+          "id": "escalar",
+          "nome": "Escalar",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": false,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "movimento"
+          ],
+          "requerimentos": "Você tem ambas as mãos livres.",
+          "descricao": "Você se move para cima, para baixo ou por uma inclinação. A menos que seja particularmente fácil, faz um teste de Atletismo. Você fica desprevenido a menos que possua uma Velocidade de escalada.",
+          "resultados": {
+            "sucesso_critico": "Você se move para cima, através de, ou desce seguramente a inclinação por 1,5 metros mais 1,5 metros para cada 6 metros de sua Velocidade em terra (3 metros para a maioria dos PJs).",
+            "sucesso": "Você se move de forma segura por 1,5 metros para cada 6 metros de sua Velocidade em terra (1,5 metros para a maioria dos PJs; mínimo 1,5 metros se sua Velocidade for menor que 6 metros).",
+            "falha_critica": "Você cai. Se começou a escalar em solo estável, você cai e fica prostrado."
+          },
+          "exemplos_tarefas": {
+            "destreinado": "escadas, encostas íngremes, árvores de galhos baixos",
+            "treinado": "cordames, cordas, árvore típica",
+            "especialista": "parede com pequenos apoios para mãos e pés",
+            "mestre": "teto com apoios para mãos e pés, muro de pedra",
+            "lendario": "superfície lisa"
+          }
+        },
+        {
+          "id": "forcar",
+          "nome": "Forçar",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": false,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "ataque"
+          ],
+          "descricao": "Utilizando seu corpo, uma alavanca ou outra ferramenta, você tenta forçar a abertura de uma porta, janela, recipiente ou portão pesado (ou atravessar paredes). Sem um pé-de-cabra, sofre –2 de penalidade de item no teste de Atletismo.",
+          "resultados": {
+            "sucesso_critico": "Você abre a porta, janela, recipiente ou portão e pode evitar danificar o item no processo.",
+            "sucesso": "Você quebra a porta, janela, recipiente ou portão para abri-lo, e o objeto aberto sofre a condição quebrado (ou dano sem quebrar se especialmente resistente).",
+            "falha_critica": "Sua tentativa emperra a porta, janela, recipiente ou portão, impondo –2 de penalidade de circunstância em tentativas futuras de Forçá-lo."
+          },
+          "exemplos_tarefas": {
+            "destreinado": "tecido, vidro frágil",
+            "treinado": "gelo, vidro resistente",
+            "especialista": "porta de madeira frágil, rastrilho de madeira",
+            "mestre": "porta de madeira resistente, rastrilho de ferro, barra de metal",
+            "lendario": "porta de pedra ou ferro"
+          }
+        },
+        {
+          "id": "nadar",
+          "nome": "Nadar",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": false,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "movimento"
+          ],
+          "descricao": "Você se impulsiona pela água. Na maioria das águas calmas obtém sucesso sem teste; em água turbulenta ou perigosa, faz teste de Atletismo. Se encerrar seu turno na água sem obter sucesso em Nadar nesse turno, afunda 3 m ou é movido pela corrente (exceto se sua última ação foi entrar na água). Submerso exige prender a respiração a cada rodada (p. 478).",
+          "resultados": {
+            "sucesso_critico": "Você se move até 3 metros pela água, mais 1,5 metros para cada 6 metros de sua Velocidade em terra (4,5 metros para a maioria dos PJs).",
+            "sucesso": "Você se move 1,5 metros pela água, mais 1,5 metros para cada 6 metros de sua Velocidade em terra (3 metros para a maioria dos PJs).",
+            "falha_critica": "Você não faz qualquer progresso e, se estiver prendendo sua respiração, perde 1 rodada de ar."
+          },
+          "exemplos_tarefas": {
+            "destreinado": "lago ou outras águas calmas",
+            "treinado": "água corrente, como um rio",
+            "especialista": "rio com correnteza rápida",
+            "mestre": "mar revolto",
+            "lendario": "redemoinho, cachoeira"
+          }
+        },
+        {
+          "id": "salto_em_altura",
+          "nome": "Salto em Altura",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": false,
+          "custo_acoes": "2 ações",
+          "tracos": [],
+          "cd_alvo": "CD 30 (padrão, ajustável pelo MJ)",
+          "descricao": "Você Anda e depois faz um Salto vertical e um teste de Atletismo CD 30 para aumentar a altura de seu salto. Se não tiver Andado pelo menos 3 metros, falha automaticamente no teste.",
+          "resultados": {
+            "sucesso_critico": "Aumente a distância vertical máxima para 2,4 metros, ou aumente a distância vertical máxima para 1,5 metros e a distância horizontal máxima para 3 metros.",
+            "sucesso": "Aumente a distância vertical máxima para 1,5 metros.",
+            "falha": "Você Salta normalmente.",
+            "falha_critica": "Você não Salta de forma nenhuma e, em vez disso, cai prostrado em seu espaço."
+          }
+        },
+        {
+          "id": "salto_em_distancia",
+          "nome": "Salto em Distância",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": false,
+          "custo_acoes": "2 ações",
+          "tracos": [],
+          "cd_alvo": "5 para cada 1,5 metros de distância (ex.: CD 20 para 6 m)",
+          "descricao": "Você Anda e depois faz um Salto horizontal e um teste de Atletismo para aumentar o comprimento de seu salto. Não pode Saltar mais longe do que sua Velocidade. Se não tiver Andado pelo menos 3 metros ou se tentar saltar em direção diferente da que Andou, falha automaticamente.",
+          "resultados": {
+            "sucesso": "Aumente a distância horizontal máxima que você Salta para a distância desejada.",
+            "falha": "Você Salta normalmente.",
+            "falha_critica": "Você Salta normalmente, mas cai e aterrissa prostrado."
+          }
+        }
+      ],
+      "acoes_treinadas": [
+        {
+          "id": "desarmar",
+          "nome": "Desarmar",
+          "proficiencia_minima": "treinado",
+          "acao_geral": false,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "ataque"
+          ],
+          "requerimentos": "Você tem pelo menos uma mão livre. Seu alvo não pode ser mais de um tamanho maior que você.",
+          "cd_alvo": "CD de Reflexos do oponente",
+          "descricao": "Você tenta derrubar algo que um oponente esteja segurando contra a CD de Reflexos dele.",
+          "resultados": {
+            "sucesso_critico": "Você derruba o item da empunhadura do oponente. O item cai no chão no espaço do oponente.",
+            "sucesso": "Você enfraquece a empunhadura de seu oponente no item. Até o início do turno dessa criatura, tentativas de Desarmar o oponente desse item recebem +2 de bônus de circunstância e o alvo sofre –2 de penalidade de circunstância em ataques com o item ou outros testes que exijam uma empunhadura firme nesse item.",
+            "falha_critica": "Você perde o equilíbrio e fica desprevenido até o início de seu próximo turno."
+          }
+        }
+      ]
+    },
+    {
+      "id": "diplomacia",
+      "nome": "Diplomacia",
+      "atributo_chave": "Carisma",
+      "atributo_sigla": "Car",
+      "sofre_penalidade_armadura": false,
+      "pagina": "243-244",
+      "descricao": "Você influencia os outros através de negociação e lisonjas.",
+      "quadros_e_regras_especiais": {
+        "alterando_atitudes": {
+          "atitudes": {
+            "Prestativa": "Disposto a ajudá-lo e responde favoravelmente a seus pedidos.",
+            "Amistosa": "Possui uma boa atitude em relação a você, mas não necessariamente arrisca seu pescoço para ajudar.",
+            "Indiferente": "Não se importa com você de maneira alguma. (A maioria dos PdMs começa indiferente.)",
+            "Inamistosa": "Não gosta de você e não quer ajudá-lo.",
+            "Hostil": "Trabalha ativamente contra você — e pode atacá-lo simplesmente por desgostar de você."
+          },
+          "regra_pjs": "Em hipótese nenhuma alguém é capaz de mudar a atitude de um personagem jogador com estas perícias; os jogadores fazem as decisões definitivas sobre como seus personagens respondem."
+        }
+      },
+      "acoes_destreinadas": [
+        {
+          "id": "impressionar",
+          "nome": "Impressionar",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": false,
+          "custo_acoes": null,
+          "tracos": [
+            "auditivo",
+            "concentração",
+            "exploração",
+            "linguístico",
+            "mental"
+          ],
+          "cd_alvo": "CD de Vontade do alvo",
+          "descricao": "Com pelo menos 1 minuto de conversa, falas carismáticas, lisonjas e outros atos de boa vontade, você faz um teste de Diplomacia contra a CD de Vontade do alvo. Boas impressões (ou más, em falha crítica) duram pelo menos pela interação social atual.",
+          "resultados": {
+            "sucesso_critico": "A atitude do alvo em relação a você melhora em dois passos.",
+            "sucesso": "A atitude do alvo em relação a você melhora em um passo.",
+            "falha_critica": "A atitude do alvo em relação a você piora em um passo."
+          }
+        },
+        {
+          "id": "obter_informacao",
+          "nome": "Obter Informação",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": false,
+          "custo_acoes": null,
+          "tracos": [
+            "exploração",
+            "secreto"
+          ],
+          "descricao": "Você vasculha mercados locais, tavernas e locais de reunião na tentativa de descobrir algo sobre um indivíduo ou tópico específico (normalmente leva 2 horas, às vezes mais; pode envolver gastos em barganhas, bebidas ou presentes).",
+          "resultados": {
+            "sucesso": "Você coleta informações sobre o indivíduo ou tópico. O MJ determina as especificidades.",
+            "falha_critica": "Você coleta informações incorretas sobre o indivíduo ou tópico."
+          },
+          "exemplos_tarefas": {
+            "destreinado": "fofoca atual",
+            "treinado": "rumor comum",
+            "especialista": "rumor obscuro, segredo mau guardado",
+            "mestre": "informação bem guardada ou esotérica",
+            "lendario": "informação conhecida somente por poucos incrivelmente selecionados ou apenas por seres extraordinários"
+          }
+        },
+        {
+          "id": "pedir",
+          "nome": "Pedir",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": false,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "auditivo",
+            "concentração",
+            "linguístico",
+            "mental"
+          ],
+          "descricao": "Você faz um pedido a uma criatura que seja amistosa ou prestativa em relação a você, em termos aceitáveis dada sua atitude atual.",
+          "resultados": {
+            "sucesso_critico": "O alvo concorda com seu pedido sem exigências.",
+            "sucesso": "O alvo concorda com seu pedido, mas pode demandar provisões adicionais ou alterações no pedido.",
+            "falha": "O alvo recusa o pedido, embora possa propor uma alternativa que pareça menos extrema.",
+            "falha_critica": "Não apenas o alvo recusa o pedido, como a atitude dele em relação a você piora em um passo devido à temeridade do pedido."
+          }
+        }
+      ],
+      "acoes_treinadas": []
+    },
+    {
+      "id": "dissimulacao",
+      "nome": "Dissimulação",
+      "atributo_chave": "Carisma",
+      "atributo_sigla": "Car",
+      "sofre_penalidade_armadura": false,
+      "pagina": "244-245",
+      "descricao": "Você pode enganar e iludir os outros utilizando disfarces, mentiras e outras formas de subterfúgio.",
+      "acoes_destreinadas": [
+        {
+          "id": "criar_uma_distracao",
+          "nome": "Criar uma Distração",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": false,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "mental"
+          ],
+          "cd_alvo": "CDs de Percepção das criaturas",
+          "descricao": "Com um gesto, truque ou palavras distrativas, faz um único teste de Dissimulação contra as CDs de Percepção das criaturas. Seja bem-sucedido ou não, as criaturas recebem +4 de bônus de circunstância contra suas tentativas de Criar uma Distração por 1 minuto.",
+          "resultados": {
+            "sucesso": "Você se torna escondido para cada criatura com CD de Percepção <= resultado até o final do seu turno (termina se realizar ação diferente de Dar um Passo, Esconder ou Esgueirar; se Golpear, o alvo fica desprevenido contra esse ataque e você se torna observado após executá-lo).",
+            "falha": "Você não desvia a atenção de criaturas com CD de Percepção > resultado, e elas ficam cientes da tentativa de enganá-las."
+          },
+          "observacao": "Adquire o traço manuseio (se usar gesto ou truque) ou os traços auditivo e linguístico (se usar palavras distrativas)."
+        },
+        {
+          "id": "mentir",
+          "nome": "Mentir",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": false,
+          "custo_acoes": "Pelo menos 1 rodada",
+          "tracos": [
+            "auditivo",
+            "concentração",
+            "linguístico",
+            "mental",
+            "secreto"
+          ],
+          "cd_alvo": "CD de Percepção de cada criatura",
+          "descricao": "Você tenta enganar alguém com uma inverdade (pelo menos 1 rodada, ou mais se elaborada), rolando um único teste de Dissimulação contra a CD de Percepção de cada criatura. Posteriormente, a critério do MJ, quem acreditou pode fazer Percepção para Sentir Motivação contra sua CD de Dissimulação se surgir evidência contrária.",
+          "resultados": {
+            "sucesso": "O alvo acredita em sua mentira.",
+            "falha": "O alvo não acredita em sua mentira e recebe +4 de bônus de circunstância contra suas tentativas de Mentir pela duração de sua conversa."
+          }
+        },
+        {
+          "id": "personificar",
+          "nome": "Personificar",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": false,
+          "custo_acoes": null,
+          "tracos": [
+            "concentração",
+            "exploração",
+            "manuseio",
+            "secreto"
+          ],
+          "cd_alvo": "CD de Percepção da criatura (ou oposição contra CD de Dissimulação ao Buscar)",
+          "descricao": "Você cria um disfarce para se passar por alguém ou algo que não é. Montar um disfarce convincente leva 10 minutos e requer um kit de disfarce (página 290). Criaturas só costumam detectar com Buscar contra sua CD de Dissimulação, ou em interação direta via teste secreto de Dissimulação contra CD de Percepção.",
+          "resultados": {
+            "sucesso": "Você leva a criatura a pensar que você é a pessoa em que está disfarçada. Pode ter de fazer novo teste se seu comportamento mudar.",
+            "falha": "A criatura nota que você não é quem afirma ser.",
+            "falha_critica": "A criatura nota que você não é quem afirma ser e o reconhece caso o conheça previamente sem um disfarce."
+          }
+        }
+      ],
+      "acoes_treinadas": [
+        {
+          "id": "fintar",
+          "nome": "Fintar",
+          "proficiencia_minima": "treinado",
+          "acao_geral": false,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "mental"
+          ],
+          "requerimentos": "Você está no alcance corpo a corpo do oponente que está tentando Fintar.",
+          "cd_alvo": "CD de Percepção do oponente",
+          "descricao": "Com um floreio enganoso, faz um teste de Dissimulação contra a CD de Percepção do oponente.",
+          "resultados": {
+            "sucesso_critico": "O alvo fica desprevenido contra ataques corpo a corpo que você desferir contra ele até o final do seu próximo turno.",
+            "sucesso": "O alvo fica desprevenido contra ataques corpo a corpo que você desferir contra ele até o final do seu turno atual.",
+            "falha_critica": "Sua finta se volta contra você. Você fica desprevenido contra ataques corpo a corpo que o alvo desferir contra você até o final do seu próximo turno."
+          }
+        }
+      ]
+    },
+    {
+      "id": "furtividade",
+      "nome": "Furtividade",
+      "atributo_chave": "Destreza",
+      "atributo_sigla": "Des",
+      "sofre_penalidade_armadura": true,
+      "pagina": "245-246",
+      "descricao": "Você é habilidoso em evitar detecção, permitindo que passe despercebido por adversários, se esconda ou oculte um item.",
+      "quadros_e_regras_especiais": {
+        "sendo_furtivo_estados_deteccao": {
+          "fluxo": "Combinar Esconder (ficar escondido atrás de cobertura ou ocultação) seguido de Esgueirar (mover-se à metade da Velocidade para ficar indetectado). Criaturas tentam encontrá-lo com Buscar (p. 470).",
+          "estados": {
+            "Observado": "Você está no campo de visão claro da criatura.",
+            "Escondido": "A criatura sabe sua localização, mas não consegue lhe ver.",
+            "Indetectado": "A criatura não sabe a sua localização."
+          }
+        }
+      },
+      "acoes_destreinadas": [
+        {
+          "id": "esconder",
+          "nome": "Esconder",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": false,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "secreto"
+          ],
+          "cd_alvo": "CD de Percepção de cada criatura observando",
+          "descricao": "Você fica atrás de cobertura (ou cobertura maior) ou em área de ocultação para tornar-se escondido em vez de observado, recebendo o bônus de circunstância de cobertura (+2 ou +4) no teste secreto de Furtividade.",
+          "resultados": {
+            "sucesso": "Você fica escondido em vez de observado (ou mantém escondido/indetectado). Permanece até perder cobertura/ocultação ou realizar ação diferente de Dar um Passo, Esconder ou Esgueirar (se Golpear, o alvo fica desprevenido contra esse ataque e você se torna observado após executá-lo)."
+          }
+        },
+        {
+          "id": "esgueirar",
+          "nome": "Esgueirar",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": false,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "movimento",
+            "secreto"
+          ],
+          "cd_alvo": "CD de Percepção de cada criatura para a qual estava escondido ou indetectado",
+          "descricao": "Você Anda até metade de sua Velocidade (ou metade de Escalar, Escavar, Nadar ou Voar) para mover-se enquanto estiver ou permanecer indetectado. Ao final do movimento, o MJ rola teste secreto de Furtividade (precisa terminar com cobertura ou ocultação contra a criatura, salvo impossibilidade física de vê-lo como invisibilidade/cegueira/escuridão sem visão no escuro).",
+          "resultados": {
+            "sucesso": "Você fica indetectado pela criatura durante e ao final do movimento (mesmas restrições de ações que quebram furtividade; falar ou fazer barulho alto torna-o escondido em vez de indetectado).",
+            "falha": "Um som revelador ou outro sinal indica sua posição; você fica escondido durante todo o movimento e permanece assim.",
+            "falha_critica": "Você é observado pela criatura durante todo o movimento e permanece assim (ou fica apenas escondido se estiver invisível e estava escondido)."
+          }
+        },
+        {
+          "id": "ocultar_um_objeto",
+          "nome": "Ocultar um Objeto",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": false,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "manuseio",
+            "secreto"
+          ],
+          "cd_alvo": "CD de Percepção de observadores passivos (ou Percepção vs sua CD de Furtividade ao Buscar)",
+          "descricao": "Você esconde um objeto pequeno em si (como uma arma de Volume leve) ou em um local (matagal, compartimento secreto). Um único teste secreto vale contra todos os observadores passivos; quem procurar ativamente usa Percepção contra sua CD de Furtividade.",
+          "resultados": {
+            "sucesso": "O objeto permanece indetectado.",
+            "falha": "O objeto é encontrado por quem o procura."
+          }
+        }
+      ],
+      "acoes_treinadas": []
+    },
+    {
+      "id": "intimidacao",
+      "nome": "Intimidação",
+      "atributo_chave": "Carisma",
+      "atributo_sigla": "Car",
+      "sofre_penalidade_armadura": false,
+      "pagina": "246-247",
+      "descricao": "Você curva os outros à sua vontade usando ameaças.",
+      "acoes_destreinadas": [
+        {
+          "id": "coagir",
+          "nome": "Coagir",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": false,
+          "custo_acoes": null,
+          "tracos": [
+            "auditivo",
+            "concentração",
+            "emoção",
+            "exploração",
+            "linguístico",
+            "mental"
+          ],
+          "cd_alvo": "CD de Vontade do alvo",
+          "descricao": "Com ameaças veladas ou explícitas após pelo menos 1 minuto conversando com uma criatura que possa ver e que possa vê-lo ou senti-lo, faz um teste de Intimidação contra a CD de Vontade do alvo.",
+          "resultados": {
+            "sucesso_critico": "O alvo lhe dá a informação que você busca ou concorda em seguir suas ordens (desde que não prejudiciais) por até 1 dia (definido pelo MJ), ficando então inamistoso se já não fosse inamistoso/hostil, mas amedrontado demais para retaliar a curto prazo.",
+            "sucesso": "Como sucesso crítico, mas após o alvo ficar inamistoso, ele pode decidir agir contra você (reportando às autoridades ou auxiliando seus inimigos).",
+            "falha": "O alvo não faz o que você diz e se torna inamistoso se já não estiver inamistoso ou hostil.",
+            "falha_critica": "O alvo se recusa a consentir, se torna hostil se já não estiver e não pode ser Coagido por você pelo menos por uma semana."
+          }
+        },
+        {
+          "id": "desmoralizar",
+          "nome": "Desmoralizar",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": false,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "auditivo",
+            "concentração",
+            "emoção",
+            "mental"
+          ],
+          "cd_alvo": "CD de Vontade do alvo",
+          "descricao": "Escolha uma criatura a até 9 metros da qual esteja ciente e faça um teste de Intimidação contra a CD de Vontade do alvo. Se não falar um idioma, se o alvo não compreender seu idioma ou não puder ouvi-lo, sofre –4 de penalidade de circunstância. O alvo fica temporariamente imune a suas tentativas de Desmoralizá-lo por 10 minutos.",
+          "resultados": {
+            "sucesso_critico": "O alvo fica assustado 2.",
+            "sucesso": "O alvo fica assustado 1."
+          }
+        }
+      ],
+      "acoes_treinadas": []
+    },
+    {
+      "id": "ladroagem",
+      "nome": "Ladroagem",
+      "atributo_chave": "Destreza",
+      "atributo_sigla": "Des",
+      "sofre_penalidade_armadura": true,
+      "pagina": "247",
+      "descricao": "Você é treinado em um conjunto particular de perícias favorecidas por ladrões e meliantes.",
+      "acoes_destreinadas": [
+        {
+          "id": "empalmar_um_objeto",
+          "nome": "Empalmar um Objeto",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": false,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "manuseio"
+          ],
+          "cd_alvo": "CDs de Percepção de todas as criaturas observando",
+          "descricao": "Empalmar um pequeno objeto desapossado (normalmente Volume insignificante) sem ser percebido exige um único teste de Ladroagem contra as CDs de Percepção de todas as criaturas que estão lhe observando. Você pega o objeto independente de sucesso ou falha.",
+          "resultados": {
+            "sucesso": "A criatura não percebe você Empalmando o Objeto.",
+            "falha": "A criatura percebe você Empalmando o Objeto e o MJ determina a resposta dela."
+          }
+        },
+        {
+          "id": "furtar",
+          "nome": "Furtar",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": false,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "manuseio"
+          ],
+          "cd_alvo": "CD de Percepção do portador (e de observadores)",
+          "descricao": "Você tenta pegar um objeto pequeno (normalmente Volume insignificante) de outra criatura sem ser percebido. Falha automaticamente se a criatura estiver em combate ou em guarda. Se estiver em um bolso ou protegido, sofre –5 de penalidade.",
+          "resultados": {
+            "sucesso": "Você furta o objeto sem o portador perceber, ou um observador não vê que você pega ou tenta pegar o item.",
+            "falha": "O portador do item percebe sua tentativa antes de você conseguir pegar o objeto, ou um observador vê que você pega ou tenta pegar o item."
+          }
+        }
+      ],
+      "acoes_treinadas": [
+        {
+          "id": "abrir_uma_fechadura",
+          "nome": "Abrir uma Fechadura",
+          "proficiencia_minima": "treinado",
+          "acao_geral": false,
+          "custo_acoes": "2 ações",
+          "tracos": [
+            "manuseio"
+          ],
+          "requerimentos": "Você possui ferramentas de ladrão (página 290).",
+          "cd_alvo": "CD determinada pela fechadura (página 290)",
+          "descricao": "Abre fechadura sem chave (fechaduras superiores podem requerer vários sucessos). Sem ferramentas apropriadas, o MJ pode permitir ferramentas improvisadas (tratadas como ferramentas de má qualidade).",
+          "resultados": {
+            "sucesso_critico": "Você destranca a fechadura ou obtém dois sucessos para abrir uma fechadura complexa. Você não deixa traços de sua interferência.",
+            "sucesso": "Você destranca a fechadura ou obtém um sucesso para abrir uma fechadura complexa.",
+            "falha_critica": "Você quebra suas ferramentas. Consertá-las requer usar Manufatura para Repará-las ou providenciar apetrechos de reposição (custando 3 pp; ou 3 po para ferramentas de ladrão infiltrador)."
+          }
+        },
+        {
+          "id": "desabilitar_um_dispositivo",
+          "nome": "Desabilitar um Dispositivo",
+          "proficiencia_minima": "treinado",
+          "acao_geral": false,
+          "custo_acoes": "2 ações",
+          "tracos": [
+            "manuseio"
+          ],
+          "requerimentos": "Alguns dispositivos exigem que você utilize ferramentas de ladrão (página 290) para desabilitá-los.",
+          "descricao": "Permite desarmar uma armadilha ou outro dispositivo complexo (frequentemente exige vários sucessos e, às vezes, graduação específica de proficiência em Ladroagem).",
+          "resultados": {
+            "sucesso_critico": "Você desabilita o dispositivo ou obtém dois sucessos para desabilitar um dispositivo complexo. Você não deixa traços de sua interferência e pode rearmar o dispositivo posteriormente se esse tipo de dispositivo puder ser rearmado.",
+            "sucesso": "Você desabilita o dispositivo ou obtém um sucesso para desabilitar um dispositivo complexo.",
+            "falha_critica": "Você aciona o dispositivo."
+          }
+        }
+      ]
+    },
+    {
+      "id": "manufatura",
+      "nome": "Manufatura",
+      "atributo_chave": "Inteligência",
+      "atributo_sigla": "Int",
+      "sofre_penalidade_armadura": false,
+      "pagina": "247-249",
+      "descricao": "Você pode utilizar esta perícia para criar, compreender e reparar itens.",
+      "quadros_e_regras_especiais": {
+        "consumiveis_e_municao": "Você pode Manufaturar itens com o traço consumível em lotes de até 4 do mesmo item com um único teste (suprindo matéria-prima para todos desde o início e completando o lote de uma vez). Munição não-mágica é manufaturada em lotes conforme a Tabela 6–8 (normalmente 10 unidades).",
+        "obtendo_formulas": "Acesso às fórmulas de todos os itens comuns do Capítulo 6 ao comprar um livro básico de manufatura (p. 291); demais fórmulas seguem regras da página 293."
+      },
+      "acoes_destreinadas": [
+        {
+          "id": "recordar_conhecimento",
+          "nome": "Recordar Conhecimento",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": true,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "concentração",
+            "secreto"
+          ],
+          "descricao": "Sobre reações alquímicas, valor de itens, engenharia, materiais inusitados e criaturas alquímicas ou mecânicas (normalmente inclui constructos)."
+        },
+        {
+          "id": "reparar",
+          "nome": "Reparar",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": false,
+          "custo_acoes": null,
+          "tracos": [
+            "exploração",
+            "manuseio"
+          ],
+          "requerimentos": "Você possui um kit de reparos (página 291).",
+          "cd_alvo": "CD determinada pelo MJ (normalmente igual à CD de Manufatura do item)",
+          "descricao": "Você gasta 10 minutos consertando um item danificado com ambas as mãos sobre uma superfície estável. Não pode Reparar um item destruído.",
+          "resultados": {
+            "sucesso_critico": "Restaura 10 PV + 10 PV por graduação de proficiência em Manufatura (20 T, 30 E, 40 M, 50 L).",
+            "sucesso": "Restaura 5 PV + 5 PV por graduação de proficiência em Manufatura (10 T, 15 E, 20 M, 25 L).",
+            "falha_critica": "Você causa 2d6 de dano ao item. Aplique a Dureza do item a este dano."
+          }
+        }
+      ],
+      "acoes_treinadas": [
+        {
+          "id": "ganhar_proventos",
+          "nome": "Ganhar Proventos",
+          "proficiencia_minima": "treinado",
+          "acao_geral": true,
+          "custo_acoes": null,
+          "tracos": [
+            "recesso"
+          ],
+          "descricao": "Manufaturando bens para o mercado (página 237–238)."
+        },
+        {
+          "id": "identificar_alquimia",
+          "nome": "Identificar Alquimia",
+          "proficiencia_minima": "treinado",
+          "acao_geral": false,
+          "custo_acoes": null,
+          "tracos": [
+            "concentração",
+            "exploração",
+            "secreto"
+          ],
+          "requerimentos": "Você possui ferramentas de alquimista (página 290).",
+          "descricao": "Identifica a natureza de um item alquímico com 10 minutos de testes.",
+          "resultados": {
+            "sucesso": "Você identifica o item e os meios para ativá-lo.",
+            "falha": "Você falha em identificar o item, mas pode tentar novamente.",
+            "falha_critica": "Você identifica o item erroneamente como outro item à escolha do MJ."
+          }
+        },
+        {
+          "id": "manufaturar",
+          "nome": "Manufaturar",
+          "proficiencia_minima": "treinado",
+          "acao_geral": false,
+          "custo_acoes": null,
+          "tracos": [
+            "manuseio",
+            "recesso"
+          ],
+          "requerimentos": "Item de seu nível ou inferior (itens sem nível contam como 0; nível 9+ exige Mestre, nível 16+ exige Lendário); possuir a fórmula; ferramentas apropriadas e oficina/laboratório/forja; matéria-prima no valor de pelo menos metade do Preço; talentos Manufatura Alquímica, Manufatura Mágica ou Manufatura de Arapuca quando aplicável.",
+          "descricao": "Após gastar 4 dias de trabalho, você faz um teste de Manufatura. Em sucesso, pode completar imediatamente pagando o restante do Preço em materiais, ou gastar dias adicionais de recesso reduzindo o custo restante conforme a Tabela 4–3 usando seu próprio nível como nível da tarefa.",
+          "resultados": {
+            "sucesso_critico": "Sua tentativa é bem-sucedida. Cada dia adicional gasto Manufaturando reduz os materiais necessários em uma quantidade baseada em seu nível + 1 e sua graduação de proficiência.",
+            "sucesso": "Sua tentativa é bem-sucedida. Cada dia adicional gasto Manufaturando reduz os materiais necessários em uma quantidade baseada em seu nível e sua graduação de proficiência.",
+            "falha": "Você falha em completar o item. Pode recuperar 100% da matéria-prima que supriu; para tentar novamente deve recomeçar do zero.",
+            "falha_critica": "Você falha em completar o item e perde 10% da matéria-prima suprida (recupera 90%); para tentar novamente deve recomeçar do zero."
+          }
+        }
+      ]
+    },
+    {
+      "id": "medicina",
+      "nome": "Medicina",
+      "atributo_chave": "Sabedoria",
+      "atributo_sigla": "Sab",
+      "sofre_penalidade_armadura": false,
+      "pagina": "249-250",
+      "descricao": "Você pode remendar ferimentos e ajudar pessoas a se recuperarem de doenças e venenos.",
+      "acoes_destreinadas": [
+        {
+          "id": "recordar_conhecimento",
+          "nome": "Recordar Conhecimento",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": true,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "concentração",
+            "secreto"
+          ],
+          "descricao": "Sobre doenças, ferimentos, venenos e outros padecimentos (inclui realizar autópsias gastando 10 minutos ou mais procurando padrões de ferimento)."
+        },
+        {
+          "id": "administrar_primeiros_socorros",
+          "nome": "Administrar Primeiros Socorros",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": false,
+          "custo_acoes": "2 ações",
+          "tracos": [
+            "manuseio"
+          ],
+          "requerimentos": "Você possui ferramentas de curandeiro (página 290).",
+          "cd_alvo": "Estabilizar: 5 + CD de rolagem de recuperação (normalmente 15 + valor de morrendo); Parar Sangramento: CD do efeito que causou o sangramento",
+          "descricao": "Você presta primeiros socorros a uma criatura adjacente que está sangrando ou morrendo (escolha um antes de rolar).",
+          "resultados": {
+            "sucesso": "Estabilizar: a criatura perde a condição morrendo (permanece inconsciente). Parar Sangramento: a criatura faz um teste simples para encerrar o sangramento.",
+            "falha_critica": "Estabilizar: o valor de morrendo aumenta em 1. Parar Sangramento: a criatura sofre imediatamente dano igual ao dano persistente de sangramento dela."
+          },
+          "observacao": "Na Tabela 4–1 (p. 235) aparece com ícone de 1 ação por erro tipográfico, mas a descrição oficial da ação na página 249 define 2 ações."
+        }
+      ],
+      "acoes_treinadas": [
+        {
+          "id": "tratar_doenca",
+          "nome": "Tratar Doença",
+          "proficiencia_minima": "treinado",
+          "acao_geral": false,
+          "custo_acoes": null,
+          "tracos": [
+            "manuseio",
+            "recesso"
+          ],
+          "requerimentos": "Você possui ferramentas de curandeiro (página 290).",
+          "cd_alvo": "CD da doença",
+          "descricao": "Passa pelo menos 8 horas cuidando de uma criatura adoecida. Uma tentativa por salvamento contra a doença.",
+          "resultados": {
+            "sucesso_critico": "Concede +4 de bônus de circunstância na próxima jogada de salvamento contra a doença.",
+            "sucesso": "Concede +2 de bônus de circunstância na próxima jogada de salvamento contra a doença.",
+            "falha_critica": "Faz a criatura sofrer –2 de penalidade de circunstância na próxima jogada de salvamento contra a doença."
+          }
+        },
+        {
+          "id": "tratar_ferimentos",
+          "nome": "Tratar Ferimentos",
+          "proficiencia_minima": "treinado",
+          "acao_geral": false,
+          "custo_acoes": null,
+          "tracos": [
+            "cura",
+            "exploração",
+            "manuseio"
+          ],
+          "requerimentos": "Você possui ferramentas de curandeiro (página 290).",
+          "cd_alvo": "CD 15 (padrão); Especialista pode tentar CD 20 (+10 PV); Mestre CD 30 (+30 PV); Lendário CD 40 (+50 PV)",
+          "descricao": "Passa 10 minutos tratando uma criatura viva ferida (inclusive você mesmo). O alvo fica temporariamente imune por 1 hora (sobrepõe-se ao tempo do tratamento). Se obtiver sucesso e tratar por 1 hora completa, dobra os PV recuperados.",
+          "resultados": {
+            "sucesso_critico": "O alvo recupera 4d8 Pontos de Vida (+ bônus de CD elevada, se aplicável) e a condição ferido dele é removida.",
+            "sucesso": "O alvo recupera 2d8 Pontos de Vida (+ bônus de CD elevada, se aplicável) e a condição ferido dele é removida.",
+            "falha_critica": "O alvo sofre 1d8 pontos de dano."
+          }
+        },
+        {
+          "id": "tratar_veneno",
+          "nome": "Tratar Veneno",
+          "proficiencia_minima": "treinado",
+          "acao_geral": false,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "manuseio"
+          ],
+          "requerimentos": "Você possui ferramentas de curandeiro (página 290).",
+          "cd_alvo": "CD do veneno",
+          "descricao": "Trata um paciente para impedir que um veneno se alastre. Uma tentativa por salvamento contra o veneno.",
+          "resultados": {
+            "sucesso_critico": "Concede +4 de bônus de circunstância na próxima jogada de salvamento contra o veneno.",
+            "sucesso": "Concede +2 de bônus de circunstância na próxima jogada de salvamento contra o veneno.",
+            "falha_critica": "Faz a criatura sofrer –2 de penalidade de circunstância na próxima jogada de salvamento contra o veneno."
+          }
+        }
+      ]
+    },
+    {
+      "id": "natureza",
+      "nome": "Natureza",
+      "atributo_chave": "Sabedoria",
+      "atributo_sigla": "Sab",
+      "sofre_penalidade_armadura": false,
+      "pagina": "250-251",
+      "descricao": "Você sabe muito sobre o mundo natural, além de comandar e treinar animais e bestas mágicas.",
+      "quadros_e_regras_especiais": {
+        "animais_comandados": "Um animal é criatura independente com Inteligência limitada que compreende apenas instruções simples (ações básicas Andar, Buscar, Golpear, Levantar, Saltar ou atividades que conheça). Age assim que puder no turno dele e esquece comandos além do que puder executar no turno."
+      },
+      "acoes_destreinadas": [
+        {
+          "id": "recordar_conhecimento",
+          "nome": "Recordar Conhecimento",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": true,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "concentração",
+            "secreto"
+          ],
+          "descricao": "Sobre fauna, flora, geografia, clima, o ambiente, criaturas de origem natural (animais, bestas, fadas e plantas), Primeiro Mundo, os Planos Material e Elementais."
+        },
+        {
+          "id": "comandar_um_animal",
+          "nome": "Comandar um Animal",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": false,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "auditivo",
+            "concentração"
+          ],
+          "cd_alvo": "CD de Vontade do animal",
+          "descricao": "Você dá uma ordem a um animal. Falha automaticamente se o animal estiver hostil ou inamistoso. Se estiver prestativo, aumente seu grau de sucesso em um passo. Pode gastar várias ações para o animal realizar a mesma quantidade de ações básicas.",
+          "resultados": {
+            "sucesso": "O animal obedece a seu comando no próximo turno dele.",
+            "falha": "O animal hesita ou resiste, e não faz nada.",
+            "falha_critica": "O animal lhe desobedece ou entende errado, e faz alguma outra ação determinada pelo MJ."
+          }
+        }
+      ],
+      "acoes_treinadas": [
+        {
+          "id": "aprender_uma_magia",
+          "nome": "Aprender uma Magia",
+          "proficiencia_minima": "treinado",
+          "acao_geral": true,
+          "custo_acoes": null,
+          "tracos": [
+            "concentração",
+            "exploração"
+          ],
+          "descricao": "Aprender uma Magia da tradição primal (página 234)."
+        },
+        {
+          "id": "identificar_magia",
+          "nome": "Identificar Magia",
+          "proficiencia_minima": "treinado",
+          "acao_geral": true,
+          "custo_acoes": null,
+          "tracos": [
+            "concentração",
+            "exploração",
+            "secreto"
+          ],
+          "descricao": "Identificar Magia, particularmente magia primal (página 238)."
+        }
+      ]
+    },
+    {
+      "id": "ocultismo",
+      "nome": "Ocultismo",
+      "atributo_chave": "Inteligência",
+      "atributo_sigla": "Int",
+      "sofre_penalidade_armadura": false,
+      "pagina": "251",
+      "descricao": "Você conhece muito sobre filosofias antigas, saberes esotéricos, misticismo obscuro e criaturas sobrenaturais.",
+      "acoes_destreinadas": [
+        {
+          "id": "recordar_conhecimento",
+          "nome": "Recordar Conhecimento",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": true,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "concentração",
+            "secreto"
+          ],
+          "descricao": "Sobre mistérios antigos, filosofias obscuras, criaturas de significância ocultista (aberrações, espíritos e limos) e dos Planos Astral, de Energia Positiva, de Energia Negativa, Etéreo e das Sombras."
+        }
+      ],
+      "acoes_treinadas": [
+        {
+          "id": "aprender_uma_magia",
+          "nome": "Aprender uma Magia",
+          "proficiencia_minima": "treinado",
+          "acao_geral": true,
+          "custo_acoes": null,
+          "tracos": [
+            "concentração",
+            "exploração"
+          ],
+          "descricao": "Aprender uma Magia da tradição ocultista (página 234)."
+        },
+        {
+          "id": "decifrar_escrita",
+          "nome": "Decifrar Escrita",
+          "proficiencia_minima": "treinado",
+          "acao_geral": true,
+          "custo_acoes": null,
+          "tracos": [
+            "concentração",
+            "exploração",
+            "secreto"
+          ],
+          "descricao": "Decifrar Escrita em tópicos ocultistas, incluindo sistemas metafísicos complexos, princípios sincréticos, filosofias bizarras e divagações incoerentes (página 236)."
+        },
+        {
+          "id": "identificar_magia",
+          "nome": "Identificar Magia",
+          "proficiencia_minima": "treinado",
+          "acao_geral": true,
+          "custo_acoes": null,
+          "tracos": [
+            "concentração",
+            "exploração",
+            "secreto"
+          ],
+          "descricao": "Identificar Magia, particularmente magia ocultista (página 238)."
+        }
+      ]
+    },
+    {
+      "id": "performance",
+      "nome": "Performance",
+      "atributo_chave": "Carisma",
+      "atributo_sigla": "Car",
+      "sofre_penalidade_armadura": false,
+      "pagina": "251",
+      "descricao": "Você é competente em uma forma de performance, utilizando seus talentos para impressionar uma multidão ou ganhar a vida.",
+      "quadros_e_regras_especiais": {
+        "competencia_basica": "Se você não atender às demandas físicas ou mentais da forma de arte (ex.: Destreza negativa ao dançar, Inteligência negativa ao discursar), o MJ pode aplicar uma penalidade baseada no atributo relevante.",
+        "tracos_de_performance": "Recebe traços adicionais conforme o tipo de performance (vide tabelas.tracos_de_performance)."
+      },
+      "acoes_destreinadas": [
+        {
+          "id": "performar",
+          "nome": "Performar",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": false,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "concentração"
+          ],
+          "descricao": "Você faz uma performance breve (canção, dança rápida ou piadas) para provar capacidade ou impressionar rapidamente; pode influenciar CDs de Diplomacia subsequentes ou mudar atitudes a critério do MJ.",
+          "resultados": {
+            "sucesso_critico": "Sua performance impressiona os observadores e eles provavelmente compartilharão histórias de sua habilidade.",
+            "sucesso": "Você se prova, e observadores apreciam a qualidade de sua performance.",
+            "falha": "Sua performance passa despercebida.",
+            "falha_critica": "Você demonstra somente incompetência."
+          },
+          "exemplos_tarefas": {
+            "destreinado": "audiência de plebeus",
+            "treinado": "audiência de artesãos",
+            "especialista": "audiência de mercadores ou baixa nobreza",
+            "mestre": "audiência de alta nobreza ou baixa realeza",
+            "lendario": "audiência de alta realeza ou seres de outros mundos"
+          }
+        }
+      ],
+      "acoes_treinadas": [
+        {
+          "id": "ganhar_proventos",
+          "nome": "Ganhar Proventos",
+          "proficiencia_minima": "treinado",
+          "acao_geral": true,
+          "custo_acoes": null,
+          "tracos": [
+            "recesso"
+          ],
+          "descricao": "Encenando uma performance diante de uma audiência (página 237–238)."
+        }
+      ]
+    },
+    {
+      "id": "religiao",
+      "nome": "Religião",
+      "atributo_chave": "Sabedoria",
+      "atributo_sigla": "Sab",
+      "sofre_penalidade_armadura": false,
+      "pagina": "251",
+      "descricao": "Os segredos de divindades, dogmas, fés e dos reinos de criaturas divinas sublimes e sinistras são conhecidos por você.",
+      "acoes_destreinadas": [
+        {
+          "id": "recordar_conhecimento",
+          "nome": "Recordar Conhecimento",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": true,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "concentração",
+            "secreto"
+          ],
+          "descricao": "Sobre agentes divinos, detalhes e nuances da teologia, mitos obscuros a respeito de uma fé, criaturas de significância religiosa (celestiais, ínferos e mortos-vivos), a Esfera Externa e os Planos de Energia Positiva e Negativa."
+        }
+      ],
+      "acoes_treinadas": [
+        {
+          "id": "aprender_uma_magia",
+          "nome": "Aprender uma Magia",
+          "proficiencia_minima": "treinado",
+          "acao_geral": true,
+          "custo_acoes": null,
+          "tracos": [
+            "concentração",
+            "exploração"
+          ],
+          "descricao": "Aprender uma Magia da tradição divina (página 234)."
+        },
+        {
+          "id": "decifrar_escrita",
+          "nome": "Decifrar Escrita",
+          "proficiencia_minima": "treinado",
+          "acao_geral": true,
+          "custo_acoes": null,
+          "tracos": [
+            "concentração",
+            "exploração",
+            "secreto"
+          ],
+          "descricao": "Decifrar Escrita de natureza religiosa, incluindo alegorias, homilias e provérbios (página 236)."
+        },
+        {
+          "id": "identificar_magia",
+          "nome": "Identificar Magia",
+          "proficiencia_minima": "treinado",
+          "acao_geral": true,
+          "custo_acoes": null,
+          "tracos": [
+            "concentração",
+            "exploração",
+            "secreto"
+          ],
+          "descricao": "Identificar Magia, particularmente magia divina (página 238)."
+        }
+      ]
+    },
+    {
+      "id": "saber",
+      "nome": "Saber",
+      "atributo_chave": "Inteligência",
+      "atributo_sigla": "Int",
+      "sofre_penalidade_armadura": false,
+      "pagina": "251-252",
+      "descricao": "Você possui informações especializadas sobre um tópico estrito. Cada subcategoria de Saber conta como sua própria perícia.",
+      "quadros_e_regras_especiais": {
+        "regras_saber": [
+          "Cada subcategoria conta como sua própria perícia independente (incrementar Saber de Planos não aumenta Saber de Navegação).",
+          "Subcategorias de Saber são sempre menos abrangentes do que outras perícias de Recordar Conhecimento e nunca devem suplantá-las completamente.",
+          "Se possuir várias subcategorias aplicáveis ou que se sobreponham a outra perícia, você pode usar a perícia com o melhor modificador (ou qualquer outra que preferir)."
+        ],
+        "subcategorias_comuns_nomeadas": [
+          "Saber Acadêmico",
+          "Saber de Agricultura",
+          "Saber de Arquitetura",
+          "Saber de Artes",
+          "Saber de Bibliotecas",
+          "Saber de Caça",
+          "Saber de Circo",
+          "Saber de Contabilidade",
+          "Saber de Curtume",
+          "Saber de Engenharia",
+          "Saber de Escotismo",
+          "Saber de Escrita",
+          "Saber de Estábulos",
+          "Saber de Genealogia",
+          "Saber de Gladiadores",
+          "Saber de Guerra",
+          "Saber de Guildas",
+          "Saber de Heráldica",
+          "Saber de Herbalismo",
+          "Saber de Jogos",
+          "Saber de Leis",
+          "Saber de Mercadores",
+          "Saber de Mineração",
+          "Saber de Moagem",
+          "Saber de Navegação",
+          "Saber de Obstetrícia",
+          "Saber de Pesca",
+          "Saber de Submundo",
+          "Saber de Teatro",
+          "Saber de Trabalho",
+          "Saber de Vidência"
+        ],
+        "categorias_parametrizadas": [
+          {
+            "padrao": "Saber sobre um assentamento específico",
+            "exemplos": [
+              "Saber de Absalom",
+              "Saber de Magnimar"
+            ]
+          },
+          {
+            "padrao": "Saber de um tipo de comida ou bebida",
+            "exemplos": [
+              "Saber de Açougue",
+              "Saber de Álcool",
+              "Saber de Bolos",
+              "Saber de Chás",
+              "Saber de Culinária"
+            ]
+          },
+          {
+            "padrao": "Saber sobre uma criatura específica ou categoria estrita de criaturas",
+            "exemplos": [
+              "Saber de Demônios",
+              "Saber de Urso-Corujas",
+              "Saber de Vampiros"
+            ]
+          },
+          {
+            "padrao": "Saber sobre uma divindade específica",
+            "exemplos": [
+              "Saber de Abadar",
+              "Saber de Iomeade"
+            ]
+          },
+          {
+            "padrao": "Saber de um plano específico (que não o Plano Material, ou sobre o plano da campanha)",
+            "exemplos": [
+              "Saber do Abismo",
+              "Saber do Paraíso",
+              "Saber do Plano Astral"
+            ]
+          },
+          {
+            "padrao": "Saber sobre um terreno específico",
+            "exemplos": [
+              "Saber de Montanhas",
+              "Saber de Rios"
+            ]
+          }
+        ]
+      },
+      "acoes_destreinadas": [
+        {
+          "id": "recordar_conhecimento",
+          "nome": "Recordar Conhecimento",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": true,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "concentração",
+            "secreto"
+          ],
+          "descricao": "Sobre o assunto da subcategoria de sua perícia de Saber."
+        }
+      ],
+      "acoes_treinadas": [
+        {
+          "id": "ganhar_proventos",
+          "nome": "Ganhar Proventos",
+          "proficiencia_minima": "treinado",
+          "acao_geral": true,
+          "custo_acoes": null,
+          "tracos": [
+            "recesso"
+          ],
+          "descricao": "Utilizando seu conhecimento para exercer uma profissão (página 237–238)."
+        }
+      ]
+    },
+    {
+      "id": "sobrevivencia",
+      "nome": "Sobrevivência",
+      "atributo_chave": "Sabedoria",
+      "atributo_sigla": "Sab",
+      "sofre_penalidade_armadura": false,
+      "pagina": "252-253",
+      "descricao": "Você é apto a viver nos ermos, forragear comida e montar abrigos, e com treinamento pode descobrir os segredos de rastrear e esconder sua trilha.",
+      "acoes_destreinadas": [
+        {
+          "id": "subsistir",
+          "nome": "Subsistir",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": true,
+          "custo_acoes": null,
+          "tracos": [
+            "recesso"
+          ],
+          "descricao": "Nos ermos ao forragear comida e montar abrigo (página 240)."
+        },
+        {
+          "id": "intuir_direcao",
+          "nome": "Intuir Direção",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": false,
+          "custo_acoes": null,
+          "tracos": [
+            "exploração",
+            "secreto"
+          ],
+          "descricao": "Usando estrelas, posição do sol, geografia, flora ou fauna, você se orienta nos ermos (normalmente 1 vez por dia, cerca de 1 minuto). Sem uma bússola, sofre –2 de penalidade de item em testes de Intuir Direção.",
+          "resultados": {
+            "sucesso_critico": "Você obtém uma noção excelente de sua localização. Em ambiente com direções cardinais, aponta-as com exatidão.",
+            "sucesso": "Você obtém orientação suficiente para evitar ficar completamente perdido e tem noção das direções cardinais."
+          },
+          "exemplos_tarefas": {
+            "destreinado": "determinar uma direção cardinal usando o sol",
+            "treinado": "encontrar um caminho coberto por vegetação em uma floresta",
+            "especialista": "orientar-se em um labirinto de jardim",
+            "mestre": "orientar-se em um labirinto bizantino ou deserto relativamente sem características",
+            "lendario": "orientar-se em um reino dos sonhos em constante mudança"
+          }
+        }
+      ],
+      "acoes_treinadas": [
+        {
+          "id": "cobrir_rastros",
+          "nome": "Cobrir Rastros",
+          "proficiencia_minima": "treinado",
+          "acao_geral": false,
+          "custo_acoes": null,
+          "tracos": [
+            "concentração",
+            "exploração",
+            "movimento"
+          ],
+          "descricao": "Você cobre seus rastros movendo-se até metade de sua Velocidade de viagem (p. 479), sem precisar de teste. Qualquer perseguidor deve obter sucesso em Sobrevivência contra sua CD de Sobrevivência se maior que a CD normal para Rastrear. Em encontros, pode ser usada como 1 ação (sem o traço exploração).",
+          "resultados": {
+            "sucesso": "Perseguidores precisam superar sua CD de Sobrevivência (se maior que a CD normal da trilha)."
+          }
+        },
+        {
+          "id": "rastrear",
+          "nome": "Rastrear",
+          "proficiencia_minima": "treinado",
+          "acao_geral": false,
+          "custo_acoes": null,
+          "tracos": [
+            "concentração",
+            "exploração",
+            "movimento"
+          ],
+          "descricao": "Você segue rastros movendo-se até metade de sua Velocidade de viagem (p. 479). Faz teste ao começar, a cada hora seguinte e quando algo mudar a trilha significativamente. Em encontros, pode ser usada como 1 ação (sem o traço exploração).",
+          "resultados": {
+            "sucesso": "Você encontra a trilha ou continua a seguir uma que já esteja seguindo.",
+            "falha": "Você perde a trilha, mas pode tentar novamente após 1 hora.",
+            "falha_critica": "Você perde a trilha e não pode tentar novamente por 24 horas."
+          },
+          "exemplos_tarefas": {
+            "destreinado": "o caminho de um grande exército seguindo uma estrada",
+            "treinado": "rastros relativamente recentes de um urso furioso atravessando planícies",
+            "especialista": "os rastros de uma pantera ligeira através de uma selva, rastros após uma chuva",
+            "mestre": "rastros após neve de inverno, rastros de um camundongo ou criatura menor, rastros em rocha nua",
+            "lendario": "rastros antigos pelas areias de um deserto ventoso, rastros após grande nevasca ou furacão"
+          }
+        }
+      ]
+    },
+    {
+      "id": "sociedade",
+      "nome": "Sociedade",
+      "atributo_chave": "Inteligência",
+      "atributo_sigla": "Int",
+      "sofre_penalidade_armadura": false,
+      "pagina": "253",
+      "descricao": "Você compreende os povos e sistemas que estruturam a civilização, além de conhecer eventos históricos e navegar complexidades físicas, societárias e econômicas de assentamentos.",
+      "acoes_destreinadas": [
+        {
+          "id": "recordar_conhecimento",
+          "nome": "Recordar Conhecimento",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": true,
+          "custo_acoes": "1 ação",
+          "tracos": [
+            "concentração",
+            "secreto"
+          ],
+          "descricao": "Sobre história local, personalidades principais, instituições legais, estrutura societária e culturas humanoides (ou outras criaturas centrais na sociedade local)."
+        },
+        {
+          "id": "subsistir",
+          "nome": "Subsistir",
+          "proficiencia_minima": "destreinado",
+          "acao_geral": true,
+          "custo_acoes": null,
+          "tracos": [
+            "recesso"
+          ],
+          "descricao": "Em um assentamento encontrando abrigo e surrupiando ou pedindo comida (página 240)."
+        }
+      ],
+      "acoes_treinadas": [
+        {
+          "id": "decifrar_escrita",
+          "nome": "Decifrar Escrita",
+          "proficiencia_minima": "treinado",
+          "acao_geral": true,
+          "custo_acoes": null,
+          "tracos": [
+            "concentração",
+            "exploração",
+            "secreto"
+          ],
+          "descricao": "Mensagem codificada, texto escrito em forma arcaica/incompleta ou em idioma desconhecido (página 236)."
+        },
+        {
+          "id": "criar_falsificacao",
+          "nome": "Criar Falsificação",
+          "proficiencia_minima": "treinado",
+          "acao_geral": false,
+          "custo_acoes": null,
+          "tracos": [
+            "recesso",
+            "secreto"
+          ],
+          "requerimentos": "Material de escrita apropriado (e exemplo de caligrafia se falsificar caligrafia específica).",
+          "cd_alvo": "CD 20 inicial; se < 20, compara com CD de Percepção ou Sociedade de observadores; exame minucioso usa Percepção/Sociedade vs sua CD de Sociedade",
+          "descricao": "Cria um documento falsificado ao longo de um dia ou semana. Em teste secreto CD 20, observadores passivos não percebem se obtiver >= 20. Caligrafia não específica a uma pessoa concede até +4 de bônus de circunstância no teste e na CD se já tiver visto documento similar.",
+          "resultados": {
+            "sucesso": "O observador não detecta a falsificação.",
+            "falha": "O observador descobre que seu documento é uma falsificação."
+          }
+        }
+      ]
+    }
+  ]
+}

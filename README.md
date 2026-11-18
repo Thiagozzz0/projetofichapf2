@@ -39,12 +39,14 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 │   └── finalizado/               # Logs individuais numerados (01.md, 02.md, ...) com data e hora
 ├── dados/                        # Regras e tabelas do PF2E convertidas em JSON
 │   ├── ancestralidades_biografias.json  # Capítulos 1 e 2 (Criação, Ancestralidades, Heranças, Biografias e Idiomas)
-│   └── equipamentos.json         # Capítulo 6 completo (Equipamentos) convertido e validado
+│   ├── equipamentos.json         # Capítulo 6 completo (Equipamentos) convertido e validado
+│   └── pericias.json             # Capítulo 4 completo (Perícias, Ações Gerais e Tabelas 4–1 a 4–4)
 ├── pdf_fonte/                    # PDF completo comprimido do Livro Básico PF2E
 ├── ref/                          # PDFs fragmentados por categoria para conversão gradual
 ├── scripts/                      # Scripts Python de geração, extração e validação de JSONs
 │   ├── gerar_ancestralidades_biografias_json.py
-│   └── gerar_equipamentos_json.py
+│   ├── gerar_equipamentos_json.py
+│   └── gerar_pericias_json.py
 └── templates/                    # Front-End HTML/CSS/JS renderizado pelo Flask
 ```
 
@@ -77,7 +79,7 @@ Os PDFs de referência estão sendo convertidos **um por vez** para garantir fid
 | `ref/Tools.pdf` | `dados/equipamentos.json` | Moedas, Volume, Armaduras, Escudos, Armas, Equipamentos de Aventura, Kits de Classe, Alquímicos, Mágicos, Fórmulas, Serviços, Animais e Tamanhos | Concluído (`02.md`) |
 | `ref/Anc Race.pdf` | `dados/ancestralidades_biografias.json` | Regras de criação, Ancestralidades, Heranças, Talentos de Ancestralidade e Biografias | Concluído (`04.md`) |
 | `ref/Class Multi.pdf` | `dados/classes.json` | 12 Classes básicas, progressão, características, talentos de classe e multiclasses | Pendente |
-| `ref/Skill sfots.pdf` | `dados/pericias.json` | Perícias, ações treinadas/destreinadas e graus de proficiência | Pendente |
+| `ref/Skill sfots.pdf` | `dados/pericias.json` | Perícias, ações treinadas/destreinadas e graus de proficiência | Concluído (`05.md`) |
 | `ref/Gifts.pdf` | `dados/talentos.json` | Talentos Gerais e Talentos de Perícia | Pendente |
 | `ref/Enchacent.pdf` | `dados/magias.json` | Tradições mágicas, magias e magias de foco | Pendente |
 | `ref/Compendium specific tools.pdf` | `dados/itens_magicos_tesouros.json` | Runas, materiais preciosos, itens alquímicos completos e tesouros | Pendente |
@@ -92,6 +94,7 @@ Com **Python 3** instalado, é possível regenerar e validar a integridade dos a
 ```bash
 python scripts/gerar_equipamentos_json.py
 python scripts/gerar_ancestralidades_biografias_json.py
+python scripts/gerar_pericias_json.py
 ```
 
 Os scripts verificam todas as contagens das tabelas dos respectivos capítulos, unicidade de IDs e integridade estrutural dos dados.
