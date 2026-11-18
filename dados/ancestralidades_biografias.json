@@ -1,0 +1,3142 @@
+{
+  "fonte": {
+    "arquivo": "ref/Anc Race.pdf",
+    "titulo": "Capítulos 1 e 2: Criação de Personagem, Ancestralidades & Biografias",
+    "paginas": "19-65",
+    "sistema": "Pathfinder 2ª Edição (Livro Básico)"
+  },
+  "regras_criacao_personagem": {
+    "atributos": [
+      {
+        "id": "forca",
+        "sigla": "FOR",
+        "nome": "Força",
+        "categoria": "Físico",
+        "descricao": "Mede o poder físico; adicionada a rolagens de ataque/dano corpo a corpo (e dano de arremesso) e define o limite de Volume."
+      },
+      {
+        "id": "destreza",
+        "sigla": "DES",
+        "nome": "Destreza",
+        "categoria": "Físico",
+        "descricao": "Mede agilidade, equilíbrio e reflexos; adicionada a ataques à distância, ataques corpo a corpo com acuidade, CA e salvamentos de Reflexos."
+      },
+      {
+        "id": "constituicao",
+        "sigla": "CON",
+        "nome": "Constituição",
+        "categoria": "Físico",
+        "descricao": "Mede saúde geral e estamina; adicionada aos Pontos de Vida por nível e salvamentos de Fortitude."
+      },
+      {
+        "id": "inteligencia",
+        "sigla": "INT",
+        "nome": "Inteligência",
+        "categoria": "Mental",
+        "descricao": "Mede facilidade em aprender e raciocinar; concede perícias treinadas e idiomas adicionais no 1º nível quando positiva."
+      },
+      {
+        "id": "sabedoria",
+        "sigla": "SAB",
+        "nome": "Sabedoria",
+        "categoria": "Mental",
+        "descricao": "Mede bom senso, consciência e intuição; adicionada à Percepção e salvamentos de Vontade."
+      },
+      {
+        "id": "carisma",
+        "sigla": "CAR",
+        "nome": "Carisma",
+        "categoria": "Mental",
+        "descricao": "Mede magnetismo pessoal e força de personalidade; influencia interações sociais e habilidades de conjuração carismáticas."
+      }
+    ],
+    "sistema_abcd": {
+      "valor_inicial": 10,
+      "minimo_nivel_1": 8,
+      "maximo_nivel_1": 18,
+      "regra_melhoria": {
+        "incremento_padrao": 2,
+        "incremento_acima_ou_igual_18": 1,
+        "regra_mesmo_passo": "Sempre que receber múltiplas melhorias de atributo ao mesmo tempo, cada melhoria deve ser aplicada a um atributo diferente."
+      },
+      "regra_defeito": {
+        "decremento": -2,
+        "descricao": "Reduz o valor do atributo relacionado em 2 pontos."
+      },
+      "etapas": [
+        {
+          "codigo": "A",
+          "nome": "Ancestralidade",
+          "descricao": "Melhorias e defeito da ancestralidade escolhida (além de eventuais defeitos voluntários)."
+        },
+        {
+          "codigo": "B",
+          "nome": "Biografia",
+          "descricao": "Duas melhorias de atributo: 1 dentre duas opções da biografia e 1 melhoria livre."
+        },
+        {
+          "codigo": "C",
+          "nome": "Classe",
+          "descricao": "Uma melhoria no atributo-chave da classe."
+        },
+        {
+          "codigo": "D",
+          "nome": "Determine os Valores",
+          "descricao": "Quatro melhorias de atributo livres aplicadas a quatro atributos diferentes."
+        }
+      ],
+      "defeitos_voluntarios": {
+        "defeitos_sofridos": 2,
+        "melhorias_livres_concedidas": 1,
+        "regra": "No passo da ancestralidade, você pode optar por sofrer 2 defeitos adicionais para ganhar 1 melhoria livre adicional. Não é permitido aplicar mais de um defeito voluntário ao mesmo atributo, salvo se já tiver recebido melhoria nesse mesmo passo (primeiro cancela a melhoria, segundo reduz em 2). Como exceção, você pode aplicar duas melhorias livres a um atributo que sofreu defeito nesse passo."
+      },
+      "metodo_alternativo_rolagem": {
+        "dados": "4d6 descartando o menor (6 vezes)",
+        "ajuste_ancestralidade": "1 melhoria livre a menos do que o normal (defeitos aplicados normalmente).",
+        "ajuste_biografia": "Apenas 1 melhoria em um dos atributos especificados (sem melhoria livre da biografia).",
+        "teto_nivel_1": 18
+      },
+      "tabela_1_1_modificadores": [
+        {
+          "faixa": "1",
+          "min": 1,
+          "max": 1,
+          "modificador": -5
+        },
+        {
+          "faixa": "2-3",
+          "min": 2,
+          "max": 3,
+          "modificador": -4
+        },
+        {
+          "faixa": "4-5",
+          "min": 4,
+          "max": 5,
+          "modificador": -3
+        },
+        {
+          "faixa": "6-7",
+          "min": 6,
+          "max": 7,
+          "modificador": -2
+        },
+        {
+          "faixa": "8-9",
+          "min": 8,
+          "max": 9,
+          "modificador": -1
+        },
+        {
+          "faixa": "10-11",
+          "min": 10,
+          "max": 11,
+          "modificador": 0
+        },
+        {
+          "faixa": "12-13",
+          "min": 12,
+          "max": 13,
+          "modificador": 1
+        },
+        {
+          "faixa": "14-15",
+          "min": 14,
+          "max": 15,
+          "modificador": 2
+        },
+        {
+          "faixa": "16-17",
+          "min": 16,
+          "max": 17,
+          "modificador": 3
+        },
+        {
+          "faixa": "18-19",
+          "min": 18,
+          "max": 19,
+          "modificador": 4
+        },
+        {
+          "faixa": "20-21",
+          "min": 20,
+          "max": 21,
+          "modificador": 5
+        },
+        {
+          "faixa": "22-23",
+          "min": 22,
+          "max": 23,
+          "modificador": 6
+        },
+        {
+          "faixa": "24-25",
+          "min": 24,
+          "max": 25,
+          "modificador": 7
+        }
+      ],
+      "formula_modificador": "(valor - 10) // 2"
+    },
+    "resumo_classes_atributos": [
+      {
+        "id": "alquimista",
+        "nome": "Alquimista",
+        "atributo_chave": [
+          "Inteligência"
+        ],
+        "atributos_secundarios": [
+          "Constituição",
+          "Destreza"
+        ],
+        "descricao_curta": "O alquimista arremessa bombas alquímicas e bebe concocções feitas por ele mesmo."
+      },
+      {
+        "id": "barbaro",
+        "nome": "Bárbaro",
+        "atributo_chave": [
+          "Força"
+        ],
+        "atributos_secundarios": [
+          "Constituição",
+          "Destreza"
+        ],
+        "descricao_curta": "O bárbaro corre em fúria pelo campo de batalha, esmagando adversários com temeridade."
+      },
+      {
+        "id": "bardo",
+        "nome": "Bardo",
+        "atributo_chave": [
+          "Carisma"
+        ],
+        "atributos_secundarios": [
+          "Constituição",
+          "Destreza"
+        ],
+        "descricao_curta": "O bardo usa performances e segredos de ocultismo para distrair adversários e inspirar aliados."
+      },
+      {
+        "id": "campeao",
+        "nome": "Campeão",
+        "atributo_chave": [
+          "Força",
+          "Destreza"
+        ],
+        "atributos_secundarios": [
+          "Carisma",
+          "Constituição"
+        ],
+        "descricao_curta": "O campeão é um combatente dedicado a uma divindade que usa seu poder divino para se aprimorar e proteger aliados."
+      },
+      {
+        "id": "clerigo",
+        "nome": "Clérigo",
+        "atributo_chave": [
+          "Sabedoria"
+        ],
+        "atributos_secundarios": [
+          "Carisma",
+          "Constituição"
+        ],
+        "descricao_curta": "O clérigo convoca o poder de uma divindade para conjurar magias que curam aliados ou ferem seus adversários."
+      },
+      {
+        "id": "druida",
+        "nome": "Druida",
+        "atributo_chave": [
+          "Sabedoria"
+        ],
+        "atributos_secundarios": [
+          "Constituição",
+          "Destreza"
+        ],
+        "descricao_curta": "O druida usa a magia do mundo natural para fortalecer aliados e subjugar inimigos."
+      },
+      {
+        "id": "feiticeiro",
+        "nome": "Feiticeiro",
+        "atributo_chave": [
+          "Carisma"
+        ],
+        "atributos_secundarios": [
+          "Destreza",
+          "Constituição"
+        ],
+        "descricao_curta": "O poder mágico do feiticeiro flui de seu sangue e se manifesta como magias e habilidades fantásticas."
+      },
+      {
+        "id": "guerreiro",
+        "nome": "Guerreiro",
+        "atributo_chave": [
+          "Destreza",
+          "Força"
+        ],
+        "atributos_secundarios": [
+          "Constituição"
+        ],
+        "descricao_curta": "O guerreiro é um mestre de armas, técnicas marciais e poderosas combinações de ataque."
+      },
+      {
+        "id": "ladino",
+        "nome": "Ladino",
+        "atributo_chave": [
+          "Destreza",
+          "Outro"
+        ],
+        "atributos_secundarios": [
+          "Carisma",
+          "Constituição"
+        ],
+        "descricao_curta": "O ladino é um mestre talentoso de malandragens que ataca seus inimigos quando eles menos esperam."
+      },
+      {
+        "id": "mago",
+        "nome": "Mago",
+        "atributo_chave": [
+          "Inteligência"
+        ],
+        "atributos_secundarios": [
+          "Destreza",
+          "Constituição"
+        ],
+        "descricao_curta": "O mago é um estudioso cuja reserva de conhecimento arcano energiza suas habilidades e magias maravilhosas."
+      },
+      {
+        "id": "monge",
+        "nome": "Monge",
+        "atributo_chave": [
+          "Destreza",
+          "Força"
+        ],
+        "atributos_secundarios": [
+          "Constituição",
+          "Sabedoria"
+        ],
+        "descricao_curta": "O monge porta os segredos das artes marciais, demonstrando-os através de proezas impressionantes em batalha."
+      },
+      {
+        "id": "patrulheiro",
+        "nome": "Patrulheiro",
+        "atributo_chave": [
+          "Destreza",
+          "Força"
+        ],
+        "atributos_secundarios": [
+          "Constituição",
+          "Sabedoria"
+        ],
+        "descricao_curta": "O patrulheiro é um mestre no uso de seus arredores, armadilhas e aliados animais para assolar inimigos."
+      }
+    ],
+    "passos_criacao": [
+      {
+        "passo": 1,
+        "titulo": "Crie um Conceito",
+        "descricao": "Defina personalidade, passado, visão de mundo, fé, relação com aliados e ideias gerais do herói."
+      },
+      {
+        "passo": 2,
+        "titulo": "Comece a Definir seus Atributos",
+        "descricao": "Inicie todos os seis valores de atributo em 10."
+      },
+      {
+        "passo": 3,
+        "titulo": "Selecione uma Ancestralidade",
+        "descricao": "Escolha ancestralidade, melhorias/defeitos ancestrais (e eventuais defeitos voluntários), herança e talento de ancestralidade de 1º nível."
+      },
+      {
+        "passo": 4,
+        "titulo": "Determine a Biografia",
+        "descricao": "Escolha a biografia, aplique suas 2 melhorias de atributo, treinamento em perícia e Saber, e anote o talento de perícia."
+      },
+      {
+        "passo": 5,
+        "titulo": "Escolha uma Classe",
+        "descricao": "Defina a classe, nível 1 e aplique +2 no atributo-chave."
+      },
+      {
+        "passo": 6,
+        "titulo": "Defina seus Atributos",
+        "descricao": "Aplique mais 4 melhorias de atributo livres (em atributos diferentes) e calcule os modificadores pela Tabela 1-1."
+      },
+      {
+        "passo": 7,
+        "titulo": "Registre Detalhes da Classe",
+        "descricao": "Calcule PV iniciais (ancestralidade + classe + mod. CON), registre proficiências iniciais, perícias treinadas e características de 1º nível (incluindo magias)."
+      },
+      {
+        "passo": 8,
+        "titulo": "Compre Equipamentos",
+        "descricao": "Gaste as 15 peças de ouro (150 pp) iniciais em armadura, armas e equipamentos, registrando moedas restantes."
+      },
+      {
+        "passo": 9,
+        "titulo": "Calcule Modificadores",
+        "descricao": "Calcule Percepção, Salvamentos (Fortitude, Reflexos, Vontade), Golpes corpo a corpo e à distância, e Perícias."
+      },
+      {
+        "passo": 10,
+        "titulo": "Finalize os Detalhes",
+        "descricao": "Defina tendência, divindade, idade, gênero/pronomes, CD de classe, Pontos de Heroísmo (1), CA e limites de Volume."
+      }
+    ],
+    "graus_proficiencia": [
+      {
+        "id": "destreinado",
+        "nome": "Destreinado",
+        "sigla": "D",
+        "bonus_fixo": 0,
+        "soma_nivel": false,
+        "formula": "0"
+      },
+      {
+        "id": "treinado",
+        "nome": "Treinado",
+        "sigla": "T",
+        "bonus_fixo": 2,
+        "soma_nivel": true,
+        "formula": "2 + nível"
+      },
+      {
+        "id": "especialista",
+        "nome": "Especialista",
+        "sigla": "E",
+        "bonus_fixo": 4,
+        "soma_nivel": true,
+        "formula": "4 + nível"
+      },
+      {
+        "id": "mestre",
+        "nome": "Mestre",
+        "sigla": "M",
+        "bonus_fixo": 6,
+        "soma_nivel": true,
+        "formula": "6 + nível"
+      },
+      {
+        "id": "lendario",
+        "nome": "Lendário",
+        "sigla": "L",
+        "bonus_fixo": 8,
+        "soma_nivel": true,
+        "formula": "8 + nível"
+      }
+    ],
+    "formulas_ficha": {
+      "pontos_vida": "pv_ancestralidade + (pv_classe + mod_constituicao) * nivel",
+      "percepcao": "proficiencia_percepcao + mod_sabedoria + bonus_permanentes",
+      "fortitude": "proficiencia_fortitude + mod_constituicao + bonus_permanentes",
+      "reflexos": "proficiencia_reflexos + mod_destreza + bonus_permanentes",
+      "vontade": "proficiencia_vontade + mod_sabedoria + bonus_permanentes",
+      "cd_classe": "10 + proficiencia_cd_classe + mod_atributo_chave",
+      "ca": "10 + min(mod_destreza, limite_des_armadura) + proficiencia_armadura + bonus_item_armadura + bonus_permanentes",
+      "golpe_corpo_a_corpo": "mod_forca (ou mod_destreza se acuidade) + proficiencia_arma + bonus_item_arma",
+      "golpe_distancia": "mod_destreza + proficiencia_arma + bonus_item_arma",
+      "pericia": "mod_atributo_pericia + proficiencia_pericia + bonus_item + penalidade_armadura_se_aplicavel",
+      "volume_sobrecarregado": "5 + mod_forca",
+      "volume_maximo": "10 + mod_forca",
+      "pontos_heroismo_inicial": 1
+    },
+    "tabela_1_2_tendencias": [
+      {
+        "sigla": "OB",
+        "nome": "Ordeiro e Bom",
+        "eixo_ordem_caos": "Ordeiro",
+        "eixo_bem_mal": "Bom",
+        "tracos": [
+          "Ordeiro",
+          "Bom"
+        ]
+      },
+      {
+        "sigla": "ON",
+        "nome": "Ordeiro e Neutro",
+        "eixo_ordem_caos": "Ordeiro",
+        "eixo_bem_mal": "Neutro",
+        "tracos": [
+          "Ordeiro"
+        ]
+      },
+      {
+        "sigla": "OM",
+        "nome": "Ordeiro e Mau",
+        "eixo_ordem_caos": "Ordeiro",
+        "eixo_bem_mal": "Mau",
+        "tracos": [
+          "Ordeiro",
+          "Mau"
+        ]
+      },
+      {
+        "sigla": "NB",
+        "nome": "Neutro e Bom",
+        "eixo_ordem_caos": "Neutro",
+        "eixo_bem_mal": "Bom",
+        "tracos": [
+          "Bom"
+        ]
+      },
+      {
+        "sigla": "N",
+        "nome": "Neutro Verdadeiro",
+        "eixo_ordem_caos": "Neutro",
+        "eixo_bem_mal": "Neutro",
+        "tracos": []
+      },
+      {
+        "sigla": "NM",
+        "nome": "Neutro e Mau",
+        "eixo_ordem_caos": "Neutro",
+        "eixo_bem_mal": "Mau",
+        "tracos": [
+          "Mau"
+        ]
+      },
+      {
+        "sigla": "CB",
+        "nome": "Caótico e Bom",
+        "eixo_ordem_caos": "Caótico",
+        "eixo_bem_mal": "Bom",
+        "tracos": [
+          "Caótico",
+          "Bom"
+        ]
+      },
+      {
+        "sigla": "CN",
+        "nome": "Caótico e Neutro",
+        "eixo_ordem_caos": "Caótico",
+        "eixo_bem_mal": "Neutro",
+        "tracos": [
+          "Caótico"
+        ]
+      },
+      {
+        "sigla": "CM",
+        "nome": "Caótico e Mau",
+        "eixo_ordem_caos": "Caótico",
+        "eixo_bem_mal": "Mau",
+        "tracos": [
+          "Caótico",
+          "Mau"
+        ]
+      }
+    ],
+    "subindo_de_nivel": {
+      "xp_por_nivel": 1000,
+      "niveis_melhoria_atributo": [
+        5,
+        10,
+        15,
+        20
+      ],
+      "niveis_talento_ancestralidade": [
+        1,
+        5,
+        9,
+        13,
+        17
+      ],
+      "lista_verificacao": [
+        "Aumentar o nível em 1 e subtrair 1.000 XP do total de XP.",
+        "Aumentar o máximo de Pontos de Vida pelo valor listado na classe.",
+        "Acrescentar características da tabela de progressão da classe, melhorias de atributo e incrementos de perícia.",
+        "Selecionar talentos conforme a tabela de progressão da classe (ancestralidade, classe, gerais e perícia).",
+        "Adicionar magias e espaços de magia se a classe conceder conjuração.",
+        "Aumentar bônus de proficiência em +1 pelo novo nível e recalcular estatísticas derivadas (CA, ataques, Percepção, salvamentos, perícias, CDs).",
+        "Ajustar bônus de talentos e habilidades escalonados por nível (como Vitalidade) e bônus de CON/INT."
+      ]
+    }
+  },
+  "ancestralidades": [
+    {
+      "id": "anao",
+      "nome": "Anão",
+      "raridade": "Comum",
+      "pontos_vida": 10,
+      "tamanho": "Médio",
+      "velocidade_m": 6.0,
+      "melhorias_atributo": [
+        "Constituição",
+        "Sabedoria",
+        "Livre"
+      ],
+      "defeito_atributo": "Carisma",
+      "idiomas_iniciais": [
+        "Comum",
+        "Enânico"
+      ],
+      "idiomas_adicionais_opcoes": [
+        "Gnômico",
+        "Goblin",
+        "Jotun",
+        "Órquico",
+        "Subterrâneo",
+        "Terran"
+      ],
+      "regra_idiomas_adicionais": "Quantidade igual ao modificador de Inteligência (se positivo), mais idiomas prevalentes na região.",
+      "tracos": [
+        "Anão",
+        "Humanoide"
+      ],
+      "habilidades_especiais": [
+        {
+          "nome": "Visão no Escuro",
+          "descricao": "Você enxerga na escuridão e sob luz fraca tão bem quanto é capaz de enxergar sob luz brilhante, embora sua visão na escuridão seja em preto e branco."
+        },
+        {
+          "nome": "Adaga de Clã",
+          "descricao": "Você recebe uma adaga de clã (páginas 280 e 284) gratuitamente de seu clã, dada em seu nascimento. Vender esta adaga é um tabu terrível."
+        }
+      ],
+      "maturidade_anos": 25,
+      "expectativa_vida_anos": 350,
+      "exemplos_nomes": [
+        "Agna",
+        "Bodill",
+        "Dolgrin",
+        "Edrukk",
+        "Grunyar",
+        "Ingra",
+        "Kazmuk",
+        "Kotri",
+        "Lupp",
+        "Morgrym",
+        "Rogar",
+        "Rusilka",
+        "Torra",
+        "Yangrit"
+      ],
+      "biografias_tipicas": [
+        "Acólito",
+        "Artesão",
+        "Combatente",
+        "Mercador",
+        "Mineiro"
+      ],
+      "classes_tipicas": [
+        "Bárbaro",
+        "Guerreiro",
+        "Monge",
+        "Patrulheiro",
+        "Clérigo",
+        "Druida"
+      ],
+      "descricao": "Anões possuem uma reputação merecida como um povo estoico e austero, arraigado em cidadelas e cidades esculpidas de rocha sólida.",
+      "herancas": [
+        {
+          "id": "anao_da_forja",
+          "nome": "Anão da Forja",
+          "descricao": "Você adquire resistência a fogo igual à metade de seu nível (mínimo 1) e trata efeitos ambientais de calor como um passo menos extremo.",
+          "resistencias": [
+            "Fogo (metade do nível, mín. 1)"
+          ]
+        },
+        {
+          "id": "anao_guardiao_da_morte",
+          "nome": "Anão Guardião da Morte",
+          "descricao": "Quando rolar um sucesso em uma jogada de salvamento contra um efeito de necromancia, trate o resultado como um sucesso crítico."
+        },
+        {
+          "id": "anao_das_rochas",
+          "nome": "Anão das Rochas",
+          "descricao": "Você recebe +2 de bônus de circunstância em CDs de Fortitude ou Reflexos contra Empurrar ou Derrubar e em salvamentos contra efeitos que tentem deixá-lo prostrado. Se qualquer efeito fosse forçá-lo a mover-se 3 metros ou mais, você é movido apenas metade da distância."
+        },
+        {
+          "id": "anao_de_sangue_ancestral",
+          "nome": "Anão de Sangue Ancestral",
+          "descricao": "Os heróis enânicos de antigamente conseguiam ignorar as magias de seus inimigos, e parte dessa resistência manifesta-se em você. Você ganha a reação Invocar Sangue Ancestral.",
+          "habilidade_acao": {
+            "nome": "Invocar Sangue Ancestral",
+            "acoes": "Reação",
+            "acionamento": "Você tenta uma jogada de salvamento contra um efeito mágico, mas ainda não efetuou a rolagem.",
+            "efeito": "Você recebe +1 de bônus de circunstância na jogada de salvamento acionadora e até o final deste turno."
+          }
+        },
+        {
+          "id": "anao_de_sangue_forte",
+          "nome": "Anão de Sangue Forte",
+          "descricao": "Você adquire resistência a veneno igual à metade de seu nível (mínimo 1). Cada salvamento bem-sucedido contra uma aflição de veneno reduz o estágio em 2 passos (ou 1 para veneno virulento), e cada sucesso crítico reduz em 3 passos (ou 2 para virulento).",
+          "resistencias": [
+            "Veneno (metade do nível, mín. 1)"
+          ]
+        }
+      ],
+      "talentos_ancestralidade": [
+        {
+          "id": "aptidao_com_pedras",
+          "nome": "Aptidão com Pedras",
+          "nivel": 1,
+          "tracos": [
+            "Anão"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Recebe +2 de bônus de circunstância em Percepção para notar trabalhos incomuns e armadilhas mecânicas feitas ou escondidas em pedra. O MJ rola teste secreto automático com -2 de penalidade mesmo sem Buscar."
+        },
+        {
+          "id": "correr_nas_rochas",
+          "nome": "Correr nas Rochas",
+          "nivel": 1,
+          "tracos": [
+            "Anão"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Ignora terreno difícil causado por detritos e solo irregular de pedra e terra. Ao usar Acrobatismo para se Equilibrar em pedra ou terra, não fica desprevenido e trata sucesso como sucesso crítico."
+        },
+        {
+          "id": "familiaridade_com_armas_enanicas",
+          "nome": "Familiaridade com Armas Enânicas",
+          "nivel": 1,
+          "tracos": [
+            "Anão"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Treinado em machado de batalha, martelo de guerra e picareta. Obtém acesso a armas enânicas incomuns; trata armas enânicas marciais como simples e avançadas como marciais para proficiência."
+        },
+        {
+          "id": "ferro_desimpedido",
+          "nome": "Ferro Desimpedido",
+          "nivel": 1,
+          "tracos": [
+            "Anão"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Ignora a redução de Velocidade de qualquer armadura que vestir. Reduz em 1,5 metros outra penalidade de Velocidade (como sobrecarregado ou magia; se múltiplas, reduza apenas uma)."
+        },
+        {
+          "id": "odio_vingativo",
+          "nome": "Ódio Vingativo",
+          "nivel": 1,
+          "tracos": [
+            "Anão"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": "O MJ pode adicionar outros traços apropriados à lista de adversários ancestrais.",
+          "descricao": "Escolha drow, duergar, gigante ou orc. Recebe +1 de bônus de circunstância no dano com armas e ataques desarmados (igual à quantidade de dados de dano da arma) contra criaturas com esse traço, ou contra uma criatura que cause dano crítico a você por 1 minuto."
+        },
+        {
+          "id": "saber_enanico",
+          "nome": "Saber Enânico",
+          "nivel": 1,
+          "tracos": [
+            "Anão"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Recebe proficiência treinado em Manufatura e Religião (se já treinado em alguma, escolhe outra perícia) e torna-se treinado em Saber Enânico."
+        },
+        {
+          "id": "ardil_com_armas_enanicas",
+          "nome": "Ardil com Armas Enânicas",
+          "nivel": 5,
+          "tracos": [
+            "Anão"
+          ],
+          "acoes": null,
+          "pre_requisitos": "Familiaridade com Armas Enânicas",
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Sempre que atingir um acerto crítico usando machado de batalha, martelo de guerra, picareta ou qualquer arma enânica, aplica o efeito de especialização de crítico da arma."
+        },
+        {
+          "id": "rolagem_de_pedregulho",
+          "nome": "Rolagem de Pedregulho",
+          "nivel": 5,
+          "tracos": [
+            "Anão"
+          ],
+          "acoes": "2 Ações",
+          "pre_requisitos": "Correr nas Rochas",
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Dê um Passo para o quadrado de um adversário do seu tamanho ou inferior, empurrando-o para trás de você (Fortitude contra CD de Atletismo para bloquear; se tentar o salvamento, sofre dano contundente igual ao seu nível + mod. Força, exceto em sucesso crítico)."
+        },
+        {
+          "id": "caminhar_pelas_rochas",
+          "nome": "Caminhar pelas Rochas",
+          "nivel": 9,
+          "tracos": [
+            "Anão"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Ganha mesclar-se às rochas como magia divina inata de 3º nível 1/dia. Permite encontrar trabalhos e armadilhas em pedra de proficiência lendária com Aptidão com Pedras (sem a penalidade de -2 se for lendário em Percepção)."
+        },
+        {
+          "id": "firmeza_da_montanha",
+          "nome": "Firmeza da Montanha",
+          "nivel": 9,
+          "tracos": [
+            "Anão"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Aumenta seus PV máximos em valor igual ao seu nível. CD de testes de recuperação sob morrendo passa a ser 9 + valor atual de morrendo (ou 6 + valor atual de morrendo se também possuir Vitalidade, cumulativo em PV)."
+        },
+        {
+          "id": "especialidade_com_armas_enanicas",
+          "nome": "Especialidade com Armas Enânicas",
+          "nivel": 13,
+          "tracos": [
+            "Anão"
+          ],
+          "acoes": null,
+          "pre_requisitos": "Familiaridade com Armas Enânicas",
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Sempre que receber proficiência de especialista ou maior em determinadas armas pela classe, recebe essa mesma proficiência em machado de batalha, martelo de guerra, picareta e todas as armas enânicas treinadas."
+        }
+      ]
+    },
+    {
+      "id": "elfo",
+      "nome": "Elfo",
+      "raridade": "Comum",
+      "pontos_vida": 6,
+      "tamanho": "Médio",
+      "velocidade_m": 9.0,
+      "melhorias_atributo": [
+        "Destreza",
+        "Inteligência",
+        "Livre"
+      ],
+      "defeito_atributo": "Constituição",
+      "idiomas_iniciais": [
+        "Comum",
+        "Élfico"
+      ],
+      "idiomas_adicionais_opcoes": [
+        "Celestial",
+        "Dracônico",
+        "Gnoll",
+        "Gnômico",
+        "Goblin",
+        "Órquico",
+        "Silvestre"
+      ],
+      "regra_idiomas_adicionais": "Quantidade igual ao modificador de Inteligência (se positivo), mais idiomas prevalentes na região.",
+      "tracos": [
+        "Elfo",
+        "Humanoide"
+      ],
+      "habilidades_especiais": [
+        {
+          "nome": "Visão na Penumbra",
+          "descricao": "Você enxerga sob luz fraca tão bem quanto é capaz de enxergar sob luz brilhante, ignorando a condição ocultado devido a luz fraca."
+        }
+      ],
+      "maturidade_anos": 20,
+      "expectativa_vida_anos": 600,
+      "exemplos_nomes": [
+        "Aerel",
+        "Amrunelara",
+        "Caladrel",
+        "Dardlara",
+        "Faunra",
+        "Heldalel",
+        "Jathal",
+        "Lanliss",
+        "Oparal",
+        "Seldlon",
+        "Soumral",
+        "Talathel",
+        "Tessara",
+        "Variel",
+        "Yalandlara",
+        "Zordlon"
+      ],
+      "biografias_tipicas": [
+        "Batedor",
+        "Caçador",
+        "Emissário",
+        "Estudioso",
+        "Nobre"
+      ],
+      "classes_tipicas": [
+        "Ladino",
+        "Patrulheiro",
+        "Alquimista",
+        "Mago"
+      ],
+      "descricao": "Elfos combinam uma graça extraterrena, intelecto apurado e uma conexão profunda com magia e longevidade.",
+      "herancas": [
+        {
+          "id": "elfo_artico",
+          "nome": "Elfo Ártico",
+          "descricao": "Você adquire resistência a frio igual à metade de seu nível (mínimo 1) e trata efeitos ambientais de frio como um passo menos extremo.",
+          "resistencias": [
+            "Frio (metade do nível, mín. 1)"
+          ]
+        },
+        {
+          "id": "elfo_das_cavernas",
+          "nome": "Elfo das Cavernas",
+          "descricao": "Você nasceu ou passou muitos anos em túneis subterrâneos ou cavernas onde a luz é escassa. Você adquire visão no escuro.",
+          "sentidos_concedidos": [
+            "Visão no Escuro"
+          ]
+        },
+        {
+          "id": "elfo_das_florestas",
+          "nome": "Elfo das Florestas",
+          "descricao": "Quando Escalar árvores, vinhas e folhagens, move-se à metade da Velocidade em sucesso e à Velocidade total em sucesso crítico (ou em sucesso com Escalada Rápida). Pode sempre usar Obter Cobertura em terreno de floresta mesmo sem obstáculo adjacente."
+        },
+        {
+          "id": "elfo_dos_sussurros",
+          "nome": "Elfo dos Sussurros",
+          "descricao": "Enquanto puder ouvir normalmente, usa Buscar para sentir criaturas indetectadas em cone de 18 metros (em vez de 9 m) e recebe +2 de bônus de circunstância ao usar Buscar para localizar criaturas indetectadas que possa ouvir a até 9 metros."
+        },
+        {
+          "id": "elfo_vidente",
+          "nome": "Elfo Vidente",
+          "descricao": "Pode conjurar o truque mágico detectar magia como magia arcana inata à vontade (elevado à metade do nível arredondada para cima) e recebe +1 de bônus de circunstância para Identificar Magia e Decifrar Escrita mágica."
+        }
+      ],
+      "talentos_ancestralidade": [
+        {
+          "id": "abandonado",
+          "nome": "Abandonado",
+          "nivel": 1,
+          "tracos": [
+            "Elfo"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Recebe +1 de bônus de circunstância em salvamentos contra efeitos de emoção e trata um sucesso como sucesso crítico."
+        },
+        {
+          "id": "elfo_ligeiro",
+          "nome": "Elfo Ligeiro",
+          "nivel": 1,
+          "tracos": [
+            "Elfo"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Sua Velocidade aumenta em 1,5 metros."
+        },
+        {
+          "id": "familiaridade_com_armas_elficas",
+          "nome": "Familiaridade com Armas Élficas",
+          "nivel": 1,
+          "tracos": [
+            "Elfo"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Treinado em arco curto, arco curto composto, arco longo, arco longo composto, espada longa e rapieira. Obtém acesso a armas élficas incomuns; trata marciais como simples e avançadas como marciais."
+        },
+        {
+          "id": "longevidade_ancestral",
+          "nome": "Longevidade Ancestral",
+          "nivel": 1,
+          "tracos": [
+            "Elfo"
+          ],
+          "acoes": null,
+          "pre_requisitos": "pelo menos 100 anos de idade",
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Durante preparações diárias, ganha proficiência treinado temporária em uma perícia à sua escolha até as próximas preparações diárias."
+        },
+        {
+          "id": "magia_extraterrena",
+          "nome": "Magia Extraterrena",
+          "nivel": 1,
+          "tracos": [
+            "Elfo"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Escolha um truque mágico da lista de magias arcanas; você pode conjurá-lo como magia arcana inata à vontade."
+        },
+        {
+          "id": "saber_elfico",
+          "nome": "Saber Élfico",
+          "nivel": 1,
+          "tracos": [
+            "Elfo"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Recebe proficiência treinado em Arcanismo e Natureza (ou outra perícia se já treinado) e torna-se treinado em Saber Élfico."
+        },
+        {
+          "id": "semblante_inabalavel",
+          "nome": "Semblante Inabalável",
+          "nivel": 1,
+          "tracos": [
+            "Elfo"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Reduz em 1 rodada a duração de qualquer efeito mental que dure pelo menos 2 rodadas e melhora em um grau o sucesso em salvamentos contra efeitos de sono."
+        },
+        {
+          "id": "elegancia_com_armas_elficas",
+          "nome": "Elegância com Armas Élficas",
+          "nivel": 5,
+          "tracos": [
+            "Elfo"
+          ],
+          "acoes": null,
+          "pre_requisitos": "Familiaridade com Armas Élficas",
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Aplica o efeito de especialização de crítico ao atingir acerto crítico com uma arma élfica ou listada em Familiaridade com Armas Élficas."
+        },
+        {
+          "id": "paciencia_eterna",
+          "nome": "Paciência Eterna",
+          "nivel": 5,
+          "tracos": [
+            "Elfo"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Pode gastar o dobro do tempo normal em um teste de Percepção ou perícia para obter +2 de bônus de circunstância e só falhar criticamente se o resultado for 10 abaixo da CD (1 natural não piora um grau)."
+        },
+        {
+          "id": "longevidade_de_especialista",
+          "nome": "Longevidade de Especialista",
+          "nivel": 9,
+          "tracos": [
+            "Elfo"
+          ],
+          "acoes": null,
+          "pre_requisitos": "Longevidade Ancestral",
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Ao usar Longevidade Ancestral, também torna-se especialista em uma perícia já treinada. Ao término, pode retreinar um incremento de perícia para tornar permanente uma dessas escolhas."
+        },
+        {
+          "id": "passada_elfica",
+          "nome": "Passada Élfica",
+          "nivel": 9,
+          "tracos": [
+            "Elfo"
+          ],
+          "acoes": "1 Ação",
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Você pode Dar um Passo de 1,5 metros duas vezes gastando uma única ação."
+        },
+        {
+          "id": "especialidade_com_armas_elficas",
+          "nome": "Especialidade com Armas Élficas",
+          "nivel": 13,
+          "tracos": [
+            "Elfo"
+          ],
+          "acoes": null,
+          "pre_requisitos": "Familiaridade com Armas Élficas",
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Sempre que receber proficiência de especialista ou maior em armas pela classe, também recebe essa proficiência em arco curto, arco curto composto, arco longo, arco longo composto, espada longa, rapieira e armas élficas treinadas."
+        },
+        {
+          "id": "longevidade_universal",
+          "nome": "Longevidade Universal",
+          "nivel": 13,
+          "tracos": [
+            "Elfo"
+          ],
+          "acoes": "1 Ação",
+          "pre_requisitos": "Longevidade de Especialista",
+          "frequencia": "uma vez por dia",
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Uma vez por dia, pode refletir sobre suas experiências de vida e alterar as perícias escolhidas com Longevidade Ancestral e Longevidade de Especialista."
+        }
+      ]
+    },
+    {
+      "id": "gnomo",
+      "nome": "Gnomo",
+      "raridade": "Comum",
+      "pontos_vida": 8,
+      "tamanho": "Pequeno",
+      "velocidade_m": 7.5,
+      "melhorias_atributo": [
+        "Constituição",
+        "Carisma",
+        "Livre"
+      ],
+      "defeito_atributo": "Força",
+      "idiomas_iniciais": [
+        "Comum",
+        "Gnômico",
+        "Silvestre"
+      ],
+      "idiomas_adicionais_opcoes": [
+        "Dracônico",
+        "Élfico",
+        "Enânico",
+        "Goblin",
+        "Jotun",
+        "Órquico"
+      ],
+      "regra_idiomas_adicionais": "Quantidade igual ao modificador de Inteligência (se positivo), mais idiomas prevalentes na região.",
+      "tracos": [
+        "Gnomo",
+        "Humanoide"
+      ],
+      "habilidades_especiais": [
+        {
+          "nome": "Visão na Penumbra",
+          "descricao": "Você enxerga sob luz fraca tão bem quanto é capaz de enxergar sob luz brilhante, ignorando a condição ocultado devido a luz fraca."
+        }
+      ],
+      "maturidade_anos": 18,
+      "expectativa_vida_anos": 400,
+      "exemplos_nomes": [
+        "Abroshtor",
+        "Bastargre",
+        "Besh",
+        "Fijit",
+        "Halungalom",
+        "Krolmnite",
+        "Neji",
+        "Majet",
+        "Pai",
+        "Poshment",
+        "Queck",
+        "Trig",
+        "Zarzuket",
+        "Zatqualmie"
+      ],
+      "biografias_tipicas": [
+        "Apresentador",
+        "Mercador",
+        "Nômade",
+        "Apostador",
+        "Encantador de Animais",
+        "Funileiro",
+        "Taverneiro"
+      ],
+      "classes_tipicas": [
+        "Druida",
+        "Feiticeiro"
+      ],
+      "descricao": "Descendentes do Primeiro Mundo feérico, gnomos são curiosos, excêntricos e dependem de novidades e magia para evitar o Descoloramento.",
+      "herancas": [
+        {
+          "id": "gnomo_camaleao",
+          "nome": "Gnomo Camaleão",
+          "descricao": "Pode mudar a cor base e saturação da pele e cabelo (1 ação para mudanças menores; 1 hora para todo o corpo). Quando em ambiente similar, usa 1 ação para receber +2 de bônus de circunstância em Furtividade."
+        },
+        {
+          "id": "gnomo_manancial",
+          "nome": "Gnomo Manancial",
+          "descricao": "Escolha arcana, divina ou ocultista. Ganha um truque mágico dessa tradição como magia inata à vontade e converte a tradição de futuras magias inatas de talentos de gnomo para a escolhida."
+        },
+        {
+          "id": "gnomo_sensitivo",
+          "nome": "Gnomo Sensitivo",
+          "descricao": "Recebe faro impreciso de 9 metros e +2 de bônus de circunstância em Percepção para localizar uma criatura indetectada dentro do alcance do faro.",
+          "sentidos_concedidos": [
+            "Faro (impreciso 9 m)"
+          ]
+        },
+        {
+          "id": "gnomo_tocado_pelas_fadas",
+          "nome": "Gnomo Tocado-pelas-Fadas",
+          "descricao": "Recebe o traço fada além de gnomo e humanoide. Escolhe um truque mágico primal para conjurar à vontade e pode trocá-lo 1/dia meditando por 10 minutos.",
+          "tracos_adicionais": [
+            "Fada"
+          ]
+        },
+        {
+          "id": "gnomo_umbral",
+          "nome": "Gnomo Umbral",
+          "descricao": "Uma conexão com svirfneblin, fadas sombrias ou outra fonte permite enxergar na escuridão completa. Você adquire visão no escuro.",
+          "sentidos_concedidos": [
+            "Visão no Escuro"
+          ]
+        }
+      ],
+      "talentos_ancestralidade": [
+        {
+          "id": "companheiro_das_fadas",
+          "nome": "Companheiro das Fadas",
+          "nivel": 1,
+          "tracos": [
+            "Gnomo"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": "Sem penalidade se possuir o talento de perícia Cumprimento Caloroso.",
+          "descricao": "Recebe +2 de bônus de circunstância em Percepção e salvamentos contra fadas. Pode Impressionar uma fada imediatamente sem 1 minuto de conversa com -5 de penalidade (e repetir após 1 minuto se falhar)."
+        },
+        {
+          "id": "cumplice_animal",
+          "nome": "Cúmplice Animal",
+          "nivel": 1,
+          "tracos": [
+            "Gnomo"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Você adquire um familiar utilizando as regras da página 217."
+        },
+        {
+          "id": "elocucionista_de_escavadores",
+          "nome": "Elocucionista de Escavadores",
+          "nivel": 1,
+          "tracos": [
+            "Gnomo"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Pode fazer perguntas, receber respostas e usar Diplomacia com animais que tenham Velocidade de escavação."
+        },
+        {
+          "id": "familiaridade_com_armas_gnomicas",
+          "nome": "Familiaridade com Armas Gnômicas",
+          "nivel": 1,
+          "tracos": [
+            "Gnomo"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Treinado em glaive e kukri. Obtém acesso a kukris e armas gnômicas incomuns; trata marciais como simples e avançadas como marciais."
+        },
+        {
+          "id": "magia_do_primeiro_mundo",
+          "nome": "Magia do Primeiro Mundo",
+          "nivel": 1,
+          "tracos": [
+            "Gnomo"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Escolha um truque mágico da lista de magias primais para conjurar como magia primal inata à vontade."
+        },
+        {
+          "id": "obsessao_gnomica",
+          "nome": "Obsessão Gnômica",
+          "nivel": 1,
+          "tracos": [
+            "Gnomo"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Torna-se treinado em uma perícia de Saber escolhida. Escala para especialista (2º nível), mestre (7º nível) e lendário (15º nível) tanto nesse Saber quanto no Saber concedido pela biografia."
+        },
+        {
+          "id": "sentir_ilusao",
+          "nome": "Sentir Ilusão",
+          "nivel": 1,
+          "tracos": [
+            "Gnomo"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Recebe +1 de bônus de circunstância em Percepção e salvamentos de Vontade contra ilusões; o MJ rola teste secreto automático para desacreditar ilusões a até 3 metros."
+        },
+        {
+          "id": "elocucionista_animal",
+          "nome": "Elocucionista Animal",
+          "nivel": 5,
+          "tracos": [
+            "Gnomo"
+          ],
+          "acoes": null,
+          "pre_requisitos": "Elocucionista de Escavadores",
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Pode falar com todos os animais e recebe +1 de bônus de circunstância para Impressionar animais."
+        },
+        {
+          "id": "fonte_energizada",
+          "nome": "Fonte Energizada",
+          "nivel": 5,
+          "tracos": [
+            "Gnomo"
+          ],
+          "acoes": "1 Ação",
+          "pre_requisitos": "reservatório de foco e pelo menos uma magia inata de herança/talento gnômico da mesma tradição de alguma magia de foco",
+          "frequencia": "uma vez por dia",
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Recupera 1 Ponto de Foco até seu máximo normal."
+        },
+        {
+          "id": "inovacao_com_armas_gnomicas",
+          "nome": "Inovação com Armas Gnômicas",
+          "nivel": 5,
+          "tracos": [
+            "Gnomo"
+          ],
+          "acoes": null,
+          "pre_requisitos": "Familiaridade com Armas Gnômicas",
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Aplica o efeito de especialização de crítico da arma em acertos críticos com glaive, kukri ou qualquer arma gnômica."
+        },
+        {
+          "id": "adepto_do_primeiro_mundo",
+          "nome": "Adepto do Primeiro Mundo",
+          "nivel": 9,
+          "tracos": [
+            "Gnomo"
+          ],
+          "acoes": null,
+          "pre_requisitos": "pelo menos uma magia primal inata",
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Adquire fogo feérico e invisibilidade como magias primais inatas de 2º nível (1/dia cada)."
+        },
+        {
+          "id": "conduite_vivaz",
+          "nome": "Conduíte Vivaz",
+          "nivel": 9,
+          "tracos": [
+            "Gnomo"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Ao descansar por 10 minutos, ganha PV igual a modificador de Constituição × metade do seu nível, cumulativo com Tratar Ferimentos."
+        },
+        {
+          "id": "especialidade_com_armas_gnomicas",
+          "nome": "Especialidade com Armas Gnômicas",
+          "nivel": 13,
+          "tracos": [
+            "Gnomo"
+          ],
+          "acoes": null,
+          "pre_requisitos": "Familiaridade com Armas Gnômicas",
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Sempre que receber proficiência de especialista ou maior em armas pela classe, recebe a mesma proficiência em glaive, kukri e armas gnômicas treinadas."
+        }
+      ]
+    },
+    {
+      "id": "goblin",
+      "nome": "Goblin",
+      "raridade": "Comum",
+      "pontos_vida": 6,
+      "tamanho": "Pequeno",
+      "velocidade_m": 7.5,
+      "melhorias_atributo": [
+        "Destreza",
+        "Carisma",
+        "Livre"
+      ],
+      "defeito_atributo": "Sabedoria",
+      "idiomas_iniciais": [
+        "Comum",
+        "Goblin"
+      ],
+      "idiomas_adicionais_opcoes": [
+        "Dracônico",
+        "Enânico",
+        "Gnoll",
+        "Gnômico",
+        "Halfling",
+        "Órquico"
+      ],
+      "regra_idiomas_adicionais": "Quantidade igual ao modificador de Inteligência (se positivo), mais idiomas prevalentes na região.",
+      "tracos": [
+        "Goblin",
+        "Humanoide"
+      ],
+      "habilidades_especiais": [
+        {
+          "nome": "Visão no Escuro",
+          "descricao": "Você enxerga na escuridão e sob luz fraca tão bem quanto é capaz de enxergar sob luz brilhante, embora sua visão na escuridão seja em preto e branco."
+        }
+      ],
+      "maturidade_anos": 8,
+      "expectativa_vida_anos": 50,
+      "exemplos_nomes": [
+        "Ak",
+        "Bokker",
+        "Frum",
+        "Guzmuk",
+        "Krobby",
+        "Loohi",
+        "Mazmord",
+        "Neeka",
+        "Omgot",
+        "Ranzak",
+        "Rickle",
+        "Tup",
+        "Wakla",
+        "Yonk",
+        "Zibini"
+      ],
+      "biografias_tipicas": [
+        "Acrobata",
+        "Apresentador",
+        "Caçador",
+        "Criança de Rua",
+        "Criminoso",
+        "Gladiador"
+      ],
+      "classes_tipicas": [
+        "Alquimista",
+        "Bardo",
+        "Ladino",
+        "Feiticeiro"
+      ],
+      "descricao": "Enérgicos, inventivos e adaptáveis, goblins vivem o momento e buscam seu lugar entre os povos civilizados.",
+      "herancas": [
+        {
+          "id": "goblin_bucho_de_ferro",
+          "nome": "Goblin Bucho-de-Ferro",
+          "descricao": "Pode subsistir com lixo em assentamentos sem usar Subsistir e comer/beber enquanto enjoado. Recebe +2 de bônus de circunstância em salvamentos contra aflições/condição enjoado de coisas ingeridas (sucessos em Fortitude viram sucesso crítico)."
+        },
+        {
+          "id": "goblin_couro_chamuscado",
+          "nome": "Goblin Couro-Chamuscado",
+          "descricao": "Recebe resistência a fogo igual à metade de seu nível (mínimo 1). Teste simples para remover dano persistente de fogo tem CD 10 (ou CD 5 com ajuda).",
+          "resistencias": [
+            "Fogo (metade do nível, mín. 1)"
+          ]
+        },
+        {
+          "id": "goblin_dentes_de_navalha",
+          "nome": "Goblin Dentes-de-Navalha",
+          "descricao": "Adquire um ataque desarmado com mandíbulas que causa 1d6 de dano perfurante (grupo pugilato, traços acuidade e desarmado)."
+        },
+        {
+          "id": "goblin_inquebravel",
+          "nome": "Goblin Inquebrável",
+          "descricao": "Recebe 10 Pontos de Vida de sua ancestralidade em vez de 6. Reduz o dano de queda como se tivesse caído apenas metade da distância.",
+          "pv_ancestral_substituto": 10
+        },
+        {
+          "id": "goblin_das_neves",
+          "nome": "Goblin das Neves",
+          "descricao": "Recebe resistência a frio igual à metade de seu nível (mínimo 1) e trata efeitos ambientais de frio como um passo menos extremo.",
+          "resistencias": [
+            "Frio (metade do nível, mín. 1)"
+          ]
+        }
+      ],
+      "talentos_ancestralidade": [
+        {
+          "id": "cancao_goblin",
+          "nome": "Canção Goblin",
+          "nivel": 1,
+          "tracos": [
+            "Goblin"
+          ],
+          "acoes": "1 Ação",
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Teste de Performance contra CD de Vontade de 1 inimigo a até 9 m (2 em especialista, 4 em mestre, 8 em lendário); sucesso aplica -1 de estado em Percepção e Vontade por 1 rodada (1 minuto em crítico)."
+        },
+        {
+          "id": "catador_da_cidade",
+          "nome": "Catador da Cidade",
+          "nivel": 1,
+          "tracos": [
+            "Goblin"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": "Com a herança goblin bucho-de-ferro, aumente o bônus para +2.",
+          "descricao": "Recebe +1 de bônus de circunstância para Subsistir usando Sociedade ou Sobrevivência em assentamento e pode Ganhar Proventos simultaneamente (+1 bônus; +2 com Bucho-de-Ferro)."
+        },
+        {
+          "id": "cavaleiro_brusco",
+          "nome": "Cavaleiro Brusco",
+          "nivel": 1,
+          "tracos": [
+            "Goblin"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Recebe o talento Cavalgar, +1 de bônus de circunstância em Natureza para Comandar um Animal em cão goblin ou lobo de montaria, e pode escolher lobo como companheiro animal montaria."
+        },
+        {
+          "id": "familiaridade_com_armas_goblinoides",
+          "nome": "Familiaridade com Armas Goblinoides",
+          "nivel": 1,
+          "tracos": [
+            "Goblin"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Treinado em cortacão e fatia-cavalo. Obtém acesso a armas goblinoides incomuns; trata marciais como simples e avançadas como marciais."
+        },
+        {
+          "id": "funileiro_de_sucata",
+          "nome": "Funileiro de Sucata",
+          "nivel": 1,
+          "tracos": [
+            "Goblin"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Manufatura itens de nível 0 (armas, não armaduras) por 1/4 do Preço como itens de má qualidade sem sofrer a penalidade deles; pode usar sucatas para descontar 1 dia extra ao Manufaturar."
+        },
+        {
+          "id": "muito_sorrateiro",
+          "nome": "Muito Sorrateiro",
+          "nivel": 1,
+          "tracos": [
+            "Goblin"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Move 1,5 metros a mais ao Esgueirar (até sua Velocidade) e não se torna observado entre ações sequenciais de Esgueirar se terminar o turno com cobertura ou ocultado."
+        },
+        {
+          "id": "passadela_goblin",
+          "nome": "Passadela Goblin",
+          "nivel": 1,
+          "tracos": [
+            "Goblin"
+          ],
+          "acoes": "Reação",
+          "pre_requisitos": "Um aliado termina uma ação de movimento adjacente a você.",
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Você aproveita o movimento de um aliado adjacente para ajustar sua posição. Você Dá um Passo."
+        },
+        {
+          "id": "saber_goblin",
+          "nome": "Saber Goblin",
+          "nivel": 1,
+          "tracos": [
+            "Goblin"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Recebe proficiência treinado em Furtividade e Natureza (ou outra perícia se já treinado) e torna-se treinado em Saber Goblin."
+        },
+        {
+          "id": "taca_fogo",
+          "nome": "Taca Fogo!",
+          "nivel": 1,
+          "tracos": [
+            "Goblin"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Magias e itens alquímicos que causem dano de fogo recebem bônus de estado no dano igual à metade do nível da magia ou 1/4 do nível do item (mínimo 1), além de +1 de estado em dano persistente de fogo."
+        },
+        {
+          "id": "frenesi_com_armas_goblinoides",
+          "nome": "Frenesi com Armas Goblinoides",
+          "nivel": 5,
+          "tracos": [
+            "Goblin"
+          ],
+          "acoes": null,
+          "pre_requisitos": "Familiaridade com Armas Goblinoides",
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Aplica o efeito de especialização de crítico da arma em acertos críticos usando cortacão, fatia-cavalo ou qualquer arma goblinoide."
+        },
+        {
+          "id": "escalador_de_cavernas",
+          "nome": "Escalador de Cavernas",
+          "nivel": 9,
+          "tracos": [
+            "Goblin"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Você adquire uma Velocidade de escalada de 3 metros."
+        },
+        {
+          "id": "passadela_apressada",
+          "nome": "Passadela Apressada",
+          "nivel": 9,
+          "tracos": [
+            "Goblin"
+          ],
+          "acoes": null,
+          "pre_requisitos": "Passadela Goblin",
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Quando usar Passadela Goblin, pode Andar até metade de sua Velocidade em vez de Dar um Passo."
+        },
+        {
+          "id": "especialidade_com_armas_goblinoides",
+          "nome": "Especialidade com Armas Goblinoides",
+          "nivel": 13,
+          "tracos": [
+            "Goblin"
+          ],
+          "acoes": null,
+          "pre_requisitos": "Familiaridade com Armas Goblinoides",
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Sempre que receber proficiência de especialista ou maior em armas pela classe, recebe essa proficiência em cortacão, fatia-cavalo e armas goblinoides treinadas."
+        },
+        {
+          "id": "muito_muito_sorrateiro",
+          "nome": "Muito, Muito Sorrateiro",
+          "nivel": 13,
+          "tracos": [
+            "Goblin"
+          ],
+          "acoes": null,
+          "pre_requisitos": "Muito Sorrateiro",
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Pode mover-se até sua Velocidade completa ao Esgueirar e não precisa mais de cobertura ou ocultação para se Esconder ou se Esgueirar."
+        }
+      ]
+    },
+    {
+      "id": "halfling",
+      "nome": "Halfling",
+      "raridade": "Comum",
+      "pontos_vida": 6,
+      "tamanho": "Pequeno",
+      "velocidade_m": 7.5,
+      "melhorias_atributo": [
+        "Destreza",
+        "Sabedoria",
+        "Livre"
+      ],
+      "defeito_atributo": "Força",
+      "idiomas_iniciais": [
+        "Comum",
+        "Halfling"
+      ],
+      "idiomas_adicionais_opcoes": [
+        "Élfico",
+        "Enânico",
+        "Gnômico",
+        "Goblin"
+      ],
+      "regra_idiomas_adicionais": "Quantidade igual ao modificador de Inteligência (se positivo), mais idiomas prevalentes na região.",
+      "tracos": [
+        "Halfling",
+        "Humanoide"
+      ],
+      "habilidades_especiais": [
+        {
+          "nome": "Olhos Aguçados",
+          "descricao": "Recebe +2 de bônus de circunstância ao usar Buscar para encontrar criaturas escondidas ou indetectadas a até 9 metros. Reduz a CD do teste simples para 3 contra alvo ocultado ou 9 contra alvo escondido."
+        }
+      ],
+      "maturidade_anos": 20,
+      "expectativa_vida_anos": 150,
+      "exemplos_nomes": [
+        "Anafa",
+        "Antal",
+        "Bellis",
+        "Boram",
+        "Etune",
+        "Filiu",
+        "Jamir",
+        "Kaleb",
+        "Linna",
+        "Marra",
+        "Miro",
+        "Rillka",
+        "Sistra",
+        "Sumak",
+        "Yamyra"
+      ],
+      "biografias_tipicas": [
+        "Acrobata",
+        "Apresentador",
+        "Criança de Rua",
+        "Criminoso",
+        "Emissário",
+        "Operário"
+      ],
+      "classes_tipicas": [
+        "Clérigo",
+        "Ladino",
+        "Monge",
+        "Patrulheiro"
+      ],
+      "descricao": "Otimistas, adaptáveis e dotados de sorte excepcional, halflings equilibram a vontade de viajar com o apego ao conforto do lar.",
+      "herancas": [
+        {
+          "id": "halfling_das_colinas",
+          "nome": "Halfling das Colinas",
+          "descricao": "Ao recuperar PV durante a noite, adicione seu nível aos PV recuperados. Quando alguém usar Medicina para Tratar seus Ferimentos, pode comer um lanche para adicionar seu nível aos PV recuperados."
+        },
+        {
+          "id": "halfling_do_crepusculo",
+          "nome": "Halfling do Crepúsculo",
+          "descricao": "Você adquire visão na penumbra.",
+          "sentidos_concedidos": [
+            "Visão na Penumbra"
+          ]
+        },
+        {
+          "id": "halfling_intrepido",
+          "nome": "Halfling Intrépido",
+          "descricao": "Quando rolar um sucesso em uma jogada de salvamento contra um efeito de emoção, trate o resultado como um sucesso crítico."
+        },
+        {
+          "id": "halfling_das_matas",
+          "nome": "Halfling das Matas",
+          "descricao": "Você ignora o terreno difícil de árvores, folhagens e matagais."
+        },
+        {
+          "id": "halfling_nomade",
+          "nome": "Halfling Nômade",
+          "descricao": "Você adquire dois idiomas adicionais (comuns ou incomuns disponíveis) e ganha outro idioma novo sempre que selecionar o talento Poliglota.",
+          "idiomas_adicionais": 2
+        }
+      ],
+      "talentos_ancestralidade": [
+        {
+          "id": "distracao_nas_sombras",
+          "nome": "Distração nas Sombras",
+          "nivel": 1,
+          "tracos": [
+            "Halfling"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Pode usar criaturas pelo menos um tamanho maior que você (Médio ou maior) como cobertura para Esconder e Esgueirar."
+        },
+        {
+          "id": "familiaridade_com_armas_halflings",
+          "nome": "Familiaridade com Armas Halflings",
+          "nivel": 1,
+          "tracos": [
+            "Halfling"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Treinado em cajado-funda halfling, espada curta e funda. Obtém acesso a armas halflings incomuns; trata marciais como simples e avançadas como marciais."
+        },
+        {
+          "id": "fundeiro_titanico",
+          "nome": "Fundeiro Titânico",
+          "nivel": 1,
+          "tracos": [
+            "Halfling"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Ao acertar um ataque com funda contra uma criatura Grande ou maior, aumenta o tamanho do dado de dano da arma em um passo."
+        },
+        {
+          "id": "halfling_atento",
+          "nome": "Halfling Atento",
+          "nivel": 1,
+          "tracos": [
+            "Halfling"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Recebe +2 de bônus de circunstância em Percepção com Sentir Motivação para perceber encantados/possuídos (teste secreto automático com -2 se não estiver usando ativamente). Pode usar Auxiliar em salvamentos contra encantamento ou possessão."
+        },
+        {
+          "id": "halfling_liberto",
+          "nome": "Halfling Liberto",
+          "nivel": 1,
+          "tracos": [
+            "Halfling"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Sucessos para Escapar ou salvamentos contra agarrado/restringido viram sucesso crítico; falhas inimigas para Agarrar viram falha crítica; Atracar exige teste de Atletismo."
+        },
+        {
+          "id": "pes_firmes",
+          "nome": "Pés Firmes",
+          "nivel": 1,
+          "tracos": [
+            "Halfling"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Sucessos em Acrobatismo para Equilibrar ou Atletismo para Escalar viram sucesso crítico e você não fica desprevenido nessas ações."
+        },
+        {
+          "id": "saber_halfling",
+          "nome": "Saber Halfling",
+          "nivel": 1,
+          "tracos": [
+            "Halfling"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Recebe proficiência treinado em Acrobatismo e Furtividade (ou outra perícia se já treinado) e torna-se treinado em Saber Halfling."
+        },
+        {
+          "id": "sorte_de_halfling",
+          "nome": "Sorte de Halfling",
+          "nivel": 1,
+          "tracos": [
+            "Fortuna",
+            "Halfling"
+          ],
+          "acoes": "Reação",
+          "pre_requisitos": null,
+          "frequencia": "uma vez por dia",
+          "acionamento": "Você falha em um teste de perícia ou jogada de salvamento.",
+          "especial": null,
+          "descricao": "Permite rerrolar o teste de perícia ou jogada de salvamento que falhou, devendo usar o novo resultado."
+        },
+        {
+          "id": "adaptabilidade_cultural",
+          "nome": "Adaptabilidade Cultural",
+          "nivel": 5,
+          "tracos": [
+            "Halfling"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Recebe o talento geral Ancestralidade Adotada e um talento de ancestralidade de 1º nível da ancestralidade escolhida."
+        },
+        {
+          "id": "embuste_com_armas_halflings",
+          "nome": "Embuste com Armas Halflings",
+          "nivel": 5,
+          "tracos": [
+            "Halfling"
+          ],
+          "acoes": null,
+          "pre_requisitos": "Familiaridade com Armas Halflings",
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Aplica o efeito de especialização de crítico ao atingir acerto crítico usando uma arma halfling ou listada em Familiaridade com Armas Halflings."
+        },
+        {
+          "id": "irreprimivel",
+          "nome": "Irreprimível",
+          "nivel": 9,
+          "tracos": [
+            "Halfling"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Sucessos contra efeitos de emoção viram sucesso crítico; se possuir herança halfling intrépido, falhas críticas contra efeitos de emoção viram falhas normais."
+        },
+        {
+          "id": "sorte_guiada",
+          "nome": "Sorte Guiada",
+          "nivel": 9,
+          "tracos": [
+            "Halfling"
+          ],
+          "acoes": null,
+          "pre_requisitos": "Sorte de Halfling",
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Pode usar Sorte de Halfling 2/dia: uma no acionamento normal e outra ao falhar em teste de Percepção ou rolagem de ataque."
+        },
+        {
+          "id": "especialidade_com_armas_halflings",
+          "nome": "Especialidade com Armas Halflings",
+          "nivel": 13,
+          "tracos": [
+            "Halfling"
+          ],
+          "acoes": null,
+          "pre_requisitos": "Familiaridade com Armas Halflings",
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Sempre que receber proficiência de especialista ou maior em armas pela classe, recebe essa proficiência em cajado-funda halfling, espada curta, funda e armas halflings treinadas."
+        },
+        {
+          "id": "sombras_incessantes",
+          "nome": "Sombras Incessantes",
+          "nivel": 13,
+          "tracos": [
+            "Halfling"
+          ],
+          "acoes": null,
+          "pre_requisitos": "Distração nas Sombras",
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Não precisa de cobertura ou ocultação para se Esconder ou Esgueirar; recebe cobertura (em vez de cobertura menor) e cobertura maior (em vez de cobertura) de outras criaturas."
+        }
+      ]
+    },
+    {
+      "id": "humano",
+      "nome": "Humano",
+      "raridade": "Comum",
+      "pontos_vida": 8,
+      "tamanho": "Médio",
+      "velocidade_m": 7.5,
+      "melhorias_atributo": [
+        "Livre",
+        "Livre"
+      ],
+      "defeito_atributo": null,
+      "idiomas_iniciais": [
+        "Comum"
+      ],
+      "idiomas_adicionais_opcoes": [
+        "Qualquer idioma comum ou regional com acesso"
+      ],
+      "regra_idiomas_adicionais": "Quantidade igual a 1 + modificador de Inteligência (mínimo 1).",
+      "tracos": [
+        "Humano",
+        "Humanoide"
+      ],
+      "habilidades_especiais": [],
+      "maturidade_anos": 15,
+      "expectativa_vida_anos": 90,
+      "exemplos_nomes": [
+        "Variados conforme etnia e região do Mar Interior (ver Capítulo 8, p. 430)"
+      ],
+      "biografias_tipicas": [
+        "Todas (ancestralidade altamente versátil)"
+      ],
+      "classes_tipicas": [
+        "Todas"
+      ],
+      "descricao": "Ambiciosos, adaptáveis e diversos, humanos formam a ancestralidade mais populosa do Mar Interior.",
+      "herancas": [
+        {
+          "id": "heranca_perita",
+          "nome": "Herança Perita",
+          "descricao": "Você se torna treinado em uma perícia à sua escolha. No 5º nível, você se torna especialista na perícia escolhida."
+        },
+        {
+          "id": "heranca_versatil",
+          "nome": "Herança Versátil",
+          "descricao": "Selecione um talento geral para o qual você atenda aos pré-requisitos (pode ser escolhido em qualquer momento da criação de personagem)."
+        },
+        {
+          "id": "meio_elfo",
+          "nome": "Meio-Elfo",
+          "descricao": "Você recebe o traço elfo e visão na penumbra. Pode selecionar talentos de ancestralidade de elfo, humano e meio-elfo.",
+          "sentidos_concedidos": [
+            "Visão na Penumbra"
+          ],
+          "tracos_adicionais": [
+            "Elfo"
+          ]
+        },
+        {
+          "id": "meio_orc",
+          "nome": "Meio-Orc",
+          "descricao": "Você recebe o traço orc e visão na penumbra. Pode selecionar talentos de ancestralidade de humano, meio-orc e orc.",
+          "sentidos_concedidos": [
+            "Visão na Penumbra"
+          ],
+          "tracos_adicionais": [
+            "Orc"
+          ]
+        }
+      ],
+      "talentos_ancestralidade": [
+        {
+          "id": "ambicao_natural",
+          "nome": "Ambição Natural",
+          "nivel": 1,
+          "tracos": [
+            "Humano"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Você recebe um talento de classe de 1º nível para sua classe, atendendo aos pré-requisitos normalmente (pode escolher ao fim da criação)."
+        },
+        {
+          "id": "armamento_nao_convencional",
+          "nome": "Armamento Não Convencional",
+          "nivel": 1,
+          "tracos": [
+            "Humano"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Escolha uma arma incomum simples ou marcial com traço de ancestralidade ou cultura; obtém acesso e a considera simples (ou arma avançada incomum considerada marcial se já treinado em todas as armas marciais)."
+        },
+        {
+          "id": "natureza_cooperativa",
+          "nome": "Natureza Cooperativa",
+          "nivel": 1,
+          "tracos": [
+            "Humano"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Você recebe +4 de bônus de circunstância em testes para Auxiliar."
+        },
+        {
+          "id": "obstinacao_altiva",
+          "nome": "Obstinação Altiva",
+          "nivel": 1,
+          "tracos": [
+            "Humano"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Sucessos contra efeitos que tentem controlar diretamente suas ações viram sucesso crítico. Falhas em testes de Intimidação para Coagi-lo viram falha crítica."
+        },
+        {
+          "id": "pericia_natural",
+          "nome": "Perícia Natural",
+          "nivel": 1,
+          "tracos": [
+            "Humano"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Você recebe a graduação de proficiência treinado em duas perícias à sua escolha."
+        },
+        {
+          "id": "treinamento_geral",
+          "nome": "Treinamento Geral",
+          "nivel": 1,
+          "tracos": [
+            "Humano"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": "Pode selecionar este talento várias vezes, escolhendo um talento diferente a cada vez.",
+          "descricao": "Recebe um talento geral de 1º nível, atendendo aos pré-requisitos."
+        },
+        {
+          "id": "truque_magico_adaptado",
+          "nome": "Truque Mágico Adaptado",
+          "nivel": 1,
+          "tracos": [
+            "Humano"
+          ],
+          "acoes": null,
+          "pre_requisitos": "característica de classe de conjuração",
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Escolha um truque mágico de uma tradição diferente da sua para substituir um dos seus truques mágicos e conjurá-lo como magia da tradição da sua classe."
+        },
+        {
+          "id": "discipulo_adaptativo",
+          "nome": "Discípulo Adaptativo",
+          "nivel": 5,
+          "tracos": [
+            "Humano"
+          ],
+          "acoes": null,
+          "pre_requisitos": "Truque Mágico Adaptado, capacidade de conjurar magias de 3º nível",
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Escolha um truque mágico ou magia de 1º nível da mesma tradição do Truque Mágico Adaptado e adicione-o à sua lista como magia da sua tradição."
+        },
+        {
+          "id": "improvisador_astuto",
+          "nome": "Improvisador Astuto",
+          "nivel": 5,
+          "tracos": [
+            "Humano"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Recebe o talento geral Improvisação Destreinada e pode tentar ações de perícia que exigem treinamento mesmo sendo destreinado."
+        },
+        {
+          "id": "alma_cooperativa",
+          "nome": "Alma Cooperativa",
+          "nivel": 9,
+          "tracos": [
+            "Humano"
+          ],
+          "acoes": null,
+          "pre_requisitos": "Natureza Cooperativa",
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Se for pelo menos especialista na perícia ao Auxiliar, obtém sucesso em qualquer resultado rolado para Auxiliar (que não tenha sido sucesso crítico)."
+        },
+        {
+          "id": "improvisacao_incrivel",
+          "nome": "Improvisação Incrível",
+          "nivel": 9,
+          "tracos": [
+            "Humano"
+          ],
+          "acoes": "Reação",
+          "pre_requisitos": "Improvisador Astuto",
+          "frequencia": "uma vez por dia",
+          "acionamento": "Você realiza um teste utilizando uma perícia em que é destreinado.",
+          "especial": null,
+          "descricao": "Recebe +4 de bônus de circunstância no teste de perícia acionador em que é destreinado."
+        },
+        {
+          "id": "talentos_multiplos",
+          "nome": "Talentos Múltiplos",
+          "nivel": 9,
+          "tracos": [
+            "Humano"
+          ],
+          "acoes": null,
+          "pre_requisitos": null,
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Recebe um talento de dedicação de multiclasse de 2º nível mesmo sem completar restrições de arquétipo atual. Meio-elfos ignoram pré-requisitos de valor de atributo."
+        },
+        {
+          "id": "especialidade_nao_convencional",
+          "nome": "Especialidade Não Convencional",
+          "nivel": 13,
+          "tracos": [
+            "Humano"
+          ],
+          "acoes": null,
+          "pre_requisitos": "Armamento Não Convencional",
+          "frequencia": null,
+          "acionamento": null,
+          "especial": null,
+          "descricao": "Sempre que receber proficiência de especialista ou maior em armas pela classe, ganha essa proficiência na arma escolhida por Armamento Não Convencional."
+        }
+      ]
+    }
+  ],
+  "herancas_mesticas_talentos": {
+    "observacao": "Por padrão meio-elfos e meio-orcs são heranças humanas, mas a critério do MJ podem ser escolhidas em outras ancestralidades (gnomos/halflings para meio-elfos; anões/goblins/halflings para meio-orcs).",
+    "meio_elfo": [
+      {
+        "id": "atavismo_elfico",
+        "nome": "Atavismo Élfico",
+        "nivel": 1,
+        "tracos": [
+          "Meio-Elfo"
+        ],
+        "acoes": null,
+        "pre_requisitos": null,
+        "frequencia": null,
+        "acionamento": null,
+        "especial": "Selecionável apenas no 1º nível; não pode ser retreinado.",
+        "descricao": "Recebe os benefícios de uma herança de elfo compatível com suas características."
+      },
+      {
+        "id": "charme_sobrenatural",
+        "nome": "Charme Sobrenatural",
+        "nivel": 5,
+        "tracos": [
+          "Meio-Elfo"
+        ],
+        "acoes": null,
+        "pre_requisitos": null,
+        "frequencia": null,
+        "acionamento": null,
+        "especial": null,
+        "descricao": "Pode conjurar cativar como magia arcana inata de 1º nível uma vez por dia."
+      },
+      {
+        "id": "inspirar_imitacao",
+        "nome": "Inspirar Imitação",
+        "nivel": 5,
+        "tracos": [
+          "Meio-Elfo"
+        ],
+        "acoes": null,
+        "pre_requisitos": null,
+        "frequencia": null,
+        "acionamento": null,
+        "especial": null,
+        "descricao": "Sempre que obtiver sucesso em um teste de perícia, qualifica-se automaticamente para usar a reação Auxiliar nessa perícia sem gastar ação de Preparar."
+      }
+    ],
+    "meio_orc": [
+      {
+        "id": "familiaridade_com_armas_orquicas",
+        "nome": "Familiaridade com Armas Órquicas",
+        "nivel": 1,
+        "tracos": [
+          "Orc"
+        ],
+        "acoes": null,
+        "pre_requisitos": null,
+        "frequencia": null,
+        "acionamento": null,
+        "especial": null,
+        "descricao": "Treinado em bracamante e machado longo. Obtém acesso a armas órquicas incomuns; trata marciais como simples e avançadas como marciais."
+      },
+      {
+        "id": "ferocidade_orquica",
+        "nome": "Ferocidade Órquica",
+        "nivel": 1,
+        "tracos": [
+          "Orc"
+        ],
+        "acoes": "Reação",
+        "pre_requisitos": null,
+        "frequencia": "uma vez por dia",
+        "acionamento": "Você seria reduzido a 0 Pontos de Vida, mas não morto imediatamente.",
+        "especial": null,
+        "descricao": "Evita ser nocauteado ao cair a 0 PV, permanecendo com 1 PV e aumentando sua condição ferido em 1."
+      },
+      {
+        "id": "pacificador_monstruoso",
+        "nome": "Pacificador Monstruoso",
+        "nivel": 1,
+        "tracos": [
+          "Meio-Orc"
+        ],
+        "acoes": null,
+        "pre_requisitos": null,
+        "frequencia": null,
+        "acionamento": null,
+        "especial": null,
+        "descricao": "Recebe +1 de bônus de circunstância em Diplomacia e Percepção (Sentir Motivação) contra não-humanoides inteligentes e humanoides marginalizados."
+      },
+      {
+        "id": "supersticao_orquica",
+        "nome": "Superstição Órquica",
+        "nivel": 1,
+        "tracos": [
+          "Concentração",
+          "Orc"
+        ],
+        "acoes": "Reação",
+        "pre_requisitos": null,
+        "frequencia": null,
+        "acionamento": "Você tenta uma jogada de salvamento contra uma magia ou efeito mágico, antes de efetuar a rolagem.",
+        "especial": null,
+        "descricao": "Recebe +1 de bônus de circunstância na jogada de salvamento acionadora contra magia ou efeito mágico."
+      },
+      {
+        "id": "visao_orquica",
+        "nome": "Visão Órquica",
+        "nivel": 1,
+        "tracos": [
+          "Meio-Orc"
+        ],
+        "acoes": null,
+        "pre_requisitos": "visão na penumbra",
+        "frequencia": null,
+        "acionamento": null,
+        "especial": "Selecionável apenas no 1º nível; não pode ser retreinado.",
+        "descricao": "Você adquire visão no escuro."
+      },
+      {
+        "id": "carnificina_com_armas_orquicas",
+        "nome": "Carnificina com Armas Órquicas",
+        "nivel": 5,
+        "tracos": [
+          "Orc"
+        ],
+        "acoes": null,
+        "pre_requisitos": "Familiaridade com Armas Órquicas",
+        "frequencia": null,
+        "acionamento": null,
+        "especial": null,
+        "descricao": "Aplica o efeito de especialização de crítico em acertos críticos usando bracamante, machado grande (machado longo) ou arma órquica."
+      },
+      {
+        "id": "vigor_vitorioso",
+        "nome": "Vigor Vitorioso",
+        "nivel": 5,
+        "tracos": [
+          "Orc"
+        ],
+        "acoes": "Reação",
+        "pre_requisitos": null,
+        "frequencia": null,
+        "acionamento": "Você reduz um adversário a 0 Pontos de Vida.",
+        "especial": null,
+        "descricao": "Recebe Pontos de Vida temporários igual ao seu modificador de Constituição até o final do próximo turno."
+      },
+      {
+        "id": "supersticao_pervasiva",
+        "nome": "Superstição Pervasiva",
+        "nivel": 9,
+        "tracos": [
+          "Orc"
+        ],
+        "acoes": null,
+        "pre_requisitos": "Superstição Órquica",
+        "frequencia": null,
+        "acionamento": null,
+        "especial": null,
+        "descricao": "Recebe +1 de bônus de circunstância em jogadas de salvamento contra magias e efeitos mágicos o tempo inteiro."
+      },
+      {
+        "id": "especialidade_com_armas_orquicas",
+        "nome": "Especialidade com Armas Órquicas",
+        "nivel": 13,
+        "tracos": [
+          "Orc"
+        ],
+        "acoes": null,
+        "pre_requisitos": "Familiaridade com Armas Órquicas",
+        "frequencia": null,
+        "acionamento": null,
+        "especial": null,
+        "descricao": "Recebe proficiência de especialista ou maior da classe também em bracamante, machado longo e armas órquicas treinadas."
+      },
+      {
+        "id": "ferocidade_incrivel",
+        "nome": "Ferocidade Incrível",
+        "nivel": 13,
+        "tracos": [
+          "Orc"
+        ],
+        "acoes": null,
+        "pre_requisitos": "Ferocidade Órquica",
+        "frequencia": null,
+        "acionamento": null,
+        "especial": null,
+        "descricao": "Pode usar Ferocidade Órquica uma vez por hora em vez de uma vez por dia."
+      }
+    ]
+  },
+  "biografias": {
+    "regras": {
+      "escolha_nivel_1": "Permanente; escolhida no 1º nível.",
+      "beneficios_padrao": [
+        "Duas melhorias de atributo (1 dentre dois atributos especificados e 1 melhoria livre).",
+        "Graduação treinado em uma perícia específica (se já treinado depois pela classe, escolha outra).",
+        "Graduação treinado em uma perícia de Saber específica.",
+        "Um talento de perícia específico."
+      ]
+    },
+    "lista": [
+      {
+        "id": "acolito",
+        "nome": "Acólito",
+        "melhorias_atributo_opcoes": [
+          "Inteligência",
+          "Sabedoria"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Religião"
+        ],
+        "saber_treinado": "Saber de Escrita",
+        "saber_tematico": false,
+        "talento_pericia": "Estudante do Cânone",
+        "descricao": "Você passou boa parte de sua vida em um convento ou monastério religioso."
+      },
+      {
+        "id": "acrobata",
+        "nome": "Acrobata",
+        "melhorias_atributo_opcoes": [
+          "Força",
+          "Destreza"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Acrobatismo"
+        ],
+        "saber_treinado": "Saber de Circo",
+        "saber_tematico": false,
+        "talento_pericia": "Equilíbrio Estável",
+        "descricao": "Em um circo ou nas ruas, você ganhou dinheiro se apresentando como um acrobata."
+      },
+      {
+        "id": "advogado",
+        "nome": "Advogado",
+        "melhorias_atributo_opcoes": [
+          "Inteligência",
+          "Carisma"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Diplomacia"
+        ],
+        "saber_treinado": "Saber de Leis",
+        "saber_tematico": false,
+        "talento_pericia": "Impressionar Grupo",
+        "descricao": "Pilhas de manuais sobre leis, professores severos e experiências na corte o instruíram em assuntos legais."
+      },
+      {
+        "id": "animador",
+        "nome": "Animador",
+        "melhorias_atributo_opcoes": [
+          "Destreza",
+          "Carisma"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Performance"
+        ],
+        "saber_treinado": "Saber de Teatro",
+        "saber_tematico": false,
+        "talento_pericia": "Performance Fascinante",
+        "descricao": "Através da educação nas artes ou pura prática obstinada, você aprendeu a entreter multidões."
+      },
+      {
+        "id": "apostador",
+        "nome": "Apostador",
+        "melhorias_atributo_opcoes": [
+          "Destreza",
+          "Carisma"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Dissimulação"
+        ],
+        "saber_treinado": "Saber de Jogos",
+        "saber_tematico": false,
+        "talento_pericia": "Mente na Minha Cara",
+        "descricao": "A emoção da vitória o levou aos jogos de azar."
+      },
+      {
+        "id": "artesao",
+        "nome": "Artesão",
+        "melhorias_atributo_opcoes": [
+          "Força",
+          "Inteligência"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Manufatura"
+        ],
+        "saber_treinado": "Saber de Guildas",
+        "saber_tematico": false,
+        "talento_pericia": "Especialidade de Manufatura",
+        "descricao": "Como um aprendiz, você praticou uma forma específica de construção, manufatura ou ofício."
+      },
+      {
+        "id": "artista",
+        "nome": "Artista",
+        "melhorias_atributo_opcoes": [
+          "Destreza",
+          "Carisma"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Manufatura"
+        ],
+        "saber_treinado": "Saber de Artes",
+        "saber_tematico": false,
+        "talento_pericia": "Especialidade de Manufatura",
+        "descricao": "Sua arte é sua maior paixão, independentemente da forma que ela assume."
+      },
+      {
+        "id": "batedor",
+        "nome": "Batedor",
+        "melhorias_atributo_opcoes": [
+          "Destreza",
+          "Sabedoria"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Sobrevivência"
+        ],
+        "saber_treinado": "Saber de Terreno (ex.: Cavernas ou Florestas)",
+        "saber_tematico": true,
+        "talento_pericia": "Forrageador",
+        "descricao": "Você chama os ermos de lar, vivendo entre trilhas e guiando viajantes."
+      },
+      {
+        "id": "cacador",
+        "nome": "Caçador",
+        "melhorias_atributo_opcoes": [
+          "Destreza",
+          "Sabedoria"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Sobrevivência"
+        ],
+        "saber_treinado": "Saber de Curtume",
+        "saber_tematico": false,
+        "talento_pericia": "Procurar Vida Selvagem",
+        "descricao": "Você perseguiu e abateu animais e outras criaturas dos ermos."
+      },
+      {
+        "id": "cacador_de_recompensas",
+        "nome": "Caçador de Recompensas",
+        "melhorias_atributo_opcoes": [
+          "Força",
+          "Sabedoria"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Sobrevivência"
+        ],
+        "saber_treinado": "Saber de Leis",
+        "saber_tematico": false,
+        "talento_pericia": "Rastreador Experiente",
+        "descricao": "Você enche seus bolsos capturando infratores da lei."
+      },
+      {
+        "id": "charlatao",
+        "nome": "Charlatão",
+        "melhorias_atributo_opcoes": [
+          "Inteligência",
+          "Carisma"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Dissimulação"
+        ],
+        "saber_treinado": "Saber de Submundo",
+        "saber_tematico": false,
+        "talento_pericia": "Mentiroso Charmoso",
+        "descricao": "Você viajava de lugar em lugar aplicando golpes e assumindo identidades falsas."
+      },
+      {
+        "id": "crianca_de_rua",
+        "nome": "Criança de Rua",
+        "melhorias_atributo_opcoes": [
+          "Destreza",
+          "Constituição"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Ladroagem"
+        ],
+        "saber_treinado": "Saber de Cidade (ex.: Absalom ou Magnimar)",
+        "saber_tematico": true,
+        "talento_pericia": "Punga",
+        "descricao": "Você sobreviveu batendo carteiras nas ruas de uma cidade grande."
+      },
+      {
+        "id": "criminoso",
+        "nome": "Criminoso",
+        "melhorias_atributo_opcoes": [
+          "Destreza",
+          "Inteligência"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Furtividade"
+        ],
+        "saber_treinado": "Saber de Submundo",
+        "saber_tematico": false,
+        "talento_pericia": "Contrabandista Experiente",
+        "descricao": "Como um inescrupuloso independente ou membro do submundo, você viveu uma vida de crimes."
+      },
+      {
+        "id": "detetive",
+        "nome": "Detetive",
+        "melhorias_atributo_opcoes": [
+          "Inteligência",
+          "Sabedoria"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Sociedade"
+        ],
+        "saber_treinado": "Saber de Submundo",
+        "saber_tematico": false,
+        "talento_pericia": "Manha das Ruas",
+        "descricao": "Você solucionou crimes como inspetor de polícia ou investigador privado."
+      },
+      {
+        "id": "discipulo_marcial",
+        "nome": "Discípulo Marcial",
+        "melhorias_atributo_opcoes": [
+          "Força",
+          "Destreza"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Acrobatismo",
+          "Atletismo"
+        ],
+        "saber_treinado": "Saber de Guerra",
+        "saber_tematico": false,
+        "talento_pericia": "Queda do Gato ou Salto Rápido",
+        "descricao": "Você passou por um treinamento intenso e estudo rigoroso para se tornar um grande combatente.",
+        "talento_pericia_condicional": {
+          "Acrobatismo": "Queda do Gato",
+          "Atletismo": "Salto Rápido"
+        }
+      },
+      {
+        "id": "emissario",
+        "nome": "Emissário",
+        "melhorias_atributo_opcoes": [
+          "Inteligência",
+          "Carisma"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Sociedade"
+        ],
+        "saber_treinado": "Saber de Cidade visitada com frequência",
+        "saber_tematico": true,
+        "talento_pericia": "Poliglota",
+        "descricao": "Como diplomata ou mensageiro, você viajou para várias terras distantes."
+      },
+      {
+        "id": "encantador_de_animais",
+        "nome": "Encantador de Animais",
+        "melhorias_atributo_opcoes": [
+          "Sabedoria",
+          "Carisma"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Natureza"
+        ],
+        "saber_treinado": "Saber de Terreno habitado por animais (ex.: Planícies ou Pântanos)",
+        "saber_tematico": true,
+        "talento_pericia": "Treinar Animal",
+        "descricao": "Você sempre sentiu uma forte ligação com os animais e aprendeu a treiná-los."
+      },
+      {
+        "id": "eremita",
+        "nome": "Eremita",
+        "melhorias_atributo_opcoes": [
+          "Constituição",
+          "Inteligência"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Natureza",
+          "Ocultismo"
+        ],
+        "saber_treinado": "Saber de Terreno onde vivia (ex.: Cavernas ou Desertos)",
+        "saber_tematico": true,
+        "talento_pericia": "Conhecimento Duvidoso",
+        "descricao": "Você viveu solitariamente em um local isolado."
+      },
+      {
+        "id": "estudioso",
+        "nome": "Estudioso",
+        "melhorias_atributo_opcoes": [
+          "Inteligência",
+          "Sabedoria"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Arcanismo",
+          "Natureza",
+          "Ocultismo",
+          "Religião"
+        ],
+        "saber_treinado": "Saber Acadêmico",
+        "saber_tematico": false,
+        "talento_pericia": "Certeza (na perícia escolhida)",
+        "descricao": "Você tem facilidade de aprendizado e se isolou para estudar livros e saberes antigos.",
+        "talento_pericia_condicional": {
+          "Arcanismo": "Certeza (Arcanismo)",
+          "Natureza": "Certeza (Natureza)",
+          "Ocultismo": "Certeza (Ocultismo)",
+          "Religião": "Certeza (Religião)"
+        }
+      },
+      {
+        "id": "funileiro",
+        "nome": "Funileiro",
+        "melhorias_atributo_opcoes": [
+          "Destreza",
+          "Inteligência"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Manufatura"
+        ],
+        "saber_treinado": "Saber de Engenharia",
+        "saber_tematico": false,
+        "talento_pericia": "Especialidade de Manufatura",
+        "descricao": "Você satisfaz sua necessidade de resolver problemas criando invenções menores."
+      },
+      {
+        "id": "gladiador",
+        "nome": "Gladiador",
+        "melhorias_atributo_opcoes": [
+          "Força",
+          "Carisma"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Performance"
+        ],
+        "saber_treinado": "Saber de Gladiadores",
+        "saber_tematico": false,
+        "talento_pericia": "Performance Impressionante",
+        "descricao": "Os sanguinários jogos de arena lhe ensinaram a arte do combate."
+      },
+      {
+        "id": "guarda",
+        "nome": "Guarda",
+        "melhorias_atributo_opcoes": [
+          "Força",
+          "Carisma"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Intimidação"
+        ],
+        "saber_treinado": "Saber de Guerra",
+        "saber_tematico": false,
+        "talento_pericia": "Coerção Rápida",
+        "descricao": "Você serviu em uma guarda e sabe fazer um suspeito falar."
+      },
+      {
+        "id": "herbalista",
+        "nome": "Herbalista",
+        "melhorias_atributo_opcoes": [
+          "Constituição",
+          "Sabedoria"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Natureza"
+        ],
+        "saber_treinado": "Saber de Herbalismo",
+        "saber_tematico": false,
+        "talento_pericia": "Medicina Natural",
+        "descricao": "Você aprendeu as propriedades curativas de várias ervas e como prepará-las."
+      },
+      {
+        "id": "lavrador",
+        "nome": "Lavrador",
+        "melhorias_atributo_opcoes": [
+          "Constituição",
+          "Sabedoria"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Atletismo"
+        ],
+        "saber_treinado": "Saber de Agricultura",
+        "saber_tematico": false,
+        "talento_pericia": "Certeza para Atletismo",
+        "descricao": "Você lavrou a terra e cuidou da colheita com costas fortes e compreensão dos ciclos sazonais."
+      },
+      {
+        "id": "marinheiro",
+        "nome": "Marinheiro",
+        "melhorias_atributo_opcoes": [
+          "Força",
+          "Destreza"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Atletismo"
+        ],
+        "saber_treinado": "Saber de Navegação",
+        "saber_tematico": false,
+        "talento_pericia": "Saqueador Subaquático",
+        "descricao": "Você ouve o chamado do mar desde jovem, em embarcações mercantes, marinha ou pirataria."
+      },
+      {
+        "id": "medico_de_campo",
+        "nome": "Médico de Campo",
+        "melhorias_atributo_opcoes": [
+          "Constituição",
+          "Sabedoria"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Medicina"
+        ],
+        "saber_treinado": "Saber de Guerra",
+        "saber_tematico": false,
+        "talento_pericia": "Medicina de Batalha",
+        "descricao": "No caos da batalha, você tratou soldados e aprendeu sobre as logísticas da guerra."
+      },
+      {
+        "id": "mercador",
+        "nome": "Mercador",
+        "melhorias_atributo_opcoes": [
+          "Inteligência",
+          "Carisma"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Diplomacia"
+        ],
+        "saber_treinado": "Saber de Mercadores",
+        "saber_tematico": false,
+        "talento_pericia": "Pechinchador",
+        "descricao": "Você permutou mercadorias por dinheiro e outros bens em lojas, mercados ou caravanas."
+      },
+      {
+        "id": "mineiro",
+        "nome": "Mineiro",
+        "melhorias_atributo_opcoes": [
+          "Força",
+          "Sabedoria"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Sobrevivência"
+        ],
+        "saber_treinado": "Saber de Mineração",
+        "saber_tematico": false,
+        "talento_pericia": "Especialidade em Terreno (subterrâneo)",
+        "descricao": "Você passou a vida arrancando minerais preciosos das profundezas escuras da terra."
+      },
+      {
+        "id": "nobre",
+        "nome": "Nobre",
+        "melhorias_atributo_opcoes": [
+          "Inteligência",
+          "Carisma"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Sociedade"
+        ],
+        "saber_treinado": "Saber de Genealogia ou Saber de Heráldica",
+        "saber_tematico": false,
+        "talento_pericia": "Gracejos da Corte",
+        "descricao": "Você cresceu como nobre ou aspirante à pequena nobreza entre obrigações e intrigas."
+      },
+      {
+        "id": "nomade",
+        "nome": "Nômade",
+        "melhorias_atributo_opcoes": [
+          "Constituição",
+          "Sabedoria"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Sobrevivência"
+        ],
+        "saber_treinado": "Saber de Terreno viajado (ex.: Desertos ou Pântanos)",
+        "saber_tematico": true,
+        "talento_pericia": "Certeza para Sobrevivência",
+        "descricao": "Viajando por toda parte, você aprendeu a sobreviver na estrada e em terras desconhecidas."
+      },
+      {
+        "id": "operario",
+        "nome": "Operário",
+        "melhorias_atributo_opcoes": [
+          "Força",
+          "Constituição"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Atletismo"
+        ],
+        "saber_treinado": "Saber de Trabalho",
+        "saber_tematico": false,
+        "talento_pericia": "Carregador Robusto",
+        "descricao": "Você passou anos realizando trabalho físico árduo."
+      },
+      {
+        "id": "prisioneiro",
+        "nome": "Prisioneiro",
+        "melhorias_atributo_opcoes": [
+          "Força",
+          "Constituição"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Furtividade"
+        ],
+        "saber_treinado": "Saber de Submundo",
+        "saber_tematico": false,
+        "talento_pericia": "Contrabandista Experiente",
+        "descricao": "Você foi aprisionado ou escravizado em algum momento e agora aproveita sua liberdade."
+      },
+      {
+        "id": "soldado",
+        "nome": "Soldado",
+        "melhorias_atributo_opcoes": [
+          "Força",
+          "Constituição"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Intimidação"
+        ],
+        "saber_treinado": "Saber de Guerra",
+        "saber_tematico": false,
+        "talento_pericia": "Olhar Intimidante",
+        "descricao": "Em sua juventude, você entrou em batalha como mercenário, miliciano ou soldado."
+      },
+      {
+        "id": "taverneiro",
+        "nome": "Taverneiro",
+        "melhorias_atributo_opcoes": [
+          "Constituição",
+          "Carisma"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Diplomacia"
+        ],
+        "saber_treinado": "Saber de Álcool",
+        "saber_tematico": false,
+        "talento_pericia": "Camarada",
+        "descricao": "Você trabalhou em um bar, aprendendo a não derramar bebida e socializar no barulho."
+      },
+      {
+        "id": "vidente",
+        "nome": "Vidente",
+        "melhorias_atributo_opcoes": [
+          "Inteligência",
+          "Carisma"
+        ],
+        "melhoria_livre": true,
+        "pericia_treinada_opcoes": [
+          "Ocultismo"
+        ],
+        "saber_treinado": "Saber de Vidência",
+        "saber_tematico": false,
+        "talento_pericia": "Identificar Estranhezas",
+        "descricao": "Você aprendeu formas tradicionais de adivinhação que o conectaram aos mistérios ocultistas."
+      }
+    ]
+  },
+  "idiomas": {
+    "regras": {
+      "adicionais_por_inteligencia": "Modificador de Inteligência positivo concede igual quantidade de idiomas adicionais da lista da ancestralidade ou região.",
+      "druídico": "Idioma secreto disponível apenas para druidas, que são proibidos de ensiná-lo a não-druidas.",
+      "lingua_sinais_leitura_labial": "Disponíveis pelos talentos de perícia Língua de Sinais e Ler Lábios (ou gratuitamente pelo MJ por conceito de personagem)."
+    },
+    "tabela_2_1_idiomas_comuns": [
+      {
+        "idioma": "Comum",
+        "falantes": "Humanos, anões, elfos, halflings e outras ancestralidades comuns"
+      },
+      {
+        "idioma": "Dracônico",
+        "falantes": "Dragões, humanoides reptilianos"
+      },
+      {
+        "idioma": "Enânico",
+        "falantes": "Anões"
+      },
+      {
+        "idioma": "Élfico",
+        "falantes": "Elfos, meio-elfos"
+      },
+      {
+        "idioma": "Gnômico",
+        "falantes": "Gnomos"
+      },
+      {
+        "idioma": "Goblin",
+        "falantes": "Bugbears, goblins, hobgoblins"
+      },
+      {
+        "idioma": "Halfling",
+        "falantes": "Halflings"
+      },
+      {
+        "idioma": "Jotun",
+        "falantes": "Gigantes, ogros, trolls, ettins, ciclopes"
+      },
+      {
+        "idioma": "Órquico",
+        "falantes": "Orcs, meio-orcs"
+      },
+      {
+        "idioma": "Silvestre",
+        "falantes": "Fadas, centauros, plantas"
+      },
+      {
+        "idioma": "Subterrâneo",
+        "falantes": "Drow, duergares, xulgathes"
+      }
+    ],
+    "tabela_2_2_idiomas_incomuns": [
+      {
+        "idioma": "Abissal",
+        "falantes": "Demônios"
+      },
+      {
+        "idioma": "Aklo",
+        "falantes": "Deros, fadas malignas, monstros de outros mundos"
+      },
+      {
+        "idioma": "Aquan",
+        "falantes": "Criaturas aquáticas, elementais de água"
+      },
+      {
+        "idioma": "Auran",
+        "falantes": "Criaturas voadoras, elementais do ar"
+      },
+      {
+        "idioma": "Celestial",
+        "falantes": "Anjos"
+      },
+      {
+        "idioma": "Gnoll",
+        "falantes": "Gnolls"
+      },
+      {
+        "idioma": "Ignan",
+        "falantes": "Elementais do fogo"
+      },
+      {
+        "idioma": "Infernal",
+        "falantes": "Diabos"
+      },
+      {
+        "idioma": "Língua-das-Sombras",
+        "falantes": "Nidaleses, criaturas do Plano das Sombras"
+      },
+      {
+        "idioma": "Necril",
+        "falantes": "Carniçais, mortos-vivos inteligentes"
+      },
+      {
+        "idioma": "Terran",
+        "falantes": "Elementais da terra"
+      }
+    ],
+    "tabela_2_3_idioma_secreto": [
+      {
+        "idioma": "Druídico",
+        "falantes": "Druidas"
+      }
+    ]
+  }
+}

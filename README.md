@@ -38,10 +38,12 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 │   ├── finalizado.md             # Índice geral de entregas concluídas
 │   └── finalizado/               # Logs individuais numerados (01.md, 02.md, ...) com data e hora
 ├── dados/                        # Regras e tabelas do PF2E convertidas em JSON
+│   ├── ancestralidades_biografias.json  # Capítulos 1 e 2 (Criação, Ancestralidades, Heranças, Biografias e Idiomas)
 │   └── equipamentos.json         # Capítulo 6 completo (Equipamentos) convertido e validado
 ├── pdf_fonte/                    # PDF completo comprimido do Livro Básico PF2E
 ├── ref/                          # PDFs fragmentados por categoria para conversão gradual
 ├── scripts/                      # Scripts Python de geração, extração e validação de JSONs
+│   ├── gerar_ancestralidades_biografias_json.py
 │   └── gerar_equipamentos_json.py
 └── templates/                    # Front-End HTML/CSS/JS renderizado pelo Flask
 ```
@@ -73,7 +75,7 @@ Os PDFs de referência estão sendo convertidos **um por vez** para garantir fid
 | PDF de Origem (`ref/`) | Destino JSON (`dados/`) | Conteúdo | Status |
 | :--- | :--- | :--- | :--- |
 | `ref/Tools.pdf` | `dados/equipamentos.json` | Moedas, Volume, Armaduras, Escudos, Armas, Equipamentos de Aventura, Kits de Classe, Alquímicos, Mágicos, Fórmulas, Serviços, Animais e Tamanhos | Concluído (`02.md`) |
-| `ref/Anc Race.pdf` | `dados/ancestralidades_biografias.json` | Regras de criação, Ancestralidades, Heranças, Talentos de Ancestralidade e Biografias | Pendente |
+| `ref/Anc Race.pdf` | `dados/ancestralidades_biografias.json` | Regras de criação, Ancestralidades, Heranças, Talentos de Ancestralidade e Biografias | Concluído (`04.md`) |
 | `ref/Class Multi.pdf` | `dados/classes.json` | 12 Classes básicas, progressão, características, talentos de classe e multiclasses | Pendente |
 | `ref/Skill sfots.pdf` | `dados/pericias.json` | Perícias, ações treinadas/destreinadas e graus de proficiência | Pendente |
 | `ref/Gifts.pdf` | `dados/talentos.json` | Talentos Gerais e Talentos de Perícia | Pendente |
@@ -85,10 +87,11 @@ Os PDFs de referência estão sendo convertidos **um por vez** para garantir fid
 
 ## 5. Como Regenerar e Validar os Dados Atuais
 
-Com **Python 3** instalado, é possível regenerar e validar a integridade de `dados/equipamentos.json` executando:
+Com **Python 3** instalado, é possível regenerar e validar a integridade dos arquivos JSON executando:
 
 ```bash
 python scripts/gerar_equipamentos_json.py
+python scripts/gerar_ancestralidades_biografias_json.py
 ```
 
-O script verifica todas as contagens das tabelas do Capítulo 6, unicidade de IDs, normalização de preços em peças de cobre (`preco_pc`) e normalização numérica de volume (`volume_valor`).
+Os scripts verificam todas as contagens das tabelas dos respectivos capítulos, unicidade de IDs e integridade estrutural dos dados.

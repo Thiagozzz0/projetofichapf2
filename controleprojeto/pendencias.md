@@ -8,7 +8,7 @@ Lista viva de todas as entregas e tarefas que ainda precisam ser realizadas até
 
 > Regra de trabalho: converter **um arquivo por vez**, com leitura cuidadosa de tabelas, caixas de texto e regras, criando script de geração/validação quando necessário.
 
-- [ ] **`ref/Anc Race.pdf` → `dados/ancestralidades_biografias.json`**
+- [x] **`ref/Anc Race.pdf` → `dados/ancestralidades_biografias.json`** *(Concluído em `18/11/2026 — 14:51` — ver [04.md](finalizado/04.md))*
   - Regras passo a passo de criação de personagem e cálculo de atributos (ABCD).
   - Todas as Ancestralidades básicas (PV, tamanho, velocidade, melhorias/defeitos, idiomas, sentidos, traços especiais).
   - Todas as Heranças de cada ancestralidade.
