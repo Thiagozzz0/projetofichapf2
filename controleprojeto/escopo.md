@@ -22,7 +22,9 @@ O sistema deve abranger desde a **matemática básica dos atributos (sistema ABC
   - `ref/` com os recortes temáticos do livro para conversão gradual, **um arquivo por vez**:
     - `ref/Tools.pdf` — Equipamentos (Capítulo 6)
     - `ref/Anc Race.pdf` — Criação, Ancestralidades, Heranças e Biografias
-    - `ref/Class Multi.pdf` — Classes e Multiclasses
+    - `ref/Classes 01.pdf` — Classes (Parte 1: Introdução, Alquimista, Bárbaro, Bardo e Campeão)
+    - `ref/Classes 02.pdf` — Classes (Parte 2: Clérigo, Druida, Feiticeiro e Guerreiro)
+    - `ref/Classes 03.pdf` — Classes (Parte 3: Ladino, Mago, Monge, Patrulheiro, Companheiros Animais/Familiares e Arquétipos Multiclasse)
     - `ref/Skill sfots.pdf` — Perícias
     - `ref/Gifts.pdf` — Talentos
     - `ref/Enchacent.pdf` — Magias
