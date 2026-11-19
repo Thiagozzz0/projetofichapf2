@@ -2,17 +2,87 @@
 
 from __future__ import annotations
 
-from flask import Flask, jsonify, render_template, request
+from typing import Any
 
-from motor import ErroValidacao, carregar_dados, gerar_personagem, listar_opcoes_criacao
+from flask import Flask, Response, jsonify, render_template, request
 
-app = Flask(__name__)
+from motor import (
+    ErroValidacao,
+    carregar_dados,
+    exportar_ficha_docx,
+    exportar_ficha_txt,
+    gerar_personagem,
+    listar_opcoes_criacao,
+    nome_arquivo_seguro,
+)
+
+app = Flask(__name__, static_folder="templates/static", static_url_path="/static")
 app.json.ensure_ascii = False
+
+
+def _extrair_payload() -> dict[str, Any] | None:
+    payload = request.get_json(silent=True)
+    if payload is None:
+        payload = request.form.to_dict() if request.form else {}
+    return payload if isinstance(payload, dict) else None
+
+
+def _gerar_a_partir_payload(payload: dict[str, Any]) -> dict[str, Any]:
+    campos_obrigatorios = ("ancestralidade_id", "heranca_id", "classe_id", "conceito_id")
+    faltantes = [c for c in campos_obrigatorios if not str(payload.get(c, "")).strip()]
+    if faltantes:
+        raise ErroValidacao(f"Campos obrigatórios ausentes: {', '.join(faltantes)}.")
+
+    nivel_raw = payload.get("nivel", 1)
+    try:
+        nivel = int(nivel_raw)
+    except (TypeError, ValueError) as exc:
+        raise ErroValidacao(f"Valor inválido para 'nivel': {nivel_raw!r}.") from exc
+
+    return gerar_personagem(
+        ancestralidade_id=str(payload["ancestralidade_id"]).strip(),
+        heranca_id=str(payload["heranca_id"]).strip(),
+        classe_id=str(payload["classe_id"]).strip(),
+        conceito_id=str(payload["conceito_id"]).strip(),
+        biografia_id=payload.get("biografia_id"),
+        nome_personagem=payload.get("nome_personagem"),
+        nome_jogador=str(payload.get("nome_jogador") or ""),
+        nivel=nivel,
+        seed=payload.get("seed"),
+    )
+
+
+def _resolver_resultado_para_exportacao(payload: dict[str, Any]) -> dict[str, Any]:
+    candidato = payload.get("resultado") if isinstance(payload.get("resultado"), dict) else payload
+    if isinstance(candidato, dict) and isinstance(candidato.get("ficha"), dict):
+        ficha = candidato["ficha"]
+        if isinstance(ficha.get("cabecalho"), dict) and isinstance(ficha.get("atributos"), dict):
+            return candidato
+        raise ErroValidacao("Estrutura de ficha inválida para exportação.")
+    return _gerar_a_partir_payload(payload)
+
+
+def _resposta_download(
+    conteudo: str | bytes,
+    mimetype: str,
+    extensao: str,
+    resultado: dict[str, Any],
+) -> Response:
+    cab = resultado["ficha"]["cabecalho"]
+    nome_arq = nome_arquivo_seguro(
+        cab.get("nome_personagem"),
+        cab.get("classe"),
+        int(cab.get("nivel") or 1),
+        extensao,
+    )
+    resp = Response(conteudo, mimetype=mimetype)
+    resp.headers["Content-Disposition"] = f'attachment; filename="{nome_arq}"'
+    return resp
 
 
 @app.get("/")
 def index():
-    """Página simples de teste interativo da Etapa 3."""
+    """Interface principal da Etapa 4 (Criação e Ficha Oficial PF2E)."""
     return render_template("index.html")
 
 
@@ -74,39 +144,53 @@ def api_conceitos_por_classe(classe_id: str):
 @app.post("/api/gerar")
 def api_gerar():
     """Gera uma ficha de personagem de 1º nível em JSON a partir das escolhas do usuário."""
-    payload = request.get_json(silent=True)
+    payload = _extrair_payload()
     if payload is None:
-        payload = request.form.to_dict() if request.form else {}
-    if not isinstance(payload, dict):
         return jsonify({"erro": "Corpo da requisição inválido; esperado objeto JSON."}), 400
 
-    campos_obrigatorios = ("ancestralidade_id", "heranca_id", "classe_id", "conceito_id")
-    faltantes = [c for c in campos_obrigatorios if not str(payload.get(c, "")).strip()]
-    if faltantes:
-        return jsonify({"erro": f"Campos obrigatórios ausentes: {', '.join(faltantes)}."}), 400
-
-    nivel_raw = payload.get("nivel", 1)
     try:
-        nivel = int(nivel_raw)
-    except (TypeError, ValueError):
-        return jsonify({"erro": f"Valor inválido para 'nivel': {nivel_raw!r}."}), 400
-
-    try:
-        resultado = gerar_personagem(
-            ancestralidade_id=str(payload["ancestralidade_id"]).strip(),
-            heranca_id=str(payload["heranca_id"]).strip(),
-            classe_id=str(payload["classe_id"]).strip(),
-            conceito_id=str(payload["conceito_id"]).strip(),
-            biografia_id=payload.get("biografia_id"),
-            nome_personagem=payload.get("nome_personagem"),
-            nome_jogador=str(payload.get("nome_jogador") or ""),
-            nivel=nivel,
-            seed=payload.get("seed"),
-        )
+        resultado = _gerar_a_partir_payload(payload)
     except ErroValidacao as exc:
         return jsonify({"erro": str(exc)}), 400
 
     return jsonify(resultado), 200
+
+
+@app.post("/api/exportar/txt")
+def api_exportar_txt():
+    """Exporta a ficha (já gerada ou gerada sob demanda) em texto plano `.txt` UTF-8."""
+    payload = _extrair_payload()
+    if payload is None:
+        return jsonify({"erro": "Corpo da requisição inválido; esperado objeto JSON."}), 400
+
+    try:
+        resultado = _resolver_resultado_para_exportacao(payload)
+        conteudo_txt = exportar_ficha_txt(resultado)
+    except (ErroValidacao, KeyError, TypeError) as exc:
+        return jsonify({"erro": str(exc)}), 400
+
+    return _resposta_download(conteudo_txt, "text/plain; charset=utf-8", "txt", resultado)
+
+
+@app.post("/api/exportar/docx")
+def api_exportar_docx():
+    """Exporta a ficha (já gerada ou gerada sob demanda) em documento `.docx` (OOXML)."""
+    payload = _extrair_payload()
+    if payload is None:
+        return jsonify({"erro": "Corpo da requisição inválido; esperado objeto JSON."}), 400
+
+    try:
+        resultado = _resolver_resultado_para_exportacao(payload)
+        conteudo_docx = exportar_ficha_docx(resultado)
+    except (ErroValidacao, KeyError, TypeError) as exc:
+        return jsonify({"erro": str(exc)}), 400
+
+    return _resposta_download(
+        conteudo_docx,
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "docx",
+        resultado,
+    )
 
 
 if __name__ == "__main__":

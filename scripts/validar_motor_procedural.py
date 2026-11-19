@@ -1,9 +1,12 @@
-"""Suíte de validação completa do Motor Procedural PF2E e rotas Flask (Etapa 3)."""
+"""Suíte de validação completa do Motor Procedural PF2E, Backend Flask, Front-End e Exportadores."""
 
 from __future__ import annotations
 
+import io
 import json
 import sys
+import xml.etree.ElementTree as ET
+import zipfile
 from pathlib import Path
 
 RAIZ_PROJETO = Path(__file__).resolve().parent.parent
@@ -188,7 +191,16 @@ def main() -> None:
 
     r_idx = client.get("/")
     assert r_idx.status_code == 200
-    assert "Pathfinder 2E" in r_idx.get_data(as_text=True)
+    html_idx = r_idx.get_data(as_text=True)
+    assert "Pathfinder 2" in html_idx
+    assert "ficha.css" in html_idx and "app.js" in html_idx
+
+    assert client.get("/static/css/ficha.css").status_code == 200
+    assert client.get("/static/js/app.js").status_code == 200
+
+    req_txt = RAIZ_PROJETO / "requirements.txt"
+    assert req_txt.exists(), "requirements.txt ausente na raiz do projeto"
+    assert "Flask" in req_txt.read_text(encoding="utf-8")
 
     r_saude = client.get("/api/saude")
     assert r_saude.status_code == 200
@@ -242,9 +254,73 @@ def main() -> None:
         },
     ).status_code == 400
 
-    print("SUCESSO TOTAL — Validação da Etapa 3 concluída!")
+    # ------------------------------------------------------------------
+    # 6. Exportação .TXT e .DOCX (com resultado pronto e por parâmetros)
+    # ------------------------------------------------------------------
+    # Exportação TXT via resultado já gerado
+    r_txt_res = client.post("/api/exportar/txt", json={"resultado": mago_elem})
+    assert r_txt_res.status_code == 200
+    assert r_txt_res.mimetype == "text/plain"
+    disp_txt = r_txt_res.headers.get("Content-Disposition", "")
+    assert "attachment;" in disp_txt and disp_txt.endswith('.txt"')
+    txt_body = r_txt_res.get_data(as_text=True)
+    assert mago_elem["ficha"]["cabecalho"]["nome_personagem"] in txt_body
+    assert "Mago — Elementalista" in txt_body
+    assert "PERÍCIAS (18 LINHAS OFICIAIS)" in txt_body
+    assert "PÁGINA 4 (p. 583) — CONJURAÇÃO E MAGIAS" in txt_body
+    assert "Mãos Flamejantes" in txt_body
+
+    # Exportação TXT via parâmetros diretos
+    r_txt_params = client.post(
+        "/api/exportar/txt",
+        json={
+            "ancestralidade_id": "humano",
+            "heranca_id": "heranca_versatil",
+            "classe_id": "guerreiro",
+            "conceito_id": "guerreiro_espada_duas_maos",
+            "seed": 88,
+        },
+    )
+    assert r_txt_params.status_code == 200
+    txt_guer = r_txt_params.get_data(as_text=True)
+    assert "Montante" in txt_guer and "Ataque Poderoso" in txt_guer
+
+    # Exportação DOCX (Mago Elementalista + Guerreiro Montante) com validação OOXML/XML completa
+    arquivos_esperados_docx = {
+        "[Content_Types].xml",
+        "_rels/.rels",
+        "word/_rels/document.xml.rels",
+        "word/styles.xml",
+        "word/document.xml",
+    }
+    for caso_res, trechos_esperados in (
+        (mago_elem, [mago_elem["ficha"]["cabecalho"]["nome_personagem"], "Elementalista", "Flamejantes"]),
+        (guer_2m, [guer_2m["ficha"]["cabecalho"]["nome_personagem"], "Montante", "Ataque Poderoso"]),
+    ):
+        r_docx = client.post("/api/exportar/docx", json={"resultado": caso_res})
+        assert r_docx.status_code == 200
+        assert r_docx.mimetype == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        disp_docx = r_docx.headers.get("Content-Disposition", "")
+        assert "attachment;" in disp_docx and disp_docx.endswith('.docx"')
+
+        raw_docx = r_docx.get_data()
+        with zipfile.ZipFile(io.BytesIO(raw_docx), "r") as zf:
+            assert zf.testzip() is None
+            assert arquivos_esperados_docx.issubset(set(zf.namelist()))
+            for nome_xml in arquivos_esperados_docx:
+                ET.fromstring(zf.read(nome_xml))
+            doc_txt = "".join(ET.fromstring(zf.read("word/document.xml")).itertext())
+            for trecho in trechos_esperados:
+                assert trecho in doc_txt, f"Trecho {trecho!r} ausente do word/document.xml"
+
+    # Erros 400 nos endpoints de exportação
+    assert client.post("/api/exportar/txt", json={}).status_code == 400
+    assert client.post("/api/exportar/docx", json={"ficha": {}}).status_code == 400
+
+    print("SUCESSO TOTAL — Validação da Etapa 3 + Etapa 4 concluída!")
     print(f"Conceitos validados: {len(todos_conceitos)}/38 | Heranças validadas: {len(todas_herancas)}/29")
-    print(f"Casos especiais validados: {len(casos_especiais)} | Rotas Flask validadas: 6 endpoints (200/400/404)")
+    print(f"Casos especiais validados: {len(casos_especiais)} | Rotas Flask validadas: 8 endpoints + static (200/400/404)")
+    print("Exportadores validados: .txt (UTF-8) e .docx (ZIP/OOXML/XML íntegros)")
 
 
 if __name__ == "__main__":

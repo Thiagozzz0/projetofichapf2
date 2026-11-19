@@ -32,6 +32,7 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 ├── app.py                        # Aplicação principal Flask (rotas e interface Web)
 ├── Prompt.md                     # Contexto e direcionamento inicial do projeto
 ├── README.md                     # Documentação geral do projeto e governança
+├── requirements.txt              # Dependências Python (Flask>=3.0,<4.0)
 ├── controleprojeto/              # Gestão e rastreabilidade das entregas
 │   ├── escopo.md                 # Escopo completo do início ao fim (norte do projeto)
 │   ├── pendencias.md             # Lista de tarefas e conversões ainda pendentes
@@ -57,6 +58,7 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 │   ├── combate_matematica.py
 │   ├── dados.py
 │   ├── equipamentos.py
+│   ├── exportacao.py
 │   ├── gerador.py
 │   ├── magias.py
 │   ├── regras_atributos.py
@@ -80,7 +82,12 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 │   ├── gerar_talentos_json.py
 │   └── validar_motor_procedural.py
 └── templates/                    # Front-End HTML/CSS/JS renderizado pelo Flask
-    └── index.html                # Página simples de validação do gerador (Etapa 3)
+    ├── index.html                # Tela de criação e visualização completa das 4 páginas da ficha
+    └── static/                   # Ativos estáticos do Front-End
+        ├── css/
+        │   └── ficha.css         # Estilização oficial de pergaminho PF2E e @media print
+        └── js/
+            └── app.js            # Lógica interativa, abas de páginas e downloads DOCX/TXT
 ```
 
 ---
@@ -122,6 +129,7 @@ Os PDFs de referência estão sendo convertidos **um por vez** para garantir fid
 | `ref/Sheet Update.pdf` | `dados/estrutura_ficha.json` | Estrutura oficial das 4 páginas da ficha (`pp. 580–583`), legendas, fórmulas de cálculo, `18` linhas de perícia cruzadas com `pericias.json` e contrato `modelo_ficha_vazia` | Concluído (`12.md`) |
 | *Etapa 2 (Conceitos)* | `dados/conceitos_subclasses.json` | `38` conceitos ("nortes") para todas as `12` classes conectando atributos, biografias, perícias, talentos, equipamentos (`15 po`) e magias | Concluído (`13.md`) |
 | *Etapa 3 (Motor & Flask)* | `motor/`, `app.py`, `templates/index.html` | Motor procedural PF2E (1º nível, `seed` opcional), API REST Flask e tela simples de teste | Concluído (`14.md`) |
+| *Etapa 4 (Front-End & Export)* | `templates/`, `templates/static/`, `motor/exportacao.py`, `requirements.txt` | Interface completa em 4 páginas inspirada na ficha oficial (`pp. 580–583`), impressão e download `.docx`/`.txt` | Concluído (`16.md` / `17.md`) |
 
 ---
 
@@ -146,9 +154,10 @@ python scripts/gerar_conceitos_subclasses_json.py
 python scripts/validar_motor_procedural.py
 ```
 
-Para iniciar o servidor Flask local (tela de teste em `http://127.0.0.1:5000`):
+Para instalar dependências e iniciar o servidor Flask local (interface completa com exportação em `.docx`, `.txt` e impressão em `http://127.0.0.1:5000`):
 
 ```bash
+pip install -r requirements.txt
 python app.py
 ```
 

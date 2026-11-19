@@ -3,366 +3,253 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gerador Procedural PF2E — Teste Etapa 3</title>
-  <style>
-    :root {
-      --bg: #f6f4ef;
-      --card: #ffffff;
-      --border: #d8d0c3;
-      --ink: #221d18;
-      --muted: #665d54;
-      --accent: #7a1f1f;
-      --accent-soft: #f5ebeb;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      padding: 24px;
-      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-      background: var(--bg);
-      color: var(--ink);
-      line-height: 1.45;
-    }
-    main { max-width: 1080px; margin: 0 auto; }
-    h1, h2, h3 { margin-top: 0; color: var(--accent); }
-    .subtitulo { color: var(--muted); margin-top: -8px; margin-bottom: 20px; }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 18px;
-      margin-bottom: 18px;
-    }
-    .grid-form {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 12px;
-    }
-    label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; }
-    select, input {
-      width: 100%;
-      padding: 8px 10px;
-      border: 1px solid var(--border);
-      border-radius: 5px;
-      font-size: 0.95rem;
-      background: #fff;
-    }
-    .dica {
-      margin-top: 10px;
-      padding: 10px 12px;
-      background: var(--accent-soft);
-      border-left: 3px solid var(--accent);
-      font-size: 0.9rem;
-    }
-    button {
-      margin-top: 14px;
-      padding: 10px 18px;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    button:hover { opacity: 0.92; }
-    .erro { color: #9c1b1b; font-weight: 600; margin-top: 10px; }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-    .stat-box {
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 10px;
-      text-align: center;
-      background: #fcfaf6;
-    }
-    .stat-box .rotulo { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; }
-    .stat-box .valor { font-size: 1.25rem; font-weight: 700; }
-    .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
-    ul { padding-left: 18px; margin: 6px 0; }
-    pre {
-      background: #1d1a17;
-      color: #f3eee7;
-      padding: 12px;
-      border-radius: 6px;
-      overflow-x: auto;
-      font-size: 0.82rem;
-      max-height: 440px;
-    }
-  </style>
+  <title>Gerador Procedural PF2E — Ficha Oficial</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}">
 </head>
 <body>
-  <main>
-    <h1>Gerador Procedural de Fichas — Pathfinder 2E</h1>
-    <p class="subtitulo">Painel de validação do motor procedural (Etapa 3 • Personagens de 1º Nível).</p>
+  <div class="app-container">
+    <header class="topbar nao-imprimir">
+      <h1>Gerador Procedural de Personagens — Pathfinder 2ª Edição</h1>
+      <p>Monte fichas completas guiadas por conceito/subclasse com matemática ABCD, equipamentos de 15 po, magias e exportação em DOCX/TXT.</p>
+    </header>
 
-    <section class="card">
+    <section class="painel-controle nao-imprimir">
+      <h2>1. Configuração do Personagem</h2>
       <form id="form-gerador">
-        <div class="grid-form">
-          <div>
+        <div class="grid-config">
+          <div class="campo-grupo">
             <label for="ancestralidade">Ancestralidade</label>
             <select id="ancestralidade" required></select>
           </div>
-          <div>
+          <div class="campo-grupo">
             <label for="heranca">Herança</label>
             <select id="heranca" required></select>
           </div>
-          <div>
+          <div class="campo-grupo">
             <label for="biografia">Biografia / Antecedente</label>
             <select id="biografia"></select>
           </div>
-          <div>
+          <div class="campo-grupo">
             <label for="classe">Classe</label>
             <select id="classe" required></select>
           </div>
-          <div>
+          <div class="campo-grupo">
             <label for="conceito">Conceito ("Norte")</label>
             <select id="conceito" required></select>
           </div>
-          <div>
-            <label for="nome">Nome do Personagem (opcional)</label>
-            <input id="nome" type="text" placeholder="Aleatório se vazio">
+          <div class="campo-grupo">
+            <label for="nivel">Nível</label>
+            <select id="nivel" name="nivel">
+              <option value="1" selected>1º Nível</option>
+            </select>
+            <small class="nota-campo">Níveis 2–20 planejados para expansão futura.</small>
           </div>
-          <div>
-            <label for="seed">Seed (opcional)</label>
-            <input id="seed" type="text" placeholder="Para reproduzir a ficha">
+          <div class="campo-grupo">
+            <label for="nome">Nome do Personagem</label>
+            <input id="nome" type="text" placeholder="Opcional (sorteado se vazio)">
+          </div>
+          <div class="campo-grupo">
+            <label for="jogador">Nome do Jogador</label>
+            <input id="jogador" type="text" placeholder="Opcional">
+          </div>
+          <div class="campo-grupo">
+            <label for="seed">Seed (Reprodutibilidade)</label>
+            <input id="seed" type="text" placeholder="Aleatória se vazia">
           </div>
         </div>
-        <div id="resumo-conceito" class="dica"></div>
-        <button type="submit">Gerar Ficha (1º Nível)</button>
-        <div id="mensagem-erro" class="erro"></div>
+
+        <div class="resumos-selecao">
+          <div id="resumo-ancestralidade" class="card-resumo"></div>
+          <div id="resumo-biografia" class="card-resumo"></div>
+          <div id="resumo-conceito" class="card-resumo"></div>
+        </div>
+
+        <div class="barra-acoes">
+          <button type="submit" class="btn btn-primario">Gerar Ficha</button>
+          <button type="button" id="btn-sortear" class="btn btn-secundario">Sortear Variação</button>
+          <button type="button" id="btn-docx" class="btn btn-exportar" disabled>Baixar .DOCX</button>
+          <button type="button" id="btn-txt" class="btn btn-exportar" disabled>Baixar .TXT</button>
+          <button type="button" id="btn-imprimir" class="btn btn-secundario" disabled>Imprimir / PDF</button>
+
+          <div class="atalhos-rapidos">
+            <span>Exemplos:</span>
+            <button type="button" class="btn btn-sutil" data-preset="mago">Mago Elementalista</button>
+            <button type="button" class="btn btn-sutil" data-preset="guerreiro">Guerreiro Espada 2M</button>
+          </div>
+        </div>
+
+        <div id="mensagem-status" class="mensagem-status" role="status" aria-live="polite"></div>
       </form>
     </section>
 
-    <section id="resultado" class="card" hidden>
-      <h2 id="titulo-ficha"></h2>
-      <p id="subtitulo-ficha" class="subtitulo"></p>
+    <section id="area-ficha" hidden>
+      <nav class="barra-abas nao-imprimir" aria-label="Páginas da ficha oficial">
+        <button type="button" class="aba-btn ativa" data-aba="todas">Todas as Páginas</button>
+        <button type="button" class="aba-btn" data-aba="1">Pág. 1: Combate &amp; Perícias</button>
+        <button type="button" class="aba-btn" data-aba="2">Pág. 2: Talentos &amp; Inventário</button>
+        <button type="button" class="aba-btn" data-aba="3">Pág. 3: Perfil &amp; Ações</button>
+        <button type="button" class="aba-btn" data-aba="4">Pág. 4: Conjuração &amp; Magias</button>
+      </nav>
 
-      <div id="stats-principais" class="stats-grid"></div>
-      <div id="atributos-grid" class="stats-grid"></div>
+      <!-- PÁGINA 1 (p. 580) -->
+      <article class="pagina-ficha" data-pagina="1">
+        <div class="pagina-topo">
+          <h2>Ficha de Personagem — Pathfinder 2ª Edição</h2>
+          <span class="pagina-ref">Página 1 (Livro Básico, p. 580)</span>
+        </div>
 
-      <div class="cols">
-        <div class="card">
-          <h3>Ataques (Golpes)</h3>
-          <ul id="lista-golpes"></ul>
+        <div class="legenda-topo">
+          <span><strong>Proficiência:</strong> [D] Destreinado +0 • [T] Treinado 2+Nível • [E] Especialista 4+Nível • [M] Mestre 6+Nível • [L] Lendário 8+Nível</span>
+          <span><strong>Ações:</strong> ◆ Única • ◆◆ Duas • ◆◆◆ Três • ◇ Livre • ↺ Reação</span>
         </div>
-        <div class="card">
-          <h3>Perícias Treinadas &amp; Idiomas</h3>
-          <ul id="lista-pericias"></ul>
-          <p id="idiomas-texto"></p>
-        </div>
-        <div class="card">
-          <h3>Habilidades e Talentos (1º Nível)</h3>
-          <ul id="lista-talentos"></ul>
-        </div>
-        <div class="card">
-          <h3>Inventário, Volume e Moedas</h3>
-          <p id="resumo-carga"></p>
-          <ul id="lista-inventario"></ul>
-        </div>
-        <div class="card" id="card-conjuracao" hidden>
-          <h3>Conjuração e Magias</h3>
-          <p id="resumo-conjuracao"></p>
-          <ul id="lista-magias"></ul>
-        </div>
-      </div>
 
-      <details>
-        <summary>Ver JSON completo da ficha (`estrutura_ficha.json`)</summary>
+        <div class="bloco">
+          <div id="p1-cabecalho" class="cabecalho-grid"></div>
+        </div>
+
+        <div class="p1-layout">
+          <div>
+            <div class="bloco">
+              <h3 class="bloco-titulo">Atributos</h3>
+              <div id="p1-atributos"></div>
+              <div id="p1-abcd" class="abcd-historico"></div>
+            </div>
+
+            <div class="bloco">
+              <h3 class="bloco-titulo">CD de Classe &amp; Velocidade</h3>
+              <div id="p1-cd-velocidade"></div>
+            </div>
+
+            <div class="bloco">
+              <h3 class="bloco-titulo">Proficiência com Armas</h3>
+              <div id="p1-prof-armas" class="prof-tira"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="bloco">
+              <h3 class="bloco-titulo">Classe de Armadura &amp; Escudo</h3>
+              <div id="p1-ca"></div>
+            </div>
+
+            <div class="bloco">
+              <h3 class="bloco-titulo">Jogadas de Salvamento</h3>
+              <div id="p1-salvamentos"></div>
+            </div>
+
+            <div class="bloco">
+              <h3 class="bloco-titulo">Pontos de Vida &amp; Percepção</h3>
+              <div id="p1-pv-percepcao"></div>
+            </div>
+
+            <div class="bloco">
+              <h3 class="bloco-titulo">Golpes Corpo a Corpo</h3>
+              <div id="p1-golpes-cc"></div>
+            </div>
+
+            <div class="bloco">
+              <h3 class="bloco-titulo">Golpes À Distância</h3>
+              <div id="p1-golpes-dist"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="bloco">
+              <h3 class="bloco-titulo">Perícias (18 Linhas Oficiais)</h3>
+              <div id="p1-pericias"></div>
+            </div>
+
+            <div class="bloco">
+              <h3 class="bloco-titulo">Idiomas</h3>
+              <div id="p1-idiomas"></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- PÁGINA 2 (p. 581) -->
+      <article class="pagina-ficha" data-pagina="2">
+        <div class="pagina-topo">
+          <h2>Habilidades, Talentos e Inventário</h2>
+          <span class="pagina-ref">Página 2 (Livro Básico, p. 581)</span>
+        </div>
+
+        <div class="p2-layout">
+          <div>
+            <div class="bloco">
+              <h3 class="bloco-titulo">Habilidades e Talentos de Ancestralidade</h3>
+              <ul id="p2-tal-anc" class="slot-lista"></ul>
+            </div>
+            <div class="bloco">
+              <h3 class="bloco-titulo">Talentos de Perícia</h3>
+              <ul id="p2-tal-per" class="slot-lista"></ul>
+            </div>
+            <div class="bloco">
+              <h3 class="bloco-titulo">Talentos Gerais</h3>
+              <ul id="p2-tal-ger" class="slot-lista"></ul>
+            </div>
+          </div>
+
+          <div>
+            <div class="bloco">
+              <h3 class="bloco-titulo">Habilidades e Talentos de Classe</h3>
+              <ul id="p2-tal-cls" class="slot-lista"></ul>
+            </div>
+            <div class="bloco">
+              <h3 class="bloco-titulo">Talentos Bônus</h3>
+              <ul id="p2-tal-bon" class="slot-lista"></ul>
+            </div>
+            <div class="bloco">
+              <h3 class="bloco-titulo">Inventário, Volume e Riqueza</h3>
+              <div id="p2-inventario"></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- PÁGINA 3 (p. 582) -->
+      <article class="pagina-ficha" data-pagina="3">
+        <div class="pagina-topo">
+          <h2>Perfil, Campanha e Ações</h2>
+          <span class="pagina-ref">Página 3 (Livro Básico, p. 582)</span>
+        </div>
+
+        <div class="p3-topo">
+          <div class="emblema-personagem" id="p3-rascunho"></div>
+          <div class="bloco" style="margin-bottom:0">
+            <h3 class="bloco-titulo">Dados Biográficos &amp; Campanha</h3>
+            <div id="p3-perfil"></div>
+          </div>
+        </div>
+
+        <div class="bloco">
+          <h3 class="bloco-titulo">Ações e Atividades (6 Slots)</h3>
+          <div id="p3-acoes" class="cards-acoes-grid"></div>
+        </div>
+
+        <div class="bloco">
+          <h3 class="bloco-titulo">Ações Livres e Reações (4 Slots)</h3>
+          <div id="p3-reacoes" class="cards-acoes-grid"></div>
+        </div>
+      </article>
+
+      <!-- PÁGINA 4 (p. 583) -->
+      <article class="pagina-ficha" data-pagina="4">
+        <div class="pagina-topo">
+          <h2>Conjuração e Magias</h2>
+          <span class="pagina-ref">Página 4 (Livro Básico, p. 583)</span>
+        </div>
+
+        <div id="p4-conteudo"></div>
+      </article>
+
+      <details class="json-detalhes nao-imprimir">
+        <summary>Inspecionar JSON completo da ficha (`estrutura_ficha.json`)</summary>
         <pre id="json-bruto"></pre>
       </details>
     </section>
-  </main>
+  </div>
 
-  <script>
-    let OPCOES = null;
-
-    function fmtMod(v) { return v >= 0 ? `+${v}` : `${v}`; }
-
-    function atualizarHerancas() {
-      const ancId = document.getElementById("ancestralidade").value;
-      const anc = OPCOES.ancestralidades.find(a => a.id === ancId);
-      const sel = document.getElementById("heranca");
-      sel.innerHTML = "";
-      (anc ? anc.herancas : []).forEach(h => {
-        const opt = document.createElement("option");
-        opt.value = h.id;
-        opt.textContent = h.nome;
-        sel.appendChild(opt);
-      });
-    }
-
-    function atualizarConceitos() {
-      const clsId = document.getElementById("classe").value;
-      const cls = OPCOES.classes.find(c => c.id === clsId);
-      const sel = document.getElementById("conceito");
-      sel.innerHTML = "";
-      (cls ? cls.conceitos : []).forEach(c => {
-        const opt = document.createElement("option");
-        opt.value = c.id;
-        opt.textContent = `${c.nome} (${c.subclasse_oficial_nome})`;
-        sel.appendChild(opt);
-      });
-      atualizarResumoConceito();
-    }
-
-    function atualizarResumoConceito() {
-      const clsId = document.getElementById("classe").value;
-      const conId = document.getElementById("conceito").value;
-      const cls = OPCOES.classes.find(c => c.id === clsId);
-      const con = cls ? cls.conceitos.find(x => x.id === conId) : null;
-      document.getElementById("resumo-conceito").textContent = con ? con.resumo_proposta : "";
-    }
-
-    async function inicializar() {
-      const resp = await fetch("/api/opcoes");
-      OPCOES = await resp.json();
-
-      const selAnc = document.getElementById("ancestralidade");
-      OPCOES.ancestralidades.forEach(a => {
-        const opt = document.createElement("option");
-        opt.value = a.id;
-        opt.textContent = `${a.nome} (PV ${a.pontos_vida})`;
-        selAnc.appendChild(opt);
-      });
-
-      const selBio = document.getElementById("biografia");
-      const optAuto = document.createElement("option");
-      optAuto.value = "procedural";
-      optAuto.textContent = "Procedural (recomendada pelo conceito)";
-      selBio.appendChild(optAuto);
-      OPCOES.biografias.forEach(b => {
-        const opt = document.createElement("option");
-        opt.value = b.id;
-        opt.textContent = b.nome;
-        selBio.appendChild(opt);
-      });
-
-      const selCls = document.getElementById("classe");
-      OPCOES.classes.forEach(c => {
-        const opt = document.createElement("option");
-        opt.value = c.id;
-        opt.textContent = c.nome;
-        selCls.appendChild(opt);
-      });
-
-      selAnc.addEventListener("change", atualizarHerancas);
-      selCls.addEventListener("change", atualizarConceitos);
-      document.getElementById("conceito").addEventListener("change", atualizarResumoConceito);
-
-      atualizarHerancas();
-      atualizarConceitos();
-    }
-
-    function renderBox(rotulo, valor) {
-      return `<div class="stat-box"><div class="rotulo">${rotulo}</div><div class="valor">${valor}</div></div>`;
-    }
-
-    function exibirFicha(res) {
-      const f = res.ficha;
-      const m = res.meta_geracao;
-      document.getElementById("resultado").hidden = false;
-      document.getElementById("titulo-ficha").textContent =
-        `${f.cabecalho.nome_personagem} — ${f.cabecalho.ancestralidade_e_heranca} • ${f.cabecalho.classe}`;
-      document.getElementById("subtitulo-ficha").textContent =
-        `Biografia: ${f.cabecalho.biografia} (${m.biografia_procedural ? "Procedural" : "Manual"}) | Seed: ${m.seed} | Saldo: ${m.saldo_restante}`;
-
-      document.getElementById("stats-principais").innerHTML = [
-        renderBox("PV Máx", f.pontos_vida.max),
-        renderBox("CA", f.classe_armadura.total),
-        renderBox("Velocidade", `${f.velocidade.metros} m`),
-        renderBox("Percepção", fmtMod(f.percepcao.total)),
-        renderBox("CD Classe", f.cd_classe.total),
-        renderBox("Fort / Ref / Von", `${fmtMod(f.jogadas_salvamento.fortitude.total)} / ${fmtMod(f.jogadas_salvamento.reflexos.total)} / ${fmtMod(f.jogadas_salvamento.vontade.total)}`),
-      ].join("");
-
-      const nomesAtr = { for: "FOR", des: "DES", con: "CON", int: "INT", sab: "SAB", car: "CAR" };
-      document.getElementById("atributos-grid").innerHTML = Object.entries(f.atributos)
-        .map(([k, a]) => renderBox(nomesAtr[k], `${a.valor} (${fmtMod(a.modificador)})`))
-        .join("");
-
-      const golpes = [...f.golpes_corpo_a_corpo, ...f.golpes_a_distancia].filter(g => g.arma);
-      document.getElementById("lista-golpes").innerHTML = golpes.map(g => {
-        const modDano = g.dano.for ?? g.dano.especial ?? 0;
-        const tipo = (g.dano.tipos_dano || []).join("/");
-        return `<li><strong>${g.arma}</strong>: ${fmtMod(g.ataque.total)} | Dano ${g.dano.dados}${modDano ? fmtMod(modDano) : ""} ${tipo}</li>`;
-      }).join("");
-
-      const perTreinadas = f.pericias.filter(p => p.grau_proficiencia !== "destreinado");
-      document.getElementById("lista-pericias").innerHTML = perTreinadas.map(p => {
-        const label = p.especializacao ? `${p.rotulo_oficial} (${p.especializacao})` : p.rotulo_oficial;
-        return `<li><strong>${label}</strong>: ${fmtMod(p.total)} (${p.grau_proficiencia})</li>`;
-      }).join("");
-      document.getElementById("idiomas-texto").textContent = `Idiomas: ${f.idiomas.join(", ")}`;
-
-      const todosTalentos = [
-        ...f.habilidades_e_talentos.ancestralidade,
-        ...f.habilidades_e_talentos.pericia,
-        ...f.habilidades_e_talentos.classe,
-        ...f.habilidades_e_talentos.bonus,
-      ].filter(t => t.nome && t.nome !== "—");
-      document.getElementById("lista-talentos").innerHTML = todosTalentos
-        .map(t => `<li><strong>[${t.rotulo_oficial}] ${t.nome}</strong> — ${t.origem_regra}</li>`)
-        .join("");
-
-      const inv = f.inventario;
-      document.getElementById("resumo-carga").textContent =
-        `Volume: ${inv.volume_total} (Sobrecarregado > ${inv.volume_sobrecarregado} / Máx ${inv.volume_maximo}) | Moedas: ${inv.riqueza.po} po, ${inv.riqueza.pp} pp, ${inv.riqueza.pc} pc`;
-      const itens = [...inv.itens_vestidos, ...inv.itens_preparados, ...inv.outros_itens];
-      document.getElementById("lista-inventario").innerHTML = itens
-        .map(i => `<li>${i.nome} (Vol ${i.volume})</li>`)
-        .join("");
-
-      const conj = f.conjuracao;
-      const temMagia = Object.values(conj.tradicoes_marcadas).some(Boolean);
-      const cardConj = document.getElementById("card-conjuracao");
-      cardConj.hidden = !temMagia;
-      if (temMagia) {
-        const trad = Object.keys(conj.tradicoes_marcadas).find(k => conj.tradicoes_marcadas[k]);
-        document.getElementById("resumo-conjuracao").textContent =
-          `Tradição: ${trad} | Ataque ${fmtMod(conj.ataque_magia.total)} | CD ${conj.cd_magia.total} | Pontos de Foco: ${conj.magias_foco.pontos_foco.maximo}`;
-        const listaM = [
-          ...conj.truques_magicos.filter(x => x.nome).map(x => `<li>[Truque] ${x.nome}</li>`),
-          ...conj.magias_foco.slots.filter(x => x.nome).map(x => `<li>[Foco] ${x.nome}</li>`),
-          ...conj.magias_inatas.filter(x => x.nome).map(x => `<li>[Inata] ${x.nome}</li>`),
-          ...conj.magias.filter(x => x.nome).map(x => `<li>[1º] ${x.nome}${x.preparada ? " (Preparada)" : ""}</li>`),
-        ];
-        document.getElementById("lista-magias").innerHTML = listaM.join("");
-      }
-
-      document.getElementById("json-bruto").textContent = JSON.stringify(res, null, 2);
-    }
-
-    document.getElementById("form-gerador").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      document.getElementById("mensagem-erro").textContent = "";
-      const payload = {
-        ancestralidade_id: document.getElementById("ancestralidade").value,
-        heranca_id: document.getElementById("heranca").value,
-        biografia_id: document.getElementById("biografia").value,
-        classe_id: document.getElementById("classe").value,
-        conceito_id: document.getElementById("conceito").value,
-        nome_personagem: document.getElementById("nome").value,
-        seed: document.getElementById("seed").value,
-      };
-      const resp = await fetch("/api/gerar", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      const dados = await resp.json();
-      if (!resp.ok) {
-        document.getElementById("mensagem-erro").textContent = dados.erro || "Erro ao gerar ficha.";
-        return;
-      }
-      exibirFicha(dados);
-    });
-
-    inicializar();
-  </script>
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
 </body>
 </html>

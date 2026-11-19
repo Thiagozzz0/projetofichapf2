@@ -59,12 +59,13 @@ Lista viva de todas as entregas e tarefas que ainda precisam ser realizadas até
 
 ---
 
-## Etapa 4 — Interface Front-End (`templates/`)
+## Etapa 4 — Interface Front-End (`templates/` & `static/`) e Exportação
 
-- [ ] **Tela de Criação do Personagem**
-  - Interface limpa e intuitiva com seleção de Ancestralidade & Herança, Biografia (modo Procedural ou Escolha Manual), Classe & Subclasse/Conceito e opção de nível/nome do personagem.
-- [ ] **Tela da Ficha Final Pronta para Uso**
-  - Layout completo inspirado na ficha oficial de Pathfinder 2E (com base em `Sheet Update.pdf`), exibindo atributos, modificadores, CA, PV, resistências, ataques prontos, perícias, talentos, magias, inventário/volume e resumo narrativo, pronta para jogar ou imprimir.
+- [x] **Tela de Criação do Personagem** *(Concluído em `19/11/2026 — 14:29` → [finalizado/16.md](finalizado/16.md))*
+  - Interface responsiva com seleção dinâmica de Ancestralidade & Herança, Biografia (modo Procedural ou Escolha Manual), Classe & Subclasse/Conceito com cartões de resumo, Nome/Jogador, Nível (1º nível ativo com nota de expansão 2–20), Seed e atalhos rápidos.
+- [x] **Tela da Ficha Final Pronta para Uso + Exportação `.docx` / `.txt` e `requirements.txt`** *(Concluído em `19/11/2026 — 14:29` → [finalizado/16.md](finalizado/16.md))*
+  - Visualizador das 4 páginas oficiais (`pp. 580–583`) com marcadores `[T][E][M][L]`, Pontos de Heroísmo, Escudo de CA, histórico ABCD, `18` linhas de Perícias, Inventário/Volume/Moedas, Ações/Reações, Conjuração e estilos de impressão `@media print`.
+  - Endpoints `POST /api/exportar/docx` e `POST /api/exportar/txt` (`motor/exportacao.py`) e criação de `requirements.txt`.
 
 ---
 
@@ -72,7 +73,7 @@ Lista viva de todas as entregas e tarefas que ainda precisam ser realizadas até
 
 - [ ] **Testes automatizados das regras matemáticas de PF2E** (cálculo de atributos, CA com Limite de Destreza, penalidades de armadura e sobrecarga, proficiências e bônus de ataque/dano).
 - [ ] **Testes de geração ponta a ponta** cobrindo todas as 12 classes e múltiplas ancestralidades via Flask.
-- [ ] **Atualização do `README.md`** com instruções de instalação e execução do projeto Flask.
+- [x] **Atualização do `README.md`** com instruções de instalação (`requirements.txt`) e execução do projeto Flask. *(Concluído em `19/11/2026 — 14:29`)*
 
 ---
 

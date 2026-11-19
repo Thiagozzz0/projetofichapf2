@@ -1,0 +1,4 @@
+# Dependências do Gerador Procedural de Fichas Pathfinder 2E
+# O pacote `motor/` e os exportadores `.txt` e `.docx` usam apenas a biblioteca padrão do Python 3
+# (sem necessidade de compilação nativa de extensões como lxml/python-docx).
+Flask>=3.0,<4.0
