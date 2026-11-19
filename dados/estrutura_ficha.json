@@ -1,0 +1,5088 @@
+{
+  "meta": {
+    "titulo": "Pathfinder 2ª Edição — Estrutura Oficial da Ficha de Personagem",
+    "fonte_pdf": "ref/Sheet Update.pdf",
+    "paginas_livro": "580–583",
+    "total_paginas": 4,
+    "sistema": "Pathfinder 2E (PT-BR)",
+    "observacoes_ficha_oficial": [
+      "Na Página 1 (p. 580), a lista de Perícias imprime SOCIEDADE antes de SOBREVIVÊNCIA (seguindo a ordem alfabética do original em inglês Society -> Survival); a ordem visual oficial foi preservada integralmente.",
+      "No PDF fonte, a camada OCR da Página 2 (p. 581) contém texto oculto duplicado da Página 1 herdado da diagramação (CharacterSheet.indd); a inspeção visual confirmou que a Página 2 exibe exclusivamente Habilidades/Talentos e Inventário.",
+      "Na Página 1 (p. 580), o terceiro termo da fórmula de dano dos Golpes Corpo a Corpo é rotulado como FOR, enquanto nos Golpes À Distância o termo correspondente é rotulado como ESPECIAL (para arcos propulsivos/armas de arremesso)."
+    ]
+  },
+  "legenda_referencia": {
+    "proficiencia": [
+      {
+        "id": "destreinado",
+        "sigla": "D",
+        "rotulo_oficial": "Destreinado",
+        "formula_texto": "+0",
+        "bonus_base": 0,
+        "soma_nivel": false
+      },
+      {
+        "id": "treinado",
+        "sigla": "T",
+        "rotulo_oficial": "Treinado",
+        "formula_texto": "2+Nível",
+        "bonus_base": 2,
+        "soma_nivel": true
+      },
+      {
+        "id": "especialista",
+        "sigla": "E",
+        "rotulo_oficial": "Especialista",
+        "formula_texto": "4+Nível",
+        "bonus_base": 4,
+        "soma_nivel": true
+      },
+      {
+        "id": "mestre",
+        "sigla": "M",
+        "rotulo_oficial": "Mestre",
+        "formula_texto": "6+Nível",
+        "bonus_base": 6,
+        "soma_nivel": true
+      },
+      {
+        "id": "lendario",
+        "sigla": "L",
+        "rotulo_oficial": "Lendário",
+        "formula_texto": "8+Nível",
+        "bonus_base": 8,
+        "soma_nivel": true
+      }
+    ],
+    "icones_acao": [
+      {
+        "id": "acao_unica",
+        "rotulo_oficial": "Ação Única",
+        "custo_acoes": 1,
+        "simbolo": "1_acao"
+      },
+      {
+        "id": "atividade_duas_acoes",
+        "rotulo_oficial": "Atividade de Duas Ações",
+        "custo_acoes": 2,
+        "simbolo": "2_acoes"
+      },
+      {
+        "id": "atividade_tres_acoes",
+        "rotulo_oficial": "Atividade de Três Ações",
+        "custo_acoes": 3,
+        "simbolo": "3_acoes"
+      },
+      {
+        "id": "acao_livre",
+        "rotulo_oficial": "Ação Livre",
+        "custo_acoes": 0,
+        "simbolo": "acao_livre"
+      },
+      {
+        "id": "reacao",
+        "rotulo_oficial": "Reação",
+        "custo_acoes": 0,
+        "simbolo": "reacao"
+      }
+    ]
+  },
+  "paginas": [
+    {
+      "numero_pagina_pdf": 1,
+      "pagina_livro": 580,
+      "titulo": "Estatísticas Principais, Combate e Perícias",
+      "blocos": {
+        "cabecalho": {
+          "rotulo_oficial": "CABEÇALHO DO PERSONAGEM",
+          "campos": [
+            {
+              "id": "nome_personagem",
+              "rotulo": "NOME DO PERSONAGEM",
+              "tipo": "texto"
+            },
+            {
+              "id": "nome_jogador",
+              "rotulo": "NOME DO JOGADOR",
+              "tipo": "texto"
+            },
+            {
+              "id": "pontos_experiencia",
+              "rotulo": "PONTOS DE EXPERIÊNCIA (XP)",
+              "tipo": "numero"
+            },
+            {
+              "id": "ancestralidade_e_heranca",
+              "rotulo": "ANCESTRALIDADE E HERANÇA",
+              "tipo": "texto"
+            },
+            {
+              "id": "biografia",
+              "rotulo": "BIOGRAFIA",
+              "tipo": "texto"
+            },
+            {
+              "id": "classe",
+              "rotulo": "CLASSE",
+              "tipo": "texto"
+            },
+            {
+              "id": "tamanho",
+              "rotulo": "TAMANHO",
+              "tipo": "texto"
+            },
+            {
+              "id": "tendencia",
+              "rotulo": "TENDÊNCIA",
+              "tipo": "texto"
+            },
+            {
+              "id": "tracos",
+              "rotulo": "TRAÇOS",
+              "tipo": "lista_texto"
+            },
+            {
+              "id": "divindade",
+              "rotulo": "DIVINDADE",
+              "tipo": "texto"
+            },
+            {
+              "id": "nivel",
+              "rotulo": "NÍVEL",
+              "tipo": "numero",
+              "minimo": 1,
+              "maximo": 20
+            },
+            {
+              "id": "pontos_heroismo",
+              "rotulo": "PONTOS DE HEROÍSMO",
+              "tipo": "marcadores",
+              "maximo": 3
+            }
+          ]
+        },
+        "atributos": {
+          "rotulo_oficial": "ATRIBUTOS",
+          "colunas_por_atributo": [
+            "modificador",
+            "valor"
+          ],
+          "itens": [
+            {
+              "id": "for",
+              "sigla": "FOR",
+              "rotulo_oficial": "FORÇA"
+            },
+            {
+              "id": "des",
+              "sigla": "DES",
+              "rotulo_oficial": "DESTREZA"
+            },
+            {
+              "id": "con",
+              "sigla": "CON",
+              "rotulo_oficial": "CONSTITUIÇÃO"
+            },
+            {
+              "id": "int",
+              "sigla": "INT",
+              "rotulo_oficial": "INTELIGÊNCIA"
+            },
+            {
+              "id": "sab",
+              "sigla": "SAB",
+              "rotulo_oficial": "SABEDORIA"
+            },
+            {
+              "id": "car",
+              "sigla": "CAR",
+              "rotulo_oficial": "CARISMA"
+            }
+          ]
+        },
+        "cd_classe": {
+          "rotulo_oficial": "CD DE CLASSE",
+          "formula": [
+            "10",
+            "ATB_CHAVE",
+            "PROF",
+            "ITEM"
+          ],
+          "rotulo_base_impresso": "CD BASE = 10",
+          "niveis_proficiencia": [
+            "T",
+            "E",
+            "M",
+            "L"
+          ],
+          "campos": [
+            "total",
+            "mod_atributo_chave",
+            "proficiencia",
+            "grau_proficiencia",
+            "item"
+          ]
+        },
+        "velocidade": {
+          "rotulo_oficial": "VELOC",
+          "unidade": "METROS",
+          "campos": [
+            {
+              "id": "metros",
+              "rotulo": "VELOC (METROS)",
+              "tipo": "numero_decimal"
+            },
+            {
+              "id": "tipos_movimento_anotacoes",
+              "rotulo": "TIPOS DE MOVIMENTO & ANOTAÇÕES",
+              "tipo": "texto"
+            }
+          ]
+        },
+        "classe_armadura": {
+          "rotulo_oficial": "CLASSE DE ARMADURA",
+          "rotulo_base_impresso": "CD BASE = 10",
+          "formula": [
+            "10",
+            "DES_OU_LIMITE",
+            "PROF",
+            "ITEM"
+          ],
+          "niveis_proficiencia": [
+            "T",
+            "E",
+            "M",
+            "L"
+          ],
+          "campos_ca": [
+            "total",
+            "des_ou_limite",
+            "limite_des_armadura",
+            "proficiencia",
+            "grau_proficiencia",
+            "item"
+          ],
+          "proficiencias_armadura": [
+            {
+              "id": "sem_armadura",
+              "rotulo_oficial": "SEM ARMADURA",
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ]
+            },
+            {
+              "id": "leve",
+              "rotulo_oficial": "LEVE",
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ]
+            },
+            {
+              "id": "media",
+              "rotulo_oficial": "MÉDIA",
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ]
+            },
+            {
+              "id": "pesada",
+              "rotulo_oficial": "PESADA",
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ]
+            }
+          ],
+          "escudo": {
+            "rotulo_oficial": "Escudo",
+            "campos": [
+              {
+                "id": "bonus_ca",
+                "rotulo": "+",
+                "tipo": "numero"
+              },
+              {
+                "id": "dureza",
+                "rotulo": "DUREZA",
+                "tipo": "numero"
+              },
+              {
+                "id": "pv_max",
+                "rotulo": "PV MÁX",
+                "tipo": "numero"
+              },
+              {
+                "id": "limiar_quebra",
+                "rotulo": "LQ",
+                "tipo": "numero"
+              },
+              {
+                "id": "pv_atuais",
+                "rotulo": "PV ATUAIS",
+                "tipo": "numero"
+              }
+            ]
+          }
+        },
+        "jogadas_salvamento": {
+          "rotulo_oficial": "JOGADAS DE SALVAMENTO",
+          "salvamentos": [
+            {
+              "id": "fortitude",
+              "rotulo_oficial": "FORTITUDE",
+              "atributo_chave": "con",
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ]
+            },
+            {
+              "id": "reflexos",
+              "rotulo_oficial": "REFLEXOS",
+              "atributo_chave": "des",
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ]
+            },
+            {
+              "id": "vontade",
+              "rotulo_oficial": "VONTADE",
+              "atributo_chave": "sab",
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ]
+            }
+          ],
+          "anotacoes": {
+            "id": "anotacoes",
+            "rotulo": "ANOTAÇÕES",
+            "tipo": "texto"
+          }
+        },
+        "pontos_vida": {
+          "rotulo_oficial": "PONTOS DE VIDA",
+          "campos": [
+            {
+              "id": "max",
+              "rotulo": "MÁX",
+              "tipo": "numero"
+            },
+            {
+              "id": "atuais",
+              "rotulo": "ATUAIS",
+              "tipo": "numero"
+            },
+            {
+              "id": "temporarios",
+              "rotulo": "TEMPORÁRIOS",
+              "tipo": "numero"
+            },
+            {
+              "id": "ferido",
+              "rotulo": "FERIDO",
+              "tipo": "numero"
+            },
+            {
+              "id": "morrendo",
+              "rotulo": "MORRENDO",
+              "tipo": "numero"
+            },
+            {
+              "id": "resistencias_e_imunidades",
+              "rotulo": "RESISTÊNCIAS E IMUNIDADES",
+              "tipo": "texto"
+            },
+            {
+              "id": "condicoes",
+              "rotulo": "CONDIÇÕES",
+              "tipo": "texto"
+            }
+          ]
+        },
+        "percepcao": {
+          "rotulo_oficial": "PERCEPÇÃO",
+          "formula": [
+            "SAB",
+            "PROF",
+            "ITEM"
+          ],
+          "niveis_proficiencia": [
+            "T",
+            "E",
+            "M",
+            "L"
+          ],
+          "campos": [
+            "total",
+            "sab",
+            "proficiencia",
+            "grau_proficiencia",
+            "item",
+            "sentidos"
+          ]
+        },
+        "golpes_corpo_a_corpo": {
+          "rotulo_oficial": "GOLPES CORPO A CORPO",
+          "quantidade_slots": 3,
+          "slots": [
+            {
+              "indice": 1,
+              "tipo": "corpo_a_corpo",
+              "ataque": {
+                "formula": [
+                  "FOR",
+                  "PROF",
+                  "ITEM"
+                ],
+                "atributos_possiveis": [
+                  "FOR"
+                ],
+                "niveis_proficiencia": [
+                  "T",
+                  "E",
+                  "M",
+                  "L"
+                ],
+                "campos": [
+                  "arma",
+                  "bonus_total",
+                  "mod_atributo",
+                  "proficiencia",
+                  "grau_proficiencia",
+                  "item"
+                ]
+              },
+              "dano": {
+                "formula": [
+                  "DADOS",
+                  "FOR",
+                  "ESPEC",
+                  "OUTRO"
+                ],
+                "tipos_dano": [
+                  {
+                    "sigla": "Cn",
+                    "nome": "Concussão"
+                  },
+                  {
+                    "sigla": "Ct",
+                    "nome": "Cortante"
+                  },
+                  {
+                    "sigla": "Pf",
+                    "nome": "Perfurante"
+                  }
+                ],
+                "campos": [
+                  "dados",
+                  "for",
+                  "tipos_dano_marcados",
+                  "especializacao",
+                  "outro",
+                  "tracos"
+                ]
+              }
+            },
+            {
+              "indice": 2,
+              "tipo": "corpo_a_corpo",
+              "ataque": {
+                "formula": [
+                  "FOR",
+                  "PROF",
+                  "ITEM"
+                ],
+                "atributos_possiveis": [
+                  "FOR"
+                ],
+                "niveis_proficiencia": [
+                  "T",
+                  "E",
+                  "M",
+                  "L"
+                ],
+                "campos": [
+                  "arma",
+                  "bonus_total",
+                  "mod_atributo",
+                  "proficiencia",
+                  "grau_proficiencia",
+                  "item"
+                ]
+              },
+              "dano": {
+                "formula": [
+                  "DADOS",
+                  "FOR",
+                  "ESPEC",
+                  "OUTRO"
+                ],
+                "tipos_dano": [
+                  {
+                    "sigla": "Cn",
+                    "nome": "Concussão"
+                  },
+                  {
+                    "sigla": "Ct",
+                    "nome": "Cortante"
+                  },
+                  {
+                    "sigla": "Pf",
+                    "nome": "Perfurante"
+                  }
+                ],
+                "campos": [
+                  "dados",
+                  "for",
+                  "tipos_dano_marcados",
+                  "especializacao",
+                  "outro",
+                  "tracos"
+                ]
+              }
+            },
+            {
+              "indice": 3,
+              "tipo": "corpo_a_corpo",
+              "ataque": {
+                "formula": [
+                  "FOR",
+                  "PROF",
+                  "ITEM"
+                ],
+                "atributos_possiveis": [
+                  "FOR"
+                ],
+                "niveis_proficiencia": [
+                  "T",
+                  "E",
+                  "M",
+                  "L"
+                ],
+                "campos": [
+                  "arma",
+                  "bonus_total",
+                  "mod_atributo",
+                  "proficiencia",
+                  "grau_proficiencia",
+                  "item"
+                ]
+              },
+              "dano": {
+                "formula": [
+                  "DADOS",
+                  "FOR",
+                  "ESPEC",
+                  "OUTRO"
+                ],
+                "tipos_dano": [
+                  {
+                    "sigla": "Cn",
+                    "nome": "Concussão"
+                  },
+                  {
+                    "sigla": "Ct",
+                    "nome": "Cortante"
+                  },
+                  {
+                    "sigla": "Pf",
+                    "nome": "Perfurante"
+                  }
+                ],
+                "campos": [
+                  "dados",
+                  "for",
+                  "tipos_dano_marcados",
+                  "especializacao",
+                  "outro",
+                  "tracos"
+                ]
+              }
+            }
+          ]
+        },
+        "golpes_a_distancia": {
+          "rotulo_oficial": "GOLPES À DISTÂNCIA",
+          "quantidade_slots": 3,
+          "slots": [
+            {
+              "indice": 1,
+              "tipo": "distancia",
+              "ataque": {
+                "formula": [
+                  "DES",
+                  "PROF",
+                  "ITEM"
+                ],
+                "atributos_possiveis": [
+                  "DES"
+                ],
+                "niveis_proficiencia": [
+                  "T",
+                  "E",
+                  "M",
+                  "L"
+                ],
+                "campos": [
+                  "arma",
+                  "bonus_total",
+                  "mod_atributo",
+                  "proficiencia",
+                  "grau_proficiencia",
+                  "item"
+                ]
+              },
+              "dano": {
+                "formula": [
+                  "DADOS",
+                  "ESPECIAL",
+                  "ESPEC",
+                  "OUTRO"
+                ],
+                "tipos_dano": [
+                  {
+                    "sigla": "Cn",
+                    "nome": "Concussão"
+                  },
+                  {
+                    "sigla": "Ct",
+                    "nome": "Cortante"
+                  },
+                  {
+                    "sigla": "Pf",
+                    "nome": "Perfurante"
+                  }
+                ],
+                "campos": [
+                  "dados",
+                  "especial",
+                  "tipos_dano_marcados",
+                  "especializacao",
+                  "outro",
+                  "tracos"
+                ]
+              }
+            },
+            {
+              "indice": 2,
+              "tipo": "distancia",
+              "ataque": {
+                "formula": [
+                  "DES",
+                  "PROF",
+                  "ITEM"
+                ],
+                "atributos_possiveis": [
+                  "DES"
+                ],
+                "niveis_proficiencia": [
+                  "T",
+                  "E",
+                  "M",
+                  "L"
+                ],
+                "campos": [
+                  "arma",
+                  "bonus_total",
+                  "mod_atributo",
+                  "proficiencia",
+                  "grau_proficiencia",
+                  "item"
+                ]
+              },
+              "dano": {
+                "formula": [
+                  "DADOS",
+                  "ESPECIAL",
+                  "ESPEC",
+                  "OUTRO"
+                ],
+                "tipos_dano": [
+                  {
+                    "sigla": "Cn",
+                    "nome": "Concussão"
+                  },
+                  {
+                    "sigla": "Ct",
+                    "nome": "Cortante"
+                  },
+                  {
+                    "sigla": "Pf",
+                    "nome": "Perfurante"
+                  }
+                ],
+                "campos": [
+                  "dados",
+                  "especial",
+                  "tipos_dano_marcados",
+                  "especializacao",
+                  "outro",
+                  "tracos"
+                ]
+              }
+            },
+            {
+              "indice": 3,
+              "tipo": "distancia",
+              "ataque": {
+                "formula": [
+                  "DES",
+                  "PROF",
+                  "ITEM"
+                ],
+                "atributos_possiveis": [
+                  "DES"
+                ],
+                "niveis_proficiencia": [
+                  "T",
+                  "E",
+                  "M",
+                  "L"
+                ],
+                "campos": [
+                  "arma",
+                  "bonus_total",
+                  "mod_atributo",
+                  "proficiencia",
+                  "grau_proficiencia",
+                  "item"
+                ]
+              },
+              "dano": {
+                "formula": [
+                  "DADOS",
+                  "ESPECIAL",
+                  "ESPEC",
+                  "OUTRO"
+                ],
+                "tipos_dano": [
+                  {
+                    "sigla": "Cn",
+                    "nome": "Concussão"
+                  },
+                  {
+                    "sigla": "Ct",
+                    "nome": "Cortante"
+                  },
+                  {
+                    "sigla": "Pf",
+                    "nome": "Perfurante"
+                  }
+                ],
+                "campos": [
+                  "dados",
+                  "especial",
+                  "tipos_dano_marcados",
+                  "especializacao",
+                  "outro",
+                  "tracos"
+                ]
+              }
+            }
+          ]
+        },
+        "proficiencia_armas": {
+          "rotulo_oficial": "PROFICIÊNCIA COM ARMAS",
+          "quantidade_slots": 4,
+          "itens": [
+            {
+              "id": "simples",
+              "rotulo_oficial": "SIMPLES",
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ],
+              "permite_rotulo_customizado": false
+            },
+            {
+              "id": "marcial",
+              "rotulo_oficial": "MARCIAL",
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ],
+              "permite_rotulo_customizado": false
+            },
+            {
+              "id": "outra_1",
+              "rotulo_oficial": "OUTRA",
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ],
+              "permite_rotulo_customizado": true
+            },
+            {
+              "id": "outra_2",
+              "rotulo_oficial": "OUTRA",
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ],
+              "permite_rotulo_customizado": true
+            }
+          ]
+        },
+        "pericias": {
+          "rotulo_oficial": "PERÍCIAS",
+          "quantidade_linhas": 18,
+          "quantidade_fixas": 16,
+          "quantidade_saber": 2,
+          "itens": [
+            {
+              "ordem_visual": 1,
+              "id": "acrobatismo",
+              "id_pericia_dados": "acrobatismo",
+              "rotulo_oficial": "ACROBATISMO",
+              "atributo_chave": "des",
+              "tem_penalidade_armadura": true,
+              "espaco_especializacao": false,
+              "formula": [
+                "DES",
+                "PROF",
+                "ITEM",
+                "ARMADURA"
+              ],
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ]
+            },
+            {
+              "ordem_visual": 2,
+              "id": "arcanismo",
+              "id_pericia_dados": "arcanismo",
+              "rotulo_oficial": "ARCANISMO",
+              "atributo_chave": "int",
+              "tem_penalidade_armadura": false,
+              "espaco_especializacao": false,
+              "formula": [
+                "INT",
+                "PROF",
+                "ITEM"
+              ],
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ]
+            },
+            {
+              "ordem_visual": 3,
+              "id": "atletismo",
+              "id_pericia_dados": "atletismo",
+              "rotulo_oficial": "ATLETISMO",
+              "atributo_chave": "for",
+              "tem_penalidade_armadura": true,
+              "espaco_especializacao": false,
+              "formula": [
+                "FOR",
+                "PROF",
+                "ITEM",
+                "ARMADURA"
+              ],
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ]
+            },
+            {
+              "ordem_visual": 4,
+              "id": "diplomacia",
+              "id_pericia_dados": "diplomacia",
+              "rotulo_oficial": "DIPLOMACIA",
+              "atributo_chave": "car",
+              "tem_penalidade_armadura": false,
+              "espaco_especializacao": false,
+              "formula": [
+                "CAR",
+                "PROF",
+                "ITEM"
+              ],
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ]
+            },
+            {
+              "ordem_visual": 5,
+              "id": "dissimulacao",
+              "id_pericia_dados": "dissimulacao",
+              "rotulo_oficial": "DISSIMULAÇÃO",
+              "atributo_chave": "car",
+              "tem_penalidade_armadura": false,
+              "espaco_especializacao": false,
+              "formula": [
+                "CAR",
+                "PROF",
+                "ITEM"
+              ],
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ]
+            },
+            {
+              "ordem_visual": 6,
+              "id": "furtividade",
+              "id_pericia_dados": "furtividade",
+              "rotulo_oficial": "FURTIVIDADE",
+              "atributo_chave": "des",
+              "tem_penalidade_armadura": true,
+              "espaco_especializacao": false,
+              "formula": [
+                "DES",
+                "PROF",
+                "ITEM",
+                "ARMADURA"
+              ],
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ]
+            },
+            {
+              "ordem_visual": 7,
+              "id": "intimidacao",
+              "id_pericia_dados": "intimidacao",
+              "rotulo_oficial": "INTIMIDAÇÃO",
+              "atributo_chave": "car",
+              "tem_penalidade_armadura": false,
+              "espaco_especializacao": false,
+              "formula": [
+                "CAR",
+                "PROF",
+                "ITEM"
+              ],
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ]
+            },
+            {
+              "ordem_visual": 8,
+              "id": "ladroagem",
+              "id_pericia_dados": "ladroagem",
+              "rotulo_oficial": "LADROAGEM",
+              "atributo_chave": "des",
+              "tem_penalidade_armadura": true,
+              "espaco_especializacao": false,
+              "formula": [
+                "DES",
+                "PROF",
+                "ITEM",
+                "ARMADURA"
+              ],
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ]
+            },
+            {
+              "ordem_visual": 9,
+              "id": "manufatura",
+              "id_pericia_dados": "manufatura",
+              "rotulo_oficial": "MANUFATURA",
+              "atributo_chave": "int",
+              "tem_penalidade_armadura": false,
+              "espaco_especializacao": false,
+              "formula": [
+                "INT",
+                "PROF",
+                "ITEM"
+              ],
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ]
+            },
+            {
+              "ordem_visual": 10,
+              "id": "medicina",
+              "id_pericia_dados": "medicina",
+              "rotulo_oficial": "MEDICINA",
+              "atributo_chave": "sab",
+              "tem_penalidade_armadura": false,
+              "espaco_especializacao": false,
+              "formula": [
+                "SAB",
+                "PROF",
+                "ITEM"
+              ],
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ]
+            },
+            {
+              "ordem_visual": 11,
+              "id": "natureza",
+              "id_pericia_dados": "natureza",
+              "rotulo_oficial": "NATUREZA",
+              "atributo_chave": "sab",
+              "tem_penalidade_armadura": false,
+              "espaco_especializacao": false,
+              "formula": [
+                "SAB",
+                "PROF",
+                "ITEM"
+              ],
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ]
+            },
+            {
+              "ordem_visual": 12,
+              "id": "ocultismo",
+              "id_pericia_dados": "ocultismo",
+              "rotulo_oficial": "OCULTISMO",
+              "atributo_chave": "int",
+              "tem_penalidade_armadura": false,
+              "espaco_especializacao": false,
+              "formula": [
+                "INT",
+                "PROF",
+                "ITEM"
+              ],
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ]
+            },
+            {
+              "ordem_visual": 13,
+              "id": "performance",
+              "id_pericia_dados": "performance",
+              "rotulo_oficial": "PERFORMANCE",
+              "atributo_chave": "car",
+              "tem_penalidade_armadura": false,
+              "espaco_especializacao": false,
+              "formula": [
+                "CAR",
+                "PROF",
+                "ITEM"
+              ],
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ]
+            },
+            {
+              "ordem_visual": 14,
+              "id": "religiao",
+              "id_pericia_dados": "religiao",
+              "rotulo_oficial": "RELIGIÃO",
+              "atributo_chave": "sab",
+              "tem_penalidade_armadura": false,
+              "espaco_especializacao": false,
+              "formula": [
+                "SAB",
+                "PROF",
+                "ITEM"
+              ],
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ]
+            },
+            {
+              "ordem_visual": 15,
+              "id": "saber_1",
+              "id_pericia_dados": "saber",
+              "rotulo_oficial": "SABER",
+              "atributo_chave": "int",
+              "tem_penalidade_armadura": false,
+              "espaco_especializacao": true,
+              "formula": [
+                "INT",
+                "PROF",
+                "ITEM"
+              ],
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ]
+            },
+            {
+              "ordem_visual": 16,
+              "id": "saber_2",
+              "id_pericia_dados": "saber",
+              "rotulo_oficial": "SABER",
+              "atributo_chave": "int",
+              "tem_penalidade_armadura": false,
+              "espaco_especializacao": true,
+              "formula": [
+                "INT",
+                "PROF",
+                "ITEM"
+              ],
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ]
+            },
+            {
+              "ordem_visual": 17,
+              "id": "sociedade",
+              "id_pericia_dados": "sociedade",
+              "rotulo_oficial": "SOCIEDADE",
+              "atributo_chave": "int",
+              "tem_penalidade_armadura": false,
+              "espaco_especializacao": false,
+              "formula": [
+                "INT",
+                "PROF",
+                "ITEM"
+              ],
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ]
+            },
+            {
+              "ordem_visual": 18,
+              "id": "sobrevivencia",
+              "id_pericia_dados": "sobrevivencia",
+              "rotulo_oficial": "SOBREVIVÊNCIA",
+              "atributo_chave": "sab",
+              "tem_penalidade_armadura": false,
+              "espaco_especializacao": false,
+              "formula": [
+                "SAB",
+                "PROF",
+                "ITEM"
+              ],
+              "niveis_proficiencia": [
+                "T",
+                "E",
+                "M",
+                "L"
+              ]
+            }
+          ]
+        },
+        "idiomas": {
+          "rotulo_oficial": "IDIOMAS",
+          "tipo": "lista_texto"
+        }
+      }
+    },
+    {
+      "numero_pagina_pdf": 2,
+      "pagina_livro": 581,
+      "titulo": "Habilidades, Talentos e Inventário",
+      "blocos": {
+        "habilidades_e_talentos_ancestralidade": {
+          "rotulo_oficial": "HABILIDADES E TALENTOS DE ANCESTRALIDADE",
+          "quantidade_slots": 7,
+          "slots": [
+            {
+              "indice": 1,
+              "rotulo_oficial": "ESPECIAL 1º",
+              "categoria": "caracteristica_ancestralidade",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 2,
+              "rotulo_oficial": "HERANÇA 1º",
+              "categoria": "heranca",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 3,
+              "rotulo_oficial": "TALENTO 1º",
+              "categoria": "talento_ancestralidade",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 4,
+              "rotulo_oficial": "TALENTO 5º",
+              "categoria": "talento_ancestralidade",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 5,
+              "rotulo_oficial": "TALENTO 9º",
+              "categoria": "talento_ancestralidade",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 6,
+              "rotulo_oficial": "TALENTO 13º",
+              "categoria": "talento_ancestralidade",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 7,
+              "rotulo_oficial": "TALENTO 17º",
+              "categoria": "talento_ancestralidade",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            }
+          ]
+        },
+        "talentos_pericia": {
+          "rotulo_oficial": "TALENTOS DE PERÍCIA",
+          "quantidade_slots": 11,
+          "slots": [
+            {
+              "indice": 1,
+              "rotulo_oficial": "BIOGRAFIA",
+              "categoria": "talento_pericia",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 2,
+              "rotulo_oficial": "2º",
+              "categoria": "talento_pericia",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 3,
+              "rotulo_oficial": "4º",
+              "categoria": "talento_pericia",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 4,
+              "rotulo_oficial": "6º",
+              "categoria": "talento_pericia",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 5,
+              "rotulo_oficial": "8º",
+              "categoria": "talento_pericia",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 6,
+              "rotulo_oficial": "10º",
+              "categoria": "talento_pericia",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 7,
+              "rotulo_oficial": "12º",
+              "categoria": "talento_pericia",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 8,
+              "rotulo_oficial": "14º",
+              "categoria": "talento_pericia",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 9,
+              "rotulo_oficial": "16º",
+              "categoria": "talento_pericia",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 10,
+              "rotulo_oficial": "18º",
+              "categoria": "talento_pericia",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 11,
+              "rotulo_oficial": "20º",
+              "categoria": "talento_pericia",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            }
+          ]
+        },
+        "talentos_gerais": {
+          "rotulo_oficial": "TALENTOS GERAIS",
+          "quantidade_slots": 5,
+          "slots": [
+            {
+              "indice": 1,
+              "rotulo_oficial": "3º",
+              "categoria": "talento_geral",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 2,
+              "rotulo_oficial": "7º",
+              "categoria": "talento_geral",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 3,
+              "rotulo_oficial": "11º",
+              "categoria": "talento_geral",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 4,
+              "rotulo_oficial": "15º",
+              "categoria": "talento_geral",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 5,
+              "rotulo_oficial": "19º",
+              "categoria": "talento_geral",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            }
+          ]
+        },
+        "habilidades_e_talentos_classe": {
+          "rotulo_oficial": "HABILIDADES E TALENTOS DE CLASSE",
+          "quantidade_slots": 22,
+          "slots": [
+            {
+              "indice": 1,
+              "rotulo_oficial": "CARACTERÍSTICA 1º",
+              "categoria": "caracteristica_classe",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 2,
+              "rotulo_oficial": "CARACTERÍSTICA 1º",
+              "categoria": "caracteristica_classe",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 3,
+              "rotulo_oficial": "TALENTO 1º",
+              "categoria": "talento_classe",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 4,
+              "rotulo_oficial": "TALENTO 2º",
+              "categoria": "talento_classe",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 5,
+              "rotulo_oficial": "CARACTERÍSTICA 3º",
+              "categoria": "caracteristica_classe",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 6,
+              "rotulo_oficial": "TALENTO 4º",
+              "categoria": "talento_classe",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 7,
+              "rotulo_oficial": "CARACTERÍSTICA 5º",
+              "categoria": "caracteristica_classe",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 8,
+              "rotulo_oficial": "TALENTO 6º",
+              "categoria": "talento_classe",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 9,
+              "rotulo_oficial": "CARACTERÍSTICA 7º",
+              "categoria": "caracteristica_classe",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 10,
+              "rotulo_oficial": "TALENTO 8º",
+              "categoria": "talento_classe",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 11,
+              "rotulo_oficial": "CARACTERÍSTICA 9º",
+              "categoria": "caracteristica_classe",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 12,
+              "rotulo_oficial": "TALENTO 10º",
+              "categoria": "talento_classe",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 13,
+              "rotulo_oficial": "CARACTERÍSTICA 11º",
+              "categoria": "caracteristica_classe",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 14,
+              "rotulo_oficial": "TALENTO 12º",
+              "categoria": "talento_classe",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 15,
+              "rotulo_oficial": "CARACTERÍSTICA 13º",
+              "categoria": "caracteristica_classe",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 16,
+              "rotulo_oficial": "TALENTO 14º",
+              "categoria": "talento_classe",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 17,
+              "rotulo_oficial": "CARACTERÍSTICA 15º",
+              "categoria": "caracteristica_classe",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 18,
+              "rotulo_oficial": "TALENTO 16º",
+              "categoria": "talento_classe",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 19,
+              "rotulo_oficial": "CARACTERÍSTICA 17º",
+              "categoria": "caracteristica_classe",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 20,
+              "rotulo_oficial": "TALENTO 18º",
+              "categoria": "talento_classe",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 21,
+              "rotulo_oficial": "CARACTERÍSTICA 19º",
+              "categoria": "caracteristica_classe",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 22,
+              "rotulo_oficial": "TALENTO 20º",
+              "categoria": "talento_classe",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            }
+          ]
+        },
+        "talentos_bonus": {
+          "rotulo_oficial": "TALENTOS BÔNUS",
+          "quantidade_slots": 2,
+          "slots": [
+            {
+              "indice": 1,
+              "rotulo_oficial": "BÔNUS 1",
+              "categoria": "talento_bonus",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            },
+            {
+              "indice": 2,
+              "rotulo_oficial": "BÔNUS 2",
+              "categoria": "talento_bonus",
+              "campos": [
+                "nome",
+                "origem_regra",
+                "pagina_ou_referencia",
+                "resumo"
+              ]
+            }
+          ]
+        },
+        "inventario": {
+          "rotulo_oficial": "INVENTÁRIO",
+          "secoes": [
+            {
+              "id": "itens_vestidos",
+              "rotulo_oficial": "ITENS VESTIDOS",
+              "colunas": [
+                "nome",
+                "investido",
+                "volume"
+              ],
+              "limite_investidos": 10,
+              "rotulo_investido": "INVESTIDO (MÁX 10)"
+            },
+            {
+              "id": "itens_preparados",
+              "rotulo_oficial": "ITENS PREPARADOS",
+              "colunas": [
+                "nome",
+                "quantidade",
+                "volume"
+              ]
+            },
+            {
+              "id": "outros_itens",
+              "rotulo_oficial": "OUTROS ITENS",
+              "colunas": [
+                "nome",
+                "quantidade",
+                "volume"
+              ]
+            }
+          ],
+          "resumo_carga": {
+            "rotulo_volume": "VOLUME",
+            "sobrecarregado": {
+              "rotulo_oficial": "SOBRECARREGADO = BASE 5 + FOR",
+              "base": 5,
+              "soma_atributo": "for"
+            },
+            "maximo": {
+              "rotulo_oficial": "MÁXIMO = BASE 10 + FOR",
+              "base": 10,
+              "soma_atributo": "for"
+            }
+          },
+          "riqueza": {
+            "moedas": [
+              {
+                "id": "pc",
+                "sigla": "PC",
+                "nome": "Peças de Cobre",
+                "valor_em_po": 0.01
+              },
+              {
+                "id": "pp",
+                "sigla": "PP",
+                "nome": "Peças de Prata",
+                "valor_em_po": 0.1
+              },
+              {
+                "id": "po",
+                "sigla": "PO",
+                "nome": "Peças de Ouro",
+                "valor_em_po": 1.0
+              },
+              {
+                "id": "pl",
+                "sigla": "PL",
+                "nome": "Peças de Platina",
+                "valor_em_po": 10.0
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "numero_pagina_pdf": 3,
+      "pagina_livro": 582,
+      "titulo": "Perfil, Campanha e Ações",
+      "blocos": {
+        "rascunho_personagem": {
+          "rotulo_oficial": "RASCUNHO DO PERSONAGEM",
+          "tipo": "area_visual"
+        },
+        "dados_biograficos": {
+          "rotulo_oficial": "DADOS BIOGRÁFICOS",
+          "campos": [
+            {
+              "id": "etnia",
+              "rotulo": "ETNIA",
+              "tipo": "texto"
+            },
+            {
+              "id": "nacionalidade",
+              "rotulo": "NACIONALIDADE",
+              "tipo": "texto"
+            },
+            {
+              "id": "local_nascimento",
+              "rotulo": "LOCAL DE NASCIMENTO",
+              "tipo": "texto"
+            },
+            {
+              "id": "idade",
+              "rotulo": "IDADE",
+              "tipo": "texto"
+            },
+            {
+              "id": "genero_pronomes",
+              "rotulo": "GÊNERO E PRONOMES",
+              "tipo": "texto"
+            },
+            {
+              "id": "altura",
+              "rotulo": "ALTURA",
+              "tipo": "texto"
+            },
+            {
+              "id": "peso",
+              "rotulo": "PESO",
+              "tipo": "texto"
+            },
+            {
+              "id": "aparencia",
+              "rotulo": "APARÊNCIA",
+              "tipo": "texto_longo"
+            }
+          ]
+        },
+        "personalidade": {
+          "rotulo_oficial": "PERSONALIDADE",
+          "campos": [
+            {
+              "id": "atitude",
+              "rotulo": "ATITUDE",
+              "tipo": "texto"
+            },
+            {
+              "id": "crencas",
+              "rotulo": "CRENÇAS",
+              "tipo": "texto"
+            },
+            {
+              "id": "gostos",
+              "rotulo": "GOSTOS",
+              "tipo": "texto"
+            },
+            {
+              "id": "aversoes",
+              "rotulo": "AVERSÕES",
+              "tipo": "texto"
+            },
+            {
+              "id": "bordoes",
+              "rotulo": "BORDÕES",
+              "tipo": "texto"
+            }
+          ]
+        },
+        "anotacoes_campanha": {
+          "rotulo_oficial": "ANOTAÇÕES DE CAMPANHA",
+          "campos": [
+            {
+              "id": "anotacoes",
+              "rotulo": "ANOTAÇÕES",
+              "tipo": "texto_longo"
+            },
+            {
+              "id": "aliados",
+              "rotulo": "ALIADOS",
+              "tipo": "texto_longo"
+            },
+            {
+              "id": "inimigos",
+              "rotulo": "INIMIGOS",
+              "tipo": "texto_longo"
+            },
+            {
+              "id": "organizacoes",
+              "rotulo": "ORGANIZAÇÕES",
+              "tipo": "texto_longo"
+            }
+          ]
+        },
+        "acoes_e_atividades": {
+          "rotulo_oficial": "AÇÕES E ATIVIDADES",
+          "layout": "2 colunas x 3 linhas",
+          "quantidade_slots": 6,
+          "slots": [
+            {
+              "indice": 1,
+              "campos": [
+                "nome",
+                "acoes",
+                "tracos",
+                "pagina",
+                "descricao"
+              ]
+            },
+            {
+              "indice": 2,
+              "campos": [
+                "nome",
+                "acoes",
+                "tracos",
+                "pagina",
+                "descricao"
+              ]
+            },
+            {
+              "indice": 3,
+              "campos": [
+                "nome",
+                "acoes",
+                "tracos",
+                "pagina",
+                "descricao"
+              ]
+            },
+            {
+              "indice": 4,
+              "campos": [
+                "nome",
+                "acoes",
+                "tracos",
+                "pagina",
+                "descricao"
+              ]
+            },
+            {
+              "indice": 5,
+              "campos": [
+                "nome",
+                "acoes",
+                "tracos",
+                "pagina",
+                "descricao"
+              ]
+            },
+            {
+              "indice": 6,
+              "campos": [
+                "nome",
+                "acoes",
+                "tracos",
+                "pagina",
+                "descricao"
+              ]
+            }
+          ]
+        },
+        "acoes_livres_e_reacoes": {
+          "rotulo_oficial": "AÇÕES LIVRES E REAÇÕES",
+          "layout": "2 colunas x 2 linhas",
+          "quantidade_slots": 4,
+          "slots": [
+            {
+              "indice": 1,
+              "tipos_marcacao": [
+                "AÇÃO LIVRE",
+                "REAÇÃO"
+              ],
+              "campos": [
+                "nome",
+                "tipo",
+                "tracos",
+                "pagina",
+                "acionamento",
+                "descricao"
+              ]
+            },
+            {
+              "indice": 2,
+              "tipos_marcacao": [
+                "AÇÃO LIVRE",
+                "REAÇÃO"
+              ],
+              "campos": [
+                "nome",
+                "tipo",
+                "tracos",
+                "pagina",
+                "acionamento",
+                "descricao"
+              ]
+            },
+            {
+              "indice": 3,
+              "tipos_marcacao": [
+                "AÇÃO LIVRE",
+                "REAÇÃO"
+              ],
+              "campos": [
+                "nome",
+                "tipo",
+                "tracos",
+                "pagina",
+                "acionamento",
+                "descricao"
+              ]
+            },
+            {
+              "indice": 4,
+              "tipos_marcacao": [
+                "AÇÃO LIVRE",
+                "REAÇÃO"
+              ],
+              "campos": [
+                "nome",
+                "tipo",
+                "tracos",
+                "pagina",
+                "acionamento",
+                "descricao"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "numero_pagina_pdf": 4,
+      "pagina_livro": 583,
+      "titulo": "Conjuração e Magias",
+      "blocos": {
+        "ataque_magia": {
+          "rotulo_oficial": "ATAQUE DE MAGIA",
+          "formula": [
+            "ATB_CHAVE",
+            "PROF"
+          ],
+          "niveis_proficiencia": [
+            "T",
+            "E",
+            "M",
+            "L"
+          ],
+          "campos": [
+            "total",
+            "mod_atributo_chave",
+            "proficiencia",
+            "grau_proficiencia"
+          ]
+        },
+        "cd_magia": {
+          "rotulo_oficial": "CD DE MAGIA",
+          "formula": [
+            "10",
+            "ATB_CHAVE",
+            "PROF"
+          ],
+          "rotulo_base_impresso": "CD BASE 10",
+          "niveis_proficiencia": [
+            "T",
+            "E",
+            "M",
+            "L"
+          ],
+          "campos": [
+            "total",
+            "mod_atributo_chave",
+            "proficiencia",
+            "grau_proficiencia"
+          ]
+        },
+        "tradicoes_magicas": {
+          "rotulo_oficial": "TRADIÇÕES MÁGICAS",
+          "tradicoes": [
+            {
+              "id": "arcana",
+              "rotulo_oficial": "ARCANAS"
+            },
+            {
+              "id": "ocultista",
+              "rotulo_oficial": "OCULTISTAS"
+            },
+            {
+              "id": "primal",
+              "rotulo_oficial": "PRIMAIS"
+            },
+            {
+              "id": "divina",
+              "rotulo_oficial": "DIVINAS"
+            }
+          ],
+          "estilos_conjuracao": [
+            {
+              "id": "preparada",
+              "rotulo_oficial": "PREPARADAS"
+            },
+            {
+              "id": "espontanea",
+              "rotulo_oficial": "ESPONTÂNEAS"
+            }
+          ]
+        },
+        "espacos_magia_por_dia": {
+          "rotulo_oficial": "ESPAÇOS DE MAGIA POR DIA",
+          "nivel_truque_rotulo": "NÍVEL DE TRUQUE",
+          "niveis_magia": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ],
+          "rotulo_remanescentes": "ESPAÇOS DE MAGIA ESPONTÂNEA REMANESCENTES"
+        },
+        "truques_magicos": {
+          "rotulo_oficial": "TRUQUES MÁGICOS",
+          "quantidade_slots": 7,
+          "slots": [
+            {
+              "indice": 1,
+              "categoria": "truque",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 2,
+              "categoria": "truque",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 3,
+              "categoria": "truque",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 4,
+              "categoria": "truque",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 5,
+              "categoria": "truque",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 6,
+              "categoria": "truque",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 7,
+              "categoria": "truque",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            }
+          ]
+        },
+        "magias_inatas": {
+          "rotulo_oficial": "MAGIAS INATAS",
+          "quantidade_slots": 2,
+          "slots": [
+            {
+              "indice": 1,
+              "categoria": "inata",
+              "tem_checkbox_preparada": false,
+              "tem_frequencia": true,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "frequencia"
+              ]
+            },
+            {
+              "indice": 2,
+              "categoria": "inata",
+              "tem_checkbox_preparada": false,
+              "tem_frequencia": true,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "frequencia"
+              ]
+            }
+          ]
+        },
+        "magias_foco": {
+          "rotulo_oficial": "MAGIAS DE FOCO",
+          "pontos_foco": {
+            "rotulo_oficial": "PONTOS DE FOCO",
+            "campos": [
+              "atuais",
+              "maximo"
+            ]
+          },
+          "quantidade_slots": 4,
+          "slots": [
+            {
+              "indice": 1,
+              "categoria": "foco",
+              "tem_checkbox_preparada": false,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes"
+              ]
+            },
+            {
+              "indice": 2,
+              "categoria": "foco",
+              "tem_checkbox_preparada": false,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes"
+              ]
+            },
+            {
+              "indice": 3,
+              "categoria": "foco",
+              "tem_checkbox_preparada": false,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes"
+              ]
+            },
+            {
+              "indice": 4,
+              "categoria": "foco",
+              "tem_checkbox_preparada": false,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes"
+              ]
+            }
+          ]
+        },
+        "magias": {
+          "rotulo_oficial": "MAGIAS",
+          "layout": "16 linhas x 2 colunas",
+          "quantidade_slots": 32,
+          "slots": [
+            {
+              "indice": 1,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 2,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 3,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 4,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 5,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 6,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 7,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 8,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 9,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 10,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 11,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 12,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 13,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 14,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 15,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 16,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 17,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 18,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 19,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 20,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 21,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 22,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 23,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 24,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 25,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 26,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 27,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 28,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 29,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 30,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 31,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            },
+            {
+              "indice": 32,
+              "categoria": "magia",
+              "tem_checkbox_preparada": true,
+              "tem_frequencia": false,
+              "componentes_disponiveis": [
+                {
+                  "sigla": "M",
+                  "nome": "Material"
+                },
+                {
+                  "sigla": "S",
+                  "nome": "Somático"
+                },
+                {
+                  "sigla": "V",
+                  "nome": "Verbal"
+                }
+              ],
+              "campos": [
+                "nome",
+                "nivel_ou_efeito",
+                "acoes",
+                "componentes",
+                "anotacoes",
+                "preparada"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "regras_calculo_ficha": {
+    "modificador_atributo": "floor((valor - 10) / 2)",
+    "bonus_proficiencia": {
+      "destreinado": "0",
+      "treinado": "2 + nivel",
+      "especialista": "4 + nivel",
+      "mestre": "6 + nivel",
+      "lendario": "8 + nivel"
+    },
+    "classe_armadura": "10 + min(mod_des, limite_des_armadura) + proficiencia_armadura + bonus_item_armadura + bonus_escudo_se_erguido",
+    "cd_classe": "10 + mod_atributo_chave_classe + proficiencia_cd_classe + bonus_item",
+    "jogadas_salvamento": {
+      "fortitude": "mod_con + proficiencia_fortitude + bonus_item",
+      "reflexos": "mod_des + proficiencia_reflexos + bonus_item",
+      "vontade": "mod_sab + proficiencia_vontade + bonus_item"
+    },
+    "percepcao": "mod_sab + proficiencia_percepcao + bonus_item",
+    "pericias": "mod_atributo_chave + proficiencia_pericia + bonus_item + penalidade_armadura_se_aplicavel",
+    "golpe_corpo_a_corpo": {
+      "ataque": "mod_for_ou_acuidade_des + proficiencia_arma + bonus_item",
+      "dano": "dados_arma + mod_for + especializacao_arma + outro"
+    },
+    "golpe_distancia": {
+      "ataque": "mod_des + proficiencia_arma + bonus_item",
+      "dano": "dados_arma + especial_ou_propulsivo_ou_arremesso + especializacao_arma + outro"
+    },
+    "pontos_vida": "pv_ancestralidade + (pv_classe + mod_con) * nivel + bonus_talentos",
+    "ataque_magia": "mod_atributo_conjuracao + proficiencia_ataque_magia",
+    "cd_magia": "10 + mod_atributo_conjuracao + proficiencia_cd_magia",
+    "nivel_truque": "ceil(nivel / 2)",
+    "limites_carga": {
+      "sobrecarregado": "5 + mod_for",
+      "maximo": "10 + mod_for",
+      "limite_itens_investidos": 10
+    }
+  },
+  "mapeamento_fontes_dados": {
+    "ancestralidade_e_heranca": "dados/ancestralidades_biografias.json",
+    "biografia": "dados/ancestralidades_biografias.json",
+    "idiomas": "dados/ancestralidades_biografias.json",
+    "classe_e_cd_classe": [
+      "dados/classes01.json",
+      "dados/classes02.json",
+      "dados/classes03.json"
+    ],
+    "arquetipos_multiclasse": "dados/arquetipos_multiclasse.json",
+    "pericias": "dados/pericias.json",
+    "talentos_gerais_e_pericia": "dados/talentos.json",
+    "equipamentos_armas_armaduras_inventario": "dados/equipamentos.json",
+    "magias_e_foco": [
+      "dados/magias01.json",
+      "dados/magias02.json"
+    ],
+    "companheiros_e_familiares": "dados/companheiros_familiares.json",
+    "itens_magicos_e_investidos": "dados/itens_magicos_tesouros.json (pendente)",
+    "conceitos_e_subclasses": "dados/conceitos_subclasses.json (pendente - Etapa 2)"
+  },
+  "modelo_ficha_vazia": {
+    "cabecalho": {
+      "nome_personagem": "",
+      "nome_jogador": "",
+      "pontos_experiencia": 0,
+      "ancestralidade_e_heranca": "",
+      "biografia": "",
+      "classe": "",
+      "tamanho": "",
+      "tendencia": "",
+      "tracos": [],
+      "divindade": "",
+      "nivel": 1,
+      "pontos_heroismo": 1
+    },
+    "atributos": {
+      "for": {
+        "valor": 10,
+        "modificador": 0
+      },
+      "des": {
+        "valor": 10,
+        "modificador": 0
+      },
+      "con": {
+        "valor": 10,
+        "modificador": 0
+      },
+      "int": {
+        "valor": 10,
+        "modificador": 0
+      },
+      "sab": {
+        "valor": 10,
+        "modificador": 0
+      },
+      "car": {
+        "valor": 10,
+        "modificador": 0
+      }
+    },
+    "cd_classe": {
+      "total": 10,
+      "mod_atributo_chave": 0,
+      "proficiencia": 0,
+      "grau_proficiencia": "destreinado",
+      "item": 0
+    },
+    "velocidade": {
+      "metros": 0.0,
+      "tipos_movimento_anotacoes": ""
+    },
+    "classe_armadura": {
+      "total": 10,
+      "des_ou_limite": 0,
+      "limite_des_armadura": null,
+      "proficiencia": 0,
+      "grau_proficiencia": "destreinado",
+      "item": 0,
+      "proficiencias_armadura": {
+        "sem_armadura": "destreinado",
+        "leve": "destreinado",
+        "media": "destreinado",
+        "pesada": "destreinado"
+      },
+      "escudo": {
+        "nome": "",
+        "bonus_ca": 0,
+        "dureza": 0,
+        "pv_max": 0,
+        "limiar_quebra": 0,
+        "pv_atuais": 0
+      }
+    },
+    "jogadas_salvamento": {
+      "fortitude": {
+        "atributo_chave": "con",
+        "total": 0,
+        "mod_atributo": 0,
+        "proficiencia": 0,
+        "grau_proficiencia": "destreinado",
+        "item": 0
+      },
+      "reflexos": {
+        "atributo_chave": "des",
+        "total": 0,
+        "mod_atributo": 0,
+        "proficiencia": 0,
+        "grau_proficiencia": "destreinado",
+        "item": 0
+      },
+      "vontade": {
+        "atributo_chave": "sab",
+        "total": 0,
+        "mod_atributo": 0,
+        "proficiencia": 0,
+        "grau_proficiencia": "destreinado",
+        "item": 0
+      },
+      "anotacoes": ""
+    },
+    "pontos_vida": {
+      "max": 0,
+      "atuais": 0,
+      "temporarios": 0,
+      "ferido": 0,
+      "morrendo": 0,
+      "resistencias_e_imunidades": "",
+      "condicoes": ""
+    },
+    "percepcao": {
+      "total": 0,
+      "mod_sab": 0,
+      "proficiencia": 0,
+      "grau_proficiencia": "destreinado",
+      "item": 0,
+      "sentidos": []
+    },
+    "golpes_corpo_a_corpo": [
+      {
+        "indice": 1,
+        "arma": "",
+        "ataque": {
+          "total": 0,
+          "mod_atributo": 0,
+          "proficiencia": 0,
+          "grau_proficiencia": "destreinado",
+          "item": 0
+        },
+        "dano": {
+          "dados": "",
+          "for": 0,
+          "tipos_dano": [],
+          "especializacao": 0,
+          "outro": 0,
+          "tracos": []
+        }
+      },
+      {
+        "indice": 2,
+        "arma": "",
+        "ataque": {
+          "total": 0,
+          "mod_atributo": 0,
+          "proficiencia": 0,
+          "grau_proficiencia": "destreinado",
+          "item": 0
+        },
+        "dano": {
+          "dados": "",
+          "for": 0,
+          "tipos_dano": [],
+          "especializacao": 0,
+          "outro": 0,
+          "tracos": []
+        }
+      },
+      {
+        "indice": 3,
+        "arma": "",
+        "ataque": {
+          "total": 0,
+          "mod_atributo": 0,
+          "proficiencia": 0,
+          "grau_proficiencia": "destreinado",
+          "item": 0
+        },
+        "dano": {
+          "dados": "",
+          "for": 0,
+          "tipos_dano": [],
+          "especializacao": 0,
+          "outro": 0,
+          "tracos": []
+        }
+      }
+    ],
+    "golpes_a_distancia": [
+      {
+        "indice": 1,
+        "arma": "",
+        "ataque": {
+          "total": 0,
+          "mod_atributo": 0,
+          "proficiencia": 0,
+          "grau_proficiencia": "destreinado",
+          "item": 0
+        },
+        "dano": {
+          "dados": "",
+          "especial": 0,
+          "tipos_dano": [],
+          "especializacao": 0,
+          "outro": 0,
+          "tracos": []
+        }
+      },
+      {
+        "indice": 2,
+        "arma": "",
+        "ataque": {
+          "total": 0,
+          "mod_atributo": 0,
+          "proficiencia": 0,
+          "grau_proficiencia": "destreinado",
+          "item": 0
+        },
+        "dano": {
+          "dados": "",
+          "especial": 0,
+          "tipos_dano": [],
+          "especializacao": 0,
+          "outro": 0,
+          "tracos": []
+        }
+      },
+      {
+        "indice": 3,
+        "arma": "",
+        "ataque": {
+          "total": 0,
+          "mod_atributo": 0,
+          "proficiencia": 0,
+          "grau_proficiencia": "destreinado",
+          "item": 0
+        },
+        "dano": {
+          "dados": "",
+          "especial": 0,
+          "tipos_dano": [],
+          "especializacao": 0,
+          "outro": 0,
+          "tracos": []
+        }
+      }
+    ],
+    "proficiencia_armas": [
+      {
+        "id": "simples",
+        "rotulo": "SIMPLES",
+        "grau_proficiencia": "destreinado"
+      },
+      {
+        "id": "marcial",
+        "rotulo": "MARCIAL",
+        "grau_proficiencia": "destreinado"
+      },
+      {
+        "id": "outra_1",
+        "rotulo": "OUTRA",
+        "grau_proficiencia": "destreinado"
+      },
+      {
+        "id": "outra_2",
+        "rotulo": "OUTRA",
+        "grau_proficiencia": "destreinado"
+      }
+    ],
+    "pericias": [
+      {
+        "ordem_visual": 1,
+        "id": "acrobatismo",
+        "id_pericia_dados": "acrobatismo",
+        "rotulo_oficial": "ACROBATISMO",
+        "especializacao": null,
+        "atributo_chave": "des",
+        "total": 0,
+        "mod_atributo": 0,
+        "proficiencia": 0,
+        "grau_proficiencia": "destreinado",
+        "item": 0,
+        "penalidade_armadura": 0
+      },
+      {
+        "ordem_visual": 2,
+        "id": "arcanismo",
+        "id_pericia_dados": "arcanismo",
+        "rotulo_oficial": "ARCANISMO",
+        "especializacao": null,
+        "atributo_chave": "int",
+        "total": 0,
+        "mod_atributo": 0,
+        "proficiencia": 0,
+        "grau_proficiencia": "destreinado",
+        "item": 0,
+        "penalidade_armadura": null
+      },
+      {
+        "ordem_visual": 3,
+        "id": "atletismo",
+        "id_pericia_dados": "atletismo",
+        "rotulo_oficial": "ATLETISMO",
+        "especializacao": null,
+        "atributo_chave": "for",
+        "total": 0,
+        "mod_atributo": 0,
+        "proficiencia": 0,
+        "grau_proficiencia": "destreinado",
+        "item": 0,
+        "penalidade_armadura": 0
+      },
+      {
+        "ordem_visual": 4,
+        "id": "diplomacia",
+        "id_pericia_dados": "diplomacia",
+        "rotulo_oficial": "DIPLOMACIA",
+        "especializacao": null,
+        "atributo_chave": "car",
+        "total": 0,
+        "mod_atributo": 0,
+        "proficiencia": 0,
+        "grau_proficiencia": "destreinado",
+        "item": 0,
+        "penalidade_armadura": null
+      },
+      {
+        "ordem_visual": 5,
+        "id": "dissimulacao",
+        "id_pericia_dados": "dissimulacao",
+        "rotulo_oficial": "DISSIMULAÇÃO",
+        "especializacao": null,
+        "atributo_chave": "car",
+        "total": 0,
+        "mod_atributo": 0,
+        "proficiencia": 0,
+        "grau_proficiencia": "destreinado",
+        "item": 0,
+        "penalidade_armadura": null
+      },
+      {
+        "ordem_visual": 6,
+        "id": "furtividade",
+        "id_pericia_dados": "furtividade",
+        "rotulo_oficial": "FURTIVIDADE",
+        "especializacao": null,
+        "atributo_chave": "des",
+        "total": 0,
+        "mod_atributo": 0,
+        "proficiencia": 0,
+        "grau_proficiencia": "destreinado",
+        "item": 0,
+        "penalidade_armadura": 0
+      },
+      {
+        "ordem_visual": 7,
+        "id": "intimidacao",
+        "id_pericia_dados": "intimidacao",
+        "rotulo_oficial": "INTIMIDAÇÃO",
+        "especializacao": null,
+        "atributo_chave": "car",
+        "total": 0,
+        "mod_atributo": 0,
+        "proficiencia": 0,
+        "grau_proficiencia": "destreinado",
+        "item": 0,
+        "penalidade_armadura": null
+      },
+      {
+        "ordem_visual": 8,
+        "id": "ladroagem",
+        "id_pericia_dados": "ladroagem",
+        "rotulo_oficial": "LADROAGEM",
+        "especializacao": null,
+        "atributo_chave": "des",
+        "total": 0,
+        "mod_atributo": 0,
+        "proficiencia": 0,
+        "grau_proficiencia": "destreinado",
+        "item": 0,
+        "penalidade_armadura": 0
+      },
+      {
+        "ordem_visual": 9,
+        "id": "manufatura",
+        "id_pericia_dados": "manufatura",
+        "rotulo_oficial": "MANUFATURA",
+        "especializacao": null,
+        "atributo_chave": "int",
+        "total": 0,
+        "mod_atributo": 0,
+        "proficiencia": 0,
+        "grau_proficiencia": "destreinado",
+        "item": 0,
+        "penalidade_armadura": null
+      },
+      {
+        "ordem_visual": 10,
+        "id": "medicina",
+        "id_pericia_dados": "medicina",
+        "rotulo_oficial": "MEDICINA",
+        "especializacao": null,
+        "atributo_chave": "sab",
+        "total": 0,
+        "mod_atributo": 0,
+        "proficiencia": 0,
+        "grau_proficiencia": "destreinado",
+        "item": 0,
+        "penalidade_armadura": null
+      },
+      {
+        "ordem_visual": 11,
+        "id": "natureza",
+        "id_pericia_dados": "natureza",
+        "rotulo_oficial": "NATUREZA",
+        "especializacao": null,
+        "atributo_chave": "sab",
+        "total": 0,
+        "mod_atributo": 0,
+        "proficiencia": 0,
+        "grau_proficiencia": "destreinado",
+        "item": 0,
+        "penalidade_armadura": null
+      },
+      {
+        "ordem_visual": 12,
+        "id": "ocultismo",
+        "id_pericia_dados": "ocultismo",
+        "rotulo_oficial": "OCULTISMO",
+        "especializacao": null,
+        "atributo_chave": "int",
+        "total": 0,
+        "mod_atributo": 0,
+        "proficiencia": 0,
+        "grau_proficiencia": "destreinado",
+        "item": 0,
+        "penalidade_armadura": null
+      },
+      {
+        "ordem_visual": 13,
+        "id": "performance",
+        "id_pericia_dados": "performance",
+        "rotulo_oficial": "PERFORMANCE",
+        "especializacao": null,
+        "atributo_chave": "car",
+        "total": 0,
+        "mod_atributo": 0,
+        "proficiencia": 0,
+        "grau_proficiencia": "destreinado",
+        "item": 0,
+        "penalidade_armadura": null
+      },
+      {
+        "ordem_visual": 14,
+        "id": "religiao",
+        "id_pericia_dados": "religiao",
+        "rotulo_oficial": "RELIGIÃO",
+        "especializacao": null,
+        "atributo_chave": "sab",
+        "total": 0,
+        "mod_atributo": 0,
+        "proficiencia": 0,
+        "grau_proficiencia": "destreinado",
+        "item": 0,
+        "penalidade_armadura": null
+      },
+      {
+        "ordem_visual": 15,
+        "id": "saber_1",
+        "id_pericia_dados": "saber",
+        "rotulo_oficial": "SABER",
+        "especializacao": "",
+        "atributo_chave": "int",
+        "total": 0,
+        "mod_atributo": 0,
+        "proficiencia": 0,
+        "grau_proficiencia": "destreinado",
+        "item": 0,
+        "penalidade_armadura": null
+      },
+      {
+        "ordem_visual": 16,
+        "id": "saber_2",
+        "id_pericia_dados": "saber",
+        "rotulo_oficial": "SABER",
+        "especializacao": "",
+        "atributo_chave": "int",
+        "total": 0,
+        "mod_atributo": 0,
+        "proficiencia": 0,
+        "grau_proficiencia": "destreinado",
+        "item": 0,
+        "penalidade_armadura": null
+      },
+      {
+        "ordem_visual": 17,
+        "id": "sociedade",
+        "id_pericia_dados": "sociedade",
+        "rotulo_oficial": "SOCIEDADE",
+        "especializacao": null,
+        "atributo_chave": "int",
+        "total": 0,
+        "mod_atributo": 0,
+        "proficiencia": 0,
+        "grau_proficiencia": "destreinado",
+        "item": 0,
+        "penalidade_armadura": null
+      },
+      {
+        "ordem_visual": 18,
+        "id": "sobrevivencia",
+        "id_pericia_dados": "sobrevivencia",
+        "rotulo_oficial": "SOBREVIVÊNCIA",
+        "especializacao": null,
+        "atributo_chave": "sab",
+        "total": 0,
+        "mod_atributo": 0,
+        "proficiencia": 0,
+        "grau_proficiencia": "destreinado",
+        "item": 0,
+        "penalidade_armadura": null
+      }
+    ],
+    "idiomas": [],
+    "habilidades_e_talentos": {
+      "ancestralidade": [
+        {
+          "indice": 1,
+          "rotulo_oficial": "ESPECIAL 1º",
+          "categoria": "caracteristica_ancestralidade",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 2,
+          "rotulo_oficial": "HERANÇA 1º",
+          "categoria": "heranca",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 3,
+          "rotulo_oficial": "TALENTO 1º",
+          "categoria": "talento_ancestralidade",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 4,
+          "rotulo_oficial": "TALENTO 5º",
+          "categoria": "talento_ancestralidade",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 5,
+          "rotulo_oficial": "TALENTO 9º",
+          "categoria": "talento_ancestralidade",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 6,
+          "rotulo_oficial": "TALENTO 13º",
+          "categoria": "talento_ancestralidade",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 7,
+          "rotulo_oficial": "TALENTO 17º",
+          "categoria": "talento_ancestralidade",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        }
+      ],
+      "pericia": [
+        {
+          "indice": 1,
+          "rotulo_oficial": "BIOGRAFIA",
+          "categoria": "talento_pericia",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 2,
+          "rotulo_oficial": "2º",
+          "categoria": "talento_pericia",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 3,
+          "rotulo_oficial": "4º",
+          "categoria": "talento_pericia",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 4,
+          "rotulo_oficial": "6º",
+          "categoria": "talento_pericia",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 5,
+          "rotulo_oficial": "8º",
+          "categoria": "talento_pericia",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 6,
+          "rotulo_oficial": "10º",
+          "categoria": "talento_pericia",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 7,
+          "rotulo_oficial": "12º",
+          "categoria": "talento_pericia",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 8,
+          "rotulo_oficial": "14º",
+          "categoria": "talento_pericia",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 9,
+          "rotulo_oficial": "16º",
+          "categoria": "talento_pericia",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 10,
+          "rotulo_oficial": "18º",
+          "categoria": "talento_pericia",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 11,
+          "rotulo_oficial": "20º",
+          "categoria": "talento_pericia",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        }
+      ],
+      "gerais": [
+        {
+          "indice": 1,
+          "rotulo_oficial": "3º",
+          "categoria": "talento_geral",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 2,
+          "rotulo_oficial": "7º",
+          "categoria": "talento_geral",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 3,
+          "rotulo_oficial": "11º",
+          "categoria": "talento_geral",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 4,
+          "rotulo_oficial": "15º",
+          "categoria": "talento_geral",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 5,
+          "rotulo_oficial": "19º",
+          "categoria": "talento_geral",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        }
+      ],
+      "classe": [
+        {
+          "indice": 1,
+          "rotulo_oficial": "CARACTERÍSTICA 1º",
+          "categoria": "caracteristica_classe",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 2,
+          "rotulo_oficial": "CARACTERÍSTICA 1º",
+          "categoria": "caracteristica_classe",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 3,
+          "rotulo_oficial": "TALENTO 1º",
+          "categoria": "talento_classe",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 4,
+          "rotulo_oficial": "TALENTO 2º",
+          "categoria": "talento_classe",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 5,
+          "rotulo_oficial": "CARACTERÍSTICA 3º",
+          "categoria": "caracteristica_classe",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 6,
+          "rotulo_oficial": "TALENTO 4º",
+          "categoria": "talento_classe",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 7,
+          "rotulo_oficial": "CARACTERÍSTICA 5º",
+          "categoria": "caracteristica_classe",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 8,
+          "rotulo_oficial": "TALENTO 6º",
+          "categoria": "talento_classe",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 9,
+          "rotulo_oficial": "CARACTERÍSTICA 7º",
+          "categoria": "caracteristica_classe",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 10,
+          "rotulo_oficial": "TALENTO 8º",
+          "categoria": "talento_classe",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 11,
+          "rotulo_oficial": "CARACTERÍSTICA 9º",
+          "categoria": "caracteristica_classe",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 12,
+          "rotulo_oficial": "TALENTO 10º",
+          "categoria": "talento_classe",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 13,
+          "rotulo_oficial": "CARACTERÍSTICA 11º",
+          "categoria": "caracteristica_classe",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 14,
+          "rotulo_oficial": "TALENTO 12º",
+          "categoria": "talento_classe",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 15,
+          "rotulo_oficial": "CARACTERÍSTICA 13º",
+          "categoria": "caracteristica_classe",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 16,
+          "rotulo_oficial": "TALENTO 14º",
+          "categoria": "talento_classe",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 17,
+          "rotulo_oficial": "CARACTERÍSTICA 15º",
+          "categoria": "caracteristica_classe",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 18,
+          "rotulo_oficial": "TALENTO 16º",
+          "categoria": "talento_classe",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 19,
+          "rotulo_oficial": "CARACTERÍSTICA 17º",
+          "categoria": "caracteristica_classe",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 20,
+          "rotulo_oficial": "TALENTO 18º",
+          "categoria": "talento_classe",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 21,
+          "rotulo_oficial": "CARACTERÍSTICA 19º",
+          "categoria": "caracteristica_classe",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 22,
+          "rotulo_oficial": "TALENTO 20º",
+          "categoria": "talento_classe",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        }
+      ],
+      "bonus": [
+        {
+          "indice": 1,
+          "rotulo_oficial": "BÔNUS 1",
+          "categoria": "talento_bonus",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        },
+        {
+          "indice": 2,
+          "rotulo_oficial": "BÔNUS 2",
+          "categoria": "talento_bonus",
+          "nome": "",
+          "origem_regra": "",
+          "pagina": null,
+          "resumo": ""
+        }
+      ]
+    },
+    "inventario": {
+      "itens_vestidos": [],
+      "itens_preparados": [],
+      "outros_itens": [],
+      "volume_total": 0.0,
+      "volume_sobrecarregado": 5,
+      "volume_maximo": 10,
+      "itens_investidos_total": 0,
+      "riqueza": {
+        "pc": 0,
+        "pp": 0,
+        "po": 0,
+        "pl": 0
+      }
+    },
+    "perfil_e_campanha": {
+      "rascunho_url": null,
+      "dados_biograficos": {
+        "etnia": "",
+        "nacionalidade": "",
+        "local_nascimento": "",
+        "idade": "",
+        "genero_pronomes": "",
+        "altura": "",
+        "peso": "",
+        "aparencia": ""
+      },
+      "personalidade": {
+        "atitude": "",
+        "crencas": "",
+        "gostos": "",
+        "aversoes": "",
+        "bordoes": ""
+      },
+      "anotacoes_campanha": {
+        "anotacoes": "",
+        "aliados": "",
+        "inimigos": "",
+        "organizacoes": ""
+      }
+    },
+    "acoes_e_atividades": [
+      {
+        "indice": 1,
+        "nome": "",
+        "acoes": "",
+        "tracos": [],
+        "pagina": null,
+        "descricao": ""
+      },
+      {
+        "indice": 2,
+        "nome": "",
+        "acoes": "",
+        "tracos": [],
+        "pagina": null,
+        "descricao": ""
+      },
+      {
+        "indice": 3,
+        "nome": "",
+        "acoes": "",
+        "tracos": [],
+        "pagina": null,
+        "descricao": ""
+      },
+      {
+        "indice": 4,
+        "nome": "",
+        "acoes": "",
+        "tracos": [],
+        "pagina": null,
+        "descricao": ""
+      },
+      {
+        "indice": 5,
+        "nome": "",
+        "acoes": "",
+        "tracos": [],
+        "pagina": null,
+        "descricao": ""
+      },
+      {
+        "indice": 6,
+        "nome": "",
+        "acoes": "",
+        "tracos": [],
+        "pagina": null,
+        "descricao": ""
+      }
+    ],
+    "acoes_livres_e_reacoes": [
+      {
+        "indice": 1,
+        "nome": "",
+        "tipo": "",
+        "tracos": [],
+        "pagina": null,
+        "acionamento": "",
+        "descricao": ""
+      },
+      {
+        "indice": 2,
+        "nome": "",
+        "tipo": "",
+        "tracos": [],
+        "pagina": null,
+        "acionamento": "",
+        "descricao": ""
+      },
+      {
+        "indice": 3,
+        "nome": "",
+        "tipo": "",
+        "tracos": [],
+        "pagina": null,
+        "acionamento": "",
+        "descricao": ""
+      },
+      {
+        "indice": 4,
+        "nome": "",
+        "tipo": "",
+        "tracos": [],
+        "pagina": null,
+        "acionamento": "",
+        "descricao": ""
+      }
+    ],
+    "conjuracao": {
+      "ataque_magia": {
+        "total": 0,
+        "mod_atributo_chave": 0,
+        "proficiencia": 0,
+        "grau_proficiencia": "destreinado"
+      },
+      "cd_magia": {
+        "total": 10,
+        "mod_atributo_chave": 0,
+        "proficiencia": 0,
+        "grau_proficiencia": "destreinado"
+      },
+      "tradicoes_marcadas": {
+        "arcana": false,
+        "ocultista": false,
+        "primal": false,
+        "divina": false
+      },
+      "estilo_conjuracao": {
+        "preparada": false,
+        "espontanea": false
+      },
+      "nivel_truque": 1,
+      "espacos_magia_por_dia": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0
+      },
+      "espacos_magia_espontanea_remanescentes": {
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0
+      },
+      "truques_magicos": [
+        {
+          "indice": 1,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 2,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 3,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 4,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 5,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 6,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 7,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        }
+      ],
+      "magias_inatas": [
+        {
+          "indice": 1,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "frequencia": ""
+        },
+        {
+          "indice": 2,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "frequencia": ""
+        }
+      ],
+      "magias_foco": {
+        "pontos_foco": {
+          "atuais": 0,
+          "maximo": 0
+        },
+        "slots": [
+          {
+            "indice": 1,
+            "nome": "",
+            "nivel": null,
+            "acoes": "",
+            "componentes": [],
+            "anotacoes": ""
+          },
+          {
+            "indice": 2,
+            "nome": "",
+            "nivel": null,
+            "acoes": "",
+            "componentes": [],
+            "anotacoes": ""
+          },
+          {
+            "indice": 3,
+            "nome": "",
+            "nivel": null,
+            "acoes": "",
+            "componentes": [],
+            "anotacoes": ""
+          },
+          {
+            "indice": 4,
+            "nome": "",
+            "nivel": null,
+            "acoes": "",
+            "componentes": [],
+            "anotacoes": ""
+          }
+        ]
+      },
+      "magias": [
+        {
+          "indice": 1,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 2,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 3,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 4,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 5,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 6,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 7,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 8,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 9,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 10,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 11,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 12,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 13,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 14,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 15,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 16,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 17,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 18,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 19,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 20,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 21,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 22,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 23,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 24,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 25,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 26,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 27,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 28,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 29,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 30,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 31,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        },
+        {
+          "indice": 32,
+          "nome": "",
+          "nivel": null,
+          "acoes": "",
+          "componentes": [],
+          "anotacoes": "",
+          "preparada": false
+        }
+      ]
+    }
+  }
+}

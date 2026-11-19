@@ -33,8 +33,8 @@ Lista viva de todas as entregas e tarefas que ainda precisam ser realizadas até
     - Todas as `159` descrições restantes (`Mensageiro Animal` a `Zona da Verdade`, completando `379/379` com `magias01.json`), quadro `Servo Invisível Criatura –1`, `158` Magias de Foco (`7` classes), regras completas + Tabelas `7–1`/`7–2` e todos os `20` Rituais.
 - [ ] **`ref/Compendium specific tools.pdf` → `dados/itens_magicos_tesouros.json`**
   - Runas fundamentais e de propriedade, materiais preciosos, itens alquímicos completos, poções, pergaminhos, talismãs e itens mágicos permanentes.
-- [ ] **`ref/Sheet Update.pdf` → `dados/estrutura_ficha.json`**
-  - Mapeamento completo de todos os campos e blocos da ficha oficial de personagem de PF2E para garantir 100% de aderência no Front-End e na saída do gerador.
+- [x] **`ref/Sheet Update.pdf` → `dados/estrutura_ficha.json`** *(Concluído em `19/11/2026 — 09:19` → [finalizado/12.md](finalizado/12.md))*
+  - Mapeamento completo das 4 páginas oficiais da ficha (`pp. 580–583`), legendas, fórmulas de cálculo, cruzamento 1:1 com `dados/pericias.json` (`18` linhas) e contrato `modelo_ficha_vazia` validado via `scripts/gerar_estrutura_ficha_json.py`.
 
 ---
 

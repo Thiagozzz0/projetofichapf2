@@ -45,6 +45,7 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 │   ├── classes03.json            # Capítulo 3 (Leva 03: Ladino, Mago, Monge e Patrulheiro)
 │   ├── companheiros_familiares.json     # Capítulo 3 (Companheiros Animais e Familiares)
 │   ├── equipamentos.json         # Capítulo 6 completo (Equipamentos) convertido e validado
+│   ├── estrutura_ficha.json      # Ficha Oficial PF2E (pp. 580–583): blueprint das 4 páginas e contrato vazio
 │   ├── magias01.json             # Capítulo 7 (Parte 1: Regras, Listas Completas e Descrições A–M)
 │   ├── magias02.json             # Capítulo 7 (Parte 2: Descrições M–Z, Magias de Foco e Rituais)
 │   ├── pericias.json             # Capítulo 4 completo (Perícias, Ações Gerais e Tabelas 4–1 a 4–4)
@@ -59,6 +60,7 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 │   ├── gerar_classes_03_json.py
 │   ├── gerar_companheiros_familiares_json.py
 │   ├── gerar_equipamentos_json.py
+│   ├── gerar_estrutura_ficha_json.py
 │   ├── gerar_magias_01_json.py
 │   ├── gerar_magias_02_json.py
 │   ├── gerar_pericias_json.py
@@ -102,7 +104,7 @@ Os PDFs de referência estão sendo convertidos **um por vez** para garantir fid
 | `ref/Enchanced 01.pdf` | `dados/magias01.json` | Cap. 7 (Parte 1): regras gerais, 4 listas completas (`779` entradas / `379` únicas) e `220` descrições A–M | Concluído (`10.md`) |
 | `ref/Enchacent02.pdf` | `dados/magias02.json` | Cap. 7 (Parte 2): `159` descrições M–Z (`379/379` combinado), quadro Servo Invisível, `158` Magias de Foco, Regras/Tabelas de Rituais e `20` Rituais | Concluído (`11.md`) |
 | `ref/Compendium specific tools.pdf` | `dados/itens_magicos_tesouros.json` | Runas, materiais preciosos, itens alquímicos completos e tesouros | Pendente |
-| `ref/Sheet Update.pdf` | `dados/estrutura_ficha.json` | Mapeamento dos campos oficiais da ficha de jogador | Pendente |
+| `ref/Sheet Update.pdf` | `dados/estrutura_ficha.json` | Estrutura oficial das 4 páginas da ficha (`pp. 580–583`), legendas, fórmulas de cálculo, `18` linhas de perícia cruzadas com `pericias.json` e contrato `modelo_ficha_vazia` | Concluído (`12.md`) |
 
 ---
 
@@ -122,6 +124,7 @@ python scripts/gerar_arquetipos_multiclasse_json.py
 python scripts/gerar_talentos_json.py
 python scripts/gerar_magias_01_json.py
 python scripts/gerar_magias_02_json.py
+python scripts/gerar_estrutura_ficha_json.py
 ```
 
 Os scripts verificam todas as contagens das tabelas dos respectivos capítulos, unicidade de IDs e integridade estrutural dos dados.
