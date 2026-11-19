@@ -27,7 +27,8 @@ O sistema deve abranger desde a **matemática básica dos atributos (sistema ABC
     - `ref/Classes 03.pdf` → `dados/classes03.json`, `dados/companheiros_familiares.json` e `dados/arquetipos_multiclasse.json` — Classes (Parte 3: Ladino, Mago, Monge e Patrulheiro), Companheiros Animais/Familiares e Arquétipos Multiclasse
     - `ref/Skill sfots.pdf` — Perícias
     - `ref/Gifts.pdf` → `dados/talentos.json` — Talentos (Capítulo 5: Talentos Gerais e Talentos de Perícia)
-    - `ref/Enchacent.pdf` — Magias
+    - `ref/Enchanced 01.pdf` → `dados/magias01.json` — Magias (Parte 1: Regras Gerais, Listas Completas e Descrições A–M)
+    - `ref/Enchacent02.pdf` → `dados/magias02.json` — Magias (Parte 2: Descrições M–Z, Magias de Foco e complementos)
     - `ref/Compendium specific tools.pdf` — Itens Mágicos e Tesouros
     - `ref/Sheet Update.pdf` — Estrutura da Ficha de Personagem
 - **Scripts Auxiliares (`scripts/`):** Scripts Python de extração, normalização e validação dos arquivos JSON em `dados/`.

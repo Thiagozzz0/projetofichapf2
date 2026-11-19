@@ -26,8 +26,11 @@ Lista viva de todas as entregas e tarefas que ainda precisam ser realizadas até
   - Ações destreinadas e treinadas de cada perícia, graus de proficiência (Destreinado, Treinado, Especialista, Mestre, Lendário) e regras de Saber.
 - [x] **`ref/Gifts.pdf` → `dados/talentos.json`** *(Concluído em `18/11/2026 — 22:15` — ver [09.md](finalizado/09.md))*
   - Talentos Gerais e Talentos de Perícia (`117` talentos completos: `17` da Tabela 5–1 e `100` em `18` grupos da Tabela 5–2, com nível, pré-requisitos, traços, ações, resultados e efeitos).
-- [ ] **`ref/Enchacent.pdf` → `dados/magias.json`**
-  - Regras de conjuração, tradições mágicas (Arcana, Divina, Ocultista, Primal), listas de truques e magias por círculo, magias de foco e descrições completas.
+- **`ref/Enchanced 01.pdf` e `ref/Enchacent02.pdf` → `dados/magias01.json` e `dados/magias02.json`** *(divisão modular do Capítulo 7)*
+  - [x] **`ref/Enchanced 01.pdf` → `dados/magias01.json` (Parte 1)** *(Concluído em `18/11/2026 — 23:20` — ver [10.md](finalizado/10.md))*
+    - Regras gerais de conjuração (`pp. 297–306`), listas completas das 4 tradições (`Arcana`, `Divina`, `Ocultista`, `Primal` — `779` entradas / `379` únicas), `3` quadros auxiliares e `220` descrições completas de magias (`Abrandar` a `Melhorar Alimentos`, `pp. 316–358`).
+  - [ ] **`ref/Enchacent02.pdf` → `dados/magias02.json` (Parte 2)**
+    - Descrições completas restantes (`Mensageiro Animal` a `Zona da Verdade`), magias de foco e eventuais rituais presentes no recorte.
 - [ ] **`ref/Compendium specific tools.pdf` → `dados/itens_magicos_tesouros.json`**
   - Runas fundamentais e de propriedade, materiais preciosos, itens alquímicos completos, poções, pergaminhos, talismãs e itens mágicos permanentes.
 - [ ] **`ref/Sheet Update.pdf` → `dados/estrutura_ficha.json`**
