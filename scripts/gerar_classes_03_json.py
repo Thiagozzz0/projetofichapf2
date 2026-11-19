@@ -1,0 +1,3350 @@
+from __future__ import annotations
+
+import json
+import unicodedata
+from pathlib import Path
+from typing import Any
+
+
+RAIZ_PROJETO = Path(__file__).resolve().parent.parent
+CAMINHO_SAIDA = RAIZ_PROJETO / "dados" / "classes03.json"
+
+
+def slugify(texto: str) -> str:
+    normalizado = unicodedata.normalize("NFD", texto)
+    sem_acentos = "".join(ch for ch in normalizado if unicodedata.category(ch) != "Mn")
+    slug = []
+    anterior_sep = False
+    for ch in sem_acentos.lower():
+        if ch.isalnum():
+            slug.append(ch)
+            anterior_sep = False
+        elif not anterior_sep:
+            slug.append("_")
+            anterior_sep = True
+    return "".join(slug).strip("_")
+
+
+def construir_tabela_progressao(linhas: list[tuple[int, str]]) -> list[dict[str, Any]]:
+    resultado = []
+    for nivel, texto in linhas:
+        caracteristicas = [item.strip() for item in texto.split(",") if item.strip()]
+        resultado.append(
+            {
+                "nivel": nivel,
+                "caracteristicas": caracteristicas,
+                "texto_original": texto,
+            }
+        )
+    return resultado
+
+
+def construir_caracteristica_classe(
+    nome: str,
+    nivel: int,
+    descricao: str,
+    *,
+    acoes_concedidas: list[dict[str, Any]] | None = None,
+    detalhes: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    obj: dict[str, Any] = {
+        "id": slugify(nome),
+        "nome": nome,
+        "nivel": nivel,
+        "descricao": descricao,
+    }
+    if acoes_concedidas:
+        obj["acoes_concedidas"] = acoes_concedidas
+    if detalhes:
+        obj["detalhes"] = detalhes
+    return obj
+
+
+def construir_acao_habilidade(
+    nome: str,
+    acoes: str,
+    tracos: list[str],
+    descricao: str,
+    *,
+    frequencia: str | None = None,
+    acionamento: str | None = None,
+    requerimentos: str | None = None,
+    custo: str | None = None,
+    resultados: dict[str, str] | None = None,
+) -> dict[str, Any]:
+    return {
+        "id": slugify(nome),
+        "nome": nome,
+        "acoes": acoes,
+        "tracos": tracos,
+        "frequencia": frequencia,
+        "acionamento": acionamento,
+        "requerimentos": requerimentos,
+        "custo": custo,
+        "descricao": descricao,
+        "resultados": resultados,
+    }
+
+
+def construir_talento_classe(
+    nome: str,
+    nivel: int,
+    tracos: list[str],
+    descricao: str,
+    *,
+    acoes: str | None = None,
+    pre_requisitos: str | None = None,
+    frequencia: str | None = None,
+    acionamento: str | None = None,
+    requerimentos: str | None = None,
+    custo: str | None = None,
+    especial: str | None = None,
+    resultados: dict[str, str] | None = None,
+) -> dict[str, Any]:
+    return {
+        "id": slugify(nome),
+        "nome": nome,
+        "nivel": nivel,
+        "tracos": tracos,
+        "acoes": acoes,
+        "pre_requisitos": pre_requisitos,
+        "frequencia": frequencia,
+        "acionamento": acionamento,
+        "requerimentos": requerimentos,
+        "custo": custo,
+        "especial": especial,
+        "resultados": resultados,
+        "descricao": descricao,
+    }
+
+
+def construir_tabela_magias_3_por_dia(nota_10_nivel: str) -> list[dict[str, Any]]:
+    espacos_base = {
+        1: {"1": 2},
+        2: {"1": 3},
+        3: {"1": 3, "2": 2},
+        4: {"1": 3, "2": 3},
+        5: {"1": 3, "2": 3, "3": 2},
+        6: {"1": 3, "2": 3, "3": 3},
+        7: {"1": 3, "2": 3, "3": 3, "4": 2},
+        8: {"1": 3, "2": 3, "3": 3, "4": 3},
+        9: {"1": 3, "2": 3, "3": 3, "4": 3, "5": 2},
+        10: {"1": 3, "2": 3, "3": 3, "4": 3, "5": 3},
+        11: {"1": 3, "2": 3, "3": 3, "4": 3, "5": 3, "6": 2},
+        12: {"1": 3, "2": 3, "3": 3, "4": 3, "5": 3, "6": 3},
+        13: {"1": 3, "2": 3, "3": 3, "4": 3, "5": 3, "6": 3, "7": 2},
+        14: {"1": 3, "2": 3, "3": 3, "4": 3, "5": 3, "6": 3, "7": 3},
+        15: {"1": 3, "2": 3, "3": 3, "4": 3, "5": 3, "6": 3, "7": 3, "8": 2},
+        16: {"1": 3, "2": 3, "3": 3, "4": 3, "5": 3, "6": 3, "7": 3, "8": 3},
+        17: {"1": 3, "2": 3, "3": 3, "4": 3, "5": 3, "6": 3, "7": 3, "8": 3, "9": 2},
+        18: {"1": 3, "2": 3, "3": 3, "4": 3, "5": 3, "6": 3, "7": 3, "8": 3, "9": 3},
+        19: {"1": 3, "2": 3, "3": 3, "4": 3, "5": 3, "6": 3, "7": 3, "8": 3, "9": 3, "10": 1},
+        20: {"1": 3, "2": 3, "3": 3, "4": 3, "5": 3, "6": 3, "7": 3, "8": 3, "9": 3, "10": 1},
+    }
+    tabela: list[dict[str, Any]] = []
+    for nivel in range(1, 21):
+        tabela.append(
+            {
+                "nivel": nivel,
+                "truques_magicos": 5,
+                "espacos_por_circulo": espacos_base[nivel],
+                "nota_10_nivel": nota_10_nivel if nivel >= 19 else None,
+            }
+        )
+    return tabela
+
+
+def construir_ladino() -> dict[str, Any]:
+    tabela_progressao = construir_tabela_progressao(
+        [
+            (1, "Ancestralidade e biografia, ataque furtivo 1d6, ataque surpresa, esquema de ladino, proficiências iniciais, talento de ladino, talento de perícia"),
+            (2, "Incremento de perícia, talento de ladino, talento de perícia"),
+            (3, "Incremento de perícia, negar vantagem, talento geral, talento de perícia"),
+            (4, "Incremento de perícia, talento de ladino, talento de perícia"),
+            (5, "Ataque furtivo 2d6, incremento de perícia, melhorias de atributo, talento de ancestralidade, talento de perícia, truques com armas"),
+            (6, "Incremento de perícia, talento de ladino, talento de perícia"),
+            (7, "Especialização em armas, evasão, incremento de perícia, sentidos vigilantes, talento geral, talento de perícia"),
+            (8, "Incremento de perícia, talento de ladino, talento de perícia"),
+            (9, "Golpe debilitante, grande fortitude, incremento de perícia, talento de ancestralidade, talento de perícia"),
+            (10, "Incremento de perícia, melhorias de atributo, talento de ladino, talento de perícia"),
+            (11, "Ataque furtivo 3d6, especialidade de ladino, incremento de perícia, talento geral, talento de perícia"),
+            (12, "Incremento de perícia, talento de ladino, talento de perícia"),
+            (13, "Especialidade em armaduras leves, evasão aprimorada, incremento de perícia, sentidos incríveis, talento de ancestralidade, talento de perícia, truques de mestre"),
+            (14, "Incremento de perícia, talento de ladino, talento de perícia"),
+            (15, "Debilitação dupla, especialização em armas maior, incremento de perícia, melhorias de atributo, talento geral, talento de perícia"),
+            (16, "Incremento de perícia, talento de ladino, talento de perícia"),
+            (17, "Ataque furtivo 4d6, incremento de perícia, mente escorregadia, talento de ancestralidade, talento de perícia"),
+            (18, "Incremento de perícia, talento de ladino, talento de perícia"),
+            (19, "Golpe de mestre, incremento de perícia, maestria em armaduras leves, talento geral, talento de perícia"),
+            (20, "Incremento de perícia, melhorias de atributo, talento de ladino, talento de perícia"),
+        ]
+    )
+
+    esquemas = [
+        {
+            "id": "ladrao",
+            "nome": "Ladrão",
+            "pericia_treinada": ["Ladroagem"],
+            "atributo_chave_alternativo": None,
+            "descricao": "Nada supera a emoção de tomar algo que pertence a outra pessoa, especialmente se você conseguir passar completamente despercebido. Você pode ser um batedor de carteiras trabalhando nas ruas, um ladrão sorrateiro se esgueirando por janelas e fugindo por cima de telhados ou um arrombador saqueando cofres muito bem guardados. Você pode até mesmo trabalhar como um consultor, simulando roubos para testar as defesas dos objetos valiosos de clientes. Quando uma luta começa, você prefere armas rápidas e leves, golpeando onde causará mais dor. Quando atacar com uma arma corpo a corpo de acuidade, você pode adicionar seu modificador de Destreza em rolagens de dano em vez de seu modificador de Força. Você é treinado em Ladroagem.",
+            "beneficio_mecanico": "Adiciona modificador de Destreza em rolagens de dano com armas corpo a corpo de acuidade em vez de Força.",
+        },
+        {
+            "id": "malandro",
+            "nome": "Malandro",
+            "pericia_treinada": ["Diplomacia", "Dissimulação"],
+            "atributo_chave_alternativo": "carisma",
+            "descricao": "Você usa fala rápida, lisonjeio e uma língua de prata para evitar o perigo e escapar de situações ardilosas. Você pode ser um vigarista ou um trapaceiro, viajando de lugar em lugar com uma nova história ou esquema. Seu esquema também é ideal para certas profissões respeitáveis, como advogado, diplomata ou político. Quando obtiver sucesso em Fintar (página 245), o alvo fica desprevenido contra ataques corpo a corpo que você realizar contra ele até o final de seu próximo turno. Em um sucesso crítico, o alvo fica desprevenido contra todos os ataques corpo a corpo (não apenas contra os seus) até o final de seu próximo turno. Você é treinado em Diplomacia e Dissimulação. Você pode escolher Carisma como seu atributo chave.",
+            "beneficio_mecanico": "Sucesso em Fintar deixa alvo desprevenido contra seus ataques corpo a corpo até o final do próximo turno; sucesso crítico deixa contra todos os ataques corpo a corpo. Pode escolher Carisma como atributo chave.",
+        },
+        {
+            "id": "rufiao",
+            "nome": "Rufião",
+            "pericia_treinada": ["Intimidação"],
+            "armaduras_adicionais": ["armaduras_medias"],
+            "atributo_chave_alternativo": "forca",
+            "descricao": "Você prefere usar de força ou intimidação em vez de recorrer à sutileza ou truques extravagantes. Você pode ser um capanga do crime organizado, um bandido de estrada ou um nobre que coage os outros com ameaças usando o poder de sua família. Ou então você pode usar suas perícias de forma honesta servindo em segurança privada ou como guarda em uma cidade com o temperamento certo. Você usa todas as ferramentas que tiver em mãos para completar o trabalho. Você pode causar dano de ataque furtivo com qualquer arma simples, além das armas listadas na característica de classe ataque furtivo. Quando obtiver um sucesso crítico em uma rolagem de ataque usando uma arma simples e o alvo tiver a condição desprevenido (incapaz de focar em se defender), você também aplica o efeito de especialização de crítico para a arma que estiver empunhando (página 283). Você não recebe estes benefícios se a arma possuir um dado de dano maior que d8 (após aplicar quaisquer habilidades que alterem o tamanho do dado de dano dela). Você é treinado em Intimidação e em armaduras médias. Você pode escolher Força como seu atributo chave. Quando receber especialidade em armaduras leves, você também recebe graduação de proficiência de especialista em armaduras médias, e quando receber maestria em armaduras leves, também recebe graduação de proficiência de mestre em armaduras médias.",
+            "beneficio_mecanico": "Ataque furtivo e especialização de crítico em acertos críticos contra alvos desprevenidos com qualquer arma simples de dado de dano até d8. Proficiência e escalonamento em armaduras médias junto com armaduras leves. Pode escolher Força como atributo chave.",
+        },
+    ]
+
+    acao_golpe_debilitante = construir_acao_habilidade(
+        "Golpe Debilitante",
+        "livre",
+        ["Ladino"],
+        "Você aplica uma das debilitações a seguir, que dura até o final de seu próximo turno.\n• Debilitação O alvo sofre –3 metros de penalidade de estado em suas Velocidades.\n• Debilitação O alvo fica enfraquecido 1.",
+        acionamento="Seu Golpe acerta uma criatura desprevenida e causa dano.",
+    )
+
+    acao_golpe_de_mestre = construir_acao_habilidade(
+        "Golpe de Mestre",
+        "livre",
+        ["Ladino"],
+        "O alvo tenta um salvamento de Fortitude contra sua CD de classe. Após isso ele fica temporariamente imune a seu Golpe de Mestre por 1 dia.",
+        acionamento="Seu Golpe acerta uma criatura desprevenida e causa dano.",
+        resultados={
+            "sucesso_critico": "O alvo não é afetado.",
+            "sucesso": "O alvo fica enfraquecido 2 até o final do próximo turno do ladino.",
+            "falha": "O alvo fica paralisado por 4 rodadas.",
+            "falha_critica": "Você escolhe se o alvo fica paralisado por 4 rodadas, inconsciente por 2 horas, ou morre imediatamente.",
+        },
+    )
+
+    caracteristicas = [
+        construir_caracteristica_classe(
+            "Ancestralidade e Biografia",
+            1,
+            "Além das habilidades fornecidas por sua classe no 1º nível, você possui os benefícios da ancestralidade e biografia selecionadas, conforme descrito no Capítulo 2.",
+        ),
+        construir_caracteristica_classe(
+            "Proficiências Iniciais",
+            1,
+            "No 1º nível, você recebe proficiências que representam seu treinamento básico. Estas proficiências são listadas no início desta classe.",
+        ),
+        construir_caracteristica_classe(
+            "Esquema de Ladino",
+            1,
+            "Quando começou a trilhar o caminho do ladino, você desenvolveu seu próprio estilo para realizar suas atividades ilícitas. Seu tipo de esquema molda suas técnicas de ladino e sua maneira de abordar suas empreitadas ao mesmo tempo em que constrói sua reputação no submundo do crime como competente em um determinado tipo de trabalho. Escolha um dos esquemas de ladino apresentados (Ladrão, Malandro ou Rufião).",
+            detalhes={"esquemas": ["ladrao", "malandro", "rufiao"]},
+        ),
+        construir_caracteristica_classe(
+            "Ataque Furtivo",
+            1,
+            "Quando seu inimigo não pode se defender apropriadamente, você tira vantagem para causar dano extra. Quando usar uma arma corpo a corpo ágil ou de acuidade, uma arma à distância, ou um ataque desarmado ágil ou de acuidade para Golpear uma criatura que tenha a condição desprevenida (página 619), você causa 1d6 de dano extra de precisão. Você também pode fazer isso com um ataque à distância usando uma arma de arremesso, mas essa arma deve ser ágil ou de acuidade. Conforme seu nível de ladino aumenta, a quantidade de dados de dano de seu ataque furtivo também aumenta. Aumente a quantidade de dados de dano em um no 5º, 11º e 17º níveis.",
+            detalhes={"progressao_dados": {"1": "1d6", "5": "2d6", "11": "3d6", "17": "4d6"}},
+        ),
+        construir_caracteristica_classe(
+            "Ataque Surpresa",
+            1,
+            "Você entra em combate antes que seus adversários sejam capazes de reagir. Na primeira rodada do combate, se você rolar Dissimulação ou Furtividade para iniciativa, criaturas que ainda não tiverem agido ficam desprevenidas contra você.",
+        ),
+        construir_caracteristica_classe(
+            "Talentos de Ladino",
+            1,
+            "No 1º nível e a cada nível par subsequente, você recebe um talento de classe de ladino. Os talentos de classe de ladino são descritos a partir da página 171.",
+        ),
+        construir_caracteristica_classe(
+            "Talentos de Perícia",
+            1,
+            "Você recebe talentos de perícia com maior frequência do que os outros. No 1º nível e a cada nível subsequente, você recebe um talento de perícia. Talentos de perícia podem ser encontrados no Capítulo 5 e possuem o traço perícia. Você deve possuir uma graduação de proficiência treinado ou melhor na perícia correspondente para selecionar um talento de perícia.",
+        ),
+        construir_caracteristica_classe(
+            "Incrementos de Perícia",
+            2,
+            "Você recebe mais incrementos de perícia do que membros de outras classes. No 2º nível e a cada nível subsequente, você recebe um incremento de perícia. Você pode usar este incremento para aumentar sua graduação de proficiência para treinado em uma perícia na qual seja destreinado ou para aumentar sua graduação de proficiência para especialista em uma perícia na qual já seja treinado. No 7º nível, você pode usar incrementos de perícia para aumentar sua graduação de proficiência para mestre em uma perícia na qual já seja especialista e, no 15º nível, você pode usar incrementos de perícia para aumentar sua graduação de proficiência para lendário em uma perícia na qual já seja mestre.",
+        ),
+        construir_caracteristica_classe(
+            "Negar Vantagem",
+            3,
+            "Como alguém que tira vantagem das defesas dos outros, você toma cuidado para não deixar que eles explorem quaisquer brechas em sua guarda. Você não fica desprevenido para criaturas do seu nível ou inferior que estejam escondidas, indetectadas, flanqueando-lhe ou usando um ataque surpresa. Entretanto, elas ainda podem ajudar criaturas aliadas a flanqueá-lo.",
+        ),
+        construir_caracteristica_classe(
+            "Talentos Gerais",
+            3,
+            "No 3º nível e a cada 4 níveis subsequentes, você recebe um talento geral. Talentos gerais são listados no Capítulo 5.",
+        ),
+        construir_caracteristica_classe(
+            "Melhorias de Atributo",
+            5,
+            "No 5º nível e a cada 5 níveis subsequentes, você melhora os valores de quatro atributos diferentes. Você pode usar estas melhorias de atributo para aumentar seus valores de atributo acima de 18 pontos. Incrementar um valor de atributo aumenta seu valor em 1 ponto se ele já for 18 ou maior, ou em 2 pontos se ele for menor que 18.",
+        ),
+        construir_caracteristica_classe(
+            "Talentos de Ancestralidade",
+            5,
+            "Além do talento de ancestralidade recebido na criação do personagem, você recebe um talento de ancestralidade no 5º nível e a cada 4 níveis subsequentes. A lista de talentos de ancestralidade disponíveis para você pode ser encontrada na seção de sua ancestralidade no Capítulo 2.",
+        ),
+        construir_caracteristica_classe(
+            "Truques com Armas",
+            5,
+            "Você se familiarizou completamente com as armas de suas atividades. Suas graduações de proficiência em armas simples, arco curto, espada curta, porrete, rapieira e ataques desarmados aumentam para especialista. Quando obtiver um sucesso crítico em uma rolagem de ataque contra uma criatura desprevenida usando uma dessas armas que seja ágil ou de acuidade, você aplica o efeito de especialização de crítico da arma que estiver empunhando.",
+        ),
+        construir_caracteristica_classe(
+            "Evasão",
+            7,
+            "Você aprendeu a se mover rapidamente para evitar explosões, sopros de dragões e coisas ainda piores. Sua graduação de proficiência em salvamentos de Reflexos aumenta para mestre. Quando rolar um sucesso em um salvamento de Reflexos, trate o resultado como um sucesso crítico.",
+        ),
+        construir_caracteristica_classe(
+            "Especialização em Armas",
+            7,
+            "Você aprendeu a infligir ferimentos graves com suas armas favoritas. Você causa 2 pontos de dano adicionais com armas e ataques desarmados nos quais é especialista. Este dano aumenta para 3 se você for mestre e para 4 se você for lendário.",
+        ),
+        construir_caracteristica_classe(
+            "Sentidos Vigilantes",
+            7,
+            "Durante suas aventuras, você desenvolveu um estado de alerta aguçado e uma maior atenção a detalhes. Sua graduação de proficiência em Percepção aumenta para mestre.",
+        ),
+        construir_caracteristica_classe(
+            "Golpe Debilitante",
+            9,
+            "Você consegue tirar vantagem de uma brecha na defesa de seu adversário para feri-lo e impedi-lo ao mesmo tempo. Você ganha a ação livre Golpe Debilitante.",
+            acoes_concedidas=[acao_golpe_debilitante],
+        ),
+        construir_caracteristica_classe(
+            "Grande Fortitude",
+            9,
+            "Seu físico se torna incrivelmente resistente. Sua graduação de proficiência em salvamentos de Fortitude aumenta para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Especialidade de Ladino",
+            11,
+            "Agora suas técnicas são mais difíceis de resistir. Sua graduação de proficiência em sua CD de classe de ladino aumenta para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Especialidade em Armaduras Leves",
+            13,
+            "Você aprendeu a se esquivar enquanto veste uma armadura leve ou nenhuma armadura. Suas graduações de proficiência em armaduras leves e defesa sem armadura aumentam para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Evasão Aprimorada",
+            13,
+            "Você se esquiva do perigo de uma forma inigualável. Sua graduação de proficiência em salvamentos de Reflexos aumenta para lendário. Quando rolar uma falha crítica em um salvamento de Reflexos, trate o resultado como uma falha. Quando rolar uma falha em um salvamento de Reflexos contra um efeito que causa dano, divida o dano sofrido pela metade.",
+        ),
+        construir_caracteristica_classe(
+            "Sentidos Incríveis",
+            13,
+            "Você percebe coisas que seriam quase impossíveis para uma pessoa ordinária detectar. Sua graduação de proficiência em Percepção aumenta para lendário.",
+        ),
+        construir_caracteristica_classe(
+            "Truques de Mestre",
+            13,
+            "Você dominou os movimentos de luta de um ladino. Suas graduações de proficiência em armas simples, arco curto, espada curta, porrete, rapieira e ataques desarmados aumentam para mestre.",
+        ),
+        construir_caracteristica_classe(
+            "Debilitação Dupla",
+            15,
+            "Seus ataques oportunistas são particularmente prejudiciais. Quando usar Golpe Debilitante, você pode aplicar duas debilitações simultaneamente; remover uma delas remove ambas.",
+        ),
+        construir_caracteristica_classe(
+            "Especialização em Armas Maior",
+            15,
+            "Seu dano de especialização em armas aumenta para 4 pontos com armas e ataques desarmados nos quais é especialista, para 6 pontos de dano nos quais é mestre e para 8 pontos de dano nos quais é lendário.",
+        ),
+        construir_caracteristica_classe(
+            "Mente Escorregadia",
+            17,
+            "Você faz jogos mentais e emprega truques cognitivos para se livrar de efeitos que afetem sua mente. Sua graduação de proficiência em salvamentos de Vontade aumenta para mestre. Quando rolar um sucesso em um salvamento de Vontade, trate o resultado como um sucesso crítico.",
+        ),
+        construir_caracteristica_classe(
+            "Golpe de Mestre",
+            19,
+            "Você pode incapacitar um adversário incauto com um único golpe. Sua graduação de proficiência em sua CD de classe de ladino aumenta para mestre. Você ganha a ação livre Golpe de Mestre.",
+            acoes_concedidas=[acao_golpe_de_mestre],
+        ),
+        construir_caracteristica_classe(
+            "Maestria em Armaduras Leves",
+            19,
+            "Sua competência com armaduras leves se aprimora, aumentando sua habilidade de esquivar-se de golpes. Suas graduações de proficiência em armaduras leves e defesa sem armadura aumentam para mestre.",
+        ),
+    ]
+
+    talentos = [
+        # 1º nível
+        construir_talento_classe(
+            "Descobridor de Armadilha",
+            1,
+            ["Ladino"],
+            "Você possui um sentido intuitivo que o alerta sobre a presença de armadilhas. Você recebe +1 de bônus de circunstância em testes de Percepção para encontrar armadilhas, na CA contra ataques feitos por elas e em salvamentos contra seus efeitos. Mesmo que não esteja Procurando, você faz um teste para encontrar armadilhas que normalmente exigiriam essa atividade. Você ainda precisa atender a quaisquer outros requerimentos para encontrar a armadilha. Você pode desativar armadilhas que requeiram graduação de proficiência mestre em Ladroagem. Se possuir graduação mestre em Ladroagem, você pode desativar armadilhas que requeiram graduação de proficiência lendária, e seu bônus de circunstância contra armadilhas aumenta para +2.",
+        ),
+        construir_talento_classe(
+            "Esquiva Ágil",
+            1,
+            ["Ladino"],
+            "Você se esquiva habilmente de um golpe, recebendo +2 de bônus de circunstância na CA contra o ataque acionador.",
+            acoes="reacao",
+            acionamento="Uma criatura mira você com um ataque e você consegue vê-la.",
+            requerimentos="Você não está sobrecarregado.",
+        ),
+        construir_talento_classe(
+            "Finta Dupla",
+            1,
+            ["Ladino"],
+            "Você faz uma série de ataques deslumbrantes com suas duas armas, usando o primeiro ataque para baixar a guarda de seu adversário contra um segundo ataque vindo de um ângulo diferente. Faça um Golpe com cada uma de suas armas corpo a corpo contra o mesmo alvo. O alvo fica automaticamente desprevenido contra o segundo ataque. Aplique sua penalidade por ataques múltiplos normalmente a estes Golpes.",
+            acoes="2",
+            requerimentos="Você está empunhando duas armas, uma em cada mão.",
+        ),
+        construir_talento_classe(
+            "Você É o Próximo",
+            1,
+            ["Emoção", "Ladino", "Medo", "Mental"],
+            "Após abater um adversário, você ameaçadoramente anuncia que está indo atrás de outro. Faça um teste de Intimidação com +2 de bônus de circunstância para Desmoralizar uma única criatura (você precisa enxergá-la e vice-versa). Se possuir proficiência lendário em Intimidação, você pode usar este talento como uma ação livre com o mesmo acionamento.",
+            acoes="reacao",
+            pre_requisitos="treinado em Intimidação",
+            requerimentos="Você reduz um inimigo a 0 Pontos de Vida.",
+        ),
+        # 2º nível
+        construir_talento_classe(
+            "Finta de Distração",
+            2,
+            ["Ladino"],
+            "Suas Fintas distraem enormemente seus adversários, permitindo que você e seus aliados se aproveitem da falta de atenção deles. Enquanto uma criatura estiver desprevenida por sua Finta, ela também sofre –2 de penalidade de circunstância em testes de Percepção e salvamentos de Reflexos.",
+            pre_requisitos="esquema de malandro",
+        ),
+        construir_talento_classe(
+            "Golpe Desequilibrante",
+            2,
+            ["Ladino"],
+            "Entrelaçando seus ataques mais poderosos em um ritmo gracioso, você desequilibra seus adversários temporariamente. Sempre que seu Golpe for um acerto crítico e causar dano, o alvo fica desprevenido contra seus ataques até o final de seu próximo turno.",
+            pre_requisitos="esquema de ladrão",
+        ),
+        construir_talento_classe(
+            "Mágica Menor",
+            2,
+            ["Ladino"],
+            "Você se arriscou com uma grande variedade de truques, obtendo habilidades mágicas menores de uma tradição em particular. Escolha magia arcana, divina, ocultista ou primal e receba dois truques mágicos comuns disponíveis para essa tradição. Você se torna treinado em ataques de magia e CDs de magias dessa tradição. Seu atributo de conjuração é Carisma.",
+        ),
+        construir_talento_classe(
+            "Mobilidade",
+            2,
+            ["Ladino"],
+            "Você se move agilmente, negando a seus inimigos a oportunidade de retaliar. Quando fizer a ação Andar para se mover metade de sua Velocidade ou menos, esse movimento não aciona reações. Você pode usar Mobilidade ao Escalar, Nadar ou Voar em vez de Andar se possuir o tipo de movimento correspondente.",
+        ),
+        construir_talento_classe(
+            "Saque Rápido",
+            2,
+            ["Ladino"],
+            "Você saca sua arma e ataca com o mesmo movimento. Você Interage para sacar uma arma, e depois Golpeia com ela.",
+            acoes="1",
+        ),
+        construir_talento_classe(
+            "Surra Brutal",
+            2,
+            ["Ladino"],
+            "A brutalidade de seus acertos críticos abala a confiança de seus adversários. Sempre que seu Golpe for um acerto crítico e causar dano, o alvo fica assustado 1.",
+            pre_requisitos="esquema de rufião",
+        ),
+        # 4º nível
+        construir_talento_classe(
+            "Avaliação de Batalha",
+            4,
+            ["Ladino", "Secreto"],
+            "Através de uma cuidadosa observação durante a batalha, você identifica as forças e fraquezas de um inimigo. O MJ rola um teste secreto de Percepção contra a CD de Dissimulação ou Furtividade (o que for maior) de um inimigo à sua escolha que esteja engajado em combate e não está ocultado, escondido ou indetectado por você. O MJ pode aplicar uma penalidade pela distância entre você e o inimigo. Após isso, o inimigo fica temporariamente imune à sua Avaliação de Batalha por 1 dia.",
+            acoes="1",
+            resultados={
+                "sucesso_critico": "O MJ escolhe e revela para você duas informações sobre o inimigo: a maior fraqueza, o salvamento que possui o menor modificador, uma imunidade ou a maior resistência que ele possuir. Se houver um empate entre estatísticas, o MJ deve selecionar uma delas aleatoriamente.",
+                "sucesso": "O MJ escolhe uma informação da lista acima para lhe revelar sobre o inimigo.",
+                "falha_critica": "O MJ lhe transmite uma informação falsa (ele deve inventar a informação).",
+            },
+        ),
+        construir_talento_classe(
+            "Aviso do Batedor",
+            4,
+            ["Ladino"],
+            "Você avisa seus aliados do perigo de forma visível ou audível, concedendo a cada um deles +1 de bônus de circunstância em suas rolagens de iniciativa. Dependendo se você fala ou usa gestos, esta ação adquire respectivamente o traço auditivo ou visual.",
+            acoes="livre",
+            acionamento="Você está prestes a rolar um teste de Percepção ou Sobrevivência para iniciativa.",
+        ),
+        construir_talento_classe(
+            "Envenenar Arma",
+            4,
+            ["Ladino", "Manuseio"],
+            "Você aplica um veneno à arma requerida; se não estiver segurando um veneno mas tiver uma mão livre, você pode Interagir para pegar um veneno como parte desta ação. Se seu próximo ataque com essa arma antes de seu próximo turno acertar e causar dano, aplique os efeitos do veneno (desde que esse veneno possa ser transmitido por contato ou ferimento). Se você falhar criticamente na rolagem de ataque, o veneno é desperdiçado normalmente.",
+            acoes="1",
+            requerimentos="Você está empunhando uma arma cortante ou perfurante.",
+            especial="Durante suas preparações diárias, você pode preparar uma quantidade de venenos de ferimento simples igual ao seu nível de ladino. Estes venenos causam 1d4 de dano de veneno. Somente você pode aplicar estes venenos apropriadamente, e eles expiram na próxima vez que você fizer suas preparações.",
+        ),
+        construir_talento_classe(
+            "Golpeador Pavoroso",
+            4,
+            ["Ladino"],
+            "Você tira vantagem do medo de seus inimigos para superar suas defesas. Qualquer criatura que estiver sofrendo a condição assustado também fica desprevenida contra seus ataques.",
+        ),
+        construir_talento_classe(
+            "Perseguição Reativa",
+            4,
+            ["Ladino"],
+            "Você se mantém próximo de um adversário em retirada. Você Anda e deve encerrar seu movimento adjacente ao inimigo acionador. Seu movimento não aciona reações do inimigo acionador. Você pode usar Perseguição Reativa ao Escalar, Escavar, Nadar ou Voar em vez de Andar se possuir o tipo de movimento correspondente.",
+            acoes="reacao",
+            acionamento="Um adversário adjacente se move para longe de você, e você pode alcançar pelo menos um espaço adjacente ao adversário com uma ação de Andar.",
+        ),
+        construir_talento_classe(
+            "Sabotagem",
+            4,
+            ["Incapacitação", "Ladino"],
+            "Você danifica sutilmente os equipamentos dos outros. Escolha um item que uma criatura em seu alcance segura ou carrega. O item deve ter partes móveis que você poderia sabotar razoavelmente (um arco curto poderia ser sabotado, mas não uma espada longa). Faça um teste de Ladroagem contra a CD de Reflexos da criatura. O dano causado por Sabotagem não pode levar o item abaixo de seu Limiar de Quebra.",
+            acoes="1",
+            requerimentos="Você tem uma mão livre.",
+            resultados={
+                "sucesso_critico": "Você causa dano igual a quatro vezes seu bônus de proficiência em Ladroagem.",
+                "sucesso": "Você causa dano igual ao dobro seu bônus de proficiência em Ladroagem.",
+                "falha_critica": "Temporariamente imune à sua Sabotagem por 1 dia.",
+            },
+        ),
+        construir_talento_classe(
+            "Trapaceiro Mágico",
+            4,
+            ["Ladino"],
+            "Seja usando itens mágicos, expressando sua magia inata ou experimentando com conjurações, você consegue ultrapassar as defesas de seus adversários com magias tão facilmente quanto com qualquer lâmina. Quando obtiver sucesso em uma rolagem de ataque de magia contra a CA de um adversário desprevenido e causar dano com essa magia, você pode adicionar o dano de seu ataque furtivo na rolagem de dano. Se uma única magia sua gerar múltiplas rolagens de dano separadas, aplique seu dano de ataque furtivo somente uma vez por alvo.",
+        ),
+        # 6º nível
+        construir_talento_classe(
+            "Bandear",
+            6,
+            ["Ladino"],
+            "Você e seus aliados acossam um oponente em conjunto. Um inimigo fica desprevenido contra seus ataques corpo a corpo devido ao flanqueamento desde que ele esteja dentro do alcance seu e de seu aliado. Seus aliados ainda devem flanquear um inimigo para que ele seja considerado desprevenido para eles.",
+        ),
+        construir_talento_classe(
+            "Golpe Escaramuçador",
+            6,
+            ["Floreio", "Ladino"],
+            "Você move seus pés e arma em sintonia. Dê um Passo e Golpeie, ou Golpeie e Dê um Passo.",
+            acoes="1",
+        ),
+        construir_talento_classe(
+            "Passo Leve",
+            6,
+            ["Ladino"],
+            "Você não se deixa restringir por obstáculos ou terrenos irregulares. Quando Andar ou Der um Passo, você pode ignorar terreno difícil.",
+        ),
+        construir_talento_classe(
+            "Torcer a Faca",
+            6,
+            ["Ladino"],
+            "Após atingir seu oponente em um ponto fraco, você dilacera o ferimento aberto. Você causa dano persistente de sangramento ao alvo igual à quantidade de dados de dano de seu ataque furtivo.",
+            acoes="1",
+            requerimentos="Sua última ação foi um Golpe corpo a corpo que causou dano de ataque furtivo a um alvo desprevenido.",
+        ),
+        # 8º nível
+        construir_talento_classe(
+            "Adiar Armadilha",
+            8,
+            ["Ladino"],
+            "Você pode emperrar os mecanismos de uma armadilha para adiar seus efeitos. Faça um teste de Ladroagem para Desabilitar um Dispositivo da armadilha; a CD para fazê-lo é aumentada em 5 pontos e os efeitos são descritos abaixo.",
+            acoes="reacao",
+            acionamento="Uma armadilha em seu alcance é acionada.",
+            resultados={
+                "sucesso_critico": "Você impede a armadilha de ser acionada ou adia a ativação dela até o início ou final de seu próximo turno (à sua escolha).",
+                "sucesso": "Você impede a armadilha de ser acionada ou adia a ativação dela até o início ou final de seu próximo turno (o que for pior para você; à escolha do MJ).",
+                "falha": "Nenhum efeito.",
+                "falha_critica": "Você fica desprevenido até o início de seu próximo turno.",
+            },
+        ),
+        construir_talento_classe(
+            "Apunhalada Oportuna",
+            8,
+            ["Ladino"],
+            "Quando seu inimigo for atingido por seu aliado, você se aproveita da distração. Faça um Golpe contra a criatura acionadora.",
+            acoes="reacao",
+            acionamento="Uma criatura em seu alcance é atingida por um ataque corpo a corpo de um de seus aliados.",
+        ),
+        construir_talento_classe(
+            "Cambalhota Ágil",
+            8,
+            ["Ladino"],
+            "Você se lança em uma cambalhota para escapar do perigo iminente. Você pode usar Esquiva Ágil antes de tentar um salvamento de Reflexos (além de seu método de acionamento original). Se o fizer, o bônus de circunstância se aplica a seus salvamentos de Reflexos contra o efeito acionador. Quando usar Esquiva Ágil e o ataque acionador falhar ou falhar criticamente, ou quando obtiver sucesso ou um sucesso crítico na jogada de salvamento, você também pode Andar até 3 metros como parte da reação. Se o fizer, a reação adquire o traço movimento. Você pode usar Cambalhota Ágil ao Nadar ou Voar em vez de Andar se possuir o tipo de movimento correspondente.",
+            pre_requisitos="Esquiva Ágil",
+        ),
+        construir_talento_classe(
+            "Envenenar Arma Aprimorado",
+            8,
+            ["Ladino"],
+            "Você envenena seus inimigos de uma forma que maximiza seus efeitos nocivos. Quando você aplicar um veneno simples com Envenenar Arma, o veneno causa 2d4 de dano de veneno (em vez de somente 1d4 de dano de veneno). Você não desperdiça um veneno que aplicar com Envenenar Arma em uma falha crítica na rolagem de ataque.",
+            pre_requisitos="Envenenar Arma",
+        ),
+        construir_talento_classe(
+            "Golpeador Astuto",
+            8,
+            ["Ladino"],
+            "Seus ataques causam mais dano, mesmo contra criaturas que não estejam desprevenidas. Quando obtiver sucesso ou um sucesso crítico em um Golpe contra uma criatura que não esteja desprevenida, você também causa 1d6 de dano de precisão. Este benefício só se aplica se você estiver usando uma arma com a qual poderia causar dano de ataque furtivo. No 14º nível, se normalmente causaria 3d6 ou mais de dano de ataque furtivo, você causa 2d6 de dano de precisão a criaturas que não estejam desprevenidas.",
+            pre_requisitos="ataque furtivo",
+        ),
+        construir_talento_classe(
+            "Lutar às Cegas",
+            8,
+            ["Ladino"],
+            "Seus instintos de batalha lhe tornam ainda mais alerta a oponentes ocultados e invisíveis. Você não precisa obter sucesso em um teste simples para mirar criaturas ocultadas. Você não fica desprevenido contra criaturas que estejam escondidas de você (a menos que esteja desprevenido contra elas por outras razões além da condição escondido). Além disso, você precisa obter sucesso somente em um teste simples CD 5 para mirar uma criatura escondida. Enquanto estiver adjacente a uma criatura indetectada de seu nível ou inferior, você a considera somente escondida.",
+            pre_requisitos="mestre em Percepção",
+        ),
+        construir_talento_classe(
+            "Passo Lateral",
+            8,
+            ["Ladino"],
+            "Você dá um passo rápido para se esquivar de um ataque, permitindo que o golpe continue na direção de outra criatura próxima. Você redireciona o ataque a uma criatura à sua escolha que esteja adjacente a você e dentro do alcance do ataque acionador. O atacante rerrola a rolagem de ataque do Golpe contra o novo alvo.",
+            acoes="reacao",
+            acionamento="A rolagem de ataque de um Golpe mirando você falha ou falha criticamente.",
+        ),
+        # 10º nível
+        construir_talento_classe(
+            "Debilitações Precisas",
+            10,
+            ["Ladino"],
+            "Você mira cuidadosamente e desfere suas debilitações de forma graciosa. Adicione as debilitações a seguir à lista de opções disponíveis para sua escolha do Golpe Debilitante.\n• Debilitação O alvo sofre 2d6 de dano de precisão adicional de seus ataques.\n• Debilitação O alvo fica desprevenido.",
+            pre_requisitos="esquema de ladrão, Golpe Debilitante",
+        ),
+        construir_talento_classe(
+            "Debilitações Táticas",
+            10,
+            ["Ladino"],
+            "Você aprende novas debilitações que lhe concedem vantagens táticas contra seus adversários. Adicione as debilitações a seguir à lista de opções disponíveis para sua escolha do Golpe Debilitante.\n• Debilitação O alvo não pode usar reações.\n• Debilitação O alvo não pode flanquear ou contribuir para o flanqueamento de aliados.",
+            pre_requisitos="esquema de malandro, Golpe Debilitante",
+        ),
+        construir_talento_classe(
+            "Debilitações Viciosas",
+            10,
+            ["Ladino"],
+            "As debilitações que você impõe prejudicam seus adversários gravemente. Adicione as debilitações a seguir à lista de opções disponíveis para sua escolha do Golpe Debilitante.\n• Debilitação O alvo adquire fraqueza 5 a dano contundente, cortante ou perfurante (à sua escolha).\n• Debilitação O alvo fica desajeitado 1.",
+            pre_requisitos="esquema de rufião, Golpe Debilitante",
+        ),
+        construir_talento_classe(
+            "Esgueirador Sagaz",
+            10,
+            ["Ladino"],
+            "É quase impossível notá-lo sem fazer muito esforço. Quando rolar uma falha em uma ação de Esgueirar, trate o resultado como um sucesso. Você ainda pode falhar criticamente.",
+            pre_requisitos="mestre em Furtividade",
+        ),
+        # 12º nível
+        construir_talento_classe(
+            "Debilitação Crítica",
+            12,
+            ["Incapacitação", "Ladino"],
+            "Suas debilitações são especialmente efetivas em seus ataques mais poderosos. Sempre que obtiver um sucesso crítico em uma rolagem de ataque contra um inimigo e usar Golpe Debilitante, adicione a debilitação a seguir à lista de opções disponíveis que você pode escolher.\n• Debilitação O alvo tenta um salvamento de Fortitude contra sua CD de classe com os efeitos a seguir.",
+            pre_requisitos="Golpe Debilitante",
+            resultados={
+                "sucesso_critico": "O alvo não é afetado.",
+                "sucesso": "O alvo fica lento 1 até o final de seu próximo turno.",
+                "falha": "O alvo fica lento 2 até o final de seu próximo turno.",
+                "falha_critica": "O alvo fica paralisado até o final de seu próximo turno.",
+            },
+        ),
+        construir_talento_classe(
+            "Interferência Reativa",
+            12,
+            ["Ladino"],
+            "Girando sua arma, puxando as vestes ou obstruindo de alguma outra forma, você reflexivamente frustra a resposta de um inimigo. Se o nível da criatura acionadora for igual ou inferior ao seu, você interrompe a reação acionadora. Se o nível da criatura acionadora for superior ao seu, você deve realizar uma rolagem de ataque contra a CA dela. Em um sucesso, você interrompe a reação acionadora.",
+            acoes="reacao",
+            acionamento="Um inimigo adjacente começa a usar uma reação.",
+        ),
+        construir_talento_classe(
+            "Salto Fantástico",
+            12,
+            ["Ladino"],
+            "Você se lança pelo ar até um adversário. Faça um Salto em Altura ou Salto em Distância. Se fizer um Salto em Altura, determine a distância que você pode percorrer usando a escala de Salto em Distância. Ao final de seu salto, você pode fazer um Golpe corpo a corpo. Imediatamente após o Golpe, você cai no solo se estiver no ar (mesmo se não tiver alcançado a distância máxima de seu salto). Se a distância que você cair não for maior do que a altura de seu salto, você não sofre dano e aterrissa de pé.",
+            acoes="2",
+        ),
+        construir_talento_classe(
+            "Surgir das Sombras",
+            12,
+            ["Floreio", "Ladino"],
+            "Saltando de seu esconderijo, você ataca um alvo quando ele menos espera. Você Anda até sua Velocidade e deve encerrar seu movimento próximo de um inimigo para o qual estiver escondido ou indetectado. Você Golpeia esse inimigo e permanece escondido ou indetectado por ele mesmo depois de Golpear. Você pode usar Surgir das Sombras ao Escalar, Escavar, Nadar ou Voar em vez de Andar se possuir o tipo de movimento correspondente.",
+            acoes="1",
+        ),
+        construir_talento_classe(
+            "Tiro de Derrubada",
+            12,
+            ["Ladino"],
+            "Seus ataques à distância podem derrubar um adversário despreparado do ar. Faça um Golpe com uma arma à distância ou com uma arma de arremesso contra uma criatura desprevenida. Se o Golpe for bem-sucedido e causar dano, o alvo deve tentar um salvamento de Reflexos contra sua CD de classe com os efeitos a seguir.",
+            acoes="2",
+            resultados={
+                "sucesso": "O alvo não é afetado.",
+                "falha": "O alvo cai até 36 metros. Se chegar ao chão, ele não sofre dano da queda.",
+                "falha_critica": "Como falha, mas o alvo não pode levitar, Saltar, Voar ou sair do chão de qualquer outra forma até o final de seu próximo turno.",
+            },
+        ),
+        # 14º nível
+        construir_talento_classe(
+            "Brecha Instantânea",
+            14,
+            ["Concentração", "Ladino"],
+            "Você distrai seu oponente com poucas palavras bem escolhidas ou um gesto rude. Escolha um alvo a até 9 metros. Ele fica desprevenido contra seus ataques até o final de seu próximo turno. Dependendo da forma como você descreve sua distração, esta ação adquire o traço auditivo ou visual.",
+            acoes="1",
+        ),
+        construir_talento_classe(
+            "Deixar uma Brecha",
+            14,
+            ["Ladino"],
+            "Quando atingir forte o suficiente, você deixa uma brecha para que seu aliado possa aproveitá-la. Sempre que você atingir um acerto crítico em um oponente desprevenido com um ataque corpo a corpo e causar dano, o alvo aciona a reação Ataque de Oportunidade de um aliado à sua escolha que a possua (como se o inimigo tivesse usado uma ação de manuseio).",
+        ),
+        construir_talento_classe(
+            "Rolamento Defensivo",
+            14,
+            ["Ladino"],
+            "Baixando e rolando para dispersar a força do golpe, você evita o potencial letal do ataque e tenta permanecer consciente. Você sofre metade do dano do ataque acionador.",
+            acoes="livre",
+            frequencia="uma vez a cada 10 minutos",
+            acionamento="Um ataque físico iria lhe reduzir a 0 Pontos de Vida.",
+        ),
+        construir_talento_classe(
+            "Sentir o Que Não É Visto",
+            14,
+            ["Ladino"],
+            "Quando procura por adversários, você percebe as menores pistas. Mesmo que tenha falhado no teste acionador, você automaticamente sente quaisquer criaturas indetectadas na área em que está Buscando, deixando-as meramente escondidas para você.",
+            acoes="reacao",
+            acionamento="Você falha em um teste de Buscar.",
+        ),
+        # 16º nível
+        construir_talento_classe(
+            "Brecha Cognitiva",
+            16,
+            ["Ladino"],
+            "Você consegue encontrar uma brecha em um efeito mental para superá-lo temporariamente. Até o final de seu próximo turno, você ignora um único efeito mental que atenda aos requerimentos. Você pode suprimir um efeito em particular usando Brecha Cognitiva somente uma vez.",
+            acoes="reacao",
+            acionamento="Seu turno acaba.",
+            requerimentos="Você está atualmente afetado por um efeito mental que sofreu ao falhar (mas não falhar criticamente) em uma jogada de salvamento.",
+            especial="Você pode usar esta reação mesmo se o efeito mental estiver lhe impedindo de usar reações.",
+        ),
+        construir_talento_classe(
+            "Corte Dissipante",
+            16,
+            ["Ladino"],
+            "Seu ataque furtivo corta através dos fios que amarram uma magia a um alvo. Faça um Golpe contra uma criatura desprevenida à sua escolha. Se seu Golpe causar dano de ataque furtivo, você tenta neutralizar uma única magia ativa no alvo. Seu nível de neutralização é igual ao seu nível de ladino, e o modificador do seu teste de neutralização é igual à sua CD de classe – 10.",
+            acoes="2",
+        ),
+        construir_talento_classe(
+            "Distração Perfeita",
+            16,
+            ["Ladino"],
+            "Você usa táticas sagazes para despistar seus adversários enquanto se afasta. Você se Esgueira enquanto deixa uma duplicata para trás. A duplicata age como a magia despistar, embora você não fique invisível, apenas indetectado. Você pode continuar a se concentrar para mover sua duplicata como descrito na magia, quer você permaneça ou não escondido pela duração do efeito. Uma vez que tenha usado Distração Perfeita, você precisa gastar 10 minutos preparando outra duplicata antes de poder usá-la novamente.",
+            acoes="1",
+            pre_requisitos="lendário em Dissimulação",
+        ),
+        construir_talento_classe(
+            "Passo nas Nuvens",
+            16,
+            ["Ladino"],
+            "Usando de acrobacias fantásticas, você consegue andar por curtos períodos sobre superfícies insubstanciais. Quando Andar, você pode se mover sobre água, ar e superfícies sólidas que suportariam somente um peso limitado como se estivesse sobre o solo. Se Andar sobre uma armadilha com uma placa de pressão sensível a peso, você não a aciona. Ao final de seu turno, você afunda, cai, quebra superfícies frágeis ou aciona armadilhas normalmente na sua localização atual.",
+            pre_requisitos="lendário em Acrobatismo",
+        ),
+        construir_talento_classe(
+            "Quadro em Branco",
+            16,
+            ["Ladino"],
+            "Suas dissimulações confundem até as mais poderosas adivinhações mortais. Efeitos de detecção, revelação e vidência passam despercebidos através de você, suas possessões e suas auras, sem detectar nada a menos que o efeito de detecção tenha um nível de neutralização 20 ou superior. Por exemplo, detectar magia ainda detectaria outras magias na área, mas nada mágico em você; visão verdadeira não o revelaria; localizar ou vidência não o encontrariam e assim por diante.",
+            pre_requisitos="lendário em Dissimulação",
+        ),
+        # 18º nível
+        construir_talento_classe(
+            "Ás do Trapaceiro",
+            18,
+            ["Concentração", "Ladino"],
+            "Seja por itens mágicos improvisados, essência mágica roubada ou outros meios, você tem uma contingência em sua manga para situações desesperadas. Quando o acionamento ocorrer, você faz a magia surtir efeito. A magia mira somente você, não importa quantas criaturas ela afetaria normalmente. Se você definir condições particularmente complicadas, conforme determinado pelo MJ, o acionamento pode falhar. Uma vez que a contingência é acionada, a magia é gasta até suas próximas preparações diárias.",
+            acoes="reacao",
+            acionamento="Você especifica o acionamento quando faz suas preparações diárias (veja Requerimentos).",
+            requerimentos="Quando faz suas preparações diárias, você deve especificar um acionamento para esta reação utilizando as mesmas restrições de acionamentos para a reação Preparar. Você também escolhe uma única magia da lista de magias arcanas, divinas, ocultistas ou primais de 4º nível ou inferior. A magia não pode ter um custo, nem pode ter um tempo de execução maior que 10 minutos. A magia deve ser capaz de mirar uma única criatura e você deve ser um alvo válido para ela.",
+        ),
+        construir_talento_classe(
+            "Furtivo Poderoso",
+            18,
+            ["Ladino"],
+            "Você aprendeu a explorar as defesas baixas de seus inimigos. Quando obtiver sucesso ou um sucesso crítico em um Golpe usando seu modificador de Força na rolagem de ataque e for causar dano de ataque furtivo, você pode trocar o dano adicional do ataque furtivo para dano comum do mesmo tipo que seu Golpe, em vez de dano de precisão.",
+        ),
+        construir_talento_classe(
+            "Infiltração Implausível",
+            18,
+            ["Ladino", "Mágico", "Movimento"],
+            "Você acha imperfeições e buracos minúsculos que ninguém seria capaz de ver e tenta de alguma forma passar por eles — possivelmente se movendo diretamente através da parede ou chão de um lado para o outro. Sua tentativa de movimento falha se a parede ou chão for construída de algo diferente de gesso, madeira ou pedra; se for mais espesso que 3 metros; ou se contiver mesmo uma fina camada de metal. Se possuir uma Velocidade de escalada, você pode usar esta habilidade para tentar se mover através do teto.",
+            acoes="2",
+            pre_requisitos="lendário em Acrobatismo, Espremer-se Rapidamente",
+        ),
+        # 20º nível
+        construir_talento_classe(
+            "Distração Reativa",
+            20,
+            ["Concentração", "Ladino", "Manuseio"],
+            "Você reativamente troca de lugar com sua duplicata para frustrar seu adversário. Você usa Distração Perfeita mesmo se estiver sendo observado, desde que encerre o movimento de sua ação Esgueirar enquanto está ocultado ou em um local com cobertura ou cobertura maior. Sua duplicata passa a ser o alvo do ataque ou efeito em vez de você. No caso de um efeito de área, se sua ação de Esgueirar não movê-lo para fora da área, tanto você quanto sua duplicata sofrem o efeito.",
+            acoes="reacao",
+            pre_requisitos="lendário em Dissimulação, Distração Perfeita",
+            acionamento="Você seria acertado por um ataque, mirado por um efeito ou está dentro da área de um efeito.",
+            requerimentos="Você possui Distração Perfeita pronta para usar.",
+        ),
+        construir_talento_classe(
+            "Exemplar Escondido",
+            20,
+            ["Ladino"],
+            "Quando foca sua mente para ficar fora de vista, você desaparece completamente. Você fica invisível por 1 minuto, mesmo se usar uma ação hostil. Nem mesmo poeira reluzente, ver invisibilidade ou efeitos similares podem lhe revelar, embora criaturas ainda possam usar a ação Buscar para localizá-lo normalmente.",
+            acoes="reacao",
+            pre_requisitos="lendário em Furtividade",
+            frequencia="uma vez por hora",
+            acionamento="Você obtém sucesso em usar Furtividade para se Esconder e ficar escondido de todos seus adversários atuais, ou usa Furtividade para se Esgueirar e ficar indetectado para todos seus adversários atuais.",
+        ),
+        construir_talento_classe(
+            "Golpeador Impossível",
+            20,
+            ["Ladino"],
+            "Seus ataques são ligeiros e mortais além da explicação. Nada pode lhe impedir de realizar um ataque furtivo, mesmo que seu oponente possa ver todos seus golpes. Em vez de causar o dano de Golpeador Astuto, você pode causar o dano inteiro de seu ataque furtivo a um alvo mesmo que ele não esteja desprevenido.",
+            pre_requisitos="Golpeador Astuto",
+        ),
+    ]
+
+    return {
+        "id": "ladino",
+        "nome": "Ladino",
+        "paginas": "167-177",
+        "descricao": "Você é competente e oportunista. Usando sua perspicácia sagaz e reações rápidas, você tira vantagem dos erros de seus oponentes e ataca onde mais dói. Você faz apostas perigosas, caçando emoções e testando os limites de suas habilidades, e provavelmente não se importa muito com quaisquer leis que possam atrapalhar sua empreitada. Embora o caminho de todo ladino seja único e cheio de perigos, a única coisa que todos têm em comum é a variedade e profundidade de suas perícias.",
+        "atributo_chave": {
+            "opcoes": ["destreza", "outro_conforme_esquema"],
+            "melhoria_1_nivel": 2,
+            "texto": "Destreza ou Outro — No 1º nível, sua classe lhe concede uma melhoria de atributo em Destreza ou na opção de seu esquema de ladino.",
+        },
+        "pontos_de_vida_por_nivel": 8,
+        "pontos_de_vida_texto": "8 mais seu modificador de Constituição no 1º nível e a cada nível subsequente.",
+        "jogando_com_a_classe": {
+            "encontros_combate": "Você se move tão furtivamente que consegue pegar inimigos desavisados. Você é um instrumento de precisão, mais útil contra um chefe durão ou conjurador distante do que contra soldados bucha de canhão.",
+            "encontros_sociais": "Suas perícias lhe dão várias ferramentas para influenciar sua oposição. Criar engodos e extrair informações é parte fundamental de sua natureza.",
+            "exploracao": "Você se esgueira para surpreender adversários e procurar perigos ou armadilhas. Você é um grande recurso para seu grupo, já que é capaz de desativar armadilhas, solucionar enigmas e antecipar perigos.",
+            "recesso": "Você pode bater carteiras ou comercializar mercadorias ilegais. Você também pode ser parte de uma guilda de ladrões ou até mesmo fundar a sua própria.",
+            "voce_pode": [
+                "Aprimorar suas habilidades através de prática intensa, por conta própria e viajando o mundo afora.",
+                "Saber onde conseguir mercadorias ilícitas.",
+                "Andar às margens da lei ou infringi-la por considerá-la insignificante ou por ter seu próprio código.",
+            ],
+            "outros_provavelmente": [
+                "O acham cativante ou fascinante, mesmo que pensem que não deveriam confiar em você.",
+                "O procuram quando precisam de alguém disposto a assumir riscos ou utilizar métodos questionáveis.",
+                "Suspeitam que você seja motivado apenas pela ganância.",
+            ],
+        },
+        "proficiencias_iniciais": {
+            "percepcao": "especialista",
+            "salvamentos": {
+                "fortitude": "treinado",
+                "reflexos": "especialista",
+                "vontade": "especialista",
+            },
+            "pericias": {
+                "fixas": ["furtividade"],
+                "opcoes_fixas": [],
+                "condicionais": ["uma_ou_mais_pericias_determinadas_por_seu_esquema_de_ladino"],
+                "adicionais_base": 7,
+                "soma_modificador_inteligencia": True,
+                "texto": "Treinado em Furtividade; treinado em uma ou mais perícias determinadas por seu esquema de ladino; treinado em uma quantidade de perícias adicionais igual a 7 mais seu modificador de Inteligência.",
+            },
+            "ataques": {
+                "armas_simples": "treinado",
+                "armas_especificas": ["arco curto", "espada curta", "porrete", "rapieira"],
+                "ataques_desarmados": "treinado",
+            },
+            "defesas": {
+                "armaduras_leves": "treinado",
+                "armaduras_medias": "destreinado (ou treinado pelo esquema de rufião)",
+                "armaduras_pesadas": "destreinado",
+                "defesa_sem_armadura": "treinado",
+            },
+            "cd_classe": "treinado",
+            "magias": None,
+        },
+        "tabela_progressao": tabela_progressao,
+        "tabelas_especificas": {},
+        "caracteristicas_de_classe": caracteristicas,
+        "subclasses": {
+            "tipo": "esquema_de_ladino",
+            "nome_tipo": "Esquema de Ladino",
+            "descricao": "Tipo de esquema que molda suas técnicas de ladino, perícias bônus e eventual atributo chave alternativo.",
+            "opcoes": esquemas,
+        },
+        "termos_chave": [
+            {
+                "termo": "Debilitação",
+                "descricao": "Debilitações aplicam condições e outros efeitos negativos a uma criatura. Quando a criatura é afetada por uma nova debilitação, qualquer debilitação prévia que a esteja afetando é encerrada.",
+            },
+            {
+                "termo": "Floreio",
+                "descricao": "Ações de floreio são técnicas que requerem empenho demais e não podem ser realizadas várias vezes em seguida. Você pode usar apenas 1 ação com o traço floreio por turno.",
+            },
+        ],
+        "exemplos_personagens": [
+            {
+                "nome": "Malandro",
+                "pagina": 172,
+                "resumo": "Uma pequena distração torna seus ataques mortais.",
+                "atributos": "Priorize Destreza e Carisma para aprimorar suas fintas.",
+                "pericias": [
+                    "Acrobatismo",
+                    "Atletismo",
+                    "Diplomacia",
+                    "Dissimulação",
+                    "Furtividade",
+                    "Intimidação",
+                    "Ladroagem",
+                    "Manufatura",
+                    "Ocultismo",
+                    "Sociedade",
+                ],
+                "subclasse": "Malandro",
+                "talento_inicial": "Descobridor de Armadilha",
+                "talentos_niveis_superiores": [
+                    "Finta de Distração (2º)",
+                    "Torcer a Faca (6º)",
+                    "Debilitações Táticas (10º)",
+                    "Distração Perfeita (16º)",
+                ],
+            },
+            {
+                "nome": "Ladrão",
+                "pagina": 174,
+                "resumo": "Furtivo e ligeiro, você abre fechaduras, encontra armadilhas e portas secretas e coleta os melhores tesouros.",
+                "atributos": "Priorize Destreza. Constituição aumenta sua saúde e Sabedoria lhe ajuda a encontrar armadilhas.",
+                "pericias": [
+                    "Acrobatismo",
+                    "Arcanismo",
+                    "Atletismo",
+                    "Diplomacia",
+                    "Dissimulação",
+                    "Furtividade",
+                    "Ladroagem",
+                    "Manufatura",
+                    "Sociedade",
+                ],
+                "subclasse": "Ladrão",
+                "talento_inicial": "Esquiva Ágil",
+                "talentos_niveis_superiores": [
+                    "Saque Rápido (2º)",
+                    "Golpe Escaramuçador (6º)",
+                    "Esgueirador Sagaz (10º)",
+                    "Surgir das Sombras (12º)",
+                    "Infiltração Implausível (18º)",
+                ],
+            },
+        ],
+        "talentos_de_classe": talentos,
+    }
+
+
+def construir_mago() -> dict[str, Any]:
+    tabela_progressao = construir_tabela_progressao(
+        [
+            (1, "Ancestralidade e biografia, conjuração arcana, elo arcano, escola arcana, proficiências iniciais, tese arcana"),
+            (2, "Talento de mago, talento de perícia"),
+            (3, "Incremento de perícia, magias de 2º nível, talento geral"),
+            (4, "Talento de mago, talento de perícia"),
+            (5, "Incremento de perícia, magias de 3º nível, melhorias de atributo, reflexos rápidos, talento de ancestralidade"),
+            (6, "Talento de mago, talento de perícia"),
+            (7, "Conjurador especialista, incremento de perícia, magias de 4º nível, talento geral"),
+            (8, "Talento de mago, talento de perícia"),
+            (9, "Fortitude mágica, incremento de perícia, magias de 5º nível, talento de ancestralidade"),
+            (10, "Melhorias de atributo, talento de mago, talento de perícia"),
+            (11, "Especialidade em armas de mago, incremento de perícia, magias de 6º nível, prontidão, talento geral"),
+            (12, "Talento de mago, talento de perícia"),
+            (13, "Especialização em armas, incremento de perícia, magias de 7º nível, robes defensivos, talento de ancestralidade"),
+            (14, "Talento de mago, talento de perícia"),
+            (15, "Conjurador mestre, incremento de perícia, magias de 8º nível, melhorias de atributo, talento geral"),
+            (16, "Talento de mago, talento de perícia"),
+            (17, "Determinação, incremento de perícia, magias de 9º nível, talento de ancestralidade"),
+            (18, "Talento de mago, talento de perícia"),
+            (19, "Arte do arquimago, conjurador lendário, incremento de perícia, talento geral"),
+            (20, "Melhorias de atributo, talento de mago, talento de perícia"),
+        ]
+    )
+
+    escolas_arcanas = [
+        {
+            "id": "abjuracao",
+            "nome": "Abjuração",
+            "tipo_escola": "especialista",
+            "magia_1_nivel_exemplo": "queda suave",
+            "magia_de_escola": "guarita de proteção (página 405)",
+            "magia_de_escola_avancada": "absorção de energia",
+            "descricao": "Como um abjurador, você domina a arte da proteção — fortalecendo defesas, impedindo ataques e até mesmo refletindo magias contra seus conjuradores. Você compreende que um pouco de prevenção vale um monte de cura. Você adiciona uma magia de abjuração de 1º nível (como queda suave) ao seu grimório. Você aprende a magia de escola guarita de proteção (página 405).",
+        },
+        {
+            "id": "adivinhacao",
+            "nome": "Adivinhação",
+            "tipo_escola": "especialista",
+            "magia_1_nivel_exemplo": "golpe certo",
+            "magia_de_escola": "visão do adivinho (página 406)",
+            "magia_de_escola_avancada": "olho vigilante",
+            "descricao": "Como um adivinho você domina visualização remota e presciência, descobrindo informações que podem transformar investigações, pesquisas e estratégias de combate. Você compreende que conhecimento é poder. Você adiciona uma magia de adivinhação de 1º nível (como golpe certo) ao seu grimório. Você aprende a magia de escola visão do adivinho (página 406).",
+        },
+        {
+            "id": "conjuracao",
+            "nome": "Conjuração",
+            "tipo_escola": "especialista",
+            "magia_1_nivel_exemplo": "convocar animal",
+            "magia_de_escola": "convocação aumentada (página 405)",
+            "magia_de_escola_avancada": "passos dimensionais",
+            "descricao": "Como um conjurador, você convoca criaturas e objetos de locais longínquos, e utiliza sua magia para transportar-se para locais distantes. Você compreende que a verdadeira chave para o sucesso está em superar a quantidade de inimigos. Você adiciona uma magia de conjuração de 1º nível (como convocar animal) ao seu grimório. Você aprende a magia de escola convocação aumentada (página 405).",
+        },
+        {
+            "id": "encantamento",
+            "nome": "Encantamento",
+            "tipo_escola": "especialista",
+            "magia_1_nivel_exemplo": "cativar",
+            "magia_de_escola": "palavras cativantes (página 406)",
+            "magia_de_escola_avancada": "aura pavorosa",
+            "descricao": "Como um encantador, você utiliza a magia para manipular a mente dos outros. Você pode usar suas habilidades para influenciar os outros sutilmente ou controlá-los diretamente. Você adiciona uma magia de encantamento de 1º nível (como cativar) ao seu grimório. Você aprende a magia de escola palavras cativantes (página 406).",
+        },
+        {
+            "id": "evocacao",
+            "nome": "Evocação",
+            "tipo_escola": "especialista",
+            "magia_1_nivel_exemplo": "toque elétrico",
+            "magia_de_escola": "dardo de força (página 405)",
+            "magia_de_escola_avancada": "tempestade elemental",
+            "descricao": "Como um evocador, você se deleita com o poder bruto da magia, usando-o para criar e destruir com facilidade. Você pode invocar elementos, forças e energia para devastar seus adversários ou ajudá-lo de outras formas. Você adiciona uma magia de evocação de 1º nível (como toque elétrico) ao seu grimório. Você aprende a magia de escola dardo de força (página 405).",
+        },
+        {
+            "id": "ilusao",
+            "nome": "Ilusão",
+            "tipo_escola": "especialista",
+            "magia_1_nivel_exemplo": "objeto ilusório",
+            "magia_de_escola": "terreno distorcido (página 406)",
+            "magia_de_escola_avancada": "manto de invisibilidade",
+            "descricao": "Como um ilusionista, você utiliza a magia para criar imagens, invenções e fantasmas para desorientar seus inimigos. Você compreende que a percepção é a realidade. Você adiciona uma magia de ilusão de 1º nível (como objeto ilusório) ao seu grimório. Você aprende a magia de escola terreno distorcido (página 406).",
+        },
+        {
+            "id": "necromancia",
+            "nome": "Necromancia",
+            "tipo_escola": "especialista",
+            "magia_1_nivel_exemplo": "gavinhas sombrias",
+            "magia_de_escola": "chamado do túmulo (página 405)",
+            "magia_de_escola_avancada": "sifonar vida",
+            "descricao": "Como um necromante, você recorre aos poderes da vida e da morte. Embora sua escola seja frequentemente difamada por sua associação com a criação de mortos-vivos, você sabe que o controle sobre a vida também significa controle sobre a cura. Você adiciona uma magia de necromancia de 1º nível (como gavinhas sombrias) ao seu grimório. Você aprende a magia de escola chamado do túmulo (página 405).",
+        },
+        {
+            "id": "transmutacao",
+            "nome": "Transmutação",
+            "tipo_escola": "especialista",
+            "magia_1_nivel_exemplo": "arma mágica",
+            "magia_de_escola": "vantagem física (página 406)",
+            "magia_de_escola_avancada": "forma mutável",
+            "descricao": "Como um transmutador, você altera as propriedades físicas das coisas, transformando criaturas, objetos, o mundo natural e até mesmo a si próprio segundo seus caprichos. Você compreende que a mudança é inevitável. Você adiciona uma magia de transmutação de 1º nível (como arma mágica) ao seu grimório. Você aprende a magia de escola vantagem física (página 406).",
+        },
+        {
+            "id": "universalista",
+            "nome": "Universalista",
+            "tipo_escola": "universalista",
+            "magia_1_nivel_exemplo": "à escolha do jogador",
+            "magia_de_escola": None,
+            "beneficio_mecanico": "Pode usar Drenar Item Ligado uma vez por dia para cada nível de magia que puder conjurar (para recordar uma magia desse nível), recebe um talento de mago extra no 1º nível e adiciona uma magia de 1º nível à escolha ao grimório.",
+            "descricao": "Em vez de se especializar estritamente em uma escola arcana, você pode se tornar um mago universalista — ao estudar todas as escolas igualmente, você busca compreender toda a amplitude das artes arcanas. Para cada nível de magia que puder conjurar, você pode usar Drenar Item Ligado uma vez por dia para recordar uma magia de cada nível desses (em vez de usá-la somente uma vez por dia no total). Você recebe um talento de mago extra, e adiciona uma magia de 1º nível à sua escolha ao seu grimório.",
+        },
+    ]
+
+    teses_arcanas = [
+        {
+            "id": "experimentacao_metamagica",
+            "nome": "Experimentação Metamágica",
+            "descricao": "Você percebeu que a prática conhecida como metamagia é um recurso que data de tempos antigos, quando magos tinham que criar suas próprias magias e variações em vez de recorrer a magias criadas por outros e repassadas ao longo dos anos. Este conhecimento lhe permite acessar eficientemente vários efeitos metamágicos. Você recebe um talento metamágico de mago de 1º nível como um talento bônus. A partir do 4º nível, durante suas preparações diárias, você recebe um talento metamágico de mago à sua escolha que possua um requerimento de nível igual à metade de seu nível ou inferior, e pode utilizá-lo até fazer suas próximas preparações diárias.",
+        },
+        {
+            "id": "mescla_de_magia",
+            "nome": "Mescla de Magia",
+            "descricao": "Você teoriza que os espaços de magia são meramente um termo descritivo para uma energia subjacente que energiza toda conjuração, e descobriu uma forma de rearranjar a hierarquia de espaços de magia, combinando-os para alimentar magias mais poderosas. Quando fizer suas preparações diárias, você pode trocar dois espaços de magia do mesmo nível por um espaço de magia bônus de até 2 níveis superior aos espaços de magia trocados. Você pode trocar quantos espaços de magia quiser, desde que os tenha disponíveis. Esses espaços de magia bônus devem pertencer a um nível que você pode conjurar normalmente, e cada espaço de magia bônus deve ser de um nível de magia diferente. Você também pode trocar qualquer espaço de magia para receber dois truques mágicos adicionais, embora só possa fazê-lo uma vez a cada preparação.",
+        },
+        {
+            "id": "sintonizacao_com_familiar_aprimorada",
+            "nome": "Sintonização com Familiar Aprimorada",
+            "descricao": "Você insiste há muito tempo que uma afinação sutil da mágica que liga mago e familiar pode aprimorar imensamente essa conexão mística, especialmente comparada ao elo seguro e genérico usado pela maioria dos magos. Você formou um pacto desses com seu familiar, recebendo mais vantagens dessa ligação do que a maioria dos magos. Você recebe o talento de mago Familiar como um talento bônus. Seu familiar recebe uma habilidade extra e uma habilidade extra adicional quando você alcançar o 6º, 12º e 18º níveis. Sua forte conexão com seu familiar altera sua característica de classe elo arcano, permitindo que você armazene sua energia mágica em seu familiar em vez de num item. Você também recebe a ação livre Drenar Familiar em vez da ação Drenar Item Ligado. Drenar Familiar funciona da mesma forma e nos mesmos momentos que Drenar Item Ligado, exceto que você drena a magia de seu familiar em vez de um item.",
+            "acao_substituta": construir_acao_habilidade(
+                "Drenar Familiar",
+                "livre",
+                ["Arcano", "Mago"],
+                "Funciona da mesma forma e nos mesmos momentos que Drenar Item Ligado, exceto que você drena a magia armazenada de seu familiar em vez de um item.",
+                frequencia="uma vez por dia",
+                requerimentos="Você ainda não agiu em seu turno.",
+            ),
+        },
+        {
+            "id": "substituicao_de_magia",
+            "nome": "Substituição de Magia",
+            "descricao": "Você não aceita o fato de que, uma vez preparadas, magias não possam ser trocadas até suas próximas preparações diárias, e descobriu um atalho que lhe permite substituir magias previamente preparadas por novas magias escolhidas. Você pode gastar 10 minutos para esvaziar um de seus espaços de magia preparados e preparar uma magia diferente de seu grimório em seu lugar. Se for interrompido durante uma troca dessas, a magia original permanece preparada e ainda pode ser conjurada. Você pode tentar trocar a magia posteriormente, mas deve iniciar o processo desde o início.",
+        },
+    ]
+
+    acao_drenar_item_ligado = construir_acao_habilidade(
+        "Drenar Item Ligado",
+        "livre",
+        ["Arcano", "Mago"],
+        "Você consome o poder armazenado em seu item ligado. Isto permite que você conjure novamente — e sem gastar um espaço de magia — uma magia que tenha preparado e que já tenha conjurado nesse dia. Você ainda deve Conjurar a Magia e atender aos outros requerimentos da magia.",
+        frequencia="uma vez por dia",
+        requerimentos="Você ainda não agiu em seu turno.",
+    )
+
+    caracteristicas = [
+        construir_caracteristica_classe(
+            "Ancestralidade e Biografia",
+            1,
+            "Além das habilidades fornecidas por sua classe no 1º nível, você possui os benefícios da ancestralidade e biografia selecionadas, conforme descrito no Capítulo 2.",
+        ),
+        construir_caracteristica_classe(
+            "Proficiências Iniciais",
+            1,
+            "No 1º nível, você recebe proficiências que representam seu treinamento básico. Estas proficiências são listadas no início desta classe.",
+        ),
+        construir_caracteristica_classe(
+            "Conjuração Arcana",
+            1,
+            "Através de estudo dedicado e prática intensiva, você consegue manipular o poder arcano para conjurar magias. Você pode conjurar magias arcanas usando a atividade Conjurar uma Magia e pode providenciar componentes materiais, somáticos e verbais quando conjurar magias (veja Conjurando Magias, na página 302). No 1º nível, a cada manhã você pode preparar duas magias de 1º nível e cinco truques mágicos dentre as opções disponíveis em seu grimório. Se for um mago especialista, você pode preparar magias adicionais da escola de magia escolhida, sendo um truque mágico e uma magia a cada nível de magia que seja capaz de conjurar. Seu grimório inicial gratuito (valor de 10 pp ou menos) contém 10 truques mágicos arcanos e cinco magias arcanas de 1º nível à sua escolha. A cada nível ganho, você adiciona duas magias arcanas comuns ao grimório (de qualquer nível que puder conjurar).",
+            detalhes={
+                "grimorio_inicial": {
+                    "truques_magicos": 10,
+                    "magias_1_nivel": 5,
+                    "magias_por_nivel_ganho": 2,
+                },
+                "espacos_especialista_por_nivel_magia": 1,
+                "truque_adicional_especialista": 1,
+            },
+        ),
+        construir_caracteristica_classe(
+            "Escola Arcana",
+            1,
+            "Muitos conjuradores arcanos mergulham profundamente em uma única escola de magia na tentativa de dominar seus segredos. Se quiser ser um mago especialista, escolha uma escola para se especializar, recebendo um espaço de magia extra de cada nível de magia que puder conjurar (apenas para magias da escola escolhida), um truque mágico adicional dessa escola, outra magia arcana de 1º nível dessa escola no grimório e a magia de escola inicial correspondente (tipo de magia de foco, reserva com 1 Ponto de Foco). Se escolher não se especializar em uma escola de magia, você é um universalista.",
+            detalhes={"nota_tabela_3_16": "Universalistas usam Drenar Item Ligado uma vez por dia por nível de magia que puderem conjurar e recebem um talento de mago extra no 1º nível."},
+        ),
+        construir_caracteristica_classe(
+            "Elo Arcano",
+            1,
+            "Você deposita parte de seu poder mágico em um item ligado. A cada dia, quando preparar suas magias, você pode designar um único item seu como seu item ligado. Ele tipicamente é um item associado com a conjuração de magias, como uma varinha, anel ou cajado, mas você pode designar uma arma ou qualquer outro item. Você ganha a ação livre Drenar Item Ligado.",
+            acoes_concedidas=[acao_drenar_item_ligado],
+        ),
+        construir_caracteristica_classe(
+            "Tese Arcana",
+            1,
+            "Durante seus estudos para se tornar um mago completamente graduado, você produziu uma tese de pesquisa mágica única sobre um tópico específico. Você recebe um benefício especial que corresponde ao tópico da pesquisa de sua tese. (Nota: na Tabela 3–16 da edição impressa consta 'teste arcana' por erro tipográfico).",
+            detalhes={"opcoes": teses_arcanas},
+        ),
+        construir_caracteristica_classe(
+            "Talentos de Mago",
+            2,
+            "No 2º nível e a cada nível par subsequente, você recebe um talento de classe de mago. Os talentos de classe de mago são descritos a partir da página 185.",
+        ),
+        construir_caracteristica_classe(
+            "Talentos de Perícia",
+            2,
+            "No 2º nível e a cada 2 níveis subsequentes, você recebe um talento de perícia. Talentos de perícia podem ser encontrados no Capítulo 5 e possuem o traço perícia. Você deve possuir uma graduação de proficiência treinado ou melhor na perícia correspondente para selecionar um talento de perícia.",
+        ),
+        construir_caracteristica_classe(
+            "Incrementos de Perícia",
+            3,
+            "No 3º nível e a cada 2 níveis subsequentes, você recebe um incremento de perícia. Você pode usar este incremento para aumentar sua graduação de proficiência para treinado em uma perícia na qual seja destreinado ou para aumentar sua graduação de proficiência para especialista em uma perícia na qual já seja treinado. No 7º nível, você pode usar incrementos de perícia para aumentar sua graduação de proficiência para mestre em uma perícia na qual já seja especialista e, no 15º nível, você pode usar incrementos de perícia para aumentar sua graduação de proficiência para lendário em uma perícia na qual já seja mestre.",
+        ),
+        construir_caracteristica_classe(
+            "Talentos Gerais",
+            3,
+            "No 3º nível e a cada 4 níveis subsequentes, você recebe um talento geral. Talentos gerais são listados no Capítulo 5.",
+        ),
+        construir_caracteristica_classe(
+            "Melhorias de Atributo",
+            5,
+            "No 5º nível e a cada 5 níveis subsequentes, você melhora os valores de quatro atributos diferentes. Você pode usar estas melhorias de atributo para aumentar seus valores de atributo acima de 18 pontos. Incrementar um valor de atributo aumenta seu valor em 1 ponto se ele já for 18 ou maior, ou em 2 pontos se ele for menor que 18.",
+        ),
+        construir_caracteristica_classe(
+            "Reflexos Rápidos",
+            5,
+            "Seus reflexos são rápidos como um relâmpago. Sua graduação de proficiência em salvamentos de Reflexos aumenta para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Talentos de Ancestralidade",
+            5,
+            "Além do talento de ancestralidade recebido na criação do personagem, você recebe um talento de ancestralidade no 5º nível e a cada 4 níveis subsequentes. A lista de talentos de ancestralidade disponíveis para você pode ser encontrada na seção de sua ancestralidade no Capítulo 2.",
+        ),
+        construir_caracteristica_classe(
+            "Conjurador Especialista",
+            7,
+            "A prática extenuante do arcanismo aprimorou suas capacidades. Suas graduações de proficiência em ataques de magia e CDs de magias arcanas aumentam para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Fortitude Mágica",
+            9,
+            "O poder mágico aprimorou a resiliência de seu corpo. Sua graduação de proficiência em salvamentos de Fortitude aumenta para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Prontidão",
+            11,
+            "Você permanece alerta às ameaças ao seu redor. Sua graduação de proficiência em Percepção aumenta para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Especialidade em Armas de Mago",
+            11,
+            "Através de uma combinação de magia e treinamento, você aprendeu a empunhar armas típicas de mago mais eficientemente. Suas graduações de proficiência em adaga, besta leve, besta pesada, cajado, clava e ataques desarmados aumentam para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Especialização em Armas",
+            13,
+            "Você aprendeu a infligir ferimentos graves com suas armas favoritas. Você causa 2 pontos de dano adicionais com armas e ataques desarmados nos quais é especialista. Este dano aumenta para 3 se você for mestre e para 4 se você for lendário.",
+        ),
+        construir_caracteristica_classe(
+            "Robes Defensivos",
+            13,
+            "O fluxo da magia e seu treinamento defensivo se combinam para lhe ajudar a sair do caminho de um ataque. Sua graduação de proficiência em defesa sem armadura aumenta para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Conjurador Mestre",
+            15,
+            "Você comanda habilidades de conjuração superlativas. Suas graduações de proficiência em ataques de magia e CDs de magias arcanas aumentam para mestre.",
+        ),
+        construir_caracteristica_classe(
+            "Determinação",
+            17,
+            "Você reforçou sua mente com determinação. Sua graduação de proficiência em salvamentos de Vontade aumenta para mestre. Quando rolar um sucesso em um salvamento de Vontade, trate o resultado como um sucesso crítico.",
+        ),
+        construir_caracteristica_classe(
+            "Arte do Arquimago",
+            19,
+            "Você comanda as magias arcanas mais potentes e pode conjurar uma magia de poder verdadeiramente incrível. Você recebe um único espaço de magia de 10º nível e pode preparar uma magia nesse espaço usando sua conjuração arcana. Você não recebe mais magias de 10º nível conforme avança de nível, embora possa selecionar o talento Poder do Arquimago para receber um segundo espaço de magia de 10º nível.",
+        ),
+        construir_caracteristica_classe(
+            "Conjurador Lendário",
+            19,
+            "Você é um conjurador consumado, com um entendimento compreensivo da teoria arcana e da prática da magia. Suas graduações de proficiência em ataques de magia e CDs de magias arcanas aumentam para lendário.",
+        ),
+    ]
+
+    talentos = [
+        # 1º nível
+        construir_talento_classe(
+            "Ampliar Magia",
+            1,
+            ["Concentração", "Mago", "Metamágico"],
+            "Você manipula a energia de sua magia, propagando-a para afetar uma área mais ampla. Se a sua próxima ação for Conjurar uma Magia que possui uma área de cone, explosão ou linha e não possui uma duração, aumente a área dessa magia. Acrescente 1,5 metros ao raio de uma explosão que normalmente tenha um raio de pelo menos 3 metros (uma explosão com raio menor não é afetada). Adicione 1,5 metros ao comprimento de um cone ou linha que normalmente tenha 4,5 metros ou menos, e adicione 3 metros ao comprimento de um cone ou linha maior que isso.",
+            acoes="1",
+        ),
+        construir_talento_classe(
+            "Contramágica",
+            1,
+            ["Abjuração", "Arcano", "Mago"],
+            "Quando um adversário Conjurar uma Magia cujas manifestações você possa ver, você pode usar sua própria magia para interrompê-la. Você gasta uma magia preparada para neutralizar a conjuração dessa mesma magia sendo conjurada pela criatura acionadora. Você perde seu espaço de magia como se tivesse conjurado a magia acionadora e então tenta neutralizá-la (página 459).",
+            acoes="reacao",
+            acionamento="Uma criatura conjura uma magia que você possui preparada.",
+        ),
+        construir_talento_classe(
+            "Familiar",
+            1,
+            ["Mago"],
+            "Um animal lhe serve e auxilia sua conjuração. Você recebe um familiar (regras para familiares são encontradas na página 217).",
+        ),
+        construir_talento_classe(
+            "Ignorar Materiais",
+            1,
+            ["Mago"],
+            "Você pode usar criativas soluções alternativas para replicar a essência arcana de certos materiais. Quando Conjurar uma Magia que requeira componentes materiais, você pode fornecer estes componentes materiais sem uma bolsa de componentes de magia desenhando símbolos intrincados no ar. Ao contrário de quando fornece componentes somáticos, você ainda deve ter uma mão completamente livre. Este efeito não remove a necessidade de quaisquer materiais listados na seção de custo da magia.",
+        ),
+        construir_talento_classe(
+            "Magia de Alcance",
+            1,
+            ["Concentração", "Mago", "Metamágico"],
+            "Você amplia a distância de sua magia. Se a sua próxima ação for Conjurar uma Magia que possui uma distância, aumente a distância dessa magia em 9 metros. Como padrão para aumentar distâncias de magias, se a magia normalmente tiver uma distância de toque, você amplia a distância dela para 9 metros.",
+            acoes="1",
+        ),
+        construir_talento_classe(
+            "Mão do Aprendiz",
+            1,
+            ["Mago"],
+            "Você pode arremessar sua arma magicamente em seu adversário. Você recebe a magia universalista mão do aprendiz. Magias universalistas são um tipo de magia de foco, similar a magias de escola. Você adquire uma reserva de foco com 1 Ponto de Foco. Veja Escolas Arcanas na página 183 para mais informações sobre magias de foco.",
+            pre_requisitos="mago universalista",
+        ),
+        # 2º nível
+        construir_talento_classe(
+            "Expansão de Truque Mágico",
+            2,
+            ["Mago"],
+            "Estudos dedicados lhe permitem preparar uma maior gama de magias simples. Você pode preparar dois truques mágicos adicionais por dia.",
+        ),
+        construir_talento_classe(
+            "Familiar Melhorado",
+            2,
+            ["Mago"],
+            "Você infunde seu familiar com energia mágica adicional, aumentando as habilidades dele. Você pode selecionar quatro habilidades de familiar ou de mestre por dia, em vez de apenas duas.",
+            pre_requisitos="um familiar",
+            especial="Se a sua tese arcana for sintonização com familiar aprimorada, o número base das habilidades de familiar que você possui antes de adicionar quaisquer habilidades recebidas de sua tese arcana é quatro.",
+        ),
+        construir_talento_classe(
+            "Ocultar Magia",
+            2,
+            ["Concentração", "Mago", "Manuseio", "Metamágico"],
+            "Escondendo seus gestos e cânticos em outras falas e movimentos, você tenta ocultar o fato de que está Conjurando uma Magia. Se a sua próxima ação for Conjurar uma Magia, faça um teste de Furtividade contra as CDs de Percepção de todos os observadores; se a magia tiver componentes verbais, você também faz um teste de Dissimulação contra as CDs de Percepção dos observadores. Se obtiver sucesso em seu teste (ou testes) contra a CD de um observador, ele não percebe que você está Conjurando uma Magia — mesmo que ela normalmente tenha manifestações sensoriais e componentes materiais, somáticos e verbais que tornariam a conjuração óbvia para aqueles ao seu redor. Esta habilidade esconde apenas as ações de conjuração e manifestações da magia, mas não seus efeitos. Portanto, um observador ainda verá um raio saindo de você ou perceberá que você desapareceu.",
+            acoes="1",
+        ),
+        # 4º nível
+        construir_talento_classe(
+            "Foco Vinculado",
+            4,
+            ["Mago"],
+            "Você conectou seu item ligado à fonte de energia que potencializa suas magias de escola. Quando Drenar seu Item Ligado para conjurar uma magia de sua escola arcana, você também recupera 1 Ponto de Foco.",
+            pre_requisitos="elo arcano, escola arcana",
+            frequencia="uma vez por dia",
+        ),
+        construir_talento_classe(
+            "Magia Residual em Arma",
+            4,
+            ["Mago"],
+            "Você canaliza a energia residual da magia em uma arma que esteja empunhando. Até o final de seu turno, a arma causa 1d6 de dano extra de um tipo correspondente à escola da magia conjurada.\n• Abjuração dano de força\n• Adivinhação, Encantamento ou Ilusão dano mental\n• Conjuração ou Transformação o mesmo tipo da arma\n• Evocação um tipo que a magia cause, ou dano de força se a magia não causa dano\n• Necromancia dano negativo",
+            acoes="livre",
+            frequencia="uma vez por turno",
+            requerimentos="Sua ação mais recente foi conjurar uma magia que não seja um truque mágico.",
+        ),
+        construir_talento_classe(
+            "Magia Silenciosa",
+            4,
+            ["Concentração", "Mago", "Metamágico"],
+            "Você aprendeu a conjurar magias sem pronunciar as palavras de poder normalmente necessárias. Se a sua próxima ação for Conjurar uma Magia que possua um componente verbal e pelo menos um outro componente, você pode remover o componente verbal. Isto torna a magia mais silenciosa e lhe permite conjurá-la em áreas onde o som não propaga. Entretanto, a magia ainda possui manifestações visuais, portanto, isto não a torna menos óbvia para alguém que veja sua conjuração. Quando usar Magia Silenciosa, você pode escolher receber os benefícios de Ocultar Magia sem precisar fazer um teste de Dissimulação, já que a magia não possui componentes verbais.",
+            acoes="1",
+            pre_requisitos="Ocultar Magia",
+        ),
+        # 6º nível
+        construir_talento_classe(
+            "Conjuração Consistente",
+            6,
+            ["Mago"],
+            "Confiante em sua técnica, você não perde a concentração facilmente quando Conjura uma Magia. Se uma reação fosse interromper sua ação de conjuração, faça um teste simples CD 15. Se obtiver sucesso, sua ação não é interrompida.",
+        ),
+        construir_talento_classe(
+            "Penetração de Magia",
+            6,
+            ["Mago"],
+            "Você estudou formas de superar a resistência mágica inata possuída por dragões, seres de outros mundos e certas criaturas poderosas. Quando uma criatura possuir um bônus de estado em jogadas de salvamento contra magia, reduza esse bônus em 1 ponto quando ela for alvo de suas magias.",
+        ),
+        # 8º nível
+        construir_talento_classe(
+            "Conservação de Elo",
+            8,
+            ["Mago", "Manuseio", "Metamágico"],
+            "Manipulando cuidadosamente as energias arcanas armazenadas ao drenar seu item ligado, você conserva poder o suficiente para conjurar outra magia um pouco mais fraca. Se a sua próxima ação for Conjurar uma Magia usando a energia de Drenar Item Ligado, você ganha um uso extra de Drenar Item Ligado. Você deve usar este Drenar Item Ligado extra antes do final de seu próximo turno ou o perderá, e só pode usá-lo para conjurar uma magia pelo menos 2 níveis inferior à magia conjurada anteriormente com Drenar Item Ligado.",
+            acoes="1",
+            pre_requisitos="elo arcano",
+            requerimentos="A última ação que você usou foi Drenar Item Ligado.",
+        ),
+        construir_talento_classe(
+            "Magia de Escola Avançada",
+            8,
+            ["Mago"],
+            "Você obtém acesso a uma poderosa nova magia de escola correspondente à sua escola arcana. Se for um abjurador, você recebe absorção de energia; se for um adivinho, você recebe olho vigilante; se for um conjurador, você recebe passos dimensionais; se for um encantador, você recebe aura pavorosa; se for um evocador, você recebe tempestade elemental; se for um ilusionista, você recebe manto de invisibilidade; se for um necromante, você recebe sifonar vida; se for um transmutador, você recebe forma mutável. Essas magias são descritas nas páginas 405 e 406. Aumente em 1 a quantidade de Pontos de Foco em sua reserva de foco.",
+            pre_requisitos="escola arcana",
+        ),
+        construir_talento_classe(
+            "Versatilidade Universal",
+            8,
+            ["Mago"],
+            "Você consegue acessar as habilidades fundamentais de qualquer escola de magia. Durante suas preparações diárias, escolha uma das oito magias de escola disponíveis para os magos especialistas de 1º nível. Você pode usar a magia dessa escola até realizar suas próximas preparações diárias. Quando Refocar, você pode escolher uma magia de escola diferente entre essas oito magias de escola, substituindo a anterior. Aumente em 1 a quantidade de Pontos de Foco em sua reserva de foco.",
+            pre_requisitos="mago universalista, Mão do Aprendiz",
+        ),
+        # 10º nível
+        construir_talento_classe(
+            "Conjuração Acelerada",
+            10,
+            ["Concentração", "Mago", "Metamágico"],
+            "Através de um processo mental extenuante, você modifica a conjuração de uma magia para gastar menos tempo. Se a sua próxima ação for conjurar um truque mágico ou magia de mago que seja pelo menos 2 níveis inferior ao maior nível de magia de mago que você possa conjurar, reduza em 1 a quantidade de ações para conjurá-la (mínimo de 1 ação).",
+            acoes="livre",
+            frequencia="uma vez por dia",
+        ),
+        construir_talento_classe(
+            "Energia Avassaladora",
+            10,
+            ["Mago", "Manuseio", "Metamágico"],
+            "Com um gesto complexo, você altera a energia de sua magia para superar as resistências de inimigos. Se a sua próxima ação for Conjurar uma Magia, essa magia ignora um valor igual ao seu nível de personagem da resistência do alvo contra dano de ácido, eletricidade, fogo, frio e sônico. Isto se aplica a todo dano causado pela magia, incluindo dano persistente e qualquer dano causado por algum efeito contínuo (como da muralha criada por muralha de fogo). As imunidades de uma criatura não são afetadas, apenas resistências.",
+            acoes="1",
+        ),
+        construir_talento_classe(
+            "Sagaz em Pergaminho",
+            10,
+            ["Mago"],
+            "Durante suas preparações diárias, você pode criar dois pergaminhos temporários contendo magias arcanas de seu grimório. Estes pergaminhos seguem as regras normais para pergaminhos (página 573), com algumas restrições adicionais. Cada pergaminho deve pertencer a um nível diferente, e o nível de magia de ambos deve ser pelo menos 2 níveis inferior ao maior nível de magia que você possa conjurar. Quaisquer pergaminhos criados desta forma perdem seu efeito mágico na próxima vez que você fizer suas preparações diárias. Um pergaminho temporário não tem valor. Se possuir proficiência mestre em CDs de magias arcanas, você pode criar três pergaminhos temporários durante suas preparações diárias e, se possuir proficiência lendária, você pode criar quatro pergaminhos temporários.",
+            pre_requisitos="especialista em Manufatura",
+        ),
+        # 12º nível
+        construir_talento_classe(
+            "Sentido Mágico",
+            12,
+            ["Adivinhação", "Arcano", "Detecção", "Mago"],
+            "Você possui literalmente um sexto sentido para magia. Você pode sentir a presença de auras mágicas como se estivesse sempre usando detectar magia de 1º nível. Esse efeito detecta magia somente em seu campo de visão. Quando Buscar, você recebe os benefícios de detectar magia de 3º nível em qualquer coisa que possa ver (além dos benefícios normais de Buscar). Você pode desligar e ligar este sentido com uma ação livre no início ou final de seu turno.",
+        ),
+        construir_talento_classe(
+            "Trespassar Contramágica",
+            12,
+            ["Mago"],
+            "Você criativamente aplica suas magias preparadas para usar sua Contramágica contra uma maior variedade de magias. Em vez de neutralizar a magia de um adversário somente se possuir a mesma magia preparada, você pode usar Contramágica desde que possua em seu grimório a magia sendo conjurada por seu adversário. Quando usar Contramágica desta maneira, você deve gastar uma magia preparada que possua pelo menos um traço em comum com a magia acionadora (além do traço de sua tradição). Em vez disso, a critério do MJ, você pode usar uma magia que tenha um traço oposto ao da magia do oponente ou que poderia neutralizar logicamente a magia acionadora (como usar uma magia de água ou frio para neutralizar bola de fogo ou usar remover medo contra uma magia de medo). Independentemente de qual magia gastar, você sofre –2 de penalidade em seu teste de neutralização (embora o MJ possa remover esta penalidade se a magia gasta for especialmente apropriada).",
+            pre_requisitos="Contramágica, Reconhecimento Rápido",
+        ),
+        # 14º nível
+        construir_talento_classe(
+            "Elo Superior",
+            14,
+            ["Mago"],
+            "Quando drenar seu item ligado, você pode deixar um pouco de energia remanescente para um uso posterior. Você pode usar Drenar Item Ligado uma vez adicional por dia, mas apenas para conjurar uma magia pelo menos 2 níveis inferior ao maior nível de magia que possa conjurar.",
+            pre_requisitos="Elo Arcano",
+        ),
+        construir_talento_classe(
+            "Foco de Elo",
+            14,
+            ["Mago"],
+            "A forte conexão com seu item ligado aumenta sua reserva de foco. Se tiver gastado pelo menos 2 Pontos de Foco desde a última vez que Refocou, você recupera 2 Pontos de Foco ao Refocar (em vez de recuperar somente 1 ponto).",
+            pre_requisitos="elo arcano",
+        ),
+        construir_talento_classe(
+            "Refletir Magia",
+            14,
+            ["Mago"],
+            "Quando obtiver sucesso em uma Contramágica para neutralizar uma magia que afete criaturas alvo ou uma área, você pode devolver o efeito da magia ao seu conjurador. Quando refletida, a magia afeta apenas o conjurador original, mesmo se for uma magia de área ou que normalmente afete mais de uma criatura. O conjurador original pode tentar um salvamento e usar outras defesas contra a magia refletida normalmente.",
+            pre_requisitos="Contramágica",
+        ),
+        # 16º nível
+        construir_talento_classe(
+            "Concentração Sem Esforço",
+            16,
+            ["Mago"],
+            "Você pode sustentar uma magia com pouco mais do que um pensamento. Você imediatamente recebe os efeitos da ação Sustentar uma Magia, permitindo-lhe prolongar a duração de uma de suas magias de mago ativas.",
+            acoes="livre",
+            acionamento="Seu turno começa.",
+        ),
+        construir_talento_classe(
+            "Rearranjar Magia",
+            16,
+            ["Concentração", "Mago"],
+            "Você aprendeu a alterar as escolhas feitas durante a conjuração de magias em si mesmo. Após conjurar uma magia que tenha afetado apenas você e que lhe ofereceu múltiplas escolhas de efeito (como resistir a energia, imunidade a magia ou uma magia de polimorfia que oferece algumas formas potenciais), você pode alterar a escolha feita quando Conjurou a Magia (como escolher um tipo diferente de dano para resistir a energia). Entretanto, esse rearranjo enfraquece a integridade da magia e reduz sua duração remanescente pela metade. Você não pode usar este talento se os benefícios da magia já tiverem sido gastados, se os efeitos da primeira escolha persistirem de alguma forma após essa troca (por exemplo, se uma das escolhas tiver sido lhe curar ou criar um item consumível que já foi usado) ou se o talento criaria um efeito mais poderoso que o oferecido pela magia base. O MJ é o árbitro final sobre os efeitos aos quais Rearranjar Magia pode ser aplicado.",
+            acoes="2",
+        ),
+        # 18º nível
+        construir_talento_classe(
+            "Possibilidades Infinitas",
+            18,
+            ["Mago"],
+            "Você encontrou uma forma de preparar um espaço de magia que existe em sua mente como diversas possibilidades ao mesmo tempo. Uma vez durante suas preparações diárias, você pode usar um espaço de magia para conter esse potencial infinito (em vez de utilizá-lo para preparar uma única magia). Você pode usar este espaço de magia para conjurar qualquer magia de seu grimório que seja pelo menos 2 níveis inferior ao espaço de magia designado; a magia age de todas as formas como uma magia 2 níveis inferior. Você não possui qualquer magia em particular preparada nesse espaço de magia até conjurá-la.",
+        ),
+        construir_talento_classe(
+            "Repreparar Magia",
+            18,
+            ["Mago"],
+            "Você descobriu uma maneira de reutilizar alguns de seus espaços de magia várias vezes. Você pode gastar 10 minutos para preparar uma magia que já tenha conjurado nesse dia, recuperando acesso a esse espaço de magia. A magia deve ser de 4º nível ou inferior e não pode ter uma duração. Você pode repreparar uma magia desta forma mesmo se já a tiver preparado previamente no mesmo dia. Se possuir a tese arcana substituição de magia, você pode preparar uma magia diferente em um espaço gasto, desde que a nova magia não tenha uma duração. Após ter repreparado a nova magia nesse espaço uma vez, você pode usar sua tese arcana somente para substituir magias sem durações nesse espaço de magia.",
+        ),
+        # 20º nível
+        construir_talento_classe(
+            "Combinação de Magia",
+            20,
+            ["Mago"],
+            "Você pode fundir magias, produzindo múltiplos efeitos com uma única conjuração. Um espaço de cada nível de magia que você pode conjurar, exceto de 2º e 1º níveis, se torna um espaço de combinação de magia (isto não se aplica a truques mágicos). Quando preparar suas magias, você pode preencher um espaço de combinação com uma combinação de duas magias. Cada magia na combinação deve ser pelo menos 2 níveis inferior ao do espaço de magia, e ambas devem mirar somente uma criatura ou objeto ou ter a opção de mirar somente uma criatura ou objeto. Cada magia na combinação também deve ter os mesmos meios para determinar sua efetividade — ambas as magias devem requerer uma rolagem de ataque de magia, requerer o mesmo tipo de jogada de salvamento ou afetar o alvo automaticamente. Quando conjurar uma magia combinada, ela afeta somente um alvo, mesmo se suas magias componentes normalmente afetariam mais de um alvo. Se qualquer magia na combinação possuir outras restrições (como mirar somente criaturas vivas), você deve obedecer a todas essas restrições. A magia combinada usa as distâncias mais curtas das magias componentes. Resolva uma magia combinada como se ela fosse uma única magia, mas aplique os efeitos de ambas magias componentes. Por exemplo: se o alvo da magia obteve sucesso no salvamento contra uma magia combinada, você aplica o efeito de sucesso de cada magia; se ele falhou criticamente, você aplica o efeito de falha crítica de ambas as magias.",
+        ),
+        construir_talento_classe(
+            "Maestria Metamágica",
+            20,
+            ["Mago"],
+            "Alterar suas magias não leva mais tempo do que conjurá-las normalmente. Você pode usar ações únicas metamágicas como ações livres.",
+        ),
+        construir_talento_classe(
+            "Poder do Arquimago",
+            20,
+            ["Mago"],
+            "Você dominou os maiores segredos da magia arcana. Você recebe um espaço de magia adicional de 10º nível.",
+            pre_requisitos="arte do arquimago",
+        ),
+    ]
+
+    return {
+        "id": "mago",
+        "nome": "Mago",
+        "paginas": "178-189",
+        "descricao": "Você é um eterno estudante dos segredos arcanos do universo, utilizando sua maestria mística para conjurar magias poderosas e devastadoras. Você trata a magia como uma ciência, cruzando referências de textos mais recentes da prática mágica moderna com tomos esotéricos antigos para descobrir e compreender o funcionamento interno da magia. Porém, o campo da teoria mágica é vasto, e não há como você estudá-lo por completo. Você se especializa em uma das oito escolas de magia, aprofundando-se nas nuances desse tipo específico de magia ou assume uma abordagem mais ampla enfatizando os laços em comum que unem todas as magias.",
+        "atributo_chave": {
+            "opcoes": ["inteligencia"],
+            "melhoria_1_nivel": 2,
+            "texto": "Inteligência — No 1º nível, sua classe lhe concede uma melhoria de atributo em Inteligência.",
+        },
+        "pontos_de_vida_por_nivel": 6,
+        "pontos_de_vida_texto": "6 mais seu modificador de Constituição no 1º nível e a cada nível subsequente.",
+        "jogando_com_a_classe": {
+            "encontros_combate": "Você provavelmente tenta ficar longe da peleja, cuidadosamente decidindo o melhor momento para usar suas magias. Você poupa suas magias mais poderosas para incapacitar os adversários mais ameaçadores e usa seus truques mágicos quando restam apenas adversários mais fracos. Quando seus inimigos se valem de truques como invisibilidade ou voo, você responde com magias como poeira reluzente ou prender à terra, igualando as chances para seus aliados.",
+            "encontros_sociais": "Você representa uma fonte de conhecimento sobre assuntos arcanos além de solucionar discussões e problemas através da lógica.",
+            "exploracao": "Você localiza auras mágicas e determina a significância arcana de escritas ou fenômenos mágicos encontrados. Quando se depara com um obstáculo inusitado que impede o avanço de sua exploração, você provavelmente tem um pergaminho que tornará mais fácil superá-lo.",
+            "recesso": "Você aprende novas magias, cria itens mágicos ou escreve pergaminhos para seu grupo e busca fórmulas novas e empolgantes de magias. Você pode até mesmo forjar conexões acadêmicas e estabelecer uma escola ou guilda própria.",
+            "voce_pode": [
+                "Ter uma curiosidade insaciável sobre o funcionamento de tudo no mundo ao seu redor — especialmente a magia.",
+                "Acreditar fervorosamente na superioridade de uma escola de magia em particular (se for especialista) ou no fato de que a verdadeira maestria da magia exige conhecimento sobre todas as escolas (se for um universalista).",
+                "Utilizar jargões esotéricos e termos técnicos para descrever precisamente os detalhes minuciosos de efeitos mágicos, mesmo que a diferença seja imperceptível para a maioria das pessoas.",
+            ],
+            "outros_provavelmente": [
+                "Consideram que você é incrivelmente poderoso e potencialmente perigoso.",
+                "Temem o que sua magia pode fazer com suas mentes, corpos e almas, e pedem que você evite conjurar magias em locais civilizados — já que poucos são capazes de identificar se uma de suas magias é inofensiva ou malevolente até ser tarde demais.",
+                "Pressupõem que você pode facilmente solucionar todos seus problemas, desde um clima perigoso a uma colheita ruim, e pedem por magias para resolver qualquer problema.",
+            ],
+        },
+        "proficiencias_iniciais": {
+            "percepcao": "treinado",
+            "salvamentos": {
+                "fortitude": "treinado",
+                "reflexos": "treinado",
+                "vontade": "especialista",
+            },
+            "pericias": {
+                "fixas": ["arcanismo"],
+                "opcoes_fixas": [],
+                "condicionais": [],
+                "adicionais_base": 2,
+                "soma_modificador_inteligencia": True,
+                "texto": "Treinado em Arcanismo; treinado em uma quantidade de perícias adicionais igual a 2 mais seu modificador de Inteligência.",
+            },
+            "ataques": {
+                "armas_simples": "destreinado",
+                "armas_especificas": ["adaga", "besta leve", "besta pesada", "cajado", "clava"],
+                "ataques_desarmados": "treinado",
+            },
+            "defesas": {
+                "armaduras_leves": "destreinado",
+                "armaduras_medias": "destreinado",
+                "armaduras_pesadas": "destreinado",
+                "todas_armaduras": "destreinado",
+                "defesa_sem_armadura": "treinado",
+            },
+            "cd_classe": None,
+            "magias": {
+                "tradicao": "arcana",
+                "tipo_conjuracao": "preparada",
+                "ataques_magia": "treinado",
+                "cds_magia": "treinado",
+                "atributo_conjuracao": "inteligencia",
+                "texto": "Treinado em ataques de magias arcanas; treinado em CDs de magias arcanas.",
+            },
+        },
+        "tabela_progressao": tabela_progressao,
+        "tabelas_especificas": {
+            "tabela_3_17_magias_por_dia": construir_tabela_magias_3_por_dia(
+                "A característica de classe arte do arquimago lhe concede um espaço de magia de 10º nível que funciona diferente dos outros espaços de magia."
+            ),
+            "exemplo_de_grimorio": {
+                "nome": "Estrutura e Interpretação da Magia Arcana",
+                "truques_magicos": [
+                    "arco elétrico",
+                    "detectar magia",
+                    "escudo místico",
+                    "jorro ácido",
+                    "ler aura",
+                    "luz",
+                    "mão mística",
+                    "mensagem",
+                    "prestidigitação",
+                    "raio de gelo",
+                ],
+                "1_nivel": [
+                    "armadura mística",
+                    "leque de cores",
+                    "lubrificar",
+                    "mãos flamejantes",
+                    "mísseis mágicos",
+                ],
+                "observacao": "Mais uma magia de sua escola se você for um mago especialista.",
+            },
+        },
+        "caracteristicas_de_classe": caracteristicas,
+        "subclasses": {
+            "tipo": "escola_arcana",
+            "nome_tipo": "Escola Arcana",
+            "descricao": "Especialização em uma das oito escolas arcanas ou abordagem universalista (complementada pela escolha da Tese Arcana no 1º nível).",
+            "opcoes": escolas_arcanas,
+            "escolhas_complementares": {
+                "tipo": "tese_arcana",
+                "nome_tipo": "Tese Arcana",
+                "opcoes": [
+                    {"id": t["id"], "nome": t["nome"]} for t in teses_arcanas
+                ],
+            },
+        },
+        "termos_chave": [
+            {
+                "termo": "Metamágico",
+                "descricao": "Ações com esse traço alteram as propriedades de suas magias. Você deve usar uma ação metamágica logo antes de Conjurar a Magia que deseja alterar. Se usar qualquer outra ação (incluindo ações livres e reações) diferente de Conjurar uma Magia logo após essa ação metamágica, você desperdiça os benefícios da ação metamágica. Efeitos acrescentados por uma ação metamágica são parte do efeito da magia, não da ação metamágica em si.",
+            }
+        ],
+        "exemplos_personagens": [
+            {
+                "nome": "Conjurador",
+                "pagina": 184,
+                "resumo": "Sua magia convoca criaturas, o transporta e cria itens úteis. Você tem conhecimento sobre criaturas estranhas e reinos distantes.",
+                "atributos": "Priorize Inteligência. Destreza, Constituição e Sabedoria aumentam suas defesas.",
+                "pericias": [
+                    "Arcanismo",
+                    "Diplomacia",
+                    "Manufatura",
+                    "Natureza",
+                    "Ocultismo",
+                    "Religião",
+                    "Sociedade",
+                ],
+                "subclasse": "Conjuração",
+                "tese": "Sintonização com Familiar Aprimorada",
+                "talentos_niveis_superiores": [
+                    "Familiar Melhorado (2º)",
+                    "Magia de Escola Avançada (8º)",
+                    "Concentração Sem Esforço (16º)",
+                ],
+            },
+            {
+                "nome": "Ilusionista",
+                "pagina": 188,
+                "resumo": "Você conjura magias ilusórias que enganam os sentidos e se especializa em superar ameaças sem usar violência.",
+                "atributos": "Priorize Inteligência. Aumente Destreza e Carisma para que possa se esgueirar e enganar pessoas com perícias tão bem quanto com suas magias.",
+                "pericias": [
+                    "Arcanismo",
+                    "Diplomacia",
+                    "Dissimulação",
+                    "Furtividade",
+                    "Ladroagem",
+                    "Ocultismo",
+                    "Sociedade",
+                ],
+                "subclasse": "Ilusão",
+                "tese": "Mescla de Magia",
+                "talentos_niveis_superiores": [
+                    "Ocultar Magia (2º)",
+                    "Magia Silenciosa (4º)",
+                    "Magia de Escola Avançada (8º)",
+                    "Sentido Mágico (12º)",
+                ],
+            },
+        ],
+        "talentos_de_classe": talentos,
+    }
+
+
+def construir_monge() -> dict[str, Any]:
+    tabela_progressao = construir_tabela_progressao(
+        [
+            (1, "Ancestralidade e biografia, proficiências iniciais, punho poderoso, rajada de golpes, talento de monge"),
+            (2, "Talento de monge, talento de perícia"),
+            (3, "Golpes místicos, incremento de perícia, movimento incrível +3 metros, talento geral"),
+            (4, "Talento de monge, talento de perícia"),
+            (5, "Especialidade em golpes, incremento de perícia, melhorias de atributo, prontidão, talento de ancestralidade"),
+            (6, "Talento de monge, talento de perícia"),
+            (7, "Caminho para a perfeição, especialização em armas, incremento de perícia, movimento incrível +4,5 metros, talento geral"),
+            (8, "Talento de monge, talento de perícia"),
+            (9, "Especialidade de monge, golpes metálicos, incremento de perícia, talento de ancestralidade"),
+            (10, "Melhorias de atributo, talento de monge, talento de perícia"),
+            (11, "Incremento de perícia, movimento incrível +6 metros, segundo caminho para a perfeição, talento geral"),
+            (12, "Talento de monge, talento de perícia"),
+            (13, "Incremento de perícia, maestria em golpes, maestria graciosa, talento de ancestralidade"),
+            (14, "Talento de monge, talento de perícia"),
+            (15, "Especialização em armas maior, incremento de perícia, melhorias de atributo, movimento incrível +7,5 metros, talento geral, terceiro caminho para a perfeição"),
+            (16, "Talento de monge, talento de perícia"),
+            (17, "Golpes adamantinos, incremento de perícia, lenda graciosa, talento de ancestralidade"),
+            (18, "Talento de monge, talento de perícia"),
+            (19, "Forma aperfeiçoada, incremento de perícia, movimento incrível +9 metros, talento geral"),
+            (20, "Melhorias de atributo, talento de monge, talento de perícia"),
+        ]
+    )
+
+    ataques_desarmados_de_monge = [
+        {
+            "ataque": "Asa da garça",
+            "dano": "1d6 Cn",
+            "grupo": "Pugilato",
+            "tracos": ["Acuidade", "ágil", "desarmado", "não-letal"],
+            "observacao": None,
+        },
+        {
+            "ataque": "Cano de ferro",
+            "dano": "1d8 Cn",
+            "grupo": "Pugilato",
+            "tracos": ["Amplitude", "aparar", "desarmado", "não-letal"],
+            "observacao": None,
+        },
+        {
+            "ataque": "Cauda do dragão",
+            "dano": "1d10 Cn",
+            "grupo": "Pugilato",
+            "tracos": ["Desarmado", "não-letal", "oscilante"],
+            "observacao": None,
+        },
+        {
+            "ataque": "Estampido do vento",
+            "dano": "1d6 Ct",
+            "grupo": "Pugilato",
+            "tracos": ["Ágil", "desarmado", "não-letal", "propulsivo"],
+            "observacao": "A postura dos ventos selvagens é uma magia de ki (página 407).",
+        },
+        {
+            "ataque": "Galho chicoteante",
+            "dano": "1d8 Ct",
+            "grupo": "Pugilato",
+            "tracos": ["Acuidade", "ágil", "desarmado", "não-letal"],
+            "observacao": None,
+        },
+        {
+            "ataque": "Garra do tigre",
+            "dano": "1d8 Ct",
+            "grupo": "Pugilato",
+            "tracos": ["Acuidade", "ágil", "desarmado", "não-letal"],
+            "observacao": None,
+        },
+        {
+            "ataque": "Mandíbula do lobo",
+            "dano": "1d8 Pf",
+            "grupo": "Pugilato",
+            "tracos": ["Acuidade", "ágil", "apunhalador", "desarmado", "não-letal"],
+            "observacao": None,
+        },
+        {
+            "ataque": "Pedra cadente",
+            "dano": "1d8 Cn",
+            "grupo": "Pugilato",
+            "tracos": ["Desarmado", "enérgico", "não-letal"],
+            "observacao": None,
+        },
+    ]
+
+    acao_rajada_de_golpes = construir_acao_habilidade(
+        "Rajada de Golpes",
+        "1",
+        ["Floreio", "Monge"],
+        "Faça dois Golpes desarmados. Se ambos atingirem a mesma criatura, some seus danos para o propósito de resistências e fraquezas. Aplique sua penalidade por ataques múltiplos normalmente a esses Golpes. Como esta ação possui o traço Floreio, você pode usar Rajada de Golpes somente uma vez por turno.",
+    )
+
+    caracteristicas = [
+        construir_caracteristica_classe(
+            "Ancestralidade e Biografia",
+            1,
+            "Além das habilidades fornecidas por sua classe no 1º nível, você possui os benefícios da ancestralidade e biografia selecionadas, conforme descrito no Capítulo 2.",
+        ),
+        construir_caracteristica_classe(
+            "Proficiências Iniciais",
+            1,
+            "No 1º nível, você recebe proficiências que representam seu treinamento básico. Estas proficiências são listadas no início desta classe.",
+        ),
+        construir_caracteristica_classe(
+            "Punho Poderoso",
+            1,
+            "Você sabe utilizar seus punhos como armas mortais. O dado de dano de seus punhos aumenta de 1d4 para 1d6. A maioria das pessoas sofre –2 de penalidade de circunstância para desferir um ataque letal com ataques desarmados não-letais, pois têm dificuldade em usar seus punhos com força mortal. Você não sofre esta penalidade para desferir um ataque letal com seu punho ou com quaisquer outros ataques desarmados.",
+        ),
+        construir_caracteristica_classe(
+            "Rajada de Golpes",
+            1,
+            "Você pode atacar rapidamente com punhos, pés, cotovelos, joelhos e outros ataques desarmados. Você ganha a ação Rajada de Golpes.",
+            acoes_concedidas=[acao_rajada_de_golpes],
+        ),
+        construir_caracteristica_classe(
+            "Talentos de Monge",
+            1,
+            "No 1º nível e a cada nível par subsequente, você recebe um talento de classe de monge. Os talentos de classe de monge são descritos a partir da página 194.",
+        ),
+        construir_caracteristica_classe(
+            "Talentos de Perícia",
+            2,
+            "No 2º nível e a cada 2 níveis subsequentes, você recebe um talento de perícia. Talentos de perícia podem ser encontrados no Capítulo 5 e possuem o traço perícia. Você deve possuir uma graduação de proficiência treinado ou melhor na perícia correspondente para selecionar um talento de perícia.",
+        ),
+        construir_caracteristica_classe(
+            "Golpes Místicos",
+            3,
+            "Você foca sua vontade nos seus ataques físicos, imbuindo-os com energia mística. Seus golpes desarmados se tornam mágicos, permitindo que ultrapassem resistências contra ataques não-mágicos. Entretanto, você ainda precisa de um item como bandagens das pancadas poderosas para receber um bônus de item em rolagens de ataque ou aumentar os dados de dano dos seus golpes desarmados.",
+        ),
+        construir_caracteristica_classe(
+            "Incrementos de Perícia",
+            3,
+            "No 3º nível e a cada 2 níveis subsequentes, você recebe um incremento de perícia. Você pode usar este incremento para aumentar sua graduação de proficiência para treinado em uma perícia na qual seja destreinado ou para aumentar sua graduação de proficiência para especialista em uma perícia na qual já seja treinado. No 7º nível, você pode usar incrementos de perícia para aumentar sua graduação de proficiência para mestre em uma perícia na qual já seja especialista e, no 15º nível, você pode usar incrementos de perícia para aumentar sua graduação de proficiência para lendário em uma perícia na qual já seja mestre.",
+        ),
+        construir_caracteristica_classe(
+            "Movimento Incrível",
+            3,
+            "Você se move como o vento. Você recebe +3 metros de bônus de estado em sua Velocidade sempre que não estiver vestindo armadura. O bônus aumenta em 1,5 metros para cada 4 níveis que você possuir além do 3º (+4,5 m no 7º, +6 m no 11º, +7,5 m no 15º — impresso '+75 metros' na Tabela 3–18 por errata — e +9 m no 19º).",
+            detalhes={"bonus_por_nivel": {"3": 3.0, "7": 4.5, "11": 6.0, "15": 7.5, "19": 9.0}},
+        ),
+        construir_caracteristica_classe(
+            "Talentos Gerais",
+            3,
+            "No 3º nível e a cada 4 níveis subsequentes, você recebe um talento geral. Talentos gerais são listados no Capítulo 5.",
+        ),
+        construir_caracteristica_classe(
+            "Especialidade em Golpes",
+            5,
+            "Você praticou arduamente artes marciais e agora superou suas antigas capacidades. Suas graduações de proficiência em ataques desarmados e armas simples aumentam para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Melhorias de Atributo",
+            5,
+            "No 5º nível e a cada 5 níveis subsequentes, você melhora os valores de quatro atributos diferentes. Você pode usar estas melhorias de atributo para aumentar seus valores de atributo acima de 18 pontos. Incrementar um valor de atributo aumenta seu valor em 1 ponto se ele já for 18 ou maior, ou em 2 pontos se ele for menor que 18.",
+        ),
+        construir_caracteristica_classe(
+            "Prontidão",
+            5,
+            "Você permanece alerta às ameaças ao seu redor. Sua graduação de proficiência em Percepção aumenta para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Talentos de Ancestralidade",
+            5,
+            "Além do talento de ancestralidade recebido na criação do personagem, você recebe um talento de ancestralidade no 5º nível e a cada 4 níveis subsequentes. A lista de talentos de ancestralidade disponíveis para você pode ser encontrada na seção de sua ancestralidade no Capítulo 2.",
+        ),
+        construir_caracteristica_classe(
+            "Caminho para a Perfeição",
+            7,
+            "Você progrediu em seu próprio caminho para a iluminação. Escolha sua jogada de salvamento de Fortitude, Reflexos ou Vontade. Sua graduação de proficiência para a jogada de salvamento escolhida aumenta para mestre. Quando rolar um sucesso no salvamento escolhido, trate o resultado como um sucesso crítico.",
+        ),
+        construir_caracteristica_classe(
+            "Especialização em Armas",
+            7,
+            "Você aprendeu a infligir ferimentos graves com suas armas favoritas. Você causa 2 pontos de dano adicionais com armas e ataques desarmados nos quais é especialista. Este dano aumenta para 3 se você for mestre e para 4 se você for lendário.",
+        ),
+        construir_caracteristica_classe(
+            "Especialidade de Monge",
+            9,
+            "Sua graduação de proficiência em sua CD de classe de monge aumenta para especialista. Se possuir magias de ki, suas graduações de proficiência em ataques de magia e CDs de magias com a tradição de magia utilizada para suas magias de ki aumentam para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Golpes Metálicos",
+            9,
+            "Você pode ajustar seu corpo para desferir ataques desarmados infundidos com a energia mística de metais raros. Seus golpes desarmados são tratados como ferro frio e prata. Isto lhe permite causar mais dano a várias criaturas sobrenaturais, como demônios, diabos e fadas.",
+        ),
+        construir_caracteristica_classe(
+            "Segundo Caminho para a Perfeição",
+            11,
+            "Você descobriu como encontrar a perfeição em cada sucesso. Escolha uma jogada de salvamento diferente da escolhida em seu caminho para a perfeição. Sua graduação de proficiência para a jogada de salvamento escolhida aumenta para mestre. Quando rolar um sucesso no salvamento escolhido, trate o resultado como um sucesso crítico.",
+        ),
+        construir_caracteristica_classe(
+            "Maestria em Golpes",
+            13,
+            "Você aprimorou sua capacidade de usar seu corpo como arma. Suas graduações de proficiência em ataques desarmados e armas simples aumentam para mestre.",
+        ),
+        construir_caracteristica_classe(
+            "Maestria Graciosa",
+            13,
+            "Você se move com graça perpétua em batalha, evitando e se esquivando de golpes. Sua graduação de proficiência em defesa sem armadura aumenta para mestre.",
+        ),
+        construir_caracteristica_classe(
+            "Especialização em Armas Maior",
+            15,
+            "Seu dano de especialização em armas aumenta para 4 pontos com armas e ataques desarmados nos quais é especialista, para 6 pontos de dano nos quais é mestre e para 8 pontos de dano nos quais é lendário.",
+        ),
+        construir_caracteristica_classe(
+            "Terceiro Caminho para a Perfeição",
+            15,
+            "Você alcançou um grande progresso em seus estudos pessoais para a iluminação. Escolha uma das jogadas de salvamento que você tenha selecionado para caminho para a perfeição ou segundo caminho para a perfeição. Sua graduação de proficiência para a jogada de salvamento escolhida aumenta para lendário. Quando rolar uma falha crítica no salvamento escolhido, trate o resultado como uma falha. Quando rolar uma falha em um salvamento do tipo escolhido contra um efeito que causa dano, divida o dano sofrido pela metade.",
+        ),
+        construir_caracteristica_classe(
+            "Golpes Adamantinos",
+            17,
+            "Quando foca sua vontade em seus membros, seus golpes são firmes como o mais duro dos metais. Seus golpes desarmados são tratados como adamante.",
+        ),
+        construir_caracteristica_classe(
+            "Lenda Graciosa",
+            17,
+            "Seu movimento sublime lhe concede proteção e ofensiva inigualáveis. Sua graduação de proficiência em defesa sem armadura aumenta para lendário, e sua graduação de proficiência em sua CD de classe de monge aumenta para mestre. Se possuir magias de ki, suas graduações de proficiência em ataques de magia e CDs de magias com a tradição de magia utilizada para suas magias de ki aumentam para mestre.",
+        ),
+        construir_caracteristica_classe(
+            "Forma Aperfeiçoada",
+            19,
+            "Você removeu todas as imperfeições de suas técnicas. No seu primeiro Golpe durante seu turno, se rolar menor do que 10, você pode tratar a rolagem de ataque como um resultado 10. Este é um efeito de fortuna.",
+        ),
+    ]
+
+    talentos = [
+        # 1º nível
+        construir_talento_classe(
+            "Arsenal Monástico",
+            1,
+            ["Monge"],
+            "Você treinou com as armas tradicionais de sua escola ou monastério. Você obtém acesso a armas incomuns que possuam o traço monge e se torna treinado em armas de monge simples e marciais. Quando sua graduação de proficiência para ataques desarmados aumentar para especialista ou mestre, sua graduação de proficiência para estas armas também aumenta para a mesma graduação. Você pode usar armas marciais de monge com quaisquer talentos ou habilidades de monge que normalmente requeiram ataques desarmados, embora não possa fazê-lo se o talento ou habilidade requerer o uso de um tipo específico de ataque, como Postura da Garça.",
+        ),
+        construir_talento_classe(
+            "Disparada de Ki",
+            1,
+            ["Monge"],
+            "Você pode usar seu ki para se mover a uma velocidade extraordinária e dificultar as chances de ser acertado. Você recebe a magia de ki disparada de ki e uma reserva de foco de 1 Ponto de Foco. As regras para magias de ki são resumidas no quadro da página 193, e as regras completas para magias de foco aparecem na página 300.",
+        ),
+        construir_talento_classe(
+            "Golpe de Ki",
+            1,
+            ["Monge"],
+            "Seu estudo do fluxo de energia mística lhe permite canalizá-la em seus golpes físicos. Você recebe a magia de ki golpe de ki e uma reserva de foco de 1 Ponto de Foco. As regras para magias de ki são resumidas no quadro da página 193, e as regras completas para magias de foco aparecem na página 300.",
+        ),
+        construir_talento_classe(
+            "Postura do Dragão",
+            1,
+            ["Monge", "Postura"],
+            "Você entra na postura de um dragão, desferindo poderosos golpes com as pernas como a cauda chicoteante de um dragão. Você pode realizar ataques de cauda do dragão que causam 1d10 de dano contundente. Esses ataques pertencem ao grupo pugilato e possuem os traços desarmado, não-letal e oscilante. Enquanto estiver na Postura do Dragão, você pode ignorar o primeiro quadrado de terreno difícil ao Andar.",
+            acoes="1",
+            requerimentos="Você está sem armadura.",
+        ),
+        construir_talento_classe(
+            "Postura da Garça",
+            1,
+            ["Monge", "Postura"],
+            "Você entra na postura de uma garça, mantendo seus braços em uma imitação de asas e usando movimentos fluidos e defensivos. Você recebe +1 de bônus de circunstância na CA, mas os únicos Golpes que você pode realizar são ataques de asa da garça. Esses ataques causam 1d6 de dano contundente, pertencem ao grupo pugilato e possuem os traços acuidade, ágil, desarmado e não-letal. Enquanto estiver na Postura da Garça, reduza a CD para Salto em Altura e Salto em Distância em 5 pontos e, quando Saltar, você pode mover-se 1,5 metros adicionais horizontalmente ou 60 centímetros verticalmente.",
+            acoes="1",
+            requerimentos="Você está sem armadura.",
+        ),
+        construir_talento_classe(
+            "Postura do Lobo",
+            1,
+            ["Monge", "Postura"],
+            "Você entra na postura de um lobo, abaixado com suas mãos lembrando o formato de presas. Você pode realizar ataques desarmados de mandíbula do lobo. Esses ataques causam 1d8 de dano perfurante, pertencem ao grupo pugilato e possuem os traços acuidade, ágil, apunhalador, desarmado e não-letal. Se flanquear um alvo enquanto estiver na Postura do Lobo, seus ataques desarmados de mandíbula do lobo também recebem o traço derrubar.",
+            acoes="1",
+            requerimentos="Você está sem armadura.",
+        ),
+        construir_talento_classe(
+            "Postura da Montanha",
+            1,
+            ["Monge", "Postura"],
+            "Você entra na postura de uma montanha implacável — uma técnica descoberta inicialmente por monges anões — permitindo-lhe golpear com o peso de uma avalanche. Os únicos Golpes que você pode realizar são ataques de pedra cadente. Esses ataques causam 1d8 de dano contundente, pertencem ao grupo pugilato e possuem os traços enérgico, desarmado e não-letal. Enquanto estiver na Postura da Montanha, você recebe +4 de bônus de estado na CA e +2 de bônus de circunstância em quaisquer defesas contra ser Derrubado ou Empurrado. Entretanto, você possui um limite de modificador de Destreza na CA de +0 — o que significa que você não adiciona sua Destreza na CA — e todas as suas Velocidades são reduzidas em 1,5 metros.",
+            acoes="1",
+            requerimentos="Você está sem armadura e tocando o solo.",
+        ),
+        construir_talento_classe(
+            "Postura do Tigre",
+            1,
+            ["Monge", "Postura"],
+            "Você adota a postura de um tigre e pode realizar ataques de garra do tigre. Esses ataques causam 1d8 de dano cortante; pertencem ao grupo pugilato e possuem os traços acuidade, ágil, desarmado e não-letal. Se você causar dano em um sucesso crítico com suas garras do tigre, o alvo sofre 1d4 de dano persistente de sangramento. Enquanto sua Velocidade for ao menos 6 metros enquanto estiver na Postura do Tigre, você pode Dar um Passo de 3 metros.",
+            acoes="1",
+            requerimentos="Você está sem armadura.",
+        ),
+        # 2º nível
+        construir_talento_classe(
+            "Agarrão Esmagador",
+            2,
+            ["Monge"],
+            "Como um poderoso constritor, você esmaga alvos em seu apertão firme. Quando obtiver sucesso em Agarrar uma criatura, você pode causar dano contundente a ela igual ao seu modificador de Força. Você pode tornar este ataque não-letal sem sofrer penalidade por isso.",
+        ),
+        construir_talento_classe(
+            "Foco em Pugilato",
+            2,
+            ["Monge"],
+            "Você sabe tirar o melhor de seus ataques quando luta frente a frente. Você obtém acesso aos efeitos de especialização de crítico de ataques desarmados e armas do grupo pugilato. Se possuir Arsenal Monástico, você também obtém acesso aos efeitos de especialização de crítico de todas as armas de monge nas quais seja treinado.",
+        ),
+        construir_talento_classe(
+            "Folha Dançante",
+            2,
+            ["Monge"],
+            "Você é leve como uma folha soprada pela brisa. Quando Saltar ou obtiver sucesso em um Salto em Altura ou Salto em Distância, aumente a distância saltada em 1,5 metros. Quando calcular o dano sofrido por queda, desconsidere qualquer distância que você cair enquanto passar adjacente a uma parede.",
+        ),
+        construir_talento_classe(
+            "Punho Atordoante",
+            2,
+            ["Incapacitação", "Monge"],
+            "O poder focado de sua rajada ameaça sobrepujar o seu oponente. Quando mirar a mesma criatura com dois Golpes de sua Rajada de Golpes, você pode tentar atordoá-la. Se um dos Golpes atingir e causar dano, o alvo deve obter sucesso em um salvamento de Fortitude contra sua CD de classe ou ficará atordoado 1 (ou atordoado 3 em uma falha crítica). Este é um efeito de incapacitação.",
+            requerimentos="Rajada de Golpes",
+        ),
+        construir_talento_classe(
+            "Punho Elemental",
+            2,
+            ["Monge"],
+            "Você convoca o poder dos elementos, infundindo seu ki com energia elemental e permitindo que seus ataques causem dano de energia. Quando conjurar golpe de ki, além dos tipos de dano normalmente disponíveis, você pode causar dano extra na forma de uma rajada de vento tempestuoso (causando dano de eletricidade e adquirindo o traço ar), um pedaço de pedra (causando dano contundente e adquirindo o traço terra), uma chama tremulante (causando dano de fogo) ou uma onda de água gelada (causando dano de frio e recebendo o traço água).",
+            requerimentos="Golpe de Ki",
+        ),
+        # 4º nível
+        construir_talento_classe(
+            "Chute Voador",
+            4,
+            ["Monge"],
+            "Você se lança em um adversário. Faça um Salto ou tente um Salto em Altura ou Salto em Distância. Ao final do salto, se estiver adjacente a um adversário, você pode imediatamente Golpeá-lo com um golpe desarmado, mesmo que ele esteja no ar. Você cai no chão após o Golpe. Se a distância que você cair não for maior do que a altura de seu salto, você não sofre dano da queda e aterrissa de pé.",
+            acoes="2",
+        ),
+        construir_talento_classe(
+            "Defletir Projétil",
+            4,
+            ["Monge"],
+            "Você recebe +4 de bônus de circunstância na CA contra o ataque acionador. Se o ataque errar, você o deflete. Você não pode usar este talento para defletir projéteis massivos (como pedregulhos ou virotes de balistas).",
+            acoes="reacao",
+            acionamento="Você é alvo de um ataque físico à distância.",
+            requerimentos="Você está ciente do ataque, não está desprevenido contra ele e possui uma mão livre.",
+        ),
+        construir_talento_classe(
+            "Impedir Movimento",
+            4,
+            ["Monge"],
+            "Você golpeia quando seu adversário tenta fugir. Faça um Golpe corpo a corpo contra a criatura acionadora. Se o ataque for um acerto crítico e o acionamento for uma ação de movimento, você interrompe essa ação.",
+            acoes="reacao",
+            acionamento="Uma criatura em seu alcance usa uma ação de movimento ou deixa um quadrado durante uma ação de movimento que ela está usando.",
+        ),
+        construir_talento_classe(
+            "Integridade Corporal",
+            4,
+            ["Monge"],
+            "Você pode restaurar sua saúde acessando o seu ki. Você recebe a magia de ki integridade corporal (página 407). Aumente em 1 a quantidade de Pontos de Foco em sua reserva de foco.",
+            pre_requisitos="magias de ki",
+        ),
+        construir_talento_classe(
+            "Movimento Cauteloso",
+            4,
+            ["Monge"],
+            "Você mantém sua guarda alta, mesmo enquanto se move. Você recebe +4 de bônus de circunstância na CA contra reações acionadas pelo seu movimento.",
+        ),
+        construir_talento_classe(
+            "Rajada de Manobras",
+            4,
+            ["Monge"],
+            "Você desfere uma combinação de manobras. Você pode substituir um ou ambos os ataques de sua Rajada de Golpes por Agarrar, Derrubar ou Empurrar.",
+            requerimentos="especialista em Atletismo",
+        ),
+        # 6º nível
+        construir_talento_classe(
+            "Alvoroço da Garça",
+            6,
+            ["Monge"],
+            "Você interpõe o braço entre você e seu oponente. Seu bônus de circunstância na CA de Postura da Garça aumenta para +3 contra o ataque acionador. Se o ataque errar, você pode imediatamente fazer um Golpe de asa da garça contra o atacante com –2 de penalidade, mesmo se ele não estiver em seu alcance.",
+            acoes="reacao",
+            pre_requisitos="Postura da Garça",
+            acionamento="Você é alvo de um ataque corpo a corpo realizado por um atacante que você consegue enxergar.",
+            requerimentos="Você está na Postura da Garça.",
+        ),
+        construir_talento_classe(
+            "Arrasto do Lobo",
+            6,
+            ["Monge"],
+            "Você tenta derrubar seu inimigo. Faça um Golpe de mandíbula do lobo. Sua mandíbula do lobo adquire o traço fatal d12 para este Golpe, e se o ataque for bem-sucedido, você derruba o alvo prostrado.",
+            acoes="2",
+            pre_requisitos="Postura do Lobo",
+            requerimentos="Você está na Postura do Lobo.",
+        ),
+        construir_talento_classe(
+            "Arremesso Giratório",
+            6,
+            ["Monge"],
+            "Você arremessa seu adversário agarrado ou restringido a uma grande distância. Você pode arremessar a criatura a qualquer distância até 3 metros mais 1,5 metros × seu modificador de Força. Se obtiver sucesso em arremessar a criatura, ela sofre dano contundente igual ao seu modificador de Força mais 1d6 para cada 3 metros que for arremessada. Faça um teste de Atletismo contra a CD de Fortitude do adversário. Você sofre –2 de penalidade de circunstância em seu teste se o alvo for um tamanho maior que você e –4 de penalidade de circunstância se ele for maior que isso. Você recebe +2 de bônus de circunstância em seu teste se o alvo for um tamanho menor que você e +4 de bônus de circunstância se ele for ainda menor.",
+            acoes="1",
+            requerimentos="Você possui uma criatura agarrada ou restringida.",
+            resultados={
+                "sucesso_critico": "Você arremessa a criatura a distância desejada e ela cai prostrada.",
+                "sucesso": "Você arremessa a criatura à distância desejada.",
+                "falha": "Você não arremessa a criatura.",
+                "falha_critica": "Você não arremessa a criatura, e ela não está mais agarrada ou restringida por você.",
+            },
+        ),
+        construir_talento_classe(
+            "Corte do Tigre",
+            6,
+            ["Monge"],
+            "Você desfere um corte feroz com ambas as mãos. Faça um Golpe de garra do tigre. Ele causa dois dados de dano extras da arma (três dados extras se você for de 14º nível ou superior) e você pode empurrar o alvo 1,5 metros como se tivesse obtido sucesso em Empurrá-lo. Se o ataque for um sucesso crítico e causar dano, adicione seu modificador de Força ao dano persistente de sangramento de sua garra do tigre.",
+            acoes="2",
+            pre_requisitos="Postura do Tigre",
+            requerimentos="Você está na Postura do Tigre.",
+        ),
+        construir_talento_classe(
+            "Fortaleza da Montanha",
+            6,
+            ["Monge"],
+            "Você foca em sua conexão com a terra e recorre à resistência da montanha para bloquear ataques contra você. Você recebe +2 de bônus de circunstância na CA até o início de seu próximo turno.",
+            acoes="1",
+            pre_requisitos="Postura da Montanha",
+            requerimentos="Você está na Postura da Montanha.",
+            especial="Se você possuir este talento, o limite do modificador de Destreza em sua CA enquanto estiver na Postura da Montanha aumenta de +0 para +1.",
+        ),
+        construir_talento_classe(
+            "Passo Abundante",
+            6,
+            ["Monge"],
+            "Você pode se teleportar uma curta distância. Você recebe a magia de ki passo abundante (página 407). Aumente em 1 a quantidade de Pontos de Foco em sua reserva de foco.",
+            pre_requisitos="magias de ki, movimento incrível",
+        ),
+        construir_talento_classe(
+            "Passo na Água",
+            6,
+            ["Monge"],
+            "Você pode Andar sobre líquidos e superfícies que não suportem seu peso. Este benefício dura somente durante seu movimento. Se encerrar seu movimento em uma superfície incapaz de suportá-lo, você cai ou ela colapsa normalmente.",
+        ),
+        construir_talento_classe(
+            "Rajada de Ki",
+            6,
+            ["Monge"],
+            "Você pode liberar um cone impactante de força ao canalizar seu ki. Você recebe a magia de ki rajada de ki (página 407). Aumente em 1 a quantidade de Pontos de Foco em sua reserva de foco.",
+            pre_requisitos="magias de ki",
+        ),
+        construir_talento_classe(
+            "Rugido do Dragão",
+            6,
+            ["Auditivo", "Emoção", "Medo", "Mental", "Monge"],
+            "Você urra, instilando medo em seus inimigos. Inimigos em uma emanação de 4,5 metros devem obter sucesso em um salvamento de Vontade contra sua CD de Intimidação ou ficam assustados 1 (assustado 2 em uma falha crítica). Quando uma criatura assustada pelo rugido começar o turno dela adjacente a você, ela não pode reduzir o valor de assustado dela abaixo de 1 nesse turno. Seu primeiro ataque que atingir uma criatura assustada após seu rugido e antes do final de seu próximo turno recebe +4 de bônus de circunstância no dano. Após usar Rugido do Dragão, você não pode usá-lo novamente por 1d4 rodadas. Seus efeitos terminam imediatamente se você sair da Postura do Dragão. Criaturas na área de seu rugido ficam temporariamente imunes a ele por 1 minuto.",
+            acoes="1",
+            pre_requisitos="Postura do Dragão",
+            requerimentos="Você está na Postura do Dragão.",
+        ),
+        # 8º nível
+        construir_talento_classe(
+            "Correr na Parede",
+            8,
+            ["Monge"],
+            "Você desafia a gravidade, atravessando planos verticais tão facilmente quanto o solo. Ande até sua Velocidade. Você deve iniciar seu movimento em uma superfície horizontal. Durante este movimento, você pode andar em superfícies verticais (como paredes) em sua Velocidade total. Se encerrar o movimento de Andar fora do chão, você cai após realizar sua próxima ação ou ao final de seu turno — o que ocorrer primeiro (embora você possa Segurar numa Beirada, se aplicável). Se possuir Passo na Água ou uma habilidade similar, Correr na Parede lhe permite correr por superfícies verticais frágeis, assim como líquidos verticais (como cachoeiras).",
+            acoes="1",
+        ),
+        construir_talento_classe(
+            "Iniciado dos Ventos Selvagens",
+            8,
+            ["Monge"],
+            "Você aprende uma postura mística que lhe permite atacar à distância. Você recebe a magia de ki postura dos ventos selvagens (página 407). Aumente em 1 a quantidade de Pontos de Foco em sua reserva de foco. Embora entrar na postura seja uma magia de ki, o Golpe estampido do vento concedido pela postura não o é, portanto, você pode usá-lo com a frequência que quiser enquanto estiver na postura.",
+            pre_requisitos="magias de ki",
+        ),
+        construir_talento_classe(
+            "Manobra Combinada",
+            8,
+            ["Monge"],
+            "Você combina duas manobras diferentes em um único movimento. Escolha dois ataques dentre Agarrar, Derrubar e Empurrar. Faça ambos os ataques escolhidos contra a mesma criatura ou contra criaturas diferentes. Cada ataque conta para sua penalidade por ataques múltiplos, mas a penalidade não aumenta até você ter realizado os dois ataques.",
+            acoes="2",
+            pre_requisitos="mestre em Atletismo",
+        ),
+        construir_talento_classe(
+            "Postura da Floresta Emaranhada",
+            8,
+            ["Monge", "Postura"],
+            "Você estende seus braços como galhos retorcidos para interferir nos movimentos de seus adversários. Você pode realizar ataques desarmados de galho chicoteante. Esses ataques causam 1d8 de dano cortante, pertencem ao grupo pugilato e possuem os traços acuidade, ágil, desarmado e não-letal. Enquanto estiver na Postura da Floresta Emaranhada e puder agir, cada inimigo em seu alcance que tentar se mover para longe de você deve obter sucesso em um salvamento de Reflexos, teste de Acrobatismo ou Atletismo contra sua CD de classe ou ficará imobilizado para essa ação. Se preferir, você pode permitir que o inimigo se mova.",
+            acoes="1",
+            requerimentos="Você está sem armadura.",
+        ),
+        construir_talento_classe(
+            "Postura do Sangue de Ferro",
+            8,
+            ["Monge", "Postura"],
+            "Você entra na postura do ferro impenetrável, recusando-se a ceder a qualquer golpe. Você pode realizar ataques desarmados de cano de ferro. Esses ataques causam 1d8 de dano contundente, pertencem ao grupo pugilato e possuem os traços amplitude, aparar, desarmado e não-letal. Enquanto estiver na Postura do Sangue de Ferro, você recebe resistência 2 a todo dano. A resistência aumenta para 3 no 12º nível, para 4 no 16º nível e para 5 no 20º nível.",
+            acoes="1",
+            requerimentos="Você está sem armadura.",
+        ),
+        construir_talento_classe(
+            "Refletir Projétil",
+            8,
+            ["Monge"],
+            "Você pega projéteis no ar e os arremessa de volta contra sua fonte. Quando obtiver sucesso em Defletir Projétil, como parte dessa reação você pode imediatamente fazer um Golpe à distância contra o atacante usando o projétil defletido. Esta é considerada uma arma de arremesso com o mesmo incremento de distância e efeitos que em um acerto do ataque acionador.",
+            pre_requisitos="Defletir Projétil",
+        ),
+        # 10º nível
+        construir_talento_classe(
+            "Aperto Dormente",
+            10,
+            ["Ataque", "Incapacitação", "Monge"],
+            "Você aperta pontos cruciais do sistema nervoso de seu alvo, impedindo o funcionamento do corpo dele. Faça um teste de Atletismo para Agarrar a criatura, com os efeitos de sucesso e sucesso crítico a seguir em vez dos efeitos normais.",
+            acoes="1",
+            requerimentos="Você possui uma criatura agarrada ou restringida.",
+            resultados={
+                "sucesso_critico": "O alvo fica inconsciente por 1 minuto, embora permaneça de pé e não solte o que está segurando.",
+                "sucesso": "O alvo fica desajeitado 1 até o final do próximo turno dele.",
+            },
+        ),
+        construir_talento_classe(
+            "Fluidez Sinuosa",
+            10,
+            ["Monge"],
+            "Qualquer jornada é muito mais do que simplesmente alcançar o destino. Você usa duas das seguintes ações em qualquer ordem: Andar, Dar um Passo e Levantar. Você não pode usar a mesma ação duas vezes.",
+            acoes="1",
+            frequencia="uma vez por rodada",
+        ),
+        construir_talento_classe(
+            "Golpe de Jogar para Trás",
+            10,
+            ["Concentração", "Monge"],
+            "Você foca sua força em um golpe poderoso o suficiente para empurrar seu inimigo para longe. Faça um Golpe desarmado. Se acertar, faça um teste de Atletismo para Empurrar o alvo. Este ataque utiliza a mesma penalidade por ataques múltiplos que seu Golpe, e não conta para sua penalidade por ataques múltiplos.",
+            acoes="2",
+        ),
+        construir_talento_classe(
+            "Salto do Vento",
+            10,
+            ["Monge"],
+            "Você converge os ventos para levantar seu corpo e planar durante um salto. Você recebe a magia de ki salto do vento (página 407). Aumente em 1 a quantidade de Pontos de Foco em sua reserva de foco.",
+            pre_requisitos="magias de ki",
+        ),
+        # 12º nível
+        construir_talento_classe(
+            "Alma de Diamante",
+            12,
+            ["Monge"],
+            "Você fortificou seu corpo e mente contra efeitos místicos. Você recebe +1 de bônus de estado em jogadas de salvamento contra magia.",
+        ),
+        construir_talento_classe(
+            "Foco Meditativo",
+            12,
+            ["Monge"],
+            "Sua meditação é tão efetiva que você consegue alcançar um foco profundo. Se tiver gastado pelo menos 2 Pontos de Foco desde a última vez que Refocou, você recupera 2 Pontos de Foco ao Refocar (em vez de recuperar somente 1 ponto).",
+            pre_requisitos="magias de ki",
+        ),
+        construir_talento_classe(
+            "Jogar para Trás Aprimorado",
+            12,
+            ["Monge"],
+            "Quando obtiver sucesso em Empurrar uma criatura, aumente a distância que você pode empurrá-la e a distância que você pode se mover com o alvo em 1,5 metros em um sucesso ou 3 metros em um sucesso crítico. Se empurrar o alvo contra um obstáculo, ele sofre dano contundente igual a 6 mais seu modificador de Força, ou 8 mais seu modificador de Força se você possuir proficiência lendária em Atletismo.",
+            pre_requisitos="mestre em Atletismo",
+        ),
+        construir_talento_classe(
+            "Perturbar o Ki",
+            12,
+            ["Monge", "Negativo"],
+            "Faça um Golpe desarmado. Se causar dano a uma criatura viva, você bloqueia a força vital interior dela. A criatura sofre 2d6 de dano persistente negativo e fica enfraquecida 1 até o dano persistente acabar. Se você for de 18º nível ou superior, o Golpe causa 3d6 de dano persistente negativo em vez de 2d6.",
+            acoes="2",
+        ),
+        construir_talento_classe(
+            "Sapiente em Postura",
+            12,
+            ["Monge"],
+            "Você reage a um perigo iminente entrando em uma postura sem sequer pensar. Use uma ação que tenha o traço postura.",
+            acoes="livre",
+            acionamento="Você rola iniciativa.",
+        ),
+        # 14º nível
+        construir_talento_classe(
+            "Corpo Atemporal",
+            14,
+            ["Monge"],
+            "Você para de envelhecer. Além disso, você recebe +2 de bônus de estado em jogadas de salvamento contra venenos e doenças, e recebe resistência a veneno igual à metade de seu nível.",
+        ),
+        construir_talento_classe(
+            "Língua do Sol e da Lua",
+            14,
+            ["Monge"],
+            "Você transcende as barreiras entre palavras e significados. Você pode falar e compreender todos os idiomas falados.",
+        ),
+        construir_talento_classe(
+            "Lufada dos Ventos Selvagens",
+            14,
+            ["Ar", "Concentração", "Evocação", "Manuseio", "Monge"],
+            "Você armazena energia e a libera em uma enorme lufada de vento corrente. Faça um Golpe de estampido do vento contra cada criatura em um cone de 9 metros ou em uma linha de 18 metros (à sua escolha). Cada ataque conta para sua penalidade por ataques múltiplos, mas a penalidade não aumenta até você ter realizado todos os ataques.",
+            acoes="2",
+            pre_requisitos="Iniciado dos Ventos Selvagens",
+            acionamento="Você está na Postura dos Ventos Selvagens.",
+        ),
+        construir_talento_classe(
+            "Rasgo da Floresta Emaranhada",
+            14,
+            ["Monge"],
+            "Você reposiciona seus adversários com ataques talhantes. Faça um Golpe de galho chicoteante. Se acertar e causar dano, você força o alvo a se mover 1,5 metros para um espaço em seu alcance. Isto segue as regras de movimento forçado encontradas na página 475.",
+            acoes="1",
+            pre_requisitos="Postura da Floresta Emaranhada",
+            acionamento="Você está na Postura da Floresta Emaranhada.",
+        ),
+        construir_talento_classe(
+            "Surto do Sangue de Ferro",
+            14,
+            ["Monge"],
+            "Você se fortalece, preparando-se para resistir a ataques absorvendo o impacto deles com seus músculos. Ao realizar essa ação, você recebe os benefícios do traço aparar de seu cano de ferro (+1 de bônus de circunstância na CA até o início de seu próximo turno) e aumenta a resistência de Postura do Sangue de Ferro para torná-la igual ao seu modificador de Força (se for maior) pela mesma duração do aparar.",
+            acoes="1",
+            pre_requisitos="Postura do Sangue de Ferro",
+            acionamento="Você está na Postura do Sangue de Ferro.",
+        ),
+        construir_talento_classe(
+            "Tremor da Montanha",
+            14,
+            ["Monge"],
+            "Você pisa com força, fazendo tremer a terra sob seus pés. Criaturas em uma emanação de 6 metros que estejam tocando o chão sofrem dano igual ao seu modificador de Força (mínimo 0), que podem resistir com um salvamento básico de Fortitude. Em uma falha, elas também caem prostradas. Após usar esta ação, você não pode usá-la novamente por 1d4 rodadas.",
+            acoes="1",
+            pre_requisitos="Fortaleza da Montanha",
+            acionamento="Você está na Postura da Montanha.",
+            especial="Se possuir este talento, o limite de modificador de Destreza em sua CA enquanto estiver na Postura da Montanha aumenta de +1 para +2.",
+        ),
+        # 16º nível
+        construir_talento_classe(
+            "Golpe Estilhaçador",
+            16,
+            ["Monge"],
+            "A força considerável de seu golpe estilhaça igualmente objetos e defesas. Faça um Golpe desarmado. Ele ignora as resistências do alvo. Se o alvo tiver Dureza, o Golpe trata a Dureza como se tivesse metade do valor.",
+            acoes="2",
+        ),
+        construir_talento_classe(
+            "Mestre de Muitos Estilos",
+            16,
+            ["Monge"],
+            "Você alterna entre posturas em uma dança incessante. Você usa uma ação com o traço postura.",
+            acoes="livre",
+            pre_requisitos="Sapiente em Postura",
+            requerimentos="Esta é sua primeira ação no turno.",
+        ),
+        construir_talento_classe(
+            "Palma Vibrante",
+            16,
+            ["Monge"],
+            "Seus golpes podem matar adversários. Você recebe a magia de ki palma vibrante (página 407). Aumente em 1 a quantidade de Pontos de Foco em sua reserva de foco.",
+            pre_requisitos="magias de ki",
+        ),
+        construir_talento_classe(
+            "Presença Iluminada",
+            16,
+            ["Emoção", "Mental", "Monge"],
+            "Você exala uma aura de determinação. Você e seus aliados a até 4,5 metros recebem +2 de bônus de estado em jogadas de salvamento de Vontade contra efeitos mentais.",
+        ),
+        # 18º nível
+        construir_talento_classe(
+            "Corpo Vazio",
+            18,
+            ["Monge"],
+            "Você transmuta seu corpo em uma forma etérea. Você recebe a magia de ki corpo vazio (página 407). Aumente em 1 a quantidade de Pontos de Foco em sua reserva de foco.",
+            pre_requisitos="magias de ki",
+        ),
+        construir_talento_classe(
+            "Manancial Meditativo",
+            18,
+            ["Monge"],
+            "Quando clareia sua mente, seu foco volta em uma poderosa torrente. Se tiver gastado pelo menos 3 Pontos de Foco desde a última vez que Refocou, você recupera 3 Pontos de Foco ao Refocar (em vez de recuperar somente 1 ponto).",
+            pre_requisitos="Foco Meditativo",
+        ),
+        construir_talento_classe(
+            "Punhos de Diamante",
+            18,
+            ["Monge"],
+            "Seu corpo endurece conforme você desfere ataques em sequência, tornando seus golpes finais ainda mais perigosos. Seus golpes desarmados adquirem o traço enérgico. Qualquer ataque desarmado que já possua este traço aumenta em um passo o tamanho de seu dado de dano.",
+        ),
+        construir_talento_classe(
+            "Rio Veloz",
+            18,
+            ["Monge"],
+            "Você flui como água, evitando todas as restrições. Encerre uma penalidade de estado em sua Velocidade, ou encerre uma condição de imobilizado ou lento que esteja afetando-o.",
+            acoes="livre",
+            acionamento="Seu turno acaba e você tem uma penalidade de estado em sua Velocidade ou está imobilizado ou lento.",
+        ),
+        # 20º nível
+        construir_talento_classe(
+            "Fundir Posturas",
+            20,
+            ["Monge"],
+            "Você combinou duas posturas em uma postura única de sua própria criação. Quando selecionar este talento, escolha duas posturas conhecidas e as combine em uma única postura fundida. Dê um nome único à sua nova postura fundida. Quando entrar em sua postura fundida, você recebe todos os efeitos das duas posturas (incluindo seus requerimentos e restrições). Você não pode fundir posturas com requerimentos ou restrições fundamentalmente incompatíveis (como Postura do Sangue de Ferro e Postura da Garça, pois ambas requerem que você use somente um tipo de Golpe).",
+            pre_requisitos="pelo menos duas posturas",
+        ),
+        construir_talento_classe(
+            "Rapidez Permanente",
+            20,
+            ["Monge"],
+            "Você se move tão rápido e elevado quanto o próprio vento. Você fica permanentemente acelerado. Você pode usar sua ação extra para Andar ou Saltar, ou para fornecer uma das ações necessárias para Salto em Altura ou Salto em Distância.",
+        ),
+        construir_talento_classe(
+            "Técnica Impossível",
+            20,
+            ["Fortuna", "Monge"],
+            "Você executa uma manobra que desafia as possibilidades. Se o efeito acionador for o acerto do ataque de um inimigo, ele deve rerrolar a rolagem de ataque e usar o menor resultado. Se o efeito acionador for a sua falha em uma jogada de salvamento, você rerrola a jogada de salvamento e usa o maior resultado entre as duas rolagens.",
+            acoes="reacao",
+            acionamento="O ataque de um inimigo o acerta ou você falha em uma jogada de salvamento contra a habilidade de um inimigo.",
+            requerimentos="Você está sem armadura e não está fatigado.",
+        ),
+    ]
+
+    return {
+        "id": "monge",
+        "nome": "Monge",
+        "paginas": "190-201",
+        "descricao": "A força de seu punho flui de sua mente e espírito. Você busca a perfeição — aprimorar seu corpo para torná-lo um instrumento sem defeitos e sua mente em um bastião ordenado de sabedoria. Você é um combatente fervoroso, reconhecido por suas habilidades em artes marciais e posturas de combate que lhe garantem técnicas de luta únicas. Embora o desafio de dominar vários estilos de combate o leve a grandes alturas, você também aprecia meditar sobre questões filosóficas e descobrir novas formas de obter paz e iluminação.",
+        "atributo_chave": {
+            "opcoes": ["forca", "destreza"],
+            "melhoria_1_nivel": 2,
+            "texto": "Força ou Destreza — No 1º nível, sua classe lhe concede uma melhoria de atributo à sua escolha em Força ou Destreza.",
+        },
+        "pontos_de_vida_por_nivel": 10,
+        "pontos_de_vida_texto": "10 mais seu modificador de Constituição no 1º nível e a cada nível subsequente.",
+        "jogando_com_a_classe": {
+            "encontros_combate": "Você se joga na peleja, esquivando ou saltando sobre obstáculos com manobras acrobáticas. Você golpeia oponentes em uma rápida rajada de ataques, utilizando seus punhos nus ou empunhando armas especializadas que dominou durante seu treinamento monástico. Você adota posturas que lhe permitem adaptar seu estilo de combate para situações diferentes, e usa habilidades de ki para realizar feitos místicos como curar-se ou planar pelo ar.",
+            "encontros_sociais": "Sua perceptividade lhe permite ver através de mentiras, e seu treinamento filosófico fornece discernimento em qualquer situação.",
+            "exploracao": "Você escala paredes, se esquiva de armadilhas, supera obstáculos e salta sobre fossos. Você normalmente fica à frente do grupo para proteger membros mais vulneráveis, e fica bem confortável procurando por perigo ou movendo-se furtivamente.",
+            "recesso": "Você se exercita disciplinadamente, se alimenta de forma saudável, medita e estuda várias filosofias. Você também pode adotar um ofício que se esforça para aperfeiçoar.",
+            "voce_pode": [
+                "Manter um regime de treinamento físico e meditação.",
+                "Encarar a adversidade com uma abordagem calma e comedida, nunca entrando em pânico ou sucumbindo ao desespero.",
+                "Olhar para o futuro procurando por maneiras para se aprimorar enquanto permanece em paz com seu eu atual.",
+            ],
+            "outros_provavelmente": [
+                "Maravilham-se com seus feitos de proeza física.",
+                "Pensam que você é um pouco certinho e tenso, dados seus votos e regras.",
+                "O procuram em busca de instrução filosófica.",
+            ],
+        },
+        "proficiencias_iniciais": {
+            "percepcao": "treinado",
+            "salvamentos": {
+                "fortitude": "especialista",
+                "reflexos": "especialista",
+                "vontade": "especialista",
+            },
+            "pericias": {
+                "fixas": [],
+                "opcoes_fixas": [],
+                "condicionais": [],
+                "adicionais_base": 4,
+                "soma_modificador_inteligencia": True,
+                "texto": "Treinado em uma quantidade de perícias adicionais igual a 4 mais seu modificador de Inteligência.",
+            },
+            "ataques": {
+                "armas_simples": "treinado",
+                "ataques_desarmados": "treinado",
+            },
+            "defesas": {
+                "armaduras_leves": "destreinado",
+                "armaduras_medias": "destreinado",
+                "armaduras_pesadas": "destreinado",
+                "todas_armaduras": "destreinado",
+                "defesa_sem_armadura": "especialista",
+            },
+            "cd_classe": "treinado",
+            "magias": None,
+        },
+        "tabela_progressao": tabela_progressao,
+        "tabelas_especificas": {
+            "ataques_desarmados_de_monge": ataques_desarmados_de_monge,
+        },
+        "caracteristicas_de_classe": caracteristicas,
+        "subclasses": {
+            "tipo": "estilo_e_caminho_monastico",
+            "nome_tipo": "Estilo de Combate / Caminho Monástico",
+            "descricao": "O monge não possui uma subclasse fechada no 1º nível além da escolha de atributo chave (Força ou Destreza), construindo sua identidade através de posturas, magias de ki e escolhas de Caminho para a Perfeição (7º, 11º e 15º níveis).",
+            "opcoes": [
+                {
+                    "id": "monge_do_ki",
+                    "nome": "Monge do Ki",
+                    "atributo_chave_recomendado": "Força (e Sabedoria)",
+                    "descricao": "Centrando-se, você convoca a energia mágica interna que habita todas as coisas vivas. Este ki pode potencializar seu corpo ou se manifestar como pura energia.",
+                    "talento_chave_1_nivel": "Golpe de Ki (ocultista)",
+                },
+                {
+                    "id": "monge_da_garca",
+                    "nome": "Monge da Garça",
+                    "atributo_chave_recomendado": "Destreza",
+                    "descricao": "Buscando graciosidade em todas as coisas, você imita os movimentos fluidos da garça. Seus golpes são rápidos como o vento e sua mente clara como um lago plácido.",
+                    "talento_chave_1_nivel": "Postura da Garça",
+                },
+            ],
+        },
+        "termos_chave": [
+            {
+                "termo": "Floreio",
+                "descricao": "Ações de floreio são técnicas que requerem empenho demais e não podem ser realizadas várias vezes em seguida. Você pode usar apenas 1 ação com o traço floreio por turno.",
+            },
+            {
+                "termo": "Incapacitação",
+                "descricao": "Uma habilidade com este traço pode tirar um personagem da luta. Porém, quando usar um efeito de incapacitação contra uma criatura de nível superior ao seu, reduza o grau de sucesso de sua rolagem de ataque em um passo — e essa criatura aprimora o grau de sucesso da jogada de salvamento dela contra esse efeito em um passo.",
+            },
+            {
+                "termo": "Magias de Ki",
+                "descricao": "Ao tocar uma reserva sobrenatural interior chamada de ki, você pode criar efeitos mágicos. Certos talentos lhe concedem magias especiais conhecidas como magias de ki, que são um tipo de magia de foco. Conjurar uma magia de foco custa 1 Ponto de Foco, e você adquire uma reserva de foco com 1 Ponto de Foco. Você reabastece sua reserva de foco durante suas preparações diárias e pode recuperar 1 Ponto de Foco ao gastar 10 minutos usando a atividade Refocar meditando para alcançar paz interior. Quando obtiver sua primeira magia de ki, decida se suas magias de ki são magias divinas ou ocultistas (atributo de conjuração: Sabedoria).",
+            },
+            {
+                "termo": "Postura",
+                "descricao": "Uma postura é uma estratégia geral de combate que você adota ao usar uma ação com o traço postura, permanecendo nela por um certo tempo. A postura é encerrada se você for nocauteado, se os requerimentos dela (se houver) forem violados, se o encontro terminar ou se você entrar em uma nova postura — o que ocorrer primeiro. Após usar uma ação com o traço postura, você não pode usar outra por 1 rodada. Você pode entrar ou estar em uma postura somente durante o modo de encontro.",
+            },
+        ],
+        "exemplos_personagens": [
+            {
+                "nome": "Monge do Ki",
+                "pagina": 198,
+                "resumo": "Centrando-se, você convoca a energia mágica interna que habita todas as coisas vivas. Este ki pode potencializar seu corpo ou se manifestar como pura energia.",
+                "atributos": "Priorize Força. Sabedoria fortifica suas magias de ki, Percepção e salvamentos de Vontade. Constituição e Destreza melhoram suas defesas físicas.",
+                "pericias": [
+                    "Acrobatismo",
+                    "Atletismo",
+                    "Furtividade",
+                    "Ocultismo",
+                ],
+                "talento_inicial": "Golpe de Ki (ocultista)",
+                "talentos_niveis_superiores": [
+                    "Punho Elemental (2º)",
+                    "Integridade Corporal (4º)",
+                    "Rajada de Ki (6º)",
+                    "Foco Meditativo (12º)",
+                    "Mão Vibrante (16º)",
+                    "Corpo Vazio (18º)",
+                ],
+            },
+            {
+                "nome": "Monge da Garça",
+                "pagina": 200,
+                "resumo": "Buscando graciosidade em todas as coisas, você imita os movimentos fluidos da garça. Seus golpes são rápidos como o vento e sua mente clara como um lago plácido.",
+                "atributos": "Priorize Destreza para ataques de acuidade e melhores defesas. Uma boa Sabedoria lhe permite perceber perigos e agir rapidamente, e Constituição aprimora sua resiliência.",
+                "pericias": [
+                    "Acrobatismo",
+                    "Furtividade",
+                    "Natureza",
+                    "Religião",
+                ],
+                "talento_inicial": "Postura da Garça",
+                "talentos_niveis_superiores": [
+                    "Folha Dançante (2º)",
+                    "Chute Voador (4º)",
+                    "Alvoroço da Garça (6º)",
+                    "Fluidez Sinuosa (10º)",
+                    "Sapiente em Postura (12º)",
+                    "Rapidez Permanente (20º)",
+                ],
+            },
+        ],
+        "talentos_de_classe": talentos,
+    }
+
+
+def construir_patrulheiro() -> dict[str, Any]:
+    tabela_progressao = construir_tabela_progressao(
+        [
+            (1, "Ancestralidade e biografia, caçar presa, excelência de caçador, proficiências iniciais, talento de patrulheiro"),
+            (2, "Talento de patrulheiro, talento de perícia"),
+            (3, "Incremento de perícia, talento geral, vontade de ferro"),
+            (4, "Talento de patrulheiro, talento de perícia"),
+            (5, "Especialidade em armas de patrulheiro, incremento de perícia, melhorias de atributo, passo irrastreável, talento de ancestralidade"),
+            (6, "Talento de patrulheiro, talento de perícia"),
+            (7, "Especialização em armas, evasão, incremento de perícia, sentidos vigilantes, talento geral"),
+            (8, "Talento de patrulheiro, talento de perícia"),
+            (9, "Especialidade de patrulheiro, incremento de perícia, préstimo da natureza, talento de ancestralidade"),
+            (10, "Melhorias de atributo, talento de patrulheiro, talento de perícia"),
+            (11, "Deslocamento nos ermos, especialidade em armaduras médias, incremento de perícia, irrefreável, talento geral"),
+            (12, "Talento de patrulheiro, talento de perícia"),
+            (13, "Incremento de perícia, maestria com armas, talento de ancestralidade"),
+            (14, "Talento de patrulheiro, talento de perícia"),
+            (15, "Especialização em armas maior, evasão aprimorada, incremento de perícia, melhorias de atributo, sentidos incríveis, talento geral"),
+            (16, "Talento de patrulheiro, talento de perícia"),
+            (17, "Caçador magistral, incremento de perícia, talento de ancestralidade"),
+            (18, "Talento de patrulheiro, talento de perícia"),
+            (19, "Incremento de perícia, presa repentina, segunda pele, talento geral"),
+            (20, "Melhorias de atributo, talento de patrulheiro, talento de perícia"),
+        ]
+    )
+
+    excelencias = [
+        {
+            "id": "despiste",
+            "nome": "Despiste",
+            "descricao": "Você é talentoso em superar e evadir de sua presa. Você recebe +2 de bônus de circunstância em testes de Dissimulação, Furtividade, Intimidação e em quaisquer testes para Recordar Conhecimento sobre sua presa, e também recebe +1 de bônus de circunstância na CA contra os ataques dela.",
+            "marcos": [
+                {
+                    "nivel": 1,
+                    "titulo": "Excelência de Caçador",
+                    "descricao": "+2 de bônus de circunstância em Dissimulação, Furtividade, Intimidação e Recordar Conhecimento sobre sua presa; +1 de bônus de circunstância na CA contra os ataques dela.",
+                },
+                {
+                    "nivel": 17,
+                    "titulo": "Caçador Magistral",
+                    "descricao": "Se possuir proficiência de mestre em Dissimulação, Furtividade, Intimidação ou na perícia que utilizar para Recordar Conhecimento sobre sua presa, aumente o bônus de circunstância com essa perícia contra a presa de +2 para +4. Se possuir proficiência de mestre com sua armadura, aumente o bônus de circunstância na CA contra sua presa de +1 para +2.",
+                },
+            ],
+        },
+        {
+            "id": "precisao",
+            "nome": "Precisão",
+            "descricao": "Você treinou para mirar nos pontos fracos de sua presa. A primeira vez que atingir sua presa caçada em uma rodada, você também causa 1d8 de dano de precisão adicional (o dano de precisão aumenta o dano causado pelo ataque e utiliza o mesmo tipo de dano, mas é ineficaz contra criaturas que não possuam órgãos vitais ou pontos fracos). No 11º nível, o dano extra aumenta para 2d8 de dano de precisão e, no 19º nível, para 3d8 de dano de precisão.",
+            "marcos": [
+                {
+                    "nivel": 1,
+                    "titulo": "Excelência de Caçador (1º, 11º, 19º)",
+                    "descricao": "Primeiro acerto contra a presa caçada na rodada causa 1d8 de dano de precisão adicional (2d8 no 11º nível, 3d8 no 19º nível).",
+                },
+                {
+                    "nivel": 17,
+                    "titulo": "Caçador Magistral (17º e 19º)",
+                    "descricao": "A segunda vez que atingir sua presa caçada em uma rodada, você também causa 1d8 de dano de precisão. No 19º nível, seu segundo acerto em uma rodada contra sua presa caçada causa 2d8 de dano de precisão, e seu terceiro acerto em uma rodada contra sua presa caçada causa 1d8 de dano de precisão.",
+                },
+            ],
+        },
+        {
+            "id": "rajada",
+            "nome": "Rajada",
+            "descricao": "Você treinou para lançar uma rajada devastadora de ataques sobre sua presa. Sua penalidade por ataques múltiplos para ataques contra sua presa caçada é –3 (–2 com uma arma ágil) em seu segundo ataque no turno (em vez de –5) e –6 (–4 com uma arma ágil) em seu terceiro ataque e em ataques subsequentes no turno (em vez de –10).",
+            "marcos": [
+                {
+                    "nivel": 1,
+                    "titulo": "Excelência de Caçador",
+                    "descricao": "Penalidade por ataques múltiplos contra a presa caçada reduzida para –3 / –6 (ou –2 / –4 com arma ágil).",
+                },
+                {
+                    "nivel": 17,
+                    "titulo": "Caçador Magistral",
+                    "descricao": "Se possuir proficiência de mestre com sua arma, sua penalidade por ataques múltiplos para ataques contra sua presa caçada é –2 (–1 com uma arma ágil) em seu segundo ataque e –4 (–2 com uma arma ágil) em seu terceiro ataque e em ataques subsequentes no turno.",
+                },
+            ],
+        },
+    ]
+
+    acao_cacar_presa = construir_acao_habilidade(
+        "Caçar Presa",
+        "1",
+        ["Concentração", "Patrulheiro"],
+        "Você designa uma única criatura como sua presa e foca seus ataques contra essa criatura. Você deve ser capaz de ver ou ouvir a presa, ou deve estar rastreando-a durante a exploração. Você recebe +2 de bônus de circunstância em testes de Percepção para Buscar sua presa e +2 de bônus de circunstância em testes de Sobrevivência para Rastrear sua presa. Você também ignora a penalidade por desferir ataques à distância dentro de seu segundo incremento de distância contra a presa que estiver caçando. Você pode ter somente uma única criatura designada como sua presa em um determinado momento. Se usar Caçar Presa contra uma criatura quando já tiver outra designada, a criatura anterior perde a designação e a nova presa a recebe. Essa designação dura até suas próximas preparações diárias.",
+    )
+
+    caracteristicas = [
+        construir_caracteristica_classe(
+            "Ancestralidade e Biografia",
+            1,
+            "Além das habilidades fornecidas por sua classe no 1º nível, você possui os benefícios da ancestralidade e biografia selecionadas, conforme descrito no Capítulo 2.",
+        ),
+        construir_caracteristica_classe(
+            "Proficiências Iniciais",
+            1,
+            "No 1º nível, você recebe proficiências que representam seu treinamento básico. Estas proficiências são listadas no início desta classe.",
+        ),
+        construir_caracteristica_classe(
+            "Caçar Presa",
+            1,
+            "Quando foca sua atenção em um único adversário, você se torna implacável em sua perseguição. Você ganha a ação Caçar Presa.",
+            acoes_concedidas=[acao_cacar_presa],
+        ),
+        construir_caracteristica_classe(
+            "Excelência de Caçador",
+            1,
+            "Você treinou por incontáveis horas para se tornar um habilidoso caçador e rastreador, recebendo um benefício adicional para Caçar sua Presa dependendo do foco de seu treinamento: Despiste, Precisão ou Rajada.",
+            detalhes={"excelencias": ["despiste", "precisao", "rajada"]},
+        ),
+        construir_caracteristica_classe(
+            "Talentos de Patrulheiro",
+            1,
+            "No 1º nível e a cada nível par subsequente, você recebe um talento de classe de patrulheiro. Os talentos de classe de patrulheiro são descritos a partir da página 206.",
+        ),
+        construir_caracteristica_classe(
+            "Talentos de Perícia",
+            2,
+            "No 2º nível e a cada 2 níveis subsequentes, você recebe um talento de perícia. Talentos de perícia podem ser encontrados no Capítulo 5 e possuem o traço perícia. Você deve possuir uma graduação de proficiência treinado ou melhor na perícia correspondente para selecionar um talento de perícia.",
+        ),
+        construir_caracteristica_classe(
+            "Talentos Gerais",
+            3,
+            "No 3º nível e a cada 4 níveis subsequentes, você recebe um talento geral. Talentos gerais são listados no Capítulo 5.",
+        ),
+        construir_caracteristica_classe(
+            "Incrementos de Perícia",
+            3,
+            "No 3º nível e a cada 2 níveis subsequentes, você recebe um incremento de perícia. Você pode usar este incremento para aumentar sua graduação de proficiência para treinado em uma perícia na qual seja destreinado ou para aumentar sua graduação de proficiência para especialista em uma perícia na qual já seja treinado. No 7º nível, você pode usar incrementos de perícia para aumentar sua graduação de proficiência para mestre em uma perícia na qual já seja especialista e, no 15º nível, você pode usar incrementos de perícia para aumentar sua graduação de proficiência para lendário em uma perícia na qual já seja mestre.",
+        ),
+        construir_caracteristica_classe(
+            "Vontade de Ferro",
+            3,
+            "Seu árduo treinamento reforçou sua determinação. Sua graduação de proficiência em salvamentos de Vontade aumenta para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Especialidade em Armas de Patrulheiro",
+            5,
+            "Você se dedicou a compreender as complexidades de suas armas. Suas graduações de proficiência em armas simples, armas marciais e ataques desarmados aumentam para especialista. Você obtém acesso aos efeitos de especialização de críticos de todas as armas simples, armas marciais e ataques desarmados quando atacar sua presa caçada.",
+        ),
+        construir_caracteristica_classe(
+            "Melhorias de Atributo",
+            5,
+            "No 5º nível e a cada 5 níveis subsequentes, você melhora os valores de quatro atributos diferentes. Você pode usar estas melhorias de atributo para aumentar seus valores de atributo acima de 18 pontos. Incrementar um valor de atributo aumenta seu valor em 1 ponto se ele já for 18 ou maior, ou em 2 pontos se ele for menor que 18.",
+        ),
+        construir_caracteristica_classe(
+            "Passo Irrastreável",
+            5,
+            "Quando se move por terrenos naturais, você é difícil de ser rastreado. Você sempre recebe os benefícios da ação Cobrir Rastros nesses terrenos sem precisar mover-se à metade de sua Velocidade.",
+        ),
+        construir_caracteristica_classe(
+            "Talentos de Ancestralidade",
+            5,
+            "Além do talento de ancestralidade recebido na criação do personagem, você recebe um talento de ancestralidade no 5º nível e a cada 4 níveis subsequentes. A lista de talentos de ancestralidade disponíveis para você pode ser encontrada na seção de sua ancestralidade no Capítulo 2.",
+        ),
+        construir_caracteristica_classe(
+            "Especialização em Armas",
+            7,
+            "Você aprendeu a infligir ferimentos graves com suas armas favoritas. Você causa 2 pontos de dano adicionais com armas e ataques desarmados nos quais é especialista. Este dano aumenta para 3 se você for mestre e para 4 se você for lendário.",
+        ),
+        construir_caracteristica_classe(
+            "Evasão",
+            7,
+            "Você aprendeu a se mover rapidamente para evitar explosões, sopros de dragões e coisas ainda piores. Sua graduação de proficiência em salvamentos de Reflexos aumenta para mestre. Quando rolar um sucesso em um salvamento de Reflexos, trate o resultado como um sucesso crítico.",
+        ),
+        construir_caracteristica_classe(
+            "Sentidos Vigilantes",
+            7,
+            "Durante suas aventuras, você desenvolveu um estado de alerta aguçado e uma maior atenção a detalhes. Sua graduação de proficiência em Percepção aumenta para mestre.",
+        ),
+        construir_caracteristica_classe(
+            "Especialidade de Patrulheiro",
+            9,
+            "Você praticou suas técnicas para torná-las mais difíceis de resistir. Sua graduação de proficiência em sua CD de classe de patrulheiro aumenta para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Préstimo da Natureza",
+            9,
+            "Você sempre explora os pontos fracos nas defesas dos adversários que estejam em terrenos desfavoráveis. Inimigos ficam desprevenidos contra você se estiverem em terreno difícil natural ou em terreno difícil resultante de uma arapuca.",
+        ),
+        construir_caracteristica_classe(
+            "Deslocamento nos Ermos",
+            11,
+            "Você se move rapidamente através de obstáculos, sejam eles pedras tombadas, matagal emaranhado ou lama fofa. Você pode ignorar os efeitos de terreno difícil não-mágico. Como padrão para ignorar terreno difícil, isto também lhe permite tratar os impedimentos de terreno difícil maior como se fossem impedimentos de terreno difícil.",
+        ),
+        construir_caracteristica_classe(
+            "Especialidade em Armaduras Médias",
+            11,
+            "Você aprendeu a se defender melhor contra ataques. Suas graduações de proficiência em armaduras leves, armaduras médias e defesa sem armadura aumentam para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Irrefreável",
+            11,
+            "Seu corpo está acostumado a perigos físicos e tornou-se mais resistente a patógenos e doenças. Sua graduação de proficiência em salvamentos de Fortitude aumenta para mestre. Quando rolar um sucesso em um salvamento de Fortitude, trate o resultado como um sucesso crítico.",
+        ),
+        construir_caracteristica_classe(
+            "Maestria em Armas",
+            13,
+            "Você compreende completamente suas armas. Suas graduações de proficiência em armas simples, armas marciais e ataques desarmados aumentam para mestre.",
+        ),
+        construir_caracteristica_classe(
+            "Especialização em Armas Maior",
+            15,
+            "Seu dano de especialização em armas aumenta para 4 pontos com armas e ataques desarmados nos quais é especialista, para 6 pontos de dano nos quais é mestre e para 8 pontos de dano nos quais é lendário.",
+        ),
+        construir_caracteristica_classe(
+            "Evasão Aprimorada",
+            15,
+            "Você se esquiva do perigo de uma forma inigualável. Sua graduação de proficiência em salvamentos de Reflexos aumenta para lendário. Quando rolar uma falha crítica em um salvamento de Reflexos, trate o resultado como uma falha. Quando rolar uma falha em um salvamento de Reflexos contra um efeito que causa dano, divida o dano sofrido pela metade.",
+        ),
+        construir_caracteristica_classe(
+            "Sentidos Incríveis",
+            15,
+            "Você percebe coisas que seriam quase impossíveis para uma pessoa ordinária detectar. Sua graduação de proficiência em Percepção aumenta para lendário.",
+        ),
+        construir_caracteristica_classe(
+            "Caçador Magistral",
+            17,
+            "Você aprimorou suas habilidades de caçador a níveis incríveis. Sua graduação de proficiência em sua CD de classe de patrulheiro aumenta para mestre. Quando usar uma arma à distância na qual possua proficiência de mestre, você pode ignorar a penalidade de distância se atacar sua presa caçada dentro do segundo e terceiro incrementos de distância da arma. Se possuir proficiência de mestre em Percepção, você recebe +4 de bônus de circunstância em testes de Percepção para Buscar sua presa caçada e, se possuir proficiência de mestre em Sobrevivência, você recebe +4 de bônus de circunstância em testes de Sobrevivência para rastrear sua presa caçada. Você também recebe um benefício adicional dependendo de sua excelência de caçador (Despiste, Precisão ou Rajada).",
+        ),
+        construir_caracteristica_classe(
+            "Segunda Pele",
+            19,
+            "Sua armadura se tornou quase uma segunda pele para você. Suas graduações de proficiência em armaduras leves, armaduras médias e defesa sem armadura aumentam para mestre. Quando vestir uma armadura leve ou média, você pode descansar normalmente em vez de receber um descanso ruim e ficar fatigado.",
+        ),
+        construir_caracteristica_classe(
+            "Presa Repentina",
+            19,
+            "Você avalia sua presa com um simples relance de olhar. Você pode usar Caçar Presa como uma ação livre se essa for sua primeira ação no turno.",
+        ),
+    ]
+
+    talentos = [
+        # 1º nível
+        construir_talento_classe(
+            "Abate Duplo",
+            1,
+            ["Floreio", "Patrulheiro"],
+            "Você ataca rapidamente sua presa caçada usando suas duas armas. Faça dois Golpes contra sua presa, cada um com uma das armas requeridas. Se ambos atingirem a mesma presa caçada, some seus danos para o propósito de resistências e fraquezas. Aplique sua penalidade por ataques múltiplos normalmente a cada Golpe.",
+            acoes="1",
+            requerimentos="Você está empunhando duas armas corpo a corpo, uma em cada mão.",
+        ),
+        construir_talento_classe(
+            "Ás com Besta",
+            1,
+            ["Patrulheiro"],
+            "Você possui um entendimento profundo da besta. Quando empunhar uma besta e usar Caçar Presa ou Interagir para recarregá-la, você recebe +2 de bônus de circunstância na rolagem de dano de seu próximo Golpe com essa besta. Se a arma usada for uma besta simples, aumente o tamanho do dado de dano para esse ataque em um passo (página 279). Você deve desferir o ataque antes do final de seu próximo turno ou estes benefícios são perdidos.",
+        ),
+        construir_talento_classe(
+            "Caçador de Monstros",
+            1,
+            ["Patrulheiro"],
+            "Você rapidamente afere sua presa e aplica seu conhecimento. Como parte da ação usada para Caçar sua Presa, você pode realizar um teste para Recordar Conhecimento sobre ela. Quando obtiver um sucesso crítico em identificar sua presa caçada com Recordar Conhecimento, você percebe uma fraqueza nas defesas da criatura. Você e os aliados a quem informar sobre a fraqueza recebem +1 de bônus de circunstância em sua próxima rolagem de ataque contra essa presa. Você pode conceder os bônus de Caçador de Monstros somente uma vez por dia contra uma criatura em particular.",
+        ),
+        construir_talento_classe(
+            "Companheiro Animal",
+            1,
+            ["Patrulheiro"],
+            "Você recebe o serviço de um companheiro animal jovem que o acompanha em suas aventuras e obedece a seus comandos simples da melhor forma possível para as capacidades dele. Veja Companheiros Animais na página 214 para mais informações. Quando você Caçar uma Presa, seu companheiro animal recebe os mesmos benefícios da ação e de sua excelência de caçador (se houver).",
+        ),
+        construir_talento_classe(
+            "Tiro à Caça",
+            1,
+            ["Floreio", "Patrulheiro"],
+            "Você dispara dois tiros contra sua caça. Faça dois Golpes contra sua presa usando a arma requerida. Se ambos atingirem a mesma criatura, some seus danos para o propósito de resistências e fraquezas. Aplique sua penalidade por ataques múltiplos normalmente a cada Golpe.",
+            acoes="1",
+            requerimentos="Você está empunhando uma arma à distância com recarga 0.",
+        ),
+        # 2º nível
+        construir_talento_classe(
+            "Empatia Selvagem",
+            2,
+            ["Patrulheiro"],
+            "Você possui uma conexão com as criaturas do mundo natural que lhe permite comunicar-se com elas em um nível rudimentar. Você pode utilizar Diplomacia para Impressionar animais e para fazer Pedidos simples a eles. Na maioria dos casos, animais selvagens esperam e ouvem seus argumentos.",
+        ),
+        construir_talento_classe(
+            "Guardião Contra Monstros",
+            2,
+            ["Patrulheiro"],
+            "Você sabe como defender a si mesmo e a outros contra sua presa. Quando conceder o bônus de Caçador de Monstros, você e seus aliados também recebem +1 de bônus de circunstância em sua próxima jogada de salvamento contra essa criatura em particular e na sua CA contra o próximo ataque realizado por essa criatura contra cada um de vocês.",
+            pre_requisitos="Caçador de Monstros",
+        ),
+        construir_talento_classe(
+            "Mira do Caçador",
+            2,
+            ["Concentração", "Patrulheiro"],
+            "Quando foca sua mira, seu ataque se torna particularmente preciso. Faça um Golpe com uma arma à distância contra sua presa caçada. Neste Golpe, você recebe +2 de bônus de circunstância na rolagem de ataque e ignora a condição ocultado de sua presa.",
+            acoes="2",
+        ),
+        construir_talento_classe(
+            "Saque Rápido",
+            2,
+            ["Patrulheiro"],
+            "Você saca sua arma e ataca com o mesmo movimento. Você Interage para sacar uma arma, e depois Golpeia com ela.",
+            acoes="1",
+        ),
+        construir_talento_classe(
+            "Terreno Predileto",
+            2,
+            ["Patrulheiro"],
+            "Você estudou um terreno específico para conseguir superar todos os seus desafios. Escolha dentre aquático, ártico, céu, deserto, floresta, montanha, pântano, planície ou subterrâneo como seu terreno predileto. Quando estiver nesse terreno, você pode ignorar os efeitos de terreno difícil não-mágico. Se possuir a característica de classe deslocamento nos ermos, você recebe um segundo benefício enquanto estiver em seu terreno predileto (o benefício corresponde à sua escolha de terreno predileto).\n• Aquático Você adquire uma Velocidade de natação igual à sua Velocidade. Se já possuir uma Velocidade de natação, você recebe +3 metros de bônus de estado em sua Velocidade de natação.\n• Ártico Você precisa comer e beber somente um décimo do normal, não é afetado por frio severo ou extremo e pode andar sobre gelo e neve à sua Velocidade total sem precisar se Equilibrar.\n• Céu Você recebe +3 metros de bônus de estado em sua Velocidade de voo, se houver.\n• Deserto Você precisa comer e beber somente um décimo do comum, não é afetado por calor severo ou extremo e pode andar sobre areia à sua Velocidade total sem precisar se Equilibrar.\n• Floresta, Montanha ou Subterrâneo Você adquire uma Velocidade de escalada igual à sua Velocidade. Se já possuir uma Velocidade de escalada, você recebe +3 metros de bônus de estado em sua Velocidade de escalada.\n• Pântano Você pode se mover sobre atoleiros à sua Velocidade total, mesmo aqueles que seriam fundos o suficiente para representar terreno difícil ou normalmente exigiriam ações de Nadar.\n• Planície Você recebe +3 metros de bônus de estado em sua Velocidade em terra.",
+        ),
+        # 4º nível
+        construir_talento_classe(
+            "Aparada Dupla",
+            4,
+            ["Patrulheiro"],
+            "Você usa suas duas armas para aparar ataques. Você recebe +1 de bônus de circunstância na CA até o início de seu próximo turno, ou +2 de bônus de circunstância se qualquer dessas armas possuir o traço aparar. Você perde este bônus de circunstância se não atender mais aos requerimentos deste talento.",
+            acoes="1",
+            requerimentos="Você está empunhando duas armas corpo a corpo, uma em cada mão.",
+        ),
+        construir_talento_classe(
+            "Aviso do Batedor",
+            4,
+            ["Patrulheiro"],
+            "Você avisa seus aliados do perigo de forma visível ou audível, concedendo a cada um deles +1 de bônus de circunstância em suas rolagens de iniciativa. Esta ação adquire o traço visual ou auditivo de acordo com a forma visível ou audível (respectivamente) do seu aviso.",
+            acoes="livre",
+            acionamento="Você está prestes a rolar um teste de Percepção ou Sobrevivência para iniciativa.",
+        ),
+        construir_talento_classe(
+            "Brado do Companheiro",
+            4,
+            ["Patrulheiro"],
+            "Você pode incitar seu companheiro a dar o máximo de si. Quando comandar seu companheiro animal, você pode gastar 2 ações para Comandar um Animal (em vez de 1 ação). Se o fizer, seu companheiro animal usa uma ação adicional.",
+            pre_requisitos="companheiro animal",
+        ),
+        construir_talento_classe(
+            "Especialista em Arapuca",
+            4,
+            ["Patrulheiro"],
+            "Você se especializa em criar armadilhas rápidas para obstruir seus inimigos no campo de batalha. Se possuir graduação de proficiência especialista em Manufatura, você adquire as fórmulas para três arapucas comuns ou incomuns (página 555). Se a sua graduação for mestre, você adquire seis fórmulas. Se sua graduação for lendária, você adquire nove fórmulas. Todo dia, durante suas preparações diárias, você pode preparar quatro arapucas de seu livro de fórmulas para uso rápido; se elas normalmente levarem 1 minuto para Manufaturar, você as Manufatura com apenas 3 ações de Interagir. A quantidade de arapucas aumenta para seis se você possuir proficiência de mestre em Manufatura e para oito se você possuir proficiência lendária em Manufatura. Arapucas preparadas desta forma não lhe custam quaisquer recursos para Manufaturar.",
+            pre_requisitos="especialista em Manufatura, Manufatura de Arapuca",
+        ),
+        construir_talento_classe(
+            "Inimigo Predileto",
+            4,
+            ["Patrulheiro"],
+            "Você estudou um tipo específico de criatura selvagem e consegue caçá-la mais facilmente. Quando adquirir este talento, escolha animais, bestas, dragões ou fungos e plantas como seu inimigo predileto. Quando rolar iniciativa e puder ver um inimigo que pertence à categoria escolhida, você pode Caçar Presa como uma ação livre para designar esse inimigo. Você pode usar esta ação livre mesmo se ainda não tiver identificado a criatura com Recordar Conhecimento. O benefício não se aplica contra inimigos prediletos disfarçados como outras criaturas e o MJ determina quando ele se aplica contra uma criatura disfarçada como um inimigo predileto.",
+        ),
+        construir_talento_classe(
+            "Interromper Presa",
+            4,
+            ["Patrulheiro"],
+            "Faça um Golpe corpo a corpo contra sua presa. Se o ataque for um acerto crítico, você interrompe a ação acionadora.",
+            acoes="reacao",
+            acionamento="Sua presa caçada está em seu alcance e usa uma ação de manuseio, uma ação de movimento, ou sai de um quadrado durante uma ação de movimento que ela está usando.",
+        ),
+        construir_talento_classe(
+            "Recarga em Movimento",
+            4,
+            ["Patrulheiro"],
+            "Você pode recarregar sua arma em movimento. Você Anda, Dá um Passo ou se Esgueira, e então Interage para recarregar.",
+            acoes="1",
+        ),
+        construir_talento_classe(
+            "Tiro Longo",
+            4,
+            ["Patrulheiro"],
+            "Sua experiência em campo lhe ensinou a mirar a longas distâncias, aumentando sua precisão. Dobre os incrementos de distância de suas armas.",
+        ),
+        # 6º nível
+        construir_talento_classe(
+            "Arapucas Rápidas",
+            6,
+            ["Patrulheiro"],
+            "Você pode armar uma arapuca em segundos. Você pode Manufaturar arapucas que normalmente levariam 1 minuto em apenas 3 ações de Interagir, mesmo se não as tiver preparado.",
+            pre_requisitos="especialista em Manufatura, Especialista em Arapuca",
+        ),
+        construir_talento_classe(
+            "Companheiro Animal Maduro",
+            6,
+            ["Patrulheiro"],
+            "Seu companheiro animal cresce, tornando-se um companheiro animal maduro e recebendo capacidades adicionais. Veja as regras para companheiros animais na página 214 para mais informações. Se você possuir a ação Caçar Presa, seu companheiro animal ataca sua presa mesmo sem receber ordens suas. Durante um encontro, mesmo se você não usar a ação Comandar um Animal, seu companheiro animal ainda pode usar 1 ação durante o seu turno para Andar ou Golpear sua presa.",
+            pre_requisitos="companheiro animal",
+        ),
+        construir_talento_classe(
+            "Golpe Escaramuçador",
+            6,
+            ["Floreio", "Patrulheiro"],
+            "Você move seus pés e arma em sintonia. Dê um Passo e Golpeie, ou Golpeie e Dê um Passo.",
+            acoes="1",
+        ),
+        construir_talento_classe(
+            "Rastreador Rápido",
+            6,
+            ["Patrulheiro"],
+            "Seus olhos aguçados veem sinais de passagem mesmo quando você está em movimento. Você pode se mover à sua Velocidade total enquanto Rastrear. Se possuir graduação de proficiência de mestre em Sobrevivência, você não precisa fazer um novo teste de Sobrevivência a cada hora enquanto Rastrear. Se possuir graduação de proficiência lendária em Sobrevivência, você pode usar outra atividade de exploração enquanto Rastrear. Se rolar Sobrevivência para iniciativa enquanto rastreia sua presa caçada, no início do seu primeiro turno no encontro, você pode Andar em direção à sua presa caçada como uma ação livre.",
+            pre_requisitos="especialista em Sobrevivência, Rastreador Experiente",
+        ),
+        construir_talento_classe(
+            "Tiro Estalido",
+            6,
+            ["Patrulheiro"],
+            "Você aprendeu a reagir com armas à distância aos movimentos de criaturas próximas. Você pode usar uma reação que normalmente lhe permite fazer um Golpe com uma arma corpo a corpo para fazer um Golpe com uma arma à distância. Você deve Golpear um alvo adjacente. Se necessário para o acionamento da reação, você trata sua arma à distância como se ela tivesse um alcance de 1,5 metros. Se a reação possuir outros requerimentos, como empunhar um tipo específico de arma, Tiro Estalido não lhe permite ignorá-los (ele permite apenas substituir um Golpe com uma arma corpo a corpo por um Golpe com uma arma à distância).",
+        ),
+        # 8º nível
+        construir_talento_classe(
+            "Arapucas Poderosas",
+            8,
+            ["Patrulheiro"],
+            "Suas arapucas são particularmente difíceis de evitar. Quando você armar uma arapuca, a CD da jogada de salvamento dela é igual à CD normal dela ou à sua CD de classe (o que for maior).",
+            pre_requisitos="mestre em Manufatura, Especialista em Arapuca",
+        ),
+        construir_talento_classe(
+            "Dádiva do Guardião",
+            8,
+            ["Patrulheiro"],
+            "Ao apontar vulnerabilidades, você concede os benefícios listados em Caçar Presa e o benefício de sua excelência de caçador a um aliado até o final do próximo turno dele. Dependendo se você fala ou usa gestos, esta ação adquire respectivamente o traço visual ou auditivo.",
+            acoes="1",
+        ),
+        construir_talento_classe(
+            "Descobridor de Perigo",
+            8,
+            ["Patrulheiro"],
+            "Você possui um sentido intuitivo que o alerta sobre a presença de perigos. Você recebe +1 de bônus de circunstância em testes de Percepção para encontrar perigos, na CA contra ataques feitos por eles e em salvamentos contra seus efeitos. Mesmo que não esteja Procurando, você faz um teste para encontrar perigos que normalmente exigiriam essa atividade. Você ainda precisa atender a quaisquer outros requerimentos para encontrar o perigo.",
+        ),
+        construir_talento_classe(
+            "Lutar às Cegas",
+            8,
+            ["Patrulheiro"],
+            "Seus instintos de batalha lhe tornam mais alerta a oponentes ocultados e invisíveis. Você não precisa obter sucesso em um teste simples para mirar criaturas ocultadas. Você não fica desprevenido contra criaturas que estejam escondidas de você (a menos que esteja desprevenido contra elas por outras razões além da condição escondido). Além disso, você precisa obter sucesso somente em um teste simples CD 5 para mirar uma criatura escondida. Enquanto estiver adjacente a uma criatura indetectada de seu nível ou inferior, você a considera somente escondida.",
+            pre_requisitos="mestre em Percepção",
+        ),
+        construir_talento_classe(
+            "Mestre em Terreno",
+            8,
+            ["Patrulheiro"],
+            "Você se adapta aos seus arredores em qualquer terreno natural que esteja. Você pode gastar 1 hora treinando no terreno atual para torná-lo seu terreno predileto, substituindo temporariamente seu terreno predileto. Se passar um dia inteiro fora do novo terreno, seu terreno predileto reverte à sua escolha original selecionada no talento Terreno Predileto.",
+            pre_requisitos="mestre em Sobrevivência, Terreno Predileto",
+        ),
+        construir_talento_classe(
+            "Mira Letal",
+            8,
+            ["Abertura", "Patrulheiro"],
+            "Você mira nos pontos fracos de sua presa, tornando seu disparo mais difícil de acertar em troca de um dano maior. Faça um Golpe à distância contra sua presa caçada com –2 de penalidade. Você recebe +4 de bônus de circunstância no dano desse Golpe. Este bônus aumenta para +6 no 11º nível e para +8 no 15º nível.",
+            acoes="1",
+            pre_requisitos="especialização em armas",
+        ),
+        # 10º nível
+        construir_talento_classe(
+            "Camuflagem",
+            10,
+            ["Patrulheiro"],
+            "Você altera sua aparência para camuflar-se aos ermos. Em terreno natural, você pode se Esgueirar mesmo se estiver sendo observado.",
+            pre_requisitos="mestre em Furtividade",
+        ),
+        construir_talento_classe(
+            "Companheiro Incrível",
+            10,
+            ["Patrulheiro"],
+            "Seu companheiro animal continua a crescer e a se desenvolver. Ele se torna um companheiro animal ágil ou selvagem (à sua escolha), recebendo capacidades adicionais determinadas pelo tipo de companheiro (página 214).",
+            pre_requisitos="Companheiro Animal Maduro",
+        ),
+        construir_talento_classe(
+            "Mestre Caçador de Monstros",
+            10,
+            ["Patrulheiro"],
+            "Você possui um conhecimento quase enciclopédico de todas as criaturas do mundo. Você pode usar Natureza para Recordar Conhecimento para identificar qualquer criatura. Além disso, você recebe os benefícios de Caçador de Monstros (e Guardião Contra Monstros, se o possuir) em um sucesso da mesma forma que recebe em um sucesso crítico.",
+            pre_requisitos="mestre em Natureza, Caçador de Monstros",
+        ),
+        construir_talento_classe(
+            "Passo do Guardião",
+            10,
+            ["Patrulheiro"],
+            "Você pode guiar seus aliados para se moverem silenciosamente pelos ermos. Quando Esgueirar durante a exploração em terreno natural, você pode conceder os benefícios desta atividade a quaisquer aliados como se eles estivessem usando-a durante a exploração. Isto não requer qualquer ação da parte deles.",
+            pre_requisitos="mestre em Furtividade",
+        ),
+        construir_talento_classe(
+            "Riposta Dupla",
+            10,
+            ["Patrulheiro"],
+            "Uma aparada inteligente com uma arma deixa seu oponente aberto para um ataque com sua outra arma. Faça um Golpe corpo a corpo ou use uma ação de Desarmar contra o oponente acionador.",
+            acoes="reacao",
+            acionamento="Uma criatura em seu alcance falha criticamente em um Golpe contra você.",
+            requerimentos="Você está se beneficiando de Aparada Dupla.",
+        ),
+        construir_talento_classe(
+            "Tiro Penetrante",
+            10,
+            ["Abertura", "Patrulheiro"],
+            "O seu disparo atravessa uma criatura interposta para acertar sua presa. Escolha um alvo que esteja concedendo cobertura menor à sua presa caçada. Faça um único Golpe à distância com a arma requerida contra o alvo escolhido e contra sua presa caçada. Este ataque ignora qualquer cobertura menor fornecida pelo alvo escolhido à sua presa caçada. Role o dano somente uma vez e aplique-o a cada criatura atingida. Um Tiro Penetrante conta como dois ataques para sua penalidade por ataques múltiplos.",
+            acoes="2",
+            pre_requisitos="Você está empunhando uma arma à distância.",
+        ),
+        # 12º nível
+        construir_talento_classe(
+            "Arapucas-Relâmpago",
+            12,
+            ["Patrulheiro"],
+            "Você pode armar uma arapuca com velocidade incrível. Você pode Manufaturar uma arapuca que normalmente exigiria 1 minuto usando apenas uma única ação de Interagir.",
+            pre_requisitos="mestre em Manufatura, Arapucas Rápidas",
+        ),
+        construir_talento_classe(
+            "Lado a Lado",
+            12,
+            ["Patrulheiro"],
+            "Você e seu companheiro animal lutam em sincronia, distraindo seus adversários e tirando seu equilíbrio. Sempre que você e seu companheiro animal estiverem adjacentes ao mesmo adversário, ambos o flanqueiam independentemente de suas posições.",
+            pre_requisitos="companheiro animal",
+        ),
+        construir_talento_classe(
+            "Presa Dupla",
+            12,
+            ["Patrulheiro"],
+            "Você pode focar em dois adversários ao mesmo tempo, caçando ambos. Quando usar a ação Caçar Presa, você pode selecionar duas criaturas como presa.",
+        ),
+        construir_talento_classe(
+            "Segunda Ferroada",
+            12,
+            ["Patrulheiro", "Pressão"],
+            "Você lê os movimentos de sua presa e cria brechas na defesa dela, usando um ataque falho para garantir pelo menos um golpe de raspão. Faça um Golpe corpo a corpo com uma das armas requeridas contra sua presa caçada. O Golpe possui o efeito de falha a seguir.",
+            acoes="1",
+            requerimentos="Você está empunhando duas armas corpo a corpo, uma em cada mão.",
+            resultados={
+                "falha": "Você causa o dano que sua outra arma requerida causaria em um acerto, excluindo todos os dados de dano. (Isto remove os dados de dano da arma, runas, magias e habilidades especiais).",
+            },
+        ),
+        construir_talento_classe(
+            "Tiro de Distração",
+            12,
+            ["Patrulheiro"],
+            "O poder bruto de seus ataques, ou a quantidade esmagadora deles, deixa um inimigo desorientado. Se você atacar sua presa caçada usando uma arma à distância e atingi-la com um acerto crítico ou duas vezes no mesmo turno, ela fica desprevenida até o início do seu próximo turno.",
+        ),
+        # 14º nível
+        construir_talento_classe(
+            "Companheiro Furtivo",
+            14,
+            ["Patrulheiro"],
+            "Você treinou seu companheiro animal para se mesclar aos arredores. Seu companheiro animal recebe o benefício do talento Camuflagem. Se seu companheiro for um emboscador especializado, a graduação de proficiência dele em Furtividade aumenta para mestre (ou lendário se já for mestre).",
+            pre_requisitos="Camuflagem, companheiro animal",
+        ),
+        construir_talento_classe(
+            "Orientação do Guardião",
+            14,
+            ["Patrulheiro"],
+            "Você pode informar a localização de sua presa a seus aliados, não importa o quão bem escondida ela esteja. Enquanto sua presa caçada for observada por você, todos os seus aliados que rolarem falhas e falhas críticas para Buscá-la tratam o resultado como um sucesso. Seus aliados precisam ser capazes de ver ou ouvir você para receberem este benefício. Você deve ser capaz de usar gestos ou fala para conceder esse benefício a seus aliados.",
+        ),
+        construir_talento_classe(
+            "Presa Compartilhada",
+            14,
+            ["Patrulheiro"],
+            "Caçando como uma verdadeira dupla, você e seu aliado acossam sua presa. Quando usar Caçar Presa e selecionar somente uma presa, você recebe seus benefícios normais e concede os benefícios listados em Caçar Presa e em sua excelência de caçador a um aliado. O aliado retém estes benefícios até você usar Caçar Presa novamente.",
+            pre_requisitos="Dádiva do Guardião, Presa Dupla",
+        ),
+        construir_talento_classe(
+            "Sentir o Que Não É Visto",
+            14,
+            ["Patrulheiro"],
+            "Quando procura por adversários, você percebe as menores pistas, como seus movimentos minuciosos ou a mudança das correntes de ar em sua pele. Mesmo que tenha falhado no teste acionador, você automaticamente sente quaisquer criaturas indetectadas na área em que está Buscando, deixando-as meramente escondidas para você.",
+            acoes="reacao",
+            acionamento="Você falha em um teste de Buscar.",
+        ),
+        construir_talento_classe(
+            "Tiro Mirado",
+            14,
+            ["Concentração", "Patrulheiro", "Pressão"],
+            "Você cuidadosamente rastreia a posição e defesas de sua presa, permitindo-lhe evitar quaisquer obstáculos que bloqueariam seu tiro. Faça um Golpe com uma arma à distância contra sua presa caçada. Você ignora a condição ocultado e toda a cobertura do alvo.",
+            acoes="1",
+            pre_requisitos="Mira do Caçador",
+        ),
+        # 16º nível
+        construir_talento_classe(
+            "Arapucas Abundantes",
+            16,
+            ["Patrulheiro"],
+            "Você pode preparar previamente uma quantidade aparentemente impossível de arapucas, e está pronto para jogá-las em adversários desavisados. Dobre a quantidade de arapucas preparadas através de Especialista em Arapuca.",
+            pre_requisitos="Especialista em Arapuca",
+        ),
+        construir_talento_classe(
+            "Companheiro Especializado",
+            16,
+            ["Patrulheiro"],
+            "Seu companheiro animal se tornou astuto o suficiente para se tornar especializado. Seu companheiro animal recebe uma especialização à sua escolha. (Veja a seção Companheiros Animais Especializados, na página 217).",
+            pre_requisitos="Companheiro Incrível",
+        ),
+        construir_talento_classe(
+            "Lendário Caçador de Monstros",
+            16,
+            ["Patrulheiro"],
+            "Seu conhecimento sobre monstros é tão incrível que revela as falhas gritantes de sua presa. Seu bônus de Caçador de Monstros (e o bônus de Guardião Contra Monstros, se o possuir) aumenta de +1 para +2 para você e quaisquer aliados que estiverem se beneficiando dele.",
+            pre_requisitos="lendário em Natureza, Caçador de Monstros Mestre",
+        ),
+        construir_talento_classe(
+            "Riposta Dupla Aprimorada",
+            16,
+            ["Patrulheiro"],
+            "No início de cada um de seus turnos, você recebe uma reação adicional que pode ser usada somente para realizar uma Riposta Dupla contra sua presa caçada. Você pode usar esta reação extra mesmo se não estiver se beneficiando de Aparada Dupla.",
+            pre_requisitos="Riposta Dupla",
+        ),
+        construir_talento_classe(
+            "Tiro de Distração Maior",
+            16,
+            ["Patrulheiro"],
+            "Mesmo um único projétil pode tirar o equilíbrio de um inimigo, e ataques mais poderosos o deixam desorientado por mais tempo. Se você atingir sua presa caçada com uma arma à distância, ela fica desprevenida até o início do seu próximo turno. Se atingir um acerto crítico contra sua presa caçada ou se acertá-la pelo menos duas vezes no mesmo turno com uma arma à distância, ela fica desprevenida até o final do seu próximo turno.",
+            pre_requisitos="Tiro de Distração",
+        ),
+        # 18º nível
+        construir_talento_classe(
+            "Caçador das Sombras",
+            18,
+            ["Patrulheiro"],
+            "Você se mescla tão bem aos arredores que observadores não conseguem diferenciá-lo do terreno ao seu redor. Enquanto estiver em terreno natural, você sempre fica ocultado de todos os adversários que escolher — exceto para sua presa caçada.",
+            pre_requisitos="Camuflagem",
+        ),
+        construir_talento_classe(
+            "Companheiro Magistral",
+            18,
+            ["Patrulheiro"],
+            "Seu companheiro animal compartilha suas habilidades incríveis de caça, conseguindo abater sua presa caçada com facilidade. Quando você Caçar uma Presa, seu companheiro animal recebe o benefício de caçador magistral associado com sua excelência de caçador (em vez de receber somente o benefício original de sua excelência de caçador).",
+            pre_requisitos="caçador magistral, companheiro animal",
+        ),
+        construir_talento_classe(
+            "Excelência Múltipla",
+            18,
+            ["Patrulheiro"],
+            "Você aprendeu todas as excelências possíveis para usar contra seus adversários. Quando usar Caçar Presa, você pode receber um outro benefício de excelência de caçador além do selecionado no 1º nível. Se o fizer, você não recebe o benefício adicional de caçador magistral.",
+            pre_requisitos="caçador magistral, excelência de caçador",
+        ),
+        construir_talento_classe(
+            "Rajada Impossível",
+            18,
+            ["Abertura", "Floreio", "Patrulheiro"],
+            "Você abre mão da precisão para atacar a uma velocidade impossível. Faça três Golpes corpo a corpo com cada uma das armas requeridas. Todos estes Golpes sofrem a máxima penalidade por ataques múltiplos, como se você já tivesse realizado dois ou mais ataques neste turno.",
+            acoes="3",
+            requerimentos="Você está empunhando duas armas corpo a corpo, uma em cada mão.",
+        ),
+        construir_talento_classe(
+            "Saraivada Impossível",
+            18,
+            ["Patrulheiro"],
+            "Você dispara uma saraivada em todos os adversários dentro de uma área. Faça um Golpe com –2 de penalidade contra cada inimigo em uma explosão de 3 metros de raio centrada em um ponto na distância da voleio de sua arma ou além. Role o dano somente uma vez para todos os alvos. Cada ataque conta para sua penalidade por ataques múltiplos, mas a penalidade não aumenta até você ter realizado todos os ataques.",
+            acoes="3",
+            requerimentos="Você está empunhando uma arma à distância com o traço recarga 0 e voleio.",
+        ),
+        construir_talento_classe(
+            "Tiro Perfeito",
+            18,
+            ["Floreio", "Patrulheiro"],
+            "Após observar os movimentos do combate com intensidade e precisão incríveis, você dispara contra sua presa no momento perfeito para causar o máximo de dor. Faça um Golpe à distância com a arma requerida contra sua presa caçada. Se acertar, o Golpe causa dano máximo. Após o Golpe, seu turno é encerrado.",
+            acoes="3",
+            requerimentos="Você está empunhando uma arma à distância carregada que possua recarga 1 ou mais e não recarregou sua arma desde seu último turno.",
+        ),
+        # 20º nível
+        construir_talento_classe(
+            "Ameaça Tripla",
+            20,
+            ["Patrulheiro"],
+            "Você consegue dividir sua atenção entre três alvos durante a caçada. Quando usar a ação Caçar Presa, você pode selecionar três criaturas como presa; selecionar duas criaturas como presa e compartilhar o efeito com um aliado (como em Presa Compartilhada); ou selecionar uma criatura como presa e compartilhar o efeito com dois aliados.",
+            pre_requisitos="Presa Compartilhada",
+        ),
+        construir_talento_classe(
+            "Até os Confins da Terra",
+            20,
+            ["Patrulheiro"],
+            "Sua habilidade de rastrear uma presa supera quaisquer explicações, permitindo-lhe traçar os movimentos de sua presa e prever a localização dela com facilidade. Quando usar Caçar Presa em uma criatura a até 30 metros, você consegue seguir os movimentos dessa criatura. Isso permite que você saiba a localização exata da criatura não importa quão longe ela esteja, desde que permaneça como sua presa. Você deve ser lendário em Natureza para rastrear a localização de sua presa após um teleporte ou viagem planar. Este talento adquire os traços adivinhação, detecção e primal se você for lendário em Natureza.",
+            pre_requisitos="lendário em Sobrevivência",
+        ),
+        construir_talento_classe(
+            "Escaramuçador Irrevogável",
+            20,
+            ["Patrulheiro"],
+            "Você é tão habilidoso em andar pelos ermos que seu movimento é completamente imune ao terreno. Você ignora os efeitos de todo terreno difícil, terreno difícil maior e terreno perigoso, além de não acionar armadilhas e perigos acionados por mover-se através de uma área (como fios e placas de pressão) a menos que queira.",
+            pre_requisitos="deslocamento nos ermos",
+        ),
+        construir_talento_classe(
+            "Tiro Lendário",
+            20,
+            ["Patrulheiro"],
+            "Você foca a atenção em sua presa caçada, notando o ângulo, resistência do ar e cada variável que afetaria seu ataque à distância. Se possuir proficiência de mestre com sua arma à distância e estiver atacando sua presa caçada, você ignora a penalidade por atacar a até cinco incrementos de distância.",
+            pre_requisitos="caçador magistral, lendário em Percepção, Tiro Longo",
+        ),
+    ]
+
+    return {
+        "id": "patrulheiro",
+        "nome": "Patrulheiro",
+        "paginas": "202-213",
+        "descricao": "Alguns patrulheiros acreditam que a civilização desgasta a alma, mas ainda precisa ser protegida de criaturas selvagens. Outros dizem que a natureza precisa ser protegida dos gananciosos, que desejam domar sua beleza e saquear seus tesouros. Você pode defender um desses objetivos ou mesmo ambos. Você pode ser um batedor, rastreador ou caçador de bestas ou de fugitivos, vivendo às margens da civilização ou explorando os ermos. Você sabe viver da terra e é competente em abater presas oportunas e inimigos odiados.",
+        "atributo_chave": {
+            "opcoes": ["forca", "destreza"],
+            "melhoria_1_nivel": 2,
+            "texto": "Força ou Destreza — No 1º nível, sua classe lhe concede uma melhoria de atributo à sua escolha em Força ou Destreza.",
+        },
+        "pontos_de_vida_por_nivel": 10,
+        "pontos_de_vida_texto": "10 mais seu modificador de Constituição no 1º nível e a cada nível subsequente.",
+        "jogando_com_a_classe": {
+            "encontros_combate": "Você pode caçar um adversário em particular, usando suas técnicas de caça para derrotá-lo mais facilmente. Você foca no adversário escolhido e o brutaliza com um arco ou armas corpo a corpo enquanto presta suporte a seus aliados com suas perícias.",
+            "encontros_sociais": "Você fala com a voz da experiência prática, especialmente envolvendo exploração dos ermos.",
+            "exploracao": "Você guia seus aliados pelos ermos ou segue rastros. Você fica atento para problemas, constantemente alerta para o perigo mesmo quando ele não é iminente.",
+            "recesso": "Você cria armas e arapucas em preparação para sua próxima aventura. Se preferir ficar a céu aberto, você pode sair em caçadas ou patrulhar áreas próximas para compreender melhor o ambiente que o cerca.",
+            "voce_pode": [
+                "Respeitar o poder bruto da natureza e compreender como aproveitar sabiamente sua fartura.",
+                "Apreciar a emoção da caça.",
+                "Caminhar à frente do grupo, procurando por perigo antes do combate começar.",
+            ],
+            "outros_provavelmente": [
+                "Procuram sua proteção contra o mundo selvagem e seus habitantes ou contra a invasão da civilização.",
+                "Esperam que você seja solitário, quieto ou taciturno.",
+                "Pensam que há algo perigoso e selvagem em você.",
+            ],
+        },
+        "proficiencias_iniciais": {
+            "percepcao": "especialista",
+            "salvamentos": {
+                "fortitude": "especialista",
+                "reflexos": "especialista",
+                "vontade": "treinado",
+            },
+            "pericias": {
+                "fixas": ["natureza", "sobrevivencia"],
+                "opcoes_fixas": [],
+                "condicionais": [],
+                "adicionais_base": 4,
+                "soma_modificador_inteligencia": True,
+                "texto": "Treinado em Natureza; treinado em Sobrevivência; treinado em uma quantidade de perícias adicionais igual a 4 mais seu modificador de Inteligência.",
+            },
+            "ataques": {
+                "armas_simples": "treinado",
+                "armas_marciais": "treinado",
+                "ataques_desarmados": "treinado",
+            },
+            "defesas": {
+                "armaduras_leves": "treinado",
+                "armaduras_medias": "treinado",
+                "armaduras_pesadas": "destreinado",
+                "defesa_sem_armadura": "treinado",
+            },
+            "cd_classe": "treinado",
+            "magias": None,
+        },
+        "tabela_progressao": tabela_progressao,
+        "tabelas_especificas": {},
+        "caracteristicas_de_classe": caracteristicas,
+        "subclasses": {
+            "tipo": "excelencia_de_cacador",
+            "nome_tipo": "Excelência de Caçador",
+            "descricao": "Foco de treinamento de caça escolhido no 1º nível que aprimora os efeitos de Caçar Presa e evolui no 17º nível com Caçador Magistral.",
+            "opcoes": excelencias,
+        },
+        "termos_chave": [
+            {
+                "termo": "Abertura",
+                "descricao": "Estas manobras funcionam apenas como sua primeira atitude em seu turno. Você pode usar uma ação de abertura apenas se ainda não tiver usado uma ação com o traço ataque ou abertura neste turno.",
+            },
+            {
+                "termo": "Floreio",
+                "descricao": "Ações de floreio são técnicas que requerem empenho demais e não podem ser realizadas várias vezes em seguida. Você pode usar apenas 1 ação com o traço floreio por turno.",
+            },
+            {
+                "termo": "Pressão",
+                "descricao": "Ações com este traço permitem que você desfira ataques em sequência. Uma ação com o traço pressão somente pode ser usada se você estiver sendo afetado por uma penalidade por ataques múltiplos. Algumas ações com o traço pressão também concedem um efeito em uma falha (não se aplicam em falha crítica; em um sucesso, você pode escolher aplicar o efeito de falha). Você não pode usar ações de pressão quando não for seu turno (mesmo usando Preparar).",
+            },
+        ],
+        "exemplos_personagens": [
+            {
+                "nome": "Patrulheiro Animal",
+                "pagina": 210,
+                "resumo": "Compartilhando um vínculo poderoso, você e seu amado animal exploram os ermos e lutam em sintonia.",
+                "atributos": "Priorize Destreza, seguido por Constituição e Sabedoria. Selecione Força se quiser causar mais dano.",
+                "pericias": [
+                    "Acrobatismo",
+                    "Atletismo",
+                    "Furtividade",
+                    "Medicina",
+                    "Natureza",
+                    "Sobrevivência",
+                ],
+                "subclasse": "Despiste",
+                "talento_inicial": "Companheiro Animal",
+                "talentos_niveis_superiores": [
+                    "Brado do Companheiro (4º)",
+                    "Companheiro Animal Maduro (6º)",
+                    "Companheiro Incrível (10º)",
+                    "Lado a Lado (12º)",
+                    "Companheiro Especializado (16º)",
+                    "Companheiro Magistral (18º)",
+                ],
+            },
+            {
+                "nome": "Arqueiro",
+                "pagina": 212,
+                "resumo": "Você mantém distância de sua presa, atirando flechas com uma precisão incrível para impedir ou matar sua caça.",
+                "atributos": "Priorizar Destreza e depois Sabedoria. Escolha Força se quiser usar um arco composto ou uma arma de arremesso, ou Inteligência para ser melhor em perícias.",
+                "pericias": [
+                    "Acrobatismo",
+                    "Atletismo",
+                    "Furtividade",
+                    "Ladroagem",
+                    "Natureza",
+                    "Sobrevivência",
+                ],
+                "subclasse": "Rajada",
+                "talento_inicial": "Tiro à Caça",
+                "talentos_niveis_superiores": [
+                    "Saque Rápido (2º)",
+                    "Tiro Longo (4º)",
+                    "Golpe Escaramuçador (6º)",
+                    "Mira Letal (8º)",
+                    "Tiro Penetrante (10º)",
+                    "Tiro de Distração (12º)",
+                    "Saraivada Impossível (18º)",
+                ],
+            },
+        ],
+        "talentos_de_classe": talentos,
+    }
+
+
+def montar_dados_classes_03() -> dict[str, Any]:
+    return {
+        "meta": {
+            "titulo": "Capítulo 3: Classes (Leva 03: Ladino, Mago, Monge e Patrulheiro) — Pathfinder 2E Livro Básico",
+            "arquivo_origem": "ref/Classes 03.pdf",
+            "paginas_livro_basico": "167-213",
+            "leva": 3,
+            "classes_incluidas": ["ladino", "mago", "monge", "patrulheiro"],
+            "versao": "1.0.0",
+            "observacoes": "Terceira e última leva das classes básicas do Capítulo 3, contendo os dados completos de Ladino, Mago, Monge e Patrulheiro. As seções Companheiros Animais e Familiares (pp. 214-218) e Arquétipos Multiclasse (pp. 219-231) foram separadas respectivamente em companheiros_familiares.json e arquetipos_multiclasse.json.",
+        },
+        "classes": [
+            construir_ladino(),
+            construir_mago(),
+            construir_monge(),
+            construir_patrulheiro(),
+        ],
+    }
+
+
+def validar_classes_03_json(dados: dict[str, Any]) -> None:
+    classes = dados["classes"]
+    assert [c["id"] for c in classes] == ["ladino", "mago", "monge", "patrulheiro"]
+
+    contagens_esperadas = {
+        "ladino": 52,
+        "mago": 32,
+        "monge": 60,
+        "patrulheiro": 60,
+    }
+    niveis_esperados = {1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20}
+
+    total_talentos = 0
+    for classe in classes:
+        assert len(classe["tabela_progressao"]) == 20
+        assert [row["nivel"] for row in classe["tabela_progressao"]] == list(range(1, 21))
+
+        talentos = classe["talentos_de_classe"]
+        assert len(talentos) == contagens_esperadas[classe["id"]], (
+            f"{classe['id']}: esperado {contagens_esperadas[classe['id']]}, obtido {len(talentos)}"
+        )
+        ids = [t["id"] for t in talentos]
+        assert len(ids) == len(set(ids)), f"IDs duplicados em {classe['id']}"
+        assert {t["nivel"] for t in talentos} == niveis_esperados
+        total_talentos += len(talentos)
+
+    assert total_talentos == 204
+
+    ladino, mago, monge, patrulheiro = classes
+    assert len(ladino["subclasses"]["opcoes"]) == 3
+    assert len(mago["subclasses"]["opcoes"]) == 9
+    assert len(mago["subclasses"]["escolhas_complementares"]["opcoes"]) == 4
+    assert len(mago["tabelas_especificas"]["tabela_3_17_magias_por_dia"]) == 20
+    assert len(monge["tabelas_especificas"]["ataques_desarmados_de_monge"]) == 8
+    assert len(patrulheiro["subclasses"]["opcoes"]) == 3
+
+
+def main() -> None:
+    dados = montar_dados_classes_03()
+    validar_classes_03_json(dados)
+
+    CAMINHO_SAIDA.parent.mkdir(parents=True, exist_ok=True)
+    with CAMINHO_SAIDA.open("w", encoding="utf-8") as arquivo:
+        json.dump(dados, arquivo, ensure_ascii=False, indent=2)
+        arquivo.write("\n")
+
+    print(f"Arquivo gerado com sucesso: {CAMINHO_SAIDA}")
+    print(f"Total de classes completas: {len(dados['classes'])}")
+    print(f"Total de talentos de classe: {sum(len(c['talentos_de_classe']) for c in dados['classes'])}")
+
+
+if __name__ == "__main__":
+    main()

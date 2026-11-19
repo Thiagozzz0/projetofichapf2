@@ -24,7 +24,7 @@ O sistema deve abranger desde a **matemática básica dos atributos (sistema ABC
     - `ref/Anc Race.pdf` — Criação, Ancestralidades, Heranças e Biografias
     - `ref/Classes 01.pdf` → `dados/classes01.json` — Classes (Parte 1: Introdução, Alquimista, Bárbaro, Bardo e Campeão)
     - `ref/Classes 02.pdf` → `dados/classes02.json` — Classes (Parte 2: Clérigo, Druida, Feiticeiro e Guerreiro)
-    - `ref/Classes 03.pdf` → `dados/classes03.json` — Classes (Parte 3: Ladino, Mago, Monge, Patrulheiro, Companheiros Animais/Familiares e Arquétipos Multiclasse)
+    - `ref/Classes 03.pdf` → `dados/classes03.json`, `dados/companheiros_familiares.json` e `dados/arquetipos_multiclasse.json` — Classes (Parte 3: Ladino, Mago, Monge e Patrulheiro), Companheiros Animais/Familiares e Arquétipos Multiclasse
     - `ref/Skill sfots.pdf` — Perícias
     - `ref/Gifts.pdf` — Talentos
     - `ref/Enchacent.pdf` — Magias

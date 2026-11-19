@@ -14,13 +14,13 @@ Lista viva de todas as entregas e tarefas que ainda precisam ser realizadas até
   - Todas as Heranças de cada ancestralidade.
   - Talentos de Ancestralidade.
   - Todas as Biografias / Antecedentes (melhorias de atributo, perícia treinada, Saber, talento de perícia).
-- **`ref/Classes 01–03.pdf` → `dados/classes01.json`, `dados/classes02.json`, `dados/classes03.json`** *(divisão modular em 3 arquivos)*
+- **`ref/Classes 01–03.pdf` → `dados/classes01.json`, `dados/classes02.json`, `dados/classes03.json`, `dados/companheiros_familiares.json`, `dados/arquetipos_multiclasse.json`** *(divisão modular do Capítulo 3)*
   - [x] **`ref/Classes 01.pdf` → `dados/classes01.json` (Leva 01)** *(Concluído em `18/11/2026 — 20:11`, renomeado em `20:41` — ver [06.md](finalizado/06.md) e [07.md](finalizado/07.md))*
     - Regras gerais de classes, visão geral das 12 classes básicas e dados completos de **Alquimista, Bárbaro, Bardo e Campeão** (`172` talentos de classe, progressões de 20 níveis, subclasses e tabelas).
   - [x] **`ref/Classes 02.pdf` → `dados/classes02.json` (Leva 02)** *(Concluído em `18/11/2026 — 20:41` — ver [07.md](finalizado/07.md))*
     - Dados completos de **Clérigo, Druida, Feiticeiro e Guerreiro** (`197` talentos de classe, progressões de 20 níveis, tabelas de magias por dia, doutrinas, ordens druídicas, 10 linhagens e estilos de combate).
-  - [ ] **`ref/Classes 03.pdf` → `dados/classes03.json` (Leva 03)**
-    - Dados completos de **Ladino, Mago, Monge e Patrulheiro**, regras de **Companheiros Animais e Familiares** e **Arquétipos Multiclasse**.
+  - [x] **`ref/Classes 03.pdf` → `dados/classes03.json`, `dados/companheiros_familiares.json` e `dados/arquetipos_multiclasse.json` (Leva 03)** *(Concluído em `18/11/2026 — 21:41` — ver [08.md](finalizado/08.md))*
+    - Dados completos de **Ladino, Mago, Monge e Patrulheiro** (`204` talentos de classe em `classes03.json`), regras completas de **Companheiros Animais e Familiares** (`8` tipos, `4` estágios, `6` especializações, `12` habilidades de familiar e `6` de mestre em `companheiros_familiares.json`) e **Arquétipos Multiclasse** (`12` arquétipos e `85` talentos em `arquetipos_multiclasse.json`).
 - [x] **`ref/Skill sfots.pdf` → `dados/pericias.json`** *(Concluído em `18/11/2026 — 17:25` — ver [05.md](finalizado/05.md))*
   - Lista completa de perícias e atributo associado.
   - Ações destreinadas e treinadas de cada perícia, graus de proficiência (Destreinado, Treinado, Especialista, Mestre, Lendário) e regras de Saber.

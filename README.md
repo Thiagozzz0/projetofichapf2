@@ -39,16 +39,22 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 │   └── finalizado/               # Logs individuais numerados (01.md, 02.md, ...) com data e hora
 ├── dados/                        # Regras e tabelas do PF2E convertidas em JSON
 │   ├── ancestralidades_biografias.json  # Capítulos 1 e 2 (Criação, Ancestralidades, Heranças, Biografias e Idiomas)
+│   ├── arquetipos_multiclasse.json      # Capítulo 3 (Regras de Arquétipos e 12 Arquétipos Multiclasse / 85 talentos)
 │   ├── classes01.json            # Capítulo 3 (Leva 01: Introdução + Alquimista, Bárbaro, Bardo e Campeão)
 │   ├── classes02.json            # Capítulo 3 (Leva 02: Clérigo, Druida, Feiticeiro e Guerreiro)
+│   ├── classes03.json            # Capítulo 3 (Leva 03: Ladino, Mago, Monge e Patrulheiro)
+│   ├── companheiros_familiares.json     # Capítulo 3 (Companheiros Animais e Familiares)
 │   ├── equipamentos.json         # Capítulo 6 completo (Equipamentos) convertido e validado
 │   └── pericias.json             # Capítulo 4 completo (Perícias, Ações Gerais e Tabelas 4–1 a 4–4)
 ├── pdf_fonte/                    # PDF completo comprimido do Livro Básico PF2E
 ├── ref/                          # PDFs fragmentados por categoria para conversão gradual
 ├── scripts/                      # Scripts Python de geração, extração e validação de JSONs
 │   ├── gerar_ancestralidades_biografias_json.py
+│   ├── gerar_arquetipos_multiclasse_json.py
 │   ├── gerar_classes_01_json.py
 │   ├── gerar_classes_02_json.py
+│   ├── gerar_classes_03_json.py
+│   ├── gerar_companheiros_familiares_json.py
 │   ├── gerar_equipamentos_json.py
 │   └── gerar_pericias_json.py
 └── templates/                    # Front-End HTML/CSS/JS renderizado pelo Flask
@@ -84,7 +90,7 @@ Os PDFs de referência estão sendo convertidos **um por vez** para garantir fid
 | `ref/Anc Race.pdf` | `dados/ancestralidades_biografias.json` | Regras de criação, Ancestralidades, Heranças, Talentos de Ancestralidade e Biografias | Concluído (`04.md`) |
 | `ref/Classes 01.pdf` | `dados/classes01.json` | Regras gerais do Cap. 3, visão geral das 12 classes e dados completos de Alquimista, Bárbaro, Bardo e Campeão (`172` talentos) | Concluído (`06.md` / `07.md`) |
 | `ref/Classes 02.pdf` | `dados/classes02.json` | Dados completos de Clérigo, Druida, Feiticeiro e Guerreiro (`197` talentos) | Concluído (`07.md`) |
-| `ref/Classes 03.pdf` | `dados/classes03.json` | Dados completos de Ladino, Mago, Monge, Patrulheiro, Companheiros Animais/Familiares e Arquétipos Multiclasse | Pendente |
+| `ref/Classes 03.pdf` | `dados/classes03.json`, `dados/companheiros_familiares.json`, `dados/arquetipos_multiclasse.json` | Dados completos de Ladino, Mago, Monge e Patrulheiro (`204` talentos), Companheiros Animais/Familiares e Arquétipos Multiclasse (`12` arquétipos, `85` talentos) | Concluído (`08.md`) |
 | `ref/Skill sfots.pdf` | `dados/pericias.json` | Perícias, ações treinadas/destreinadas e graus de proficiência | Concluído (`05.md`) |
 | `ref/Gifts.pdf` | `dados/talentos.json` | Talentos Gerais e Talentos de Perícia | Pendente |
 | `ref/Enchacent.pdf` | `dados/magias.json` | Tradições mágicas, magias e magias de foco | Pendente |
@@ -103,6 +109,9 @@ python scripts/gerar_ancestralidades_biografias_json.py
 python scripts/gerar_pericias_json.py
 python scripts/gerar_classes_01_json.py
 python scripts/gerar_classes_02_json.py
+python scripts/gerar_classes_03_json.py
+python scripts/gerar_companheiros_familiares_json.py
+python scripts/gerar_arquetipos_multiclasse_json.py
 ```
 
 Os scripts verificam todas as contagens das tabelas dos respectivos capítulos, unicidade de IDs e integridade estrutural dos dados.
