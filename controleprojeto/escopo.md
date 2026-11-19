@@ -29,7 +29,7 @@ O sistema deve abranger desde a **matemática básica dos atributos (sistema ABC
     - `ref/Gifts.pdf` → `dados/talentos.json` — Talentos (Capítulo 5: Talentos Gerais e Talentos de Perícia)
     - `ref/Enchanced 01.pdf` → `dados/magias01.json` — Magias (Parte 1: Regras Gerais, Listas Completas e Descrições A–M)
     - `ref/Enchacent02.pdf` → `dados/magias02.json` — Magias (Parte 2: Descrições M–Z, Magias de Foco e Rituais)
-    - `ref/Compendium specific tools.pdf` — Itens Mágicos e Tesouros
+    - `ref/Compendium specific tools.pdf` — Itens Mágicos e Tesouros *(Adiado para fase futura)*
     - `ref/Sheet Update.pdf` → `dados/estrutura_ficha.json` — Estrutura da Ficha de Personagem *(Concluído)*
 - **Scripts Auxiliares (`scripts/`):** Scripts Python de geração, extração, normalização e validação dos arquivos JSON em `dados/`.
 - **Governança (`controleprojeto/`):** Documentação viva do projeto (`escopo.md`, `pendencias.md`, `finalizado.md`) e registros sequenciais de entregas concluídas em `controleprojeto/finalizado/` (`01.md`, `02.md`, ...), sempre datados com data e hora a cada alteração ou etapa finalizada.

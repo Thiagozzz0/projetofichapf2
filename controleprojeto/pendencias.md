@@ -31,7 +31,7 @@ Lista viva de todas as entregas e tarefas que ainda precisam ser realizadas até
     - Regras gerais de conjuração (`pp. 297–306`), listas completas das 4 tradições (`Arcana`, `Divina`, `Ocultista`, `Primal` — `779` entradas / `379` únicas), `3` quadros auxiliares e `220` descrições completas de magias (`Abrandar` a `Melhorar Alimentos`, `pp. 316–358`).
   - [x] **`ref/Enchacent02.pdf` → `dados/magias02.json` (Parte 2)** *(Concluído em `19/11/2026 — 09:02` — ver [11.md](finalizado/11.md))*
     - Todas as `159` descrições restantes (`Mensageiro Animal` a `Zona da Verdade`, completando `379/379` com `magias01.json`), quadro `Servo Invisível Criatura –1`, `158` Magias de Foco (`7` classes), regras completas + Tabelas `7–1`/`7–2` e todos os `20` Rituais.
-- [ ] **`ref/Compendium specific tools.pdf` → `dados/itens_magicos_tesouros.json`**
+- [ ] **`ref/Compendium specific tools.pdf` → `dados/itens_magicos_tesouros.json`** *(Adiado para implementação futura conforme decisão do usuário em `19/11/2026`)*
   - Runas fundamentais e de propriedade, materiais preciosos, itens alquímicos completos, poções, pergaminhos, talismãs e itens mágicos permanentes.
 - [x] **`ref/Sheet Update.pdf` → `dados/estrutura_ficha.json`** *(Concluído em `19/11/2026 — 09:19` → [finalizado/12.md](finalizado/12.md))*
   - Mapeamento completo das 4 páginas oficiais da ficha (`pp. 580–583`), legendas, fórmulas de cálculo, cruzamento 1:1 com `dados/pericias.json` (`18` linhas) e contrato `modelo_ficha_vazia` validado via `scripts/gerar_estrutura_ficha_json.py`.
@@ -40,9 +40,8 @@ Lista viva de todas as entregas e tarefas que ainda precisam ser realizadas até
 
 ## Etapa 2 — Subclasses / Conceitos Procedurais
 
-- [ ] **Definir e estruturar `dados/conceitos_subclasses.json`**
-  - Criar os conceitos ("nortes") disponíveis para cada uma das 12 classes (ex.: *Guerreiro — Combatente de 2 Espadas*, *Guerreiro — Arqueiro*, *Guerreiro — Escudeiro*, *Guerreiro — Arma Pesada*, etc.).
-  - Mapear para cada conceito: prioridade de atributos livres, biografias mais condizentes, perícias prioritárias, talentos recomendados por categoria, loadout de equipamentos/armas/armadura compatível com 15 po e magias preferenciais (quando conjurador).
+- [x] **Definir e estruturar `dados/conceitos_subclasses.json`** *(Concluído em `19/11/2026 — 10:54` → [finalizado/13.md](finalizado/13.md))*
+  - Criados `38` conceitos ("nortes") cobrindo todas as `12` classes (incluindo *Mago — Elementalista*, *Guerreiro — Mestre da Espada de Duas Mãos*, entre outros), com prioridade de atributos, biografias recomendadas, perícias/saberes, talentos (Classe, Perícia, Gerais e afinidade ancestral), equipamentos compatíveis com `15 po` e diretrizes de conjuração, validados 1:1 contra todos os JSONs de `dados/`.
 
 ---
 
