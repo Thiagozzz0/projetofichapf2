@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerador Procedural PF2E — Teste Etapa 3</title>
+  <style>
+    :root {
+      --bg: #f6f4ef;
+      --card: #ffffff;
+      --border: #d8d0c3;
+      --ink: #221d18;
+      --muted: #665d54;
+      --accent: #7a1f1f;
+      --accent-soft: #f5ebeb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.45;
+    }
+    main { max-width: 1080px; margin: 0 auto; }
+    h1, h2, h3 { margin-top: 0; color: var(--accent); }
+    .subtitulo { color: var(--muted); margin-top: -8px; margin-bottom: 20px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+    .grid-form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; }
+    select, input {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      font-size: 0.95rem;
+      background: #fff;
+    }
+    .dica {
+      margin-top: 10px;
+      padding: 10px 12px;
+      background: var(--accent-soft);
+      border-left: 3px solid var(--accent);
+      font-size: 0.9rem;
+    }
+    button {
+      margin-top: 14px;
+      padding: 10px 18px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button:hover { opacity: 0.92; }
+    .erro { color: #9c1b1b; font-weight: 600; margin-top: 10px; }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .stat-box {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px;
+      text-align: center;
+      background: #fcfaf6;
+    }
+    .stat-box .rotulo { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; }
+    .stat-box .valor { font-size: 1.25rem; font-weight: 700; }
+    .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+    ul { padding-left: 18px; margin: 6px 0; }
+    pre {
+      background: #1d1a17;
+      color: #f3eee7;
+      padding: 12px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.82rem;
+      max-height: 440px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Gerador Procedural de Fichas — Pathfinder 2E</h1>
+    <p class="subtitulo">Painel de validação do motor procedural (Etapa 3 • Personagens de 1º Nível).</p>
+
+    <section class="card">
+      <form id="form-gerador">
+        <div class="grid-form">
+          <div>
+            <label for="ancestralidade">Ancestralidade</label>
+            <select id="ancestralidade" required></select>
+          </div>
+          <div>
+            <label for="heranca">Herança</label>
+            <select id="heranca" required></select>
+          </div>
+          <div>
+            <label for="biografia">Biografia / Antecedente</label>
+            <select id="biografia"></select>
+          </div>
+          <div>
+            <label for="classe">Classe</label>
+            <select id="classe" required></select>
+          </div>
+          <div>
+            <label for="conceito">Conceito ("Norte")</label>
+            <select id="conceito" required></select>
+          </div>
+          <div>
+            <label for="nome">Nome do Personagem (opcional)</label>
+            <input id="nome" type="text" placeholder="Aleatório se vazio">
+          </div>
+          <div>
+            <label for="seed">Seed (opcional)</label>
+            <input id="seed" type="text" placeholder="Para reproduzir a ficha">
+          </div>
+        </div>
+        <div id="resumo-conceito" class="dica"></div>
+        <button type="submit">Gerar Ficha (1º Nível)</button>
+        <div id="mensagem-erro" class="erro"></div>
+      </form>
+    </section>
+
+    <section id="resultado" class="card" hidden>
+      <h2 id="titulo-ficha"></h2>
+      <p id="subtitulo-ficha" class="subtitulo"></p>
+
+      <div id="stats-principais" class="stats-grid"></div>
+      <div id="atributos-grid" class="stats-grid"></div>
+
+      <div class="cols">
+        <div class="card">
+          <h3>Ataques (Golpes)</h3>
+          <ul id="lista-golpes"></ul>
+        </div>
+        <div class="card">
+          <h3>Perícias Treinadas &amp; Idiomas</h3>
+          <ul id="lista-pericias"></ul>
+          <p id="idiomas-texto"></p>
+        </div>
+        <div class="card">
+          <h3>Habilidades e Talentos (1º Nível)</h3>
+          <ul id="lista-talentos"></ul>
+        </div>
+        <div class="card">
+          <h3>Inventário, Volume e Moedas</h3>
+          <p id="resumo-carga"></p>
+          <ul id="lista-inventario"></ul>
+        </div>
+        <div class="card" id="card-conjuracao" hidden>
+          <h3>Conjuração e Magias</h3>
+          <p id="resumo-conjuracao"></p>
+          <ul id="lista-magias"></ul>
+        </div>
+      </div>
+
+      <details>
+        <summary>Ver JSON completo da ficha (`estrutura_ficha.json`)</summary>
+        <pre id="json-bruto"></pre>
+      </details>
+    </section>
+  </main>
+
+  <script>
+    let OPCOES = null;
+
+    function fmtMod(v) { return v >= 0 ? `+${v}` : `${v}`; }
+
+    function atualizarHerancas() {
+      const ancId = document.getElementById("ancestralidade").value;
+      const anc = OPCOES.ancestralidades.find(a => a.id === ancId);
+      const sel = document.getElementById("heranca");
+      sel.innerHTML = "";
+      (anc ? anc.herancas : []).forEach(h => {
+        const opt = document.createElement("option");
+        opt.value = h.id;
+        opt.textContent = h.nome;
+        sel.appendChild(opt);
+      });
+    }
+
+    function atualizarConceitos() {
+      const clsId = document.getElementById("classe").value;
+      const cls = OPCOES.classes.find(c => c.id === clsId);
+      const sel = document.getElementById("conceito");
+      sel.innerHTML = "";
+      (cls ? cls.conceitos : []).forEach(c => {
+        const opt = document.createElement("option");
+        opt.value = c.id;
+        opt.textContent = `${c.nome} (${c.subclasse_oficial_nome})`;
+        sel.appendChild(opt);
+      });
+      atualizarResumoConceito();
+    }
+
+    function atualizarResumoConceito() {
+      const clsId = document.getElementById("classe").value;
+      const conId = document.getElementById("conceito").value;
+      const cls = OPCOES.classes.find(c => c.id === clsId);
+      const con = cls ? cls.conceitos.find(x => x.id === conId) : null;
+      document.getElementById("resumo-conceito").textContent = con ? con.resumo_proposta : "";
+    }
+
+    async function inicializar() {
+      const resp = await fetch("/api/opcoes");
+      OPCOES = await resp.json();
+
+      const selAnc = document.getElementById("ancestralidade");
+      OPCOES.ancestralidades.forEach(a => {
+        const opt = document.createElement("option");
+        opt.value = a.id;
+        opt.textContent = `${a.nome} (PV ${a.pontos_vida})`;
+        selAnc.appendChild(opt);
+      });
+
+      const selBio = document.getElementById("biografia");
+      const optAuto = document.createElement("option");
+      optAuto.value = "procedural";
+      optAuto.textContent = "Procedural (recomendada pelo conceito)";
+      selBio.appendChild(optAuto);
+      OPCOES.biografias.forEach(b => {
+        const opt = document.createElement("option");
+        opt.value = b.id;
+        opt.textContent = b.nome;
+        selBio.appendChild(opt);
+      });
+
+      const selCls = document.getElementById("classe");
+      OPCOES.classes.forEach(c => {
+        const opt = document.createElement("option");
+        opt.value = c.id;
+        opt.textContent = c.nome;
+        selCls.appendChild(opt);
+      });
+
+      selAnc.addEventListener("change", atualizarHerancas);
+      selCls.addEventListener("change", atualizarConceitos);
+      document.getElementById("conceito").addEventListener("change", atualizarResumoConceito);
+
+      atualizarHerancas();
+      atualizarConceitos();
+    }
+
+    function renderBox(rotulo, valor) {
+      return `<div class="stat-box"><div class="rotulo">${rotulo}</div><div class="valor">${valor}</div></div>`;
+    }
+
+    function exibirFicha(res) {
+      const f = res.ficha;
+      const m = res.meta_geracao;
+      document.getElementById("resultado").hidden = false;
+      document.getElementById("titulo-ficha").textContent =
+        `${f.cabecalho.nome_personagem} — ${f.cabecalho.ancestralidade_e_heranca} • ${f.cabecalho.classe}`;
+      document.getElementById("subtitulo-ficha").textContent =
+        `Biografia: ${f.cabecalho.biografia} (${m.biografia_procedural ? "Procedural" : "Manual"}) | Seed: ${m.seed} | Saldo: ${m.saldo_restante}`;
+
+      document.getElementById("stats-principais").innerHTML = [
+        renderBox("PV Máx", f.pontos_vida.max),
+        renderBox("CA", f.classe_armadura.total),
+        renderBox("Velocidade", `${f.velocidade.metros} m`),
+        renderBox("Percepção", fmtMod(f.percepcao.total)),
+        renderBox("CD Classe", f.cd_classe.total),
+        renderBox("Fort / Ref / Von", `${fmtMod(f.jogadas_salvamento.fortitude.total)} / ${fmtMod(f.jogadas_salvamento.reflexos.total)} / ${fmtMod(f.jogadas_salvamento.vontade.total)}`),
+      ].join("");
+
+      const nomesAtr = { for: "FOR", des: "DES", con: "CON", int: "INT", sab: "SAB", car: "CAR" };
+      document.getElementById("atributos-grid").innerHTML = Object.entries(f.atributos)
+        .map(([k, a]) => renderBox(nomesAtr[k], `${a.valor} (${fmtMod(a.modificador)})`))
+        .join("");
+
+      const golpes = [...f.golpes_corpo_a_corpo, ...f.golpes_a_distancia].filter(g => g.arma);
+      document.getElementById("lista-golpes").innerHTML = golpes.map(g => {
+        const modDano = g.dano.for ?? g.dano.especial ?? 0;
+        const tipo = (g.dano.tipos_dano || []).join("/");
+        return `<li><strong>${g.arma}</strong>: ${fmtMod(g.ataque.total)} | Dano ${g.dano.dados}${modDano ? fmtMod(modDano) : ""} ${tipo}</li>`;
+      }).join("");
+
+      const perTreinadas = f.pericias.filter(p => p.grau_proficiencia !== "destreinado");
+      document.getElementById("lista-pericias").innerHTML = perTreinadas.map(p => {
+        const label = p.especializacao ? `${p.rotulo_oficial} (${p.especializacao})` : p.rotulo_oficial;
+        return `<li><strong>${label}</strong>: ${fmtMod(p.total)} (${p.grau_proficiencia})</li>`;
+      }).join("");
+      document.getElementById("idiomas-texto").textContent = `Idiomas: ${f.idiomas.join(", ")}`;
+
+      const todosTalentos = [
+        ...f.habilidades_e_talentos.ancestralidade,
+        ...f.habilidades_e_talentos.pericia,
+        ...f.habilidades_e_talentos.classe,
+        ...f.habilidades_e_talentos.bonus,
+      ].filter(t => t.nome && t.nome !== "—");
+      document.getElementById("lista-talentos").innerHTML = todosTalentos
+        .map(t => `<li><strong>[${t.rotulo_oficial}] ${t.nome}</strong> — ${t.origem_regra}</li>`)
+        .join("");
+
+      const inv = f.inventario;
+      document.getElementById("resumo-carga").textContent =
+        `Volume: ${inv.volume_total} (Sobrecarregado > ${inv.volume_sobrecarregado} / Máx ${inv.volume_maximo}) | Moedas: ${inv.riqueza.po} po, ${inv.riqueza.pp} pp, ${inv.riqueza.pc} pc`;
+      const itens = [...inv.itens_vestidos, ...inv.itens_preparados, ...inv.outros_itens];
+      document.getElementById("lista-inventario").innerHTML = itens
+        .map(i => `<li>${i.nome} (Vol ${i.volume})</li>`)
+        .join("");
+
+      const conj = f.conjuracao;
+      const temMagia = Object.values(conj.tradicoes_marcadas).some(Boolean);
+      const cardConj = document.getElementById("card-conjuracao");
+      cardConj.hidden = !temMagia;
+      if (temMagia) {
+        const trad = Object.keys(conj.tradicoes_marcadas).find(k => conj.tradicoes_marcadas[k]);
+        document.getElementById("resumo-conjuracao").textContent =
+          `Tradição: ${trad} | Ataque ${fmtMod(conj.ataque_magia.total)} | CD ${conj.cd_magia.total} | Pontos de Foco: ${conj.magias_foco.pontos_foco.maximo}`;
+        const listaM = [
+          ...conj.truques_magicos.filter(x => x.nome).map(x => `<li>[Truque] ${x.nome}</li>`),
+          ...conj.magias_foco.slots.filter(x => x.nome).map(x => `<li>[Foco] ${x.nome}</li>`),
+          ...conj.magias_inatas.filter(x => x.nome).map(x => `<li>[Inata] ${x.nome}</li>`),
+          ...conj.magias.filter(x => x.nome).map(x => `<li>[1º] ${x.nome}${x.preparada ? " (Preparada)" : ""}</li>`),
+        ];
+        document.getElementById("lista-magias").innerHTML = listaM.join("");
+      }
+
+      document.getElementById("json-bruto").textContent = JSON.stringify(res, null, 2);
+    }
+
+    document.getElementById("form-gerador").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      document.getElementById("mensagem-erro").textContent = "";
+      const payload = {
+        ancestralidade_id: document.getElementById("ancestralidade").value,
+        heranca_id: document.getElementById("heranca").value,
+        biografia_id: document.getElementById("biografia").value,
+        classe_id: document.getElementById("classe").value,
+        conceito_id: document.getElementById("conceito").value,
+        nome_personagem: document.getElementById("nome").value,
+        seed: document.getElementById("seed").value,
+      };
+      const resp = await fetch("/api/gerar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const dados = await resp.json();
+      if (!resp.ok) {
+        document.getElementById("mensagem-erro").textContent = dados.erro || "Erro ao gerar ficha.";
+        return;
+      }
+      exibirFicha(dados);
+    });
+
+    inicializar();
+  </script>
+</body>
+</html>

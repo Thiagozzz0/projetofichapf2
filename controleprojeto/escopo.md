@@ -91,7 +91,7 @@ A criação do personagem segue a estrutura definida para equilibrar **escolhas 
 | Fase | Descrição | Estratégia |
 | :--- | :--- | :--- |
 | **Fase 1** | Conversão dos PDFs em `ref/` para JSONs estruturados em `dados/` | Um PDF por vez, com validação numérica e de completude via scripts em `scripts/`. |
-| **Fase 2** | Modelagem dos Conceitos/Subclasses (`dados/conceitos_subclasses.json`) | Definir "nortes" claros para cada classe (prioridade de atributos, perícias, talentos, armas/armaduras, magias). |
-| **Fase 3** | Motor Procedural e Backend Flask (`app.py` + módulos de regras) | Implementar toda a matemática de PF2E, regras de pré-requisitos e gerador procedural. |
+| **Fase 2** | Modelagem dos Conceitos/Subclasses (`dados/conceitos_subclasses.json`) | Definir "nortes" claros para cada classe (`38` conceitos cobrindo atributos, biografias, perícias, talentos, armas/armaduras, magias). *(Concluído)* |
+| **Fase 3** | Motor Procedural e Backend Flask (`app.py` + pacote `motor/`) | Matemática de PF2E (1º nível, arquitetura pronta para progressão), gerador com `seed` opcional, API JSON e tela simples de teste. *(Concluído)* |
 | **Fase 4** | Front-End (`templates/`) | Tela de configuração interativa + visualização completa e imprimível da ficha final. |
 | **Fase 5** | Testes Integrados e Refinamento | Validar fichas geradas para múltiplas combinações de ancestralidade, classe e conceito. |

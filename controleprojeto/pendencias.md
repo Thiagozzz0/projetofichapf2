@@ -47,15 +47,15 @@ Lista viva de todas as entregas e tarefas que ainda precisam ser realizadas até
 
 ## Etapa 3 — Motor Procedural e Backend Flask
 
-- [ ] **Estruturar módulos Python do gerador**
-  - Carregamento e cache dos arquivos em `dados/*.json`.
-  - Calculadora de atributos (ABCD) respeitando limites e melhorias livres por conceito.
-  - Gerador procedural de Biografia (opcional quando o usuário não escolher manualmente), Perícias, Talentos (Ancestralidade, Classe, Perícia, Geral) e Magias.
-  - Comprador procedural de Equipamentos com o dinheiro inicial (`15 po` / `150 pp`), cálculo de Volume, limites de sobrecarga e saldo restante.
-  - Calculadora de estatísticas finais (PV, CA, Resistências, Percepção, Velocidade, CDs e Ataques/Danos de armas).
-- [ ] **Implementar aplicação Flask (`app.py`)**
-  - Rotas de página inicial, seleção dinâmica (Ancestralidade/Herança, Biografia manual ou procedural, Classe e Subclasse/Conceito) e geração/exibição da ficha final.
-  - Endpoints JSON (API) para carregar opções dinâmicas no Front-End (ex.: listar heranças da ancestralidade escolhida, listar conceitos da classe escolhida).
+- [x] **Estruturar módulos Python do gerador (`motor/`)** *(Concluído em `19/11/2026 — 12:11` → [finalizado/14.md](finalizado/14.md))*
+  - Carregamento e cache dos arquivos em `dados/*.json` (`motor/dados.py`).
+  - Calculadora de atributos (ABCD) respeitando limites e melhorias livres por conceito (`motor/regras_atributos.py`).
+  - Gerador procedural/manual de Biografia, Perícias, Idiomas, Talentos e Magias (`motor/biografia_pericias.py`, `motor/talentos.py`, `motor/magias.py`).
+  - Comprador procedural de Equipamentos com o dinheiro inicial (`15 po` / `150 pp`), cálculo de Volume, limites de sobrecarga e saldo restante (`motor/equipamentos.py`).
+  - Calculadora de estatísticas finais (PV, CA, Resistências, Percepção, Velocidade, CDs, Golpes e Ações) com `seed` opcional (`motor/combate_matematica.py`, `motor/gerador.py`).
+- [x] **Implementar aplicação Flask (`app.py` + `templates/index.html` de teste)** *(Concluído em `19/11/2026 — 12:11` → [finalizado/14.md](finalizado/14.md))*
+  - Rotas de página inicial (`/`), saúde (`/api/saude`), listagem de opções (`/api/opcoes`), endpoints dinâmicos de heranças e conceitos (`/api/ancestralidades/<id>/herancas`, `/api/classes/<id>/conceitos`) e geração em JSON (`POST /api/gerar`).
+  - Página HTML simples de teste (`templates/index.html`) validando a geração de fichas de 1º nível ponta a ponta.
 
 ---
 

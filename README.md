@@ -51,6 +51,17 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 │   ├── magias02.json             # Capítulo 7 (Parte 2: Descrições M–Z, Magias de Foco e Rituais)
 │   ├── pericias.json             # Capítulo 4 completo (Perícias, Ações Gerais e Tabelas 4–1 a 4–4)
 │   └── talentos.json             # Capítulo 5 completo (17 Talentos Gerais e 100 Talentos de Perícia)
+├── motor/                        # Pacote Python do motor procedural de regras PF2E
+│   ├── __init__.py
+│   ├── biografia_pericias.py
+│   ├── combate_matematica.py
+│   ├── dados.py
+│   ├── equipamentos.py
+│   ├── gerador.py
+│   ├── magias.py
+│   ├── regras_atributos.py
+│   ├── talentos.py
+│   └── util.py
 ├── pdf_fonte/                    # PDF completo comprimido do Livro Básico PF2E
 ├── ref/                          # PDFs fragmentados por categoria para conversão gradual
 ├── scripts/                      # Scripts Python de geração, extração e validação de JSONs
@@ -66,8 +77,10 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 │   ├── gerar_magias_01_json.py
 │   ├── gerar_magias_02_json.py
 │   ├── gerar_pericias_json.py
-│   └── gerar_talentos_json.py
+│   ├── gerar_talentos_json.py
+│   └── validar_motor_procedural.py
 └── templates/                    # Front-End HTML/CSS/JS renderizado pelo Flask
+    └── index.html                # Página simples de validação do gerador (Etapa 3)
 ```
 
 ---
@@ -108,6 +121,7 @@ Os PDFs de referência estão sendo convertidos **um por vez** para garantir fid
 | `ref/Compendium specific tools.pdf` | `dados/itens_magicos_tesouros.json` | Runas, materiais preciosos, itens alquímicos completos e tesouros | Adiado (futuro) |
 | `ref/Sheet Update.pdf` | `dados/estrutura_ficha.json` | Estrutura oficial das 4 páginas da ficha (`pp. 580–583`), legendas, fórmulas de cálculo, `18` linhas de perícia cruzadas com `pericias.json` e contrato `modelo_ficha_vazia` | Concluído (`12.md`) |
 | *Etapa 2 (Conceitos)* | `dados/conceitos_subclasses.json` | `38` conceitos ("nortes") para todas as `12` classes conectando atributos, biografias, perícias, talentos, equipamentos (`15 po`) e magias | Concluído (`13.md`) |
+| *Etapa 3 (Motor & Flask)* | `motor/`, `app.py`, `templates/index.html` | Motor procedural PF2E (1º nível, `seed` opcional), API REST Flask e tela simples de teste | Concluído (`14.md`) |
 
 ---
 
@@ -129,6 +143,13 @@ python scripts/gerar_magias_01_json.py
 python scripts/gerar_magias_02_json.py
 python scripts/gerar_estrutura_ficha_json.py
 python scripts/gerar_conceitos_subclasses_json.py
+python scripts/validar_motor_procedural.py
+```
+
+Para iniciar o servidor Flask local (tela de teste em `http://127.0.0.1:5000`):
+
+```bash
+python app.py
 ```
 
 Os scripts verificam todas as contagens das tabelas dos respectivos capítulos, unicidade de IDs e integridade estrutural dos dados.
