@@ -28,7 +28,7 @@ O sistema deve abranger desde a **matemática básica dos atributos (sistema ABC
     - `ref/Skill sfots.pdf` — Perícias
     - `ref/Gifts.pdf` → `dados/talentos.json` — Talentos (Capítulo 5: Talentos Gerais e Talentos de Perícia)
     - `ref/Enchanced 01.pdf` → `dados/magias01.json` — Magias (Parte 1: Regras Gerais, Listas Completas e Descrições A–M)
-    - `ref/Enchacent02.pdf` → `dados/magias02.json` — Magias (Parte 2: Descrições M–Z, Magias de Foco e complementos)
+    - `ref/Enchacent02.pdf` → `dados/magias02.json` — Magias (Parte 2: Descrições M–Z, Magias de Foco e Rituais)
     - `ref/Compendium specific tools.pdf` — Itens Mágicos e Tesouros
     - `ref/Sheet Update.pdf` — Estrutura da Ficha de Personagem
 - **Scripts Auxiliares (`scripts/`):** Scripts Python de extração, normalização e validação dos arquivos JSON em `dados/`.

@@ -29,8 +29,8 @@ Lista viva de todas as entregas e tarefas que ainda precisam ser realizadas até
 - **`ref/Enchanced 01.pdf` e `ref/Enchacent02.pdf` → `dados/magias01.json` e `dados/magias02.json`** *(divisão modular do Capítulo 7)*
   - [x] **`ref/Enchanced 01.pdf` → `dados/magias01.json` (Parte 1)** *(Concluído em `18/11/2026 — 23:20` — ver [10.md](finalizado/10.md))*
     - Regras gerais de conjuração (`pp. 297–306`), listas completas das 4 tradições (`Arcana`, `Divina`, `Ocultista`, `Primal` — `779` entradas / `379` únicas), `3` quadros auxiliares e `220` descrições completas de magias (`Abrandar` a `Melhorar Alimentos`, `pp. 316–358`).
-  - [ ] **`ref/Enchacent02.pdf` → `dados/magias02.json` (Parte 2)**
-    - Descrições completas restantes (`Mensageiro Animal` a `Zona da Verdade`), magias de foco e eventuais rituais presentes no recorte.
+  - [x] **`ref/Enchacent02.pdf` → `dados/magias02.json` (Parte 2)** *(Concluído em `19/11/2026 — 09:02` — ver [11.md](finalizado/11.md))*
+    - Todas as `159` descrições restantes (`Mensageiro Animal` a `Zona da Verdade`, completando `379/379` com `magias01.json`), quadro `Servo Invisível Criatura –1`, `158` Magias de Foco (`7` classes), regras completas + Tabelas `7–1`/`7–2` e todos os `20` Rituais.
 - [ ] **`ref/Compendium specific tools.pdf` → `dados/itens_magicos_tesouros.json`**
   - Runas fundamentais e de propriedade, materiais preciosos, itens alquímicos completos, poções, pergaminhos, talismãs e itens mágicos permanentes.
 - [ ] **`ref/Sheet Update.pdf` → `dados/estrutura_ficha.json`**

@@ -46,6 +46,7 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 │   ├── companheiros_familiares.json     # Capítulo 3 (Companheiros Animais e Familiares)
 │   ├── equipamentos.json         # Capítulo 6 completo (Equipamentos) convertido e validado
 │   ├── magias01.json             # Capítulo 7 (Parte 1: Regras, Listas Completas e Descrições A–M)
+│   ├── magias02.json             # Capítulo 7 (Parte 2: Descrições M–Z, Magias de Foco e Rituais)
 │   ├── pericias.json             # Capítulo 4 completo (Perícias, Ações Gerais e Tabelas 4–1 a 4–4)
 │   └── talentos.json             # Capítulo 5 completo (17 Talentos Gerais e 100 Talentos de Perícia)
 ├── pdf_fonte/                    # PDF completo comprimido do Livro Básico PF2E
@@ -59,6 +60,7 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 │   ├── gerar_companheiros_familiares_json.py
 │   ├── gerar_equipamentos_json.py
 │   ├── gerar_magias_01_json.py
+│   ├── gerar_magias_02_json.py
 │   ├── gerar_pericias_json.py
 │   └── gerar_talentos_json.py
 └── templates/                    # Front-End HTML/CSS/JS renderizado pelo Flask
@@ -98,7 +100,7 @@ Os PDFs de referência estão sendo convertidos **um por vez** para garantir fid
 | `ref/Skill sfots.pdf` | `dados/pericias.json` | Perícias, ações treinadas/destreinadas e graus de proficiência | Concluído (`05.md`) |
 | `ref/Gifts.pdf` | `dados/talentos.json` | Talentos Gerais (`17`) e Talentos de Perícia (`100` em `18` grupos) | Concluído (`09.md`) |
 | `ref/Enchanced 01.pdf` | `dados/magias01.json` | Cap. 7 (Parte 1): regras gerais, 4 listas completas (`779` entradas / `379` únicas) e `220` descrições A–M | Concluído (`10.md`) |
-| `ref/Enchacent02.pdf` | `dados/magias02.json` | Cap. 7 (Parte 2): descrições restantes M–Z, magias de foco e rituais (se presentes) | Pendente |
+| `ref/Enchacent02.pdf` | `dados/magias02.json` | Cap. 7 (Parte 2): `159` descrições M–Z (`379/379` combinado), quadro Servo Invisível, `158` Magias de Foco, Regras/Tabelas de Rituais e `20` Rituais | Concluído (`11.md`) |
 | `ref/Compendium specific tools.pdf` | `dados/itens_magicos_tesouros.json` | Runas, materiais preciosos, itens alquímicos completos e tesouros | Pendente |
 | `ref/Sheet Update.pdf` | `dados/estrutura_ficha.json` | Mapeamento dos campos oficiais da ficha de jogador | Pendente |
 
@@ -119,6 +121,7 @@ python scripts/gerar_companheiros_familiares_json.py
 python scripts/gerar_arquetipos_multiclasse_json.py
 python scripts/gerar_talentos_json.py
 python scripts/gerar_magias_01_json.py
+python scripts/gerar_magias_02_json.py
 ```
 
 Os scripts verificam todas as contagens das tabelas dos respectivos capítulos, unicidade de IDs e integridade estrutural dos dados.
