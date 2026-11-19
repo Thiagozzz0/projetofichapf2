@@ -26,7 +26,7 @@ O sistema deve abranger desde a **matemática básica dos atributos (sistema ABC
     - `ref/Classes 02.pdf` → `dados/classes02.json` — Classes (Parte 2: Clérigo, Druida, Feiticeiro e Guerreiro)
     - `ref/Classes 03.pdf` → `dados/classes03.json`, `dados/companheiros_familiares.json` e `dados/arquetipos_multiclasse.json` — Classes (Parte 3: Ladino, Mago, Monge e Patrulheiro), Companheiros Animais/Familiares e Arquétipos Multiclasse
     - `ref/Skill sfots.pdf` — Perícias
-    - `ref/Gifts.pdf` — Talentos
+    - `ref/Gifts.pdf` → `dados/talentos.json` — Talentos (Capítulo 5: Talentos Gerais e Talentos de Perícia)
     - `ref/Enchacent.pdf` — Magias
     - `ref/Compendium specific tools.pdf` — Itens Mágicos e Tesouros
     - `ref/Sheet Update.pdf` — Estrutura da Ficha de Personagem

@@ -24,8 +24,8 @@ Lista viva de todas as entregas e tarefas que ainda precisam ser realizadas até
 - [x] **`ref/Skill sfots.pdf` → `dados/pericias.json`** *(Concluído em `18/11/2026 — 17:25` — ver [05.md](finalizado/05.md))*
   - Lista completa de perícias e atributo associado.
   - Ações destreinadas e treinadas de cada perícia, graus de proficiência (Destreinado, Treinado, Especialista, Mestre, Lendário) e regras de Saber.
-- [ ] **`ref/Gifts.pdf` → `dados/talentos.json`**
-  - Talentos Gerais e Talentos de Perícia (nível, pré-requisitos, traços, frequência/ações e efeitos).
+- [x] **`ref/Gifts.pdf` → `dados/talentos.json`** *(Concluído em `18/11/2026 — 22:15` — ver [09.md](finalizado/09.md))*
+  - Talentos Gerais e Talentos de Perícia (`117` talentos completos: `17` da Tabela 5–1 e `100` em `18` grupos da Tabela 5–2, com nível, pré-requisitos, traços, ações, resultados e efeitos).
 - [ ] **`ref/Enchacent.pdf` → `dados/magias.json`**
   - Regras de conjuração, tradições mágicas (Arcana, Divina, Ocultista, Primal), listas de truques e magias por círculo, magias de foco e descrições completas.
 - [ ] **`ref/Compendium specific tools.pdf` → `dados/itens_magicos_tesouros.json`**

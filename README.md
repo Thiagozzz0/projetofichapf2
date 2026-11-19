@@ -45,7 +45,8 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 │   ├── classes03.json            # Capítulo 3 (Leva 03: Ladino, Mago, Monge e Patrulheiro)
 │   ├── companheiros_familiares.json     # Capítulo 3 (Companheiros Animais e Familiares)
 │   ├── equipamentos.json         # Capítulo 6 completo (Equipamentos) convertido e validado
-│   └── pericias.json             # Capítulo 4 completo (Perícias, Ações Gerais e Tabelas 4–1 a 4–4)
+│   ├── pericias.json             # Capítulo 4 completo (Perícias, Ações Gerais e Tabelas 4–1 a 4–4)
+│   └── talentos.json             # Capítulo 5 completo (17 Talentos Gerais e 100 Talentos de Perícia)
 ├── pdf_fonte/                    # PDF completo comprimido do Livro Básico PF2E
 ├── ref/                          # PDFs fragmentados por categoria para conversão gradual
 ├── scripts/                      # Scripts Python de geração, extração e validação de JSONs
@@ -56,7 +57,8 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 │   ├── gerar_classes_03_json.py
 │   ├── gerar_companheiros_familiares_json.py
 │   ├── gerar_equipamentos_json.py
-│   └── gerar_pericias_json.py
+│   ├── gerar_pericias_json.py
+│   └── gerar_talentos_json.py
 └── templates/                    # Front-End HTML/CSS/JS renderizado pelo Flask
 ```
 
@@ -92,7 +94,7 @@ Os PDFs de referência estão sendo convertidos **um por vez** para garantir fid
 | `ref/Classes 02.pdf` | `dados/classes02.json` | Dados completos de Clérigo, Druida, Feiticeiro e Guerreiro (`197` talentos) | Concluído (`07.md`) |
 | `ref/Classes 03.pdf` | `dados/classes03.json`, `dados/companheiros_familiares.json`, `dados/arquetipos_multiclasse.json` | Dados completos de Ladino, Mago, Monge e Patrulheiro (`204` talentos), Companheiros Animais/Familiares e Arquétipos Multiclasse (`12` arquétipos, `85` talentos) | Concluído (`08.md`) |
 | `ref/Skill sfots.pdf` | `dados/pericias.json` | Perícias, ações treinadas/destreinadas e graus de proficiência | Concluído (`05.md`) |
-| `ref/Gifts.pdf` | `dados/talentos.json` | Talentos Gerais e Talentos de Perícia | Pendente |
+| `ref/Gifts.pdf` | `dados/talentos.json` | Talentos Gerais (`17`) e Talentos de Perícia (`100` em `18` grupos) | Concluído (`09.md`) |
 | `ref/Enchacent.pdf` | `dados/magias.json` | Tradições mágicas, magias e magias de foco | Pendente |
 | `ref/Compendium specific tools.pdf` | `dados/itens_magicos_tesouros.json` | Runas, materiais preciosos, itens alquímicos completos e tesouros | Pendente |
 | `ref/Sheet Update.pdf` | `dados/estrutura_ficha.json` | Mapeamento dos campos oficiais da ficha de jogador | Pendente |
@@ -112,6 +114,7 @@ python scripts/gerar_classes_02_json.py
 python scripts/gerar_classes_03_json.py
 python scripts/gerar_companheiros_familiares_json.py
 python scripts/gerar_arquetipos_multiclasse_json.py
+python scripts/gerar_talentos_json.py
 ```
 
 Os scripts verificam todas as contagens das tabelas dos respectivos capítulos, unicidade de IDs e integridade estrutural dos dados.

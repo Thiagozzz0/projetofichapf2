@@ -1,0 +1,3413 @@
+{
+  "meta": {
+    "titulo": "Capítulo 5: Talentos (Talentos Gerais e Talentos de Perícia) — Pathfinder 2E Livro Básico",
+    "arquivo_origem": "ref/Gifts.pdf",
+    "paginas_livro_basico": "255-269",
+    "versao": "1.0.0",
+    "total_talentos": 117,
+    "total_talentos_gerais": 17,
+    "total_talentos_de_pericia": 100
+  },
+  "regras_gerais": {
+    "paginas": "255",
+    "descricao": "Todos os tipos de experiências e treinamentos podem moldar seu personagem além do que ele aprendeu evoluindo em sua classe. Habilidades que requerem um grau de treinamento, mas que podem ser aprendidas por qualquer um — não somente membros de determinadas ancestralidades ou classes — são chamadas de talentos gerais.",
+    "talentos_gerais": {
+      "progressao_padrao": "Para a maioria das classes, você recebe um talento geral quando alcança o 3º nível e a cada 4 níveis subsequentes.",
+      "regra_selecao": "Cada vez que receber um talento geral, você pode selecionar qualquer talento com o traço geral ao qual satisfaça os pré-requisitos. Talentos gerais também incluem a subcategoria de talentos de perícia."
+    },
+    "talentos_de_pericia": {
+      "progressao_padrao": "A maioria dos personagens recebe talentos de perícia no 2º nível e a cada 2 níveis subsequentes.",
+      "regra_selecao": "Quando receber um talento de perícia, você deve selecionar um talento geral com o traço perícia; você não pode selecionar um talento geral que não possua o traço perícia. O nível de um talento de perícia tipicamente é o nível mínimo no qual um personagem poderia atender a seu pré-requisito de proficiência."
+    }
+  },
+  "tabela_5_1_talentos_gerais": [
+    {
+      "id": "ancestralidade_adotada",
+      "nome": "Ancestralidade Adotada",
+      "nivel": 1,
+      "pre_requisitos": null,
+      "beneficios": "Obtém acesso a talentos de outra ancestralidade"
+    },
+    {
+      "id": "bloqueio_com_escudo",
+      "nome": "Bloqueio com Escudo",
+      "nivel": 1,
+      "pre_requisitos": null,
+      "beneficios": "Apara um golpe com seu escudo"
+    },
+    {
+      "id": "cavalgar",
+      "nome": "Cavalgar",
+      "nivel": 1,
+      "pre_requisitos": null,
+      "beneficios": "Obtém sucesso automaticamente ao comandar sua montaria para se mover"
+    },
+    {
+      "id": "controlar_a_respiracao",
+      "nome": "Controlar a Respiração",
+      "nivel": 1,
+      "pre_requisitos": null,
+      "beneficios": "Prende sua respiração por mais tempo e recebe benefícios contra ameaças inaladas"
+    },
+    {
+      "id": "duro_de_matar",
+      "nome": "Duro de Matar",
+      "nivel": 1,
+      "pre_requisitos": null,
+      "beneficios": "Morre em morrendo 5 (em vez de morrendo 4)"
+    },
+    {
+      "id": "iniciativa_incrivel",
+      "nome": "Iniciativa Incrível",
+      "nivel": 1,
+      "pre_requisitos": null,
+      "beneficios": "+2 em rolagens de iniciativa"
+    },
+    {
+      "id": "passo_aprumado",
+      "nome": "Passo Aprumado",
+      "nivel": 1,
+      "pre_requisitos": "Destreza 14",
+      "beneficios": "Dá um Passo em terreno difícil"
+    },
+    {
+      "id": "perspicacia_astuta",
+      "nome": "Perspicácia Astuta",
+      "nivel": 1,
+      "pre_requisitos": null,
+      "beneficios": "Se torna especialista em um salvamento ou em Percepção"
+    },
+    {
+      "id": "proficiencia_com_armas",
+      "nome": "Proficiência com Armas",
+      "nivel": 1,
+      "pre_requisitos": null,
+      "beneficios": "Se torna treinado em um tipo de arma"
+    },
+    {
+      "id": "proficiencia_com_armaduras",
+      "nome": "Proficiência com Armaduras",
+      "nivel": 1,
+      "pre_requisitos": null,
+      "beneficios": "Se torna treinado em um tipo de armadura"
+    },
+    {
+      "id": "recuperacao_rapida",
+      "nome": "Recuperação Rápida",
+      "nivel": 1,
+      "pre_requisitos": "Constituição 14",
+      "beneficios": "Recupera mais PV descansando e recupera-se rápido de doenças e venenos"
+    },
+    {
+      "id": "veloz",
+      "nome": "Veloz",
+      "nivel": 1,
+      "pre_requisitos": null,
+      "beneficios": "Aumenta sua Velocidade em 1,5 metros"
+    },
+    {
+      "id": "vitalidade",
+      "nome": "Vitalidade",
+      "nivel": 1,
+      "pre_requisitos": null,
+      "beneficios": "Aumenta seus PV máximos e reduz a CD de testes de recuperação"
+    },
+    {
+      "id": "exemplar_ancestral",
+      "nome": "Exemplar Ancestral",
+      "nivel": 3,
+      "pre_requisitos": null,
+      "beneficios": "Recebe um talento de ancestralidade de 1º nível"
+    },
+    {
+      "id": "improvisacao_destreinada",
+      "nome": "Improvisação Destreinada",
+      "nivel": 3,
+      "pre_requisitos": null,
+      "beneficios": "Se torna mais habilidoso em usar perícias destreinadas"
+    },
+    {
+      "id": "procura_acelerada",
+      "nome": "Procura Acelerada",
+      "nivel": 7,
+      "pre_requisitos": "Mestre em Percepção",
+      "beneficios": "Procura em áreas na metade do tempo"
+    },
+    {
+      "id": "investidura_incrivel",
+      "nome": "Investidura Incrível",
+      "nivel": 11,
+      "pre_requisitos": "Carisma 16",
+      "beneficios": "Investe em até 12 itens mágicos"
+    }
+  ],
+  "tabela_5_2_talentos_gerais_de_pericia": [
+    {
+      "grupo_id": "pericias_variadas",
+      "titulo": "Talentos de Perícias Variadas",
+      "pericia_id": "variadas",
+      "talentos": [
+        {
+          "id": "certeza",
+          "nome": "Certeza",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em pelo menos uma perícia",
+          "beneficios": "Obtém um resultado fixo em um teste de perícia"
+        },
+        {
+          "id": "conhecimento_duvidoso",
+          "nome": "Conhecimento Duvidoso",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em uma perícia com a ação Recordar Conhecimento",
+          "beneficios": "Obtém conhecimento errado e verdadeiro em uma falha"
+        },
+        {
+          "id": "enganar_item_magico",
+          "nome": "Enganar Item Mágico",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Arcanismo, Natureza, Ocultismo ou Religião",
+          "beneficios": "Ativa um item mágico que normalmente não poderia"
+        },
+        {
+          "id": "identificacao_rapida",
+          "nome": "Identificação Rápida",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Arcanismo, Natureza, Ocultismo ou Religião",
+          "beneficios": "Identifica Magia em 1 minuto ou menos"
+        },
+        {
+          "id": "reconhecer_magia",
+          "nome": "Reconhecer Magia",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Arcanismo, Natureza, Ocultismo ou Religião",
+          "beneficios": "Identifica uma magia como uma reação enquanto ela é conjurada"
+        },
+        {
+          "id": "treinamento_em_pericia",
+          "nome": "Treinamento em Perícia",
+          "nivel": 1,
+          "pre_requisitos": "Inteligência 12",
+          "beneficios": "Se torna treinado em uma perícia"
+        },
+        {
+          "id": "atalho_magico",
+          "nome": "Atalho Mágico",
+          "nivel": 2,
+          "pre_requisitos": "Especialista em Arcanismo, Natureza, Ocultismo ou Religião",
+          "beneficios": "Aprende magias rapidamente e com custo reduzido"
+        },
+        {
+          "id": "conhecimento_automatico",
+          "nome": "Conhecimento Automático",
+          "nivel": 2,
+          "pre_requisitos": "Especialista em uma perícia com a ação Recordar Conhecimento",
+          "beneficios": "Recorda Conhecimento como uma ação livre uma vez por rodada"
+        },
+        {
+          "id": "reconhecimento_rapido",
+          "nome": "Reconhecimento Rápido",
+          "nivel": 7,
+          "pre_requisitos": "Mestre em Arcanismo, Natureza, Ocultismo ou Religião; Reconhecer Magia",
+          "beneficios": "Identifica magias como uma ação livre"
+        }
+      ]
+    },
+    {
+      "grupo_id": "acrobatismo",
+      "titulo": "Talentos de Acrobatismo",
+      "pericia_id": "acrobatismo",
+      "talentos": [
+        {
+          "id": "equilibrio_estavel",
+          "nome": "Equilíbrio Estável",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Acrobatismo",
+          "beneficios": "Mantém seu equilíbrio em condições adversas"
+        },
+        {
+          "id": "espremer_se_rapidamente",
+          "nome": "Espremer-se Rapidamente",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Acrobatismo",
+          "beneficios": "Move-se rapidamente enquanto se Espreme"
+        },
+        {
+          "id": "queda_do_gato",
+          "nome": "Queda do Gato",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Acrobatismo",
+          "beneficios": "Trata quedas como mais curtas do que são"
+        },
+        {
+          "id": "rastejo_ligeiro",
+          "nome": "Rastejo Ligeiro",
+          "nivel": 2,
+          "pre_requisitos": "Especialista em Acrobatismo",
+          "beneficios": "Rasteja mais rápido"
+        },
+        {
+          "id": "levantar_rapidamente",
+          "nome": "Levantar Rapidamente",
+          "nivel": 7,
+          "pre_requisitos": "Mestre em Acrobatismo",
+          "beneficios": "Fica de pé livremente sem acionar reações"
+        }
+      ]
+    },
+    {
+      "grupo_id": "arcanismo",
+      "titulo": "Talentos de Arcanismo",
+      "pericia_id": "arcanismo",
+      "talentos": [
+        {
+          "id": "sentido_arcano",
+          "nome": "Sentido Arcano",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Arcanismo",
+          "beneficios": "Conjura detectar magia à vontade como uma magia arcana inata"
+        },
+        {
+          "id": "teoria_unificada",
+          "nome": "Teoria Unificada",
+          "nivel": 15,
+          "pre_requisitos": "Lendário em Arcanismo",
+          "beneficios": "Utiliza Arcanismo para testes de todas as tradições"
+        }
+      ]
+    },
+    {
+      "grupo_id": "atletismo",
+      "titulo": "Talentos de Atletismo",
+      "pericia_id": "atletismo",
+      "talentos": [
+        {
+          "id": "carregador_robusto",
+          "nome": "Carregador Robusto",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Atletismo",
+          "beneficios": "Aumenta seu limite de Volume em 2 pontos"
+        },
+        {
+          "id": "escalador_de_combate",
+          "nome": "Escalador de Combate",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Atletismo",
+          "beneficios": "Luta de forma mais eficaz enquanto Escala"
+        },
+        {
+          "id": "lutador_titanico",
+          "nome": "Lutador Titânico",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Atletismo",
+          "beneficios": "Agarra, Desarma, Derruba ou Empurra criaturas maiores"
+        },
+        {
+          "id": "salto_rapido",
+          "nome": "Salto Rápido",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Atletismo",
+          "beneficios": "Salta em Altura ou à Distância como uma ação única"
+        },
+        {
+          "id": "saqueador_subaquatico",
+          "nome": "Saqueador Subaquático",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Atletismo",
+          "beneficios": "Luta de forma mais eficaz embaixo d'água"
+        },
+        {
+          "id": "salto_poderoso",
+          "nome": "Salto Poderoso",
+          "nivel": 2,
+          "pre_requisitos": "Especialista em Atletismo",
+          "beneficios": "Salta mais alto e mais longe"
+        },
+        {
+          "id": "segurar_se_rapidamente",
+          "nome": "Segurar-se Rapidamente",
+          "nivel": 2,
+          "pre_requisitos": "Especialista em Atletismo",
+          "beneficios": "Se ergue de beiradas rapidamente"
+        },
+        {
+          "id": "escalada_rapida",
+          "nome": "Escalada Rápida",
+          "nivel": 7,
+          "pre_requisitos": "Mestre em Atletismo",
+          "beneficios": "Escala rapidamente"
+        },
+        {
+          "id": "natacao_rapida",
+          "nome": "Natação Rápida",
+          "nivel": 7,
+          "pre_requisitos": "Mestre em Atletismo",
+          "beneficios": "Nada rapidamente"
+        },
+        {
+          "id": "salto_na_parede",
+          "nome": "Salto na Parede",
+          "nivel": 7,
+          "pre_requisitos": "Mestre em Atletismo",
+          "beneficios": "Salta pelas paredes"
+        },
+        {
+          "id": "salto_nas_nuvens",
+          "nome": "Salto nas Nuvens",
+          "nivel": 15,
+          "pre_requisitos": "Lendário em Atletismo",
+          "beneficios": "Salta distâncias impossíveis"
+        }
+      ]
+    },
+    {
+      "grupo_id": "diplomacia",
+      "titulo": "Talentos de Diplomacia",
+      "pericia_id": "diplomacia",
+      "talentos": [
+        {
+          "id": "camarada",
+          "nome": "Camarada",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Diplomacia",
+          "beneficios": "Obtém Informação rapidamente"
+        },
+        {
+          "id": "impressionar_grupo",
+          "nome": "Impressionar Grupo",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Diplomacia",
+          "beneficios": "Impressiona múltiplos alvos de uma vez"
+        },
+        {
+          "id": "pechinchador",
+          "nome": "Pechinchador",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Diplomacia",
+          "beneficios": "Ganha Proventos ao procurar por pechinchas"
+        },
+        {
+          "id": "cumprimento_caloroso",
+          "nome": "Cumprimento Caloroso",
+          "nivel": 2,
+          "pre_requisitos": "Especialista em Diplomacia",
+          "beneficios": "Impressiona um alvo que acabou de conhecer"
+        },
+        {
+          "id": "pedido_desavergonhado",
+          "nome": "Pedido Desavergonhado",
+          "nivel": 7,
+          "pre_requisitos": "Mestre em Diplomacia",
+          "beneficios": "Faz Pedidos para outras pessoas com consequências mais brandas"
+        },
+        {
+          "id": "negociacao_lendaria",
+          "nome": "Negociação Lendária",
+          "nivel": 15,
+          "pre_requisitos": "Lendário em Diplomacia",
+          "beneficios": "Negocia rapidamente com adversários"
+        }
+      ]
+    },
+    {
+      "grupo_id": "dissimulacao",
+      "titulo": "Talentos de Dissimulação",
+      "pericia_id": "dissimulacao",
+      "talentos": [
+        {
+          "id": "distracao_prolongada",
+          "nome": "Distração Prolongada",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Dissimulação",
+          "beneficios": "Permanece escondido após Criar uma Distração"
+        },
+        {
+          "id": "mente_na_minha_cara",
+          "nome": "Mente na Minha Cara",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Dissimulação",
+          "beneficios": "Utiliza Dissimulação para detectar mentiras"
+        },
+        {
+          "id": "mentiroso_charmoso",
+          "nome": "Mentiroso Charmoso",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Dissimulação",
+          "beneficios": "Aprimora a atitude de um alvo com suas mentiras"
+        },
+        {
+          "id": "confabulador",
+          "nome": "Confabulador",
+          "nivel": 2,
+          "pre_requisitos": "Especialista em Dissimulação",
+          "beneficios": "Reduz os bônus contra suas repetidas mentiras"
+        },
+        {
+          "id": "disfarce_rapido",
+          "nome": "Disfarce Rápido",
+          "nivel": 2,
+          "pre_requisitos": "Especialista em Dissimulação",
+          "beneficios": "Monta um disfarce em metade do tempo"
+        },
+        {
+          "id": "segredos_escorregadios",
+          "nome": "Segredos Escorregadios",
+          "nivel": 7,
+          "pre_requisitos": "Mestre em Dissimulação",
+          "beneficios": "Evita que descubram sua verdadeira natureza"
+        }
+      ]
+    },
+    {
+      "grupo_id": "furtividade",
+      "titulo": "Talentos de Furtividade",
+      "pericia_id": "furtividade",
+      "talentos": [
+        {
+          "id": "contrabandista_experiente",
+          "nome": "Contrabandista Experiente",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Furtividade",
+          "beneficios": "Oculta itens de forma mais eficaz contra observadores"
+        },
+        {
+          "id": "esgueirador_de_terreno",
+          "nome": "Esgueirador de Terreno",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Furtividade",
+          "beneficios": "Se esgueira em certos terrenos sem fazer um teste"
+        },
+        {
+          "id": "aliados_quietos",
+          "nome": "Aliados Quietos",
+          "nivel": 2,
+          "pre_requisitos": "Especialista em Furtividade",
+          "beneficios": "Rola um único teste de Furtividade quando se esgueira com aliados"
+        },
+        {
+          "id": "enganar_sentidos",
+          "nome": "Enganar Sentidos",
+          "nivel": 7,
+          "pre_requisitos": "Mestre em Furtividade",
+          "beneficios": "Toma precauções contra sentidos especiais"
+        },
+        {
+          "id": "esgueirar_se_rapidamente",
+          "nome": "Esgueirar-se Rapidamente",
+          "nivel": 7,
+          "pre_requisitos": "Mestre em Furtividade",
+          "beneficios": "Se move à sua Velocidade total enquanto Esgueira"
+        },
+        {
+          "id": "esgueirador_lendario",
+          "nome": "Esgueirador Lendário",
+          "nivel": 15,
+          "pre_requisitos": "Lendário em Furtividade, Esgueirar-se Rapidamente",
+          "beneficios": "Esconde e Esgueira sem cobertura ou sem estar ocultado"
+        }
+      ]
+    },
+    {
+      "grupo_id": "intimidacao",
+      "titulo": "Talentos de Intimidação",
+      "pericia_id": "intimidacao",
+      "talentos": [
+        {
+          "id": "coagir_grupo",
+          "nome": "Coagir Grupo",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Intimidação",
+          "beneficios": "Coage vários alvos simultaneamente"
+        },
+        {
+          "id": "coercao_rapida",
+          "nome": "Coerção Rápida",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Intimidação",
+          "beneficios": "Coage uma criatura rapidamente"
+        },
+        {
+          "id": "olhar_intimidante",
+          "nome": "Olhar Intimidante",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Intimidação",
+          "beneficios": "Desmoraliza uma criatura sem precisar falar"
+        },
+        {
+          "id": "coercao_duradoura",
+          "nome": "Coerção Duradoura",
+          "nivel": 2,
+          "pre_requisitos": "Especialista em Intimidação",
+          "beneficios": "Coage um alvo a ajudá-lo por mais tempo"
+        },
+        {
+          "id": "intrepidez_intimidante",
+          "nome": "Intrepidez Intimidante",
+          "nivel": 2,
+          "pre_requisitos": "Força 16, Especialista em Intimidação",
+          "beneficios": "Recebe um bônus para Desmoralizar fisicamente"
+        },
+        {
+          "id": "brado_de_batalha",
+          "nome": "Brado de Batalha",
+          "nivel": 7,
+          "pre_requisitos": "Mestre em Intimidação",
+          "beneficios": "Desmoraliza adversários quando rola sua iniciativa"
+        },
+        {
+          "id": "retirada_aterrorizada",
+          "nome": "Retirada Aterrorizada",
+          "nivel": 7,
+          "pre_requisitos": "Mestre em Intimidação",
+          "beneficios": "Faz adversários Desmoralizados por você fugirem"
+        },
+        {
+          "id": "matar_de_medo",
+          "nome": "Matar de Medo",
+          "nivel": 15,
+          "pre_requisitos": "Lendário em Intimidação",
+          "beneficios": "Assusta tanto um alvo, que pode até matá-lo"
+        }
+      ]
+    },
+    {
+      "grupo_id": "ladroagem",
+      "titulo": "Talentos de Ladroagem",
+      "pericia_id": "ladroagem",
+      "talentos": [
+        {
+          "id": "furto_subito",
+          "nome": "Furto Súbito",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Ladroagem",
+          "beneficios": "Seus furtos são mais difíceis de perceber"
+        },
+        {
+          "id": "punga",
+          "nome": "Punga",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Ladroagem",
+          "beneficios": "Furta ou Empalma um Objeto de forma mais eficaz"
+        },
+        {
+          "id": "desarmamento_prudente",
+          "nome": "Desarmamento Prudente",
+          "nivel": 2,
+          "pre_requisitos": "Especialista em Ladroagem",
+          "beneficios": "+2 na CA ou salvamentos contra dispositivos ou armadilhas que acionar enquanto estiver desarmando-os"
+        },
+        {
+          "id": "destrancar_rapidamente",
+          "nome": "Destrancar Rapidamente",
+          "nivel": 7,
+          "pre_requisitos": "Mestre em Ladroagem",
+          "beneficios": "Abre uma Fechadura com 1 ação"
+        },
+        {
+          "id": "ladrao_lendario",
+          "nome": "Ladrão Lendário",
+          "nivel": 15,
+          "pre_requisitos": "Lendário em Ladroagem, Punga",
+          "beneficios": "Rouba algo que normalmente seria impossível"
+        }
+      ]
+    },
+    {
+      "grupo_id": "manufatura",
+      "titulo": "Talentos de Manufatura",
+      "pericia_id": "manufatura",
+      "talentos": [
+        {
+          "id": "especialidade_de_manufatura",
+          "nome": "Especialidade de Manufatura",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Manufatura",
+          "beneficios": "Recebe bônus para Manufaturar certos itens"
+        },
+        {
+          "id": "manufatura_alquimica",
+          "nome": "Manufatura Alquímica",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Manufatura",
+          "beneficios": "Manufatura itens alquímicos"
+        },
+        {
+          "id": "manufatura_de_arapuca",
+          "nome": "Manufatura de Arapuca",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Manufatura",
+          "beneficios": "Manufatura arapucas"
+        },
+        {
+          "id": "reparo_rapido",
+          "nome": "Reparo Rápido",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Manufatura",
+          "beneficios": "Repara itens rapidamente"
+        },
+        {
+          "id": "manufatura_magica",
+          "nome": "Manufatura Mágica",
+          "nivel": 2,
+          "pre_requisitos": "Especialista em Manufatura",
+          "beneficios": "Manufatura itens mágicos"
+        },
+        {
+          "id": "inventor",
+          "nome": "Inventor",
+          "nivel": 7,
+          "pre_requisitos": "Mestre em Manufatura",
+          "beneficios": "Usa Manufatura para criar fórmulas de itens"
+        },
+        {
+          "id": "manufatura_impecavel",
+          "nome": "Manufatura Impecável",
+          "nivel": 7,
+          "pre_requisitos": "Mestre em Manufatura, Especialidade de Manufatura",
+          "beneficios": "Manufatura itens de forma mais eficaz"
+        },
+        {
+          "id": "manufaturar_qualquer_coisa",
+          "nome": "Manufaturar Qualquer Coisa",
+          "nivel": 15,
+          "pre_requisitos": "Lendário em Manufatura",
+          "beneficios": "Ignora a maioria dos requerimentos para manufaturar"
+        }
+      ]
+    },
+    {
+      "grupo_id": "medicina",
+      "titulo": "Talentos de Medicina",
+      "pericia_id": "medicina",
+      "talentos": [
+        {
+          "id": "medicina_de_batalha",
+          "nome": "Medicina de Batalha",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Medicina",
+          "beneficios": "Cura a si ou um aliado em batalha"
+        },
+        {
+          "id": "medico_de_enfermaria",
+          "nome": "Médico de Enfermaria",
+          "nivel": 2,
+          "pre_requisitos": "Especialista em Medicina",
+          "beneficios": "Trata vários pacientes de uma vez"
+        },
+        {
+          "id": "recuperacao_continua",
+          "nome": "Recuperação Contínua",
+          "nivel": 2,
+          "pre_requisitos": "Especialista em Medicina",
+          "beneficios": "Trata Ferimentos em um paciente com maior frequência"
+        },
+        {
+          "id": "recuperacao_robusta",
+          "nome": "Recuperação Robusta",
+          "nivel": 2,
+          "pre_requisitos": "Especialista em Medicina",
+          "beneficios": "Benefícios melhores de Tratar Doença ou Tratar Veneno"
+        },
+        {
+          "id": "medico_lendario",
+          "nome": "Médico Lendário",
+          "nivel": 15,
+          "pre_requisitos": "Lendário em Medicina",
+          "beneficios": "Remove doenças ou a condição cego, condenado, drenado ou surdo"
+        }
+      ]
+    },
+    {
+      "grupo_id": "natureza",
+      "titulo": "Talentos de Natureza",
+      "pericia_id": "natureza",
+      "talentos": [
+        {
+          "id": "medicina_natural",
+          "nome": "Medicina Natural",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Natureza",
+          "beneficios": "Utiliza Natureza para Tratar Ferimentos"
+        },
+        {
+          "id": "treinar_animal",
+          "nome": "Treinar Animal",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Natureza",
+          "beneficios": "Ensina um truque para um animal"
+        },
+        {
+          "id": "elo_com_animal",
+          "nome": "Elo com Animal",
+          "nivel": 2,
+          "pre_requisitos": "Especialista em Natureza",
+          "beneficios": "Um animal se torna permanentemente prestativo"
+        }
+      ]
+    },
+    {
+      "grupo_id": "ocultismo",
+      "titulo": "Talentos de Ocultismo",
+      "pericia_id": "ocultismo",
+      "talentos": [
+        {
+          "id": "identificar_estranhezas",
+          "nome": "Identificar Estranhezas",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Ocultismo",
+          "beneficios": "+2 em testes de Ocultismo para Identificar Magia com certos traços"
+        },
+        {
+          "id": "magia_bizarra",
+          "nome": "Magia Bizarra",
+          "nivel": 7,
+          "pre_requisitos": "Mestre em Ocultismo",
+          "beneficios": "Sua magia se torna mais difícil de identificar"
+        }
+      ]
+    },
+    {
+      "grupo_id": "performance",
+      "titulo": "Talentos de Performance",
+      "pericia_id": "performance",
+      "talentos": [
+        {
+          "id": "artista_virtuoso",
+          "nome": "Artista Virtuoso",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Performance",
+          "beneficios": "+1 com um certo tipo de performance"
+        },
+        {
+          "id": "performance_fascinante",
+          "nome": "Performance Fascinante",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Performance",
+          "beneficios": "Performa para fascinar observadores"
+        },
+        {
+          "id": "performance_impressionante",
+          "nome": "Performance Impressionante",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Performance",
+          "beneficios": "Impressiona com Performance"
+        },
+        {
+          "id": "artista_lendario",
+          "nome": "Artista Lendário",
+          "nivel": 15,
+          "pre_requisitos": "Lendário em Performance, Artista Virtuoso",
+          "beneficios": "Obtém reconhecimento por sua Performance"
+        }
+      ]
+    },
+    {
+      "grupo_id": "religiao",
+      "titulo": "Talentos de Religião",
+      "pericia_id": "religiao",
+      "talentos": [
+        {
+          "id": "estudante_do_canone",
+          "nome": "Estudante do Cânone",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Religião",
+          "beneficios": "Reconhece melhor os princípios de sua fé ou filosofia"
+        },
+        {
+          "id": "orientacao_divina",
+          "nome": "Orientação Divina",
+          "nivel": 15,
+          "pre_requisitos": "Lendário em Religião",
+          "beneficios": "Encontra orientação nas escritas de sua fé"
+        }
+      ]
+    },
+    {
+      "grupo_id": "saber",
+      "titulo": "Talentos de Perícias de Saber",
+      "pericia_id": "saber",
+      "talentos": [
+        {
+          "id": "profissional_experiente",
+          "nome": "Profissional Experiente",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Saber",
+          "beneficios": "Impede falhas críticas quando Ganhar Proventos"
+        },
+        {
+          "id": "saber_adicional",
+          "nome": "Saber Adicional",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Saber",
+          "beneficios": "Se torna treinado em outra subcategoria de Saber"
+        },
+        {
+          "id": "saber_inconfundivel",
+          "nome": "Saber Inconfundível",
+          "nivel": 2,
+          "pre_requisitos": "Especialista em Saber",
+          "beneficios": "Recorda Conhecimento de Saber de forma mais eficaz"
+        },
+        {
+          "id": "profissional_lendario",
+          "nome": "Profissional Lendário",
+          "nivel": 15,
+          "pre_requisitos": "Lendário em Saber",
+          "beneficios": "Obtém reconhecimento por seu Saber"
+        }
+      ]
+    },
+    {
+      "grupo_id": "sobrevivencia",
+      "titulo": "Talentos de Sobrevivência",
+      "pericia_id": "sobrevivencia",
+      "talentos": [
+        {
+          "id": "especialidade_em_terreno",
+          "nome": "Especialidade em Terreno",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Sobrevivência",
+          "beneficios": "+1 em testes de Sobrevivência em certos terrenos"
+        },
+        {
+          "id": "forrageador",
+          "nome": "Forrageador",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Sobrevivência",
+          "beneficios": "Forrageia por suprimentos para várias criaturas"
+        },
+        {
+          "id": "procurar_vida_selvagem",
+          "nome": "Procurar Vida Selvagem",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Sobrevivência",
+          "beneficios": "Identifica criaturas próximas através de pistas e sinais"
+        },
+        {
+          "id": "rastreador_experiente",
+          "nome": "Rastreador Experiente",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Sobrevivência",
+          "beneficios": "Rastreia à sua Velocidade total com –5 de penalidade"
+        },
+        {
+          "id": "sobrevivencia_planar",
+          "nome": "Sobrevivência Planar",
+          "nivel": 7,
+          "pre_requisitos": "Mestre em Sobrevivência",
+          "beneficios": "Utiliza Sobrevivência para Subsistir em planos diferentes"
+        },
+        {
+          "id": "sobrevivente_lendario",
+          "nome": "Sobrevivente Lendário",
+          "nivel": 15,
+          "pre_requisitos": "Lendário em Sobrevivência",
+          "beneficios": "Sobrevive a condições extremas"
+        }
+      ]
+    },
+    {
+      "grupo_id": "sociedade",
+      "titulo": "Talentos de Sociedade",
+      "pericia_id": "sociedade",
+      "talentos": [
+        {
+          "id": "gracejos_da_corte",
+          "nome": "Gracejos da Corte",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Sociedade",
+          "beneficios": "Utiliza Sociedade para se relacionar na sociedade nobre"
+        },
+        {
+          "id": "ler_labios",
+          "nome": "Ler Lábios",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Sociedade",
+          "beneficios": "Lê os lábios de pessoas que pode ver"
+        },
+        {
+          "id": "lingua_de_sinais",
+          "nome": "Língua de Sinais",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Sociedade",
+          "beneficios": "Aprende língua de sinais"
+        },
+        {
+          "id": "manha_das_ruas",
+          "nome": "Manha das Ruas",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Sociedade",
+          "beneficios": "Utiliza Sociedade para Obter Informação e Recordar Conhecimento"
+        },
+        {
+          "id": "poliglota",
+          "nome": "Poliglota",
+          "nivel": 1,
+          "pre_requisitos": "Treinado em Sociedade",
+          "beneficios": "Aprende dois idiomas novos"
+        },
+        {
+          "id": "conexoes",
+          "nome": "Conexões",
+          "nivel": 2,
+          "pre_requisitos": "Especialista em Sociedade, Gracejos da Corte",
+          "beneficios": "Utiliza suas conexões para conseguir favores e reuniões"
+        },
+        {
+          "id": "decodificador_lendario",
+          "nome": "Decodificador Lendário",
+          "nivel": 15,
+          "pre_requisitos": "Lendário em Sociedade",
+          "beneficios": "Decifra Escrita mais rapidamente utilizando Sociedade"
+        },
+        {
+          "id": "linguista_lendario",
+          "nome": "Linguista Lendário",
+          "nivel": 15,
+          "pre_requisitos": "Lendário em Sociedade, Poliglota",
+          "beneficios": "Cria idiomas de contato para se comunicar"
+        }
+      ]
+    }
+  ],
+  "talentos": [
+    {
+      "id": "aliados_quietos",
+      "nome": "Aliados Quietos",
+      "nivel": 2,
+      "categoria": "pericia",
+      "grupo_pericia": "furtividade",
+      "resumo_beneficio": "Rola um único teste de Furtividade quando se esgueira com aliados",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "especialista em Furtividade",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você é habilidoso em se mover com um grupo. Quando estiver Evitando Ser Percebido e seus aliados Seguirem o Especialista, você e esses aliados podem rolar um único teste de Furtividade utilizando o menor modificador, em vez de rolar separadamente. Isto não se aplica a rolagens de iniciativa."
+    },
+    {
+      "id": "ancestralidade_adotada",
+      "nome": "Ancestralidade Adotada",
+      "nivel": 1,
+      "categoria": "geral",
+      "grupo_pericia": null,
+      "resumo_beneficio": "Obtém acesso a talentos de outra ancestralidade",
+      "tracos": [
+        "Geral"
+      ],
+      "acoes": null,
+      "pre_requisitos": null,
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você é completamente imerso na cultura e tradições de outra ancestralidade, seja por ter nascido nela, obtido essa familiaridade através de um rito de passagem ou se vinculado através de uma grande amizade ou romance. Escolha uma ancestralidade comum. Você pode selecionar os talentos de ancestralidade da ancestralidade escolhida com este talento além dos talentos de sua própria ancestralidade, desde que não exijam quaisquer características fisiológicas que você não possua (conforme determinado pelo MJ)."
+    },
+    {
+      "id": "artista_lendario",
+      "nome": "Artista Lendário",
+      "nivel": 15,
+      "categoria": "pericia",
+      "grupo_pericia": "performance",
+      "resumo_beneficio": "Obtém reconhecimento por sua Performance",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "lendário em Performance, Artista Virtuoso",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Sua fama se espalhou pelas terras. PdMs que obtiverem sucesso em um teste de Sociedade CD 10 para Recordar Conhecimento já ouviram falar de você e normalmente possuem uma atitude em relação a você um passo melhor do que o normal, dependendo de sua reputação e da disposição do PdM. Por exemplo: se você for reconhecido por crueldade e comportamento exigente, criaturas podem se sentir intimidadas em vez de amistosas. Quando Ganhar Proventos com Performance, você atrai uma audiência de nível superior à que o local permitiria, já que elas se deslocam para assisti-lo. Por exemplo: governantes e anjos podem viajar para sua pequena torre na mata para ouvi-lo tocar. Tipicamente, isto aumenta as audiências disponíveis em 2 níveis ou mais, determinado pelo MJ."
+    },
+    {
+      "id": "artista_virtuoso",
+      "nome": "Artista Virtuoso",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "performance",
+      "resumo_beneficio": "+1 com um certo tipo de performance",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Performance",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": [
+        {
+          "especialidade": "Atuação",
+          "exemplo": "Drama, marionetes, pantomima"
+        },
+        {
+          "especialidade": "Canto",
+          "exemplo": "Balada, cântico, melodia, rimas"
+        },
+        {
+          "especialidade": "Comédia",
+          "exemplo": "Bobice, contar piadas, limeriques"
+        },
+        {
+          "especialidade": "Cordas",
+          "exemplo": "Alaúde, harpa, viola, violino"
+        },
+        {
+          "especialidade": "Dança",
+          "exemplo": "Balé, hulara, jig, macru"
+        },
+        {
+          "especialidade": "Oratória",
+          "exemplo": "Épico, narrativa, ode, poesia"
+        },
+        {
+          "especialidade": "Percussão",
+          "exemplo": "Carrilhão, gongo, tambor, xilofone"
+        },
+        {
+          "especialidade": "Sopro",
+          "exemplo": "Flauta, flauta doce, gaita de fole, trombeta"
+        },
+        {
+          "especialidade": "Teclados",
+          "exemplo": "Cravo, órgão, piano"
+        }
+      ],
+      "descricao": "Você possui talento excepcional com um tipo de performance. Você recebe +1 de bônus de circunstância quando realizar um determinado tipo de performance. Se você for mestre em Performance, este bônus aumenta para +2. Selecione uma das especialidades a seguir e aplique o bônus quando realizar testes de Performance desse tipo. Se não for claro quando uma especialidade se aplica, o MJ decide."
+    },
+    {
+      "id": "atalho_magico",
+      "nome": "Atalho Mágico",
+      "nivel": 2,
+      "categoria": "pericia",
+      "grupo_pericia": "pericias_variadas",
+      "resumo_beneficio": "Aprende magias rapidamente e com custo reduzido",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "especialista em Arcanismo, Natureza, Ocultismo ou Religião",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você tem facilidade em aprender magias. Se for especialista na tradição associada à perícia, você leva 10 minutos por nível de magia para aprender uma magia dessa tradição em vez de 1 hora por nível de magia. Se falhar em aprender a magia, você pode tentar novamente após 1 semana ou após ganhar um nível, o que ocorrer primeiro. Se for mestre na tradição associada à perícia, aprender a magia leva 5 minutos por nível de magia e, se for lendário, leva apenas 1 minuto por nível de magia. Você pode usar recesso para aprender e escrever novas magias. Isto funciona como se estivesse usando Ganhar Proventos com a perícia associada à tradição, mas em vez de ganhar dinheiro, você escolhe uma magia disponível para aprender e ganha um desconto para aprendê-la, aprendendo-a gratuitamente se seu ganho de proventos igualar ou exceder o custo dela."
+    },
+    {
+      "id": "bloqueio_com_escudo",
+      "nome": "Bloqueio com Escudo",
+      "nivel": 1,
+      "categoria": "geral",
+      "grupo_pericia": null,
+      "resumo_beneficio": "Apara um golpe com seu escudo",
+      "tracos": [
+        "Geral"
+      ],
+      "acoes": "reacao",
+      "pre_requisitos": null,
+      "acionamento": "Enquanto estiver com seu escudo erguido, você sofreria dano de um ataque físico.",
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você posiciona seu escudo na frente de um golpe para bloqueá-lo. Seu escudo o impede de sofrer uma quantidade de dano igual à dureza do escudo. Tanto você quanto o escudo sofrem o dano remanescente (ambos sofrem o mesmo dano), o que pode quebrar ou até mesmo destruir o escudo."
+    },
+    {
+      "id": "brado_de_batalha",
+      "nome": "Brado de Batalha",
+      "nivel": 7,
+      "categoria": "pericia",
+      "grupo_pericia": "intimidacao",
+      "resumo_beneficio": "Desmoraliza adversários quando rola sua iniciativa",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "mestre em Intimidação",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Quando rolar iniciativa, você pode gritar um poderoso brado de batalha e Desmoralizar um adversário observado como uma ação livre. Se for lendário em Intimidação, você pode usar uma reação para Desmoralizar seu adversário quando obtiver sucesso crítico em uma rolagem de ataque."
+    },
+    {
+      "id": "camarada",
+      "nome": "Camarada",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "diplomacia",
+      "resumo_beneficio": "Obtém Informação rapidamente",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Diplomacia",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você é habilidoso em descobrir informações através de conversa. Você pode usar a atividade de exploração Obter Informação em metade do tempo normal (geralmente reduzindo o tempo necessário para 1 hora). Se você for mestre em Diplomacia e decidir Obter Informação na velocidade normal, quando o fizer e rolar uma falha crítica, trate o resultado como uma falha. Contudo, ainda não há garantia de que um rumor que você descubra com Obter Informação seja preciso."
+    },
+    {
+      "id": "carregador_robusto",
+      "nome": "Carregador Robusto",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "atletismo",
+      "resumo_beneficio": "Aumenta seu limite de Volume em 2 pontos",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Atletismo",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode carregar mais do que sua estrutura indica. Aumente seus limites de Volume máximo e sobrecarregado em 2 pontos."
+    },
+    {
+      "id": "cavalgar",
+      "nome": "Cavalgar",
+      "nivel": 1,
+      "categoria": "geral",
+      "grupo_pericia": null,
+      "resumo_beneficio": "Obtém sucesso automaticamente ao comandar sua montaria para se mover",
+      "tracos": [
+        "Geral"
+      ],
+      "acoes": null,
+      "pre_requisitos": null,
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Quando Comandar um Animal em que estiver montado para realizar uma ação de movimento (como Andar), você obtém sucesso automaticamente em vez de precisar fazer um teste. Qualquer animal em que você estiver montado age em seu turno, como um lacaio. Se você Montar um animal no meio de um encontro, ele pula o próximo turno dele e age somente em seu próximo turno. A página 250 possui mais informações sobre Comandar um Animal."
+    },
+    {
+      "id": "certeza",
+      "nome": "Certeza",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "pericias_variadas",
+      "resumo_beneficio": "Obtém um resultado fixo em um teste de perícia",
+      "tracos": [
+        "Fortuna",
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em pelo menos uma perícia",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": "Você pode selecionar este talento várias vezes. Cada vez que o fizer, escolha uma perícia diferente e receba os benefícios para essa perícia.",
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Mesmo nas piores circunstâncias, você pode realizar tarefas básicas. Escolha uma perícia na qual é treinado. Você pode abrir mão de rolar um teste de perícia para essa perícia e em vez disso obter um resultado de 10 + seu bônus de proficiência (não aplique quaisquer outros bônus, penalidades ou modificadores)."
+    },
+    {
+      "id": "coagir_grupo",
+      "nome": "Coagir Grupo",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "intimidacao",
+      "resumo_beneficio": "Coage vários alvos simultaneamente",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Intimidação",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Quando Coagir, você pode comparar o resultado de seu teste de Intimidação às CDs de Vontade de dois alvos em vez de um. É possível obter um grau de sucesso diferente para cada alvo. A quantidade de alvos que você pode Coagir em uma única ação aumenta para quatro se você for especialista, 10 se for mestre e 25 se for lendário."
+    },
+    {
+      "id": "coercao_duradoura",
+      "nome": "Coerção Duradoura",
+      "nivel": 2,
+      "categoria": "pericia",
+      "grupo_pericia": "intimidacao",
+      "resumo_beneficio": "Coage um alvo a ajudá-lo por mais tempo",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "especialista em Intimidação",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Quando obtiver sucesso em Coagir alguém, o tempo máximo que ele consente aumenta para uma semana (embora ainda seja determinado pelo MJ). Se você for lendário, o máximo aumenta para um mês."
+    },
+    {
+      "id": "coercao_rapida",
+      "nome": "Coerção Rápida",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "intimidacao",
+      "resumo_beneficio": "Coage uma criatura rapidamente",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Intimidação",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode ameaçar os outros com a simples implicação de algumas escolhas. Você pode Coagir uma criatura após 1 rodada de conversa em vez de 1 minuto. Você ainda não pode Coagir uma criatura no meio do combate, ou sem engajar em uma conversa."
+    },
+    {
+      "id": "conexoes",
+      "nome": "Conexões",
+      "nivel": 2,
+      "categoria": "pericia",
+      "grupo_pericia": "sociedade",
+      "resumo_beneficio": "Utiliza suas conexões para conseguir favores e reuniões",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "especialista em Sociedade, Gracejos da Corte",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você possui conexões sociais que pode usar para trocar favores ou encontrar pessoas importantes. Quando estiver em uma área com conexões (tipicamente um assentamento onde passou tempo em recesso formando conexões ou possivelmente outra área na mesma nação), você pode realizar um teste de Sociedade para arranjar um encontro com uma figura política importante ou pedir por um favor em troca de um favor posterior à escolha de seu contato. O MJ decide a CD baseado na dificuldade do favor e da proeminência da figura."
+    },
+    {
+      "id": "confabulador",
+      "nome": "Confabulador",
+      "nivel": 2,
+      "categoria": "pericia",
+      "grupo_pericia": "dissimulacao",
+      "resumo_beneficio": "Reduz os bônus contra suas repetidas mentiras",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "especialista em Dissimulação",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Mesmo quando pego em suas inverdades, você joga mentira após mentira. Reduza o bônus de circunstância que um alvo recebe por suas tentativas prévias de Criar uma Distração ou Mentir de +4 para +2. Se você for mestre em Dissimulação, reduza o bônus para +1 e, se for lendário em Dissimulação, seus alvos não recebem quaisquer desses bônus."
+    },
+    {
+      "id": "conhecimento_automatico",
+      "nome": "Conhecimento Automático",
+      "nivel": 2,
+      "categoria": "pericia",
+      "grupo_pericia": "pericias_variadas",
+      "resumo_beneficio": "Recorda Conhecimento como uma ação livre uma vez por rodada",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "especialista em uma perícia com a ação Recordar Conhecimento, Certeza nessa perícia",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": "Você pode selecionar este talento várias vezes. Cada vez que o fizer, escolha uma perícia diferente. Você pode usar Conhecimento Automático com quaisquer perícias que tiver escolhido, mas ainda pode usar Conhecimento Automático somente uma vez por rodada.",
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você recorda fatos básicos prontamente. Escolha uma perícia na qual seja especialista que tenha a ação Recordar Conhecimento e para a qual você possui o talento Certeza. Você pode usar a ação Recordar Conhecimento com essa perícia como uma ação livre uma vez por rodada. Se o fizer, você deve usar Certeza no teste de perícia."
+    },
+    {
+      "id": "conhecimento_duvidoso",
+      "nome": "Conhecimento Duvidoso",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "pericias_variadas",
+      "resumo_beneficio": "Obtém conhecimento errado e verdadeiro em uma falha",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em uma perícia com a ação Recordar Conhecimento",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você tem praticamente um tesouro de informações, mas nem todas vêm de fontes confiáveis. Quando falhar em Recordar Conhecimento usando qualquer perícia, você recorda um pouco de conhecimento verdadeiro e um pouco de conhecimento errôneo, mas não tem qualquer forma de diferenciar qual é cada um."
+    },
+    {
+      "id": "contrabandista_experiente",
+      "nome": "Contrabandista Experiente",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "furtividade",
+      "resumo_beneficio": "Oculta itens de forma mais eficaz contra observadores",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Furtividade",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você frequentemente contrabandeia coisas pelas autoridades. Quando o MJ rolar seu teste de Furtividade para um observador passivo perceber um item pequeno que você tenha ocultado, ele usa o número rolado ou 10 — o que for maior — como resultado de sua rolagem de dado, adicionando-o ao seu modificador de Furtividade para determinar o resultado de seu teste. Se você for mestre em Furtividade, o MJ usa o número rolado ou 15 e, se for lendário em Furtividade, você automaticamente obtém sucesso em esconder um item pequeno ocultado de observadores passivos. Isto não fornece benefícios quando uma criatura faz um teste de Percepção enquanto procura ativamente em você para encontrar itens escondidos. Devido à sua perícia em contrabando, você tem mais facilidade em encontrar trabalhos de contrabando mais lucrativos quando usar Saber de Submundo para Ganhar Proventos."
+    },
+    {
+      "id": "controlar_a_respiracao",
+      "nome": "Controlar a Respiração",
+      "nivel": 1,
+      "categoria": "geral",
+      "grupo_pericia": null,
+      "resumo_beneficio": "Prende sua respiração por mais tempo e recebe benefícios contra ameaças inaladas",
+      "tracos": [
+        "Geral"
+      ],
+      "acoes": null,
+      "pre_requisitos": null,
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você possui um controle incrível sobre sua respiração, o que lhe concede vantagens onde o ar seja perigoso ou escasso. Você pode prender sua respiração por 25 vezes o tempo usual antes de sufocar. Você recebe +1 de bônus de circunstância em jogadas de salvamento contra ameaças inaladas (como venenos inalados) e, se rolar um sucesso numa jogada de salvamento dessas, trate o resultado como um sucesso crítico."
+    },
+    {
+      "id": "cumprimento_caloroso",
+      "nome": "Cumprimento Caloroso",
+      "nivel": 2,
+      "categoria": "pericia",
+      "grupo_pericia": "diplomacia",
+      "resumo_beneficio": "Impressiona um alvo que acabou de conhecer",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "especialista em Diplomacia",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "A primeira impressão é seu ponto forte. Quando encontrar alguém em uma situação casual ou social, você pode imediatamente fazer um teste de Diplomacia para Impressionar essa criatura em vez de precisar conversar por 1 minuto. Você sofre –5 de penalidade no teste. Se falhar ou falhar criticamente, você pode engajar em 1 minuto de conversa e fazer um novo teste ao final desse período em vez de aceitar o resultado da falha ou falha crítica."
+    },
+    {
+      "id": "decodificador_lendario",
+      "nome": "Decodificador Lendário",
+      "nivel": 15,
+      "categoria": "pericia",
+      "grupo_pericia": "sociedade",
+      "resumo_beneficio": "Decifra Escrita mais rapidamente utilizando Sociedade",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "lendário em Sociedade",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Sua competência com idiomas e códigos é tão grande que você pode decifrar informações com pouco mais do que uma leitura rápida de um texto. Você pode Decifrar Escrita utilizando Sociedade enquanto lê em velocidade normal. Se desacelerar e gastar a quantidade de tempo total normalmente necessária e rolar um sucesso, trate o resultado como um sucesso crítico; se você obtiver um sucesso crítico enquanto gasta a quantidade normal de tempo, você obtém uma compreensão quase palavra por palavra do documento."
+    },
+    {
+      "id": "desarmamento_prudente",
+      "nome": "Desarmamento Prudente",
+      "nivel": 2,
+      "categoria": "pericia",
+      "grupo_pericia": "ladroagem",
+      "resumo_beneficio": "+2 na CA ou salvamentos contra dispositivos ou armadilhas que acionar enquanto estiver desarmando-os",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "especialista em Ladroagem",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Se acionar um dispositivo ou ativar uma armadilha enquanto estiver desarmando-a, você recebe +2 de bônus de circunstância na CA ou jogada de salvamento contra o dispositivo ou armadilha. Isto se aplica somente para ataques ou efeitos acionados por sua tentativa falha, não para rolagens posteriores (como ataques adicionais de uma armadilha complexa)."
+    },
+    {
+      "id": "destrancar_rapidamente",
+      "nome": "Destrancar Rapidamente",
+      "nivel": 7,
+      "categoria": "pericia",
+      "grupo_pericia": "ladroagem",
+      "resumo_beneficio": "Abre uma Fechadura com 1 ação",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "mestre em Ladroagem",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode Abrir uma Fechadura usando 1 ação em vez de 2."
+    },
+    {
+      "id": "disfarce_rapido",
+      "nome": "Disfarce Rápido",
+      "nivel": 2,
+      "categoria": "pericia",
+      "grupo_pericia": "dissimulacao",
+      "resumo_beneficio": "Monta um disfarce em metade do tempo",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "especialista em Dissimulação",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode montar um Disfarce na metade do tempo normal (geralmente 5 minutos). Se for mestre em Dissimulação, você leva um décimo do tempo normal (normalmente 1 minuto). Se for lendário, você pode criar um disfarce completo e Personificar como uma atividade de 3 ações."
+    },
+    {
+      "id": "distracao_prolongada",
+      "nome": "Distração Prolongada",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "dissimulacao",
+      "resumo_beneficio": "Permanece escondido após Criar uma Distração",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Dissimulação",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Quando obtiver um sucesso crítico para Criar uma Distração, você permanece escondido após o final do seu turno. Este efeito dura uma quantidade de tempo que depende da distração e situação, conforme determinado pelo MJ (mínimo 1 rodada adicional)."
+    },
+    {
+      "id": "duro_de_matar",
+      "nome": "Duro de Matar",
+      "nivel": 1,
+      "categoria": "geral",
+      "grupo_pericia": null,
+      "resumo_beneficio": "Morre em morrendo 5 (em vez de morrendo 4)",
+      "tracos": [
+        "Geral"
+      ],
+      "acoes": null,
+      "pre_requisitos": null,
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você é mais difícil de ser morto do que a maioria. Você só morre quando o valor de sua condição morrendo chegar a 5 (em vez de morrendo 4)."
+    },
+    {
+      "id": "elo_com_animal",
+      "nome": "Elo com Animal",
+      "nivel": 2,
+      "categoria": "pericia",
+      "grupo_pericia": "natureza",
+      "resumo_beneficio": "Um animal se torna permanentemente prestativo",
+      "tracos": [
+        "Geral",
+        "Perícia",
+        "Recesso"
+      ],
+      "acoes": null,
+      "pre_requisitos": "especialista em Natureza",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você forja fortes conexões com um animal. Você pode gastar 7 dias de recesso tentando ligar-se a um animal normal (não um companheiro animal ou outro animal especial). Após esta duração, faça um teste de Natureza CD 20. Se bem-sucedido, você cria um elo com o animal. O animal fica permanentemente prestativo para você, a menos que você faça algo notório para quebrar o elo. Um animal prestativo é mais fácil de direcionar, conforme descrito sob Comandar um Animal na página 250. Criar um elo com um novo animal encerra qualquer elo prévio que você possuir. Você não pode ter um elo com animal e um companheiro animal (embora possa ter um elo com animal e um familiar)."
+    },
+    {
+      "id": "enganar_item_magico",
+      "nome": "Enganar Item Mágico",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "pericias_variadas",
+      "resumo_beneficio": "Ativa um item mágico que normalmente não poderia",
+      "tracos": [
+        "Geral",
+        "Manuseio",
+        "Perícia"
+      ],
+      "acoes": "1",
+      "pre_requisitos": "treinado em Arcanismo, Natureza, Ocultismo ou Religião",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": {
+        "sucesso": "Pelo resto de seu turno atual, você pode gastar ações para ativar o item como se pudesse fazê-lo normalmente.",
+        "falha": "Você não pode usar o item ou tentar enganá-lo novamente neste turno, mas pode tentar novamente em turnos subsequentes.",
+        "falha_critica": "Você não pode usar o item e não pode tentar enganá-lo novamente até suas próximas preparações diárias."
+      },
+      "opcoes_tabela": null,
+      "descricao": "Você examina um item mágico que normalmente não poderia usar em um esforço para enganá-lo e ativá-lo temporariamente. Por exemplo: com isto, um guerreiro pode conjurar uma magia de uma varinha ou um mago pode conjurar uma magia que não está na lista arcana dele usando um pergaminho. Você deve saber o que ocorre ao ativar o item, caso contrário, é incapaz de enganá-lo. Faça um teste utilizando a perícia apropriada à tradição do item mágico ou, se estiver tentando conjurar uma magia do item, à tradição que possua a magia em sua lista. As perícias relevantes são Arcanismo para magia arcana, Natureza para magia primal, Ocultismo para magia ocultista, Religião para magia divina ou qualquer uma das quatro perícias para um item que tenha o traço mágico, mas nenhum traço de tradição. O MJ determina a CD baseado no nível do item (possivelmente ajustada dependendo do item ou situação). Se você ativar um item mágico que requer uma rolagem de ataque de magia ou CD de magia e não possuir a habilidade de conjurar magias da tradição relevante, utilize seu nível como bônus de proficiência e o maior de seus modificadores entre Inteligência, Sabedoria ou Carisma. Se você for mestre na perícia apropriada para a tradição do item, em vez disso utilize o bônus de proficiência treinado e, se for lendário, utilize o bônus de proficiência de especialista."
+    },
+    {
+      "id": "enganar_sentidos",
+      "nome": "Enganar Sentidos",
+      "nivel": 7,
+      "categoria": "pericia",
+      "grupo_pericia": "furtividade",
+      "resumo_beneficio": "Toma precauções contra sentidos especiais",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "mestre em Furtividade",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você é perito em enganar os sentidos especiais de criaturas e cauteloso o suficiente para se prevenir contra eles a todo momento. Sempre que usar as ações Esconder, Esgueirar ou Evitar Ser Percebido, você sempre é considerado como tomando precauções contra sentidos especiais (veja o quadro Detectando com Outros Sentidos, na página 465)."
+    },
+    {
+      "id": "equilibrio_estavel",
+      "nome": "Equilíbrio Estável",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "acrobatismo",
+      "resumo_beneficio": "Mantém seu equilíbrio em condições adversas",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Acrobatismo",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você consegue manter seu equilíbrio facilmente, mesmo em condições adversas. Sempre que rolar um sucesso usando a ação Equilibrar, trate o resultado como um sucesso crítico. Você não fica desprevenido enquanto tenta se Equilibrar em superfícies estreitas e solo irregular. Graças ao seu equilíbrio incrível, você pode utilizar Acrobatismo em vez de Reflexos para Segurar numa Beirada."
+    },
+    {
+      "id": "escalada_rapida",
+      "nome": "Escalada Rápida",
+      "nivel": 7,
+      "categoria": "pericia",
+      "grupo_pericia": "atletismo",
+      "resumo_beneficio": "Escala rapidamente",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "mestre em Atletismo",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Quando Escalar, você se move 1,5 metros a mais em um sucesso e 3 metros a mais em um sucesso crítico (até o máximo de sua Velocidade). Se for lendário em Atletismo, você recebe uma Velocidade de escalada igual à sua Velocidade."
+    },
+    {
+      "id": "escalador_de_combate",
+      "nome": "Escalador de Combate",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "atletismo",
+      "resumo_beneficio": "Luta de forma mais eficaz enquanto Escala",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Atletismo",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Suas técnicas permitem que você lute enquanto escala. Você não fica desprevenido enquanto Escala e pode Escalar com uma mão ocupada. Você ainda deve usar uma outra mão e ambas as pernas para Escalar."
+    },
+    {
+      "id": "esgueirador_de_terreno",
+      "nome": "Esgueirador de Terreno",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "furtividade",
+      "resumo_beneficio": "Se esgueira em certos terrenos sem fazer um teste",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Furtividade",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": "Você pode selecionar este talento várias vezes. Cada vez que o fizer, você deve escolher um tipo de terreno diferente.",
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Selecione um tipo de terreno difícil da lista a seguir: detritos, matagal ou neve. Enquanto estiver indetectado por todos não-aliados nesse tipo de terreno, você pode Esgueirar sem fazer um teste de Furtividade desde que não se mova mais do que 1,5 metros e não se aproxime a 3 metros ou menos de um inimigo durante seu movimento. Este talento também permite que você se aproxime automaticamente de criaturas a até 4,5 metros enquanto Evitar Ser Percebido durante a exploração, desde que elas não estejam ativamente Procurando ou em guarda."
+    },
+    {
+      "id": "esgueirador_lendario",
+      "nome": "Esgueirador Lendário",
+      "nivel": 15,
+      "categoria": "pericia",
+      "grupo_pericia": "furtividade",
+      "resumo_beneficio": "Esconde e Esgueira sem cobertura ou sem estar ocultado",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "lendário em Furtividade, Esgueirar-se Rapidamente",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você sempre está se esgueirando a menos que escolha ser visto, mesmo quando não houver onde se esconder. Você pode Esconder-se e Esgueirar mesmo sem cobertura ou sem estar ocultado. Quando empregar uma tática de exploração diferente de Evitar Ser Percebido, você também recebe os benefícios de Evitar Ser Percebido a menos que escolha não fazê-lo. Veja a página 479 para mais informações sobre táticas de exploração."
+    },
+    {
+      "id": "esgueirar_se_rapidamente",
+      "nome": "Esgueirar-se Rapidamente",
+      "nivel": 7,
+      "categoria": "pericia",
+      "grupo_pericia": "furtividade",
+      "resumo_beneficio": "Se move à sua Velocidade total enquanto Esgueira",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "mestre em Furtividade",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode mover-se sua Velocidade total quando Esgueirar. Você pode usar Esgueirar-se Rapidamente enquanto Escalar, Escavar, Nadar ou Voar em vez de Andar se possuir o tipo de movimento correspondente."
+    },
+    {
+      "id": "especialidade_de_manufatura",
+      "nome": "Especialidade de Manufatura",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "manufatura",
+      "resumo_beneficio": "Recebe bônus para Manufaturar certos itens",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Manufatura",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": [
+        {
+          "especialidade": "Alfaiataria",
+          "itens_aplicaveis": "Roupas"
+        },
+        {
+          "especialidade": "Alquimia*",
+          "itens_aplicaveis": "Itens alquímicos (como elixires). *Você deve possuir o talento de perícia Manufatura Alquímica para Manufaturar itens alquímicos."
+        },
+        {
+          "especialidade": "Alvenaria",
+          "itens_aplicaveis": "Bens de pedra e estruturas"
+        },
+        {
+          "especialidade": "Arte",
+          "itens_aplicaveis": "Artes finas, incluindo joalheria"
+        },
+        {
+          "especialidade": "Carpintaria",
+          "itens_aplicaveis": "Bens de madeira e estruturas"
+        },
+        {
+          "especialidade": "Carpintaria naval",
+          "itens_aplicaveis": "Navios e barcos"
+        },
+        {
+          "especialidade": "Curtume",
+          "itens_aplicaveis": "Bens de couro, incluindo armaduras de couro"
+        },
+        {
+          "especialidade": "Encadernação",
+          "itens_aplicaveis": "Livros e papéis"
+        },
+        {
+          "especialidade": "Ferraria",
+          "itens_aplicaveis": "Bens metálicos duráveis, incluindo armaduras"
+        },
+        {
+          "especialidade": "Olaria",
+          "itens_aplicaveis": "Bens de cerâmica"
+        },
+        {
+          "especialidade": "Tecelagem",
+          "itens_aplicaveis": "Tecidos, cestos e tapetes"
+        },
+        {
+          "especialidade": "Vidraçaria",
+          "itens_aplicaveis": "Vidro, incluindo vitrais e janelas"
+        }
+      ],
+      "descricao": "Seu treinamento focou em Manufaturar um tipo particular de item. Selecione uma das especialidades listadas na tabela; você recebe +1 de bônus de circunstância em testes de Manufatura para Manufaturar itens desse tipo. Se você for mestre em Manufatura, este bônus aumenta para +2. Se não for claro quando uma especialidade se aplica, o MJ decide. Algumas especialidades podem se aplicar apenas parcialmente. Por exemplo: se estiver criando uma maça-estrela e possuir especialidade em carpintaria, o MJ pode lhe dar metade de seu bônus devido ao item requerer carpintaria e ferraria."
+    },
+    {
+      "id": "especialidade_em_terreno",
+      "nome": "Especialidade em Terreno",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "sobrevivencia",
+      "resumo_beneficio": "+1 em testes de Sobrevivência em certos terrenos",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Sobrevivência",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": "Você pode selecionar este talento várias vezes. Cada vez que o fizer, você deve escolher um tipo de terreno diferente.",
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Sua experiência em viajar por um determinado tipo de terreno lhe torna extremamente confiante ao fazê-lo. Você recebe +1 de bônus de circunstância em testes de Sobrevivência em um dos seguintes tipos de terreno, escolhido ao selecionar este talento: aquático, ártico, céu, deserto, floresta, montanha, pântano, planície ou subterrâneo."
+    },
+    {
+      "id": "espremer_se_rapidamente",
+      "nome": "Espremer-se Rapidamente",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "acrobatismo",
+      "resumo_beneficio": "Move-se rapidamente enquanto se Espreme",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Acrobatismo",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você se Espreme 1,5 metros por rodada (3 metros em um sucesso crítico). Se for lendário em Acrobatismo, você se Espreme à Velocidade total."
+    },
+    {
+      "id": "estudante_do_canone",
+      "nome": "Estudante do Cânone",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "religiao",
+      "resumo_beneficio": "Reconhece melhor os princípios de sua fé ou filosofia",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Religião",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pesquisou muitas fés e religiões e, por isso, é capaz de reconhecer noções religiosas imprecisas ou errôneas. Se rolar uma falha crítica em um teste de Religião para Decifrar uma Escrita de natureza religiosa ou para Recordar Conhecimento sobre os princípios de religiões, trate o resultado como uma falha. Quando tentar Recordar Conhecimento sobre os princípios de sua própria fé, se rolar uma falha crítica, trate o resultado como uma falha e, se rolar um sucesso, trate o resultado como um sucesso crítico."
+    },
+    {
+      "id": "exemplar_ancestral",
+      "nome": "Exemplar Ancestral",
+      "nivel": 3,
+      "categoria": "geral",
+      "grupo_pericia": null,
+      "resumo_beneficio": "Recebe um talento de ancestralidade de 1º nível",
+      "tracos": [
+        "Geral"
+      ],
+      "acoes": null,
+      "pre_requisitos": null,
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Através de instinto, estudo ou magia, você sente uma conexão mais profunda com sua ancestralidade. Você recebe um talento de ancestralidade de 1º nível."
+    },
+    {
+      "id": "forrageador",
+      "nome": "Forrageador",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "sobrevivencia",
+      "resumo_beneficio": "Forrageia por suprimentos para várias criaturas",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Sobrevivência",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Enquanto utilizar Sobrevivência para Subsistir, se rolar qualquer resultado pior que um sucesso, você obtém um sucesso. Se rolar um sucesso, você pode fornecer subsistência para si mesmo e quatro criaturas adicionais. Se rolar um sucesso crítico, você pode cuidar do dobro de criaturas que poderia em um sucesso. Cada vez que sua graduação de proficiência em Sobrevivência aumentar, dobre a quantidade de criaturas adicionais que você pode cuidar em um sucesso (para oito se for especialista, 16 se for mestre ou 32 se for lendário). Você pode escolher cuidar de metade da quantidade de criaturas adicionais e fornecer um padrão de vida confortável em vez de simples subsistência. Várias criaturas menores ou criaturas com apetites significativamente menores do que um humano contam como uma única criatura para este talento, e criaturas maiores ou com apetites maiores contam como várias criaturas. O MJ determina o quanto uma criatura não-humana precisa comer."
+    },
+    {
+      "id": "furto_subito",
+      "nome": "Furto Súbito",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "ladroagem",
+      "resumo_beneficio": "Seus furtos são mais difíceis de perceber",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Ladroagem",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Quando obtiver sucesso em Furtar algo, observadores (criaturas diferentes da que está sendo furtada) sofrem –2 de penalidade de circunstância em suas CDs de Percepção para detectar seu furto. Adicionalmente, se você Criar uma Distração utilizando Dissimulação antes de usar uma ação para Empalmar um Objeto ou Furtar, essa última ação não encerra sua condição indetectado."
+    },
+    {
+      "id": "gracejos_da_corte",
+      "nome": "Gracejos da Corte",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "sociedade",
+      "resumo_beneficio": "Utiliza Sociedade para se relacionar na sociedade nobre",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Sociedade",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você foi criado entre a nobreza ou aprendeu a etiqueta e comportamento apropriados, permitindo que se apresente como um nobre e jogue com influências e políticas. Você pode utilizar Sociedade para Impressionar um nobre ou para Personificar fingindo ser um nobre se não for um. Se quiser personificar um nobre específico, você ainda precisa utilizar Dissimulação para Personificar normalmente e para Mentir quando necessário."
+    },
+    {
+      "id": "identificacao_rapida",
+      "nome": "Identificação Rápida",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "pericias_variadas",
+      "resumo_beneficio": "Identifica Magia em 1 minuto ou menos",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Arcanismo, Natureza, Ocultismo ou Religião",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode Identificar Magia rapidamente. Você leva somente 1 minuto em vez de 10 minutos quando usa Identificar Magia para determinar as propriedades de um efeito contínuo, item ou local. Se for mestre na perícia, você faz isso usando uma atividade de 3 ações e, se for lendário na perícia, usando somente 1 ação."
+    },
+    {
+      "id": "identificar_estranhezas",
+      "nome": "Identificar Estranhezas",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "ocultismo",
+      "resumo_beneficio": "+2 em testes de Ocultismo para Identificar Magia com certos traços",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Ocultismo",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você possui um sentido para magias que distorcem mentes ou revelam segredos. Você recebe +2 de bônus de circunstância em testes de Ocultismo para Identificar Magias que possuam os traços mental, possessão, predição ou vidência."
+    },
+    {
+      "id": "impressionar_grupo",
+      "nome": "Impressionar Grupo",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "diplomacia",
+      "resumo_beneficio": "Impressiona múltiplos alvos de uma vez",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Diplomacia",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Quando Impressionar, você pode comparar o resultado de seu teste de Diplomacia às CDs de Vontade de dois alvos em vez de um. É possível obter um grau de sucesso diferente para cada alvo. A quantidade de alvos que você pode Impressionar em uma única ação aumenta para quatro se você for especialista, 10 se for mestre e 25 se for lendário."
+    },
+    {
+      "id": "improvisacao_destreinada",
+      "nome": "Improvisação Destreinada",
+      "nivel": 3,
+      "categoria": "geral",
+      "grupo_pericia": null,
+      "resumo_beneficio": "Se torna mais habilidoso em usar perícias destreinadas",
+      "tracos": [
+        "Geral"
+      ],
+      "acoes": null,
+      "pre_requisitos": null,
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você aprendeu a lidar com situações que estejam fora do seu domínio. Seu bônus de proficiência para testes de perícia destreinados é igual à metade de seu nível em vez de +0. Se você for de 7º nível ou superior, o bônus se torna igual ao seu nível. Isto não permite usar as ações de perícia treinadas."
+    },
+    {
+      "id": "iniciativa_incrivel",
+      "nome": "Iniciativa Incrível",
+      "nivel": 1,
+      "categoria": "geral",
+      "grupo_pericia": null,
+      "resumo_beneficio": "+2 em rolagens de iniciativa",
+      "tracos": [
+        "Geral"
+      ],
+      "acoes": null,
+      "pre_requisitos": null,
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você reage mais rapidamente do que os outros. Você recebe +2 de bônus de circunstância em rolagens de iniciativa."
+    },
+    {
+      "id": "intrepidez_intimidante",
+      "nome": "Intrepidez Intimidante",
+      "nivel": 2,
+      "categoria": "pericia",
+      "grupo_pericia": "intimidacao",
+      "resumo_beneficio": "Recebe um bônus para Desmoralizar fisicamente",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "Força 16, especialista em Intimidação",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Em situações onde você pode ameaçar o alvo fisicamente ao Coagir ou Desmoralizar, você recebe +1 de bônus de circunstância em seu teste de Intimidação e ignora a penalidade por não compartilhar um idioma. Se seu valor de Força for 20 ou maior e você for mestre em Intimidação, este bônus aumenta para +2."
+    },
+    {
+      "id": "inventor",
+      "nome": "Inventor",
+      "nivel": 7,
+      "categoria": "pericia",
+      "grupo_pericia": "manufatura",
+      "resumo_beneficio": "Usa Manufatura para criar fórmulas de itens",
+      "tracos": [
+        "Geral",
+        "Perícia",
+        "Recesso"
+      ],
+      "acoes": null,
+      "pre_requisitos": "mestre em Manufatura",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você é um gênio em Manufatura, facilmente capaz de determinar como as coisas são feitas e de criar novas invenções. Você pode usar recesso para inventar uma fórmula comum que não conheça. Isto funciona como a atividade Manufaturar: você gasta metade do Preço da fórmula adiantado, faz um teste de Manufatura e, em um sucesso, finaliza a fórmula pagando a diferença ou trabalhando por mais tempo para diminuir o Preço. A diferença é que você gasta o tempo adicional em pesquisa, projeto e desenvolvimento, em vez de criar um item. Após completá-la, você adiciona a nova fórmula inventada ao seu livro de fórmulas."
+    },
+    {
+      "id": "investidura_incrivel",
+      "nome": "Investidura Incrível",
+      "nivel": 11,
+      "categoria": "geral",
+      "grupo_pericia": null,
+      "resumo_beneficio": "Investe em até 12 itens mágicos",
+      "tracos": [
+        "Geral"
+      ],
+      "acoes": null,
+      "pre_requisitos": "Carisma 16",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você possui uma habilidade incrível para investir em mais itens mágicos. Aumente seu limite de itens investidos de 10 para 12."
+    },
+    {
+      "id": "ladrao_lendario",
+      "nome": "Ladrão Lendário",
+      "nivel": 15,
+      "categoria": "pericia",
+      "grupo_pericia": "ladroagem",
+      "resumo_beneficio": "Rouba algo que normalmente seria impossível",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "lendário em Ladroagem, Punga",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Sua habilidade de Furtar desafia o possível. Você pode tentar Furtar algo que está sendo ativamente empunhado, que seria extremamente perceptível ou que consumisse tempo para remover (como sapatos calçados ou uma armadura vestida). Você deve fazê-lo lenta e cuidadosamente, gastando pelo menos 1 minuto (e significativamente mais tempo para itens que normalmente consomem tempo para remover, como armaduras). Durante toda esta duração, você deve ter meios de permanecer escondido, como a cobertura de escuridão ou uma multidão lotada. Você sofre –5 de penalidade em seu teste de Ladroagem. Mesmo se obtiver sucesso, se o item for extremamente notável — como uma armadura completa — seu sumiço será rapidamente notado por observadores após o furto."
+    },
+    {
+      "id": "ler_labios",
+      "nome": "Ler Lábios",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "sociedade",
+      "resumo_beneficio": "Lê os lábios de pessoas que pode ver",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Sociedade",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode ler os lábios de pessoas próximas que possa ver claramente. Em situações calmas ou comuns, você pode fazer isto automaticamente. Em modo de encontro ou quando tentar um feito mais difícil de leitura labial, você fica fascinado e desprevenido durante cada rodada que passar focando em movimentos de lábios e deve obter sucesso em um teste de Sociedade (CD determinada pelo MJ) para conseguir ler os lábios de alguém. Em ambos os casos, você deve conhecer o idioma para conseguir lê-lo. Se tiver problemas de audição (ou for surdo) e possuir Ler Lábios, você reconhece os movimentos labiais para a forma falada de seus idiomas. Você também pode falar a forma falada de seus idiomas de forma clara o suficiente para que outros possam entendê-lo."
+    },
+    {
+      "id": "levantar_rapidamente",
+      "nome": "Levantar Rapidamente",
+      "nivel": 7,
+      "categoria": "pericia",
+      "grupo_pericia": "acrobatismo",
+      "resumo_beneficio": "Fica de pé livremente sem acionar reações",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": "livre",
+      "pre_requisitos": "mestre em Acrobatismo",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você se Levanta. Este movimento não aciona reações."
+    },
+    {
+      "id": "lingua_de_sinais",
+      "nome": "Língua de Sinais",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "sociedade",
+      "resumo_beneficio": "Aprende língua de sinais",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Sociedade",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você aprende a língua de sinais associada com os idiomas que conhece, permitindo-lhe fazer e entender sinais. Línguas de sinais tipicamente requerem ambas as mãos para transmitir conceitos mais complexos, e são visuais em vez de auditivas. Língua de sinais é difícil de compreender durante o combate devido ao alto nível de atenção exigida, ao contrário de gestos básicos como apontar para um adversário ou sugerir um alvo. Língua de sinais é difícil de usar em áreas de baixa visibilidade, assim como a fala é difícil em um ambiente barulhento."
+    },
+    {
+      "id": "linguista_lendario",
+      "nome": "Linguista Lendário",
+      "nivel": 15,
+      "categoria": "pericia",
+      "grupo_pericia": "sociedade",
+      "resumo_beneficio": "Cria idiomas de contato para se comunicar",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "lendário em Sociedade, Poliglota",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você é tão competente com idiomas que consegue criar uma língua de contato instantaneamente. Você sempre pode falar com qualquer criatura que possua um idioma — mesmo um idioma que você não conhece — criando um novo idioma de contato que utiliza termos simplificados e transmite conceitos básicos. Para fazê-lo, você primeiro deve compreender pelo menos o meio de comunicação utilizado pela criatura (fala, língua de sinais e assim por diante)."
+    },
+    {
+      "id": "lutador_titanico",
+      "nome": "Lutador Titânico",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "atletismo",
+      "resumo_beneficio": "Agarra, Desarma, Derruba ou Empurra criaturas maiores",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Atletismo",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode tentar Agarrar, Derrubar, Desarmar ou Empurrar criaturas até dois tamanhos maior do que você, ou até três tamanhos maior do que o seu se você for lendário em Atletismo."
+    },
+    {
+      "id": "magia_bizarra",
+      "nome": "Magia Bizarra",
+      "nivel": 7,
+      "categoria": "pericia",
+      "grupo_pericia": "ocultismo",
+      "resumo_beneficio": "Sua magia se torna mais difícil de identificar",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "mestre em Ocultismo",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode imbuir variações estranhas em sua conjuração, esteja conjurando magias ocultistas ou não. As CDs para Reconhecer Magias e Identificar Magias que você conjurar aumentam em 5 pontos."
+    },
+    {
+      "id": "manha_das_ruas",
+      "nome": "Manha das Ruas",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "sociedade",
+      "resumo_beneficio": "Utiliza Sociedade para Obter Informação e Recordar Conhecimento",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Sociedade",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você conhece a vida nas ruas e sente o ritmo de seu assentamento local. Você pode utilizar seu modificador de Sociedade em vez de seu modificador de Diplomacia para Obter Informação. Em qualquer assentamento que frequentar regularmente, você pode usar a ação Recordar Conhecimento com Sociedade para saber os mesmos tipos de informação que poderia descobrir com Diplomacia para Obter Informação. A CD normalmente é significativamente maior, mas você sabe a informação sem gastar tempo coletando-a. Se falhar em recordar a informação, você ainda pode tentar Obter Informação em seguida normalmente."
+    },
+    {
+      "id": "manufatura_alquimica",
+      "nome": "Manufatura Alquímica",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "manufatura",
+      "resumo_beneficio": "Manufatura itens alquímicos",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Manufatura",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode usar a atividade Manufaturar para criar itens alquímicos. Quando selecionar este talento, você imediatamente acrescenta as fórmulas para quatro itens alquímicos comuns de 1º nível ao seu livro de fórmulas."
+    },
+    {
+      "id": "manufatura_de_arapuca",
+      "nome": "Manufatura de Arapuca",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "manufatura",
+      "resumo_beneficio": "Manufatura arapucas",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Manufatura",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode usar a atividade Manufaturar para criar arapucas, utilizando as regras da página 248. Quando selecionar este talento, você acrescenta as fórmulas para quatro arapucas comuns ao seu livro de fórmulas."
+    },
+    {
+      "id": "manufatura_impecavel",
+      "nome": "Manufatura Impecável",
+      "nivel": 7,
+      "categoria": "pericia",
+      "grupo_pericia": "manufatura",
+      "resumo_beneficio": "Manufatura itens de forma mais eficaz",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "mestre em Manufatura, Especialidade de Manufatura",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você manufatura criações impecáveis com grande eficiência. Sempre que rolar um sucesso em um teste de Manufatura para criar um item do tipo escolhido com Especialidade de Manufatura, trate o resultado como um sucesso crítico."
+    },
+    {
+      "id": "manufatura_magica",
+      "nome": "Manufatura Mágica",
+      "nivel": 2,
+      "categoria": "pericia",
+      "grupo_pericia": "manufatura",
+      "resumo_beneficio": "Manufatura itens mágicos",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "especialista em Manufatura",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode Manufaturar itens mágicos, embora alguns tenham outros requerimentos, conforme listado no Capítulo 11. Quando selecionar este talento, você recebe fórmulas para quatro itens mágicos comuns de 2º nível ou inferior."
+    },
+    {
+      "id": "manufaturar_qualquer_coisa",
+      "nome": "Manufaturar Qualquer Coisa",
+      "nivel": 15,
+      "categoria": "pericia",
+      "grupo_pericia": "manufatura",
+      "resumo_beneficio": "Ignora a maioria dos requerimentos para manufaturar",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "lendário em Manufatura",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode encontrar formas de criar quase qualquer coisa, a despeito das restrições. Desde que tenha o talento de perícia de Manufatura apropriado (como Manufatura Mágica para itens mágicos) e atenda aos requerimentos de nível do item e proficiência, você ignora quase qualquer outro requerimento (como ser de uma ancestralidade específica ou fornecer magias). As únicas exceções são requerimentos que adicionam custos ao item, incluindo conjurações de magias que tenham um custo, e requerimentos de itens especiais (como a pedra filosofal) que possuam meios exclusivos de acesso e Manufatura. O MJ decide se você pode ignorar um requerimento."
+    },
+    {
+      "id": "matar_de_medo",
+      "nome": "Matar de Medo",
+      "nivel": 15,
+      "categoria": "pericia",
+      "grupo_pericia": "intimidacao",
+      "resumo_beneficio": "Assusta tanto um alvo, que pode até matá-lo",
+      "tracos": [
+        "Emoção",
+        "Geral",
+        "Incapacitação",
+        "Medo",
+        "Morte",
+        "Perícia"
+      ],
+      "acoes": "1",
+      "pre_requisitos": "lendário em Intimidação",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": {
+        "sucesso_critico": "O alvo deve obter sucesso em um salvamento de Fortitude contra sua CD de Intimidação ou morre. Se o alvo obtiver sucesso no salvamento dele, ele fica assustado 2 e fugindo por 1 rodada; ele não sofre efeito em um sucesso crítico.",
+        "sucesso": "O alvo fica assustado 2.",
+        "falha": "O alvo fica assustado 1.",
+        "falha_critica": "O alvo não é afetado."
+      },
+      "opcoes_tabela": null,
+      "descricao": "Você pode literalmente matar seu adversário de medo. Faça um teste de Intimidação contra a CD de Vontade de uma criatura viva a até 9 metros que você consiga sentir ou observar e que pode lhe sentir ou observar. Se o alvo não puder ouvi-lo ou não compreender o idioma que você está falando, você sofre –4 de penalidade de circunstância. A criatura fica temporariamente imune por 1 minuto."
+    },
+    {
+      "id": "medicina_de_batalha",
+      "nome": "Medicina de Batalha",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "medicina",
+      "resumo_beneficio": "Cura a si ou um aliado em batalha",
+      "tracos": [
+        "Cura",
+        "Geral",
+        "Manuseio",
+        "Perícia"
+      ],
+      "acoes": "1",
+      "pre_requisitos": "treinado em Medicina",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode curar a si mesmo ou um aliado adjacente, mesmo em combate. Faça um teste de Medicina com a mesma CD de Tratar Ferimentos e forneça a quantidade correspondente de cura; usar este talento não remove a condição ferido. Da mesma forma que Tratar Ferimentos, você pode fazer teste contra CDs mais altas se possuir a graduação de proficiência mínima. O alvo fica temporariamente imune à sua Medicina de Batalha por 1 dia."
+    },
+    {
+      "id": "medicina_natural",
+      "nome": "Medicina Natural",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "natureza",
+      "resumo_beneficio": "Utiliza Natureza para Tratar Ferimentos",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Natureza",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode aplicar curativos naturais para curar seus aliados. Você pode utilizar Natureza em vez de Medicina para Tratar Ferimentos. Em terras ermas, você pode ter acesso mais fácil a ingredientes frescos, recebendo +2 de bônus de circunstância em seu teste para Tratar Ferimentos utilizando Natureza (sujeito ao julgamento do MJ)."
+    },
+    {
+      "id": "medico_de_enfermaria",
+      "nome": "Médico de Enfermaria",
+      "nivel": 2,
+      "categoria": "pericia",
+      "grupo_pericia": "medicina",
+      "resumo_beneficio": "Trata vários pacientes de uma vez",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "especialista em Medicina",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você estudou em grandes enfermarias médicas, tratando vários pacientes de uma vez e cuidando de todas suas necessidades. Quando usar Tratar Doença ou Tratar Ferimentos, você pode tratar até dois alvos. Se for mestre em Medicina, você pode tratar até quatro alvos e, se for lendário em Medicina, pode tratar até oito alvos."
+    },
+    {
+      "id": "medico_lendario",
+      "nome": "Médico Lendário",
+      "nivel": 15,
+      "categoria": "pericia",
+      "grupo_pericia": "medicina",
+      "resumo_beneficio": "Remove doenças ou a condição cego, condenado, drenado ou surdo",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "lendário em Medicina",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você descobriu avanços ou técnicas médicas que possibilitam resultados milagrosos. Uma vez por dia para cada alvo, você pode gastar 1 hora tratando-o e fazer um teste de Medicina para remover uma doença ou a condição cego, condenado, drenado ou surdo. Utilize a CD da doença, magia ou efeito que criou a condição. Se a fonte do efeito for acima do 20º nível, um artefato ou algo de poder similar, aumente a CD em 10."
+    },
+    {
+      "id": "mente_na_minha_cara",
+      "nome": "Mente na Minha Cara",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "dissimulacao",
+      "resumo_beneficio": "Utiliza Dissimulação para detectar mentiras",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Dissimulação",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode utilizar Dissimulação para tecer armadilhas e pegar qualquer um tentando enganá-lo. Se puder conversar com alguém tentando Mentir para você, utilize sua CD de Dissimulação se for maior que sua CD de Percepção para determinar se esse alguém obtém sucesso. Isto não se aplica se você não for capaz de dialogar contra-argumentando, como quando alguém tenta Mentir durante um discurso longo."
+    },
+    {
+      "id": "mentiroso_charmoso",
+      "nome": "Mentiroso Charmoso",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "dissimulacao",
+      "resumo_beneficio": "Aprimora a atitude de um alvo com suas mentiras",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Dissimulação",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Seu charme o permite persuadir pessoas através de suas mentiras. Quando obtiver um sucesso crítico usando a ação Mentir, a atitude do alvo em relação a você melhora em um passo, como se tivesse obtido sucesso em Diplomacia para Impressionar. Isto funciona somente uma vez por conversa, e se você tiver obtido um sucesso crítico contra vários alvos usando o mesmo resultado, escolha a atitude de uma única criatura para aprimorar. Você deve estar mentindo para contar uma informação aparentemente importante, inflar sua reputação ou se colocar nas graças de alguém — algo inalcançável com mentiras triviais e irrelevantes."
+    },
+    {
+      "id": "natacao_rapida",
+      "nome": "Natação Rápida",
+      "nivel": 7,
+      "categoria": "pericia",
+      "grupo_pericia": "atletismo",
+      "resumo_beneficio": "Nada rapidamente",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "mestre em Atletismo",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Quando Nadar, você se move 1,5 metros a mais em um sucesso e 3 metros a mais em um sucesso crítico, até o máximo de sua Velocidade. Se for lendário em Atletismo, você recebe uma Velocidade de natação igual à sua Velocidade."
+    },
+    {
+      "id": "negociacao_lendaria",
+      "nome": "Negociação Lendária",
+      "nivel": 15,
+      "categoria": "pericia",
+      "grupo_pericia": "diplomacia",
+      "resumo_beneficio": "Negocia rapidamente com adversários",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": "3",
+      "pre_requisitos": "lendário em Diplomacia",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode negociar incrivelmente rápido em situações adversas. Você pode tentar Impressionar e então Pedir que seu oponente pare a atividade atual dele e engaje em negociações. Você sofre –5 de penalidade em seu teste de Diplomacia. O MJ determina a CD do Pedido baseado nas circunstâncias — isso normalmente possui uma CD pelo menos muito difícil do mesmo nível da criatura. Algumas criaturas podem simplesmente recusar, e mesmo criaturas que concordarem em negociar podem achar seus argumentos infundados e retornar à violência."
+    },
+    {
+      "id": "olhar_intimidante",
+      "nome": "Olhar Intimidante",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "intimidacao",
+      "resumo_beneficio": "Desmoraliza uma criatura sem precisar falar",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Intimidação",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode Desmoralizar com um mero olhar. Quando o fizer, Desmoralizar perde o traço auditivo e adquire o traço visual, e você não sofre uma penalidade se a criatura não compreender seu idioma."
+    },
+    {
+      "id": "orientacao_divina",
+      "nome": "Orientação Divina",
+      "nivel": 15,
+      "categoria": "pericia",
+      "grupo_pericia": "religiao",
+      "resumo_beneficio": "Encontra orientação nas escritas de sua fé",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "lendário em Religião",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você é tão imerso em escrituras divinas que encontra significado e orientação em seus textos para qualquer situação. Gaste 10 minutos Decifrando Escrita em escrituras religiosas de sua divindade ou filosofia enquanto pensa sobre um problema em particular ou questão difícil enfrentada por você, e depois faça um teste de Religião (CD determinada pelo MJ). Se obtiver sucesso, você descobre uma passagem, parábola ou aforismo relevante que pode lhe ajudar a seguir ou mudar seu pensamento para solucionar seu problema. Por exemplo: o MJ pode lhe fornecer uma dica ou poema enigmático que o guiará ao próximo passo para solucionar seu problema."
+    },
+    {
+      "id": "passo_aprumado",
+      "nome": "Passo Aprumado",
+      "nivel": 1,
+      "categoria": "geral",
+      "grupo_pericia": null,
+      "resumo_beneficio": "Dá um Passo em terreno difícil",
+      "tracos": [
+        "Geral"
+      ],
+      "acoes": null,
+      "pre_requisitos": "Destreza 14",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você dá um passo de forma rápida e cuidadosa. Você pode Dar um Passo em terreno difícil."
+    },
+    {
+      "id": "pechinchador",
+      "nome": "Pechinchador",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "diplomacia",
+      "resumo_beneficio": "Ganha Proventos ao procurar por pechinchas",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Diplomacia",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode Ganhar Proventos (página 237) utilizando Diplomacia, gastando seus dias procurando barganhas e revendendo mercadorias para gerar lucro. Você também pode gastar tempo especificamente procurando por uma boa barganha de um item; isto funciona como se você estivesse usando Ganhar Proventos com Diplomacia, exceto que em vez de ganhar dinheiro, você compra o item com um desconto igual ao dinheiro que teria ganho (recebendo o item gratuitamente se seu ganho de proventos igualar ou exceder o custo dele). Finalmente, se selecionar Pechinchador durante a criação de personagem no 1º nível, você começa o jogo com 2 po adicionais."
+    },
+    {
+      "id": "pedido_desavergonhado",
+      "nome": "Pedido Desavergonhado",
+      "nivel": 7,
+      "categoria": "pericia",
+      "grupo_pericia": "diplomacia",
+      "resumo_beneficio": "Faz Pedidos para outras pessoas com consequências mais brandas",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "mestre em Diplomacia",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode minimizar as consequências ou ultraje de seus pedidos usando puro charme e insolência. Quando Pedir alguma coisa, você reduz qualquer aumento na CD devido a um pedido ultrajante em 2 pontos e, se rolar uma falha crítica para seu Pedido, trate o resultado como uma falha. Embora isto signifique que você nunca faz seu alvo piorar a atitude dele em relação a você fazendo um Pedido, eventualmente ele se cansará de seus pedidos mesmo que tenha uma atitude positiva em relação a você."
+    },
+    {
+      "id": "performance_fascinante",
+      "nome": "Performance Fascinante",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "performance",
+      "resumo_beneficio": "Performa para fascinar observadores",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Performance",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Quando Performar, compare seu resultado à CD de Vontade de um observador. Se obtiver sucesso, o alvo fica fascinado por você durante 1 rodada. Se o observador estiver em uma situação que exige atenção imediata, tal como um combate, você deve obter um sucesso crítico para fasciná-lo e a ação Performar adquire o traço incapacitação. Você deve escolher qual criatura está tentando fascinar antes de rolar seu teste, e depois dele o alvo fica temporariamente imune por 1 hora. Se for especialista em Performance, você pode fascinar até quatro observadores; se for mestre em Performance, pode fascinar até 10 observadores; e se for lendário em Performance, pode fascinar qualquer quantidade de observadores ao mesmo tempo."
+    },
+    {
+      "id": "performance_impressionante",
+      "nome": "Performance Impressionante",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "performance",
+      "resumo_beneficio": "Impressiona com Performance",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Performance",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Suas performances inspiram admiração e lhe garantem fãs. Você pode Impressionar utilizando Performance em vez de Diplomacia."
+    },
+    {
+      "id": "perspicacia_astuta",
+      "nome": "Perspicácia Astuta",
+      "nivel": 1,
+      "categoria": "geral",
+      "grupo_pericia": null,
+      "resumo_beneficio": "Se torna especialista em um salvamento ou em Percepção",
+      "tracos": [
+        "Geral"
+      ],
+      "acoes": null,
+      "pre_requisitos": null,
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Sua capacidade de evitar ou perceber ameaças está além do comum para a maioria das pessoas em sua profissão. Escolha entre Percepção ou um único tipo de salvamento (Fortitude, Reflexos ou Vontade). Você se torna especialista na característica escolhida. No 17º nível, você se torna mestre na característica escolhida."
+    },
+    {
+      "id": "poliglota",
+      "nome": "Poliglota",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "sociedade",
+      "resumo_beneficio": "Aprende dois idiomas novos",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Sociedade",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": "Você pode selecionar este talento várias vezes. Cada vez que o fizer, você aprende idiomas adicionais.",
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você compreende facilmente novos idiomas. Você aprende dois novos idiomas, escolhidos dentre os idiomas comuns, idiomas incomuns e quaisquer outros idiomas aos quais tenha acesso. Você aprende um idioma adicional se já for (ou se tornar) mestre em Sociedade e mais um se já for (ou se tornar) lendário."
+    },
+    {
+      "id": "procura_acelerada",
+      "nome": "Procura Acelerada",
+      "nivel": 7,
+      "categoria": "geral",
+      "grupo_pericia": null,
+      "resumo_beneficio": "Procura em áreas na metade do tempo",
+      "tracos": [
+        "Geral"
+      ],
+      "acoes": null,
+      "pre_requisitos": "mestre em Percepção",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você desenvolveu um sistema para procurar em grande velocidade, encontrando detalhes e segredos duas vezes mais rápido do que outros. Quando Procurar, você leva metade do tempo usual para Procurar em uma determinada área. Isto significa que, enquanto estiver explorando, você dobra a Velocidade em que pode se mover enquanto Procura em uma área antes de atravessá-la (até metade de sua Velocidade). Se for lendário em Percepção, em vez disso você pode Procurar quatro vezes mais rápido."
+    },
+    {
+      "id": "procurar_vida_selvagem",
+      "nome": "Procurar Vida Selvagem",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "sobrevivencia",
+      "resumo_beneficio": "Identifica criaturas próximas através de pistas e sinais",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Sobrevivência",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode estudar detalhes nos ermos para determinar a presença de criaturas próximas. Você pode gastar 10 minutos aferindo a área ao seu redor para descobrir quais criaturas há nos arredores, baseado em ninhos, excrementos e marcas na vegetação. Faça um teste de Sobrevivência contra a CD determinada pelo MJ baseado em quão óbvios são os sinais. Em um sucesso, você pode fazer um teste de Recordar Conhecimento com –2 de penalidade para aprender mais sobre as criaturas somente a partir destes sinais. Se for mestre em Sobrevivência, você não sofre essa penalidade."
+    },
+    {
+      "id": "proficiencia_com_armaduras",
+      "nome": "Proficiência com Armaduras",
+      "nivel": 1,
+      "categoria": "geral",
+      "grupo_pericia": null,
+      "resumo_beneficio": "Se torna treinado em um tipo de armadura",
+      "tracos": [
+        "Geral"
+      ],
+      "acoes": null,
+      "pre_requisitos": null,
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": "Você pode selecionar este talento várias vezes. Cada vez que o fizer, você se torna treinado no próximo tipo de armadura seguindo a progressão acima.",
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você se torna treinado em armaduras leves. Se já for treinado em armaduras leves, você recebe treinamento em armaduras médias. Se já for treinado em armaduras leves e médias, você recebe treinamento em armaduras pesadas."
+    },
+    {
+      "id": "proficiencia_com_armas",
+      "nome": "Proficiência com Armas",
+      "nivel": 1,
+      "categoria": "geral",
+      "grupo_pericia": null,
+      "resumo_beneficio": "Se torna treinado em um tipo de arma",
+      "tracos": [
+        "Geral"
+      ],
+      "acoes": null,
+      "pre_requisitos": null,
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": "Você pode selecionar este talento várias vezes. Cada vez que o fizer, você se torna treinado no próximo tipo de arma seguindo a progressão acima.",
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você se torna treinado em todas as armas simples. Se já for treinado em todas as armas simples, você recebe treinamento em todas as armas marciais. Se já for treinado em todas as armas simples e marciais, você recebe treinamento em uma arma avançada à sua escolha."
+    },
+    {
+      "id": "profissional_experiente",
+      "nome": "Profissional Experiente",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "saber",
+      "resumo_beneficio": "Impede falhas críticas quando Ganhar Proventos",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Saber",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você assegura cuidadosamente suas empreitadas profissionais para evitar desastres. Quando utilizar Saber para Ganhar Proventos, se rolar uma falha crítica, trate o resultado como uma falha. Se for especialista em Saber, você dobra a quantidade de proventos recebidos por uma falha em um teste para Ganhar Proventos (a menos que o resultado original tenha sido uma falha crítica)."
+    },
+    {
+      "id": "profissional_lendario",
+      "nome": "Profissional Lendário",
+      "nivel": 15,
+      "categoria": "pericia",
+      "grupo_pericia": "saber",
+      "resumo_beneficio": "Obtém reconhecimento por seu Saber",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "lendário em Saber",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Sua fama se espalhou por todo lugar (se possuir Saber de Guerra, por exemplo, você pode ser um lendário estrategista ou general). Isto funciona como Artista Lendário (página 258), exceto que você consegue trabalhos de níveis superiores quando Ganhar Proventos com Saber."
+    },
+    {
+      "id": "punga",
+      "nome": "Punga",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "ladroagem",
+      "resumo_beneficio": "Furta ou Empalma um Objeto de forma mais eficaz",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Ladroagem",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode Furtar ou Empalmar um Objeto que esteja bem guardado, como algo dentro de um bolso, sem sofrer os –5 de penalidade normais. Você não pode furtar objetos que seriam extremamente perceptíveis ou que consumam tempo para remover (como sapatos calçados, armaduras vestidas ou objetos ativamente empunhados). Se for mestre em Ladroagem, você pode tentar Furtar de uma criatura que esteja em combate ou em guarda. Quando o fizer, Furtar requer 2 ações de manuseio (em vez de 1) e você sofre –5 de penalidade."
+    },
+    {
+      "id": "queda_do_gato",
+      "nome": "Queda do Gato",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "acrobatismo",
+      "resumo_beneficio": "Trata quedas como mais curtas do que são",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Acrobatismo",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Suas felinas acrobacias aéreas permitem que você amorteça suas quedas. Trate quedas como se fossem 3 metros mais curtas. Se for especialista em Acrobatismo, trate quedas como se fossem 7,5 metros mais curtas. Se for mestre em Acrobatismo, trate quedas como se fossem 15 metros mais curtas. Se for lendário em Acrobatismo, você sempre cai de pé e não sofre dano (independentemente da distância caída)."
+    },
+    {
+      "id": "rastejo_ligeiro",
+      "nome": "Rastejo Ligeiro",
+      "nivel": 2,
+      "categoria": "pericia",
+      "grupo_pericia": "acrobatismo",
+      "resumo_beneficio": "Rasteja mais rápido",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "especialista em Acrobatismo",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode Rastejar incrivelmente rápido — até metade de sua Velocidade em vez de 1,5 metros. Se for mestre em Acrobatismo, você pode Rastejar à sua Velocidade total e, se for lendário, você não fica desprevenido enquanto estiver prostrado."
+    },
+    {
+      "id": "rastreador_experiente",
+      "nome": "Rastreador Experiente",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "sobrevivencia",
+      "resumo_beneficio": "Rastreia à sua Velocidade total com –5 de penalidade",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Sobrevivência",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Rastrear está enraizado em sua natureza e, quando necessário, você pode seguir uma trilha sem hesitar. Você pode Rastrear enquanto se move à sua Velocidade total sofrendo –5 de penalidade em seu teste de Sobrevivência. Se for mestre em Sobrevivência, você não sofre os –5 de penalidade. Se for lendário em Sobrevivência, você não precisa mais rolar um novo teste de Sobrevivência a cada hora em que estiver rastreando, embora ainda precise rolar sempre que houver mudanças significativas na trilha."
+    },
+    {
+      "id": "reconhecer_magia",
+      "nome": "Reconhecer Magia",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "pericias_variadas",
+      "resumo_beneficio": "Identifica uma magia como uma reação enquanto ela é conjurada",
+      "tracos": [
+        "Geral",
+        "Perícia",
+        "Secreto"
+      ],
+      "acoes": "reacao",
+      "pre_requisitos": "treinado em Arcanismo, Natureza, Ocultismo ou Religião",
+      "acionamento": "Uma criatura em sua linha de visão conjura uma magia que você não possui preparada ou que não consta em seu repertório de magias, ou uma armadilha ou objeto similar conjura uma magia dessas. Você deve estar ciente da conjuração.",
+      "requerimentos": null,
+      "especial": null,
+      "resultados": {
+        "sucesso_critico": "Você reconhece corretamente a magia e recebe +1 de bônus de circunstância em sua jogada de salvamento ou CA contra ela.",
+        "sucesso": "Você reconhece corretamente a magia.",
+        "falha": "Você falha em reconhecer a magia.",
+        "falha_critica": "Você identifica a magia erroneamente como outra magia completamente diferente à escolha do MJ."
+      },
+      "opcoes_tabela": null,
+      "descricao": "Se for treinado na perícia apropriada para a tradição da magia sendo conjurada e ela for uma magia comum de 2º nível ou inferior, você a identifica automaticamente (embora ainda precise rolar para tentar obter um sucesso crítico, você não corre o risco de obter um resultado pior do que um sucesso). O nível mais alto de magia que pode identificar automaticamente aumenta para 4 se você for especialista, 6 se for mestre e 10 se for lendário. O MJ rola um teste secreto de Arcanismo, Natureza, Ocultismo ou Religião (o que corresponder à tradição da magia sendo conjurada). Se não for treinado na perícia, você não pode obter um resultado melhor que uma falha."
+    },
+    {
+      "id": "reconhecimento_rapido",
+      "nome": "Reconhecimento Rápido",
+      "nivel": 7,
+      "categoria": "pericia",
+      "grupo_pericia": "pericias_variadas",
+      "resumo_beneficio": "Identifica magias como uma ação livre",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "mestre em Arcanismo, Natureza, Ocultismo ou Religião; Reconhecer Magia",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você Reconhece Magias rapidamente. Uma vez por rodada, você pode Reconhecer uma Magia utilizando uma perícia na qual você seja mestre como uma ação livre."
+    },
+    {
+      "id": "recuperacao_continua",
+      "nome": "Recuperação Contínua",
+      "nivel": 2,
+      "categoria": "pericia",
+      "grupo_pericia": "medicina",
+      "resumo_beneficio": "Trata Ferimentos em um paciente com maior frequência",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "especialista em Medicina",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você monitora zelosamente o progresso de um paciente para administrar um tratamento mais rápido. Quando você Tratar Ferimentos, seu paciente fica imune por apenas 10 minutos (em vez de 1 hora). Isto se aplica somente às suas atividades de Tratar Ferimentos, não a outros tratamentos recebidos pelo paciente."
+    },
+    {
+      "id": "recuperacao_rapida",
+      "nome": "Recuperação Rápida",
+      "nivel": 1,
+      "categoria": "geral",
+      "grupo_pericia": null,
+      "resumo_beneficio": "Recupera mais PV descansando e recupera-se rápido de doenças e venenos",
+      "tracos": [
+        "Geral"
+      ],
+      "acoes": null,
+      "pre_requisitos": "Constituição 14",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Seu corpo combate aflições rapidamente. Você recupera o dobro de Pontos de Vida por descansar. Cada vez que obtiver sucesso em um salvamento de Fortitude contra uma doença ou veneno em efeito, você reduz seu estágio em 2, ou em 1 contra uma doença ou veneno virulento. Cada sucesso crítico que você obtiver contra uma doença ou veneno em efeito reduz seu estágio em 3, ou em 2 contra uma doença ou veneno virulento. Além disso, você reduz a severidade de sua condição drenado em 2 quando descansar por uma noite (em vez de reduzi-la apenas em 1)."
+    },
+    {
+      "id": "recuperacao_robusta",
+      "nome": "Recuperação Robusta",
+      "nivel": 2,
+      "categoria": "pericia",
+      "grupo_pericia": "medicina",
+      "resumo_beneficio": "Benefícios melhores de Tratar Doença ou Tratar Veneno",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "especialista em Medicina",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você aprendeu medicina popular para melhorar a recuperação de doenças e venenos, e o seu uso contínuo o tornou especialmente resiliente. Quando você Tratar uma Doença ou Veneno, ou quando alguém usar uma destas ações em você, aumente o bônus de circunstância concedido em um sucesso para +4 e, se o resultado da jogada de salvamento do paciente for um sucesso, o paciente trata o resultado como um sucesso crítico."
+    },
+    {
+      "id": "reparo_rapido",
+      "nome": "Reparo Rápido",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "manufatura",
+      "resumo_beneficio": "Repara itens rapidamente",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Manufatura",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você leva 1 minuto para Reparar um item. Se você for mestre em Manufatura, isso leva 3 ações. Se for lendário em Manufatura, isso leva 1 ação."
+    },
+    {
+      "id": "retirada_aterrorizada",
+      "nome": "Retirada Aterrorizada",
+      "nivel": 7,
+      "categoria": "pericia",
+      "grupo_pericia": "intimidacao",
+      "resumo_beneficio": "Faz adversários Desmoralizados por você fugirem",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "mestre em Intimidação",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Quando você obtiver um sucesso crítico na ação Desmoralizar, se o nível do alvo for menor que o seu, ele fica fugindo por 1 rodada."
+    },
+    {
+      "id": "saber_adicional",
+      "nome": "Saber Adicional",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "saber",
+      "resumo_beneficio": "Se torna treinado em outra subcategoria de Saber",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Saber",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": "Você pode selecionar este talento várias vezes. Cada vez que o fizer, você deve selecionar uma nova subcategoria de Saber e recebe os incrementos de perícia adicionais para essa subcategoria nos níveis listados.",
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Seu conhecimento expandiu para abranger um novo campo. Escolha uma subcategoria adicional da perícia Saber. Você se torna treinado nela. No 3º, 7º e 15º níveis, você recebe um incremento de perícia adicional que você pode aplicar somente à subcategoria escolhida de Saber."
+    },
+    {
+      "id": "saber_inconfundivel",
+      "nome": "Saber Inconfundível",
+      "nivel": 2,
+      "categoria": "pericia",
+      "grupo_pericia": "saber",
+      "resumo_beneficio": "Recorda Conhecimento de Saber de forma mais eficaz",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "especialista em Saber",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você nunca obtém informações errôneas sobre suas áreas de especialidade. Quando Recordar Conhecimento utilizando qualquer subcategoria de Saber na qual é treinado, se rolar uma falha crítica, trate o resultado como falha. Se for mestre em uma subcategoria de Saber, em um sucesso crítico, você obtém ainda mais informações ou contexto do que o comum."
+    },
+    {
+      "id": "salto_na_parede",
+      "nome": "Salto na Parede",
+      "nivel": 7,
+      "categoria": "pericia",
+      "grupo_pericia": "atletismo",
+      "resumo_beneficio": "Salta pelas paredes",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "mestre em Atletismo",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode usar o impulso de um salto para se lançar de uma parede. Se estiver adjacente a uma parede ao final de um salto (seja realizando um Salto, Salto em Altura ou Salto em Distância), você não cai desde que sua próxima ação seja outro salto. Além disso, como seu salto prévio lhe dá impulso, você pode usar Salto em Altura ou Salto em Distância como uma ação única, mas sem Andar como parte da atividade. Você pode usar Salto na Parede somente uma vez por turno, a menos que seja lendário em Atletismo, sendo que nesse caso você pode Saltar na Parede uma vez por cada ação consecutiva usada nesse turno."
+    },
+    {
+      "id": "salto_nas_nuvens",
+      "nome": "Salto nas Nuvens",
+      "nivel": 15,
+      "categoria": "pericia",
+      "grupo_pericia": "atletismo",
+      "resumo_beneficio": "Salta distâncias impossíveis",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "lendário em Atletismo",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Sua capacidade atlética inigualável lhe permite saltar distâncias impossíveis. Triplique a distância de seu Salto em Distância (portanto, você poderia saltar 18 metros em um teste bem-sucedido de CD 20). Quando Saltar em Altura, utilize o cálculo para Salto em Distância, mas não triplique a distância percorrida. Quando Saltar em Altura ou Saltar em Distância, você também pode aumentar a quantidade de ações usadas (até a quantidade de ações remanescentes em seu turno) para saltar ainda mais longe. Para cada ação extra, adicione sua Velocidade à distância máxima que você salta."
+    },
+    {
+      "id": "salto_poderoso",
+      "nome": "Salto Poderoso",
+      "nivel": 2,
+      "categoria": "pericia",
+      "grupo_pericia": "atletismo",
+      "resumo_beneficio": "Salta mais alto e mais longe",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "especialista em Atletismo",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Quando Saltar, você pode saltar até 1,5 metros em um Salto vertical e também aumenta a distância que pode saltar horizontalmente em 1,5 metros."
+    },
+    {
+      "id": "salto_rapido",
+      "nome": "Salto Rápido",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "atletismo",
+      "resumo_beneficio": "Salta em Altura ou à Distância como uma ação única",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Atletismo",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode usar Salto em Altura ou Salto em Distância como uma ação única em vez de 2 ações. Se o fizer, você não realiza o Andar inicial (nem falha se não Andar 3 metros)."
+    },
+    {
+      "id": "saqueador_subaquatico",
+      "nome": "Saqueador Subaquático",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "atletismo",
+      "resumo_beneficio": "Luta de forma mais eficaz embaixo d'água",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Atletismo",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você aprendeu a lutar embaixo d’água. Você não fica desprevenido enquanto estiver na água e não sofre as penalidades normais por usar uma arma corpo a corpo contundente ou cortante dentro da água."
+    },
+    {
+      "id": "segredos_escorregadios",
+      "nome": "Segredos Escorregadios",
+      "nivel": 7,
+      "categoria": "pericia",
+      "grupo_pericia": "dissimulacao",
+      "resumo_beneficio": "Evita que descubram sua verdadeira natureza",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "mestre em Dissimulação",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você engana e evita tentativas de descobrir suas intenções ou sua verdadeira natureza. Quando uma magia ou efeito mágico tentar ler sua mente, detectar se você está mentindo ou revelar sua tendência, você pode fazer um teste de Dissimulação contra a CD da magia ou efeito. Se obtiver sucesso neste teste, o efeito não revela nada."
+    },
+    {
+      "id": "segurar_se_rapidamente",
+      "nome": "Segurar-se Rapidamente",
+      "nivel": 2,
+      "categoria": "pericia",
+      "grupo_pericia": "atletismo",
+      "resumo_beneficio": "Se ergue de beiradas rapidamente",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "especialista em Atletismo",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode facilmente se erguer de beiradas. Quando Segurar numa Beirada, você pode se erguer até a superfície e se levantar. Você pode utilizar Atletismo em vez de Reflexos para Segurar numa Beirada."
+    },
+    {
+      "id": "sentido_arcano",
+      "nome": "Sentido Arcano",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "arcanismo",
+      "resumo_beneficio": "Conjura detectar magia à vontade como uma magia arcana inata",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Arcanismo",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Seu estudo da magia permite que você sinta a presença dela instintivamente. Você pode conjurar detectar magia de 1º nível à vontade, como uma magia arcana inata. Se você for mestre em Arcanismo, a magia é elevada para o 3º nível; se for lendário, a magia é elevada para o 4º nível."
+    },
+    {
+      "id": "sobrevivencia_planar",
+      "nome": "Sobrevivência Planar",
+      "nivel": 7,
+      "categoria": "pericia",
+      "grupo_pericia": "sobrevivencia",
+      "resumo_beneficio": "Utiliza Sobrevivência para Subsistir em planos diferentes",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "mestre em Sobrevivência",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode Subsistir utilizando Sobrevivência em planos diferentes, mesmo naqueles sem os recursos ou fenômenos naturais normalmente necessários. Por exemplo: você pode forragear por comida até mesmo em planos que não tenham comida que normalmente o sustentaria. Um sucesso em seu teste para Subsistir também pode reduzir o dano causado pelo plano, a critério do MJ."
+    },
+    {
+      "id": "sobrevivente_lendario",
+      "nome": "Sobrevivente Lendário",
+      "nivel": 15,
+      "categoria": "pericia",
+      "grupo_pericia": "sobrevivencia",
+      "resumo_beneficio": "Sobrevive a condições extremas",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "lendário em Sobrevivência",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode sobreviver indefinidamente sem comida ou água e pode tolerar calor ou frio severos, extremos e incríveis sem sofrer dano por isso."
+    },
+    {
+      "id": "teoria_unificada",
+      "nome": "Teoria Unificada",
+      "nivel": 15,
+      "categoria": "pericia",
+      "grupo_pericia": "arcanismo",
+      "resumo_beneficio": "Utiliza Arcanismo para testes de todas as tradições",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "lendário em Arcanismo",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você começou a conectar de maneira significativa os fundamentos comuns das quatro tradições de magia e essências mágicas, permitindo-lhe compreender todas através de uma única visão arcana. Sempre que você usar uma ação ou talento de perícia que requeira um teste de Natureza, Ocultismo ou Religião (dependendo da tradição mágica), você pode utilizar Arcanismo em vez dessas perícias. Se normalmente sofreria uma penalidade ou rolaria contra uma CD maior por utilizar Arcanismo para outras magias (como quando Identificar Magia), isso não ocorre mais."
+    },
+    {
+      "id": "treinamento_em_pericia",
+      "nome": "Treinamento em Perícia",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "pericias_variadas",
+      "resumo_beneficio": "Se torna treinado em uma perícia",
+      "tracos": [
+        "Geral",
+        "Perícia"
+      ],
+      "acoes": null,
+      "pre_requisitos": "Inteligência 12",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": "Você pode selecionar este talento várias vezes. Cada vez que o fizer, você deve selecionar uma nova perícia para se tornar treinado.",
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você se torna treinado em uma perícia à sua escolha."
+    },
+    {
+      "id": "treinar_animal",
+      "nome": "Treinar Animal",
+      "nivel": 1,
+      "categoria": "pericia",
+      "grupo_pericia": "natureza",
+      "resumo_beneficio": "Ensina um truque para um animal",
+      "tracos": [
+        "Geral",
+        "Manuseio",
+        "Perícia",
+        "Recesso"
+      ],
+      "acoes": null,
+      "pre_requisitos": "treinado em Natureza",
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": {
+        "sucesso": "O animal aprende a ação. Se o animal já conhecia essa ação, você pode Comandar o Animal a fazê-la sem precisar de um teste de Natureza. Se for uma ação básica nova, acrescente-a às ações que o animal pode realizar quando Comandado (embora você ainda precise fazer a rolagem para Comandá-lo).",
+        "falha": "O animal não aprende o truque."
+      },
+      "opcoes_tabela": null,
+      "descricao": "Você passa tempo ensinando um animal para fazer uma certa ação. Você pode selecionar uma ação básica que o animal já saiba como fazer (geralmente uma das listadas na ação Comandar um Animal, na página 250) ou tentar ensinar uma nova ação básica ao animal. O MJ determina a CD de qualquer teste necessário e a quantidade de tempo que o treinamento leva (normalmente pelo menos uma semana). Geralmente é impossível ensinar a um animal um truque que exija pensamento crítico. Se for especialista, mestre ou lendário em Natureza, você pode ser capaz de treinar criaturas mais inusitadas (a critério do MJ)."
+    },
+    {
+      "id": "veloz",
+      "nome": "Veloz",
+      "nivel": 1,
+      "categoria": "geral",
+      "grupo_pericia": null,
+      "resumo_beneficio": "Aumenta sua Velocidade em 1,5 metros",
+      "tracos": [
+        "Geral"
+      ],
+      "acoes": null,
+      "pre_requisitos": null,
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você se move mais rápido a pé. Sua Velocidade aumenta em 1,5 metros."
+    },
+    {
+      "id": "vitalidade",
+      "nome": "Vitalidade",
+      "nivel": 1,
+      "categoria": "geral",
+      "grupo_pericia": null,
+      "resumo_beneficio": "Aumenta seus PV máximos e reduz a CD de testes de recuperação",
+      "tracos": [
+        "Geral"
+      ],
+      "acoes": null,
+      "pre_requisitos": null,
+      "acionamento": null,
+      "requerimentos": null,
+      "especial": null,
+      "resultados": null,
+      "opcoes_tabela": null,
+      "descricao": "Você pode suportar mais punição que a maioria antes de sucumbir. Aumente seus Pontos de Vida máximos em uma quantidade igual ao seu nível. A CD de seus testes de recuperação é igual a 9 + seu valor atual de morrendo (página 459)."
+    }
+  ]
+}
