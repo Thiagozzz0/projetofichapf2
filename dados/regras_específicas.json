@@ -1,0 +1,183 @@
+{
+  "fonte": {
+    "titulo": "Regras Específicas, Exceções Estruturais e Acúmulo de Bônus (PF2E Níveis 1–20)",
+    "proposito": "Centralizar regras transversais e exceções mecânicas que alteram fórmulas padrão ou a estrutura normal da ficha sem quebrar o schema dos JSONs de capítulos.",
+    "sistema": "Pathfinder 2ª Edição (Livro Básico)",
+    "referencias": [
+      "Cap. 1 (Criação de Personagem e Subindo de Nível)",
+      "Cap. 2 (Ancestralidades e Heranças)",
+      "Cap. 5 (Talentos)",
+      "Cap. 9 (Jogando o Jogo — Bônus, Penalidades e Condição Morrendo)"
+    ]
+  },
+  "pontos_de_vida": {
+    "regra_ancestralidade": {
+      "aplicar_somente_nivel_1": true,
+      "multiplica_por_nivel": false,
+      "arquivo_origem": "ancestralidades_biografias.json",
+      "campo_base_ancestralidade": "pontos_vida",
+      "campo_substituto_heranca": "pv_ancestral_substituto",
+      "observacao": "Os Pontos de Vida da ancestralidade (ou substituto de herança, como Goblin Inquebrável) são somados uma única vez no 1º nível e nunca são multiplicados ao subir de nível."
+    },
+    "regra_classe_e_constituicao": {
+      "multiplica_por_nivel": true,
+      "campo_classe": "pontos_de_vida_por_nivel",
+      "atributo_somado": "con",
+      "retroativo_ao_aumentar_con": true,
+      "minimo_ganho_por_nivel": 1,
+      "formula_total": "max(1, pv_ancestralidade + (pv_classe + mod_con) * nivel + bonus_pv_por_nivel * nivel + bonus_pv_fixos)",
+      "observacao": "Ao elevar Constituição nos níveis 5, 10, 15 ou 20 (ou por outros meios permanentes), o novo modificador de CON aplica-se retroativamente a todos os níveis."
+    },
+    "modificadores_escalonados_por_nivel": [
+      {
+        "id": "vitalidade",
+        "nome": "Vitalidade",
+        "origem_arquivo": "talentos.json",
+        "tipo_origem": "talento_geral",
+        "nivel_minimo": 1,
+        "tipo_bonus": "sem_tipo",
+        "pv_por_nivel": 1,
+        "acumula_com": [
+          "firmeza_da_montanha"
+        ],
+        "efeito_secundario": "Reduz a CD base de testes de recuperação sob morrendo de 10 para 9."
+      },
+      {
+        "id": "firmeza_da_montanha",
+        "nome": "Firmeza da Montanha",
+        "origem_arquivo": "ancestralidades_biografias.json",
+        "tipo_origem": "talento_ancestralidade",
+        "ancestralidade_id": "anao",
+        "nivel_minimo": 9,
+        "tipo_bonus": "sem_tipo",
+        "pv_por_nivel": 1,
+        "acumula_com": [
+          "vitalidade"
+        ],
+        "efeito_secundario": "Reduz a CD base de testes de recuperação sob morrendo para 9 (ou 6 se também possuir Vitalidade, cumulativo em PV)."
+      }
+    ],
+    "combinacoes_cumulativas": [
+      {
+        "ids_requeridos": [
+          "vitalidade",
+          "firmeza_da_montanha"
+        ],
+        "pv_por_nivel_total": 2,
+        "cd_recuperacao_base": 6,
+        "observacao": "Vitalidade (+1 PV/nível) e Firmeza da Montanha (+1 PV/nível) não possuem tipo de bônus e acumulam explicitamente (+2 PV/nível e CD de recuperação 6 + morrendo)."
+      }
+    ],
+    "pv_temporarios": {
+      "somam_ao_maximo": false,
+      "acumulam_entre_si": false,
+      "regra": "Pontos de Vida temporários nunca aumentam os PV máximos nem se acumulam; se uma segunda fonte conceder PV temporários, mantém-se apenas o maior valor restante."
+    }
+  },
+  "morrendo_e_testes_de_recuperacao": {
+    "limite_morrendo_padrao": 4,
+    "modificadores_limite_morrendo": [
+      {
+        "id": "duro_de_matar",
+        "nome": "Duro de Matar",
+        "origem_arquivo": "talentos.json",
+        "tipo_origem": "talento_geral",
+        "nivel_minimo": 1,
+        "novo_limite_morrendo": 5
+      }
+    ],
+    "formula_cd_recuperacao": "cd_base + valor_atual_morrendo",
+    "cd_recuperacao_base_padrao": 10,
+    "tabela_resolucao_cd_recuperacao": [
+      {
+        "talentos_presentes": [
+          "vitalidade",
+          "firmeza_da_montanha"
+        ],
+        "cd_base": 6,
+        "descricao": "Possui Vitalidade e Firmeza da Montanha."
+      },
+      {
+        "talentos_presentes": [
+          "firmeza_da_montanha"
+        ],
+        "cd_base": 9,
+        "descricao": "Possui apenas Firmeza da Montanha."
+      },
+      {
+        "talentos_presentes": [
+          "vitalidade"
+        ],
+        "cd_base": 9,
+        "descricao": "Possui apenas Vitalidade."
+      },
+      {
+        "talentos_presentes": [],
+        "cd_base": 10,
+        "descricao": "Padrão (sem Vitalidade nem Firmeza da Montanha)."
+      }
+    ]
+  },
+  "regras_acumulo_bonus_e_penalidades": {
+    "principio_geral": "No Pathfinder 2E, bônus do mesmo tipo não acumulam (aplica-se apenas o maior); penalidades do mesmo tipo também não acumulam (aplica-se apenas a pior/mais severa).",
+    "tipos_bonus": [
+      {
+        "id": "proficiencia",
+        "nome": "Bônus de Proficiência",
+        "acumula_mesmo_tipo": false,
+        "regra": "Determinado pelo grau (D/T/E/M/L) e nível; cada teste usa apenas uma proficiência."
+      },
+      {
+        "id": "circunstancia",
+        "nome": "Bônus de Circunstância",
+        "acumula_mesmo_tipo": false,
+        "regra": "Usa apenas o maior bônus de circunstância aplicável ao teste ou estatística."
+      },
+      {
+        "id": "estado",
+        "nome": "Bônus de Estado",
+        "acumula_mesmo_tipo": false,
+        "regra": "Usa apenas o maior bônus de estado aplicável (normalmente vindo de magias ou condições)."
+      },
+      {
+        "id": "item",
+        "nome": "Bônus de Item",
+        "acumula_mesmo_tipo": false,
+        "regra": "Usa apenas o maior bônus de item aplicável (ex.: armaduras, runas de potência)."
+      },
+      {
+        "id": "sem_tipo",
+        "nome": "Bônus / Incremento Sem Tipo",
+        "acumula_mesmo_tipo": true,
+        "regra": "Aumentos diretos sem categoria tipada acumulam entre si, salvo restrição explícita (ex.: Vitalidade + Firmeza da Montanha em PV máximos)."
+      }
+    ],
+    "tipos_penalidade": [
+      {
+        "id": "circunstancia",
+        "nome": "Penalidade de Circunstância",
+        "acumula_mesmo_tipo": false,
+        "regra": "Aplica-se apenas a pior penalidade de circunstância."
+      },
+      {
+        "id": "estado",
+        "nome": "Penalidade de Estado",
+        "acumula_mesmo_tipo": false,
+        "regra": "Aplica-se apenas a pior penalidade de estado."
+      },
+      {
+        "id": "item",
+        "nome": "Penalidade de Item",
+        "acumula_mesmo_tipo": false,
+        "regra": "Aplica-se apenas a pior penalidade de item."
+      },
+      {
+        "id": "sem_tipo",
+        "nome": "Penalidade Sem Tipo",
+        "acumula_mesmo_tipo": true,
+        "regra": "Penalidades sem tipo (como penalidade de ataques múltiplos) acumulam entre si e com penalidades tipadas."
+      }
+    ],
+    "aplicacao_no_motor": "Ao expandir o motor para níveis 2–20, agrupar modificadores por tipo usando max() para bônus e min() para penalidades tipadas, somando livremente apenas modificadores 'sem_tipo'."
+  }
+}

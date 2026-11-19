@@ -52,6 +52,7 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 │   ├── magias01.json             # Capítulo 7 (Parte 1: Regras, Listas Completas e Descrições A–M)
 │   ├── magias02.json             # Capítulo 7 (Parte 2: Descrições M–Z, Magias de Foco e Rituais)
 │   ├── pericias.json             # Capítulo 4 completo (Perícias, Ações Gerais e Tabelas 4–1 a 4–4)
+│   ├── regras_específicas.json   # Regras específicas, exceções estruturais, PV (N1–20), morrendo e acúmulo de bônus
 │   └── talentos.json             # Capítulo 5 completo (17 Talentos Gerais e 100 Talentos de Perícia)
 ├── motor/                        # Pacote Python do motor procedural de regras PF2E
 │   ├── __init__.py
@@ -80,6 +81,7 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 │   ├── gerar_magias_01_json.py
 │   ├── gerar_magias_02_json.py
 │   ├── gerar_pericias_json.py
+│   ├── gerar_regras_especificas_json.py
 │   ├── gerar_talentos_json.py
 │   └── validar_motor_procedural.py
 └── templates/                    # Front-End HTML/CSS/JS renderizado pelo Flask
@@ -153,6 +155,7 @@ python scripts/gerar_magias_01_json.py
 python scripts/gerar_magias_02_json.py
 python scripts/gerar_estrutura_ficha_json.py
 python scripts/gerar_conceitos_subclasses_json.py
+python scripts/gerar_regras_especificas_json.py
 python scripts/validar_motor_procedural.py
 ```
 
