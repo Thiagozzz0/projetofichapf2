@@ -8,6 +8,8 @@ Lista viva de todas as entregas e tarefas que ainda precisam ser realizadas até
 
 > Regra de trabalho: converter **um arquivo por vez**, com leitura cuidadosa de tabelas, caixas de texto e regras, criando script de geração/validação quando necessário.
 
+- [x] **`ref/Tools.pdf` → `dados/equipamentos.json`** *(Concluído em `18/11/2026 — 11:36` — ver [02.md](finalizado/02.md))*
+  - Moedas, Volume, Armaduras, Escudos, Armas, Equipamentos de Aventura, Kits de Classe, Alquímicos, Mágicos, Fórmulas, Serviços, Animais e Tamanhos.
 - [x] **`ref/Anc Race.pdf` → `dados/ancestralidades_biografias.json`** *(Concluído em `18/11/2026 — 14:51` — ver [04.md](finalizado/04.md))*
   - Regras passo a passo de criação de personagem e cálculo de atributos (ABCD).
   - Todas as Ancestralidades básicas (PV, tamanho, velocidade, melhorias/defeitos, idiomas, sentidos, traços especiais).
@@ -59,25 +61,31 @@ Lista viva de todas as entregas e tarefas que ainda precisam ser realizadas até
 
 ---
 
-## Etapa 4 — Interface Front-End (`templates/` & `static/`) e Exportação
+## Etapa 4 — Interface Front-End (`templates/` & `templates/static/`) e Exportação
 
 - [x] **Tela de Criação do Personagem** *(Concluído em `19/11/2026 — 14:29` → [finalizado/16.md](finalizado/16.md))*
   - Interface responsiva com seleção dinâmica de Ancestralidade & Herança, Biografia (modo Procedural ou Escolha Manual), Classe & Subclasse/Conceito com cartões de resumo, Nome/Jogador, Nível (1º nível ativo com nota de expansão 2–20), Seed e atalhos rápidos.
-- [x] **Tela da Ficha Final Pronta para Uso + Exportação `.docx` / `.txt` e `requirements.txt`** *(Concluído em `19/11/2026 — 14:29` → [finalizado/16.md](finalizado/16.md))*
+- [x] **Tela da Ficha Final Pronta para Uso + Exportação `.docx` / `.txt` e `requirements.txt`** *(Concluído em `19/11/2026 — 14:29` → [finalizado/16.md](finalizado/16.md) e [17.md](finalizado/17.md))*
   - Visualizador das 4 páginas oficiais (`pp. 580–583`) com marcadores `[T][E][M][L]`, Pontos de Heroísmo, Escudo de CA, histórico ABCD, `18` linhas de Perícias, Inventário/Volume/Moedas, Ações/Reações, Conjuração e estilos de impressão `@media print`.
-  - Endpoints `POST /api/exportar/docx` e `POST /api/exportar/txt` (`motor/exportacao.py`) e criação de `requirements.txt`.
+  - Endpoints `POST /api/exportar/docx` e `POST /api/exportar/txt` (`motor/exportacao.py`), criação de `requirements.txt` e organização de estáticos em `templates/static/`.
 
 ---
 
 ## Etapa 5 — Testes e Validação Final
 
-- [ ] **Testes automatizados das regras matemáticas de PF2E** (cálculo de atributos, CA com Limite de Destreza, penalidades de armadura e sobrecarga, proficiências e bônus de ataque/dano).
-- [ ] **Testes de geração ponta a ponta** cobrindo todas as 12 classes e múltiplas ancestralidades via Flask.
+- [x] **Testes integrados ponta a ponta via Flask (`scripts/validar_motor_procedural.py`)** *(Concluído em `19/11/2026 — 14:29` → [finalizado/16.md](finalizado/16.md))*
+  - Cobertura de todos os `38` conceitos nas `12` classes, `29` heranças das `6` ancestralidades, `10` casos especiais, `8` endpoints Flask + arquivos estáticos e validação estrutural completa das exportações `.txt` e `.docx` (OOXML/XML).
+- [ ] **Suíte unitária dedicada de casos de borda matemáticos de PF2E** *(sugerido detalhamento em [sugestoes/02_melhorias_motor_e_regras.md](sugestoes/02_melhorias_motor_e_regras.md))*
+  - Testes isolados de CA com Limite de Destreza, penalidade por `FOR < forca_minima` vs `Ferro Desimpedido`, sobrecarga (`-3m` respeitando mínimo `1,5m`), `Acuidade` / `Ladrão` / `Propulsivo` (FOR positiva e negativa) e `Capelão da Guerra`.
+- [ ] **Validação visual interativa em navegador real (`python app.py`)**
+  - Conferir layout desktop/mobile, impressão/PDF pelo navegador e abertura real dos arquivos `.docx` baixados no Microsoft Word / LibreOffice.
 - [x] **Atualização do `README.md`** com instruções de instalação (`requirements.txt`) e execução do projeto Flask. *(Concluído em `19/11/2026 — 14:29`)*
 
 ---
 
 ## Expansões Futuras (Pós-MVP 1º Nível)
+
+> Detalhamento completo e propostas adicionais estão catalogados em [`controleprojeto/sugestoes/`](sugestoes/README.md).
 
 - [ ] **Geração de Fichas Acima do 1º Nível (Níveis `2` a `20`)** *(solicitado pelo usuário em `19/11/2026`)*
   - Expandir `motor/` (`regras_atributos.py` com melhorias nos níveis `5/10/15/20`, incremento de perícias e proficiências de armas/armaduras/salvamentos/conjuração conforme `tabela_progressao` das 12 classes, seleção de talentos por nível de Classe, Perícia, Geral e Ancestralidade até o 20º nível, além de espaços/repertório/grimório de magias dos círculos `2–10`).

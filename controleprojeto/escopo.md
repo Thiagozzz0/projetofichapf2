@@ -14,25 +14,25 @@ O sistema deve abranger desde a **matemática básica dos atributos (sistema ABC
 
 ## 2. Stack Tecnológica e Estrutura de Pastas
 
-- **Backend & Motor de Regras:** Python + **Flask** (`app.py` e módulos auxiliares).
-- **Front-End (`templates/`):** Templates HTML/CSS/JS renderizados pelo Flask para o formulário de configuração do personagem e exibição/impressão da ficha final.
-- **Base de Dados em JSON (`dados/`):** Todas as regras, tabelas, classes, ancestralidades, heranças, biografias, perícias, talentos, magias, equipamentos e mapeamento da ficha convertidas em arquivos `.json` estruturados e normalizados.
+- **Backend & Motor de Regras:** Python 3 + **Flask** (`app.py`, `requirements.txt` e pacote `motor/` com exportadores `.docx`/`.txt`).
+- **Front-End (`templates/` e `templates/static/`):** Interface HTML/CSS/JS renderizada pelo Flask para configuração do personagem, visualização das 4 páginas oficiais (`pp. 580–583`), impressão `@media print` e download em `.docx`/`.txt`.
+- **Base de Dados em JSON (`dados/`):** Todas as regras, tabelas, classes, ancestralidades, heranças, biografias, perícias, talentos, magias, equipamentos, conceitos (`conceitos_subclasses.json`) e mapeamento da ficha (`estrutura_ficha.json`) convertidas em arquivos `.json` estruturados e normalizados.
 - **Materiais de Referência (`ref/` e `pdf_fonte/`):**
   - `pdf_fonte/P Basic 2.0 Teste_compressed.pdf` (Livro Básico completo comprimido).
   - `ref/` com os recortes temáticos do livro para conversão gradual, **um arquivo por vez**:
-    - `ref/Tools.pdf` — Equipamentos (Capítulo 6)
-    - `ref/Anc Race.pdf` — Criação, Ancestralidades, Heranças e Biografias
-    - `ref/Classes 01.pdf` → `dados/classes01.json` — Classes (Parte 1: Introdução, Alquimista, Bárbaro, Bardo e Campeão)
-    - `ref/Classes 02.pdf` → `dados/classes02.json` — Classes (Parte 2: Clérigo, Druida, Feiticeiro e Guerreiro)
-    - `ref/Classes 03.pdf` → `dados/classes03.json`, `dados/companheiros_familiares.json` e `dados/arquetipos_multiclasse.json` — Classes (Parte 3: Ladino, Mago, Monge e Patrulheiro), Companheiros Animais/Familiares e Arquétipos Multiclasse
-    - `ref/Skill sfots.pdf` — Perícias
-    - `ref/Gifts.pdf` → `dados/talentos.json` — Talentos (Capítulo 5: Talentos Gerais e Talentos de Perícia)
-    - `ref/Enchanced 01.pdf` → `dados/magias01.json` — Magias (Parte 1: Regras Gerais, Listas Completas e Descrições A–M)
-    - `ref/Enchacent02.pdf` → `dados/magias02.json` — Magias (Parte 2: Descrições M–Z, Magias de Foco e Rituais)
+    - `ref/Tools.pdf` → `dados/equipamentos.json` — Equipamentos (Capítulo 6) *(Concluído)*
+    - `ref/Anc Race.pdf` → `dados/ancestralidades_biografias.json` — Criação, Ancestralidades, Heranças e Biografias *(Concluído)*
+    - `ref/Classes 01.pdf` → `dados/classes01.json` — Classes (Parte 1: Introdução, Alquimista, Bárbaro, Bardo e Campeão) *(Concluído)*
+    - `ref/Classes 02.pdf` → `dados/classes02.json` — Classes (Parte 2: Clérigo, Druida, Feiticeiro e Guerreiro) *(Concluído)*
+    - `ref/Classes 03.pdf` → `dados/classes03.json`, `dados/companheiros_familiares.json` e `dados/arquetipos_multiclasse.json` — Classes (Parte 3: Ladino, Mago, Monge e Patrulheiro), Companheiros Animais/Familiares e Arquétipos Multiclasse *(Concluído)*
+    - `ref/Skill sfots.pdf` → `dados/pericias.json` — Perícias *(Concluído)*
+    - `ref/Gifts.pdf` → `dados/talentos.json` — Talentos (Capítulo 5: Talentos Gerais e Talentos de Perícia) *(Concluído)*
+    - `ref/Enchanced 01.pdf` → `dados/magias01.json` — Magias (Parte 1: Regras Gerais, Listas Completas e Descrições A–M) *(Concluído)*
+    - `ref/Enchacent02.pdf` → `dados/magias02.json` — Magias (Parte 2: Descrições M–Z, Magias de Foco e Rituais) *(Concluído)*
     - `ref/Compendium specific tools.pdf` — Itens Mágicos e Tesouros *(Adiado para fase futura)*
     - `ref/Sheet Update.pdf` → `dados/estrutura_ficha.json` — Estrutura da Ficha de Personagem *(Concluído)*
-- **Scripts Auxiliares (`scripts/`):** Scripts Python de geração, extração, normalização e validação dos arquivos JSON em `dados/`.
-- **Governança (`controleprojeto/`):** Documentação viva do projeto (`escopo.md`, `pendencias.md`, `finalizado.md`) e registros sequenciais de entregas concluídas em `controleprojeto/finalizado/` (`01.md`, `02.md`, ...), sempre datados com data e hora a cada alteração ou etapa finalizada.
+- **Scripts Auxiliares (`scripts/`):** Scripts Python de geração, extração, normalização e validação dos arquivos JSON em `dados/` e do motor procedural.
+- **Governança (`controleprojeto/`):** Documentação viva do projeto (`escopo.md`, `pendencias.md`, `finalizado.md`), registros sequenciais de entregas concluídas em `controleprojeto/finalizado/` (`01.md`, `02.md`, ...) sempre datados com data e hora, e roadmap de melhorias futuras em `controleprojeto/sugestoes/`.
 
 ---
 
@@ -90,9 +90,9 @@ A criação do personagem segue a estrutura definida para equilibrar **escolhas 
 
 | Fase | Descrição | Estratégia |
 | :--- | :--- | :--- |
-| **Fase 1** | Conversão dos PDFs em `ref/` para JSONs estruturados em `dados/` | Um PDF por vez, com validação numérica e de completude via scripts em `scripts/`. |
+| **Fase 1** | Conversão dos PDFs em `ref/` para JSONs estruturados em `dados/` | Um PDF por vez, com validação numérica e de completude via scripts em `scripts/`. *(Concluído — exceto `Compendium specific tools.pdf`, adiado)* |
 | **Fase 2** | Modelagem dos Conceitos/Subclasses (`dados/conceitos_subclasses.json`) | Definir "nortes" claros para cada classe (`38` conceitos cobrindo atributos, biografias, perícias, talentos, armas/armaduras, magias). *(Concluído)* |
 | **Fase 3** | Motor Procedural e Backend Flask (`app.py` + pacote `motor/`) | Matemática de PF2E (1º nível, arquitetura pronta para progressão), gerador com `seed` opcional, API JSON e tela simples de teste. *(Concluído)* |
-| **Fase 4** | Front-End (`templates/`, `static/`) e Exportação | Tela de configuração interativa + visualização completa das 4 páginas oficiais, impressão `@media print` e download `.docx`/`.txt` + `requirements.txt`. *(Concluído)* |
-| **Fase 5** | Testes Integrados e Refinamento | Validar fichas geradas para múltiplas combinações de ancestralidade, classe e conceito. |
+| **Fase 4** | Front-End (`templates/`, `templates/static/`) e Exportação | Tela de configuração interativa + visualização completa das 4 páginas oficiais, impressão `@media print` e download `.docx`/`.txt` + `requirements.txt`. *(Concluído)* |
+| **Fase 5** | Testes Integrados e Refinamento | Suíte `validar_motor_procedural.py` já cobre `38` conceitos, `29` heranças e rotas Flask; falta bateria unitária dedicada de casos de borda matemáticos e teste visual final no navegador. |
 | **Expansão Futura** | Progressão de Níveis (`2` a `20`) e Itens Mágicos | Expandir o motor para gerar fichas completas acima do 1º nível (melhorias de atributo nos níveis 5/10/15/20, talentos por nível, escalonamento de proficiências, círculos 2–10 de magia e integração com `ref/Compendium specific tools.pdf`). |

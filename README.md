@@ -37,7 +37,8 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 │   ├── escopo.md                 # Escopo completo do início ao fim (norte do projeto)
 │   ├── pendencias.md             # Lista de tarefas e conversões ainda pendentes
 │   ├── finalizado.md             # Índice geral de entregas concluídas
-│   └── finalizado/               # Logs individuais numerados (01.md, 02.md, ...) com data e hora
+│   ├── finalizado/               # Logs individuais numerados (01.md, 02.md, ...) com data e hora
+│   └── sugestoes/                # Propostas e roadmap de melhorias futuras (níveis 2–20, UX, regras)
 ├── dados/                        # Regras e tabelas do PF2E convertidas em JSON
 │   ├── ancestralidades_biografias.json  # Capítulos 1 e 2 (Criação, Ancestralidades, Heranças, Biografias e Idiomas)
 │   ├── arquetipos_multiclasse.json      # Capítulo 3 (Regras de Arquétipos e 12 Arquétipos Multiclasse / 85 talentos)
@@ -97,8 +98,9 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 Para manter rastreabilidade total da evolução do projeto e evitar desvios durante o desenvolvimento, toda a documentação viva fica centralizada em [`controleprojeto/`](controleprojeto/):
 
 - **[`controleprojeto/escopo.md`](controleprojeto/escopo.md):** Documento-mestre com o escopo completo, fluxo de regras, arquitetura e fases do projeto.
-- **[`controleprojeto/pendencias.md`](controleprojeto/pendencias.md):** Checklist de todas as etapas pendentes (conversões de PDF para JSON, modelagem de conceitos, backend Flask, templates e testes).
+- **[`controleprojeto/pendencias.md`](controleprojeto/pendencias.md):** Checklist de todas as etapas pendentes (conversões de PDF para JSON, modelagem de conceitos, backend Flask, templates, testes e expansões futuras).
 - **[`controleprojeto/finalizado.md`](controleprojeto/finalizado.md):** Índice cronológico geral das entregas já concluídas.
+- **[`controleprojeto/sugestoes/`](controleprojeto/sugestoes/README.md):** Catálogo de sugestões técnicas e melhorias mapeadas para evoluções futuras (níveis 2–20, motor de regras e interface).
 - **[`controleprojeto/finalizado/`](controleprojeto/finalizado/):** Pasta dedicada para o registro individual de **cada alteração, atualização ou etapa finalizada** no projeto.
   - **Padrão de nomenclatura:** Arquivos Markdown numerados sequencialmente (`01.md`, `02.md`, `03.md`, ...).
   - **Conteúdo obrigatório em cada arquivo:**
@@ -161,4 +163,4 @@ pip install -r requirements.txt
 python app.py
 ```
 
-Os scripts verificam todas as contagens das tabelas dos respectivos capítulos, unicidade de IDs e integridade estrutural dos dados.
+Os scripts verificam todas as contagens das tabelas dos respectivos capítulos, unicidade de IDs e integridade estrutural dos dados. *(Observação: para executar o aplicativo Web e o motor basta instalar `requirements.txt`; apenas o extrator histórico `scripts/gerar_magias_01_json.py` requer `PyMuPDF` caso você queira re-extrair esse PDF do zero.)*
