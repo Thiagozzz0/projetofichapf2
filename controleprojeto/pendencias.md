@@ -73,3 +73,12 @@ Lista viva de todas as entregas e tarefas que ainda precisam ser realizadas até
 - [ ] **Testes automatizados das regras matemáticas de PF2E** (cálculo de atributos, CA com Limite de Destreza, penalidades de armadura e sobrecarga, proficiências e bônus de ataque/dano).
 - [ ] **Testes de geração ponta a ponta** cobrindo todas as 12 classes e múltiplas ancestralidades via Flask.
 - [ ] **Atualização do `README.md`** com instruções de instalação e execução do projeto Flask.
+
+---
+
+## Expansões Futuras (Pós-MVP 1º Nível)
+
+- [ ] **Geração de Fichas Acima do 1º Nível (Níveis `2` a `20`)** *(solicitado pelo usuário em `19/11/2026`)*
+  - Expandir `motor/` (`regras_atributos.py` com melhorias nos níveis `5/10/15/20`, incremento de perícias e proficiências de armas/armaduras/salvamentos/conjuração conforme `tabela_progressao` das 12 classes, seleção de talentos por nível de Classe, Perícia, Geral e Ancestralidade até o 20º nível, além de espaços/repertório/grimório de magias dos círculos `2–10`).
+- [ ] **Itens Mágicos, Runas e Tesouros**
+  - Retomar conversão de `ref/Compendium specific tools.pdf` → `dados/itens_magicos_tesouros.json` e integrá-lo ao motor para personagens de nível `2+`.

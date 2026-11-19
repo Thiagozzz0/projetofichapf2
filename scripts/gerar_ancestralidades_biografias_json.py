@@ -60,9 +60,10 @@ def construir_talento_ancestralidade(
     frequencia: str | None = None,
     acionamento: str | None = None,
     especial: str | None = None,
+    observacao_livro: str | None = None,
 ) -> dict[str, Any]:
     """Monta entrada normalizada de talento de ancestralidade."""
-    return {
+    entrada: dict[str, Any] = {
         "id": slugify(nome),
         "nome": nome,
         "nivel": nivel,
@@ -74,6 +75,9 @@ def construir_talento_ancestralidade(
         "especial": especial,
         "descricao": descricao,
     }
+    if observacao_livro:
+        entrada["observacao_livro"] = observacao_livro
+    return entrada
 
 
 def construir_biografia(
@@ -334,7 +338,7 @@ def obter_ancestralidades() -> list[dict[str, Any]]:
                 "Os heróis enânicos de antigamente conseguiam ignorar as magias de seus inimigos, e parte dessa resistência manifesta-se em você. Você ganha a reação Invocar Sangue Ancestral.",
                 habilidade_acao={
                     "nome": "Invocar Sangue Ancestral",
-                    "acoes": "Reação",
+                    "acoes": "reacao",
                     "acionamento": "Você tenta uma jogada de salvamento contra um efeito mágico, mas ainda não efetuou a rolagem.",
                     "efeito": "Você recebe +1 de bônus de circunstância na jogada de salvamento acionadora e até o final deste turno.",
                 },
@@ -353,7 +357,7 @@ def obter_ancestralidades() -> list[dict[str, Any]]:
             construir_talento_ancestralidade("Ódio Vingativo", 1, ["Anão"], "Escolha drow, duergar, gigante ou orc. Recebe +1 de bônus de circunstância no dano com armas e ataques desarmados (igual à quantidade de dados de dano da arma) contra criaturas com esse traço, ou contra uma criatura que cause dano crítico a você por 1 minuto.", especial="O MJ pode adicionar outros traços apropriados à lista de adversários ancestrais."),
             construir_talento_ancestralidade("Saber Enânico", 1, ["Anão"], "Recebe proficiência treinado em Manufatura e Religião (se já treinado em alguma, escolhe outra perícia) e torna-se treinado em Saber Enânico."),
             construir_talento_ancestralidade("Ardil com Armas Enânicas", 5, ["Anão"], "Sempre que atingir um acerto crítico usando machado de batalha, martelo de guerra, picareta ou qualquer arma enânica, aplica o efeito de especialização de crítico da arma.", pre_requisitos="Familiaridade com Armas Enânicas"),
-            construir_talento_ancestralidade("Rolagem de Pedregulho", 5, ["Anão"], "Dê um Passo para o quadrado de um adversário do seu tamanho ou inferior, empurrando-o para trás de você (Fortitude contra CD de Atletismo para bloquear; se tentar o salvamento, sofre dano contundente igual ao seu nível + mod. Força, exceto em sucesso crítico).", acoes="2 Ações", pre_requisitos="Correr nas Rochas"),
+            construir_talento_ancestralidade("Rolagem de Pedregulho", 5, ["Anão"], "Dê um Passo para o quadrado de um adversário do seu tamanho ou inferior, empurrando-o para trás de você (Fortitude contra CD de Atletismo para bloquear; se tentar o salvamento, sofre dano contundente igual ao seu nível + mod. Força, exceto em sucesso crítico).", acoes="2", pre_requisitos="Correr nas Rochas"),
             construir_talento_ancestralidade("Caminhar pelas Rochas", 9, ["Anão"], "Ganha mesclar-se às rochas como magia divina inata de 3º nível 1/dia. Permite encontrar trabalhos e armadilhas em pedra de proficiência lendária com Aptidão com Pedras (sem a penalidade de -2 se for lendário em Percepção)."),
             construir_talento_ancestralidade("Firmeza da Montanha", 9, ["Anão"], "Aumenta seus PV máximos em valor igual ao seu nível. CD de testes de recuperação sob morrendo passa a ser 9 + valor atual de morrendo (ou 6 + valor atual de morrendo se também possuir Vitalidade, cumulativo em PV)."),
             construir_talento_ancestralidade("Especialidade com Armas Enânicas", 13, ["Anão"], "Sempre que receber proficiência de especialista ou maior em determinadas armas pela classe, recebe essa mesma proficiência em machado de batalha, martelo de guerra, picareta e todas as armas enânicas treinadas.", pre_requisitos="Familiaridade com Armas Enânicas"),
@@ -420,9 +424,9 @@ def obter_ancestralidades() -> list[dict[str, Any]]:
             construir_talento_ancestralidade("Elegância com Armas Élficas", 5, ["Elfo"], "Aplica o efeito de especialização de crítico ao atingir acerto crítico com uma arma élfica ou listada em Familiaridade com Armas Élficas.", pre_requisitos="Familiaridade com Armas Élficas"),
             construir_talento_ancestralidade("Paciência Eterna", 5, ["Elfo"], "Pode gastar o dobro do tempo normal em um teste de Percepção ou perícia para obter +2 de bônus de circunstância e só falhar criticamente se o resultado for 10 abaixo da CD (1 natural não piora um grau)."),
             construir_talento_ancestralidade("Longevidade de Especialista", 9, ["Elfo"], "Ao usar Longevidade Ancestral, também torna-se especialista em uma perícia já treinada. Ao término, pode retreinar um incremento de perícia para tornar permanente uma dessas escolhas.", pre_requisitos="Longevidade Ancestral"),
-            construir_talento_ancestralidade("Passada Élfica", 9, ["Elfo"], "Você pode Dar um Passo de 1,5 metros duas vezes gastando uma única ação.", acoes="1 Ação"),
+            construir_talento_ancestralidade("Passada Élfica", 9, ["Elfo"], "Você pode Dar um Passo de 1,5 metros duas vezes gastando uma única ação.", acoes="1"),
             construir_talento_ancestralidade("Especialidade com Armas Élficas", 13, ["Elfo"], "Sempre que receber proficiência de especialista ou maior em armas pela classe, também recebe essa proficiência em arco curto, arco curto composto, arco longo, arco longo composto, espada longa, rapieira e armas élficas treinadas.", pre_requisitos="Familiaridade com Armas Élficas"),
-            construir_talento_ancestralidade("Longevidade Universal", 13, ["Elfo"], "Uma vez por dia, pode refletir sobre suas experiências de vida e alterar as perícias escolhidas com Longevidade Ancestral e Longevidade de Especialista.", acoes="1 Ação", pre_requisitos="Longevidade de Especialista", frequencia="uma vez por dia"),
+            construir_talento_ancestralidade("Longevidade Universal", 13, ["Elfo"], "Uma vez por dia, pode refletir sobre suas experiências de vida e alterar as perícias escolhidas com Longevidade Ancestral e Longevidade de Especialista.", acoes="1", pre_requisitos="Longevidade de Especialista", frequencia="uma vez por dia"),
         ],
     }
 
@@ -485,7 +489,7 @@ def obter_ancestralidades() -> list[dict[str, Any]]:
             construir_talento_ancestralidade("Obsessão Gnômica", 1, ["Gnomo"], "Torna-se treinado em uma perícia de Saber escolhida. Escala para especialista (2º nível), mestre (7º nível) e lendário (15º nível) tanto nesse Saber quanto no Saber concedido pela biografia."),
             construir_talento_ancestralidade("Sentir Ilusão", 1, ["Gnomo"], "Recebe +1 de bônus de circunstância em Percepção e salvamentos de Vontade contra ilusões; o MJ rola teste secreto automático para desacreditar ilusões a até 3 metros."),
             construir_talento_ancestralidade("Elocucionista Animal", 5, ["Gnomo"], "Pode falar com todos os animais e recebe +1 de bônus de circunstância para Impressionar animais.", pre_requisitos="Elocucionista de Escavadores"),
-            construir_talento_ancestralidade("Fonte Energizada", 5, ["Gnomo"], "Recupera 1 Ponto de Foco até seu máximo normal.", acoes="1 Ação", pre_requisitos="reservatório de foco e pelo menos uma magia inata de herança/talento gnômico da mesma tradição de alguma magia de foco", frequencia="uma vez por dia"),
+            construir_talento_ancestralidade("Fonte Energizada", 5, ["Gnomo"], "Recupera 1 Ponto de Foco até seu máximo normal.", acoes="1", pre_requisitos="reservatório de foco e pelo menos uma magia inata de herança/talento gnômico da mesma tradição de alguma magia de foco", frequencia="uma vez por dia"),
             construir_talento_ancestralidade("Inovação com Armas Gnômicas", 5, ["Gnomo"], "Aplica o efeito de especialização de crítico da arma em acertos críticos com glaive, kukri ou qualquer arma gnômica.", pre_requisitos="Familiaridade com Armas Gnômicas"),
             construir_talento_ancestralidade("Adepto do Primeiro Mundo", 9, ["Gnomo"], "Adquire fogo feérico e invisibilidade como magias primais inatas de 2º nível (1/dia cada).", pre_requisitos="pelo menos uma magia primal inata"),
             construir_talento_ancestralidade("Conduíte Vivaz", 9, ["Gnomo"], "Ao descansar por 10 minutos, ganha PV igual a modificador de Constituição × metade do seu nível, cumulativo com Tratar Ferimentos."),
@@ -544,13 +548,21 @@ def obter_ancestralidades() -> list[dict[str, Any]]:
             ),
         ],
         "talentos_ancestralidade": [
-            construir_talento_ancestralidade("Canção Goblin", 1, ["Goblin"], "Teste de Performance contra CD de Vontade de 1 inimigo a até 9 m (2 em especialista, 4 em mestre, 8 em lendário); sucesso aplica -1 de estado em Percepção e Vontade por 1 rodada (1 minuto em crítico).", acoes="1 Ação"),
+            construir_talento_ancestralidade("Canção Goblin", 1, ["Goblin"], "Teste de Performance contra CD de Vontade de 1 inimigo a até 9 m (2 em especialista, 4 em mestre, 8 em lendário); sucesso aplica -1 de estado em Percepção e Vontade por 1 rodada (1 minuto em crítico).", acoes="1"),
             construir_talento_ancestralidade("Catador da Cidade", 1, ["Goblin"], "Recebe +1 de bônus de circunstância para Subsistir usando Sociedade ou Sobrevivência em assentamento e pode Ganhar Proventos simultaneamente (+1 bônus; +2 com Bucho-de-Ferro).", especial="Com a herança goblin bucho-de-ferro, aumente o bônus para +2."),
             construir_talento_ancestralidade("Cavaleiro Brusco", 1, ["Goblin"], "Recebe o talento Cavalgar, +1 de bônus de circunstância em Natureza para Comandar um Animal em cão goblin ou lobo de montaria, e pode escolher lobo como companheiro animal montaria."),
             construir_talento_ancestralidade("Familiaridade com Armas Goblinoides", 1, ["Goblin"], "Treinado em cortacão e fatia-cavalo. Obtém acesso a armas goblinoides incomuns; trata marciais como simples e avançadas como marciais."),
             construir_talento_ancestralidade("Funileiro de Sucata", 1, ["Goblin"], "Manufatura itens de nível 0 (armas, não armaduras) por 1/4 do Preço como itens de má qualidade sem sofrer a penalidade deles; pode usar sucatas para descontar 1 dia extra ao Manufaturar."),
             construir_talento_ancestralidade("Muito Sorrateiro", 1, ["Goblin"], "Move 1,5 metros a mais ao Esgueirar (até sua Velocidade) e não se torna observado entre ações sequenciais de Esgueirar se terminar o turno com cobertura ou ocultado."),
-            construir_talento_ancestralidade("Passadela Goblin", 1, ["Goblin"], "Você aproveita o movimento de um aliado adjacente para ajustar sua posição. Você Dá um Passo.", acoes="Reação", pre_requisitos="Um aliado termina uma ação de movimento adjacente a você."),
+            construir_talento_ancestralidade(
+                "Passadela Goblin",
+                1,
+                ["Goblin"],
+                "Você aproveita o movimento de um aliado adjacente para ajustar sua posição. Você Dá um Passo.",
+                acoes="reacao",
+                acionamento="Um aliado termina uma ação de movimento adjacente a você.",
+                observacao_livro="Errata editorial do Livro Básico PT-BR (p. 49 / Anc Race.pdf pág. 31): o texto do acionamento foi impresso sob o rótulo 'Pré-requisitos'.",
+            ),
             construir_talento_ancestralidade("Saber Goblin", 1, ["Goblin"], "Recebe proficiência treinado em Furtividade e Natureza (ou outra perícia se já treinado) e torna-se treinado em Saber Goblin."),
             construir_talento_ancestralidade("Taca Fogo!", 1, ["Goblin"], "Magias e itens alquímicos que causem dano de fogo recebem bônus de estado no dano igual à metade do nível da magia ou 1/4 do nível do item (mínimo 1), além de +1 de estado em dano persistente de fogo."),
             construir_talento_ancestralidade("Frenesi com Armas Goblinoides", 5, ["Goblin"], "Aplica o efeito de especialização de crítico da arma em acertos críticos usando cortacão, fatia-cavalo ou qualquer arma goblinoide.", pre_requisitos="Familiaridade com Armas Goblinoides"),
@@ -618,7 +630,7 @@ def obter_ancestralidades() -> list[dict[str, Any]]:
             construir_talento_ancestralidade("Halfling Liberto", 1, ["Halfling"], "Sucessos para Escapar ou salvamentos contra agarrado/restringido viram sucesso crítico; falhas inimigas para Agarrar viram falha crítica; Atracar exige teste de Atletismo."),
             construir_talento_ancestralidade("Pés Firmes", 1, ["Halfling"], "Sucessos em Acrobatismo para Equilibrar ou Atletismo para Escalar viram sucesso crítico e você não fica desprevenido nessas ações."),
             construir_talento_ancestralidade("Saber Halfling", 1, ["Halfling"], "Recebe proficiência treinado em Acrobatismo e Furtividade (ou outra perícia se já treinado) e torna-se treinado em Saber Halfling."),
-            construir_talento_ancestralidade("Sorte de Halfling", 1, ["Fortuna", "Halfling"], "Permite rerrolar o teste de perícia ou jogada de salvamento que falhou, devendo usar o novo resultado.", acoes="Reação", frequencia="uma vez por dia", acionamento="Você falha em um teste de perícia ou jogada de salvamento."),
+            construir_talento_ancestralidade("Sorte de Halfling", 1, ["Fortuna", "Halfling"], "Permite rerrolar o teste de perícia ou jogada de salvamento que falhou, devendo usar o novo resultado.", acoes="reacao", frequencia="uma vez por dia", acionamento="Você falha em um teste de perícia ou jogada de salvamento."),
             construir_talento_ancestralidade("Adaptabilidade Cultural", 5, ["Halfling"], "Recebe o talento geral Ancestralidade Adotada e um talento de ancestralidade de 1º nível da ancestralidade escolhida."),
             construir_talento_ancestralidade("Embuste com Armas Halflings", 5, ["Halfling"], "Aplica o efeito de especialização de crítico ao atingir acerto crítico usando uma arma halfling ou listada em Familiaridade com Armas Halflings.", pre_requisitos="Familiaridade com Armas Halflings"),
             construir_talento_ancestralidade("Irreprimível", 9, ["Halfling"], "Sucessos contra efeitos de emoção viram sucesso crítico; se possuir herança halfling intrépido, falhas críticas contra efeitos de emoção viram falhas normais."),
@@ -681,7 +693,7 @@ def obter_ancestralidades() -> list[dict[str, Any]]:
             construir_talento_ancestralidade("Discípulo Adaptativo", 5, ["Humano"], "Escolha um truque mágico ou magia de 1º nível da mesma tradição do Truque Mágico Adaptado e adicione-o à sua lista como magia da sua tradição.", pre_requisitos="Truque Mágico Adaptado, capacidade de conjurar magias de 3º nível"),
             construir_talento_ancestralidade("Improvisador Astuto", 5, ["Humano"], "Recebe o talento geral Improvisação Destreinada e pode tentar ações de perícia que exigem treinamento mesmo sendo destreinado."),
             construir_talento_ancestralidade("Alma Cooperativa", 9, ["Humano"], "Se for pelo menos especialista na perícia ao Auxiliar, obtém sucesso em qualquer resultado rolado para Auxiliar (que não tenha sido sucesso crítico).", pre_requisitos="Natureza Cooperativa"),
-            construir_talento_ancestralidade("Improvisação Incrível", 9, ["Humano"], "Recebe +4 de bônus de circunstância no teste de perícia acionador em que é destreinado.", acoes="Reação", pre_requisitos="Improvisador Astuto", frequencia="uma vez por dia", acionamento="Você realiza um teste utilizando uma perícia em que é destreinado."),
+            construir_talento_ancestralidade("Improvisação Incrível", 9, ["Humano"], "Recebe +4 de bônus de circunstância no teste de perícia acionador em que é destreinado.", acoes="reacao", pre_requisitos="Improvisador Astuto", frequencia="uma vez por dia", acionamento="Você realiza um teste utilizando uma perícia em que é destreinado."),
             construir_talento_ancestralidade("Talentos Múltiplos", 9, ["Humano"], "Recebe um talento de dedicação de multiclasse de 2º nível mesmo sem completar restrições de arquétipo atual. Meio-elfos ignoram pré-requisitos de valor de atributo."),
             construir_talento_ancestralidade("Especialidade Não Convencional", 13, ["Humano"], "Sempre que receber proficiência de especialista ou maior em armas pela classe, ganha essa proficiência na arma escolhida por Armamento Não Convencional.", pre_requisitos="Armamento Não Convencional"),
         ],
@@ -705,12 +717,12 @@ def obter_herancas_mesticas_talentos() -> dict[str, Any]:
         ],
         "meio_orc": [
             construir_talento_ancestralidade("Familiaridade com Armas Órquicas", 1, ["Orc"], "Treinado em bracamante e machado longo. Obtém acesso a armas órquicas incomuns; trata marciais como simples e avançadas como marciais."),
-            construir_talento_ancestralidade("Ferocidade Órquica", 1, ["Orc"], "Evita ser nocauteado ao cair a 0 PV, permanecendo com 1 PV e aumentando sua condição ferido em 1.", acoes="Reação", frequencia="uma vez por dia", acionamento="Você seria reduzido a 0 Pontos de Vida, mas não morto imediatamente."),
+            construir_talento_ancestralidade("Ferocidade Órquica", 1, ["Orc"], "Evita ser nocauteado ao cair a 0 PV, permanecendo com 1 PV e aumentando sua condição ferido em 1.", acoes="reacao", frequencia="uma vez por dia", acionamento="Você seria reduzido a 0 Pontos de Vida, mas não morto imediatamente."),
             construir_talento_ancestralidade("Pacificador Monstruoso", 1, ["Meio-Orc"], "Recebe +1 de bônus de circunstância em Diplomacia e Percepção (Sentir Motivação) contra não-humanoides inteligentes e humanoides marginalizados."),
-            construir_talento_ancestralidade("Superstição Órquica", 1, ["Concentração", "Orc"], "Recebe +1 de bônus de circunstância na jogada de salvamento acionadora contra magia ou efeito mágico.", acoes="Reação", acionamento="Você tenta uma jogada de salvamento contra uma magia ou efeito mágico, antes de efetuar a rolagem."),
+            construir_talento_ancestralidade("Superstição Órquica", 1, ["Concentração", "Orc"], "Recebe +1 de bônus de circunstância na jogada de salvamento acionadora contra magia ou efeito mágico.", acoes="reacao", acionamento="Você tenta uma jogada de salvamento contra uma magia ou efeito mágico, antes de efetuar a rolagem."),
             construir_talento_ancestralidade("Visão Órquica", 1, ["Meio-Orc"], "Você adquire visão no escuro.", pre_requisitos="visão na penumbra", especial="Selecionável apenas no 1º nível; não pode ser retreinado."),
             construir_talento_ancestralidade("Carnificina com Armas Órquicas", 5, ["Orc"], "Aplica o efeito de especialização de crítico em acertos críticos usando bracamante, machado grande (machado longo) ou arma órquica.", pre_requisitos="Familiaridade com Armas Órquicas"),
-            construir_talento_ancestralidade("Vigor Vitorioso", 5, ["Orc"], "Recebe Pontos de Vida temporários igual ao seu modificador de Constituição até o final do próximo turno.", acoes="Reação", acionamento="Você reduz um adversário a 0 Pontos de Vida."),
+            construir_talento_ancestralidade("Vigor Vitorioso", 5, ["Orc"], "Recebe Pontos de Vida temporários igual ao seu modificador de Constituição até o final do próximo turno.", acoes="reacao", acionamento="Você reduz um adversário a 0 Pontos de Vida."),
             construir_talento_ancestralidade("Superstição Pervasiva", 9, ["Orc"], "Recebe +1 de bônus de circunstância em jogadas de salvamento contra magias e efeitos mágicos o tempo inteiro.", pre_requisitos="Superstição Órquica"),
             construir_talento_ancestralidade("Especialidade com Armas Órquicas", 13, ["Orc"], "Recebe proficiência de especialista ou maior da classe também em bracamante, machado longo e armas órquicas treinadas.", pre_requisitos="Familiaridade com Armas Órquicas"),
             construir_talento_ancestralidade("Ferocidade Incrível", 13, ["Orc"], "Pode usar Ferocidade Órquica uma vez por hora em vez de uma vez por dia.", pre_requisitos="Ferocidade Órquica"),
@@ -858,13 +870,22 @@ def validar_dados(dados: dict[str, Any]) -> None:
     assert len(idiomas["tabela_2_2_idiomas_incomuns"]) == 11
     assert len(idiomas["tabela_2_3_idioma_secreto"]) == 1
 
-    # Unicidade de IDs em ancestralidades, heranças e talentos
+    # Unicidade de IDs em ancestralidades, heranças e talentos + padronização de ações
     assert len({a["id"] for a in ancs}) == 6
+    acoes_validas = {None, "1", "2", "3", "livre", "reacao"}
     for anc in ancs:
         h_ids = [h["id"] for h in anc["herancas"]]
         t_ids = [t["id"] for t in anc["talentos_ancestralidade"]]
         assert len(h_ids) == len(set(h_ids)), f"Heranças duplicadas em {anc['nome']}"
         assert len(t_ids) == len(set(t_ids)), f"Talentos duplicados em {anc['nome']}"
+        for h in anc["herancas"]:
+            if h.get("habilidade_acao"):
+                assert h["habilidade_acao"].get("acoes") in acoes_validas
+        for t in anc["talentos_ancestralidade"]:
+            assert t.get("acoes") in acoes_validas, f"Ação não padronizada em {t['id']}: {t.get('acoes')}"
+    for grp in ("meio_elfo", "meio_orc"):
+        for t in mesticagem[grp]:
+            assert t.get("acoes") in acoes_validas, f"Ação não padronizada em {t['id']}: {t.get('acoes')}"
 
 
 def main() -> None:

@@ -296,10 +296,10 @@
         ]
       },
       "equipamento_recomendado": {
-        "categoria_armadura_preferida": "media",
+        "categoria_armadura_preferida": "leve",
         "armaduras_ids": [
-          "gibao_de_peles",
-          "couro_batido"
+          "couro_batido",
+          "couro"
         ],
         "usa_escudo": false,
         "escudos_ids": [],
@@ -1152,8 +1152,7 @@
       "equipamento_recomendado": {
         "categoria_armadura_preferida": "sem_armadura",
         "armaduras_ids": [
-          "roupa_de_explorador",
-          "armadura_acolchoada"
+          "roupa_de_explorador"
         ],
         "usa_escudo": true,
         "escudos_ids": [
@@ -1367,8 +1366,7 @@
       "equipamento_recomendado": {
         "categoria_armadura_preferida": "sem_armadura",
         "armaduras_ids": [
-          "roupa_de_explorador",
-          "armadura_acolchoada"
+          "roupa_de_explorador"
         ],
         "usa_escudo": false,
         "escudos_ids": [],
@@ -2657,8 +2655,7 @@
           "adaga"
         ],
         "armas_distancia_ids": [
-          "besta_leve",
-          "funda"
+          "besta_leve"
         ],
         "estilo_empunhadura": "conjurador",
         "kit_classe_preferido": "Mago"
@@ -3137,8 +3134,8 @@
           "manopla"
         ],
         "armas_distancia_ids": [
-          "shuriken",
-          "dardo"
+          "dardo",
+          "funda"
         ],
         "estilo_empunhadura": "desarmado",
         "kit_classe_preferido": "Monge"
@@ -3211,10 +3208,11 @@
         "escudos_ids": [],
         "armas_corpo_a_corpo_ids": [
           "manopla",
-          "bo"
+          "cajado"
         ],
         "armas_distancia_ids": [
-          "shuriken"
+          "dardo",
+          "funda"
         ],
         "estilo_empunhadura": "desarmado",
         "kit_classe_preferido": "Monge"

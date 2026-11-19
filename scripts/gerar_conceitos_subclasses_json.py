@@ -185,8 +185,8 @@ def construir_conceitos() -> list[dict[str, Any]]:
             talentos_pericia=["carregador_robusto", "olhar_intimidante", "manufatura_alquimica"],
             talentos_gerais=["vitalidade", "duro_de_matar", "proficiencia_com_armas"],
             tracos_ancestralidade_afinidade=["resistencia", "forca", "garras", "mordida"],
-            categoria_armadura_preferida="media",
-            armaduras_ids=["gibao_de_peles", "couro_batido"],
+            categoria_armadura_preferida="leve",
+            armaduras_ids=["couro_batido", "couro"],
             usa_escudo=False,
             escudos_ids=[],
             armas_corpo_a_corpo_ids=["lanca_longa", "maca", "adaga"],
@@ -503,7 +503,7 @@ def construir_conceitos() -> list[dict[str, Any]]:
             talentos_gerais=["vitalidade", "iniciativa_incrivel", "recuperacao_rapida"],
             tracos_ancestralidade_afinidade=["cura", "positivo", "sabedoria"],
             categoria_armadura_preferida="sem_armadura",
-            armaduras_ids=["roupa_de_explorador", "armadura_acolchoada"],
+            armaduras_ids=["roupa_de_explorador"],
             usa_escudo=True,
             escudos_ids=["escudo_de_madeira", "broquel"],
             armas_corpo_a_corpo_ids=["cajado", "maca_leve"],
@@ -573,7 +573,7 @@ def construir_conceitos() -> list[dict[str, Any]]:
             talentos_gerais=["iniciativa_incrivel", "vitalidade", "perspicacia_astuta"],
             tracos_ancestralidade_afinidade=["luz", "positivo", "visao"],
             categoria_armadura_preferida="sem_armadura",
-            armaduras_ids=["roupa_de_explorador", "armadura_acolchoada"],
+            armaduras_ids=["roupa_de_explorador"],
             usa_escudo=False,
             escudos_ids=[],
             armas_corpo_a_corpo_ids=["cajado", "adaga"],
@@ -1038,7 +1038,7 @@ def construir_conceitos() -> list[dict[str, Any]]:
             usa_escudo=False,
             escudos_ids=[],
             armas_corpo_a_corpo_ids=["cajado", "adaga"],
-            armas_distancia_ids=["besta_leve", "funda"],
+            armas_distancia_ids=["besta_leve"],
             estilo_empunhadura="conjurador",
             conjuracao_recomendada=_conjuracao(
                 tradicao="arcana",
@@ -1210,7 +1210,7 @@ def construir_conceitos() -> list[dict[str, Any]]:
             usa_escudo=False,
             escudos_ids=[],
             armas_corpo_a_corpo_ids=["manopla"],
-            armas_distancia_ids=["shuriken", "dardo"],
+            armas_distancia_ids=["dardo", "funda"],
             estilo_empunhadura="desarmado",
         ),
         _conceito(
@@ -1237,8 +1237,8 @@ def construir_conceitos() -> list[dict[str, Any]]:
             armaduras_ids=["roupa_de_explorador"],
             usa_escudo=False,
             escudos_ids=[],
-            armas_corpo_a_corpo_ids=["manopla", "bo"],
-            armas_distancia_ids=["shuriken"],
+            armas_corpo_a_corpo_ids=["manopla", "cajado"],
+            armas_distancia_ids=["dardo", "funda"],
             estilo_empunhadura="desarmado",
         ),
 
@@ -1404,10 +1404,10 @@ def validar_conceitos(dados: dict[str, Any]) -> None:
     talentos_por_id = {t["id"]: t for t in talentos_dados}
 
     eq = _carregar_json("equipamentos.json")
-    armaduras_ids = {a["id"] for a in eq["armaduras"]["itens"]}
-    escudos_ids = {s["id"] for s in eq["escudos"]["itens"]}
-    armas_cc_ids = {w["id"] for w in eq["armas"]["corpo_a_corpo"]}
-    armas_dist_ids = {w["id"] for w in eq["armas"]["distancia"]}
+    armaduras_por_id = {a["id"]: a for a in eq["armaduras"]["itens"]}
+    escudos_por_id = {s["id"]: s for s in eq["escudos"]["itens"]}
+    armas_cc_por_id = {w["id"]: w for w in eq["armas"]["corpo_a_corpo"]}
+    armas_dist_por_id = {w["id"]: w for w in eq["armas"]["distancia"]}
     kits_classes = {k["classe"] for k in eq["kits_de_classe"]}
 
     magias_lista = _carregar_json("magias01.json")["magias"] + _carregar_json("magias02.json")["magias"]
@@ -1463,18 +1463,70 @@ def validar_conceitos(dados: dict[str, Any]) -> None:
             assert tid in talentos_por_id, f"Talento geral inválido '{tid}' em {cid}"
             assert talentos_por_id[tid]["categoria"] == "geral", f"'{tid}' não é Talento Geral"
 
-        # Equipamentos
+        # Equipamentos e proficiência base (1º nível)
         eq_rec = c["equipamento_recomendado"]
         assert eq_rec["kit_classe_preferido"] in kits_classes
         assert len(eq_rec["armaduras_ids"]) >= 1
+
+        prof_def = dict(classe["proficiencias_iniciais"]["defesas"])
+        if c["classe_id"] == "clerigo" and c["subclasse_oficial_id"] == "capelao_da_guerra":
+            prof_def["armaduras_leves"] = "treinado"
+            prof_def["armaduras_medias"] = "treinado"
+        elif c["classe_id"] == "ladino" and c["subclasse_oficial_id"] == "rufiao":
+            prof_def["armaduras_medias"] = "treinado"
+
+        mapa_cat_arm = {
+            "Sem Armadura": "defesa_sem_armadura",
+            "Armadura Leve": "armaduras_leves",
+            "Armadura Média": "armaduras_medias",
+            "Armadura Pesada": "armaduras_pesadas",
+        }
         for aid in eq_rec["armaduras_ids"]:
-            assert aid in armaduras_ids, f"Armadura inválida '{aid}' em {cid}"
+            assert aid in armaduras_por_id, f"Armadura inválida '{aid}' em {cid}"
+            arm = armaduras_por_id[aid]
+            chave_def = mapa_cat_arm[arm["categoria"]]
+            grau_def = str(prof_def.get(chave_def, "destreinado")).lower()
+            assert not grau_def.startswith("destreinado"), (
+                f"Armadura '{aid}' sem proficiência no 1º nível em {cid}"
+            )
+            if c["classe_id"] == "druida":
+                assert (arm.get("material") or "").lower() != "metal", (
+                    f"Druida não pode usar armadura de metal '{aid}' em {cid}"
+                )
+
         for sid in eq_rec["escudos_ids"]:
-            assert sid in escudos_ids, f"Escudo inválido '{sid}' em {cid}"
+            assert sid in escudos_por_id, f"Escudo inválido '{sid}' em {cid}"
+            if c["classe_id"] == "druida":
+                assert "aco" not in sid, f"Druida não pode usar escudo de metal '{sid}' em {cid}"
+
+        prof_atk = classe["proficiencias_iniciais"]["ataques"]
+        esp_raw = prof_atk.get("armas_especificas")
+        esp_nomes = (
+            {n.lower() for n in esp_raw.get("armas", [])}
+            if isinstance(esp_raw, dict)
+            else ({n.lower() for n in esp_raw} if isinstance(esp_raw, list) else set())
+        )
+        armas_todas = armas_cc_por_id | armas_dist_por_id
         for wid in eq_rec["armas_corpo_a_corpo_ids"]:
-            assert wid in armas_cc_ids, f"Arma CC inválida '{wid}' em {cid}"
+            assert wid in armas_cc_por_id, f"Arma CC inválida '{wid}' em {cid}"
         for wid in eq_rec["armas_distancia_ids"]:
-            assert wid in armas_dist_ids or wid in armas_cc_ids, f"Arma distância inválida '{wid}' em {cid}"
+            assert wid in armas_dist_por_id or wid in armas_cc_por_id, f"Arma distância inválida '{wid}' em {cid}"
+        for wid in eq_rec["armas_corpo_a_corpo_ids"] + eq_rec["armas_distancia_ids"]:
+            arma = armas_todas[wid]
+            cat = arma["categoria"]
+            if wid == "bomba_alquimica":
+                ok = not str(prof_atk.get("bombas_alquimicas", "destreinado")).startswith("destreinado")
+            elif arma["nome"].lower() in esp_nomes:
+                ok = True
+            elif cat == "Arma Simples":
+                ok = not str(prof_atk.get("armas_simples", "destreinado")).startswith("destreinado")
+            elif cat == "Arma Marcial":
+                ok = not str(prof_atk.get("armas_marciais", "destreinado")).startswith("destreinado")
+            elif cat == "Arma Avançada":
+                ok = not str(prof_atk.get("armas_avancadas", "destreinado")).startswith("destreinado")
+            else:
+                ok = False
+            assert ok, f"Arma '{wid}' ({cat}) sem proficiência no 1º nível em {cid}"
 
         # Conjuração (quando aplicável)
         conj = c["conjuracao_recomendada"]

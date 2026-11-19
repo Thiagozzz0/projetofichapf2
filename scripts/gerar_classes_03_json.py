@@ -849,7 +849,10 @@ def construir_ladino() -> dict[str, Any]:
             },
             "ataques": {
                 "armas_simples": "treinado",
-                "armas_especificas": ["arco curto", "espada curta", "porrete", "rapieira"],
+                "armas_especificas": {
+                    "graduacao": "treinado",
+                    "armas": ["arco curto", "espada curta", "porrete", "rapieira"],
+                },
                 "ataques_desarmados": "treinado",
             },
             "defesas": {
@@ -858,7 +861,10 @@ def construir_ladino() -> dict[str, Any]:
                 "armaduras_pesadas": "destreinado",
                 "defesa_sem_armadura": "treinado",
             },
-            "cd_classe": "treinado",
+            "cd_classe": {
+                "graduacao": "treinado",
+                "texto": "Treinado em CD de classe de ladino",
+            },
             "magias": None,
         },
         "tabela_progressao": tabela_progressao,
@@ -1006,6 +1012,8 @@ def construir_mago() -> dict[str, Any]:
             "nome": "Evocação",
             "tipo_escola": "especialista",
             "magia_1_nivel_exemplo": "toque elétrico",
+            "magia_1_nivel_exemplo_id_canonico": "toque_chocante",
+            "observacao_livro": "No Livro Básico PT-BR, o Cap. 3 (p. 182) cita 'toque elétrico', enquanto no Cap. 7 (magias02.json) a mesma magia foi traduzida como 'Toque Chocante' (toque_chocante).",
             "magia_de_escola": "dardo de força (página 405)",
             "magia_de_escola_avancada": "tempestade elemental",
             "descricao": "Como um evocador, você se deleita com o poder bruto da magia, usando-o para criar e destruir com facilidade. Você pode invocar elementos, forças e energia para devastar seus adversários ou ajudá-lo de outras formas. Você adiciona uma magia de evocação de 1º nível (como toque elétrico) ao seu grimório. Você aprende a magia de escola dardo de força (página 405).",
@@ -1501,7 +1509,10 @@ def construir_mago() -> dict[str, Any]:
             },
             "ataques": {
                 "armas_simples": "destreinado",
-                "armas_especificas": ["adaga", "besta leve", "besta pesada", "cajado", "clava"],
+                "armas_especificas": {
+                    "graduacao": "treinado",
+                    "armas": ["adaga", "besta leve", "besta pesada", "cajado", "clava"],
+                },
                 "ataques_desarmados": "treinado",
             },
             "defesas": {
@@ -2373,7 +2384,10 @@ def construir_monge() -> dict[str, Any]:
                 "todas_armaduras": "destreinado",
                 "defesa_sem_armadura": "especialista",
             },
-            "cd_classe": "treinado",
+            "cd_classe": {
+                "graduacao": "treinado",
+                "texto": "Treinado em CD de classe de monge",
+            },
             "magias": None,
         },
         "tabela_progressao": tabela_progressao,
@@ -3194,7 +3208,10 @@ def construir_patrulheiro() -> dict[str, Any]:
                 "armaduras_pesadas": "destreinado",
                 "defesa_sem_armadura": "treinado",
             },
-            "cd_classe": "treinado",
+            "cd_classe": {
+                "graduacao": "treinado",
+                "texto": "Treinado em CD de classe de patrulheiro",
+            },
             "magias": None,
         },
         "tabela_progressao": tabela_progressao,
@@ -3276,6 +3293,19 @@ def construir_patrulheiro() -> dict[str, Any]:
 
 
 def montar_dados_classes_03() -> dict[str, Any]:
+    classes = [
+        construir_ladino(),
+        construir_mago(),
+        construir_monge(),
+        construir_patrulheiro(),
+    ]
+    for classe in classes:
+        classe.setdefault("tabelas_especificas", {})
+        classe["tabelas_especificas"]["tabela_talentos_indice"] = [
+            {"nome": t["nome"], "nivel": t["nivel"]}
+            for t in sorted(classe["talentos_de_classe"], key=lambda x: x["nome"])
+        ]
+
     return {
         "meta": {
             "titulo": "Capítulo 3: Classes (Leva 03: Ladino, Mago, Monge e Patrulheiro) — Pathfinder 2E Livro Básico",
@@ -3286,12 +3316,7 @@ def montar_dados_classes_03() -> dict[str, Any]:
             "versao": "1.0.0",
             "observacoes": "Terceira e última leva das classes básicas do Capítulo 3, contendo os dados completos de Ladino, Mago, Monge e Patrulheiro. As seções Companheiros Animais e Familiares (pp. 214-218) e Arquétipos Multiclasse (pp. 219-231) foram separadas respectivamente em companheiros_familiares.json e arquetipos_multiclasse.json.",
         },
-        "classes": [
-            construir_ladino(),
-            construir_mago(),
-            construir_monge(),
-            construir_patrulheiro(),
-        ],
+        "classes": classes,
     }
 
 
@@ -3316,6 +3341,7 @@ def validar_classes_03_json(dados: dict[str, Any]) -> None:
         assert len(talentos) == contagens_esperadas[classe["id"]], (
             f"{classe['id']}: esperado {contagens_esperadas[classe['id']]}, obtido {len(talentos)}"
         )
+        assert len(classe["tabelas_especificas"]["tabela_talentos_indice"]) == len(talentos)
         ids = [t["id"] for t in talentos]
         assert len(ids) == len(set(ids)), f"IDs duplicados em {classe['id']}"
         assert {t["nivel"] for t in talentos} == niveis_esperados
@@ -3324,6 +3350,10 @@ def validar_classes_03_json(dados: dict[str, Any]) -> None:
     assert total_talentos == 204
 
     ladino, mago, monge, patrulheiro = classes
+    for cls_cd in (ladino, monge, patrulheiro):
+        assert isinstance(cls_cd["proficiencias_iniciais"]["cd_classe"], dict)
+    for cls_arm in (ladino, mago):
+        assert isinstance(cls_arm["proficiencias_iniciais"]["ataques"]["armas_especificas"], dict)
     assert len(ladino["subclasses"]["opcoes"]) == 3
     assert len(mago["subclasses"]["opcoes"]) == 9
     assert len(mago["subclasses"]["escolhas_complementares"]["opcoes"]) == 4

@@ -648,7 +648,7 @@
           "descricao": "Os heróis enânicos de antigamente conseguiam ignorar as magias de seus inimigos, e parte dessa resistência manifesta-se em você. Você ganha a reação Invocar Sangue Ancestral.",
           "habilidade_acao": {
             "nome": "Invocar Sangue Ancestral",
-            "acoes": "Reação",
+            "acoes": "reacao",
             "acionamento": "Você tenta uma jogada de salvamento contra um efeito mágico, mas ainda não efetuou a rolagem.",
             "efeito": "Você recebe +1 de bônus de circunstância na jogada de salvamento acionadora e até o final deste turno."
           }
@@ -768,7 +768,7 @@
           "tracos": [
             "Anão"
           ],
-          "acoes": "2 Ações",
+          "acoes": "2",
           "pre_requisitos": "Correr nas Rochas",
           "frequencia": null,
           "acionamento": null,
@@ -1071,7 +1071,7 @@
           "tracos": [
             "Elfo"
           ],
-          "acoes": "1 Ação",
+          "acoes": "1",
           "pre_requisitos": null,
           "frequencia": null,
           "acionamento": null,
@@ -1099,7 +1099,7 @@
           "tracos": [
             "Elfo"
           ],
-          "acoes": "1 Ação",
+          "acoes": "1",
           "pre_requisitos": "Longevidade de Especialista",
           "frequencia": "uma vez por dia",
           "acionamento": null,
@@ -1333,7 +1333,7 @@
           "tracos": [
             "Gnomo"
           ],
-          "acoes": "1 Ação",
+          "acoes": "1",
           "pre_requisitos": "reservatório de foco e pelo menos uma magia inata de herança/talento gnômico da mesma tradição de alguma magia de foco",
           "frequencia": "uma vez por dia",
           "acionamento": null,
@@ -1510,7 +1510,7 @@
           "tracos": [
             "Goblin"
           ],
-          "acoes": "1 Ação",
+          "acoes": "1",
           "pre_requisitos": null,
           "frequencia": null,
           "acionamento": null,
@@ -1594,12 +1594,13 @@
           "tracos": [
             "Goblin"
           ],
-          "acoes": "Reação",
-          "pre_requisitos": "Um aliado termina uma ação de movimento adjacente a você.",
+          "acoes": "reacao",
+          "pre_requisitos": null,
           "frequencia": null,
-          "acionamento": null,
+          "acionamento": "Um aliado termina uma ação de movimento adjacente a você.",
           "especial": null,
-          "descricao": "Você aproveita o movimento de um aliado adjacente para ajustar sua posição. Você Dá um Passo."
+          "descricao": "Você aproveita o movimento de um aliado adjacente para ajustar sua posição. Você Dá um Passo.",
+          "observacao_livro": "Errata editorial do Livro Básico PT-BR (p. 49 / Anc Race.pdf pág. 31): o texto do acionamento foi impresso sob o rótulo 'Pré-requisitos'."
         },
         {
           "id": "saber_goblin",
@@ -1907,7 +1908,7 @@
             "Fortuna",
             "Halfling"
           ],
-          "acoes": "Reação",
+          "acoes": "reacao",
           "pre_requisitos": null,
           "frequencia": "uma vez por dia",
           "acionamento": "Você falha em um teste de perícia ou jogada de salvamento.",
@@ -2218,7 +2219,7 @@
           "tracos": [
             "Humano"
           ],
-          "acoes": "Reação",
+          "acoes": "reacao",
           "pre_requisitos": "Improvisador Astuto",
           "frequencia": "uma vez por dia",
           "acionamento": "Você realiza um teste utilizando uma perícia em que é destreinado.",
@@ -2324,7 +2325,7 @@
         "tracos": [
           "Orc"
         ],
-        "acoes": "Reação",
+        "acoes": "reacao",
         "pre_requisitos": null,
         "frequencia": "uma vez por dia",
         "acionamento": "Você seria reduzido a 0 Pontos de Vida, mas não morto imediatamente.",
@@ -2353,7 +2354,7 @@
           "Concentração",
           "Orc"
         ],
-        "acoes": "Reação",
+        "acoes": "reacao",
         "pre_requisitos": null,
         "frequencia": null,
         "acionamento": "Você tenta uma jogada de salvamento contra uma magia ou efeito mágico, antes de efetuar a rolagem.",
@@ -2395,7 +2396,7 @@
         "tracos": [
           "Orc"
         ],
-        "acoes": "Reação",
+        "acoes": "reacao",
         "pre_requisitos": null,
         "frequencia": null,
         "acionamento": "Você reduz um adversário a 0 Pontos de Vida.",

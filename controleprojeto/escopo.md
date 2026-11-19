@@ -95,3 +95,4 @@ A criação do personagem segue a estrutura definida para equilibrar **escolhas 
 | **Fase 3** | Motor Procedural e Backend Flask (`app.py` + pacote `motor/`) | Matemática de PF2E (1º nível, arquitetura pronta para progressão), gerador com `seed` opcional, API JSON e tela simples de teste. *(Concluído)* |
 | **Fase 4** | Front-End (`templates/`) | Tela de configuração interativa + visualização completa e imprimível da ficha final. |
 | **Fase 5** | Testes Integrados e Refinamento | Validar fichas geradas para múltiplas combinações de ancestralidade, classe e conceito. |
+| **Expansão Futura** | Progressão de Níveis (`2` a `20`) e Itens Mágicos | Expandir o motor para gerar fichas completas acima do 1º nível (melhorias de atributo nos níveis 5/10/15/20, talentos por nível, escalonamento de proficiências, círculos 2–10 de magia e integração com `ref/Compendium specific tools.pdf`). |

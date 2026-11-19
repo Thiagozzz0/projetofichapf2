@@ -66,12 +66,15 @@
         },
         "ataques": {
           "armas_simples": "treinado",
-          "armas_especificas": [
-            "arco curto",
-            "espada curta",
-            "porrete",
-            "rapieira"
-          ],
+          "armas_especificas": {
+            "graduacao": "treinado",
+            "armas": [
+              "arco curto",
+              "espada curta",
+              "porrete",
+              "rapieira"
+            ]
+          },
           "ataques_desarmados": "treinado"
         },
         "defesas": {
@@ -80,7 +83,10 @@
           "armaduras_pesadas": "destreinado",
           "defesa_sem_armadura": "treinado"
         },
-        "cd_classe": "treinado",
+        "cd_classe": {
+          "graduacao": "treinado",
+          "texto": "Treinado em CD de classe de ladino"
+        },
         "magias": null
       },
       "tabela_progressao": [
@@ -293,7 +299,218 @@
           "texto_original": "Incremento de perícia, melhorias de atributo, talento de ladino, talento de perícia"
         }
       ],
-      "tabelas_especificas": {},
+      "tabelas_especificas": {
+        "tabela_talentos_indice": [
+          {
+            "nome": "Adiar Armadilha",
+            "nivel": 8
+          },
+          {
+            "nome": "Apunhalada Oportuna",
+            "nivel": 8
+          },
+          {
+            "nome": "Avaliação de Batalha",
+            "nivel": 4
+          },
+          {
+            "nome": "Aviso do Batedor",
+            "nivel": 4
+          },
+          {
+            "nome": "Bandear",
+            "nivel": 6
+          },
+          {
+            "nome": "Brecha Cognitiva",
+            "nivel": 16
+          },
+          {
+            "nome": "Brecha Instantânea",
+            "nivel": 14
+          },
+          {
+            "nome": "Cambalhota Ágil",
+            "nivel": 8
+          },
+          {
+            "nome": "Corte Dissipante",
+            "nivel": 16
+          },
+          {
+            "nome": "Debilitação Crítica",
+            "nivel": 12
+          },
+          {
+            "nome": "Debilitações Precisas",
+            "nivel": 10
+          },
+          {
+            "nome": "Debilitações Táticas",
+            "nivel": 10
+          },
+          {
+            "nome": "Debilitações Viciosas",
+            "nivel": 10
+          },
+          {
+            "nome": "Deixar uma Brecha",
+            "nivel": 14
+          },
+          {
+            "nome": "Descobridor de Armadilha",
+            "nivel": 1
+          },
+          {
+            "nome": "Distração Perfeita",
+            "nivel": 16
+          },
+          {
+            "nome": "Distração Reativa",
+            "nivel": 20
+          },
+          {
+            "nome": "Envenenar Arma",
+            "nivel": 4
+          },
+          {
+            "nome": "Envenenar Arma Aprimorado",
+            "nivel": 8
+          },
+          {
+            "nome": "Esgueirador Sagaz",
+            "nivel": 10
+          },
+          {
+            "nome": "Esquiva Ágil",
+            "nivel": 1
+          },
+          {
+            "nome": "Exemplar Escondido",
+            "nivel": 20
+          },
+          {
+            "nome": "Finta Dupla",
+            "nivel": 1
+          },
+          {
+            "nome": "Finta de Distração",
+            "nivel": 2
+          },
+          {
+            "nome": "Furtivo Poderoso",
+            "nivel": 18
+          },
+          {
+            "nome": "Golpe Desequilibrante",
+            "nivel": 2
+          },
+          {
+            "nome": "Golpe Escaramuçador",
+            "nivel": 6
+          },
+          {
+            "nome": "Golpeador Astuto",
+            "nivel": 8
+          },
+          {
+            "nome": "Golpeador Impossível",
+            "nivel": 20
+          },
+          {
+            "nome": "Golpeador Pavoroso",
+            "nivel": 4
+          },
+          {
+            "nome": "Infiltração Implausível",
+            "nivel": 18
+          },
+          {
+            "nome": "Interferência Reativa",
+            "nivel": 12
+          },
+          {
+            "nome": "Lutar às Cegas",
+            "nivel": 8
+          },
+          {
+            "nome": "Mobilidade",
+            "nivel": 2
+          },
+          {
+            "nome": "Mágica Menor",
+            "nivel": 2
+          },
+          {
+            "nome": "Passo Lateral",
+            "nivel": 8
+          },
+          {
+            "nome": "Passo Leve",
+            "nivel": 6
+          },
+          {
+            "nome": "Passo nas Nuvens",
+            "nivel": 16
+          },
+          {
+            "nome": "Perseguição Reativa",
+            "nivel": 4
+          },
+          {
+            "nome": "Quadro em Branco",
+            "nivel": 16
+          },
+          {
+            "nome": "Rolamento Defensivo",
+            "nivel": 14
+          },
+          {
+            "nome": "Sabotagem",
+            "nivel": 4
+          },
+          {
+            "nome": "Salto Fantástico",
+            "nivel": 12
+          },
+          {
+            "nome": "Saque Rápido",
+            "nivel": 2
+          },
+          {
+            "nome": "Sentir o Que Não É Visto",
+            "nivel": 14
+          },
+          {
+            "nome": "Surgir das Sombras",
+            "nivel": 12
+          },
+          {
+            "nome": "Surra Brutal",
+            "nivel": 2
+          },
+          {
+            "nome": "Tiro de Derrubada",
+            "nivel": 12
+          },
+          {
+            "nome": "Torcer a Faca",
+            "nivel": 6
+          },
+          {
+            "nome": "Trapaceiro Mágico",
+            "nivel": 4
+          },
+          {
+            "nome": "Você É o Próximo",
+            "nivel": 1
+          },
+          {
+            "nome": "Ás do Trapaceiro",
+            "nivel": 18
+          }
+        ]
+      },
       "caracteristicas_de_classe": [
         {
           "id": "ancestralidade_e_biografia",
@@ -1594,13 +1811,16 @@
         },
         "ataques": {
           "armas_simples": "destreinado",
-          "armas_especificas": [
-            "adaga",
-            "besta leve",
-            "besta pesada",
-            "cajado",
-            "clava"
-          ],
+          "armas_especificas": {
+            "graduacao": "treinado",
+            "armas": [
+              "adaga",
+              "besta leve",
+              "besta pesada",
+              "cajado",
+              "clava"
+            ]
+          },
           "ataques_desarmados": "treinado"
         },
         "defesas": {
@@ -2084,7 +2304,137 @@
             "mísseis mágicos"
           ],
           "observacao": "Mais uma magia de sua escola se você for um mago especialista."
-        }
+        },
+        "tabela_talentos_indice": [
+          {
+            "nome": "Ampliar Magia",
+            "nivel": 1
+          },
+          {
+            "nome": "Combinação de Magia",
+            "nivel": 20
+          },
+          {
+            "nome": "Concentração Sem Esforço",
+            "nivel": 16
+          },
+          {
+            "nome": "Conjuração Acelerada",
+            "nivel": 10
+          },
+          {
+            "nome": "Conjuração Consistente",
+            "nivel": 6
+          },
+          {
+            "nome": "Conservação de Elo",
+            "nivel": 8
+          },
+          {
+            "nome": "Contramágica",
+            "nivel": 1
+          },
+          {
+            "nome": "Elo Superior",
+            "nivel": 14
+          },
+          {
+            "nome": "Energia Avassaladora",
+            "nivel": 10
+          },
+          {
+            "nome": "Expansão de Truque Mágico",
+            "nivel": 2
+          },
+          {
+            "nome": "Familiar",
+            "nivel": 1
+          },
+          {
+            "nome": "Familiar Melhorado",
+            "nivel": 2
+          },
+          {
+            "nome": "Foco Vinculado",
+            "nivel": 4
+          },
+          {
+            "nome": "Foco de Elo",
+            "nivel": 14
+          },
+          {
+            "nome": "Ignorar Materiais",
+            "nivel": 1
+          },
+          {
+            "nome": "Maestria Metamágica",
+            "nivel": 20
+          },
+          {
+            "nome": "Magia Residual em Arma",
+            "nivel": 4
+          },
+          {
+            "nome": "Magia Silenciosa",
+            "nivel": 4
+          },
+          {
+            "nome": "Magia de Alcance",
+            "nivel": 1
+          },
+          {
+            "nome": "Magia de Escola Avançada",
+            "nivel": 8
+          },
+          {
+            "nome": "Mão do Aprendiz",
+            "nivel": 1
+          },
+          {
+            "nome": "Ocultar Magia",
+            "nivel": 2
+          },
+          {
+            "nome": "Penetração de Magia",
+            "nivel": 6
+          },
+          {
+            "nome": "Poder do Arquimago",
+            "nivel": 20
+          },
+          {
+            "nome": "Possibilidades Infinitas",
+            "nivel": 18
+          },
+          {
+            "nome": "Rearranjar Magia",
+            "nivel": 16
+          },
+          {
+            "nome": "Refletir Magia",
+            "nivel": 14
+          },
+          {
+            "nome": "Repreparar Magia",
+            "nivel": 18
+          },
+          {
+            "nome": "Sagaz em Pergaminho",
+            "nivel": 10
+          },
+          {
+            "nome": "Sentido Mágico",
+            "nivel": 12
+          },
+          {
+            "nome": "Trespassar Contramágica",
+            "nivel": 12
+          },
+          {
+            "nome": "Versatilidade Universal",
+            "nivel": 8
+          }
+        ]
       },
       "caracteristicas_de_classe": [
         {
@@ -2340,6 +2690,8 @@
             "nome": "Evocação",
             "tipo_escola": "especialista",
             "magia_1_nivel_exemplo": "toque elétrico",
+            "magia_1_nivel_exemplo_id_canonico": "toque_chocante",
+            "observacao_livro": "No Livro Básico PT-BR, o Cap. 3 (p. 182) cita 'toque elétrico', enquanto no Cap. 7 (magias02.json) a mesma magia foi traduzida como 'Toque Chocante' (toque_chocante).",
             "magia_de_escola": "dardo de força (página 405)",
             "magia_de_escola_avancada": "tempestade elemental",
             "descricao": "Como um evocador, você se deleita com o poder bruto da magia, usando-o para criar e destruir com facilidade. Você pode invocar elementos, forças e energia para devastar seus adversários ou ajudá-lo de outras formas. Você adiciona uma magia de evocação de 1º nível (como toque elétrico) ao seu grimório. Você aprende a magia de escola dardo de força (página 405)."
@@ -3082,7 +3434,10 @@
           "todas_armaduras": "destreinado",
           "defesa_sem_armadura": "especialista"
         },
-        "cd_classe": "treinado",
+        "cd_classe": {
+          "graduacao": "treinado",
+          "texto": "Treinado em CD de classe de monge"
+        },
         "magias": null
       },
       "tabela_progressao": [
@@ -3372,6 +3727,248 @@
               "não-letal"
             ],
             "observacao": null
+          }
+        ],
+        "tabela_talentos_indice": [
+          {
+            "nome": "Agarrão Esmagador",
+            "nivel": 2
+          },
+          {
+            "nome": "Alma de Diamante",
+            "nivel": 12
+          },
+          {
+            "nome": "Alvoroço da Garça",
+            "nivel": 6
+          },
+          {
+            "nome": "Aperto Dormente",
+            "nivel": 10
+          },
+          {
+            "nome": "Arrasto do Lobo",
+            "nivel": 6
+          },
+          {
+            "nome": "Arremesso Giratório",
+            "nivel": 6
+          },
+          {
+            "nome": "Arsenal Monástico",
+            "nivel": 1
+          },
+          {
+            "nome": "Chute Voador",
+            "nivel": 4
+          },
+          {
+            "nome": "Corpo Atemporal",
+            "nivel": 14
+          },
+          {
+            "nome": "Corpo Vazio",
+            "nivel": 18
+          },
+          {
+            "nome": "Correr na Parede",
+            "nivel": 8
+          },
+          {
+            "nome": "Corte do Tigre",
+            "nivel": 6
+          },
+          {
+            "nome": "Defletir Projétil",
+            "nivel": 4
+          },
+          {
+            "nome": "Disparada de Ki",
+            "nivel": 1
+          },
+          {
+            "nome": "Fluidez Sinuosa",
+            "nivel": 10
+          },
+          {
+            "nome": "Foco Meditativo",
+            "nivel": 12
+          },
+          {
+            "nome": "Foco em Pugilato",
+            "nivel": 2
+          },
+          {
+            "nome": "Folha Dançante",
+            "nivel": 2
+          },
+          {
+            "nome": "Fortaleza da Montanha",
+            "nivel": 6
+          },
+          {
+            "nome": "Fundir Posturas",
+            "nivel": 20
+          },
+          {
+            "nome": "Golpe Estilhaçador",
+            "nivel": 16
+          },
+          {
+            "nome": "Golpe de Jogar para Trás",
+            "nivel": 10
+          },
+          {
+            "nome": "Golpe de Ki",
+            "nivel": 1
+          },
+          {
+            "nome": "Impedir Movimento",
+            "nivel": 4
+          },
+          {
+            "nome": "Iniciado dos Ventos Selvagens",
+            "nivel": 8
+          },
+          {
+            "nome": "Integridade Corporal",
+            "nivel": 4
+          },
+          {
+            "nome": "Jogar para Trás Aprimorado",
+            "nivel": 12
+          },
+          {
+            "nome": "Lufada dos Ventos Selvagens",
+            "nivel": 14
+          },
+          {
+            "nome": "Língua do Sol e da Lua",
+            "nivel": 14
+          },
+          {
+            "nome": "Manancial Meditativo",
+            "nivel": 18
+          },
+          {
+            "nome": "Manobra Combinada",
+            "nivel": 8
+          },
+          {
+            "nome": "Mestre de Muitos Estilos",
+            "nivel": 16
+          },
+          {
+            "nome": "Movimento Cauteloso",
+            "nivel": 4
+          },
+          {
+            "nome": "Palma Vibrante",
+            "nivel": 16
+          },
+          {
+            "nome": "Passo Abundante",
+            "nivel": 6
+          },
+          {
+            "nome": "Passo na Água",
+            "nivel": 6
+          },
+          {
+            "nome": "Perturbar o Ki",
+            "nivel": 12
+          },
+          {
+            "nome": "Postura da Floresta Emaranhada",
+            "nivel": 8
+          },
+          {
+            "nome": "Postura da Garça",
+            "nivel": 1
+          },
+          {
+            "nome": "Postura da Montanha",
+            "nivel": 1
+          },
+          {
+            "nome": "Postura do Dragão",
+            "nivel": 1
+          },
+          {
+            "nome": "Postura do Lobo",
+            "nivel": 1
+          },
+          {
+            "nome": "Postura do Sangue de Ferro",
+            "nivel": 8
+          },
+          {
+            "nome": "Postura do Tigre",
+            "nivel": 1
+          },
+          {
+            "nome": "Presença Iluminada",
+            "nivel": 16
+          },
+          {
+            "nome": "Punho Atordoante",
+            "nivel": 2
+          },
+          {
+            "nome": "Punho Elemental",
+            "nivel": 2
+          },
+          {
+            "nome": "Punhos de Diamante",
+            "nivel": 18
+          },
+          {
+            "nome": "Rajada de Ki",
+            "nivel": 6
+          },
+          {
+            "nome": "Rajada de Manobras",
+            "nivel": 4
+          },
+          {
+            "nome": "Rapidez Permanente",
+            "nivel": 20
+          },
+          {
+            "nome": "Rasgo da Floresta Emaranhada",
+            "nivel": 14
+          },
+          {
+            "nome": "Refletir Projétil",
+            "nivel": 8
+          },
+          {
+            "nome": "Rio Veloz",
+            "nivel": 18
+          },
+          {
+            "nome": "Rugido do Dragão",
+            "nivel": 6
+          },
+          {
+            "nome": "Salto do Vento",
+            "nivel": 10
+          },
+          {
+            "nome": "Sapiente em Postura",
+            "nivel": 12
+          },
+          {
+            "nome": "Surto do Sangue de Ferro",
+            "nivel": 14
+          },
+          {
+            "nome": "Tremor da Montanha",
+            "nivel": 14
+          },
+          {
+            "nome": "Técnica Impossível",
+            "nivel": 20
           }
         ]
       },
@@ -4756,7 +5353,10 @@
           "armaduras_pesadas": "destreinado",
           "defesa_sem_armadura": "treinado"
         },
-        "cd_classe": "treinado",
+        "cd_classe": {
+          "graduacao": "treinado",
+          "texto": "Treinado em CD de classe de patrulheiro"
+        },
         "magias": null
       },
       "tabela_progressao": [
@@ -4946,7 +5546,250 @@
           "texto_original": "Melhorias de atributo, talento de patrulheiro, talento de perícia"
         }
       ],
-      "tabelas_especificas": {},
+      "tabelas_especificas": {
+        "tabela_talentos_indice": [
+          {
+            "nome": "Abate Duplo",
+            "nivel": 1
+          },
+          {
+            "nome": "Ameaça Tripla",
+            "nivel": 20
+          },
+          {
+            "nome": "Aparada Dupla",
+            "nivel": 4
+          },
+          {
+            "nome": "Arapucas Abundantes",
+            "nivel": 16
+          },
+          {
+            "nome": "Arapucas Poderosas",
+            "nivel": 8
+          },
+          {
+            "nome": "Arapucas Rápidas",
+            "nivel": 6
+          },
+          {
+            "nome": "Arapucas-Relâmpago",
+            "nivel": 12
+          },
+          {
+            "nome": "Até os Confins da Terra",
+            "nivel": 20
+          },
+          {
+            "nome": "Aviso do Batedor",
+            "nivel": 4
+          },
+          {
+            "nome": "Brado do Companheiro",
+            "nivel": 4
+          },
+          {
+            "nome": "Camuflagem",
+            "nivel": 10
+          },
+          {
+            "nome": "Caçador das Sombras",
+            "nivel": 18
+          },
+          {
+            "nome": "Caçador de Monstros",
+            "nivel": 1
+          },
+          {
+            "nome": "Companheiro Animal",
+            "nivel": 1
+          },
+          {
+            "nome": "Companheiro Animal Maduro",
+            "nivel": 6
+          },
+          {
+            "nome": "Companheiro Especializado",
+            "nivel": 16
+          },
+          {
+            "nome": "Companheiro Furtivo",
+            "nivel": 14
+          },
+          {
+            "nome": "Companheiro Incrível",
+            "nivel": 10
+          },
+          {
+            "nome": "Companheiro Magistral",
+            "nivel": 18
+          },
+          {
+            "nome": "Descobridor de Perigo",
+            "nivel": 8
+          },
+          {
+            "nome": "Dádiva do Guardião",
+            "nivel": 8
+          },
+          {
+            "nome": "Empatia Selvagem",
+            "nivel": 2
+          },
+          {
+            "nome": "Escaramuçador Irrevogável",
+            "nivel": 20
+          },
+          {
+            "nome": "Especialista em Arapuca",
+            "nivel": 4
+          },
+          {
+            "nome": "Excelência Múltipla",
+            "nivel": 18
+          },
+          {
+            "nome": "Golpe Escaramuçador",
+            "nivel": 6
+          },
+          {
+            "nome": "Guardião Contra Monstros",
+            "nivel": 2
+          },
+          {
+            "nome": "Inimigo Predileto",
+            "nivel": 4
+          },
+          {
+            "nome": "Interromper Presa",
+            "nivel": 4
+          },
+          {
+            "nome": "Lado a Lado",
+            "nivel": 12
+          },
+          {
+            "nome": "Lendário Caçador de Monstros",
+            "nivel": 16
+          },
+          {
+            "nome": "Lutar às Cegas",
+            "nivel": 8
+          },
+          {
+            "nome": "Mestre Caçador de Monstros",
+            "nivel": 10
+          },
+          {
+            "nome": "Mestre em Terreno",
+            "nivel": 8
+          },
+          {
+            "nome": "Mira Letal",
+            "nivel": 8
+          },
+          {
+            "nome": "Mira do Caçador",
+            "nivel": 2
+          },
+          {
+            "nome": "Orientação do Guardião",
+            "nivel": 14
+          },
+          {
+            "nome": "Passo do Guardião",
+            "nivel": 10
+          },
+          {
+            "nome": "Presa Compartilhada",
+            "nivel": 14
+          },
+          {
+            "nome": "Presa Dupla",
+            "nivel": 12
+          },
+          {
+            "nome": "Rajada Impossível",
+            "nivel": 18
+          },
+          {
+            "nome": "Rastreador Rápido",
+            "nivel": 6
+          },
+          {
+            "nome": "Recarga em Movimento",
+            "nivel": 4
+          },
+          {
+            "nome": "Riposta Dupla",
+            "nivel": 10
+          },
+          {
+            "nome": "Riposta Dupla Aprimorada",
+            "nivel": 16
+          },
+          {
+            "nome": "Saque Rápido",
+            "nivel": 2
+          },
+          {
+            "nome": "Saraivada Impossível",
+            "nivel": 18
+          },
+          {
+            "nome": "Segunda Ferroada",
+            "nivel": 12
+          },
+          {
+            "nome": "Sentir o Que Não É Visto",
+            "nivel": 14
+          },
+          {
+            "nome": "Terreno Predileto",
+            "nivel": 2
+          },
+          {
+            "nome": "Tiro Estalido",
+            "nivel": 6
+          },
+          {
+            "nome": "Tiro Lendário",
+            "nivel": 20
+          },
+          {
+            "nome": "Tiro Longo",
+            "nivel": 4
+          },
+          {
+            "nome": "Tiro Mirado",
+            "nivel": 14
+          },
+          {
+            "nome": "Tiro Penetrante",
+            "nivel": 10
+          },
+          {
+            "nome": "Tiro Perfeito",
+            "nivel": 18
+          },
+          {
+            "nome": "Tiro de Distração",
+            "nivel": 12
+          },
+          {
+            "nome": "Tiro de Distração Maior",
+            "nivel": 16
+          },
+          {
+            "nome": "Tiro à Caça",
+            "nivel": 1
+          },
+          {
+            "nome": "Ás com Besta",
+            "nivel": 1
+          }
+        ]
+      },
       "caracteristicas_de_classe": [
         {
           "id": "ancestralidade_e_biografia",
