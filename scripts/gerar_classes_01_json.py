@@ -1,4 +1,4 @@
-"""Gerador e validador de dados/classes.json (Leva 01) a partir de ref/Classes 01.pdf."""
+"""Gerador e validador de dados/classes01.json (Leva 01) a partir de ref/Classes 01.pdf."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Any
 
 RAIZ_PROJETO = Path(__file__).resolve().parent.parent
-CAMINHO_SAIDA = RAIZ_PROJETO / "dados" / "classes.json"
+CAMINHO_SAIDA = RAIZ_PROJETO / "dados" / "classes01.json"
 
 
 def slugify(texto: str) -> str:

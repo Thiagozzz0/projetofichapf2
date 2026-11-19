@@ -1,0 +1,3772 @@
+"""Gerador e validador de dados/classes02.json (Leva 02) a partir de ref/Classes 02.pdf."""
+
+from __future__ import annotations
+
+import json
+import re
+import unicodedata
+from pathlib import Path
+from typing import Any
+
+RAIZ_PROJETO = Path(__file__).resolve().parent.parent
+CAMINHO_SAIDA = RAIZ_PROJETO / "dados" / "classes02.json"
+
+
+def slugify(texto: str) -> str:
+    """Converte um nome em identificador snake_case ASCII."""
+    normalizado = unicodedata.normalize("NFKD", texto)
+    sem_acentos = "".join(c for c in normalizado if not unicodedata.combining(c))
+    return re.sub(r"[^a-zA-Z0-9]+", "_", sem_acentos.lower()).strip("_")
+
+
+def construir_tabela_progressao(linhas: list[tuple[int, str]]) -> list[dict[str, Any]]:
+    """Converte linhas (nivel, texto_caracteristicas) em lista normalizada de 20 níveis."""
+    resultado: list[dict[str, Any]] = []
+    for nivel, texto in linhas:
+        caracteristicas = [item.strip() for item in texto.split(",") if item.strip()]
+        resultado.append(
+            {
+                "nivel": nivel,
+                "caracteristicas": caracteristicas,
+                "texto_original": texto,
+            }
+        )
+    return resultado
+
+
+def construir_caracteristica_classe(
+    nome: str,
+    nivel: int,
+    descricao: str,
+    *,
+    acoes_concedidas: list[dict[str, Any]] | None = None,
+    detalhes: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Cria uma entrada normalizada de característica de classe."""
+    entrada: dict[str, Any] = {
+        "id": slugify(nome),
+        "nome": nome,
+        "nivel": nivel,
+        "descricao": descricao,
+    }
+    if acoes_concedidas:
+        entrada["acoes_concedidas"] = acoes_concedidas
+    if detalhes:
+        entrada["detalhes"] = detalhes
+    return entrada
+
+
+def construir_acao_habilidade(
+    nome: str,
+    acoes: str,
+    tracos: list[str],
+    descricao: str,
+    *,
+    frequencia: str | None = None,
+    acionamento: str | None = None,
+    requerimentos: str | None = None,
+    custo: str | None = None,
+    resultados: dict[str, str] | None = None,
+) -> dict[str, Any]:
+    """Cria uma entrada normalizada de ação ou reação concedida por classe/subclasse."""
+    entrada: dict[str, Any] = {
+        "id": slugify(nome),
+        "nome": nome,
+        "acoes": acoes,
+        "tracos": tracos,
+    }
+    if frequencia is not None:
+        entrada["frequencia"] = frequencia
+    if acionamento is not None:
+        entrada["acionamento"] = acionamento
+    if requerimentos is not None:
+        entrada["requerimentos"] = requerimentos
+    if custo is not None:
+        entrada["custo"] = custo
+    entrada["descricao"] = descricao
+    if resultados is not None:
+        entrada["resultados"] = resultados
+    return entrada
+
+
+def construir_talento_classe(
+    nome: str,
+    nivel: int,
+    tracos: list[str],
+    descricao: str,
+    *,
+    acoes: str | None = None,
+    pre_requisitos: str | None = None,
+    frequencia: str | None = None,
+    acionamento: str | None = None,
+    requerimentos: str | None = None,
+    custo: str | None = None,
+    especial: str | None = None,
+    resultados: dict[str, str] | None = None,
+) -> dict[str, Any]:
+    """Cria uma entrada normalizada de talento de classe."""
+    return {
+        "id": slugify(nome),
+        "nome": nome,
+        "nivel": nivel,
+        "tracos": tracos,
+        "acoes": acoes,
+        "pre_requisitos": pre_requisitos,
+        "frequencia": frequencia,
+        "acionamento": acionamento,
+        "requerimentos": requerimentos,
+        "custo": custo,
+        "especial": especial,
+        "resultados": resultados,
+        "descricao": descricao,
+    }
+
+
+def construir_tabela_magias_3_por_dia(nota_10_nivel: str, *, com_fonte_divina: bool = False) -> list[dict[str, Any]]:
+    """Gera tabelas padrão de 20 níveis com 5 truques e até 3 espaços por círculo (Clérigo e Druida)."""
+    linhas: list[dict[str, Any]] = []
+    for nivel in range(1, 21):
+        espacos: dict[str, int] = {}
+        maior_circulo = 0
+        for circulo in range(1, 10):
+            nivel_desbloqueio = (circulo - 1) * 2 + 1
+            if nivel == nivel_desbloqueio:
+                espacos[str(circulo)] = 2
+                maior_circulo = circulo
+            elif nivel > nivel_desbloqueio:
+                espacos[str(circulo)] = 3
+                maior_circulo = circulo
+        if nivel >= 19:
+            espacos["10"] = 1
+            maior_circulo = 10
+
+        entrada: dict[str, Any] = {
+            "nivel": nivel,
+            "truques_magicos": 5,
+            "espacos_por_circulo": espacos,
+            "nota_10_nivel": nota_10_nivel if nivel >= 19 else None,
+        }
+        if com_fonte_divina:
+            entrada["circulo_fonte_divina"] = maior_circulo
+            entrada["espacos_fonte_divina_formula"] = "1 + modificador_carisma"
+        linhas.append(entrada)
+    return linhas
+
+
+def construir_clerigo() -> dict[str, Any]:
+    """Constrói os dados completos da classe Clérigo (pp. 117–127)."""
+    tabela_progressao = construir_tabela_progressao(
+        [
+            (1, "Ancestralidade e biografia, conjuração divina, divindade, doutrina, fonte divina, proficiências iniciais"),
+            (2, "Talento de clérigo, talento de perícia"),
+            (3, "Incremento de perícia, magias de 2º nível, segunda doutrina, talento geral"),
+            (4, "Talento de clérigo, talento de perícia"),
+            (5, "Incremento de perícia, magias de 3º nível, melhorias de atributo, prontidão, talento de ancestralidade"),
+            (6, "Talento de clérigo, talento de perícia"),
+            (7, "Incremento de perícia, magias de 4º nível, talento geral, terceira doutrina"),
+            (8, "Talento de clérigo, talento de perícia"),
+            (9, "Determinação, incremento de perícia, magias de 5º nível, talento de ancestralidade"),
+            (10, "Melhorias de atributo, talento de clérigo, talento de perícia"),
+            (11, "Incremento de perícia, magias de 6º nível, quarta doutrina, reflexos rápidos, talento geral"),
+            (12, "Talento de clérigo, talento de perícia"),
+            (13, "Defesa divina, especialização em armas, incremento de perícia, magias de 7º nível, talento de ancestralidade"),
+            (14, "Talento de clérigo, talento de perícia"),
+            (15, "Incremento de perícia, magias de 8º nível, melhorias de atributo, quinta doutrina, talento geral"),
+            (16, "Talento de clérigo, talento de perícia"),
+            (17, "Incremento de perícia, magias de 9º nível, talento de ancestralidade"),
+            (18, "Talento de clérigo, talento de perícia"),
+            (19, "Doutrina final, incremento de perícia, magia milagrosa, talento geral"),
+            (20, "Melhorias de atributo, talento de clérigo, talento de perícia"),
+        ]
+    )
+
+    tabela_3_9_magias_por_dia = construir_tabela_magias_3_por_dia(
+        "A característica de classe magia milagrosa lhe concede um espaço de magia de 10º nível que funciona diferente dos outros espaços de magia.",
+        com_fonte_divina=True,
+    )
+
+    tabela_talentos_indice = [
+        {"nome": "Afastar Mortos-Vivos", "nivel": 2},
+        {"nome": "Arma Castigante", "nivel": 10},
+        {"nome": "Arma Divina", "nivel": 6},
+        {"nome": "Audiência do Avatar", "nivel": 20},
+        {"nome": "Banimento Rápido", "nivel": 14},
+        {"nome": "Banimento Rápido Aprimorado", "nivel": 18},
+        {"nome": "Benção Eterna", "nivel": 16},
+        {"nome": "Canalização Direcionada", "nivel": 4},
+        {"nome": "Canalização Ecoante", "nivel": 18},
+        {"nome": "Canalização Metamágica", "nivel": 20},
+        {"nome": "Canalização Rápida", "nivel": 14},
+        {"nome": "Canalizar Punição", "nivel": 4},
+        {"nome": "Castigo Sagrado", "nivel": 1},
+        {"nome": "Comandar Mortos-Vivos", "nivel": 4},
+        {"nome": "Comandar Mortos-Vivos Aprimorado", "nivel": 10},
+        {"nome": "Conjuração Consistente", "nivel": 6},
+        {"nome": "Cremar Mortos-Vivos", "nivel": 8},
+        {"nome": "Cura Comunal", "nivel": 2},
+        {"nome": "Cura Comunal Aprimorada", "nivel": 4},
+        {"nome": "Domínio Avançado", "nivel": 8},
+        {"nome": "Energia Seletiva", "nivel": 6},
+        {"nome": "Exaurir Vida", "nivel": 2},
+        {"nome": "Expansão de Truque Mágico", "nivel": 2},
+        {"nome": "Foco de Domínio", "nivel": 12},
+        {"nome": "Fonte Versátil", "nivel": 2},
+        {"nome": "Infusão Necrótica", "nivel": 4},
+        {"nome": "Iniciado no Domínio", "nivel": 1},
+        {"nome": "Jogar ao Chão", "nivel": 6},
+        {"nome": "Magia de Alcance", "nivel": 1},
+        {"nome": "Manancial de Domínio", "nivel": 18},
+        {"nome": "Mãos Agressoras", "nivel": 1},
+        {"nome": "Mãos Curandeiras", "nivel": 1},
+        {"nome": "Milagreiro", "nivel": 20},
+        {"nome": "Ornar Antimagia", "nivel": 12},
+        {"nome": "Ornar Armamento", "nivel": 2},
+        {"nome": "Ornar Energia", "nivel": 8},
+        {"nome": "Proteção Divina", "nivel": 14},
+        {"nome": "Provimento Compartilhado", "nivel": 12},
+        {"nome": "Provimento de Guerra", "nivel": 10},
+        {"nome": "Recuperação Defensiva", "nivel": 12},
+        {"nome": "Recuperação Heroica", "nivel": 10},
+        {"nome": "Ressurreicionista", "nivel": 16},
+        {"nome": "Ruína Eterna", "nivel": 16},
+        {"nome": "Simplicidade Mortal", "nivel": 1},
+        {"nome": "Socorro Canalizado", "nivel": 8},
+        {"nome": "Tendenciar Armamento", "nivel": 8},
+        {"nome": "Tendenciar Armamento Prolongado", "nivel": 14},
+    ]
+
+    caracteristicas_de_classe = [
+        construir_caracteristica_classe(
+            "Ancestralidade e Biografia",
+            1,
+            "Além das habilidades fornecidas por sua classe no 1º nível, você possui os benefícios da ancestralidade e biografia selecionadas, conforme descrito no Capítulo 2.",
+        ),
+        construir_caracteristica_classe(
+            "Proficiências Iniciais",
+            1,
+            "No 1º nível, você recebe proficiências que representam seu treinamento básico, listadas no início desta classe.",
+        ),
+        construir_caracteristica_classe(
+            "Divindade",
+            1,
+            (
+                "Como um clérigo, você é um servo mortal de uma divindade e a reverencia acima de todas as outras (páginas 437 a 440). "
+                "Sua tendência deve ser permitida por sua divindade. Sua divindade lhe concede a graduação de proficiência treinado em uma perícia "
+                "e na arma favorita dela (com acesso se for incomum), e adiciona magias à sua lista de magias. "
+                "Anátema: atos fundamentalmente opostos à tendência ou aos ideais de sua divindade tiram você de suas boas graças, fazendo perder conjuração divina e fonte divina até realizar um ritual de expiação (página 413)."
+            ),
+        ),
+        construir_caracteristica_classe(
+            "Conjuração Divina",
+            1,
+            (
+                "Você pode conjurar magias divinas usando a atividade Conjurar uma Magia (página 302) e pode segurar um foco divino (como um símbolo religioso) "
+                "para componentes materiais em vez de usar uma bolsa de componentes de magia. No 1º nível, você prepara duas magias de 1º nível e cinco truques mágicos da lista divina (página 309) ou de sua divindade. "
+                "Seu atributo chave para ataques e CDs de magias é Sabedoria. Inclui Elevar Magias e Truques Mágicos (elevados automaticamente à metade do nível arredondada para cima)."
+            ),
+        ),
+        construir_caracteristica_classe(
+            "Fonte Divina",
+            1,
+            (
+                "Dependendo de sua divindade (páginas 437 a 440), você prepara magias adicionais de curar ou ferir (se ambas estiverem listadas, escolha uma permanentemente). "
+                "Fonte de Cura concede espaços adicionais por dia de seu maior nível de espaços de magia de clérigo para preparar apenas curar (página 332), em quantidade igual a 1 + modificador de Carisma. "
+                "Fonte de Ferimento concede espaços adicionais por dia de seu maior nível de espaços de magia de clérigo para preparar apenas ferir (página 342), em quantidade igual a 1 + modificador de Carisma."
+            ),
+            detalhes={"opcoes": ["Fonte de Cura", "Fonte de Ferimento"], "formula_espacos": "1 + modificador_carisma"},
+        ),
+        construir_caracteristica_classe(
+            "Doutrina",
+            1,
+            (
+                "No 1º nível, você seleciona uma doutrina (capelão da guerra ou sacerdote enclausurado) e recebe os benefícios de sua primeira doutrina. "
+                "No 3º, 7º, 11º, 15º e 19º níveis, recebe respectivamente a segunda, terceira, quarta, quinta e doutrina final."
+            ),
+            detalhes={"niveis_doutrina": [1, 3, 7, 11, 15, 19]},
+        ),
+        construir_caracteristica_classe(
+            "Talentos de Clérigo",
+            2,
+            "No 2º nível e a cada nível par subsequente, você recebe um talento de classe de clérigo.",
+        ),
+        construir_caracteristica_classe(
+            "Talentos de Perícia",
+            2,
+            "No 2º nível e a cada 2 níveis subsequentes, você recebe um talento de perícia (Capítulo 5).",
+        ),
+        construir_caracteristica_classe(
+            "Incrementos de Perícia",
+            3,
+            "No 3º nível e a cada 2 níveis subsequentes, você recebe um incremento de perícia (mestre a partir do 7º nível, lendário a partir do 15º nível).",
+        ),
+        construir_caracteristica_classe(
+            "Talentos Gerais",
+            3,
+            "No 3º nível e a cada 4 níveis subsequentes, você recebe um talento geral (Capítulo 5).",
+        ),
+        construir_caracteristica_classe(
+            "Melhorias de Atributo",
+            5,
+            "No 5º nível e a cada 5 níveis subsequentes, você melhora os valores de quatro atributos diferentes (+1 se >= 18, +2 se < 18).",
+        ),
+        construir_caracteristica_classe(
+            "Prontidão",
+            5,
+            "Sua graduação de proficiência em Percepção aumenta para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Talentos de Ancestralidade",
+            5,
+            "Você recebe um talento de ancestralidade no 5º nível e a cada 4 níveis subsequentes.",
+        ),
+        construir_caracteristica_classe(
+            "Determinação",
+            9,
+            "Sua graduação de proficiência em salvamentos de Vontade aumenta para mestre. Quando rolar um sucesso em um salvamento de Vontade, trate o resultado como um sucesso crítico.",
+        ),
+        construir_caracteristica_classe(
+            "Reflexos Rápidos",
+            11,
+            "Sua graduação de proficiência em salvamentos de Reflexos aumenta para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Defesa Divina",
+            13,
+            "Sua graduação de proficiência em defesa sem armadura aumenta para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Especialização em Armas",
+            13,
+            "Você causa 2 pontos de dano adicionais com armas e ataques desarmados nos quais é especialista (3 se mestre, 4 se lendário).",
+        ),
+        construir_caracteristica_classe(
+            "Magia Milagrosa",
+            19,
+            (
+                "Você recebe um único espaço de magia de 10º nível e pode preparar uma magia nesse espaço usando sua conjuração divina "
+                "(pode selecionar o talento Milagreiro para um segundo espaço de 10º nível)."
+            ),
+        ),
+    ]
+
+    subclasses = {
+        "tipo": "doutrina",
+        "nome_tipo": "Doutrina",
+        "opcoes": [
+            {
+                "id": "capelao_da_guerra",
+                "nome": "Capelão da Guerra",
+                "descricao": "Você treinou em uma doutrina mais militar de sua igreja, focando tanto em magias quanto em batalha.",
+                "marcos": [
+                    {
+                        "nivel": 1,
+                        "titulo": "Primeira Doutrina",
+                        "descricao": (
+                            "Você é treinado em armaduras leves e médias e possui proficiência de especialista em salvamentos de Fortitude. "
+                            "Você recebe o talento geral Bloqueio com Escudo (página 258). Se a arma de sua divindade for simples, você recebe o talento de clérigo Simplicidade Mortal (página 122). "
+                            "No 13º nível, se receber a característica de classe defesa divina, você também recebe proficiência de especialista em armaduras leves e médias."
+                        ),
+                    },
+                    {
+                        "nivel": 3,
+                        "titulo": "Segunda Doutrina",
+                        "descricao": "Você é treinado em armas marciais.",
+                    },
+                    {
+                        "nivel": 7,
+                        "titulo": "Terceira Doutrina",
+                        "descricao": (
+                            "Suas graduações de proficiência na arma favorita de sua divindade, em armas simples e ataques desarmados aumentam para especialista. "
+                            "Quando obtiver um sucesso crítico em uma rolagem de ataque usando essa arma, você aplica o efeito de especialização de crítico da arma; se necessário, utilize sua CD de magias divinas."
+                        ),
+                    },
+                    {
+                        "nivel": 11,
+                        "titulo": "Quarta Doutrina",
+                        "descricao": "Suas graduações de proficiência em ataques de magia e CDs de magias divinas aumentam para especialista.",
+                    },
+                    {
+                        "nivel": 15,
+                        "titulo": "Quinta Doutrina",
+                        "descricao": "Sua graduação de proficiência em salvamentos de Fortitude aumenta para mestre. Quando rolar um sucesso em um salvamento de Fortitude, trate o resultado como um sucesso crítico.",
+                    },
+                    {
+                        "nivel": 19,
+                        "titulo": "Doutrina Final",
+                        "descricao": "Suas graduações de proficiência em ataques de magia e CDs de magias divinas aumentam para mestre.",
+                    },
+                ],
+            },
+            {
+                "id": "sacerdote_enclausurado",
+                "nome": "Sacerdote Enclausurado",
+                "descricao": "Você é um clérigo membro do sacerdócio, focando em magias divinas e em sua conexão com os domínios de sua divindade.",
+                "marcos": [
+                    {
+                        "nivel": 1,
+                        "titulo": "Primeira Doutrina",
+                        "descricao": "Você recebe o talento de clérigo Iniciado no Domínio (página 121).",
+                    },
+                    {
+                        "nivel": 3,
+                        "titulo": "Segunda Doutrina",
+                        "descricao": "Sua graduação de proficiência em salvamentos de Fortitude aumenta para especialista.",
+                    },
+                    {
+                        "nivel": 7,
+                        "titulo": "Terceira Doutrina",
+                        "descricao": "Suas graduações de proficiência em ataques de magia e CDs de magias divinas aumentam para especialista.",
+                    },
+                    {
+                        "nivel": 11,
+                        "titulo": "Quarta Doutrina",
+                        "descricao": (
+                            "Suas graduações de proficiência na arma favorita de sua divindade, em armas simples e ataques desarmados aumentam para especialista. "
+                            "Quando obtiver um sucesso crítico em uma rolagem de ataque usando essa arma, você aplica o efeito de especialização de crítico da arma; se necessário, utilize sua CD de magias divinas."
+                        ),
+                    },
+                    {
+                        "nivel": 15,
+                        "titulo": "Quinta Doutrina",
+                        "descricao": "Suas graduações de proficiência em ataques de magia e CDs de magias divinas aumentam para mestre.",
+                    },
+                    {
+                        "nivel": 19,
+                        "titulo": "Doutrina Final",
+                        "descricao": "Suas graduações de proficiência em ataques de magia e CDs de magias divinas aumentam para lendário.",
+                    },
+                ],
+            },
+        ],
+    }
+
+    termos_chave = [
+        {
+            "termo": "Metamágico",
+            "descricao": (
+                "Ações com esse traço alteram as propriedades de suas magias. Você deve usar uma ação metamágica logo antes de Conjurar a Magia que deseja alterar. "
+                "Se usar qualquer outra ação (incluindo ações livres e reações) diferente de Conjurar uma Magia logo após essa ação metamágica, você desperdiça os benefícios da ação metamágica. "
+                "Efeitos acrescentados por uma ação metamágica são parte do efeito da magia, não da ação metamágica em si."
+            ),
+        },
+        {
+            "termo": "Controlando Mortos-Vivos",
+            "descricao": (
+                "Mortos-vivos controlados recebem o traço lacaio. Lacaios podem usar 2 ações por turno e não podem usar reações. "
+                "Em combate, um lacaio age no seu turno após você usar uma ação para emitir um comando verbal (traços auditivo e concentração). "
+                "Se não receberem comandos, não usam nenhuma ação a não ser para se defenderem ou escaparem de perigos óbvios. Se deixados sem atenção por pelo menos 1 minuto, "
+                "lacaios acéfalos não agem, enquanto os inteligentes agem como quiserem. Você não pode ter mais de quatro lacaios mortos-vivos ao mesmo tempo."
+            ),
+        },
+    ]
+
+    exemplos_personagens = [
+        {
+            "nome": "Gozreno",
+            "pagina": 124,
+            "resumo": "Seguindo O Vento e As Ondas, você protege a beleza da natureza em todas as suas formas.",
+            "atributos": "Priorize Sabedoria e Força. Carisma aumenta sua fonte divina para a magia curar.",
+            "pericias": ["Atletismo", "Natureza", "Religião", "Sobrevivência"],
+            "divindade": "Gozreh (tendência: ON; fonte divina: curar)",
+            "subclasse": "Capelão da guerra",
+            "talentos_niveis_superiores": ["Iniciado no Domínio (água, 1º)", "Arma Divina (6º)"],
+            "magias_preparadas": {
+                "1_nivel": ["lufada de vento", "santuário", "magias curar de fonte divina"],
+                "truques_magicos": ["detectar magia", "escudo místico", "intuir direção", "luz", "mensagem"],
+            },
+        },
+        {
+            "nome": "Pharasmino",
+            "pagina": 126,
+            "resumo": "Seguidor da Senhora das Tumbas, você respeita a santidade da vida e da morte.",
+            "atributos": "Priorize Sabedoria, com Carisma logo em seguida para maximizar sua cura e ajudá-lo a pregar a palavra de sua fé.",
+            "pericias": ["Diplomacia", "Medicina", "Ocultismo", "Religião"],
+            "divindade": "Pharasma (tendência: N; fonte divina: curar)",
+            "subclasse": "Sacerdote enclausurado (domínio da morte)",
+            "talentos_niveis_superiores": ["Afastar Mortos-Vivos (2º)", "Energia Seletiva (6º)"],
+            "magias_preparadas": {
+                "1_nivel": ["medo", "vínculo mental", "magias curar de fonte divina"],
+                "truques_magicos": ["detectar magia", "disrupção de morto-vivo", "estabilizar", "luz", "pasmar"],
+            },
+        },
+    ]
+
+    talentos = [
+        # 1º NÍVEL (6)
+        construir_talento_classe(
+            "Castigo Sagrado",
+            1,
+            ["Clérigo"],
+            "Você combina energia sagrada com energia positiva para ferir demônios, diabos e outros de sua laia. As magias curar que você conjura causam dano a ínferos como se fossem mortos-vivos.",
+            pre_requisitos="tendência bondosa",
+        ),
+        construir_talento_classe(
+            "Iniciado no Domínio",
+            1,
+            ["Clérigo"],
+            (
+                "Sua divindade lhe concede uma magia especial relacionada aos poderes dela. Selecione um domínio — um assunto de interesse particular da sua religião — a partir da lista de sua divindade. "
+                "Você recebe a magia de domínio inicial, uma magia única a esse domínio que não é disponível para outros clérigos (Tabela 8–2: Domínios na página 441). "
+                "Magias de domínio são um tipo de magia de foco (custa 1 Ponto de Foco; você adquire reserva de foco com 1 Ponto de Foco, máximo 3; recupera 1 Ponto de Foco com 10 minutos usando Refocar)."
+            ),
+            especial="Você pode selecionar este talento várias vezes. Cada vez que o fizer, você deve escolher um domínio diferente para receber a magia inicial dele.",
+        ),
+        construir_talento_classe(
+            "Mãos Agressoras",
+            1,
+            ["Clérigo"],
+            "O poder incisivo de sua energia negativa aumenta. Quando conjurar ferir, você rola d10s em vez de d8s.",
+            pre_requisitos="fonte de ferimento",
+        ),
+        construir_talento_classe(
+            "Mãos Curandeiras",
+            1,
+            ["Clérigo"],
+            "Sua energia positiva é mais vibrante e restauradora. Quando conjurar curar, você rola d10s em vez de d8s.",
+            pre_requisitos="fonte de cura",
+        ),
+        construir_talento_classe(
+            "Magia de Alcance",
+            1,
+            ["Clérigo", "Concentração", "Metamágico"],
+            "Você amplia a distância de sua magia. Se a próxima ação que você usar for Conjurar uma Magia que possui uma distância, aumente a distância dessa magia em 9 metros. Como padrão para aumentar distâncias de magias, se a magia normalmente tiver uma distância de toque, você amplia a distância dela para 9 metros.",
+            acoes="1",
+        ),
+        construir_talento_classe(
+            "Simplicidade Mortal",
+            1,
+            ["Clérigo"],
+            "A arma de sua divindade é especialmente poderosa em suas mãos. Quando estiver empunhando a arma favorita de sua divindade, aumente o tamanho do dado de dano dessa arma em um passo. Se a arma favorecida de sua divindade for um ataque desarmado (como um punho, se você adorar Irori) e o dado de dano dela for menor que um d6, aumente o tamanho do dado de dano para d6.",
+            pre_requisitos="divindade com arma favorita simples, treinado com a arma favorita de sua divindade",
+        ),
+        # 2º NÍVEL (6)
+        construir_talento_classe(
+            "Afastar Mortos-Vivos",
+            2,
+            ["Clérigo"],
+            "Mortos-vivos feridos por sua energia positiva podem fugir, compelidos por sua aversão inata à força vital oposta à sua existência. Quando usar a magia curar para ferir mortos-vivos, cada morto-vivo do seu nível ou inferior que falhar criticamente em seu salvamento sofre a condição fugindo por 1 rodada.",
+        ),
+        construir_talento_classe(
+            "Cura Comunal",
+            2,
+            ["Clérigo", "Cura", "Positivo"],
+            "Você é um poderoso conduíte para a energia positiva, e ela cura seus ferimentos menores quando a canaliza através de seu corpo. Quando conjurar a magia curar para curar uma única outra criatura, você recupera Pontos de Vida igual ao nível da magia curar utilizada.",
+        ),
+        construir_talento_classe(
+            "Exaurir Vida",
+            2,
+            ["Clérigo", "Cura"],
+            "Você drena a força vital de seus inimigos para curar seus próprios ferimentos. Quando conjurar a magia ferir e causar dano a pelo menos uma criatura viva, você recupera Pontos de Vida igual ao nível da magia ferir utilizada. Você só pode se beneficiar desse talento enquanto for uma criatura viva.",
+        ),
+        construir_talento_classe(
+            "Expansão de Truque Mágico",
+            2,
+            ["Clérigo"],
+            "Você estuda uma maior gama de magias simples. Você pode preparar dois truques mágicos adicionais por dia.",
+        ),
+        construir_talento_classe(
+            "Fonte Versátil",
+            2,
+            ["Clérigo"],
+            "Conforme explora os aspectos de sua divindade, você vai além das restrições de curar ou ferir. Você pode preparar curar ou ferir nos espaços de magia recebidos de sua fonte de cura ou fonte de ferimento.",
+            pre_requisitos="fonte de cura ou fonte de ferimento, divindade que permite que clérigos escolham ambas as fontes",
+        ),
+        construir_talento_classe(
+            "Ornar Armamento",
+            2,
+            ["Clérigo", "Exploração"],
+            (
+                "Gravando cuidadosamente uma imagem sagrada em um objeto físico, você se fortalece e prepara para a batalha. Você pode gastar 10 minutos ornando um símbolo de sua divindade em uma arma ou escudo. "
+                "O símbolo não desvanece até que se passe 1 ano. Porém, se você Ornar um Armamento novamente, qualquer símbolo previamente ornado por você (ou no objeto sendo usado) desaparece imediatamente. "
+                "O item se torna um símbolo religioso de sua divindade e pode ser utilizado como foco divino enquanto permanecer ornado, e recebe um benefício determinado pelo tipo do item (somente a seguidores da divindade): "
+                "• Arma: O empunhador recebe +1 de bônus de estado em rolagens de dano. "
+                "• Escudo: O escudo recebe +1 de bônus de estado em sua Dureza."
+            ),
+        ),
+        # 4º NÍVEL (5)
+        construir_talento_classe(
+            "Canalização Direcionada",
+            4,
+            ["Clérigo"],
+            "Você pode moldar a energia canalizada em uma única direção, alcançando mais longe e de forma mais direcionada. Quando conjurar uma versão de curar ou ferir que possua uma área de efeito, você pode torná-la um cone de 18 metros em vez de uma emanação de 9 metros.",
+        ),
+        construir_talento_classe(
+            "Canalizar Punição",
+            4,
+            ["Clérigo", "Divino", "Necromancia"],
+            "Você canaliza as forças destrutivas da energia positiva ou energia negativa através de um ataque corpo a corpo e atinge seu adversário. Faça um Golpe corpo a corpo e adicione o dano da magia ao dano do Golpe. Este dano é positivo se você gastar a magia curar ou negativo se você gastar a magia ferir. A magia é gasta sem nenhum efeito se seu Golpe falhar ou atingir uma criatura que não sofra dano desse tipo de energia (como atingir uma criatura que não seja morta-viva com a magia curar).",
+            acoes="2",
+            pre_requisitos="fonte de cura ou fonte de ferimento",
+            custo="gastar uma magia curar ou ferir",
+        ),
+        construir_talento_classe(
+            "Comandar Mortos-Vivos",
+            4,
+            ["Clérigo", "Concentração", "Necromancia"],
+            "Você prende a força interna que anima um morto-vivo e o faz curvar-se à sua vontade. Se a sua próxima ação for conjurar ferir mirando um morto-vivo, você altera os efeitos da magia ferir. Em vez dos efeitos normais de ferir, o alvo fica controlado por você se o nível dele for igual ou menor ao seu nível – 3. Ele pode tentar uma jogada de salvamento de Vontade para resistir a ser controlado por você. Se o alvo já estiver sob o controle de outra criatura, essa outra criatura também rola uma jogada de salvamento, e o morto-vivo usa o melhor resultado.",
+            acoes="2",
+            pre_requisitos="fonte de ferimento, tendência maligna",
+            resultados={
+                "sucesso_critico": "O alvo não é afetado e fica temporariamente imune a esse efeito por 24 horas.",
+                "sucesso": "O alvo não é afetado.",
+                "falha": "O morto-vivo se torna um lacaio sob seu controle. A magia recebe uma duração de 1 minuto, mas é dispensada se você ou um aliado atacar o morto-vivo lacaio.",
+                "falha_critica": "Como falha, mas a duração é de 1 hora.",
+            },
+        ),
+        construir_talento_classe(
+            "Cura Comunal Aprimorada",
+            4,
+            ["Clérigo"],
+            "Você pode direcionar o excesso de energia canalizada para beneficiar um aliado. Você pode conceder os Pontos de Vida recuperados pela Cura Comunal para qualquer criatura dentro da distância da magia curar em vez de curar a si mesmo. Você também pode usar Cura Comunal quando mirar apenas a si próprio com a magia curar; nesse caso, você deve conceder a cura adicional a outra criatura.",
+            pre_requisitos="Cura Comunal",
+        ),
+        construir_talento_classe(
+            "Infusão Necrótica",
+            4,
+            ["Clérigo", "Concentração", "Metamágico"],
+            "Você verte energia negativa em seu alvo morto-vivo para potencializar os ataques dele. Se a sua próxima ação for conjurar ferir para restaurar Pontos de Vida de um único morto-vivo, o alvo causa 1d6 de dano negativo com suas armas e ataques desarmados corpo a corpo até o final de seu próximo turno. Se a magia ferir for pelo menos de 5º nível, este dano aumenta para 2d6 e, se a magia ferir for pelo menos de 8º nível, este dano aumenta para 3d6.",
+            acoes="1",
+            pre_requisitos="fonte de ferimento, tendência maligna",
+        ),
+        # 6º NÍVEL (4)
+        construir_talento_classe(
+            "Arma Divina",
+            6,
+            ["Clérigo"],
+            "Você direciona a energia residual da magia para uma arma que estiver empunhando. Até o final de seu turno, a arma causa 1d4 de dano de força adicional. Em vez disso, você pode causar 1d6 de dano adicional de um tipo de tendência que corresponda a um dos componentes da tendência de sua divindade. Como normal para o dano com tendência, este dano pode ferir somente criaturas da tendência oposta.",
+            acoes="livre",
+            frequencia="uma vez por turno",
+            acionamento="Você termina de Conjurar uma Magia usando um de seus espaços divinos em seu turno.",
+        ),
+        construir_talento_classe(
+            "Conjuração Consistente",
+            6,
+            ["Clérigo"],
+            "Confiante em sua técnica, você não perde a concentração facilmente quando Conjura uma Magia. Se uma reação fosse interromper sua ação de conjuração, faça um teste simples CD 15. Se obtiver sucesso, sua ação não é interrompida.",
+        ),
+        construir_talento_classe(
+            "Energia Seletiva",
+            6,
+            ["Clérigo"],
+            "Ao convocar o poder divino, você pode impedir alguns inimigos de se beneficiarem ou alguns aliados de se ferirem. Quando conjurar uma versão de curar ou ferir que tenha uma área, você pode designar uma quantidade de criaturas igual ao seu modificador de Carisma (mínimo 1) que não são afetadas pela magia.",
+        ),
+        construir_talento_classe(
+            "Jogar ao Chão",
+            6,
+            ["Clérigo", "Concentração", "Metamágico"],
+            "A força pura de sua fé pode fazer um adversário desmoronar. Se a sua próxima ação for conjurar curar ou ferir para causar dano em uma criatura, o alvo fica prostrado se sofrer qualquer dano da magia. Se o alvo falhar criticamente em seu salvamento contra a magia, ele também sofre –3 metros de penalidade de estado em sua Velocidade por 1 minuto.",
+            acoes="1",
+            pre_requisitos="fonte de cura ou fonte de ferimento",
+        ),
+        # 8º NÍVEL (5)
+        construir_talento_classe(
+            "Cremar Mortos-Vivos",
+            8,
+            ["Clérigo"],
+            "Sua energia positiva queima mortos-vivos. Quando usar a magia curar para causar dano a mortos-vivos, todo morto-vivo que sofrer dano também sofre dano persistente de fogo igual ao nível da magia.",
+        ),
+        construir_talento_classe(
+            "Domínio Avançado",
+            8,
+            ["Clérigo"],
+            "Seus estudos ou orações expõem os segredos profundos do domínio de sua divindade. Você recebe uma magia avançada de domínio de um de seus domínios (conforme listado na Tabela 8–2: Domínios, na página 441). Aumente em 1 a quantidade de Pontos de Foco em sua reserva de foco.",
+            pre_requisitos="Iniciado no Domínio",
+            especial="Você pode selecionar este talento várias vezes. Cada vez que o fizer, você deve selecionar uma magia avançada de domínio diferente, desde que seja de um domínio que você já possua uma magia inicial de domínio.",
+        ),
+        construir_talento_classe(
+            "Ornar Energia",
+            8,
+            ["Clérigo"],
+            (
+                "Canalizando forças elementais, você torna seus símbolos ornados mais potentes. Quando Ornar um Armamento, você pode escolher os efeitos a seguir em vez dos efeitos listados em Ornar Armamento (mesmas restrições): "
+                "• Arma: Escolha ácido, eletricidade, fogo, frio ou sônico. A arma causa 1d4 de dano extra desse tipo (1d6 se possuir uma magia de domínio com o traço correspondente). "
+                "• Escudo: Escolha ácido, eletricidade, fogo, frio ou sônico. O portador recebe o bônus de circunstância do escudo em jogadas de salvamento contra esse tipo de dano e pode usar Bloqueio com Escudo contra esse tipo de dano. O escudo adquire resistência igual à metade de seu nível se possuir magia de domínio correspondente."
+            ),
+            pre_requisitos="Ornar Armamento",
+        ),
+        construir_talento_classe(
+            "Socorro Canalizado",
+            8,
+            ["Clérigo"],
+            "Você pode remover condições através da graça divina. Você pode sacrificar uma magia de curar que tenha preparado nos espaços de magia adicionais de sua fonte de cura para conjurar uma das seguintes magias: remover doença, remover maldição, remover paralisia ou restauração. A magia é elevada para o mesmo nível que a magia curar sacrificada.",
+            pre_requisitos="fonte de cura",
+        ),
+        construir_talento_classe(
+            "Tendenciar Armamento",
+            8,
+            ["Clérigo", "Divino", "Evocação"],
+            "Você conduz uma arma à concordância metafísica com as crenças de sua divindade. Quando selecionar este talento, escolha bem, caos, mal ou ordem (correspondente a um componente da tendência de sua divindade; esta ação possui esse traço). Quando usar esta ação, você toca uma arma. Por 1 rodada, essa arma causa 1d6 de dano adicional do tipo escolhido a criaturas da tendência oposta. Se você Tendenciar Armamento novamente, qualquer armamento previamente tendenciado perde seu dano adicional.",
+            acoes="1",
+            pre_requisitos="divindade bondosa, caótica, maligna ou ordeira",
+            frequencia="uma vez por rodada",
+            especial="Você pode selecionar este talento uma segunda vez, escolhendo o outro componente de tendência de sua divindade. Quando Tendenciar Armamento, você pode escolher somente um desses componentes de tendência.",
+        ),
+        # 10º NÍVEL (4)
+        construir_talento_classe(
+            "Arma Castigante",
+            10,
+            ["Clérigo"],
+            "A força do castigo de sua divindade fortalece seu corpo para que você possa sobrepujar os perversos. Após causar dano a um ínfero usando a magia curar, seus Golpes com arma ou desarmados causam dano bondoso extra a ínferos igual à metade do nível da magia curar até o final de seu próximo turno. Isto é cumulativo com qualquer outro dano bondoso já causado pela arma (como de uma runa sagrada).",
+            pre_requisitos="Castigo Sagrado",
+        ),
+        construir_talento_classe(
+            "Comandar Mortos-Vivos Aprimorado",
+            10,
+            ["Clérigo"],
+            "Criaturas mortas-vivas acham quase impossível resistir aos seus comandos. Quando usar Comandar Mortos-Vivos, se o morto-vivo obtiver sucesso (mas não um sucesso crítico) no salvamento, ele se torna seu lacaio por 1 rodada. Se o morto-vivo falhar no salvamento, ele se torna seu lacaio por 10 minutos. Se ele falhar criticamente, se torna seu lacaio por 24 horas.",
+            pre_requisitos="fonte de ferimento, tendência maligna, Comandar Mortos-Vivos",
+        ),
+        construir_talento_classe(
+            "Provimento de Guerra",
+            10,
+            ["Clérigo"],
+            "Golpear seus inimigos gera louvor e proteção de sua divindade. Quando causar dano a uma criatura com um Golpe usando a arma favorita de sua divindade, você recebe uma quantidade de Pontos de Vida temporários igual à metade de seu nível (ou igual ao seu nível se o Golpe for um sucesso crítico). Estes Pontos de Vida temporários duram até o início de seu próximo turno.",
+            pre_requisitos="especialista com a arma favorita de sua divindade",
+        ),
+        construir_talento_classe(
+            "Recuperação Heroica",
+            10,
+            ["Clérigo", "Concentração", "Metamágico"],
+            "O poder restaurador de sua cura revigora seu receptor. Se a sua próxima ação for conjurar curar mirando uma única criatura viva e a magia recuperar Pontos de Vida dela, essa criatura também receberá os seguintes três bônus: +1,5 metros de bônus de estado em Velocidade, +1 de bônus de estado em rolagens de ataque e +1 de bônus de estado em rolagens de dano. Esses benefícios duram até o final do próximo turno da criatura.",
+            acoes="1",
+            pre_requisitos="fonte de cura, tendência bondosa",
+        ),
+        # 12º NÍVEL (4)
+        construir_talento_classe(
+            "Foco de Domínio",
+            12,
+            ["Clérigo"],
+            "Sua devoção aos domínios de sua divindade aumenta, assim como o poder concedido a você. Se tiver gastado pelo menos 2 Pontos de Foco desde a última vez que Refocou, você recupera 2 Pontos de Foco ao Refocar (em vez de recuperar somente 1 ponto).",
+            pre_requisitos="uma ou mais magias de domínio",
+        ),
+        construir_talento_classe(
+            "Ornar Antimagia",
+            12,
+            ["Clérigo"],
+            (
+                "O símbolo de sua divindade protege contra magia ofensiva. Quando Ornar um Armamento, você também pode escolher dentre os efeitos a seguir em vez dos efeitos listados em Ornar Armamento (mesmas restrições): "
+                "• Arma: Quando desferir um acerto crítico com a arma, o seu portador pode tentar neutralizar uma magia no alvo, utilizando seu nível como nível de neutralização. Se tentar fazê-lo, o símbolo ornado desaparece imediatamente. "
+                "• Escudo: Quando tiver o escudo erguido, o seu portador recebe o bônus de circunstância do escudo em jogadas de salvamento contra magia e pode usar Bloqueio com Escudo contra o dano das magias de seus inimigos."
+            ),
+            pre_requisitos="Ornar Armamento",
+        ),
+        construir_talento_classe(
+            "Provimento Compartilhado",
+            12,
+            ["Clérigo"],
+            "Quando sua divindade abençoa seus atos bélicos, você pode estender esse favor a seus aliados. Você pode conceder os Pontos de Vida temporários de Provimento de Guerra para um aliado a até 3 metros em vez de concedê-los a si mesmo. Você pode conceder estes Pontos de Vida temporários para um aliado diferente a cada vez, o que significa que você consegue concedê-los a múltiplas criaturas em um mesmo turno.",
+            pre_requisitos="Provimento de Guerra",
+        ),
+        construir_talento_classe(
+            "Recuperação Defensiva",
+            12,
+            ["Clérigo", "Concentração", "Metamágico"],
+            "Sua fé fornece proteção temporária além da cura. Se a sua próxima ação for conjurar curar ou ferir mirando uma única criatura e a magia recuperar Pontos de Vida dela, essa criatura também recebe +2 de bônus de estado na CA e jogadas de salvamento por 1 rodada.",
+            acoes="1",
+            pre_requisitos="fonte de cura ou fonte de ferimento",
+        ),
+        # 14º NÍVEL (4)
+        construir_talento_classe(
+            "Banimento Rápido",
+            14,
+            ["Clérigo"],
+            "A força de seu golpe envia sua vítima de volta a seu plano natal. Você gasta a magia banimento que tem preparada, afetando a criatura atingida pelo acerto crítico sem precisar conjurar a magia. A criatura pode tentar resistir à magia normalmente.",
+            acoes="reacao",
+            acionamento="Você atinge um acerto crítico em uma criatura que não está no plano natal dela.",
+            requerimentos="Você possui a magia banimento preparada.",
+        ),
+        construir_talento_classe(
+            "Canalização Rápida",
+            14,
+            ["Clérigo"],
+            "O poder divino está sempre nas pontas de seus dedos, respondendo rapidamente ao seu chamado. Quando conjurar curar ou ferir gastando 2 ações, você pode obter os efeitos da versão de 3 ações em vez da versão de 2 ações. Você pode fazer isto com curar se tiver fonte de cura ou com ferir se tiver fonte de ferimento (ou com ambas se possuir Fonte Versátil).",
+            pre_requisitos="fonte de cura ou fonte de ferimento",
+        ),
+        construir_talento_classe(
+            "Proteção Divina",
+            14,
+            ["Clérigo"],
+            "Quando recorrer ao poder de sua divindade para cumprir o objetivo de seu domínio, você recebe proteção divina. Após conjurar uma magia de domínio, você adquire resistência a todo dano até o início de seu próximo turno. O valor da resistência é igual ao nível da magia de domínio conjurada.",
+            pre_requisitos="Domínio Avançado",
+        ),
+        construir_talento_classe(
+            "Tendenciar Armamento Prolongado",
+            14,
+            ["Clérigo"],
+            "A tendência que você impõe em uma arma dura muito mais. A duração de Tendenciar Armamento aumenta para 1 minuto.",
+            pre_requisitos="Tendenciar Armamento",
+        ),
+        # 16º NÍVEL (3)
+        construir_talento_classe(
+            "Benção Eterna",
+            16,
+            ["Clérigo"],
+            "Seus feitos benevolentes lhe concederam a graça eterna de sua divindade. Você é continuamente envolto pela magia benção com um nível de magia igual à metade de seu nível de personagem arredondada para cima. O raio da magia é de 4,5 metros e você não pode aumentá-lo. Você pode Dispensar a magia; se o fizer, ela retorna automaticamente após 1 minuto.",
+            pre_requisitos="tendência bondosa",
+        ),
+        construir_talento_classe(
+            "Ressurreicionista",
+            16,
+            ["Clérigo"],
+            "Quando traz uma criatura de volta à vida, você garante que ela prospere e se revigore. Quando restaurar Pontos de Vida a uma criatura que esteja morrendo ou trouxer uma criatura de volta à vida e restaurar Pontos de Vida dela, você concede cura acelerada 5 à criatura por 1 minuto. Esta cura acelerada se encerra se a criatura for derrubada inconsciente.",
+        ),
+        construir_talento_classe(
+            "Ruína Eterna",
+            16,
+            ["Clérigo"],
+            "Uma vida de maldade o tornou um nexo para o poder vil de sua divindade. Você é continuamente envolto pela magia ruína com um nível de magia igual à metade de seu nível arredondada para cima. O raio da magia é de 4,5 metros e você não pode aumentá-lo. Você pode Dispensar a magia; se o fizer, ela retorna automaticamente após 1 minuto.",
+            pre_requisitos="tendência maligna",
+        ),
+        # 18º NÍVEL (3)
+        construir_talento_classe(
+            "Banimento Rápido Aprimorado",
+            18,
+            ["Clérigo"],
+            "Você bane criaturas facilmente com sua arma. Você pode usar Banimento Rápido desde que tenha um espaço de magia de 5º nível ou superior remanescente, mesmo que não tenha banimento preparada. Você deve sacrificar uma magia preparada de 5º nível ou superior para criar um efeito de banimento que é elevado para o nível dessa magia. Sua arma serve como o componente material especial de banimento, impondo –2 de penalidade no salvamento do alvo contra qualquer banimento conjurado por você através de Banimento Rápido.",
+            pre_requisitos="Banimento Rápido",
+        ),
+        construir_talento_classe(
+            "Canalização Ecoante",
+            18,
+            ["Clérigo", "Concentração", "Metamágico"],
+            "Quando convoca energia positiva ou negativa, você também cria um pequeno bolsão dessa energia. Se a sua próxima ação for conjurar curar ou ferir para curar ou causar dano a uma única criatura, escolha uma criatura adicional adjacente a você ou ao seu alvo. Essa criatura é afetada pela versão de 1 ação da mesma magia. Esta magia é do mesmo nível que a versão de 2 ações de curar ou ferir conjurada e não custa outro espaço de magia.",
+            acoes="1",
+        ),
+        construir_talento_classe(
+            "Manancial de Domínio",
+            18,
+            ["Clérigo"],
+            "O investimento nos domínios de sua divindade aumenta a intensidade de seu foco. Se tiver gastado pelo menos 3 Pontos de Foco desde a última vez que Refocou, você recupera 3 Pontos de Foco ao Refocar (em vez de recuperar somente 1 ponto).",
+            pre_requisitos="Foco de Domínio",
+        ),
+        # 20º NÍVEL (3)
+        construir_talento_classe(
+            "Audiência do Avatar",
+            20,
+            ["Clérigo"],
+            (
+                "Seu serviço duradouro o tornou um arauto menor de sua divindade, o que lhe proporciona certos privilégios. Primeiro, qualquer criatura encontrada sabe instintivamente que você fala por sua divindade. "
+                "Segundo, você não precisa pagar qualquer custo para conduzir o ritual comunhão para contatar sua divindade e automaticamente obtém um sucesso crítico na rolagem necessária. "
+                "Terceiro, uma vez por dia, você pode conjurar salto planar como uma magia divina inata, mas apenas para viajar para o reino de sua divindade (tempo de conjuração 1 minuto, seu símbolo religioso serve como diapasão, aparece exatamente onde desejar, e pode retornar gastando 1 ação única com os traços concentração e divino)."
+            ),
+        ),
+        construir_talento_classe(
+            "Canalização Metamágica",
+            20,
+            ["Clérigo", "Concentração"],
+            "A profunda compreensão de revelações divinas sobre a natureza da essência vital lhe permite manipular livremente os seus efeitos de energia positiva ou negativa. Use 1 ação metamágica que você poderia realizar normalmente gastando 1 ação e que possa ser aplicada à magia curar ou ferir. Se usada desta maneira, seus efeitos se aplicam somente à magia curar ou ferir.",
+            acoes="livre",
+        ),
+        construir_talento_classe(
+            "Milagreiro",
+            20,
+            ["Clérigo"],
+            "Você é um conduíte para o verdadeiro poder deífico. Você recebe um espaço de magia de 10º nível adicional.",
+            pre_requisitos="magia milagrosa",
+        ),
+    ]
+
+    return {
+        "id": "clerigo",
+        "nome": "Clérigo",
+        "paginas": "116-127",
+        "descricao": (
+            "As divindades exercem sua vontade sobre o mundo de infinitas formas, e você é um de seus servos mortais mais resolutos. "
+            "Abençoado com magia divina, você vive segundo os ideais de sua fé, se adorna com os símbolos de sua igreja e treina diligentemente "
+            "para empunhar a arma favorita de sua divindade. Suas magias podem proteger e curar seus aliados ou punir os adversários e inimigos de sua fé, "
+            "conforme a vontade de sua divindade. Você tem uma vida de devoção, pregando os ensinamentos de sua fé através das palavras e do exemplo."
+        ),
+        "atributo_chave": {
+            "opcoes": ["sabedoria"],
+            "melhoria_1_nivel": 2,
+            "texto": "Sabedoria — No 1º nível, sua classe lhe concede uma melhoria de atributo em Sabedoria.",
+        },
+        "pontos_de_vida_por_nivel": 8,
+        "pontos_de_vida_texto": "8 mais seu modificador de Constituição no 1º nível e a cada nível subsequente.",
+        "jogando_com_a_classe": {
+            "encontros_combate": (
+                "Se for um capelão da guerra, você se divide entre conjurar magias e atacar seus inimigos — geralmente com a arma favorita de sua divindade. "
+                "Se for um sacerdote enclausurado, você primariamente conjura magias. A maioria de suas magias aprimora, protege ou cura seus aliados. "
+                "Dependendo de sua divindade, você recebe magias extras para curar seus aliados ou ferir seus inimigos."
+            ),
+            "encontros_sociais": "Você pode fazer propostas diplomáticas ou discursos impressionantes. Por ser sábio, você também percebe as inverdades contadas pelos outros.",
+            "exploracao": (
+                "Você detecta magia por perto e interpreta quaisquer escritas religiosas que encontrar. Você também pode concentrar-se em uma magia de proteção "
+                "para seus aliados em caso de um ataque súbito. Após uma batalha ou perigo, você pode curar qualquer um que tenha se machucado."
+            ),
+            "recesso": "Você pode prestar serviços em um santuário, viajar para pregar a palavra de sua divindade, pesquisar escrituras, celebrar dias santos ou até mesmo fundar um novo templo.",
+            "voce_pode": [
+                "Visitar os templos e lugares sagrados de sua fé e compartilhar uma afinidade imediata com outros adoradores de sua divindade.",
+                "Conhecer os ensinamentos dos textos sagrados de sua religião e como aplicá-los a um dilema.",
+                "Cooperar com seus aliados, desde que eles não lhe peçam para ir contra a vontade divina.",
+            ],
+            "outros_provavelmente": [
+                "Acham sua devoção impressionante, mesmo que não a compreendam completamente.",
+                "Esperam que você cure os ferimentos deles.",
+                "Confiam em você para interagir com outras figuras religiosas.",
+            ],
+        },
+        "proficiencias_iniciais": {
+            "percepcao": "treinado",
+            "salvamentos": {
+                "fortitude": "treinado",
+                "reflexos": "treinado",
+                "vontade": "especialista",
+            },
+            "pericias": {
+                "fixas": ["religiao"],
+                "opcoes_fixas": [],
+                "condicionais": ["pericia_determinada_pela_divindade"],
+                "adicionais_base": 2,
+                "soma_modificador_inteligencia": True,
+                "texto": "Treinado em Religião; treinado em uma perícia determinada por sua divindade; treinado em uma quantidade de perícias adicionais igual a 2 mais seu modificador de Inteligência.",
+            },
+            "ataques": {
+                "armas_simples": "treinado",
+                "arma_favorita_divindade": {
+                    "graduacao": "treinado",
+                    "concede_acesso_se_incomum": True,
+                },
+                "ataques_desarmados": "treinado",
+            },
+            "defesas": {
+                "armaduras_leves": "destreinado",
+                "armaduras_medias": "destreinado",
+                "armaduras_pesadas": "destreinado",
+                "todas_armaduras": "destreinado (embora sua doutrina possa alterar isto)",
+                "defesa_sem_armadura": "treinado",
+            },
+            "cd_classe": None,
+            "magias": {
+                "tradicao": "divina",
+                "tipo_conjuracao": "preparada",
+                "ataques_magia": "treinado",
+                "cds_magia": "treinado",
+                "atributo_conjuracao": "sabedoria",
+                "texto": "Treinado em ataques de magias divinas; treinado em CDs de magias divinas.",
+            },
+        },
+        "tabela_progressao": tabela_progressao,
+        "tabelas_especificas": {
+            "tabela_3_9_magias_por_dia": tabela_3_9_magias_por_dia,
+            "tabela_talentos_indice": tabela_talentos_indice,
+        },
+        "caracteristicas_de_classe": caracteristicas_de_classe,
+        "subclasses": subclasses,
+        "termos_chave": termos_chave,
+        "exemplos_personagens": exemplos_personagens,
+        "talentos_de_classe": talentos,
+    }
+
+
+def construir_druida() -> dict[str, Any]:
+    """Constrói os dados completos da classe Druida (pp. 128–139)."""
+    tabela_progressao = construir_tabela_progressao(
+        [
+            (1, "Anátema, ancestralidade e biografia, Bloqueio com Escudo, conjuração primal, empatia selvagem, idioma Druídico, ordem druídica, proficiências iniciais"),
+            (2, "Talento de druida, talento de perícia"),
+            (3, "Grande fortitude, incremento de perícia, magias de 2º nível, prontidão, talento geral"),
+            (4, "Talento de druida, talento de perícia"),
+            (5, "Incremento de perícia, magias de 3º nível, melhorias de atributo, reflexos rápidos, talento de ancestralidade"),
+            (6, "Talento de druida, talento de perícia"),
+            (7, "Conjurador especialista, incremento de perícia, magias de 4º nível, talento geral"),
+            (8, "Talento de druida, talento de perícia"),
+            (9, "Incremento de perícia, magias de 5º nível, talento de ancestralidade"),
+            (10, "Melhorias de atributo, talento de druida, talento de perícia"),
+            (11, "Determinação, especialidade em armas de druida, incremento de perícia, magias de 6º nível, talento geral"),
+            (12, "Talento de druida, talento de perícia"),
+            (13, "Especialidade em armaduras médias, especialização em armas, incremento de perícia, magias de 7º nível, talento de ancestralidade"),
+            (14, "Talento de druida, talento de perícia"),
+            (15, "Conjurador mestre, incremento de perícia, magias de 8º nível, melhorias de atributo, talento geral"),
+            (16, "Talento de druida, talento de perícia"),
+            (17, "Incremento de perícia, magias de 9º nível, talento de ancestralidade"),
+            (18, "Talento de druida, talento de perícia"),
+            (19, "Conjurador lendário, hierofante primal, incremento de perícia, talento geral"),
+            (20, "Melhorias de atributo, talento de druida, talento de perícia"),
+        ]
+    )
+
+    tabela_3_11_magias_por_dia = construir_tabela_magias_3_por_dia(
+        "A característica de classe hierofante primal lhe concede um espaço de magia de 10º nível que funciona diferente dos outros espaços de magia.",
+        com_fonte_divina=False,
+    )
+
+    tabela_talentos_indice = [
+        {"nome": "Ampliar Magia", "nivel": 1},
+        {"nome": "Aspecto Altaneiro", "nivel": 8},
+        {"nome": "Aspecto de Dinossauro", "nivel": 8},
+        {"nome": "Aspecto de Dragão", "nivel": 12},
+        {"nome": "Aspecto de Elemental", "nivel": 10},
+        {"nome": "Aspecto de Inseto", "nivel": 6},
+        {"nome": "Aspecto de Monstruosidade", "nivel": 16},
+        {"nome": "Aspecto de Planta", "nivel": 10},
+        {"nome": "Aspecto Selvagem", "nivel": 1},
+        {"nome": "Chamado dos Ermos", "nivel": 2},
+        {"nome": "Companheiro Animal", "nivel": 1},
+        {"nome": "Companheiro Animal Maduro", "nivel": 4},
+        {"nome": "Companheiro Especializado", "nivel": 14},
+        {"nome": "Companheiro Incrível", "nivel": 8},
+        {"nome": "Concentração Sem Esforço", "nivel": 16},
+        {"nome": "Conduíte de Linha de Ley", "nivel": 20},
+        {"nome": "Conjuração Consistente", "nivel": 6},
+        {"nome": "Controlar Forma", "nivel": 4},
+        {"nome": "Controlar Forma Perfeitamente", "nivel": 18},
+        {"nome": "Convocações Primais", "nivel": 12},
+        {"nome": "Convocador de Fadas", "nivel": 8},
+        {"nome": "Deslocamento da Floresta", "nivel": 4},
+        {"nome": "Empatia Verde", "nivel": 6},
+        {"nome": "Energia Avassaladora", "nivel": 10},
+        {"nome": "Explorador de Ordem", "nivel": 2},
+        {"nome": "Familiar Leshy", "nivel": 1},
+        {"nome": "Familiar Melhorado", "nivel": 2},
+        {"nome": "Foco Primal", "nivel": 12},
+        {"nome": "Invocador de Ventos", "nivel": 8},
+        {"nome": "Invocar Desastre", "nivel": 18},
+        {"nome": "Lado a Lado", "nivel": 10},
+        {"nome": "Língua Verde", "nivel": 12},
+        {"nome": "Magia de Alcance", "nivel": 1},
+        {"nome": "Magia de Ordem", "nivel": 4},
+        {"nome": "Manancial Primal", "nivel": 18},
+        {"nome": "Metamorfo Verdadeiro", "nivel": 20},
+        {"nome": "Metamorfose Verdejante", "nivel": 14},
+        {"nome": "Mil Faces", "nivel": 4},
+        {"nome": "Nascido da Tempestade", "nivel": 1},
+        {"nome": "Natureza Atemporal", "nivel": 14},
+        {"nome": "Poder do Hierofante", "nivel": 20},
+        {"nome": "Resistência a Veneno", "nivel": 2},
+        {"nome": "Retribuição da Tempestade", "nivel": 6},
+        {"nome": "Silvados Empaladores", "nivel": 16},
+        {"nome": "Transformação Curativa", "nivel": 10},
+    ]
+
+    caracteristicas_de_classe = [
+        construir_caracteristica_classe(
+            "Ancestralidade e Biografia",
+            1,
+            "Além das habilidades fornecidas por sua classe no 1º nível, você possui os benefícios da ancestralidade e biografia selecionadas, conforme descrito no Capítulo 2.",
+        ),
+        construir_caracteristica_classe(
+            "Proficiências Iniciais",
+            1,
+            "No 1º nível, você recebe proficiências que representam seu treinamento básico, listadas no início desta classe.",
+        ),
+        construir_caracteristica_classe(
+            "Conjuração Primal",
+            1,
+            (
+                "Você pode conjurar magias primais usando a atividade Conjurar uma Magia (página 302) e pode segurar um foco primal (tal como visco e azevinho) "
+                "para magias que exijam componentes materiais em vez de usar uma bolsa de componentes de magia. No 1º nível, você prepara duas magias de 1º nível e cinco truques mágicos da lista primal (página 314). "
+                "Seu atributo chave para ataques e CDs de magias é Sabedoria. Inclui Elevar Magias e Truques Mágicos (elevados automaticamente à metade do nível arredondada para cima)."
+            ),
+        ),
+        construir_caracteristica_classe(
+            "Anátema",
+            1,
+            (
+                "Como guardiões da ordem natural, druidas consideram afrontas à natureza como anátemas (perdem conjuração primal e benefícios da ordem até realizar um ritual de expiação, página 413). "
+                "Anátemas para todos os druidas: usar armaduras ou escudos de metal; espoliar locais naturais; ensinar o idioma Druídico para não-druidas."
+            ),
+            detalhes={
+                "anatemas_gerais": [
+                    "Usar armaduras ou escudos de metal.",
+                    "Espoliar locais naturais.",
+                    "Ensinar o idioma Druídico para não-druidas.",
+                ]
+            },
+        ),
+        construir_caracteristica_classe(
+            "Idioma Druídico",
+            1,
+            "Você conhece o Druídico, um idioma secreto conhecido apenas por druidas, em adição a quaisquer idiomas conhecidos através de sua ancestralidade. O Druídico possui seu próprio alfabeto.",
+        ),
+        construir_caracteristica_classe(
+            "Ordem Druídica",
+            1,
+            (
+                "Ao se tornar um druida, você se alinha a uma ordem (Animais, Folha, Tempestade ou Selvagens) que lhe concede um talento de classe, uma magia de ordem e uma perícia treinada adicional. "
+                "Magias de ordem são magias de foco (custa 1 Ponto de Foco; você adquire reserva de foco com 1 Ponto de Foco, máximo 3; recupera 1 ponto com 10 minutos usando Refocar comungando com espíritos locais ou cuidando das terras ermas)."
+            ),
+            detalhes={"reserva_foco_inicial": 1},
+        ),
+        construir_caracteristica_classe(
+            "Bloqueio com Escudo",
+            1,
+            "Você recebe o talento geral Bloqueio com Escudo (página 258), uma reação que lhe permite reduzir dano com seu escudo.",
+            detalhes={"talento_bonus": "Bloqueio com Escudo"},
+        ),
+        construir_caracteristica_classe(
+            "Empatia Selvagem",
+            1,
+            "Você possui uma conexão com as criaturas do mundo natural que lhe permite comunicar-se com elas em um nível rudimentar. Você pode utilizar Diplomacia para Impressionar animais e para fazer Pedidos simples a eles.",
+        ),
+        construir_caracteristica_classe(
+            "Talentos de Druida",
+            2,
+            "No 2º nível e a cada nível par subsequente, você recebe um talento de classe de druida.",
+        ),
+        construir_caracteristica_classe(
+            "Talentos de Perícia",
+            2,
+            "No 2º nível e a cada 2 níveis subsequentes, você recebe um talento de perícia (Capítulo 5).",
+        ),
+        construir_caracteristica_classe(
+            "Prontidão",
+            3,
+            "Sua graduação de proficiência em Percepção aumenta para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Talentos Gerais",
+            3,
+            "No 3º nível e a cada 4 níveis subsequentes, você recebe um talento geral (Capítulo 5).",
+        ),
+        construir_caracteristica_classe(
+            "Grande Fortitude",
+            3,
+            "Sua graduação de proficiência em salvamentos de Fortitude aumenta para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Incrementos de Perícia",
+            3,
+            "No 3º nível e a cada 2 níveis subsequentes, você recebe um incremento de perícia (mestre a partir do 7º nível, lendário a partir do 15º nível).",
+        ),
+        construir_caracteristica_classe(
+            "Melhorias de Atributo",
+            5,
+            "No 5º nível e a cada 5 níveis subsequentes, você melhora os valores de quatro atributos diferentes (+1 se >= 18, +2 se < 18).",
+        ),
+        construir_caracteristica_classe(
+            "Talentos de Ancestralidade",
+            5,
+            "Você recebe um talento de ancestralidade no 5º nível e a cada 4 níveis subsequentes.",
+        ),
+        construir_caracteristica_classe(
+            "Reflexos Rápidos",
+            5,
+            "Sua graduação de proficiência em salvamentos de Reflexos aumenta para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Conjurador Especialista",
+            7,
+            "Suas graduações de proficiência em ataques de magia e CDs de magias primais aumentam para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Determinação",
+            11,
+            "Sua graduação de proficiência em salvamentos de Vontade aumenta para mestre. Quando rolar um sucesso em um salvamento de Vontade, trate o resultado como um sucesso crítico.",
+        ),
+        construir_caracteristica_classe(
+            "Especialidade em Armas de Druida",
+            11,
+            "Suas graduações de proficiência em armas simples e ataques desarmados aumentam para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Especialidade em Armaduras Médias",
+            13,
+            "Suas graduações de proficiência em armaduras leves, armaduras médias e defesa sem armadura aumentam para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Especialização em Armas",
+            13,
+            "Você causa 2 pontos de dano adicionais com armas e ataques desarmados nos quais é especialista (3 se mestre, 4 se lendário).",
+        ),
+        construir_caracteristica_classe(
+            "Conjurador Mestre",
+            15,
+            "Suas graduações de proficiência em ataques de magia e CDs de magias primais aumentam para mestre.",
+        ),
+        construir_caracteristica_classe(
+            "Conjurador Lendário",
+            19,
+            "Suas graduações de proficiência em ataques de magia e CDs de magias primais aumentam para lendário.",
+        ),
+        construir_caracteristica_classe(
+            "Hierofante Primal",
+            19,
+            "Você recebe um único espaço de magia de 10º nível e pode preparar uma magia nesse espaço usando sua conjuração primal (pode selecionar Poder do Hierofante para receber um segundo espaço).",
+        ),
+    ]
+
+    subclasses = {
+        "tipo": "ordem_druidica",
+        "nome_tipo": "Ordem Druídica",
+        "opcoes": [
+            {
+                "id": "animais",
+                "nome": "Animais",
+                "descricao": "Você possui uma forte conexão com bestas e está aliado a uma besta companheira.",
+                "pericia_treinada": "Atletismo",
+                "talento_concedido": "Companheiro Animal",
+                "magia_ordem": "curar animal",
+                "pontos_foco_adicionais": 0,
+                "anatema": "Cometer crueldade arbitrária com animais ou matar animais desnecessariamente é anátema à sua ordem. (Isto não o impede de defender-se de animais ou matá-los para alimentar-se.)",
+            },
+            {
+                "id": "folha",
+                "nome": "Folha",
+                "descricao": "Você reverencia plantas e a magnanimidade da natureza, agindo como jardineiro e guardião dos ermos.",
+                "pericia_treinada": "Diplomacia",
+                "talento_concedido": "Familiar Leshy",
+                "magia_ordem": "bom fruto",
+                "pontos_foco_adicionais": 1,
+                "anatema": "Cometer crueldade arbitrária com plantas ou matá-las desnecessariamente é anátema à sua ordem. (Isto não o impede de defender-se de plantas ou colhê-las quando necessário para sobrevivência.)",
+            },
+            {
+                "id": "tempestade",
+                "nome": "Tempestade",
+                "descricao": "Você carrega a fúria da tempestade em seu interior, canalizando-a em efeitos aterrorizantes e cavalgando os ventos pelo céu.",
+                "pericia_treinada": "Acrobatismo",
+                "talento_concedido": "Nascido da Tempestade",
+                "magia_ordem": "surto de tempestade",
+                "pontos_foco_adicionais": 1,
+                "anatema": "Poluir o ar ou permitir que os causadores de grande poluição do ar ou mudanças climáticas permaneçam impunes é anátema para sua ordem.",
+            },
+            {
+                "id": "selvagens",
+                "nome": "Selvagens",
+                "descricao": "O selvagem e incontrolável chamado da natureza lhe infunde, além de conceder a habilidade de se transformar e assumir a forma feroz de criaturas selvagens.",
+                "pericia_treinada": "Intimidação",
+                "talento_concedido": "Aspecto Selvagem",
+                "magia_ordem": "morfia selvagem",
+                "pontos_foco_adicionais": 0,
+                "anatema": "Tornar-se completamente domesticado pelas tentações da civilização é anátema para sua ordem.",
+            },
+        ],
+    }
+
+    termos_chave = [
+        {
+            "termo": "Metamágico",
+            "descricao": (
+                "Ações com esse traço alteram as propriedades de suas magias. Você deve usar uma ação metamágica logo antes de Conjurar a Magia que deseja alterar. "
+                "Se usar qualquer outra ação (incluindo ações livres e reações) diferente de Conjurar uma Magia logo após essa ação metamágica, você desperdiça os benefícios da ação metamágica. "
+                "Efeitos acrescentados por uma ação metamágica são parte do efeito da magia, não da ação metamágica em si."
+            ),
+        }
+    ]
+
+    exemplos_personagens = [
+        {
+            "nome": "Druida Selvagem",
+            "pagina": 134,
+            "resumo": "Assumindo as formas de criaturas perigosas, você luta com uma intensidade feral. Embora confie em seus instintos, você pode desconfiar dos maneirismos da sociedade educada.",
+            "atributos": "Priorize Sabedoria e Força para que possa conjurar magias e entrar em combate corpo a corpo. Você também precisa de Destreza e Constituição para aprimorar suas defesas e capacidade de sobrevivência.",
+            "pericias": ["Acrobatismo", "Atletismo", "Intimidação", "Natureza"],
+            "subclasse": "Selvagens",
+            "talentos_niveis_superiores": [
+                "Controlar Forma (4º)",
+                "Aspecto de Inseto (6º)",
+                "Aspecto Altaneiro (8º)",
+                "Aspecto de Planta (10º)",
+                "Aspecto de Monstruosidade (16º)",
+            ],
+            "magias_preparadas": {
+                "1_nivel": ["curar", "presa mágica"],
+                "truques_magicos": ["detectar magia", "emaranhapé", "intuir direção", "luzes dançantes", "produzir chama"],
+            },
+        },
+        {
+            "nome": "Druida da Tempestade",
+            "pagina": 136,
+            "resumo": "Você recorre ao poder da natureza para lançar relâmpagos, intensos efeitos climáticos e magias elementais.",
+            "atributos": "Priorize Sabedoria. Você geralmente se mantém à distância, portanto, tenha uma Destreza alta. Você pode escolher focar mais em sua saúde com Constituição ou ser mais bem informado e perito com Inteligência.",
+            "pericias": ["Acrobatismo", "Medicina", "Natureza", "Sobrevivência"],
+            "subclasse": "Tempestade",
+            "talentos_niveis_superiores": [
+                "Ampliar Magia (1º)",
+                "Retribuição da Tempestade (6º)",
+                "Invocador de Ventos (8º)",
+                "Foco Primal (12º)",
+                "Invocar Desastre (18º)",
+            ],
+            "magias_preparadas": {
+                "1_nivel": ["lufada de vento", "mãos flamejantes"],
+                "truques_magicos": ["arco elétrico", "detectar magia", "intuir direção", "luz", "raio de gelo"],
+            },
+        },
+        {
+            "nome": "Druida da Folha",
+            "pagina": 138,
+            "resumo": "Você é um zelador cuidadoso sintonizado com o mundo natural e a magia da vida. Uma pequena planta chamada de leshy o acompanha.",
+            "atributos": "Priorize Sabedoria. Coloque Destreza e Constituição para aumentar suas defesas, e Carisma para ser mais diplomático — ou Força, se pretender causar mais dano em corpo a corpo.",
+            "pericias": ["Diplomacia", "Medicina", "Natureza", "Sobrevivência"],
+            "subclasse": "Folha",
+            "talentos_niveis_superiores": [
+                "Chamado dos Ermos (2º)",
+                "Deslocamento da Floresta (4º)",
+                "Empatia Verde (6º)",
+                "Aspecto de Planta (10º)",
+                "Língua Verde (12º)",
+            ],
+            "magias_preparadas": {
+                "1_nivel": ["curar", "convocar plantas e fungos"],
+                "truques_magicos": ["detectar magia", "emaranhapé", "estabilizar", "intuir direção", "luz"],
+            },
+        },
+    ]
+
+    talentos = [
+        # 1º NÍVEL (6)
+        construir_talento_classe(
+            "Ampliar Magia",
+            1,
+            ["Druida", "Manuseio", "Metamágico"],
+            "Você manipula a energia de sua magia, propagando-a para afetar uma área mais ampla. Se a sua próxima ação for Conjurar uma Magia que possui uma área de cone, explosão ou linha e não possui uma duração, aumente a área dessa magia. Acrescente 1,5 metros ao raio de uma explosão que normalmente tenha um raio de pelo menos 3 metros (uma explosão com raio menor não é afetada). Adicione 1,5 metros ao comprimento de um cone ou linha que normalmente tenha 4,5 metros ou menos, e adicione 3 metros ao comprimento de um cone ou linha maior que isso.",
+            acoes="1",
+        ),
+        construir_talento_classe(
+            "Aspecto Selvagem",
+            1,
+            ["Druida"],
+            "Você é uno com os ermos, sempre mudando e adaptando-se a qualquer desafio. Você recebe a magia de ordem aspecto selvagem, que lhe permite se transformar em uma grande variedade de formas que pode ser expandida com talentos de druida.",
+            pre_requisitos="ordem dos selvagens",
+        ),
+        construir_talento_classe(
+            "Companheiro Animal",
+            1,
+            ["Druida"],
+            "Você recebe o serviço de um companheiro animal jovem que o acompanha em aventuras e obedece a seus comandos simples da melhor forma possível para as capacidades dele. Veja Companheiros Animais na página 214 para mais informações.",
+            pre_requisitos="ordem dos animais",
+        ),
+        construir_talento_classe(
+            "Familiar Leshy",
+            1,
+            ["Druida"],
+            "Você recebe um familiar leshy, uma planta Minúscula que incorpora um dos muitos espíritos da natureza. Exceto por assumir a forma de uma planta em vez da forma de um animal, este familiar utiliza todas as mesmas regras que outros familiares (detalhadas na página 217).",
+            pre_requisitos="ordem da folha",
+        ),
+        construir_talento_classe(
+            "Magia de Alcance",
+            1,
+            ["Concentração", "Druida", "Metamágico"],
+            "Você amplia a distância de sua magia. Se a sua próxima ação for Conjurar uma Magia que possui uma distância, aumente a distância dessa magia em 9 metros. Como padrão para aumentar distâncias de magias, se a magia normalmente tiver uma distância de toque, você amplia a distância dela para 9 metros.",
+            acoes="1",
+        ),
+        construir_talento_classe(
+            "Nascido da Tempestade",
+            1,
+            ["Druida"],
+            "Você está em casa nos ermos, regozijando-se no poder da natureza liberta. Você não sofre penalidades de circunstância causadas pelo clima em ataques de magia à distância ou testes de Percepção, e suas magias com alvos não exigem um teste simples para obterem sucesso contra um alvo ocultado por efeitos climáticos (como névoa).",
+            pre_requisitos="ordem da tempestade",
+        ),
+        # 2º NÍVEL (4)
+        construir_talento_classe(
+            "Chamado dos Ermos",
+            2,
+            ["Druida"],
+            "Você chama as criaturas da natureza para lhe ajudar. Você pode gastar 10 minutos comungando com a natureza para substituir uma das magias que tenha preparada em um de seus espaços de magia de druida por uma magia convocar animal ou convocar plantas e fungos do mesmo nível.",
+        ),
+        construir_talento_classe(
+            "Explorador de Ordem",
+            2,
+            ["Druida"],
+            "Você aprendeu os segredos de outra ordem druídica, passando pelos ritos de iniciação exigidos e obtendo acesso a seus segredos. Escolha uma ordem diferente da sua. Você recebe um talento de 1º nível que possui essa ordem como pré-requisito e se torna um membro dessa ordem para o propósito de atender a pré-requisitos de talentos. Se cometer atos anátemas à sua nova ordem, você perde todos os talentos e habilidades dessa nova ordem, mas retém seus outros talentos e habilidades de druida. Você não recebe quaisquer outros benefícios da ordem que escolher.",
+            especial="Você pode selecionar este talento várias vezes. Cada vez que o fizer, você deve escolher uma ordem diferente da sua.",
+        ),
+        construir_talento_classe(
+            "Familiar Melhorado",
+            2,
+            ["Druida"],
+            "Você infunde seu familiar com mais energia primal, aumentando as habilidades dele. Você pode selecionar quatro habilidades de familiar ou de mestre por dia, em vez de apenas duas.",
+            pre_requisitos="um familiar",
+        ),
+        construir_talento_classe(
+            "Resistência a Veneno",
+            2,
+            ["Druida"],
+            "Sua afinidade com o mundo natural lhe concede proteção contra alguns de seus perigos. Você adquire resistência a veneno igual à metade de seu nível, e recebe +1 de bônus de estado em jogadas de salvamento contra venenos.",
+        ),
+        # 4º NÍVEL (5)
+        construir_talento_classe(
+            "Companheiro Animal Maduro",
+            4,
+            ["Druida"],
+            "Seu companheiro animal cresce, tornando-se um companheiro animal maduro e recebendo capacidades adicionais. Veja as regras para companheiros animais na página 214 para mais informações. Seu companheiro animal é mais bem treinado que a maioria. Durante um encontro, mesmo se você não usar a ação Comandar um Animal, seu companheiro animal ainda pode usar 1 ação em seu turno nessa rodada para Andar ou Golpear.",
+            pre_requisitos="companheiro animal",
+        ),
+        construir_talento_classe(
+            "Controlar Forma",
+            4,
+            ["Druida", "Manuseio", "Metamágico"],
+            "Com cuidado e esforço adicional, você pode assumir uma forma alternativa por um maior período de tempo. Se a sua próxima ação for conjurar aspecto selvagem, o nível de aspecto selvagem é inferior ao normal em 2 (mínimo 1º nível), mas você pode permanecer transformado por até 1 hora ou pela duração listada (o que for maior). Você ainda pode dispensar a forma a qualquer momento, conforme permitido pela magia.",
+            acoes="1",
+            pre_requisitos="Força 14, Aspecto Selvagem",
+        ),
+        construir_talento_classe(
+            "Deslocamento da Floresta",
+            4,
+            ["Druida"],
+            "Você sempre encontra um caminho, quase como se a folhagem se abrisse diante de você. Você ignora qualquer terreno difícil causado por plantas (como arbustos, matagal e vinhas). Mesmo plantas manipuladas por magia não impedem seu progresso.",
+            pre_requisitos="ordem da folha",
+        ),
+        construir_talento_classe(
+            "Magia de Ordem",
+            4,
+            ["Druida"],
+            "Você se aprofundou ainda mais no aprendizado de uma nova ordem, obtendo acesso a uma valiosa magia de ordem. Escolha uma ordem previamente selecionada com Explorador de Ordem. Você recebe a magia de ordem inicial dessa ordem.",
+            pre_requisitos="Explorador de Ordem",
+            especial="Você pode selecionar este talento várias vezes. Cada vez que o fizer, você deve escolher uma ordem diferente previamente selecionada com Explorador de Ordem.",
+        ),
+        construir_talento_classe(
+            "Mil Faces",
+            4,
+            ["Druida"],
+            "Sua forma é tão mutável quanto o clima, mudando para atender aos seus caprichos. Você adiciona as formas listadas em forma de humanoide à sua lista de aspecto selvagem.",
+            pre_requisitos="Aspecto Selvagem",
+        ),
+        # 6º NÍVEL (4)
+        construir_talento_classe(
+            "Aspecto de Inseto",
+            6,
+            ["Druida"],
+            "Sua compreensão da vida se expande, permitindo-o imitar uma maior gama de criaturas. Acrescente as formas de forma de inseto à sua lista de aspecto selvagem. Sempre que usar aspecto selvagem para polimorfar para uma forma de inseto não voadora listada em forma de peste, a duração é 24 horas em vez de 10 minutos.",
+            pre_requisitos="Aspecto Selvagem",
+        ),
+        construir_talento_classe(
+            "Conjuração Consistente",
+            6,
+            ["Druida"],
+            "Confiante em sua técnica, você não perde a concentração facilmente quando Conjura uma Magia. Se uma reação fosse interromper sua ação de conjuração, faça um teste simples CD 15. Se obtiver sucesso, sua ação não é interrompida.",
+        ),
+        construir_talento_classe(
+            "Empatia Verde",
+            6,
+            ["Druida"],
+            "Você pode se comunicar com plantas em um nível básico, utilizando Diplomacia para Impressioná-las e para fazer Pedidos simples a elas. Tipicamente, plantas que não sejam criaturas são incapazes de atender à maioria dos pedidos a menos que você tenha acesso a magias como falar com plantas. Devido à sua afiliação à ordem da folha, as plantas sentem que você as apoia, fazendo com que você receba +2 de bônus de circunstância em seu teste para Impressionar uma planta utilizando Empatia Verde.",
+            pre_requisitos="ordem da folha",
+        ),
+        construir_talento_classe(
+            "Retribuição da Tempestade",
+            6,
+            ["Druida", "Manuseio", "Metamágico"],
+            "Você ataca, direcionando uma explosão de fúria tempestuosa contra uma criatura que o feriu. Você pode conjurar surto de tempestade no oponente acionador e empurrá-lo, afastando-o 1,5 metros de você se ele falhar no salvamento de Reflexos, ou 3 metros se ele falhar criticamente. Este é um movimento forçado.",
+            acoes="reacao",
+            pre_requisitos="ordem da tempestade, magia de ordem surto de tempestade",
+            acionamento="Um oponente adjacente a você o atinge com um acerto crítico com uma arma corpo a corpo ou ataque desarmado corpo a corpo.",
+            requerimentos="Você tem pelo menos 1 Ponto de Foco disponível.",
+        ),
+        # 8º NÍVEL (5)
+        construir_talento_classe(
+            "Aspecto Altaneiro",
+            8,
+            ["Druida"],
+            "Asas o libertam dos grilhões do chão. Acrescente as formas de forma aérea à sua lista de aspecto selvagem. Se possuir Aspecto de Inseto, você também acrescenta a forma de vespa à sua lista de aspecto selvagem. Se possuir Aspecto de Dinossauro, você também acrescenta a forma de pterossauro à sua lista de aspecto selvagem. Sempre que usar aspecto selvagem para assumir uma forma que concede um modificador de Acrobatismo específico, você recebe +1 de bônus de estado em seus testes de Acrobatismo.",
+            pre_requisitos="Aspecto Selvagem",
+        ),
+        construir_talento_classe(
+            "Aspecto de Dinossauro",
+            8,
+            ["Druida"],
+            "Você dominou o formato de dinossauros ferozes. Acrescente as formas de forma de dinossauro à sua lista de aspecto selvagem. Sempre que usar aspecto selvagem para assumir uma forma que concede um modificador de Atletismo específico, você recebe +1 de bônus de estado em seus testes de Atletismo.",
+            pre_requisitos="Aspecto Selvagem",
+        ),
+        construir_talento_classe(
+            "Companheiro Incrível",
+            8,
+            ["Druida"],
+            "Seu companheiro animal continua a crescer e a se desenvolver. Ele se torna um companheiro animal ágil ou selvagem (à sua escolha), recebendo capacidades adicionais determinadas pelo tipo de companheiro (página 214).",
+            pre_requisitos="Companheiro Animal Maduro",
+        ),
+        construir_talento_classe(
+            "Convocador de Fadas",
+            8,
+            ["Druida"],
+            "Você aprendeu alguns dos truques usados pelas fadas para manipular magia primal criando ilusões e trapaças. Adicione cena ilusória, disfarce ilusório, objeto ilusório e véu à sua lista de magias como magias primais.",
+        ),
+        construir_talento_classe(
+            "Invocador de Ventos",
+            8,
+            ["Druida"],
+            "Você ordena os ventos para que o ergam e o carreguem pelo ar. Você recebe a magia de ordem voo dos ventos tempestuosos. Aumente em 1 a quantidade de Pontos de Foco em sua reserva de foco.",
+            pre_requisitos="ordem da tempestade",
+        ),
+        # 10º NÍVEL (5)
+        construir_talento_classe(
+            "Aspecto de Elemental",
+            10,
+            ["Druida"],
+            "Você compreende tanto os elementos fundamentais da natureza que é capaz de imbuí-los em seu corpo, manifestando-se como uma personificação desses elementos. Acrescente as formas de forma de elemental à sua lista de aspecto selvagem. Sempre que estiver polimorfado em outra forma usando aspecto selvagem, você adquire resistência 5 a fogo.",
+            pre_requisitos="Aspecto Selvagem",
+        ),
+        construir_talento_classe(
+            "Aspecto de Planta",
+            10,
+            ["Druida"],
+            "Você assume a forma de uma criatura planta. Acrescente as formas de forma de planta à sua lista de aspecto selvagem; se não possuir aspecto selvagem, em vez disso você pode conjurar forma de planta uma vez por dia, elevada ao maior nível de magia que seja capaz de conjurar. Sempre que estiver polimorfado em outra forma usando aspecto selvagem, você adquire resistência 5 a veneno.",
+            pre_requisitos="ordem da folha ou Aspecto Selvagem",
+        ),
+        construir_talento_classe(
+            "Energia Avassaladora",
+            10,
+            ["Druida", "Manuseio", "Metamágico"],
+            "Com um gesto complexo, você recorre ao poder primal de sua magia para superar as resistências de inimigos. Se a sua próxima ação for Conjurar uma Magia, essa magia ignora um valor igual ao seu nível de personagem da resistência do alvo contra dano de ácido, eletricidade, fogo, frio ou sônico. Isto se aplica a todo dano causado pela magia, incluindo dano persistente e qualquer dano causado por algum efeito contínuo (como da muralha criada por muralha de fogo). As imunidades de uma criatura não são afetadas.",
+            acoes="1",
+        ),
+        construir_talento_classe(
+            "Lado a Lado",
+            10,
+            ["Druida"],
+            "Você e seu companheiro animal lutam em sincronia, distraindo seus adversários e tirando seu equilíbrio. Sempre que você e seu companheiro animal estiverem adjacentes ao mesmo adversário, ambos o flanqueiam independentemente de suas posições.",
+            pre_requisitos="companheiro animal",
+        ),
+        construir_talento_classe(
+            "Transformação Curativa",
+            10,
+            ["Druida", "Metamágico"],
+            "Você canaliza a magia de metamorfose para fechar ferimentos e sarar lesões. Se a sua próxima ação for conjurar uma magia de polimorfia que não seja um truque mágico e que mire apenas uma criatura, sua magia de polimorfia também restaura 1d6 Pontos de Vida por nível a essa criatura. Este é um efeito de cura.",
+            acoes="1",
+        ),
+        # 12º NÍVEL (4)
+        construir_talento_classe(
+            "Aspecto de Dragão",
+            12,
+            ["Druida"],
+            "Você pode assumir a forma de algumas das criaturas mais temíveis do mundo. Acrescente as formas de forma de dragão à sua lista de aspecto selvagem. Sempre que estiver polimorfado em outra forma usando aspecto selvagem, você adquire resistência 5 a ácido, eletricidade, fogo, frio ou veneno (à sua escolha).",
+            pre_requisitos="Aspecto Altaneiro",
+        ),
+        construir_talento_classe(
+            "Convocações Primais",
+            12,
+            ["Druida"],
+            "Sempre que convocar um aliado, você pode potencializá-lo com o poder elemental da água, ar, fogo ou terra. Você recebe a magia de ordem convocações primais.",
+            pre_requisitos="Chamado dos Ermos",
+        ),
+        construir_talento_classe(
+            "Foco Primal",
+            12,
+            ["Druida"],
+            "Sua conexão com a natureza é particularmente forte, e os espíritos da natureza se reúnem ao seu redor e o ajudam a recuperar seu foco. Se tiver gastado pelo menos 2 Pontos de Foco desde a última vez que Refocou, você recupera 2 Pontos de Foco ao Refocar (em vez de recuperar somente 1 ponto).",
+        ),
+        construir_talento_classe(
+            "Língua Verde",
+            12,
+            ["Druida"],
+            "Você compartilha uma afinidade especial com todos os seres verdes e vivos. Você (e seu familiar leshy, se possuir) está constantemente sob os efeitos de falar com plantas. A maioria das plantas que não sejam criaturas o reconhecem como um druida da ordem da folha e são amistosas a você.",
+            pre_requisitos="Empatia Verde",
+        ),
+        # 14º NÍVEL (3)
+        construir_talento_classe(
+            "Companheiro Especializado",
+            14,
+            ["Druida"],
+            "Seu companheiro animal continua a crescer em poder e habilidade, e agora é astuto o suficiente para se tornar especializado. Seu companheiro animal recebe uma especialização à sua escolha. (Veja a seção Companheiros Animais Especializados, na página 217).",
+            pre_requisitos="Companheiro Incrível",
+            especial="Você pode selecionar este talento até três vezes. Cada vez que o fizer, adicione uma especialização diferente ao seu companheiro.",
+        ),
+        construir_talento_classe(
+            "Metamorfose Verdejante",
+            14,
+            ["Druida"],
+            (
+                "Você se transforma em uma versão planta de si mesmo. Você adquire o traço planta e perde qualquer traço inapropriado para sua nova forma (tipicamente humanoide para um PJ, e possivelmente animal ou fungo). "
+                "Você pode mudar entre uma forma que se parece bastante com a sua antiga aparência para uma árvore ou qualquer outra planta que não seja uma criatura como uma ação única que possui o traço de concentração. "
+                "Isto tem o mesmo efeito que aspecto de árvore, exceto que você pode se transformar em qualquer tipo de planta que não seja uma criatura e sua CA é 30. "
+                "Se descansar por 10 minutos enquanto está transformado em uma planta que não seja uma criatura durante o período diurno sob luz solar direta, você recupera metade de seus Pontos de Vida máximos. "
+                "Se passar o resto do dia descansando desta forma, você restaura seus Pontos de Vida máximos e remove todas as condições não-permanentes de desajeitado, drenado, enfraquecido e estupefato, assim como todos os venenos e doenças de 19º nível ou inferior."
+            ),
+            pre_requisitos="ordem da folha",
+        ),
+        construir_talento_classe(
+            "Natureza Atemporal",
+            14,
+            ["Druida"],
+            "Com a magia primal sustentando-o, você para de envelhecer. O grande fluxo de energia primal lhe concede +2 de bônus de estado em salvamentos contra doenças e magias primais.",
+        ),
+        # 16º NÍVEL (3)
+        construir_talento_classe(
+            "Aspecto de Monstruosidade",
+            16,
+            ["Druida"],
+            "Você pode se transformar em uma poderosa criatura mágica. Acrescente as formas de serpente marinha e vorme púrpura listadas em forma de monstruosidade à sua lista de aspecto selvagem. Se possuir Aspecto Altaneiro, acrescente a forma de fênix listada em forma de monstruosidade à sua lista de aspecto selvagem.",
+            pre_requisitos="Aspecto Selvagem",
+        ),
+        construir_talento_classe(
+            "Concentração Sem Esforço",
+            16,
+            ["Druida"],
+            "Você pode sustentar uma magia com pouco mais do que um pensamento. Você imediatamente recebe os efeitos da ação Sustentar uma Magia, permitindo-lhe prolongar a duração de uma de suas magias de druida ativas.",
+            acoes="livre",
+            acionamento="Seu turno começa.",
+        ),
+        construir_talento_classe(
+            "Silvados Empaladores",
+            16,
+            ["Druida"],
+            "Você pode preencher uma área com silvados devastadores que empalam e impedem seus adversários. Você recebe a magia de ordem silvados empaladores. Aumente em 1 a quantidade de Pontos de Foco em sua reserva de foco.",
+            pre_requisitos="ordem da folha",
+        ),
+        # 18º NÍVEL (3)
+        construir_talento_classe(
+            "Controlar Forma Perfeitamente",
+            18,
+            ["Druida"],
+            "Graças à magia e memória muscular, você pode permanecer em formas alternativas indefinidamente — talvez tenha até mesmo esquecido sua forma original. Quando usar Controlar Forma, em vez de durar 1 hora, o aspecto selvagem é permanente até você Dispensá-lo.",
+            pre_requisitos="Força 18, Controlar Forma",
+        ),
+        construir_talento_classe(
+            "Invocar Desastre",
+            18,
+            ["Druida"],
+            "Você pode invocar a fúria da natureza sobre seus adversários. Você recebe a magia de ordem senhor da tempestade. Aumente em 1 a quantidade de Pontos de Foco em sua reserva de foco.",
+            pre_requisitos="Invocador de Ventos",
+        ),
+        construir_talento_classe(
+            "Manancial Primal",
+            18,
+            ["Druida"],
+            "Seu reservatório de Pontos de Foco é um manancial profundo. Se tiver gastado pelo menos 3 Pontos de Foco desde a última vez que Refocou, você recupera 3 Pontos de Foco ao Refocar (em vez de recuperar somente 1 ponto).",
+            pre_requisitos="Foco Primal",
+        ),
+        # 20º NÍVEL (3)
+        construir_talento_classe(
+            "Conduíte de Linha de Ley",
+            20,
+            ["Concentração", "Druida", "Manuseio", "Metamágico"],
+            "Você pode tocar as linhas de ley do mundo para conjurar suas magias sem esforço. Se a sua próxima ação for Conjurar uma Magia de 5º nível ou inferior que não possua duração, você não gasta a magia preparada ao conjurá-la.",
+            acoes="1",
+            frequencia="uma vez por minuto",
+        ),
+        construir_talento_classe(
+            "Metamorfo Verdadeiro",
+            20,
+            ["Concentração", "Druida"],
+            "Você transcende as limitações do corpo. Enquanto estiver sob os efeitos de aspecto selvagem, você pode se transformar em qualquer outra forma em sua lista de aspecto selvagem; se as durações das formas forem diferentes, utilize a mais curta entre as duas. Uma vez por dia, você pode se transformar em um kaiju com os efeitos de encarnação da natureza; se possuir Aspecto de Planta, em vez disso você pode se transformar na criatura homem verde.",
+            acoes="2",
+            pre_requisitos="Aspecto de Dragão, Aspecto Selvagem",
+        ),
+        construir_talento_classe(
+            "Poder do Hierofante",
+            20,
+            ["Druida"],
+            "Você se entrelaçou ao mundo natural e o poder completo dele flui através de seu corpo. Você recebe um espaço de magia adicional de 10º nível.",
+            pre_requisitos="hierofante primal",
+        ),
+    ]
+
+    return {
+        "id": "druida",
+        "nome": "Druida",
+        "paginas": "128-139",
+        "descricao": (
+            "É impossível resistir ao poder da natureza. Ela pode arruinar a mais resistente das fortalezas em minutos, "
+            "reduzir até mesmo as obras mais bem feitas a detritos, queimá-las em cinzas, enterrá-las sob uma avalanche de neve ou submergi-las sob as ondas. "
+            "Ela pode fornecer magnanimidade e esplendor de tirar o fôlego àqueles que a respeitam — e uma morte agonizante àqueles que a tratam levianamente. "
+            "Você é um dos que ouvem o chamado da natureza. Você reverencia a majestade de seu poder e se entrega a seu serviço."
+        ),
+        "atributo_chave": {
+            "opcoes": ["sabedoria"],
+            "melhoria_1_nivel": 2,
+            "texto": "Sabedoria — No 1º nível, sua classe lhe concede uma melhoria de atributo em Sabedoria.",
+        },
+        "pontos_de_vida_por_nivel": 8,
+        "pontos_de_vida_texto": "8 mais seu modificador de Constituição no 1º nível e a cada nível subsequente.",
+        "jogando_com_a_classe": {
+            "encontros_combate": (
+                "Você recorre às forças da natureza para derrotar seus inimigos e proteger seus aliados. Você conjura magias extraídas de uma fonte primal "
+                "para proteger a si e a seus amigos, curar seus ferimentos ou convocar animais mortais para lutar ao seu lado. "
+                "Dependendo de sua ligação com a natureza, você pode recorrer a poderosas magias elementais ou transformar-se em uma besta aterrorizante."
+            ),
+            "encontros_sociais": "Você traz o equilíbrio e uma abordagem racional aos problemas, buscando soluções ideais para proteger o mundo natural e permitir que os seres vivam em paz e harmonia com ele. Você frequentemente propõe concessões onde ambos os lados conseguem o que precisam, mesmo que eles não possam ter tudo que desejam.",
+            "exploracao": "Suas habilidades na natureza são inestimáveis. Você rastreia inimigos, atravessa os ermos e usa magias para detectar auras mágicas ao seu redor. Você pode até mesmo pedir que animais selvagens usem seus sentidos extraordinários e habilidades de batedor para o bem do seu grupo.",
+            "recesso": "Você pode criar itens mágicos ou poções. Seu vínculo com a natureza pode levá-lo a cuidar de uma área selvagem, fazer amizade com bestas e curar os ferimentos causados pela civilização. Você pode até mesmo ensinar técnicas sustentáveis de agricultura e pecuária que permitam que os outros vivam da terra sem ferir o equilíbrio natural.",
+            "voce_pode": [
+                "Possuir um respeito profundo e significativo pelo poder da natureza.",
+                "Estar em constante admiração do mundo natural, ansioso por compartilhá-lo com os outros, mas cauteloso com a influência que possam ter na natureza.",
+                "Tratar plantas e animais como aliados, cooperando com eles em direção aos seus objetivos.",
+            ],
+            "outros_provavelmente": [
+                "O veem como um representante da natureza e podem até mesmo assumir que você é capaz de controlá-la.",
+                "Pressupõem que você é um eremita que evita cidades e suas sociedades, preferindo viver nos ermos.",
+                "O consideram um místico, similar a um sacerdote, mas respondendo apenas às forças da natureza.",
+            ],
+        },
+        "proficiencias_iniciais": {
+            "percepcao": "treinado",
+            "salvamentos": {
+                "fortitude": "treinado",
+                "reflexos": "treinado",
+                "vontade": "especialista",
+            },
+            "pericias": {
+                "fixas": ["natureza"],
+                "opcoes_fixas": [],
+                "condicionais": ["pericia_determinada_pela_ordem_druidica"],
+                "adicionais_base": 2,
+                "soma_modificador_inteligencia": True,
+                "texto": "Treinado em Natureza; treinado em uma perícia determinada por sua ordem druídica; treinado em uma quantidade de perícias adicionais igual a 2 mais seu modificador de Inteligência.",
+            },
+            "ataques": {
+                "armas_simples": "treinado",
+                "ataques_desarmados": "treinado",
+            },
+            "defesas": {
+                "armaduras_leves": "treinado",
+                "armaduras_medias": "treinado",
+                "defesa_sem_armadura": "treinado",
+                "restricao_anatema": "Não pode usar armaduras ou escudos de metal.",
+            },
+            "cd_classe": None,
+            "magias": {
+                "tradicao": "primal",
+                "tipo_conjuracao": "preparada",
+                "ataques_magia": "treinado",
+                "cds_magia": "treinado",
+                "atributo_conjuracao": "sabedoria",
+                "texto": "Treinado em ataques de magias primais; treinado em CDs de magias primais.",
+            },
+        },
+        "tabela_progressao": tabela_progressao,
+        "tabelas_especificas": {
+            "tabela_3_11_magias_por_dia": tabela_3_11_magias_por_dia,
+            "tabela_talentos_indice": tabela_talentos_indice,
+        },
+        "caracteristicas_de_classe": caracteristicas_de_classe,
+        "subclasses": subclasses,
+        "termos_chave": termos_chave,
+        "exemplos_personagens": exemplos_personagens,
+        "talentos_de_classe": talentos,
+    }
+
+
+def construir_feiticeiro() -> dict[str, Any]:
+    """Constrói os dados completos da classe Feiticeiro (pp. 140–151)."""
+    tabela_progressao = construir_tabela_progressao(
+        [
+            (1, "Ancestralidade e biografia, conjuração de feiticeiro, linhagem, proficiências iniciais, repertório de magias"),
+            (2, "Talento de feiticeiro, talento de perícia"),
+            (3, "Incremento de perícia, magias de 2º nível, magias emblemáticas, talento geral"),
+            (4, "Talento de feiticeiro, talento de perícia"),
+            (5, "Fortitude mágica, incremento de perícia, magias de 3º nível, melhorias de atributo, talento de ancestralidade"),
+            (6, "Talento de feiticeiro, talento de perícia"),
+            (7, "Conjurador especialista, incremento de perícia, magias de 4º nível, talento geral"),
+            (8, "Talento de feiticeiro, talento de perícia"),
+            (9, "Incremento de perícia, magias de 5º nível, reflexos rápidos, talento de ancestralidade"),
+            (10, "Melhorias de atributo, talento de feiticeiro, talento de perícia"),
+            (11, "Especialidade em armas simples, incremento de perícia, magias de 6º nível, prontidão, talento geral"),
+            (12, "Talento de feiticeiro, talento de perícia"),
+            (13, "Especialização em armas, incremento de perícia, magias de 7º nível, robes defensivos, talento de ancestralidade"),
+            (14, "Talento de feiticeiro, talento de perícia"),
+            (15, "Conjurador mestre, incremento de perícia, magias de 8º nível, melhorias de atributo, talento geral"),
+            (16, "Talento de feiticeiro, talento de perícia"),
+            (17, "Determinação, incremento de perícia, magias de 9º nível, talento de ancestralidade"),
+            (18, "Talento de feiticeiro, talento de perícia"),
+            (19, "Conjurador lendário, exemplar de linhagem, incremento de perícia, talento geral"),
+            (20, "Melhorias de atributo, talento de feiticeiro, talento de perícia"),
+        ]
+    )
+
+    tabela_3_13_magias_por_dia: list[dict[str, Any]] = []
+    for nivel in range(1, 21):
+        espacos: dict[str, int] = {}
+        for circulo in range(1, 10):
+            nivel_desbloqueio = (circulo - 1) * 2 + 1
+            if nivel == nivel_desbloqueio:
+                espacos[str(circulo)] = 3
+            elif nivel > nivel_desbloqueio:
+                espacos[str(circulo)] = 4
+        if nivel >= 19:
+            espacos["10"] = 1
+        tabela_3_13_magias_por_dia.append(
+            {
+                "nivel": nivel,
+                "truques_magicos": 5,
+                "espacos_por_circulo": espacos,
+                "nota_10_nivel": (
+                    "A característica de classe exemplar de linhagem lhe concede um espaço de magia de 10º nível que funciona diferente dos outros espaços de magia."
+                    if nivel >= 19
+                    else None
+                ),
+            }
+        )
+
+    tabela_talentos_indice = [
+        {"nome": "Ampliar Magia", "nivel": 1},
+        {"nome": "Concentração Sem Esforço", "nivel": 16},
+        {"nome": "Conduíte de Linhagem", "nivel": 20},
+        {"nome": "Conjuração Acelerada", "nivel": 10},
+        {"nome": "Conjuração Consistente", "nivel": 6},
+        {"nome": "Contramágica", "nivel": 1},
+        {"nome": "Energia Avassaladora", "nivel": 10},
+        {"nome": "Entrelaçar Dissipação", "nivel": 14},
+        {"nome": "Evolução Arcana", "nivel": 4},
+        {"nome": "Evolução de Linhagem Cruzada", "nivel": 8},
+        {"nome": "Evolução de Linhagem Cruzada Maior", "nivel": 18},
+        {"nome": "Evolução Divina", "nivel": 4},
+        {"nome": "Evolução Mental Maior", "nivel": 16},
+        {"nome": "Evolução Ocultista", "nivel": 4},
+        {"nome": "Evolução Primal", "nivel": 4},
+        {"nome": "Evolução Vital Maior", "nivel": 16},
+        {"nome": "Expansão de Truque Mágico", "nivel": 2},
+        {"nome": "Familiar", "nivel": 1},
+        {"nome": "Familiar Melhorado", "nivel": 2},
+        {"nome": "Feitiçaria Perigosa", "nivel": 1},
+        {"nome": "Foco de Linhagem", "nivel": 12},
+        {"nome": "Linhagem Avançada", "nivel": 6},
+        {"nome": "Linhagem Maior", "nivel": 10},
+        {"nome": "Maestria Metamágica", "nivel": 20},
+        {"nome": "Magia de Alcance", "nivel": 1},
+        {"nome": "Magia Residual em Arma", "nivel": 4},
+        {"nome": "Manancial de Linhagem", "nivel": 18},
+        {"nome": "Perfeição de Linhagem", "nivel": 20},
+        {"nome": "Refletir Magia", "nivel": 14},
+        {"nome": "Resistência de Linhagem", "nivel": 8},
+        {"nome": "Sentido Mágico", "nivel": 12},
+    ]
+
+    caracteristicas_de_classe = [
+        construir_caracteristica_classe(
+            "Ancestralidade e Biografia",
+            1,
+            "Além das habilidades fornecidas por sua classe no 1º nível, você possui os benefícios da ancestralidade e biografia selecionadas, conforme descrito no Capítulo 2.",
+        ),
+        construir_caracteristica_classe(
+            "Proficiências Iniciais",
+            1,
+            "No 1º nível, você recebe proficiências que representam seu treinamento básico, listadas no início desta classe.",
+        ),
+        construir_caracteristica_classe(
+            "Conjuração de Feiticeiro",
+            1,
+            (
+                "Você pode conjurar magias usando a atividade Conjurar uma Magia (página 302) e normalmente pode substituir componentes materiais por componentes somáticos, "
+                "de forma que não precisa usar uma bolsa de componentes de magia. No 1º nível você pode conjurar até três magias de 1º nível por dia e cinco truques mágicos (Tabela 3–13). "
+                "Seu atributo chave para ataques e CDs de magias é Carisma. Inclui Elevar Magias e Truques Mágicos (elevados automaticamente à metade do nível arredondada para cima)."
+            ),
+        ),
+        construir_caracteristica_classe(
+            "Repertório de Magias",
+            1,
+            (
+                "No 1º nível, você aprende duas magias de 1º nível e quatro truques mágicos à sua escolha (da tradição de sua linhagem), assim como uma magia e um truque mágico adicionais de sua linhagem. "
+                "Para cada espaço de magia recebido ao avançar de nível, você adiciona uma magia do mesmo nível ao seu repertório (sendo a primeira magia de cada novo nível sempre a concedida por sua linhagem). "
+                "Cada vez que ganhar um nível e aprender novas magias, pode trocar uma magia antiga por outra do mesmo nível (exceto magias concedidas por sua linhagem)."
+            ),
+            detalhes={"magias_1_nivel_iniciais_livres": 2, "truques_iniciais_livres": 4, "bonus_linhagem_1_nivel": {"truque": 1, "magia_1_nivel": 1}},
+        ),
+        construir_caracteristica_classe(
+            "Linhagem",
+            1,
+            (
+                "Escolha uma linhagem que determina a tradição mágica, lista de magias, magias adicionais concedidas, duas perícias treinadas, Pontos de Foco (1 Ponto de Foco inicial, máximo 3; "
+                "recupera 1 Ponto de Foco ao Refocar por 10 minutos sem precisar fazer nada específico) e efeitos de mágica sanguínea."
+            ),
+            detalhes={"reserva_foco_inicial": 1},
+        ),
+        construir_caracteristica_classe(
+            "Talentos de Feiticeiro",
+            2,
+            "No 2º nível e a cada nível par subsequente, você recebe um talento de classe de feiticeiro.",
+        ),
+        construir_caracteristica_classe(
+            "Talentos de Perícia",
+            2,
+            "No 2º nível e a cada 2 níveis subsequentes, você recebe um talento de perícia (Capítulo 5).",
+        ),
+        construir_caracteristica_classe(
+            "Incrementos de Perícia",
+            3,
+            "No 3º nível e a cada 2 níveis subsequentes, você recebe um incremento de perícia (mestre a partir do 7º nível, lendário a partir do 15º nível).",
+        ),
+        construir_caracteristica_classe(
+            "Magias Emblemáticas",
+            3,
+            "Para cada nível de magia que tiver acesso, escolha uma magia desse nível como uma magia emblemática, podendo elevá-la livremente ou conjurar versões de níveis inferiores.",
+        ),
+        construir_caracteristica_classe(
+            "Talentos Gerais",
+            3,
+            "No 3º nível e a cada 4 níveis subsequentes, você recebe um talento geral (Capítulo 5).",
+        ),
+        construir_caracteristica_classe(
+            "Fortitude Mágica",
+            5,
+            "Sua graduação de proficiência em salvamentos de Fortitude aumenta para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Melhorias de Atributo",
+            5,
+            "No 5º nível e a cada 5 níveis subsequentes, você melhora os valores de quatro atributos diferentes (+1 se >= 18, +2 se < 18).",
+        ),
+        construir_caracteristica_classe(
+            "Talentos de Ancestralidade",
+            5,
+            "Você recebe um talento de ancestralidade no 5º nível e a cada 4 níveis subsequentes.",
+        ),
+        construir_caracteristica_classe(
+            "Conjurador Especialista",
+            7,
+            "Suas graduações de proficiência em ataques de magia e CDs de magias da tradição de sua linhagem aumentam para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Reflexos Rápidos",
+            9,
+            "Sua graduação de proficiência em salvamentos de Reflexos aumenta para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Especialidade em Armas Simples",
+            11,
+            "Suas graduações de proficiência em armas simples e ataques desarmados aumentam para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Prontidão",
+            11,
+            "Sua graduação de proficiência em Percepção aumenta para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Especialização em Armas",
+            13,
+            "Você causa 2 pontos de dano adicionais com armas e ataques desarmados nos quais é especialista (3 se mestre, 4 se lendário).",
+        ),
+        construir_caracteristica_classe(
+            "Robes Defensivos",
+            13,
+            "Sua graduação de proficiência em defesa sem armadura aumenta para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Conjurador Mestre",
+            15,
+            "Suas graduações de proficiência em ataques de magia e CDs de magias da tradição de sua linhagem aumentam para mestre.",
+        ),
+        construir_caracteristica_classe(
+            "Determinação",
+            17,
+            "Sua graduação de proficiência em salvamentos de Vontade aumenta para mestre. Quando rolar um sucesso em um salvamento de Vontade, trate o resultado como um sucesso crítico.",
+        ),
+        construir_caracteristica_classe(
+            "Conjurador Lendário",
+            19,
+            "Suas graduações de proficiência em ataques de magia e CDs de magias da tradição de sua linhagem aumentam para lendário.",
+        ),
+        construir_caracteristica_classe(
+            "Exemplar de Linhagem",
+            19,
+            (
+                "Adicione duas magias comuns de 10º nível da sua tradição ao seu repertório de magias. "
+                "Você recebe um único espaço de magia de 10º nível que pode ser usado para conjurar uma dessas duas magias "
+                "(pode selecionar o talento Perfeição de Linhagem para receber um segundo espaço de 10º nível)."
+            ),
+        ),
+    ]
+
+    subclasses = {
+        "tipo": "linhagem",
+        "nome_tipo": "Linhagem",
+        "regras_gerais": {
+            "magias_de_linhagem": "Magias de foco (1 Ponto de Foco inicial, máximo 3). Refocar por 10 minutos sem precisar fazer nada específico.",
+            "magica_sanguinea": (
+                "Sempre que conjurar uma magia de linhagem usando Pontos de Foco ou uma magia concedida de sua linhagem usando um espaço de magia, "
+                "você recebe um efeito de mágica sanguínea após a resolução dos efeitos iniciais da magia."
+            ),
+        },
+        "opcoes": [
+            {
+                "id": "aberrante",
+                "nome": "Aberrante",
+                "descricao": "Você ouve uma voz vinda das estrelas ou abaixo da terra. Antiga e desconhecida, esta influência alienígena pressiona sua mente.",
+                "tradicao_magica": "ocultista",
+                "lista_magias_pagina": 311,
+                "pericias_linhagem": ["Intimidação", "Ocultismo"],
+                "magias_concedidas": {
+                    "truque_magico": "pasmar",
+                    "1": "ferrão de aranha",
+                    "2": "toque da idiotice",
+                    "3": "toque vampírico",
+                    "4": "confusão",
+                    "5": "tentáculos negros",
+                    "6": "enfraquecer mente",
+                    "7": "distorcer mente",
+                    "8": "dança incontrolável",
+                    "9": "canção incomensurável",
+                },
+                "magias_de_linhagem": {
+                    "inicial": "membros tentaculares",
+                    "avancada": "sussurros aberrantes",
+                    "maior": "anatomia inusitada",
+                },
+                "magica_sanguinea": "Sussurros aberrantes protegem sua mente ou a mente de um alvo, concedendo-lhe +2 de bônus de estado em jogadas de salvamento de Vontade por 1 rodada.",
+            },
+            {
+                "id": "angelical",
+                "nome": "Angelical",
+                "descricao": "Um de seus antepassados veio de um reino celestial, ou a devoção de seus ancestrais levou sua linhagem a ser abençoada.",
+                "tradicao_magica": "divina",
+                "lista_magias_pagina": 309,
+                "pericias_linhagem": ["Diplomacia", "Religião"],
+                "magias_concedidas": {
+                    "truque_magico": "luz",
+                    "1": "curar",
+                    "2": "arma espiritual",
+                    "3": "luz abrasadora",
+                    "4": "ira divina",
+                    "5": "chuva de fogo",
+                    "6": "barreira de lâminas",
+                    "7": "decreto divino",
+                    "8": "aura divina",
+                    "9": "presciência",
+                },
+                "magias_de_linhagem": {
+                    "inicial": "auréola angelical",
+                    "avancada": "asas angelicais",
+                    "maior": "marca celestial",
+                },
+                "magica_sanguinea": "Uma aura angelical protege você ou um alvo, concedendo +1 de bônus de estado em jogadas de salvamento por 1 rodada.",
+            },
+            {
+                "id": "demoniaca",
+                "nome": "Demoníaca",
+                "descricao": "Demônios corrompem tudo que tocam. Um de seus ancestrais se tornou vítima da corrupção deles, e você carrega esse pesado fardo.",
+                "tradicao_magica": "divina",
+                "lista_magias_pagina": 309,
+                "pericias_linhagem": ["Intimidação", "Religião"],
+                "magias_concedidas": {
+                    "truque_magico": "jorro ácido",
+                    "1": "medo",
+                    "2": "crescer",
+                    "3": "lentidão",
+                    "4": "ira divina",
+                    "5": "praga abissal",
+                    "6": "desintegrar",
+                    "7": "decreto divino",
+                    "8": "aura divina",
+                    "9": "implosão",
+                },
+                "magias_de_linhagem": {
+                    "inicial": "mandíbulas do glutão",
+                    "avancada": "pântano de preguiça",
+                    "maior": "ira abissal",
+                },
+                "magica_sanguinea": "A corrupção do pecado enfraquece as defesas do alvo ou torna você mais imponente. O alvo sofre –1 de penalidade de estado na CA por 1 rodada ou você recebe +1 de bônus de estado em testes de Intimidação por 1 rodada.",
+            },
+            {
+                "id": "diabolica",
+                "nome": "Diabólica",
+                "descricao": "Diabos são malignos e possuem uma língua afiada, e um de seus ancestrais flertou com a escuridão ou fez um pacto infernal.",
+                "tradicao_magica": "divina",
+                "lista_magias_pagina": 309,
+                "pericias_linhagem": ["Dissimulação", "Religião"],
+                "magias_concedidas": {
+                    "truque_magico": "produzir chama",
+                    "1": "cativar",
+                    "2": "esfera flamejante",
+                    "3": "subjugar",
+                    "4": "sugestão",
+                    "5": "desespero esmagador",
+                    "6": "visão verdadeira",
+                    "7": "decreto divino",
+                    "8": "aura divina",
+                    "9": "chuva de meteoros",
+                },
+                "magias_de_linhagem": {
+                    "inicial": "édito diabólico",
+                    "avancada": "abraçar o fosso",
+                    "maior": "erupção de fogo infernal",
+                },
+                "magica_sanguinea": "Fogo infernal queima um alvo ou enche sua língua de mentiras. O alvo sofre 1 de dano de fogo por nível da magia (se ela já causar dano de fogo, combine este valor com o dano da magia antes de determinar fraquezas e resistências) ou você recebe +1 de bônus de estado em testes de Dissimulação por 1 rodada.",
+            },
+            {
+                "id": "draconica",
+                "nome": "Dracônica",
+                "descricao": "O sangue de dragões corre em suas veias. Estas bestas são temíveis em combate e habilidosas com magia.",
+                "tradicao_magica": "arcana",
+                "lista_magias_pagina": 307,
+                "pericias_linhagem": ["Arcanismo", "Intimidação"],
+                "magias_concedidas": {
+                    "truque_magico": "escudo místico",
+                    "1": "golpe certo",
+                    "2": "resistir a energia",
+                    "3": "rapidez",
+                    "4": "imunidade a magia",
+                    "5": "muralha cromática",
+                    "6": "forma de dragão",
+                    "7": "máscara de terror",
+                    "8": "muralha prismática",
+                    "9": "presença avassaladora",
+                },
+                "magias_de_linhagem": {
+                    "inicial": "garras de dragão",
+                    "avancada": "sopro de dragão",
+                    "maior": "asas de dragão",
+                },
+                "magica_sanguinea": "Escamas dracônicas crescem brevemente em você ou em um alvo, concedendo +1 de bônus de estado na CA em 1 rodada.",
+                "subopcoes": {
+                    "nome": "Tipo de Dragão",
+                    "descricao": "No 1º nível, escolha o tipo de dragão que influenciou sua linhagem (não pode ser trocado posteriormente).",
+                    "opcoes": [
+                        {"dragao": "Bronze", "categoria": "Metálico", "tipo_dano": "eletricidade"},
+                        {"dragao": "Cobre", "categoria": "Metálico", "tipo_dano": "ácido"},
+                        {"dragao": "Latão", "categoria": "Metálico", "tipo_dano": "fogo"},
+                        {"dragao": "Prata", "categoria": "Metálico", "tipo_dano": "frio"},
+                        {"dragao": "Ouro", "categoria": "Metálico", "tipo_dano": "fogo"},
+                        {"dragao": "Azul", "categoria": "Cromático", "tipo_dano": "eletricidade"},
+                        {"dragao": "Branco", "categoria": "Cromático", "tipo_dano": "frio"},
+                        {"dragao": "Negro", "categoria": "Cromático", "tipo_dano": "ácido"},
+                        {"dragao": "Verde", "categoria": "Cromático", "tipo_dano": "veneno"},
+                        {"dragao": "Vermelho", "categoria": "Cromático", "tipo_dano": "fogo"},
+                    ],
+                },
+            },
+            {
+                "id": "elemental",
+                "nome": "Elemental",
+                "descricao": "Um ancestral gênio ou alguma outra influência elemental imbuiu seu sangue com um furor primal, afetando o funcionamento de suas magias de linhagem, as magias concedidas marcadas com um asterisco (*) e sua mágica sanguínea.",
+                "tradicao_magica": "primal",
+                "lista_magias_pagina": 314,
+                "pericias_linhagem": ["Intimidação", "Natureza"],
+                "magias_concedidas": {
+                    "truque_magico": "produzir chama*",
+                    "1": "mãos flamejantes*",
+                    "2": "resistir a energia",
+                    "3": "bola de fogo*",
+                    "4": "liberdade de movimento",
+                    "5": "forma de elemental",
+                    "6": "repulsão",
+                    "7": "égide de energia",
+                    "8": "muralha prismática",
+                    "9": "tempestade da vingança",
+                },
+                "magias_de_linhagem": {
+                    "inicial": "arremesso elemental*",
+                    "avancada": "movimento elemental",
+                    "maior": "rajada elemental*",
+                },
+                "magica_sanguinea": "Energia elemental envolve você ou um alvo. O alvo sofre 1 de dano contundente ou de fogo (de acordo com seu tipo elemental) por nível da magia (se a magia já causar esse tipo de dano, combine este valor com o dano da magia antes de determinar fraquezas e resistências) ou você recebe +1 de bônus de estado em testes de Intimidação por 1 rodada.",
+                "subopcoes": {
+                    "nome": "Tipo de Elemental",
+                    "descricao": "No 1º nível, escolha o tipo de elemental que influenciou sua linhagem: água, ar, fogo ou terra. Para fogo, todas as magias marcadas (*) causam dano de fogo; para os outros elementais, causam dano contundente. Substitua quaisquer traços elementais pelo traço do elemento escolhido.",
+                    "opcoes": [
+                        {"elemento": "Água", "tipo_dano_magias_marcadas": "contundente", "traco_elemental": "água"},
+                        {"elemento": "Ar", "tipo_dano_magias_marcadas": "contundente", "traco_elemental": "ar"},
+                        {"elemento": "Fogo", "tipo_dano_magias_marcadas": "fogo", "traco_elemental": "fogo"},
+                        {"elemento": "Terra", "tipo_dano_magias_marcadas": "contundente", "traco_elemental": "terra"},
+                    ],
+                },
+            },
+            {
+                "id": "estriga",
+                "nome": "Estriga",
+                "descricao": "Uma estriga amaldiçoou sua família há muito tempo, ou então você descende de uma estriga ou cambiante, e a corrupção amaldiçoada desse ser infesta seu sangue e alma.",
+                "tradicao_magica": "ocultista",
+                "lista_magias_pagina": 311,
+                "pericias_linhagem": ["Dissimulação", "Ocultismo"],
+                "magias_concedidas": {
+                    "truque_magico": "pasmar",
+                    "1": "disfarce ilusório",
+                    "2": "toque da idiotice",
+                    "3": "cegueira",
+                    "4": "maldição do exilado",
+                    "5": "maldição do marinheiro",
+                    "6": "polimorfia perniciosa",
+                    "7": "distorcer mente",
+                    "8": "epidemia espiritual",
+                    "9": "inimizade da natureza",
+                },
+                "magias_de_linhagem": {
+                    "inicial": "bruxaria invejosa",
+                    "avancada": "fisionomia horrorosa",
+                    "maior": "você é meu",
+                },
+                "magica_sanguinea": "Maldições rancorosas punem seus adversários. A primeira criatura que causar dano a você antes do final do seu próximo turno deve tentar um salvamento básico de Vontade ou sofre 2 pontos de dano mental por nível da magia.",
+            },
+            {
+                "id": "feerica",
+                "nome": "Feérica",
+                "descricao": "Por capricho das fadas ou devido a um encontro em um bosque iluminado pela luz da lua, a magia do Primeiro Mundo incorporou-se na linhagem de sua família.",
+                "tradicao_magica": "primal",
+                "lista_magias_pagina": 314,
+                "pericias_linhagem": ["Dissimulação", "Natureza"],
+                "magias_concedidas": {
+                    "truque_magico": "som fantasma",
+                    "1": "cativar",
+                    "2": "riso histérico",
+                    "3": "subjugar",
+                    "4": "sugestão",
+                    "5": "manto de cores",
+                    "6": "despistar",
+                    "7": "visões de perigo",
+                    "8": "dança incontrolável",
+                    "9": "mansão resplandecente",
+                },
+                "magias_de_linhagem": {
+                    "inicial": "pó das fadas",
+                    "avancada": "desaparecimento feérico",
+                    "maior": "glamour feérico",
+                },
+                "magica_sanguinea": "Encantamentos feéricos coloridos dançam ao seu redor ou de um alvo, deixando-o ocultado por 1 rodada. Essa ocultação tão óbvia não pode ser utilizada para se Esconder.",
+            },
+            {
+                "id": "imperial",
+                "nome": "Imperial",
+                "descricao": "Um de seus ancestrais foi um mortal que dominou a magia. Esse sangue mágico pode permanecer latente por gerações, mas se manifestou por completo em você.",
+                "tradicao_magica": "arcana",
+                "lista_magias_pagina": 307,
+                "pericias_linhagem": ["Arcanismo", "Sociedade"],
+                "magias_concedidas": {
+                    "truque_magico": "detectar magia",
+                    "1": "mísseis mágicos",
+                    "2": "dissipar magia",
+                    "3": "rapidez",
+                    "4": "porta dimensional",
+                    "5": "olho bisbilhoteiro",
+                    "6": "desintegrar",
+                    "7": "rajada prismática",
+                    "8": "labirinto",
+                    "9": "esfera prismática",
+                },
+                "magias_de_linhagem": {
+                    "inicial": "memórias ancestrais",
+                    "avancada": "prolongar magia",
+                    "maior": "contramedida arcana",
+                },
+                "magica_sanguinea": "Um ressurgimento de memórias ancestrais concede a você ou a um alvo +1 de bônus de estado em testes de perícia por 1 rodada.",
+            },
+            {
+                "id": "morta_viva",
+                "nome": "Morta-Viva",
+                "descricao": "O toque da não-morte corre em suas veias. Sua árvore genealógica pode conter mortos-vivos poderosos, como um vampiro, ou talvez você tenha morrido e retornado um pouco diferente.",
+                "tradicao_magica": "divina",
+                "lista_magias_pagina": 309,
+                "pericias_linhagem": ["Intimidação", "Religião"],
+                "magias_concedidas": {
+                    "truque_magico": "toque gélido",
+                    "1": "ferir",
+                    "2": "vitalidade falsa",
+                    "3": "compelir morto-vivo",
+                    "4": "cadáver falante",
+                    "5": "nuvem mortal",
+                    "6": "exsanguinação vampírica",
+                    "7": "dedo da morte",
+                    "8": "ressecamento horrível",
+                    "9": "lamento da banshee",
+                },
+                "magias_de_linhagem": {
+                    "inicial": "benção da não-morte",
+                    "avancada": "drenar vida",
+                    "maior": "túmulo ávido",
+                },
+                "magica_sanguinea": "Energia necromântica flui através de você ou um alvo. Você recebe Pontos de Vida temporários igual ao nível da magia por 1 rodada ou o alvo sofre 1 de dano negativo por nível da magia (se a magia já causar dano negativo, combine este valor com o dano da magia antes de determinar fraquezas e resistências).",
+            },
+        ],
+    }
+
+    termos_chave = [
+        {
+            "termo": "Metamágico",
+            "descricao": (
+                "Ações com esse traço alteram as propriedades de suas magias. Você deve usar uma ação metamágica logo antes de Conjurar a Magia que deseja alterar. "
+                "Se usar qualquer outra ação (incluindo ações livres e reações) diferente de Conjurar uma Magia logo após essa ação metamágica, você desperdiça os benefícios da ação metamágica. "
+                "Efeitos acrescentados por uma ação metamágica são parte do efeito da magia, não da ação metamágica em si."
+            ),
+        },
+        {
+            "termo": "Os Abençoados e os Condenados",
+            "descricao": (
+                "Muitas linhagens são ligadas a determinados tipos de criaturas, e as reputações dessas criaturas influenciam a maneira que as pessoas o veem. "
+                "Ter uma linhagem ligada a criaturas de uma determinada tendência não gera efeito em sua própria tendência a menos que você queira; sua magia não depende dessa fonte."
+            ),
+        },
+    ]
+
+    exemplos_personagens = [
+        {
+            "nome": "Tocado-Pelas-Fadas",
+            "pagina": 146,
+            "resumo": "Seu sangue o liga à magia do Primeiro Mundo e às fadas extraterrenas. Como elas, você é caprichoso, cativante e difícil de convencer.",
+            "atributos": "Aprimore seu Carisma primeiro. Uma boa Destreza, Constituição e Sabedoria garantem defesas sólidas.",
+            "pericias": ["Diplomacia", "Dissimulação", "Furtividade", "Natureza"],
+            "subclasse": "Feérica",
+            "talentos_niveis_superiores": [
+                "Magia de Alcance (1º)",
+                "Evolução Primal (4º)",
+                "Linhagem Avançada (6º)",
+                "Linhagem Maior (10º)",
+                "Foco de Linhagem (12º)",
+            ],
+            "magias_listadas_no_quadro": {
+                "1_nivel": ["cativar", "convocar fada", "passos velozes"],
+                "truques_magicos": ["detectar magia", "emaranhapé", "luzes dançantes", "pasmar", "som fantasma"],
+            },
+        },
+        {
+            "nome": "Sangue de Demônio",
+            "pagina": 150,
+            "resumo": "As criaturas grotescas e caóticas do Abismo deixaram sua marca na linhagem de sua família. Você tem uma veia cruel e se emociona com a destruição arbitrária.",
+            "atributos": "Seu Carisma é o mais importante, e Força, Destreza e Constituição lhe tornam um melhor combatente.",
+            "pericias": ["Atletismo", "Dissimulação", "Intimidação", "Religião"],
+            "subclasse": "Demoníaca",
+            "talentos_niveis_superiores": [
+                "Feitiçaria Perigosa (1º)",
+                "Evolução Divina (4º)",
+                "Linhagem Avançada (6º)",
+                "Resistência de Linhagem (8º)",
+                "Linhagem Maior (10º)",
+                "Foco de Linhagem (12º)",
+            ],
+            "repertorio_magias": {
+                "1_nivel": ["ferir", "medo", "ruína"],
+                "truques_magicos": ["detectar magia", "escudo místico", "jorro ácido", "luz", "toque gélido"],
+            },
+        },
+    ]
+
+    talentos = [
+        # 1º NÍVEL (5)
+        construir_talento_classe(
+            "Ampliar Magia",
+            1,
+            ["Feiticeiro", "Manuseio", "Metamágico"],
+            "Você manipula a energia de sua magia, propagando-a para afetar uma área mais ampla. Se a sua próxima ação for Conjurar uma Magia que possui uma área de cone, explosão ou linha e não possui uma duração, aumente a área dessa magia. Acrescente 1,5 metros ao raio de uma explosão que normalmente tenha um raio de pelo menos 3 metros (uma explosão com raio menor não é afetada). Adicione 1,5 metros ao comprimento de um cone ou linha que normalmente tenha 4,5 metros ou menos, e adicione 3 metros ao comprimento de um cone ou linha maior que isso.",
+            acoes="1",
+        ),
+        construir_talento_classe(
+            "Contramágica",
+            1,
+            ["Abjuração", "Feiticeiro"],
+            "Quando um adversário Conjurar uma Magia cujas manifestações você possa ver e que conheça, você pode usar sua própria magia para interrompê-la. Você gasta um de seus espaços de magia para neutralizar a conjuração de uma magia da criatura acionadora que conste em seu repertório. Você perde seu espaço de magia como se tivesse conjurado a magia acionadora e então tenta neutralizar a magia acionadora (página 459).",
+            acoes="reacao",
+            acionamento="Uma criatura conjura uma magia que você possui em seu repertório.",
+            requerimentos="Você tem um espaço de magia disponível que poderia usar para conjurar a magia acionadora.",
+            especial="Este talento possui o traço correspondente à tradição de magias que você conjura (arcano, divino, natural ou ocultista).",
+        ),
+        construir_talento_classe(
+            "Familiar",
+            1,
+            ["Feiticeiro"],
+            "Um animal lhe serve e auxilia sua conjuração. Você recebe um familiar (regras para familiares são encontradas na página 217).",
+        ),
+        construir_talento_classe(
+            "Feitiçaria Perigosa",
+            1,
+            ["Feiticeiro"],
+            "Seu legado lhe concede grande poder destrutivo. Quando Conjurar uma Magia que cause dano e não possua duração usando seus espaços de magia, você recebe um bônus de estado no dano dessa magia igual ao nível dela.",
+        ),
+        construir_talento_classe(
+            "Magia de Alcance",
+            1,
+            ["Concentração", "Feiticeiro", "Metamágico"],
+            "Você amplia a distância de sua magia. Se a sua próxima ação for Conjurar uma Magia que possui uma distância, aumente a distância dessa magia em 9 metros. Como padrão para aumentar distâncias de magias, se a magia normalmente tiver uma distância de toque, você amplia a distância dela para 9 metros.",
+            acoes="1",
+        ),
+        # 2º NÍVEL (2)
+        construir_talento_classe(
+            "Expansão de Truque Mágico",
+            2,
+            ["Feiticeiro"],
+            "Você compreende melhor o poder básico de sua linhagem. Adicione dois truques mágicos de sua lista de magias ao seu repertório de magias.",
+        ),
+        construir_talento_classe(
+            "Familiar Melhorado",
+            2,
+            ["Feiticeiro"],
+            "Você infunde seu familiar com energia mágica adicional, aumentando as habilidades dele. Você pode selecionar quatro habilidades de familiar ou de mestre por dia, em vez de apenas duas.",
+            pre_requisitos="um familiar",
+        ),
+        # 4º NÍVEL (5)
+        construir_talento_classe(
+            "Evolução Arcana",
+            4,
+            ["Arcano", "Feiticeiro"],
+            (
+                "Seu legado arcano lhe concede uma aptidão excepcional pra tarefas intelectuais e acadêmicas. Você se torna treinado em uma perícia à sua escolha. "
+                "Além disso, você mantém um livro de magias arcanas similar ao grimório de um mago (adicione todas as magias de seu repertório sem custos e utilize Arcanismo para Aprender Magias, página 234). "
+                "Durante suas preparações diárias, escolha qualquer magia de seu livro de magias arcanas: se ela já estiver em seu repertório, trate-a como uma magia emblemática adicional nesse dia; se não estiver, trate-a como se estivesse até suas próximas preparações diárias."
+            ),
+            pre_requisitos="linhagem que concede magias arcanas",
+        ),
+        construir_talento_classe(
+            "Evolução Divina",
+            4,
+            ["Divino", "Feiticeiro"],
+            "O poder divino fornecido por sua linhagem flui através de você. Você recebe um espaço de magia de seu maior nível de magia, que pode usar somente para conjurar curar ou ferir (à sua escolha). Você pode conjurar qualquer uma destas magias usando esse espaço de magia, mesmo que ela não esteja em seu repertório de magia.",
+            pre_requisitos="linhagem que concede magias divinas",
+        ),
+        construir_talento_classe(
+            "Evolução Ocultista",
+            4,
+            ["Feiticeiro", "Ocultista"],
+            "Vislumbres dos segredos do universo lhe emprestam seu poder. Você se torna treinado em uma perícia à sua escolha. Além disso, uma vez por dia, você pode gastar 1 minuto para escolher uma magia ocultista mental que não conhece e adicioná-la ao seu repertório de magias. Você perde esta magia temporária na próxima vez que fizer suas preparações diárias (embora possa usar esta habilidade para adicioná-la novamente a cada dia).",
+            pre_requisitos="linhagem que concede magias ocultistas",
+        ),
+        construir_talento_classe(
+            "Evolução Primal",
+            4,
+            ["Feiticeiro", "Primal"],
+            "Você pode recorrer à ajuda das criaturas dos ermos. Você recebe um espaço de magia de seu maior nível de magia, que pode usar somente para conjurar convocar animal ou convocar plantas e fungos (à sua escolha). Você pode conjurar qualquer uma destas magias usando esse espaço de magia, mesmo que ela não esteja em seu repertório de magia.",
+            pre_requisitos="linhagem que concede magias primais",
+        ),
+        construir_talento_classe(
+            "Magia Residual em Arma",
+            4,
+            ["Feiticeiro"],
+            (
+                "Você canaliza a energia residual da magia em uma arma que esteja empunhando. Até o final de seu turno, a arma causa 1d6 de dano extra de um tipo correspondente à escola da magia conjurada: "
+                "• Abjuração: dano de força; "
+                "• Adivinhação, Encantamento ou Ilusão: dano mental; "
+                "• Conjuração ou Transformação: o mesmo tipo da arma; "
+                "• Evocação: um tipo que a magia cause, ou dano de força se a magia não causa dano; "
+                "• Necromancia: dano negativo."
+            ),
+            acoes="livre",
+            frequencia="uma vez por turno",
+            requerimentos="Sua ação mais recente foi conjurar uma magia que não seja um truque mágico.",
+        ),
+        # 6º NÍVEL (2)
+        construir_talento_classe(
+            "Conjuração Consistente",
+            6,
+            ["Feiticeiro"],
+            "Confiante em sua técnica, você não perde a concentração facilmente quando Conjura uma Magia. Se uma reação fosse interromper sua ação de conjuração, faça um teste simples CD 15. Se obtiver sucesso, sua ação não é interrompida.",
+        ),
+        construir_talento_classe(
+            "Linhagem Avançada",
+            6,
+            ["Feiticeiro"],
+            "Você estudou sua linhagem para aprender os segredos de sua magia. Você recebe a magia de linhagem avançada associada à sua linhagem. Aumente em 1 a quantidade de Pontos de Foco em sua reserva de foco.",
+            pre_requisitos="magia de linhagem",
+        ),
+        # 8º NÍVEL (2)
+        construir_talento_classe(
+            "Evolução de Linhagem Cruzada",
+            8,
+            ["Feiticeiro"],
+            "Interações estranhas em sua linhagem lhe fornecem magias inesperadas. Você pode possuir uma magia em seu repertório de magias de uma tradição diferente da que corresponde à sua linhagem. Você conjura essa magia como uma magia da tradição de sua linhagem. Você pode trocar a magia adicionada e a tradição a que ela pertence como poderia fazer com qualquer outra magia, mas não pode possuir mais de uma magia de outra tradição em seu repertório de magias ao mesmo tempo devido a este talento.",
+        ),
+        construir_talento_classe(
+            "Resistência de Linhagem",
+            8,
+            ["Feiticeiro"],
+            "Seu sangue mágico lhe torna mais resistente a magia. Você recebe +1 de bônus de estado em jogadas de salvamento contra magias e efeitos mágicos.",
+        ),
+        # 10º NÍVEL (3)
+        construir_talento_classe(
+            "Conjuração Acelerada",
+            10,
+            ["Concentração", "Feiticeiro", "Metamágico"],
+            "Através de um processo mental extenuante, você modifica a conjuração de uma magia para gastar menos tempo. Se a sua próxima ação for conjurar um truque mágico ou magia de feiticeiro que seja pelo menos 2 níveis inferior ao maior nível de magia de feiticeiro que você possa conjurar, reduza em 1 a quantidade de ações para conjurá-la (mínimo de 1 ação).",
+            acoes="livre",
+            frequencia="uma vez por dia",
+        ),
+        construir_talento_classe(
+            "Energia Avassaladora",
+            10,
+            ["Feiticeiro", "Manuseio", "Metamágico"],
+            "Você altera suas magias para superar resistências. Se a sua próxima ação for Conjurar uma Magia, essa magia ignora um valor igual ao seu nível de personagem da resistência do alvo contra dano de ácido, eletricidade, fogo, frio ou sônico. Isto se aplica a todo dano causado pela magia, incluindo dano persistente e qualquer dano causado por algum efeito contínuo (como da muralha criada por muralha de fogo). As imunidades de uma criatura não são afetadas.",
+            acoes="1",
+        ),
+        construir_talento_classe(
+            "Linhagem Maior",
+            10,
+            ["Feiticeiro"],
+            "Uma grande comunhão com o legado de sua linhagem desvendou seus maiores segredos. Você recebe a magia de linhagem maior associada à sua linhagem. Aumente em 1 a quantidade de Pontos de Foco em sua reserva de foco.",
+            pre_requisitos="magia de linhagem",
+        ),
+        # 12º NÍVEL (2)
+        construir_talento_classe(
+            "Foco de Linhagem",
+            12,
+            ["Feiticeiro"],
+            "Seu foco se recupera mais rápido. Se tiver gastado pelo menos 2 Pontos de Foco desde a última vez que Refocou, você recupera 2 Pontos de Foco ao Refocar (em vez de recuperar somente 1 ponto).",
+            pre_requisitos="magia de linhagem",
+        ),
+        construir_talento_classe(
+            "Sentido Mágico",
+            12,
+            ["Adivinhação", "Detecção", "Feiticeiro"],
+            "Você possui literalmente um sexto sentido para magia. Você pode sentir a presença de auras mágicas como se estivesse sempre usando detectar magia de 1º nível. Esse efeito detecta magia somente em seu campo de visão. Quando Buscar, você recebe os benefícios de detectar magia de 3º nível em qualquer coisa que possa ver (além dos benefícios normais de Buscar). Você pode desligar e ligar este sentido com uma ação livre no início ou final de seu turno.",
+        ),
+        # 14º NÍVEL (2)
+        construir_talento_classe(
+            "Entrelaçar Dissipação",
+            14,
+            ["Feiticeiro", "Metamágico"],
+            "Você entrelaça energia dissipadora em uma magia, lançando ambos os efeitos em um adversário. Se sua próxima ação for conjurar uma magia de alvo único contra uma criatura, se o ataque da magia for bem-sucedido ou se o adversário falhar na jogada de salvamento dele, você pode conjurar dissipar magia no adversário como uma ação livre (gastando um espaço de magia normalmente e tendo como alvo um efeito de magia afetando o adversário).",
+            acoes="1",
+            pre_requisitos="dissipar magia em seu repertório de magias",
+        ),
+        construir_talento_classe(
+            "Refletir Magia",
+            14,
+            ["Feiticeiro"],
+            "Quando obtiver sucesso em uma Contramágica para neutralizar uma magia que afete criaturas alvo ou uma área, você pode devolver o efeito da magia ao conjurador dela. Quando refletida, a magia afeta apenas o conjurador original, mesmo se for uma magia de área ou que normalmente afete mais de uma criatura. O conjurador original pode tentar um salvamento e usar outras defesas contra a magia refletida normalmente.",
+            pre_requisitos="Contramágica",
+        ),
+        # 16º NÍVEL (3)
+        construir_talento_classe(
+            "Concentração Sem Esforço",
+            16,
+            ["Feiticeiro"],
+            "Você pode sustentar uma magia com pouco mais do que um pensamento. Você imediatamente recebe os efeitos da ação Sustentar uma Magia, permitindo-lhe prolongar a duração de uma de suas magias de feiticeiro ativas.",
+            acoes="livre",
+            acionamento="Seu turno começa.",
+        ),
+        construir_talento_classe(
+            "Evolução Mental Maior",
+            16,
+            ["Feiticeiro"],
+            "Sua conexão profunda à essência mental melhora bastante seu repertório de magias. Adicione uma magia a seu repertório de magias para cada nível de magia que puder conjurar.",
+            pre_requisitos="Evolução Arcana ou Evolução Ocultista",
+        ),
+        construir_talento_classe(
+            "Evolução Vital Maior",
+            16,
+            ["Feiticeiro"],
+            "O poder vital surge de você como uma fonte de energia. Duas vezes por dia, você pode conjurar uma magia após ter ficado sem espaços de magia do nível de magia apropriado. As duas magias conjuradas com este talento devem ser de níveis de magia diferentes.",
+            pre_requisitos="Evolução Divina ou Evolução Primal",
+        ),
+        # 18º NÍVEL (2)
+        construir_talento_classe(
+            "Evolução de Linhagem Cruzada Maior",
+            18,
+            ["Feiticeiro"],
+            "Sua linhagem é extraordinariamente complexa. Você pode possuir até três magias de outras tradições em seu repertório de magias (em vez de somente uma). Estas magias devem pertencer a níveis diferentes e não precisam ser da mesma tradição.",
+            pre_requisitos="Evolução de Linhagem Cruzada",
+        ),
+        construir_talento_classe(
+            "Manancial de Linhagem",
+            18,
+            ["Feiticeiro"],
+            "O poder de seu sangue reabastece seu foco. Se tiver gastado pelo menos 3 Pontos de Foco desde a última vez que Refocou, você recupera 3 Pontos de Foco ao Refocar (em vez de recuperar somente 1 ponto).",
+            pre_requisitos="Foco de Linhagem",
+        ),
+        # 20º NÍVEL (3)
+        construir_talento_classe(
+            "Conduíte de Linhagem",
+            20,
+            ["Feiticeiro", "Metamágico"],
+            "Sua natureza mágica inata lhe permite redirecionar energias ambientais para abastecer suas magias. Se a sua próxima ação for Conjurar uma Magia de 5º nível ou inferior que não tenha duração, você não gasta a magia preparada ao conjurá-la.",
+            acoes="1",
+            frequencia="uma vez por minuto",
+        ),
+        construir_talento_classe(
+            "Maestria Metamágica",
+            20,
+            ["Feiticeiro"],
+            "Alterar suas magias não gasta mais tempo do que conjurá-las normalmente. Você pode usar ações únicas metamágicas como ações livres.",
+        ),
+        construir_talento_classe(
+            "Perfeição de Linhagem",
+            20,
+            ["Feiticeiro"],
+            "Você comanda os poderes definitivos de sua linhagem e tradição. Você recebe um espaço de magia adicional de 10º nível.",
+            pre_requisitos="exemplar de linhagem",
+        ),
+    ]
+
+    return {
+        "id": "feiticeiro",
+        "nome": "Feiticeiro",
+        "paginas": "140-151",
+        "descricao": (
+            "Você não escolheu se tornar um conjurador — você nasceu assim. A magia corre em seu sangue, "
+            "seja porque uma divindade marcou um de seus ancestrais, porque um antepassado comungou com uma criatura primal "
+            "ou porque um poderoso ritual ocultista influenciou sua linhagem. Autorreflexão e estudo lhe permitem refinar suas habilidades mágicas inerentes "
+            "e acessar novas habilidades mais poderosas. Entretanto, o poder em seu sangue carrega um risco e você constantemente enfrenta a escolha de se erguer como um mestre conjurador ou sucumbir à destruição."
+        ),
+        "atributo_chave": {
+            "opcoes": ["carisma"],
+            "melhoria_1_nivel": 2,
+            "texto": "Carisma — No 1º nível, sua classe lhe concede uma melhoria de atributo em Carisma.",
+        },
+        "pontos_de_vida_por_nivel": 6,
+        "pontos_de_vida_texto": "6 mais seu modificador de Constituição no 1º nível e a cada nível subsequente.",
+        "jogando_com_a_classe": {
+            "encontros_combate": (
+                "Você usa suas magias para ferir seus inimigos, influenciar suas mentes e impedir seus movimentos. "
+                "Você pode ser vulnerável demais para entrar em combate corpo a corpo ou pode possuir uma linhagem que o conceda habilidades para se virar em uma peleja. "
+                "Embora sua magia seja poderosa, você também recorre a truques mágicos para conservar suas melhores magias — ou após usar todas."
+            ),
+            "encontros_sociais": "Seu carisma natural lhe torna habilidoso em interagir com as pessoas.",
+            "exploracao": "Você detecta a magia ao seu redor, encontra tesouros e alerta seu grupo sobre armadilhas mágicas. Quando o grupo encontra mistérios ou problemas relacionados à sua linhagem, você tenta solucioná-los.",
+            "recesso": "Você cria itens mágicos ou escreve pergaminhos. Sua linhagem pode levá-lo a pesquisar sua ancestralidade ou associar-se a pessoas ou criaturas afiliadas a ela.",
+            "voce_pode": [
+                "Possuir um forte espírito independente e, seja aceitando ou rejeitando sua herança mágica, desejar distinguir-se como um conjurador e indivíduo único.",
+                "Ver sua linhagem com uma mistura de fascínio e medo — qualquer sentimento entre uma aceitação sincera e uma rejeição veemente.",
+                "Recorrer a itens mágicos, como pergaminhos e varinhas, para suplementar sua seleção limitada de magias.",
+            ],
+            "outros_provavelmente": [
+                "Maravilham-se com sua habilidade de criar magia do nada e veem suas habilidades com igual admiração e desconfiança.",
+                "O consideram menos dedicado do que magos estudiosos, clérigos devotados e outros praticantes de magia, já que seus poderes surgem naturalmente.",
+                "Pressupõem que você é imprevisível e caótico como a magia que carrega, mesmo que sua personalidade prove o contrário.",
+            ],
+        },
+        "proficiencias_iniciais": {
+            "percepcao": "treinado",
+            "salvamentos": {
+                "fortitude": "treinado",
+                "reflexos": "treinado",
+                "vontade": "especialista",
+            },
+            "pericias": {
+                "fixas": [],
+                "opcoes_fixas": [],
+                "condicionais": ["duas_pericias_determinadas_pela_linhagem"],
+                "adicionais_base": 2,
+                "soma_modificador_inteligencia": True,
+                "texto": "Treinado em uma ou mais perícias determinadas por sua linhagem; treinado em uma quantidade de perícias adicionais igual a 2 mais seu modificador de Inteligência.",
+            },
+            "ataques": {
+                "armas_simples": "treinado",
+                "ataques_desarmados": "treinado",
+            },
+            "defesas": {
+                "armaduras_leves": "destreinado",
+                "armaduras_medias": "destreinado",
+                "armaduras_pesadas": "destreinado",
+                "todas_armaduras": "destreinado",
+                "defesa_sem_armadura": "treinado",
+            },
+            "cd_classe": None,
+            "magias": {
+                "tradicao": "conforme_linhagem",
+                "tipo_conjuracao": "espontanea",
+                "ataques_magia": "treinado",
+                "cds_magia": "treinado",
+                "atributo_conjuracao": "carisma",
+                "texto": "Treinado em ataques de magias de sua tradição de magia, conforme indicado por sua linhagem; treinado em CDs de magias de sua tradição de magia, conforme indicado por sua linhagem.",
+            },
+        },
+        "tabela_progressao": tabela_progressao,
+        "tabelas_especificas": {
+            "tabela_3_13_magias_por_dia": tabela_3_13_magias_por_dia,
+            "tabela_talentos_indice": tabela_talentos_indice,
+        },
+        "caracteristicas_de_classe": caracteristicas_de_classe,
+        "subclasses": subclasses,
+        "termos_chave": termos_chave,
+        "exemplos_personagens": exemplos_personagens,
+        "talentos_de_classe": talentos,
+    }
+
+
+def construir_guerreiro() -> dict[str, Any]:
+    """Constrói os dados completos da classe Guerreiro (pp. 152–165)."""
+    tabela_progressao = construir_tabela_progressao(
+        [
+            (1, "Ancestralidade e biografia, ataque de oportunidade, bloqueio com escudo, proficiências iniciais, talento de guerreiro"),
+            (2, "Talento de guerreiro, talento de perícia"),
+            (3, "Bravura, incremento de perícia, talento geral"),
+            (4, "Talento de guerreiro, talento de perícia"),
+            (5, "Incremento de perícia, maestria em armas de guerreiro, melhorias de atributo, talento de ancestralidade"),
+            (6, "Talento de guerreiro, talento de perícia"),
+            (7, "Incremento de perícia, intendente do campo de batalha, especialização em armas, talento geral"),
+            (8, "Talento de guerreiro, talento de perícia"),
+            (9, "Flexibilidade de combate, incremento de perícia, irrefreável, talento de ancestralidade"),
+            (10, "Melhorias de atributo, talento de guerreiro, talento de perícia"),
+            (11, "Especialidade em armaduras, especialidade de guerreiro, incremento de perícia, talento geral"),
+            (12, "Talento de guerreiro, talento de perícia"),
+            (13, "Incremento de perícia, lenda com armas, talento de ancestralidade"),
+            (14, "Talento de guerreiro, talento de perícia"),
+            (15, "Especialização em armas maior, evasão, flexibilidade aprimorada, incremento de perícia, melhorias de atributo, talento geral"),
+            (16, "Talento de guerreiro, talento de perícia"),
+            (17, "Incremento de perícia, maestria em armaduras, talento de ancestralidade"),
+            (18, "Talento de guerreiro, talento de perícia"),
+            (19, "Incremento de perícia, lenda versátil, talento geral"),
+            (20, "Melhorias de atributo, talento de guerreiro, talento de perícia"),
+        ]
+    )
+
+    tabela_talentos_indice = [
+        {"nome": "Agressão Vantajosa", "nivel": 6},
+        {"nome": "Aparada de Duelo", "nivel": 2},
+        {"nome": "Aparada Dupla", "nivel": 4},
+        {"nome": "Arrebatar", "nivel": 4},
+        {"nome": "Assalto de Duas Mãos", "nivel": 4},
+        {"nome": "Ataque Fisgador", "nivel": 1},
+        {"nome": "Ataque em Movimento", "nivel": 12},
+        {"nome": "Ataque Poderoso", "nivel": 1},
+        {"nome": "Ataque de Posicionamento", "nivel": 8},
+        {"nome": "Atracar em Combate", "nivel": 2},
+        {"nome": "Bloqueio Agressivo", "nivel": 2},
+        {"nome": "Bloqueio Rápido com Escudo", "nivel": 8},
+        {"nome": "Bruto Temível", "nivel": 10},
+        {"nome": "Corte Duplo", "nivel": 1},
+        {"nome": "Crítico Selvagem", "nivel": 18},
+        {"nome": "Dança de Duelo", "nivel": 12},
+        {"nome": "Defesa Dupla", "nivel": 16},
+        {"nome": "Deflexão do Guardião", "nivel": 6},
+        {"nome": "Deslocamento com Escudo", "nivel": 4},
+        {"nome": "Determinação", "nivel": 14},
+        {"nome": "Empurrão Brutal", "nivel": 2},
+        {"nome": "Empurrão Poderoso", "nivel": 4},
+        {"nome": "Empurrão Propelente", "nivel": 12},
+        {"nome": "Escudo Espelhado", "nivel": 10},
+        {"nome": "Escudo Reativo", "nivel": 1},
+        {"nome": "Escudo Reflexivo", "nivel": 6},
+        {"nome": "Escudo Reflexivo Aprimorado", "nivel": 16},
+        {"nome": "Estilhaçar Defesas", "nivel": 6},
+        {"nome": "Estocada", "nivel": 2},
+        {"nome": "Finalização Brutal", "nivel": 12},
+        {"nome": "Finalização Desesperada", "nivel": 14},
+        {"nome": "Finalização Guiante", "nivel": 14},
+        {"nome": "Foco Furioso", "nivel": 6},
+        {"nome": "Golpe de Derrubada", "nivel": 8},
+        {"nome": "Golpe de Exatidão", "nivel": 1},
+        {"nome": "Golpe Giratório", "nivel": 14},
+        {"nome": "Golpe Infalível", "nivel": 10},
+        {"nome": "Golpe Intimidante", "nivel": 2},
+        {"nome": "Graça Ágil", "nivel": 10},
+        {"nome": "Guarda Exemplar", "nivel": 12},
+        {"nome": "Guardião de Escudo", "nivel": 6},
+        {"nome": "Investida Súbita", "nivel": 1},
+        {"nome": "Lutar às Cegas", "nivel": 8},
+        {"nome": "Mira Incrível", "nivel": 8},
+        {"nome": "Pose Graciosa", "nivel": 16},
+        {"nome": "Postura de Desarme", "nivel": 6},
+        {"nome": "Postura Disruptiva", "nivel": 10},
+        {"nome": "Postura de Estocada", "nivel": 12},
+        {"nome": "Postura de Tiro Móvel", "nivel": 8},
+        {"nome": "Postura de Tiros Múltiplos", "nivel": 16},
+        {"nome": "Punhalada Reveladora", "nivel": 6},
+        {"nome": "Rajada com Duas Armas", "nivel": 14},
+        {"nome": "Reflexos de Combate", "nivel": 10},
+        {"nome": "Represálias Ilimitadas", "nivel": 20},
+        {"nome": "Reversão Rápida", "nivel": 4},
+        {"nome": "Ricochete Incrível", "nivel": 12},
+        {"nome": "Riposta de Duelo", "nivel": 8},
+        {"nome": "Riposta de Duelo Aprimorada", "nivel": 12},
+        {"nome": "Riposta Dupla", "nivel": 10},
+        {"nome": "Riposta Dupla Aprimorada", "nivel": 14},
+        {"nome": "Riposta Guiante", "nivel": 14},
+        {"nome": "Sagaz em Postura", "nivel": 14},
+        {"nome": "Salto Súbito", "nivel": 8},
+        {"nome": "Saraivada Impossível", "nivel": 18},
+        {"nome": "Supremacia com Armas", "nivel": 20},
+        {"nome": "Tiro de Assistência", "nivel": 2},
+        {"nome": "Tiro Certeiro", "nivel": 1},
+        {"nome": "Tiro Debilitante", "nivel": 10},
+        {"nome": "Tiro Duplo", "nivel": 4},
+        {"nome": "Tiro Triplo", "nivel": 6},
+        {"nome": "Tombar", "nivel": 4},
+        {"nome": "Tombar Aprimorado", "nivel": 10},
+        {"nome": "Torção de Desarme", "nivel": 10},
+        {"nome": "Treinamento com Armas Avançadas", "nivel": 6},
+    ]
+
+    caracteristicas_de_classe = [
+        construir_caracteristica_classe(
+            "Ancestralidade e Biografia",
+            1,
+            "Além das habilidades fornecidas por sua classe no 1º nível, você possui os benefícios da ancestralidade e biografia selecionadas, conforme descrito no Capítulo 2.",
+        ),
+        construir_caracteristica_classe(
+            "Proficiências Iniciais",
+            1,
+            "No 1º nível, você recebe proficiências que representam seu treinamento básico, listadas no início desta classe.",
+        ),
+        construir_caracteristica_classe(
+            "Ataque de Oportunidade",
+            1,
+            "Sempre atento a fraquezas, você pode rapidamente atacar adversários que deixam uma abertura em suas defesas. Você recebe a reação Ataque de Oportunidade.",
+            acoes_concedidas=[
+                construir_acao_habilidade(
+                    "Ataque de Oportunidade",
+                    "reacao",
+                    [],
+                    (
+                        "Você ataca um adversário que baixa a guarda. Faça um Golpe corpo a corpo contra a criatura acionadora. "
+                        "Se seu ataque for um acerto crítico e o acionamento for uma ação de manuseio, você interrompe essa ação. "
+                        "Este Golpe não conta para sua penalidade por ataques múltiplos e sua penalidade por ataques múltiplos não se aplica a ele."
+                    ),
+                    acionamento="Uma criatura em seu alcance usa uma ação de manuseio ou de movimento, desfere um ataque à distância ou sai de um quadrado usando uma ação de movimento.",
+                )
+            ],
+        ),
+        construir_caracteristica_classe(
+            "Bloqueio com Escudo",
+            1,
+            "Você recebe o talento geral Bloqueio com Escudo (página 258), uma reação que lhe permite reduzir dano com seu escudo.",
+            detalhes={"talento_bonus": "Bloqueio com Escudo"},
+        ),
+        construir_caracteristica_classe(
+            "Talentos de Guerreiro",
+            1,
+            "No 1º nível e a cada nível par subsequente, você recebe um talento de classe de guerreiro.",
+        ),
+        construir_caracteristica_classe(
+            "Talentos de Perícia",
+            2,
+            "No 2º nível e a cada 2 níveis subsequentes, você recebe um talento de perícia (Capítulo 5).",
+        ),
+        construir_caracteristica_classe(
+            "Bravura",
+            3,
+            "Sua graduação de proficiência em salvamentos de Vontade aumenta para especialista. Quando rolar um sucesso em um salvamento de Vontade contra um efeito de medo, trate o resultado como um sucesso crítico. Além disso, sempre que você sofrer a condição assustado, reduza seu valor em 1.",
+        ),
+        construir_caracteristica_classe(
+            "Incrementos de Perícia",
+            3,
+            "No 3º nível e a cada 2 níveis subsequentes, você recebe um incremento de perícia (mestre a partir do 7º nível, lendário a partir do 15º nível).",
+        ),
+        construir_caracteristica_classe(
+            "Talentos Gerais",
+            3,
+            "No 3º nível e a cada 4 níveis subsequentes, você recebe um talento geral (Capítulo 5).",
+        ),
+        construir_caracteristica_classe(
+            "Maestria em Armas de Guerreiro",
+            5,
+            "Escolha um grupo de armas. Sua graduação de proficiência aumenta para mestre com armas simples e marciais desse grupo, e para especialista com as armas avançadas desse grupo. Você obtém acesso aos efeitos de especialização de crítico (página 283) de todas as armas com as quais possui proficiência de mestre.",
+        ),
+        construir_caracteristica_classe(
+            "Melhorias de Atributo",
+            5,
+            "No 5º nível e a cada 5 níveis subsequentes, você melhora os valores de quatro atributos diferentes (+1 se >= 18, +2 se < 18).",
+        ),
+        construir_caracteristica_classe(
+            "Talentos de Ancestralidade",
+            5,
+            "Você recebe um talento de ancestralidade no 5º nível e a cada 4 níveis subsequentes.",
+        ),
+        construir_caracteristica_classe(
+            "Especialização em Armas",
+            7,
+            "Você causa 2 pontos de dano adicionais com armas e ataques desarmados nos quais é especialista (3 se mestre, 4 se lendário).",
+        ),
+        construir_caracteristica_classe(
+            "Intendente do Campo de Batalha",
+            7,
+            "Sua graduação de proficiência em Percepção aumenta para mestre. Além disso, você recebe +2 de bônus de circunstância em testes de Percepção para iniciativa, fazendo com que você reaja mais rápido durante o combate.",
+        ),
+        construir_caracteristica_classe(
+            "Flexibilidade de Combate",
+            9,
+            "Quando fizer suas preparações diárias, você recebe um talento de guerreiro de 8º nível ou inferior que ainda não possua (atendendo a todos os pré-requisitos), podendo usá-lo até suas próximas preparações diárias.",
+        ),
+        construir_caracteristica_classe(
+            "Irrefreável",
+            9,
+            "Sua graduação de proficiência em salvamentos de Fortitude aumenta para mestre. Quando rolar um sucesso em um salvamento de Fortitude, trate o resultado como um sucesso crítico.",
+        ),
+        construir_caracteristica_classe(
+            "Especialidade em Armaduras",
+            11,
+            "Suas graduações de proficiência em armaduras leves, médias e pesadas, assim como em defesa sem armadura, aumentam para especialista. Você adquire os efeitos de especialização em armadura para armaduras médias e pesadas.",
+        ),
+        construir_caracteristica_classe(
+            "Especialidade de Guerreiro",
+            11,
+            "Sua graduação de proficiência em sua CD de classe de guerreiro aumenta para especialista.",
+        ),
+        construir_caracteristica_classe(
+            "Lenda com Armas",
+            13,
+            "Suas graduações de proficiência em armas simples, armas marciais e ataques desarmados aumentam para mestre, e armas avançadas aumentam para especialista. Você pode selecionar um grupo de armas e aumentar suas graduações de proficiência para lendário em todas as armas simples e marciais desse grupo e para mestre em todas as armas avançadas desse grupo.",
+        ),
+        construir_caracteristica_classe(
+            "Especialização em Armas Maior",
+            15,
+            "Seu dano de especialização em armas aumenta para 4 pontos com armas e ataques desarmados nos quais é especialista, 6 pontos nos quais é mestre e 8 pontos nos quais é lendário.",
+        ),
+        construir_caracteristica_classe(
+            "Evasão",
+            15,
+            "Sua graduação de proficiência em salvamentos de Reflexos aumenta para mestre. Quando rolar um sucesso em um salvamento de Reflexos, trate o resultado como um sucesso crítico.",
+        ),
+        construir_caracteristica_classe(
+            "Flexibilidade Aprimorada",
+            15,
+            "Quando usar sua flexibilidade de combate, você pode receber dois talentos em vez de um (o primeiro de 8º nível ou inferior e o segundo de até 14º nível, podendo o primeiro atender aos pré-requisitos do segundo).",
+        ),
+        construir_caracteristica_classe(
+            "Maestria em Armaduras",
+            17,
+            "Suas graduações de proficiência em armaduras leves, médias e pesadas, assim como em defesa sem armadura, aumentam para mestre.",
+        ),
+        construir_caracteristica_classe(
+            "Lenda Versátil",
+            19,
+            "Suas graduações de proficiência em armas simples, armas marciais e ataques desarmados aumentam para lendário, e armas avançadas aumentam para mestre. Sua graduação de proficiência em sua CD de classe de guerreiro aumenta para mestre.",
+        ),
+    ]
+
+    subclasses = {
+        "tipo": "estilo_e_grupo_de_armas",
+        "nome_tipo": "Estilo de Combate e Grupo de Armas",
+        "descricao": (
+            "O guerreiro não possui uma subclasse fechada no 1º nível além da escolha de atributo chave (Força ou Destreza), "
+            "mas especializa-se em um grupo de armas no 5º e no 13º níveis (Maestria em Armas de Guerreiro / Lenda com Armas) "
+            "e constrói sua identidade tática pelos estilos apresentados nos exemplos do Livro Básico."
+        ),
+        "opcoes": [
+            {
+                "id": "agressor",
+                "nome": "Agressor (Arma de Duas Mãos)",
+                "atributo_chave_recomendado": "Força",
+                "descricao": "Usando uma arma de duas mãos, você empurra seus adversários no campo de batalha e causa ferimentos dolorosos, derrubando o maior inimigo em seu caminho.",
+                "talento_chave_1_nivel": "Ataque Poderoso",
+            },
+            {
+                "id": "duelista",
+                "nome": "Duelista (Arma de Uma Mão e Mão Livre)",
+                "atributo_chave_recomendado": "Força",
+                "descricao": "Com uma lâmina em uma mão e a outra livre, você é perito em frustrar seus oponentes com golpes desarmantes e desorientadores enquanto apara ataques.",
+                "talento_chave_1_nivel": "Ataque Fisgador",
+            },
+            {
+                "id": "arqueiro",
+                "nome": "Arqueiro (Combate à Distância)",
+                "atributo_chave_recomendado": "Destreza",
+                "descricao": "Você atinge seus oponentes de longe com armas à distância e se especializa em despachar inimigos voadores ou difíceis de alcançar.",
+                "talento_chave_1_nivel": "Tiro Certeiro",
+            },
+        ],
+    }
+
+    termos_chave = [
+        {
+            "termo": "Abertura",
+            "descricao": "Estas manobras funcionam apenas como sua primeira atitude em seu turno. Você pode usar uma ação de abertura apenas se ainda não tiver usado uma ação com o traço ataque ou abertura neste turno.",
+        },
+        {
+            "termo": "Floreio",
+            "descricao": "Ações de floreio são técnicas que requerem empenho demais e não podem ser realizadas várias vezes em seguida. Você pode usar apenas 1 ação com o traço floreio por turno.",
+        },
+        {
+            "termo": "Postura",
+            "descricao": (
+                "Uma postura é uma estratégia geral de combate que você adota ao usar uma ação com o traço postura, permanecendo nela por um certo tempo. "
+                "A postura é encerrada se você for nocauteado, se os requerimentos dela forem violados, se o encontro terminar ou se você entrar em uma nova postura — o que ocorrer primeiro. "
+                "Após usar uma ação com o traço postura, você não pode usar outra por 1 rodada. Você pode entrar ou estar em uma postura somente durante o modo de encontro."
+            ),
+        },
+        {
+            "termo": "Pressão",
+            "descricao": (
+                "Ações com este traço permitem que você desfira ataques em sequência. Uma ação com o traço pressão somente pode ser usada se você estiver sendo afetado por uma penalidade por ataques múltiplos. "
+                "Efeitos que são acrescentados em uma falha não se aplicam em uma falha crítica; em um sucesso, você pode escolher aplicar o efeito de falha. "
+                "Você não pode usar ações de pressão quando não for seu turno (mesmo usando Preparar)."
+            ),
+        },
+    ]
+
+    exemplos_personagens = [
+        {
+            "nome": "Agressor",
+            "pagina": 160,
+            "resumo": "Usando uma arma de duas mãos, você empurra seus adversários no campo de batalha e causa ferimentos dolorosos. Você se especializa em derrubar o maior inimigo que estiver em seu caminho.",
+            "atributos": "Priorize Força, Constituição e Sabedoria para melhorar sua capacidade de sobrevivência e aumentar seu dano, e Destreza para manobrabilidade extra.",
+            "pericias": ["Atletismo", "Intimidação", "Manufatura", "Medicina"],
+            "talento_inicial": "Ataque Poderoso",
+            "talentos_niveis_superiores": [
+                "Tombar (4º)",
+                "Foco Furioso (6º)",
+                "Ataque de Posicionamento (8º)",
+                "Finalização Brutal (12º)",
+                "Crítico Selvagem (18º)",
+            ],
+        },
+        {
+            "nome": "Duelista",
+            "pagina": 162,
+            "resumo": "Com uma lâmina em uma mão e a outra livre, você é perito em frustrar seus oponentes com golpes desarmantes e desorientadores enquanto se mantém atento aos ataques desajeitados deles.",
+            "atributos": "Priorize Força. Destreza e Sabedoria melhoram sua capacidade de sobrevivência e versatilidade, e Constituição concede vitalidade extra.",
+            "pericias": ["Acrobatismo", "Atletismo", "Dissimulação", "Medicina"],
+            "talento_inicial": "Ataque Fisgador",
+            "talentos_niveis_superiores": [
+                "Aparada de Duelo (2º)",
+                "Deflexão do Guardião (6º)",
+                "Riposta de Duelo (8º)",
+                "Dança de Duelo (12º)",
+                "Sagaz em Postura (14º)",
+            ],
+        },
+        {
+            "nome": "Arqueiro",
+            "pagina": 164,
+            "resumo": "Você atinge seus oponentes de longe com armas à distância e se especializa em despachar inimigos voadores ou difíceis de alcançar.",
+            "atributos": "Priorize Destreza. Constituição e Sabedoria melhoram sua capacidade de sobrevivência, e Força adiciona dano com armas propulsivas.",
+            "pericias": ["Acrobatismo", "Furtividade", "Ladroagem", "Medicina"],
+            "talento_inicial": "Tiro Certeiro",
+            "talentos_niveis_superiores": [
+                "Tiro Duplo (4º)",
+                "Tiro Triplo (6º)",
+                "Tiro Debilitante (10º)",
+                "Postura de Tiros Múltiplos (16º)",
+                "Saraivada Impossível (18º)",
+            ],
+        },
+    ]
+
+    talentos = [
+        # 1º NÍVEL (7)
+        construir_talento_classe(
+            "Ataque Fisgador",
+            1,
+            ["Guerreiro"],
+            "Você combina um ataque com movimentos rápidos para agarrar um inimigo e tirar o equilíbrio dele enquanto ele estiver em seu alcance. Faça um Golpe enquanto tiver uma mão livre. Se este Golpe acertar, o alvo fica desprevenido até o início de seu próximo turno ou até que não esteja mais ao alcance de sua mão, o que ocorrer primeiro.",
+            acoes="1",
+            requerimentos="Você possui uma mão livre e seu alvo está ao alcance dessa mão.",
+        ),
+        construir_talento_classe(
+            "Ataque Poderoso",
+            1,
+            ["Floreio", "Guerreiro"],
+            "Você desfere um ataque particularmente poderoso que atinge seu adversário com uma enorme força mas lhe deixa um pouco instável. Faça um Golpe corpo a corpo. Um Ataque Poderoso conta como dois ataques para calcular sua penalidade por ataques múltiplos. Se este Golpe acertar, você causa um dado de dano extra da arma. Se você for pelo menos de 10º nível, aumente o dano extra para dois dados de dano da arma e, se for pelo menos de 18º nível, aumente o dano extra para três dados de dano da arma.",
+            acoes="2",
+        ),
+        construir_talento_classe(
+            "Corte Duplo",
+            1,
+            ["Guerreiro"],
+            "Você ataca seu adversário com ambas as armas. Faça dois Golpes, um com cada uma de suas duas armas corpo a corpo, sendo que ambos os Golpes sofrem sua penalidade por ataques múltiplos atual. Ambos os Golpes devem ser no mesmo alvo. Se o segundo Golpe for feito com uma arma que não possua o traço ágil, ele sofre –2 de penalidade. Se os dois ataques acertarem, some seus danos e depois adicione quaisquer outros efeitos aplicáveis de ambas as armas. Você adiciona dano de precisão somente uma vez, em um ataque à sua escolha. Some o dano de ambos os Golpes e aplique resistências e fraquezas apenas uma vez. Isto conta como dois ataques para calcular sua penalidade por ataques múltiplos.",
+            acoes="2",
+            requerimentos="Você está empunhando duas armas corpo a corpo, uma em cada mão.",
+        ),
+        construir_talento_classe(
+            "Escudo Reativo",
+            1,
+            ["Guerreiro"],
+            "Você interpõe seu escudo no último momento antes de sofrer um golpe. Você imediatamente usa a ação Erguer um Escudo e recebe o bônus do escudo na CA. O bônus de circunstância do escudo se aplica à sua CA para determinar o resultado do ataque acionador.",
+            acoes="reacao",
+            acionamento="Um inimigo lhe acerta com um Golpe corpo a corpo.",
+            requerimentos="Você está empunhando um escudo.",
+        ),
+        construir_talento_classe(
+            "Golpe de Exatidão",
+            1,
+            ["Guerreiro", "Pressão"],
+            "Você faz um ataque controlado, considerando calculadamente o seu impulso. Faça um Golpe. Este Golpe possui o efeito de falha a seguir.",
+            acoes="1",
+            resultados={"falha": "Este ataque não conta para sua penalidade por ataques múltiplos."},
+        ),
+        construir_talento_classe(
+            "Investida Súbita",
+            1,
+            ["Abertura", "Floreio", "Guerreiro"],
+            "Com um disparo rápido, você corre até seu adversário e faz um movimento de ataque. Ande duas vezes. Se encerrar seu movimento com pelo menos um inimigo em seu alcance corpo a corpo, você pode realizar um Golpe corpo a corpo contra esse inimigo. Você pode usar Investida Súbita ao Escalar, Escavar, Nadar ou Voar em vez de Andar se possuir o tipo de movimento correspondente.",
+            acoes="2",
+        ),
+        construir_talento_classe(
+            "Tiro Certeiro",
+            1,
+            ["Abertura", "Guerreiro", "Postura"],
+            "Você mira para acertar rapidamente os seus inimigos próximos. Quando usar uma arma à distância de voleio enquanto estiver nesta postura, você não sofre a penalidade do traço voleio em suas rolagens de ataque. Quando usar uma arma à distância que não possui o traço voleio, você recebe +2 de bônus de circunstância nas rolagens de dano de ataques realizados contra alvos dentro do primeiro incremento de distância da arma.",
+            acoes="1",
+            requerimentos="Você está empunhando uma arma à distância.",
+        ),
+        # 2º NÍVEL (7)
+        construir_talento_classe(
+            "Aparada de Duelo",
+            2,
+            ["Guerreiro"],
+            "Você pode aparar ataques desferidos contra você com sua arma de uma mão. Você recebe +2 de bônus de circunstância na CA até o início de seu próximo turno desde que continue a atender aos requerimentos.",
+            acoes="1",
+            requerimentos="Você está empunhando somente uma arma corpo a corpo de uma mão e tem todas as suas outras mãos livres",
+        ),
+        construir_talento_classe(
+            "Atracar em Combate",
+            2,
+            ["Guerreiro", "Pressão"],
+            "Você ataca seu adversário e atraca nele. Faça um Golpe corpo a corpo enquanto mantém uma mão livre. Se o Golpe acertar, você agarra o alvo usando sua mão livre. A criatura permanece agarrada até o final de seu próximo turno ou até ela escapar, o que ocorrer primeiro.",
+            acoes="1",
+            requerimentos="Você possui uma mão livre e seu alvo está ao alcance dessa mão.",
+        ),
+        construir_talento_classe(
+            "Bloqueio Agressivo",
+            2,
+            ["Guerreiro"],
+            "Você empurra enquanto bloqueia o ataque, afastando ou desequilibrando seu adversário. Você usa seu escudo para empurrar a criatura acionadora, automaticamente Empurrando-a 1,5 metros ou deixando-a desprevenida até o início do seu próximo turno. A criatura acionadora escolhe se é movida ou se fica desprevenida. Se ela escolher ser movida, você escolhe a direção. Se Empurrar a faria atingir um objeto sólido, entrar em um quadrado de terreno difícil ou entrar no espaço de outra criatura, ela deve ficar desprevenida em vez de ser movida.",
+            acoes="livre",
+            acionamento="Você usa a reação Bloqueio com Escudo e o oponente que a acionou está adjacente a você e é do seu tamanho ou menor.",
+        ),
+        construir_talento_classe(
+            "Empurrão Brutal",
+            2,
+            ["Guerreiro", "Pressão"],
+            "Colocando seu peso no ataque, você atinge seu oponente com força o suficiente para fazê-lo tropeçar para trás. Faça um Golpe com uma arma corpo a corpo de duas mãos. Se acertar um alvo que seja do seu tamanho ou menor, ele fica desprevenido até o final de seu turno atual e você pode Empurrá-lo automaticamente com os mesmos benefícios da ação Empurrar (incluindo o efeito de sucesso crítico, se seu Golpe for um acerto crítico). Se você se mover para seguir o alvo, seu movimento não aciona reações. Este Golpe possui o efeito de falha a seguir.",
+            acoes="1",
+            requerimentos="Você está empunhando uma arma corpo a corpo de duas mãos.",
+            resultados={"falha": "O alvo fica desprevenido até o final de seu turno atual."},
+        ),
+        construir_talento_classe(
+            "Estocada",
+            2,
+            ["Guerreiro"],
+            "Estendendo seu corpo ao máximo, você ataca um inimigo que normalmente estaria além de seu alcance. Faça um Golpe com uma arma corpo a corpo aumentando seu alcance em 1,5 metros para esse Golpe. Se a arma tiver o traço derrubar, desarmar ou empurrar, você pode usar a ação correspondente em vez de um Golpe.",
+            acoes="1",
+            requerimentos="Você está empunhando uma arma corpo a corpo.",
+        ),
+        construir_talento_classe(
+            "Golpe Intimidante",
+            2,
+            ["Emoção", "Guerreiro", "Medo", "Mental"],
+            "Seu golpe não apenas fere seus alvos, mas também estilhaça sua confiança. Faça um Golpe corpo a corpo. Se você acertar e causar dano, o alvo fica assustado 1 (ou assustado 2 em um acerto crítico).",
+            acoes="2",
+        ),
+        construir_talento_classe(
+            "Tiro de Assistência",
+            2,
+            ["Guerreiro"],
+            "Com um tiro rápido, você atrapalha um adversário em combate. Você pode usar a ação Auxiliar com uma arma à distância que empunhar. Em vez do alvo estar em seu alcance, ele deve estar dentro da distância máxima de sua arma. Um Tiro de Assistência usa munição e incorre penalidades como qualquer outro ataque.",
+            acoes="1",
+        ),
+        # 4º NÍVEL (8)
+        construir_talento_classe(
+            "Aparada Dupla",
+            4,
+            ["Guerreiro"],
+            "Você usa suas duas armas para aparar ataques. Você recebe +1 de bônus de circunstância na CA até o início de seu próximo turno, ou +2 de bônus de circunstância se qualquer uma dessas armas possuir o traço aparar. Você perde este bônus de circunstância se não atender mais aos requerimentos deste talento.",
+            acoes="1",
+            requerimentos="Você está empunhando duas armas corpo a corpo, uma em cada mão.",
+        ),
+        construir_talento_classe(
+            "Arrebatar",
+            4,
+            ["Floreio", "Guerreiro"],
+            "Você faz um movimento amplo em arco. Faça um Golpe corpo a corpo e compare o resultado da rolagem de ataque à CA de até dois adversários que estejam em seu alcance corpo-a-corpo e adjacentes um ao outro. Role o dano somente uma vez e aplique-o a cada criatura atingida. Um Arrebatar conta como dois ataques para calcular sua penalidade por ataques múltiplos. Se estiver usando uma arma com o traço amplitude, aplique esse modificador dela a todos os seus ataques de Arrebatar.",
+            acoes="2",
+        ),
+        construir_talento_classe(
+            "Assalto de Duas Mãos",
+            4,
+            ["Floreio", "Guerreiro"],
+            "Você move sua mão livre para a empunhadura de sua arma por tempo o suficiente para acrescentar impulso e desferir um golpe mais poderoso. Faça um Golpe com a arma requerida. Você rapidamente troca sua empunhadura durante o Golpe para fazer o ataque com duas mãos. Se a arma normalmente não possuir o traço duas mãos, aumente o dado de dano da arma em um passo para este ataque (página 279). Se a arma possuir o traço duas mãos, você recebe o benefício desse traço e um bônus de circunstância no dano igual à quantidade de dados de dano da arma. Quando o Golpe for completado, você volta a empunhar a arma com apenas uma mão. Esta ação não encerra qualquer postura ou efeito de talento de guerreiro que requeira uma mão livre.",
+            acoes="1",
+            requerimentos="Você está empunhando uma arma corpo a corpo de uma mão e possui uma mão livre.",
+        ),
+        construir_talento_classe(
+            "Deslocamento com Escudo",
+            4,
+            ["Guerreiro"],
+            "Quando seu escudo está erguido, os golpes de seus inimigos não podem lhe tocar. Quando tiver seu escudo erguido, você pode Andar para mover-se metade de sua Velocidade sem acionar reações que seriam acionadas por seu movimento (tal como Ataques de Oportunidade). Você pode usar Deslocamento com Escudo ao Nadar ou Voar em vez de Andar se possuir o tipo de movimento correspondente.",
+        ),
+        construir_talento_classe(
+            "Empurrão Poderoso",
+            4,
+            ["Floreio", "Guerreiro"],
+            "Você pode empurrar adversários maiores com seu ataque. Você pode usar Bloqueio Agressivo ou Empurrão Brutal contra uma criatura até dois tamanhos maior que você. Quando uma criatura que você Empurrar parar de se mover por ter atingido um objeto, ela sofre dano igual ao seu modificador de Força (mínimo 1). Isto acontece independentemente da maneira que você usou para Empurrar a criatura.",
+            pre_requisitos="Bloqueio Agressivo ou Empurrão Brutal",
+        ),
+        construir_talento_classe(
+            "Reversão Rápida",
+            4,
+            ["Floreio", "Guerreiro", "Pressão"],
+            "Você vira o flanqueamento de seus adversários contra eles com uma reversão rápida. Faça um Golpe corpo a corpo contra um dos inimigos flanqueando e faça um segundo Golpe com a mesma arma ou ataque desarmado contra um inimigo diferente que esteja flanqueando-o. Este segundo Golpe sofre a mesma penalidade por ataques múltiplos do ataque inicial e não conta para sua penalidade por ataques múltiplos.",
+            acoes="1",
+            requerimentos="Você está flanqueado por dois inimigos ou mais.",
+        ),
+        construir_talento_classe(
+            "Tiro Duplo",
+            4,
+            ["Floreio", "Guerreiro"],
+            "Você atira duas vezes em uma sucessão impossível de ver. Faça dois Golpes, cada um contra um alvo diferente e com –2 de penalidade. Cada ataque conta para sua penalidade por ataques múltiplos, mas a penalidade não aumenta até você ter realizado os dois ataques.",
+            acoes="2",
+            requerimentos="Você está empunhando uma arma à distância com recarga 0.",
+        ),
+        construir_talento_classe(
+            "Tombar",
+            4,
+            ["Floreio", "Guerreiro"],
+            "Você faz um ataque para desequilibrar um adversário e segue imediatamente com outro golpe para tombá-lo. Faça um Golpe corpo a corpo. Se acertar e causar dano, você pode fazer um teste de Atletismo para Derrubar a criatura acertada. Se estiver empunhando uma arma corpo a corpo de duas mãos, você pode ignorar o requerimento de Derrubar que exige que você tenha uma mão livre. Cada ataque conta para sua penalidade por ataques múltiplos, mas a penalidade não aumenta até você ter realizado os dois ataques.",
+            acoes="2",
+            pre_requisitos="treinado em Atletismo",
+        ),
+        # 6º NÍVEL (10)
+        construir_talento_classe(
+            "Agressão Vantajosa",
+            6,
+            ["Guerreiro", "Pressão"],
+            "Aproveitando o movimento comprometido de seu inimigo, você desfere um golpe mais mortal. Faça um Golpe contra uma criatura que esteja agarrada, prostrada ou restringida. Você recebe um bônus de circunstância no dano deste Golpe igual à quantidade de dados de dano da arma, ou esse número + 2 se estiver empunhando uma arma com duas mãos. Este Golpe possui o efeito de falha a seguir.",
+            acoes="1",
+            resultados={"falha": "Você causa dano ao alvo igual à quantidade de dados de dano da arma, ou esse número + 2 se estiver empunhando uma arma com duas mãos. Este dano é do mesmo tipo que a arma."},
+        ),
+        construir_talento_classe(
+            "Deflexão do Guardião",
+            6,
+            ["Guerreiro"],
+            "Você usa sua arma para defletir o ataque contra seu aliado, concedendo +2 de bônus de circunstância na CA de seu aliado contra o ataque acionador. Isto transforma o acerto crítico acionador em um acerto comum ou o acerto acionador em um erro.",
+            acoes="reacao",
+            acionamento="Um aliado ao seu alcance corpo a corpo é atingido por um ataque, você pode ver o atacante e o aliado receber um bônus de circunstância de +2 na CA tornaria o acerto uma falha (ou tornaria um acerto crítico em um acerto comum).",
+            requerimentos="Você está empunhando uma arma corpo a corpo de uma mão e tem todas as suas outras mãos livres.",
+        ),
+        construir_talento_classe(
+            "Escudo Reflexivo",
+            6,
+            ["Guerreiro"],
+            "Você pode usar seu escudo para evitar o pior de efeitos de área e outros danos. Quando Erguer seu escudo, você recebe o bônus de circunstância do escudo em salvamentos de Reflexos. Se possuir a reação Bloqueio com Escudo, o dano sofrido como resultado de um salvamento de Reflexos pode acionar essa reação, mesmo que o dano não seja físico.",
+        ),
+        construir_talento_classe(
+            "Estilhaçar Defesas",
+            6,
+            ["Guerreiro", "Pressão"],
+            "Sua ofensiva explora o medo de seu inimigo. Faça um Golpe corpo a corpo contra uma criatura assustada. Se você acertar e causar dano, o alvo fica desprevenido até o término da condição assustado dele. Se o alvo já estiver desprevenido para você ao sofrer o dano deste Golpe, ele não pode reduzir o valor de assustado abaixo de 1 até o final de seu próximo turno.",
+            acoes="1",
+            requerimentos="Uma criatura assustada está em seu alcance corpo a corpo.",
+        ),
+        construir_talento_classe(
+            "Foco Furioso",
+            6,
+            ["Guerreiro"],
+            "Você aprendeu a manter seu equilíbrio mesmo quando ataca furiosamente. Quando fizer um Ataque Poderoso com uma arma que estiver empunhando com duas mãos, ele conta como um único ataque para calcular sua penalidade por ataques múltiplos (em vez de dois).",
+            pre_requisitos="Ataque Poderoso",
+        ),
+        construir_talento_classe(
+            "Guardião de Escudo",
+            6,
+            ["Guerreiro"],
+            "Você usa seu escudo para proteger seus aliados. Quando tiver um escudo erguido, você pode usar sua reação Bloqueio com Escudo quando um ataque for feito contra um aliado adjacente. Se o fizer, o escudo impede que esse aliado sofra dano em vez de impedir que você sofra dano (seguindo as regras normais para Bloqueio com Escudo).",
+            pre_requisitos="Bloqueio com Escudo",
+        ),
+        construir_talento_classe(
+            "Postura de Desarme",
+            6,
+            ["Guerreiro", "Postura"],
+            "Você adota uma postura de esgrima que aprimora seu controle sobre sua arma. Enquanto estiver nesta postura, você recebe +1 de bônus de circunstância em testes de Atletismo para Desarmar e +2 de bônus de circunstância em sua CD de Reflexos para defender-se contra testes realizados para Desarmá-lo. Além disso, você pode tentar Desarmar criaturas até dois tamanhos maiores que você.",
+            acoes="1",
+            pre_requisitos="treinado em Atletismo",
+            requerimentos="Você está empunhando somente uma arma corpo a corpo de uma mão e tem todas as suas outras mãos livres.",
+        ),
+        construir_talento_classe(
+            "Punhalada Reveladora",
+            6,
+            ["Guerreiro"],
+            (
+                "Você apunhala com sua arma perfurante na direção de um adversário imperceptível, revelando a localização dele para seus aliados. "
+                "Faça um Golpe com a arma corpo a corpo requerida. Você não precisa realizar um teste simples para atingir uma criatura ocultada e precisa apenas obter sucesso em um teste simples CD 5 para mirar uma criatura escondida. "
+                "Se acertar e causar dano, você pode espetar a arma requerida no seu alvo corpóreo, revelando a posição atual dele (você Larga a arma e ela fica alojada no alvo). "
+                "Se o alvo estiver ocultado, outras criaturas não precisam obter sucesso em um teste simples para atingi-lo; se escondido, precisam obter sucesso apenas em um teste simples CD 5; e o alvo não consegue tornar-se indetectado para quem puder ver a arma (que permanece visível mesmo se o alvo estiver invisível). "
+                "Este benefício dura até a arma ser removida (o alvo ou criatura adjacente pode removê-la com 2 ações de Interagir)."
+            ),
+            acoes="2",
+            requerimentos="Você está empunhando uma arma corpo a corpo que causa dano perfurante.",
+        ),
+        construir_talento_classe(
+            "Tiro Triplo",
+            6,
+            ["Guerreiro"],
+            "Você pode disparar vários tiros rapidamente com maior controle. Quando usar Tiro Duplo, você pode realizar os ataques contra o mesmo alvo. Você pode acrescentar uma ação adicional a Tiro Duplo para realizar três Golpes à distância em vez de dois. Se o fizer, a penalidade é de –4. Todos os ataques contam para sua penalidade por ataques múltiplos, mas a penalidade não aumenta até você ter realizado todos os ataques.",
+            pre_requisitos="Tiro Duplo",
+        ),
+        construir_talento_classe(
+            "Treinamento com Armas Avançadas",
+            6,
+            ["Guerreiro"],
+            "Você estudou a arte de empunhar uma arma avançada. Escolha um grupo de armas. Você recebe proficiência com todas as armas avançadas nesse grupo como se elas fossem armas marciais de seu grupo de armas.",
+        ),
+        # 8º NÍVEL (8)
+        construir_talento_classe(
+            "Ataque de Posicionamento",
+            8,
+            ["Floreio", "Guerreiro"],
+            "Com golpes punitivos, você força seu oponente para uma posição. Faça um Golpe com a arma requerida. Se acertar, você move o alvo 1,5 metros para um espaço em seu alcance. Isto segue as regras de movimento forçado encontradas na página 475.",
+            acoes="2",
+            requerimentos="Você está empunhando uma arma corpo a corpo de duas mãos e seu alvo está em seu alcance.",
+        ),
+        construir_talento_classe(
+            "Bloqueio Rápido com Escudo",
+            8,
+            ["Guerreiro"],
+            "Você posiciona seu escudo de maneira praticamente instintiva. No início de cada um de seus turnos, você recebe uma reação adicional que pode ser usada somente para realizar um Bloqueio com Escudo.",
+            pre_requisitos="Bloqueio com Escudo, Escudo Reativo",
+        ),
+        construir_talento_classe(
+            "Golpe de Derrubada",
+            8,
+            ["Guerreiro"],
+            "Seu ataque pode trazer um adversário do ar para o chão. Faça um Golpe. Se você acertar e causar dano a uma criatura que esteja voando, ela cai até 36 metros. A queda é gradual, o suficiente para que o alvo não sofra dano de queda se cair até o chão. Se o ataque for um acerto crítico, o alvo não pode levitar, Saltar, Voar ou sair do chão de qualquer outra forma até o final de seu próximo turno.",
+            acoes="2",
+        ),
+        construir_talento_classe(
+            "Lutar às Cegas",
+            8,
+            ["Guerreiro"],
+            "Seus instintos de batalha lhe tornam mais alerta a oponentes ocultados e invisíveis. Você não precisa obter sucesso em um teste simples para mirar criaturas ocultadas. Você não fica desprevenido contra criaturas que estejam escondidas de você (a menos que esteja desprevenido contra elas por outras razões além da condição escondido). Além disso, você precisa obter sucesso somente em um teste simples CD 5 para mirar uma criatura escondida. Enquanto estiver adjacente a uma criatura indetectada de seu nível ou inferior, você a considera somente escondida.",
+            pre_requisitos="mestre em Percepção",
+        ),
+        construir_talento_classe(
+            "Mira Incrível",
+            8,
+            ["Concentração", "Guerreiro"],
+            "Ao gastar um momento focando sua atenção, você garante um ataque certeiro. Faça um Golpe com uma arma à distância. Neste Golpe, você recebe +2 de bônus de circunstância na rolagem de ataque e ignora a condição ocultado do alvo.",
+            acoes="2",
+        ),
+        construir_talento_classe(
+            "Postura de Tiro Móvel",
+            8,
+            ["Guerreiro", "Postura"],
+            "Seus tiros ficam ágeis e mortais. Enquanto estiver nesta postura, seus Golpes à distância não acionam Ataques de Oportunidade ou outras reações acionadas por um ataque à distância. Se possuir Ataque de Oportunidade, você pode usá-lo com uma arma à distância carregada que estiver empunhando. Para isso, a criatura acionadora deve estar a até 1,5 metros de você.",
+            acoes="1",
+        ),
+        construir_talento_classe(
+            "Riposta de Duelo",
+            8,
+            ["Guerreiro"],
+            "Você riposta contra um inimigo desbalanceado. Faça um Golpe corpo a corpo ou tente Desarmar a criatura acionadora.",
+            acoes="reacao",
+            pre_requisitos="Aparada de Duelo",
+            acionamento="Uma criatura em seu alcance falha criticamente em um Golpe contra você.",
+            requerimentos="Você está se beneficiando de Aparada de Duelo.",
+        ),
+        construir_talento_classe(
+            "Salto Súbito",
+            8,
+            ["Guerreiro"],
+            "Você salta e ataca um adversário no meio do salto. Faça um Salto, Salto em Altura ou Salto em Distância e realize um Golpe corpo a corpo em qualquer ponto durante seu salto. Imediatamente após o Golpe, você cai no solo se estiver no ar, mesmo se não tiver alcançado a distância máxima de seu salto. Se a distância que você cair não for maior do que a altura de seu salto, você não sofre dano da queda e aterrissa de pé. Quando realizar um Salto em Altura ou Salto em Distância durante um Salto Súbito, determine a CD de acordo com as CDs para Salto em Distância e aumente sua distância máxima até o dobro de sua Velocidade.",
+            acoes="2",
+            especial="Se possuir Golpe de Derrubada, você pode gastar 3 ações para fazer um Salto Súbito e usar o Golpe de Derrubada em vez de um Golpe normal.",
+        ),
+        # 10º NÍVEL (10)
+        construir_talento_classe(
+            "Bruto Temível",
+            10,
+            ["Guerreiro"],
+            "O medo deixa seus adversários fracos e mais vulneráveis a seus ataques. Você recebe um bônus de circunstância em rolagens de dano em Golpes realizados contra criaturas assustadas. O bônus é igual ao dobro do valor de assustado do alvo. Se possuir proficiência de mestre em Intimidação, aumente o bônus para o triplo do valor de assustado do alvo.",
+        ),
+        construir_talento_classe(
+            "Escudo Espelhado",
+            10,
+            ["Guerreiro"],
+            "Você reflete a magia de volta contra o oponente acionador. Faça um ataque à distância contra a criatura acionadora usando sua melhor proficiência com qualquer arma à distância. Se puder conjurar magias, você pode fazer uma rolagem de ataque de magia. Se você obtiver sucesso no ataque à distância, seu oponente sofre os efeitos de uma rolagem de ataque de magia bem-sucedida para a própria magia conjurada (ou os efeitos de um sucesso crítico se sua rolagem de ataque for um sucesso crítico).",
+            acoes="reacao",
+            acionamento="Um oponente conjura uma magia que tem você como alvo e falha criticamente em uma rolagem de ataque de magia contra sua CA.",
+            requerimentos="Você tem um escudo erguido.",
+        ),
+        construir_talento_classe(
+            "Golpe Infalível",
+            10,
+            ["Guerreiro", "Pressão"],
+            "Mesmo quando não acerta diretamente você ainda deixa um golpe de raspão. Faça um Golpe corpo a corpo. Este Golpe possui o efeito de falha a seguir.",
+            acoes="1",
+            resultados={"falha": "Seu ataque causa o dano que causaria em um acerto, excluindo todo dano de dados. (Isto remove os dados de dano da arma, runas, magias e habilidades especiais)."},
+        ),
+        construir_talento_classe(
+            "Graça Ágil",
+            10,
+            ["Guerreiro"],
+            "Seus movimentos graciosos com armas ágeis são incomparáveis. Sua penalidade por ataques múltiplos com armas ágeis e ataques desarmados ágeis se torna –3 para seu segundo ataque e –6 para ataques subsequentes (em vez de –4 e –8).",
+        ),
+        construir_talento_classe(
+            "Postura Disruptiva",
+            10,
+            ["Guerreiro", "Postura"],
+            "A menor distração pode provocar sua ira, e você está preparado para frustrar as ações dos inimigos. Enquanto estiver nesta postura, você pode usar Ataque de Oportunidade quando uma criatura em seu alcance usar uma ação de concentração (além de poder fazê-lo contra ações de manuseio e de movimento). Além disso, você interrompe a ação acionadora de concentração ou manuseio se acertar seu Golpe (não apenas se conseguir um acerto crítico).",
+            acoes="1",
+        ),
+        construir_talento_classe(
+            "Reflexos de Combate",
+            10,
+            ["Guerreiro"],
+            "Você é particularmente rápido em punir os adversários que deixam brechas nas defesas. No início de cada um de seus turnos, você recebe uma reação adicional que pode ser usada somente para realizar um Ataque de Oportunidade.",
+        ),
+        construir_talento_classe(
+            "Riposta Dupla",
+            10,
+            ["Guerreiro"],
+            "Uma aparada inteligente com uma arma deixa seu oponente aberto para um ataque com sua outra arma. Faça um Golpe corpo a corpo ou use uma ação de Desarmar contra o oponente acionador.",
+            acoes="reacao",
+            acionamento="Uma criatura em seu alcance falha criticamente em um Golpe contra você.",
+            requerimentos="Você está se beneficiando de Aparada Dupla.",
+        ),
+        construir_talento_classe(
+            "Tiro Debilitante",
+            10,
+            ["Floreio", "Guerreiro"],
+            "Mirando em um ponto fraco, você impede seu adversário com um tiro preciso. Faça um Golpe com uma arma à distância. Se você acertar e causar dano, o alvo fica lento 1 até o final do próximo turno dele.",
+            acoes="2",
+        ),
+        construir_talento_classe(
+            "Tombar Aprimorado",
+            10,
+            ["Guerreiro"],
+            "Você pode jogar seu adversário ao chão com um único golpe. Quando usar Tombar, você pode realizar um único Golpe em vez de um Golpe seguido por Derrubar. Se o fizer e seu Golpe acertar, você também aplica o efeito de sucesso crítico de Derrubar. Se estiver usado uma arma corpo a corpo de duas mãos com esse Golpe, você pode usar o tamanho do dado de dano da arma em vez do tamanho do dado de dano comum para um sucesso crítico de Derrubar.",
+            pre_requisitos="Tombar",
+        ),
+        construir_talento_classe(
+            "Torção de Desarme",
+            10,
+            ["Guerreiro", "Pressão"],
+            "Após seu ataque inicial redirecionar as defesas de seu adversário, seus movimentos seguintes torcem a empunhadura dele para desarmá-lo. Faça um Golpe corpo a corpo com arma usando a arma requerida. Além de seus outros efeitos, este Golpe obtém os efeitos do sucesso ou sucesso crítico da ação Desarmar. Este Golpe possui o efeito de falha a seguir.",
+            acoes="1",
+            pre_requisitos="treinado em Atletismo",
+            requerimentos="Você está empunhando somente uma arma corpo a corpo de uma mão e tem todas as suas outras mãos livres.",
+            resultados={"falha": "O alvo fica desprevenido até o final de seu turno atual."},
+        ),
+        # 12º NÍVEL (8)
+        construir_talento_classe(
+            "Ataque em Movimento",
+            12,
+            ["Guerreiro", "Pressão"],
+            "Saindo de perto de um adversário, você Golpeia outro. Você Anda até sua Velocidade, mas deve encerrar esse movimento ao alcance corpo a corpo de um inimigo diferente. Ao final de seu movimento, faça um Golpe corpo a corpo contra um inimigo em seu alcance. Você pode usar Ataque em Movimento ao Escalar, Escavar, Nadar ou Voar em vez de Andar se possuir o tipo de movimento correspondente.",
+            acoes="1",
+            requerimentos="Você está adjacente a um inimigo.",
+        ),
+        construir_talento_classe(
+            "Dança de Duelo",
+            12,
+            ["Guerreiro", "Postura"],
+            "Usando sua mão livre como pivô de equilíbrio, você ataca e defende com sua arma. Enquanto estiver nesta postura, você recebe constantemente os benefícios de Aparada de Duelo.",
+            acoes="1",
+            pre_requisitos="Aparada de Duelo",
+            requerimentos="Você está empunhando somente uma arma corpo a corpo de uma mão e tem todas as suas outras mãos livres.",
+        ),
+        construir_talento_classe(
+            "Empurrão Propelente",
+            12,
+            ["Guerreiro"],
+            "Aumente a distância que você Empurra seu oponente com Bloqueio Agressivo ou Empurrão Brutal para 3 metros em um sucesso ou para 6 metros em um sucesso crítico. Quando usar Bloqueio Agressivo, você pode escolher se o alvo fica desprevenido ou é Empurrado. Quando fizer um Empurrão Brutal, você também Empurra o alvo 1,5 metros em uma falha.",
+            pre_requisitos="Bloqueio Agressivo ou Empurrão Brutal",
+        ),
+        construir_talento_classe(
+            "Finalização Brutal",
+            12,
+            ["Guerreiro", "Pressão"],
+            "Seu golpe final pode causar um impacto mesmo se apenas resvalar nas defesas do adversário. Faça um Golpe com a arma requerida. Após o Golpe, seu turno se encerra. O Golpe causa um dado de dano extra da arma (ou dois dados de dano extras da arma se você for de 18º nível ou maior). Este Golpe possui o efeito de falha a seguir.",
+            acoes="1",
+            requerimentos="Você está empunhando uma arma corpo a corpo com duas mãos.",
+            resultados={"falha": "Você causa dano igual a um dado de dano da arma requerida. Aumente este dano para dois dados se você for pelo menos de 18º nível."},
+        ),
+        construir_talento_classe(
+            "Guarda Exemplar",
+            12,
+            ["Guerreiro", "Postura"],
+            "Após um curto momento para definir sua postura, você sempre mantém seu escudo pronto sem sequer pensar. Enquanto estiver nesta postura, você constantemente possui seu escudo erguido como se tivesse usado a ação Erguer um Escudo (desde que atenda aos requerimentos desta ação).",
+            acoes="1",
+            requerimentos="Você está empunhando um escudo.",
+        ),
+        construir_talento_classe(
+            "Postura de Estocada",
+            12,
+            ["Guerreiro", "Postura"],
+            "Você se prepara para estender o seu corpo e atacar inimigos distantes. Enquanto estiver nesta postura, você pode usar Ataque de Oportunidade contra uma criatura que esteja fora de seu alcance comum, mas em seu alcance com Estocada. Se o fizer, aumente o alcance do Golpe em 1,5 metros.",
+            acoes="1",
+            pre_requisitos="ataque de oportunidade, Estocada",
+            requerimentos="Você está empunhando uma arma corpo a corpo.",
+        ),
+        construir_talento_classe(
+            "Ricochete Incrível",
+            12,
+            ["Concentração", "Guerreiro", "Pressão"],
+            "Após seu primeiro tiro indicar a posição de seu oponente, você direciona outro que ricocheteia em obstáculos para acertá-lo precisamente. Faça um Golpe com uma arma à distância contra um alvo que você já tenha atacado neste turno. Você ignora a condição ocultado e toda cobertura que o alvo possuir.",
+            acoes="1",
+            pre_requisitos="Mira Incrível",
+        ),
+        construir_talento_classe(
+            "Riposta de Duelo Aprimorada",
+            12,
+            ["Guerreiro"],
+            "Sua arma constantemente gira e dispara, golpeando adversários sempre que uma oportunidade se apresenta. Quando recuperar suas ações no início de cada um de seus turnos, você recebe uma reação adicional que pode ser usada somente para realizar uma Riposta de Duelo. Você pode usar esta reação extra mesmo se não estiver se beneficiando de Aparada de Duelo.",
+            pre_requisitos="Riposta de Duelo",
+        ),
+        # 14º NÍVEL (8)
+        construir_talento_classe(
+            "Determinação",
+            14,
+            ["Concentração", "Guerreiro"],
+            (
+                "Seu treinamento lhe permite livrar-se das magias e condições impostas por seus adversários durante situações críticas. Escolha uma única magia ou condição não-permanente que o esteja afetando. "
+                "Se escolher uma condição, o efeito dela em você é encerrado. Se escolher uma magia, tente neutralizar a magia (usando seu nível como nível de neutralização e tentando um salvamento de Vontade como seu teste de neutralização). "
+                "Isto não remove qualquer dano de Pontos de Vida normalmente causados pela magia ou condição e não impede que a magia ou efeito debilitante afete outros aliados ou o ambiente ao seu redor. "
+                "Você não pode remover uma aflição contínua ou impedir que uma aflição dessas inflija condições posteriores. Esse talento não remove condições impostas por uma situação (como estar flanqueado ou prostrado). "
+                "Se o efeito for causado por uma criatura, item ou perigo de 20º nível ou superior, Determinação não pode removê-lo."
+            ),
+            acoes="1",
+            frequencia="Uma vez por dia",
+        ),
+        construir_talento_classe(
+            "Finalização Desesperada",
+            14,
+            ["Guerreiro"],
+            "Você dá tudo de si em uma última pressão. Use uma ação única com o traço pressão que você conheça como parte de Finalização Desesperada. Você abre mão da habilidade de usar reações até o início de seu próximo turno.",
+            acoes="reacao",
+            acionamento="Você completa a última ação em seu turno, mas seu turno ainda não acabou.",
+            requerimentos="Você atende aos requerimentos para usar uma ação com o traço pressão.",
+        ),
+        construir_talento_classe(
+            "Finalização Guiante",
+            14,
+            ["Guerreiro", "Pressão"],
+            "Usando sua arma como alavanca, você força seu oponente a ficar exatamente onde você quer. Faça um Golpe com a arma requerida. Se o Golpe acertar, você pode mover o alvo até 3 metros para um espaço em seu alcance. Você pode mover o alvo através de seu próprio espaço durante este movimento. Isto segue as regras normais para movimento forçado encontradas na página 475. Este Golpe possui o efeito de falha a seguir.",
+            acoes="1",
+            requerimentos="Você está empunhando somente uma arma corpo a corpo de uma mão e tem todas as suas outras mãos livres.",
+            resultados={"falha": "Você pode forçar a criatura a se mover como se tivesse obtido um sucesso, mas o move somente 1,5 metros."},
+        ),
+        construir_talento_classe(
+            "Golpe Giratório",
+            14,
+            ["Abertura", "Floreio", "Guerreiro"],
+            "Você ataca todos os adversários ao seu redor. Faça um Golpe corpo a corpo contra cada inimigo em seu alcance corpo a corpo. Cada ataque conta para sua penalidade por ataques múltiplos, mas a penalidade não aumenta até você ter realizado todos os ataques.",
+            acoes="3",
+        ),
+        construir_talento_classe(
+            "Riposta Dupla Aprimorada",
+            14,
+            ["Guerreiro"],
+            "Suas armas são um borrão de movimento, bloqueando e atingindo seus adversários. No início de cada um de seus turnos, você recebe uma reação adicional que pode ser usada somente para realizar uma Riposta Dupla. Você pode usar esta reação extra mesmo se não estiver se beneficiando de Aparada Dupla.",
+            pre_requisitos="Riposta Dupla",
+        ),
+        construir_talento_classe(
+            "Riposta Guiante",
+            14,
+            ["Guerreiro"],
+            "Ao mudar seu peso e angular sua arma, você guia seu oponente para uma posição mais favorável. Quando acertar o Golpe de Riposta de Duelo, você pode mover o alvo até 3 metros para um espaço em seu alcance. Isto segue as regras normais para movimento forçado encontradas na página 475.",
+            pre_requisitos="Riposta de Duelo",
+        ),
+        construir_talento_classe(
+            "Rajada com Duas Armas",
+            14,
+            ["Floreio", "Guerreiro", "Pressão"],
+            "Você ataca com suas duas armas em um frenesi súbito. Golpeie duas vezes, uma vez com cada arma.",
+            acoes="1",
+            requerimentos="Você está empunhando duas armas, uma em cada mão.",
+        ),
+        construir_talento_classe(
+            "Sagaz em Postura",
+            14,
+            ["Guerreiro"],
+            "Você reage a um perigo iminente entrando em uma postura sem sequer pensar. Use uma ação que tenha o traço postura.",
+            acoes="livre",
+            acionamento="Você rola iniciativa.",
+        ),
+        # 16º NÍVEL (4)
+        construir_talento_classe(
+            "Defesa Dupla",
+            16,
+            ["Guerreiro", "Postura"],
+            "Você sempre está pronto para usar sua arma da mão inábil para interferir com os ataques direcionados contra você. Enquanto estiver nesta postura, você constantemente recebe os benefícios da ação Aparada Dupla.",
+            acoes="1",
+            pre_requisitos="Aparada Dupla",
+            requerimentos="Você está empunhando duas armas corpo a corpo, uma em cada mão.",
+        ),
+        construir_talento_classe(
+            "Escudo Reflexivo Aprimorado",
+            16,
+            ["Guerreiro"],
+            "Seu escudo pode ajudar a salvar aliados próximos. Quando usar Bloqueio com Escudo contra o dano resultante de um salvamento de Reflexos, os aliados adjacentes que sofreriam dano devido a salvamentos de Reflexos contra o mesmo efeito também se beneficiam da redução de dano.",
+            pre_requisitos="Escudo Reflexivo",
+        ),
+        construir_talento_classe(
+            "Pose Graciosa",
+            16,
+            ["Guerreiro", "Postura"],
+            "Com o posicionamento correto, a arma de sua mão inábil golpeia como o ferrão de um escorpião. Enquanto estiver nesta postura e fizer seu segundo Golpe de Corte Duplo com uma arma ágil, Corte Duplo conta como apenas um ataque para calcular sua penalidade por ataques múltiplos.",
+            acoes="1",
+            pre_requisitos="Corte Duplo",
+        ),
+        construir_talento_classe(
+            "Postura de Tiros Múltiplos",
+            16,
+            ["Guerreiro", "Postura"],
+            "Você se firma em uma posição estável para disparar de maneira rápida e precisa. Enquanto estiver nesta postura, sua penalidade por Tiro Duplo é reduzida para –1 (ou para –2 se você adicionar a ação extra para realizar três Golpes). Esta postura é encerrada se você mover-se de sua posição.",
+            acoes="1",
+            pre_requisitos="Tiro Triplo",
+            requerimentos="Você está empunhando uma arma à distância com recarga 0.",
+        ),
+        # 18º NÍVEL (2)
+        construir_talento_classe(
+            "Crítico Selvagem",
+            18,
+            ["Guerreiro"],
+            "Os ferimentos que você inflige são terríveis. Quando Golpear com uma arma ou ataque desarmado em que possua proficiência lendária, você obtém um sucesso crítico se rolar um 19 no dado desde que o resultado seja um sucesso. Este talento não surte efeito em um 19 se o resultado seria uma falha.",
+        ),
+        construir_talento_classe(
+            "Saraivada Impossível",
+            18,
+            ["Abertura", "Floreio", "Guerreiro"],
+            "Você dispara uma saraivada em todos os adversários em uma área. Faça um Golpe com –2 de penalidade contra cada inimigo em uma explosão de 3 metros de raio centrada no alcance de voleio da sua arma ou além. Role o dano somente uma vez para todos os alvos. Cada ataque conta para sua penalidade por ataques múltiplos, mas a penalidade não aumenta até você ter realizado todos os ataques.",
+            acoes="3",
+            requerimentos="Você está empunhando uma arma à distância com o traço recarga 0 e voleio.",
+        ),
+        # 20º NÍVEL (2)
+        construir_talento_classe(
+            "Represálias Ilimitadas",
+            20,
+            ["Guerreiro"],
+            "Com um sexto sentido para o fluxo de combate, você reage rapidamente a qualquer situação. No começo do turno de cada inimigo, você recebe uma reação que pode ser usada somente durante esse turno.",
+        ),
+        construir_talento_classe(
+            "Supremacia com Armas",
+            20,
+            ["Guerreiro"],
+            "Sua habilidade com armas lhe permite atacar rapidamente a qualquer momento. Você fica permanentemente acelerado. Você pode usar sua ação extra somente para Golpear.",
+        ),
+    ]
+
+    return {
+        "id": "guerreiro",
+        "nome": "Guerreiro",
+        "paginas": "152-165",
+        "descricao": (
+            "Lutando por honra, ganância, lealdade ou simplesmente pela emoção da batalha, você é um mestre incontestável de armas e técnicas de combate. "
+            "Você combate usando combinações inteligentes de movimentos de abertura, golpes de finalização e contra-ataques sempre que seus adversários agem imprudentemente e baixam a guarda. "
+            "Seja um cavaleiro, mercenário, atirador ou mestre da lâmina, você aprimorou suas habilidades marciais como uma forma de arte e desfere ataques críticos e devastadores em seus inimigos."
+        ),
+        "atributo_chave": {
+            "opcoes": ["forca", "destreza"],
+            "melhoria_1_nivel": 2,
+            "texto": "Força ou Destreza — No 1º nível, sua classe lhe concede uma melhoria de atributo à sua escolha em Força ou Destreza.",
+        },
+        "pontos_de_vida_por_nivel": 10,
+        "pontos_de_vida_texto": "10 mais seu modificador de Constituição no 1º nível e a cada nível subsequente.",
+        "jogando_com_a_classe": {
+            "encontros_combate": (
+                "Você golpeia com precisão incomparável e usa técnicas de combate especializadas. "
+                "Um guerreiro corpo a corpo se interpõe entre seus aliados e inimigos, atacando os adversários que tentam passar por ele. "
+                "Um guerreiro à distância desfere tiros precisos de longe."
+            ),
+            "encontros_sociais": "Você pode ser uma presença intimidadora. Isto pode se provar útil durante negociações com inimigos, mas às vezes gera problemas durante interações mais gentis.",
+            "exploracao": "Você mantém suas defesas preparadas para o combate, e fica de olho aberto para ameaças escondidas. Você também supera desafios físicos à sua maneira, quebrando portas, erguendo obstáculos, escalando habilmente e saltando sobre fossos.",
+            "recesso": "Você pode executar trabalho manual ou forjar e reparar armamentos. Se conhecer técnicas que não são mais úteis, você pode treinar novas. Se tiver estabelecido sua reputação, você pode criar uma organização ou uma fortaleza própria.",
+            "voce_pode": [
+                "Conhecer o propósito e qualidade de cada arma e armadura que possui.",
+                "Reconhecer que o perigo da vida de um aventureiro deve ser balanceado com comemorações ou obras ambiciosas.",
+                "Ter pouca paciência com enigmas ou problemas que requerem lógica ou estudos detalhados.",
+            ],
+            "outros_provavelmente": [
+                "O acham intimidador até conhecê-lo — e talvez até mesmo após isso.",
+                "Pensam que você é só músculos e nenhum cérebro.",
+                "Respeitam sua experiência na arte da guerra e valorizam sua opinião na qualidade de armamentos.",
+            ],
+        },
+        "proficiencias_iniciais": {
+            "percepcao": "especialista",
+            "salvamentos": {
+                "fortitude": "especialista",
+                "reflexos": "especialista",
+                "vontade": "treinado",
+            },
+            "pericias": {
+                "fixas": [],
+                "opcoes_fixas": ["acrobatismo", "atletismo"],
+                "adicionais_base": 3,
+                "soma_modificador_inteligencia": True,
+                "texto": "Treinado em Acrobatismo ou Atletismo, à sua escolha; treinado em uma quantidade de perícias adicionais igual a 3 mais seu modificador de Inteligência.",
+            },
+            "ataques": {
+                "armas_simples": "especialista",
+                "armas_marciais": "especialista",
+                "armas_avancadas": "treinado",
+                "ataques_desarmados": "especialista",
+            },
+            "defesas": {
+                "armaduras_leves": "treinado",
+                "armaduras_medias": "treinado",
+                "armaduras_pesadas": "treinado",
+                "todas_armaduras": "treinado",
+                "defesa_sem_armadura": "treinado",
+            },
+            "cd_classe": {
+                "graduacao": "treinado",
+                "texto": "Treinado em CD de classe de guerreiro",
+            },
+            "magias": None,
+        },
+        "tabela_progressao": tabela_progressao,
+        "tabelas_especificas": {
+            "tabela_talentos_indice": tabela_talentos_indice,
+        },
+        "caracteristicas_de_classe": caracteristicas_de_classe,
+        "subclasses": subclasses,
+        "termos_chave": termos_chave,
+        "exemplos_personagens": exemplos_personagens,
+        "talentos_de_classe": talentos,
+    }
+
+
+def montar_dados_classes_02() -> dict[str, Any]:
+    """Monta o dicionário completo de dados/classes02.json para a Leva 02."""
+    return {
+        "meta": {
+            "titulo": "Capítulo 3: Classes (Leva 02: Clérigo, Druida, Feiticeiro e Guerreiro) — Pathfinder 2E Livro Básico",
+            "arquivo_origem": "ref/Classes 02.pdf",
+            "paginas_livro_basico": "117-165",
+            "leva": 2,
+            "classes_incluidas": ["clerigo", "druida", "feiticeiro", "guerreiro"],
+            "versao": "1.0.0",
+            "observacoes": (
+                "Segunda leva do Capítulo 3: Classes, contendo os dados completos de Clérigo, Druida, Feiticeiro e Guerreiro."
+            ),
+        },
+        "classes": [
+            construir_clerigo(),
+            construir_druida(),
+            construir_feiticeiro(),
+            construir_guerreiro(),
+        ],
+    }
+
+
+def validar_classes_02_json(dados: dict[str, Any]) -> None:
+    """Valida todas as contagens, tabelas, subclasses, IDs e talentos da Leva 02."""
+    classes = dados["classes"]
+    assert len(classes) == 4, f"Esperado 4 classes na Leva 02, encontrado {len(classes)}"
+    ids_classes = [c["id"] for c in classes]
+    assert ids_classes == ["clerigo", "druida", "feiticeiro", "guerreiro"], f"Classes inesperadas: {ids_classes}"
+
+    esperado_talentos_por_nivel = {
+        "clerigo": {1: 6, 2: 6, 4: 5, 6: 4, 8: 5, 10: 4, 12: 4, 14: 4, 16: 3, 18: 3, 20: 3},
+        "druida": {1: 6, 2: 4, 4: 5, 6: 4, 8: 5, 10: 5, 12: 4, 14: 3, 16: 3, 18: 3, 20: 3},
+        "feiticeiro": {1: 5, 2: 2, 4: 5, 6: 2, 8: 2, 10: 3, 12: 2, 14: 2, 16: 3, 18: 2, 20: 3},
+        "guerreiro": {1: 7, 2: 7, 4: 8, 6: 10, 8: 8, 10: 10, 12: 8, 14: 8, 16: 4, 18: 2, 20: 2},
+    }
+    esperado_totais_talentos = {"clerigo": 47, "druida": 45, "feiticeiro": 31, "guerreiro": 74}
+
+    for classe in classes:
+        cid = classe["id"]
+        prog = classe["tabela_progressao"]
+        assert len(prog) == 20, f"Esperado 20 níveis na progressão de {cid}, encontrado {len(prog)}"
+        assert [row["nivel"] for row in prog] == list(range(1, 21)), f"Níveis fora de ordem em {cid}"
+
+        talentos = classe["talentos_de_classe"]
+        total_esp = esperado_totais_talentos[cid]
+        assert len(talentos) == total_esp, f"Esperado {total_esp} talentos em {cid}, encontrado {len(talentos)}"
+        assert len({t["id"] for t in talentos}) == total_esp, f"IDs duplicados em talentos de {cid}"
+
+        contagem_por_nivel: dict[int, int] = {}
+        for t in talentos:
+            contagem_por_nivel[t["nivel"]] = contagem_por_nivel.get(t["nivel"], 0) + 1
+        assert contagem_por_nivel == esperado_talentos_por_nivel[cid], (
+            f"Distribuição por nível divergente em {cid}: {contagem_por_nivel}"
+        )
+
+        indice = classe["tabelas_especificas"]["tabela_talentos_indice"]
+        assert len(indice) == total_esp, f"Tabela índice divergente em {cid}: {len(indice)}"
+        pares_talentos = {(t["nome"], t["nivel"]) for t in talentos}
+        pares_indice = {(i["nome"], i["nivel"]) for i in indice}
+        assert pares_talentos == pares_indice, (
+            f"Diferença entre talentos e tabela índice em {cid}: {pares_talentos ^ pares_indice}"
+        )
+
+    mapa_classes = {c["id"]: c for c in classes}
+
+    clerigo = mapa_classes["clerigo"]
+    assert len(clerigo["subclasses"]["opcoes"]) == 2
+    assert len(clerigo["tabelas_especificas"]["tabela_3_9_magias_por_dia"]) == 20
+
+    druida = mapa_classes["druida"]
+    assert len(druida["subclasses"]["opcoes"]) == 4
+    assert len(druida["tabelas_especificas"]["tabela_3_11_magias_por_dia"]) == 20
+
+    feiticeiro = mapa_classes["feiticeiro"]
+    linhagens = feiticeiro["subclasses"]["opcoes"]
+    assert len(linhagens) == 10
+    for lin in linhagens:
+        assert len(lin["magias_concedidas"]) == 10, f"Linhagem {lin['id']} sem 10 magias concedidas"
+        assert set(lin["magias_de_linhagem"].keys()) == {"inicial", "avancada", "maior"}
+    assert len(feiticeiro["tabelas_especificas"]["tabela_3_13_magias_por_dia"]) == 20
+
+    guerreiro = mapa_classes["guerreiro"]
+    assert len(guerreiro["subclasses"]["opcoes"]) == 3
+
+
+def main() -> None:
+    """Gera dados/classes02.json (Leva 02), valida e imprime resumo estatístico."""
+    dados = montar_dados_classes_02()
+    validar_classes_02_json(dados)
+
+    CAMINHO_SAIDA.parent.mkdir(parents=True, exist_ok=True)
+    conteudo = json.dumps(dados, ensure_ascii=False, indent=2)
+    CAMINHO_SAIDA.write_text(conteudo + "\n", encoding="utf-8")
+
+    total_talentos = sum(len(c["talentos_de_classe"]) for c in dados["classes"])
+    print(f"Arquivo gerado com sucesso: {CAMINHO_SAIDA}")
+    print(f"- Classes completas nesta leva: {len(dados['classes'])} ({', '.join(c['nome'] for c in dados['classes'])})")
+    for c in dados["classes"]:
+        print(
+            f"  * {c['nome']}: {len(c['caracteristicas_de_classe'])} características, "
+            f"{len(c['subclasses']['opcoes'])} opções de {c['subclasses']['nome_tipo']}, "
+            f"{len(c['talentos_de_classe'])} talentos de classe"
+        )
+    print(f"- Total de talentos convertidos na Leva 02: {total_talentos}")
+    print(f"- Tamanho do arquivo: {CAMINHO_SAIDA.stat().st_size} bytes")
+
+
+if __name__ == "__main__":
+    main()
