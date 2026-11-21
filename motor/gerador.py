@@ -21,6 +21,9 @@ class ErroValidacao(ValueError):
     """Erro levantado quando parâmetros de entrada da geração são inválidos."""
 
 
+CLASSES_DIVINDADE_OBRIGATORIA = frozenset({"clerigo", "campeao"})
+
+
 _NOMES_HUMANOS_PADRAO = [
     "Alden", "Beatriz", "Caio", "Darian", "Elena", "Ezren",
     "Helena", "Henrique", "Kyra", "Lorian", "Rafael", "Seoni",
@@ -51,11 +54,52 @@ def _determinar_tendencia(
     return "NB"
 
 
+def fontes_divinas_aceitas_conceito(conceito: dict[str, Any]) -> list[str]:
+    """Retorna as fontes divinas aceitas pelo conceito de Clérigo."""
+    explicitas = conceito.get("fontes_divinas_aceitas")
+    if explicitas:
+        return list(explicitas)
+    fonte_pref = conceito.get("fonte_divina_preferida") or (
+        "ferimento" if ("ceifador" in conceito["id"] or "exaurir" in conceito["id"]) else "cura"
+    )
+    return [fonte_pref]
+
+
+def divindades_compativeis_conceito(
+    db: BaseDados,
+    classe_id: str,
+    conceito: dict[str, Any],
+) -> list[str]:
+    """Lista os IDs de divindades compatíveis com a classe e o conceito."""
+    if classe_id == "campeao":
+        candidatas = list(
+            conceito.get("subclasses_oficiais_candidatas") or [conceito["subclasse_oficial_id"]]
+        )
+        tends_aceitas = {_determinar_tendencia("campeao", sid) for sid in candidatas}
+        return [
+            d["id"]
+            for d in db.divindades.values()
+            if any(t in d["tendencias_seguidores"] for t in tends_aceitas)
+        ]
+    if classe_id == "clerigo":
+        chaves_fonte = {
+            "ferir" if f == "ferimento" else "curar"
+            for f in fontes_divinas_aceitas_conceito(conceito)
+        }
+        return [
+            d["id"]
+            for d in db.divindades.values()
+            if any(cf in d["fontes_divinas"] for cf in chaves_fonte)
+        ]
+    return list(db.divindades.keys())
+
+
 def _selecionar_subclasse_procedural(
     db: BaseDados,
     classe_id: str,
     conceito: dict[str, Any],
     rng: random.Random,
+    divindade_explicita: dict[str, Any] | None = None,
 ) -> dict[str, Any] | None:
     """Resolve a subclasse oficial a partir do conceito (exata ou dentre candidatas)."""
     candidatas = list(conceito.get("subclasses_oficiais_candidatas") or [])
@@ -64,6 +108,18 @@ def _selecionar_subclasse_procedural(
     validas = [s for sid in candidatas if (s := db.subclasse(classe_id, sid)) is not None]
     if not validas:
         return db.subclasse(classe_id, conceito.get("subclasse_oficial_id", ""))
+    if classe_id == "campeao" and divindade_explicita is not None:
+        tends_div = set(divindade_explicita["tendencias_seguidores"])
+        compativeis = [s for s in validas if _determinar_tendencia("campeao", s["id"]) in tends_div]
+        if not compativeis:
+            tends_req = ", ".join(
+                sorted({_determinar_tendencia("campeao", s["id"]) for s in validas})
+            )
+            raise ErroValidacao(
+                f"A divindade '{divindade_explicita['nome']}' não aceita seguidores de tendência "
+                f"'{tends_req}' (exigida pelo conceito '{conceito['nome']}')."
+            )
+        validas = compativeis
     return validas[0] if len(validas) == 1 else rng.choice(validas)
 
 
@@ -307,6 +363,7 @@ def listar_opcoes_criacao(dados: BaseDados | None = None) -> dict[str, Any]:
             "nome": c["nome"],
             "pontos_de_vida_por_nivel": c["pontos_de_vida_por_nivel"],
             "atributo_chave": c["atributo_chave"]["opcoes"],
+            "divindade_obrigatoria": c["id"] in CLASSES_DIVINDADE_OBRIGATORIA,
             "conceitos": [
                 {
                     "id": con["id"],
@@ -322,6 +379,7 @@ def listar_opcoes_criacao(dados: BaseDados | None = None) -> dict[str, Any]:
                     ),
                     "resumo_proposta": con["resumo_proposta"],
                     "sinergia_mecanica": con.get("sinergia_mecanica", ""),
+                    "divindades_compativeis_ids": divindades_compativeis_conceito(db, c["id"], con),
                 }
                 for con in db.conceitos_da_classe(c["id"])
             ],
@@ -402,12 +460,69 @@ def gerar_personagem(
         seed_usada = int(seed_str) if seed_str.isdigit() else seed_str
     rng = random.Random(seed_usada)
 
-    subclasse = _selecionar_subclasse_procedural(db, classe_id, conceito, rng)
-    tese_arcana = _resolver_tese_arcana(classe, conceito.get("tese_arcana_id")) if classe_id == "mago" else None
-    fonte_divina = conceito.get("fonte_divina_preferida") or (
-        "ferimento" if ("ceifador" in conceito["id"] or "exaurir" in conceito["id"]) else "cura"
+    div_req = None if divindade_id is None else str(divindade_id).strip()
+    if classe_id in CLASSES_DIVINDADE_OBRIGATORIA and div_req in ("", "nenhuma"):
+        raise ErroValidacao(f"A classe {classe['nome']} exige obrigatoriamente a seleção de uma divindade.")
+
+    divindade_explicita: dict[str, Any] | None = None
+    if div_req not in (None, "", "nenhuma", "procedural", "aleatoria"):
+        divindade_explicita = db.divindades.get(div_req)
+        if not divindade_explicita:
+            raise ErroValidacao(f"Divindade desconhecida: '{div_req}'.")
+
+    subclasse = _selecionar_subclasse_procedural(
+        db, classe_id, conceito, rng, divindade_explicita=divindade_explicita
     )
-    divindade = _selecionar_divindade(db, classe_id, subclasse, conceito, fonte_divina, divindade_id, rng)
+    tese_arcana = _resolver_tese_arcana(classe, conceito.get("tese_arcana_id")) if classe_id == "mago" else None
+
+    fontes_aceitas = fontes_divinas_aceitas_conceito(conceito)
+    fonte_divina = conceito.get("fonte_divina_preferida") or fontes_aceitas[0]
+
+    if classe_id == "clerigo" and divindade_explicita is not None:
+        chave_pref = "ferir" if fonte_divina == "ferimento" else "curar"
+        if chave_pref not in divindade_explicita["fontes_divinas"]:
+            alternativa = next(
+                (
+                    f
+                    for f in fontes_aceitas
+                    if ("ferir" if f == "ferimento" else "curar") in divindade_explicita["fontes_divinas"]
+                ),
+                None,
+            )
+            if alternativa is None:
+                raise ErroValidacao(
+                    f"A divindade '{divindade_explicita['nome']}' não concede Fonte Divina "
+                    f"compatível com o conceito '{conceito['nome']}'."
+                )
+            fonte_divina = alternativa
+
+    if divindade_explicita is not None:
+        divindade = divindade_explicita
+    elif div_req == "aleatoria":
+        if classe_id == "campeao":
+            tend_causa = _determinar_tendencia("campeao", subclasse["id"] if subclasse else "")
+            compat = [d for d in db.divindades.values() if tend_causa in d["tendencias_seguidores"]]
+            divindade = rng.choice(compat) if compat else None
+        elif classe_id == "clerigo":
+            chaves_ok = {"ferir" if f == "ferimento" else "curar" for f in fontes_aceitas}
+            compat = [
+                d for d in db.divindades.values() if any(cf in d["fontes_divinas"] for cf in chaves_ok)
+            ]
+            divindade = rng.choice(compat) if compat else None
+            if divindade:
+                chave_pref = "ferir" if fonte_divina == "ferimento" else "curar"
+                if chave_pref not in divindade["fontes_divinas"]:
+                    fonte_divina = next(
+                        f
+                        for f in fontes_aceitas
+                        if ("ferir" if f == "ferimento" else "curar") in divindade["fontes_divinas"]
+                    )
+        else:
+            divindade = rng.choice(list(db.divindades.values()))
+    elif classe_id in CLASSES_DIVINDADE_OBRIGATORIA:
+        divindade = _selecionar_divindade(db, classe_id, subclasse, conceito, fonte_divina, None, rng)
+    else:
+        divindade = None
 
     # ------------------------------------------------------------------
     # 2. Seleção de Biografia (Manual ou Procedural) + Atributos (ABCD)
@@ -634,7 +749,8 @@ def gerar_personagem(
             "tese_arcana_id": tese_arcana["id"] if tese_arcana else None,
             "tese_arcana_nome": tese_arcana["nome"] if tese_arcana else None,
             "divindade_id": divindade["id"] if divindade else None,
-            "divindade_procedural": not bool(divindade_id and divindade_id != "procedural"),
+            "divindade_obrigatoria": classe_id in CLASSES_DIVINDADE_OBRIGATORIA,
+            "divindade_procedural": (div_req in (None, "procedural", "aleatoria")) and (divindade is not None),
             "divindade_detalhes": divindade_detalhes,
             "companheiro_ou_familiar": companheiro_ou_familiar,
             "limite_morrendo": notas_combate["limite_morrendo"],

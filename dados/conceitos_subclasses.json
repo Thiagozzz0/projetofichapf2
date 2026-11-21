@@ -187,6 +187,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -283,6 +284,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -377,6 +379,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -468,6 +471,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -564,6 +568,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -655,6 +660,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -745,6 +751,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -837,6 +844,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -929,6 +937,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -1020,6 +1029,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -1138,6 +1148,7 @@
       },
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -1254,6 +1265,7 @@
       },
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -1371,6 +1383,7 @@
       },
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -1492,6 +1505,7 @@
       },
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -1587,6 +1601,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": "escudo"
@@ -1679,6 +1694,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": "lamina"
@@ -1779,6 +1795,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": "montaria"
@@ -1871,6 +1888,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": "lamina"
@@ -1972,6 +1990,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": "lamina"
@@ -2089,6 +2108,9 @@
       },
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": "cura",
+      "fontes_divinas_aceitas": [
+        "cura"
+      ],
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -2210,6 +2232,10 @@
       },
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": "cura",
+      "fontes_divinas_aceitas": [
+        "cura",
+        "ferimento"
+      ],
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -2327,6 +2353,9 @@
       },
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": "ferimento",
+      "fontes_divinas_aceitas": [
+        "ferimento"
+      ],
       "tendencia_preferida": "N",
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -2444,6 +2473,10 @@
       },
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": "cura",
+      "fontes_divinas_aceitas": [
+        "cura",
+        "ferimento"
+      ],
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -2563,6 +2596,7 @@
       },
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -2682,6 +2716,7 @@
       },
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -2803,6 +2838,7 @@
       },
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -2924,6 +2960,7 @@
       },
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -3099,6 +3136,7 @@
         }
       },
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -3274,6 +3312,7 @@
         }
       },
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -3396,6 +3435,7 @@
       },
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -3513,6 +3553,7 @@
       },
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -3609,6 +3650,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -3702,6 +3744,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -3793,6 +3836,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -3885,6 +3929,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -3979,6 +4024,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -4070,6 +4116,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -4162,6 +4209,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -4254,6 +4302,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -4346,6 +4395,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -4441,6 +4491,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -4557,6 +4608,7 @@
       },
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": "mescla_de_magia",
       "aliado_divino_sugerido": null
@@ -4672,6 +4724,7 @@
       },
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": "substituicao_de_magia",
       "aliado_divino_sugerido": null
@@ -4788,6 +4841,7 @@
       },
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": "sintonizacao_com_familiar_aprimorada",
       "aliado_divino_sugerido": null
@@ -4906,6 +4960,7 @@
       },
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": "sintonizacao_com_familiar_aprimorada",
       "aliado_divino_sugerido": null
@@ -5024,6 +5079,7 @@
       },
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": "substituicao_de_magia",
       "aliado_divino_sugerido": null
@@ -5112,6 +5168,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -5201,6 +5258,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -5288,6 +5346,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -5383,6 +5442,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -5471,6 +5531,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -5563,6 +5624,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -5656,6 +5718,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -5750,6 +5813,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -5848,6 +5912,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null
@@ -5939,6 +6004,7 @@
       "conjuracao_recomendada": null,
       "conjuracao_por_tradicao": null,
       "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
       "tese_arcana_id": null,
       "aliado_divino_sugerido": null

@@ -255,8 +255,24 @@ def main() -> None:
 
     r_opcoes = client.get("/api/opcoes")
     assert r_opcoes.status_code == 200
-    assert len(r_opcoes.get_json()["classes"]) == 12
-    assert len(r_opcoes.get_json()["divindades"]) == 20
+    opcoes_json = r_opcoes.get_json()
+    assert len(opcoes_json["classes"]) == 12
+    assert len(opcoes_json["divindades"]) == 20
+    obrigatorias_ui = {c["id"] for c in opcoes_json["classes"] if c["divindade_obrigatoria"]}
+    assert obrigatorias_ui == {"clerigo", "campeao"}
+    mapa_conceitos_ui = {con["id"]: con for c in opcoes_json["classes"] for con in c["conceitos"]}
+    esperado_div_compat = {
+        "campeao_cruzado_vingador": 7,
+        "campeao_bastiao_impenetravel": 9,
+        "campeao_quebrador_correntes": 5,
+        "campeao_cavaleiro_montado": 13,
+        "clerigo_hospitalario_sagrado": 15,
+        "clerigo_ceifador_sombrio": 11,
+        "clerigo_arauto_guerra": 20,
+        "guerreiro_colosso_demolidor": 20,
+    }
+    for cid_check, qtd_esp in esperado_div_compat.items():
+        assert len(mapa_conceitos_ui[cid_check]["divindades_compativeis_ids"]) == qtd_esp
 
     r_her = client.get("/api/ancestralidades/elfo/herancas")
     assert r_her.status_code == 200 and len(r_her.get_json()["herancas"]) == 5
@@ -264,8 +280,12 @@ def main() -> None:
 
     r_con = client.get("/api/classes/mago/conceitos")
     assert r_con.status_code == 200 and len(r_con.get_json()["conceitos"]) == 5
+    assert r_con.get_json()["divindade_obrigatoria"] is False
     primeiro_con = r_con.get_json()["conceitos"][0]
     assert "subclasses_oficiais_candidatas" in primeiro_con and "sinergia_mecanica" in primeiro_con
+    assert len(primeiro_con["divindades_compativeis_ids"]) == 20
+    r_con_camp = client.get("/api/classes/campeao/conceitos")
+    assert r_con_camp.status_code == 200 and r_con_camp.get_json()["divindade_obrigatoria"] is True
     assert client.get("/api/classes/inexistente/conceitos").status_code == 404
 
     r_ok = client.post(
@@ -281,6 +301,55 @@ def main() -> None:
     assert r_ok.status_code == 200
     payload_ok = r_ok.get_json()
     verificar_contrato_e_matematica(payload_ok, dados)
+
+    assert client.post(
+        "/api/gerar",
+        json={
+            "ancestralidade_id": "humano",
+            "heranca_id": "heranca_versatil",
+            "classe_id": "clerigo",
+            "conceito_id": "clerigo_hospitalario_sagrado",
+            "divindade_id": "",
+        },
+    ).status_code == 400
+    assert client.post(
+        "/api/gerar",
+        json={
+            "ancestralidade_id": "humano",
+            "heranca_id": "heranca_versatil",
+            "classe_id": "campeao",
+            "conceito_id": "campeao_cruzado_vingador",
+            "divindade_id": "nenhuma",
+        },
+    ).status_code == 400
+
+    r_guerr_nenhuma = client.post(
+        "/api/gerar",
+        json={
+            "ancestralidade_id": "humano",
+            "heranca_id": "heranca_versatil",
+            "classe_id": "guerreiro",
+            "conceito_id": "guerreiro_colosso_demolidor",
+            "divindade_id": "nenhuma",
+            "seed": 42,
+        },
+    )
+    assert r_guerr_nenhuma.status_code == 200
+    assert r_guerr_nenhuma.get_json()["ficha"]["cabecalho"]["divindade"] == ""
+
+    r_guerr_rand = client.post(
+        "/api/gerar",
+        json={
+            "ancestralidade_id": "humano",
+            "heranca_id": "heranca_versatil",
+            "classe_id": "guerreiro",
+            "conceito_id": "guerreiro_colosso_demolidor",
+            "divindade_id": "aleatoria",
+            "seed": 42,
+        },
+    )
+    assert r_guerr_rand.status_code == 200
+    assert r_guerr_rand.get_json()["ficha"]["cabecalho"]["divindade"] != ""
 
     # Erros controlados (400)
     assert client.post("/api/gerar", json={"ancestralidade_id": "humano"}).status_code == 400

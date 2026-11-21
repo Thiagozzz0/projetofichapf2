@@ -309,6 +309,83 @@ def test_divindades_reais_e_companheiros_familiares() -> None:
     assert "Drenar Familiar" in reac_m
 
 
+def test_divindade_obrigatoria_vs_opcional_e_compatibilidade() -> None:
+    db = carregar_dados()
+    # Clérigo e Campeão devem rejeitar "" e "nenhuma"
+    for cls_id, con_id in (
+        ("clerigo", "clerigo_hospitalario_sagrado"),
+        ("campeao", "campeao_cruzado_vingador"),
+    ):
+        for val_inv in ("", "nenhuma"):
+            try:
+                gerar_personagem("humano", "heranca_versatil", cls_id, con_id, divindade_id=val_inv, seed=1, dados=db)
+                raise AssertionError(f"{cls_id} deveria rejeitar divindade_id={val_inv!r}")
+            except ErroValidacao:
+                pass
+
+    # Classes opcionais (Guerreiro e Mago) sem divindade com "nenhuma", "" ou None
+    for cls_id, con_id in (
+        ("guerreiro", "guerreiro_colosso_demolidor"),
+        ("mago", "mago_evocador_artilharia"),
+    ):
+        for val_opt in ("nenhuma", "", None):
+            r = gerar_personagem("humano", "heranca_versatil", cls_id, con_id, divindade_id=val_opt, seed=4, dados=db)
+            assert r["ficha"]["cabecalho"]["divindade"] == ""
+            assert r["meta_geracao"]["divindade_id"] is None
+            assert r["meta_geracao"]["divindade_obrigatoria"] is False
+
+    # Guerreiro com divindade "aleatoria" -> recebe uma das 20 sem poderes de Clérigo/Campeão
+    g_rand = gerar_personagem(
+        "humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor", divindade_id="aleatoria", seed=8, dados=db
+    )
+    assert g_rand["meta_geracao"]["divindade_id"] in db.divindades
+    assert g_rand["meta_geracao"]["divindade_procedural"] is True
+    assert g_rand["ficha"]["cabecalho"]["divindade"] != ""
+
+    # Guerreiro com divindade manual Iomedae -> cabeçalho e detalhes preenchidos, procedural=False
+    g_iom = gerar_personagem(
+        "humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor", divindade_id="iomedae", seed=8, dados=db
+    )
+    assert "Iomedae" in g_iom["ficha"]["cabecalho"]["divindade"]
+    assert g_iom["meta_geracao"]["divindade_detalhes"]["id"] == "iomedae"
+    assert g_iom["meta_geracao"]["divindade_procedural"] is False
+
+    # Campeão multi-causa com Desna -> nunca sorteia Paladino (OB), sempre Redentor (NB) ou Libertador (CB)
+    for s in range(1, 21):
+        camp_d = gerar_personagem(
+            "humano", "heranca_versatil", "campeao", "campeao_cavaleiro_montado", divindade_id="desna", seed=s, dados=db
+        )
+        assert camp_d["meta_geracao"]["subclasse_oficial_id"] in {"redentor", "libertador"}
+
+    # Campeão multi-causa com Urgathoa -> incompatível com Paladino/Redentor/Libertador
+    try:
+        gerar_personagem(
+            "humano", "heranca_versatil", "campeao", "campeao_cavaleiro_montado", divindade_id="urgathoa", seed=1, dados=db
+        )
+        raise AssertionError("Campeão multi-causa deveria rejeitar Urgathoa")
+    except ErroValidacao:
+        pass
+
+    # Arauto da Guerra com Urgathoa (só Ferir) -> funciona, equipa Segadeira, usa Fonte de Ferimento e não pega Mãos Curandeiras
+    cl_urg = gerar_personagem(
+        "humano", "heranca_perita", "clerigo", "clerigo_arauto_guerra", divindade_id="urgathoa", seed=5, dados=db
+    )
+    assert cl_urg["meta_geracao"]["divindade_detalhes"]["fonte_divina"] == "ferimento"
+    assert any(g["arma"] == "Segadeira" for g in cl_urg["ficha"]["golpes_corpo_a_corpo"])
+    assert any("Ferir (Fonte Divina" in (m["nome"] or "") for m in cl_urg["ficha"]["conjuracao"]["magias"])
+    nomes_tal_cl = [x["nome"] for cat in cl_urg["ficha"]["habilidades_e_talentos"].values() for x in cat if x.get("nome")]
+    assert "Mãos Curandeiras" not in nomes_tal_cl
+
+    # Hospitalário Sagrado com Urgathoa -> rejeita com ErroValidacao
+    try:
+        gerar_personagem(
+            "humano", "heranca_perita", "clerigo", "clerigo_hospitalario_sagrado", divindade_id="urgathoa", seed=5, dados=db
+        )
+        raise AssertionError("Hospitalário Sagrado deveria rejeitar Urgathoa")
+    except ErroValidacao:
+        pass
+
+
 def main() -> None:
     test_ca_limite_destreza_e_sem_armadura()
     test_penalidade_armadura_barulhenta_flexivel_e_ferro_desimpedido()
@@ -317,6 +394,7 @@ def main() -> None:
     test_idiomas_humano_mago_grimorio_e_regras_especificas()
     test_acoes_classe_pagina3_e_zero_descarte_talentos()
     test_divindades_reais_e_companheiros_familiares()
+    test_divindade_obrigatoria_vs_opcional_e_compatibilidade()
     print("SUCESSO TOTAL — Todos os testes de casos de borda PF2E passaram!")
 
 

@@ -874,6 +874,33 @@ body {
   font-size: 0.8rem;
 }
 
+.badge-obrigatoria,
+.badge-opcional {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  vertical-align: middle;
+}
+
+.badge-obrigatoria {
+  background: var(--accent);
+  color: #fdf8ef;
+}
+
+.badge-opcional {
+  background: var(--tint-strong);
+  color: var(--muted);
+}
+
+#grupo-divindade.divindade-obrigatoria select:invalid {
+  border-color: var(--accent);
+  background: #fff9f8;
+}
+
 @media (max-width: 980px) {
   .p1-layout,
   .p2-layout,

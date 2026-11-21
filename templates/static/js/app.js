@@ -126,6 +126,93 @@
       sel.appendChild(opt);
     });
     atualizarResumoConceito();
+    atualizarDivindades();
+  }
+
+  function atualizarDivindades() {
+    const selDiv = document.getElementById("divindade");
+    if (!selDiv || !OPCOES) return;
+
+    const clsId = document.getElementById("classe").value;
+    const conId = document.getElementById("conceito").value;
+    const cls = OPCOES.classes.find((c) => c.id === clsId);
+    const con = cls ? cls.conceitos.find((x) => x.id === conId) : null;
+    const obrigatoria = Boolean(cls && cls.divindade_obrigatoria);
+
+    const modoAnterior = selDiv.dataset.modo || "";
+    const valorAnterior = selDiv.value;
+    const grupoDiv = document.getElementById("grupo-divindade");
+    const badgeDiv = document.getElementById("badge-divindade");
+    const notaDiv = document.getElementById("nota-divindade");
+
+    selDiv.innerHTML = "";
+
+    if (obrigatoria) {
+      selDiv.required = true;
+      selDiv.dataset.modo = "obrigatoria";
+      if (grupoDiv) grupoDiv.classList.add("divindade-obrigatoria");
+      if (badgeDiv) {
+        badgeDiv.textContent = "Obrigatória";
+        badgeDiv.className = "badge-obrigatoria";
+      }
+      if (notaDiv) {
+        notaDiv.textContent = "Obrigatória para esta classe. Exibindo apenas divindades compatíveis com o conceito.";
+      }
+
+      const optPlaceholder = document.createElement("option");
+      optPlaceholder.value = "";
+      optPlaceholder.disabled = true;
+      optPlaceholder.textContent = "Selecione uma divindade...";
+      selDiv.appendChild(optPlaceholder);
+
+      const optProc = document.createElement("option");
+      optProc.value = "procedural";
+      optProc.textContent = "Procedural (recomendada pelo conceito)";
+      selDiv.appendChild(optProc);
+
+      const compativeis = new Set((con && con.divindades_compativeis_ids) || []);
+      const lista = (OPCOES.divindades || []).filter((d) => !compativeis.size || compativeis.has(d.id));
+      lista.forEach((d) => {
+        const opt = document.createElement("option");
+        opt.value = d.id;
+        opt.textContent = `${d.nome} (${d.tendencia} • ${d.arma_favorecida_nome})`;
+        selDiv.appendChild(opt);
+      });
+
+      const opcoesValidas = Array.from(selDiv.options).map((o) => o.value).filter((v) => v !== "");
+      selDiv.value = modoAnterior === "obrigatoria" && opcoesValidas.includes(valorAnterior) ? valorAnterior : "";
+    } else {
+      selDiv.required = false;
+      selDiv.dataset.modo = "opcional";
+      if (grupoDiv) grupoDiv.classList.remove("divindade-obrigatoria");
+      if (badgeDiv) {
+        badgeDiv.textContent = "Opcional";
+        badgeDiv.className = "badge-opcional";
+      }
+      if (notaDiv) {
+        notaDiv.textContent = "Opcional para esta classe (apenas interpretação; não concede poderes de Clérigo/Campeão).";
+      }
+
+      const optNenhuma = document.createElement("option");
+      optNenhuma.value = "nenhuma";
+      optNenhuma.textContent = "Nenhuma (opcional)";
+      selDiv.appendChild(optNenhuma);
+
+      const optAleatoria = document.createElement("option");
+      optAleatoria.value = "aleatoria";
+      optAleatoria.textContent = "Aleatória (sortear divindade)";
+      selDiv.appendChild(optAleatoria);
+
+      (OPCOES.divindades || []).forEach((d) => {
+        const opt = document.createElement("option");
+        opt.value = d.id;
+        opt.textContent = `${d.nome} (${d.tendencia} • ${d.arma_favorecida_nome})`;
+        selDiv.appendChild(opt);
+      });
+
+      const opcoesValidas = Array.from(selDiv.options).map((o) => o.value);
+      selDiv.value = modoAnterior === "opcional" && opcoesValidas.includes(valorAnterior) ? valorAnterior : "nenhuma";
+    }
   }
 
   function atualizarResumoConceito() {
@@ -189,25 +276,14 @@
         selCls.appendChild(opt);
       });
 
-      const selDiv = document.getElementById("divindade");
-      if (selDiv) {
-        const optDivAuto = document.createElement("option");
-        optDivAuto.value = "procedural";
-        optDivAuto.textContent = "Procedural (recomendada pelo conceito)";
-        selDiv.appendChild(optDivAuto);
-        (OPCOES.divindades || []).forEach((d) => {
-          const opt = document.createElement("option");
-          opt.value = d.id;
-          opt.textContent = `${d.nome} (${d.tendencia} • ${d.arma_favorecida_nome})`;
-          selDiv.appendChild(opt);
-        });
-      }
-
       selAnc.addEventListener("change", atualizarHerancas);
       document.getElementById("heranca").addEventListener("change", atualizarResumoAncestralidade);
       selBio.addEventListener("change", atualizarResumoBiografia);
       selCls.addEventListener("change", atualizarConceitos);
-      document.getElementById("conceito").addEventListener("change", atualizarResumoConceito);
+      document.getElementById("conceito").addEventListener("change", () => {
+        atualizarResumoConceito();
+        atualizarDivindades();
+      });
 
       atualizarHerancas();
       atualizarResumoBiografia();
@@ -603,6 +679,11 @@
   }
 
   async function gerarFichaAtual(forcarNovaSeed = false) {
+    const form = document.getElementById("form-gerador");
+    if (form && !form.reportValidity()) {
+      setStatus("Selecione uma divindade para esta classe antes de gerar a ficha.", "erro");
+      return;
+    }
     setStatus("Gerando ficha procedural...");
     const seedInput = document.getElementById("seed");
     const divSelect = document.getElementById("divindade");
@@ -610,7 +691,7 @@
       ancestralidade_id: document.getElementById("ancestralidade").value,
       heranca_id: document.getElementById("heranca").value,
       biografia_id: document.getElementById("biografia").value,
-      divindade_id: divSelect ? divSelect.value : "procedural",
+      divindade_id: divSelect ? divSelect.value : "",
       classe_id: document.getElementById("classe").value,
       conceito_id: document.getElementById("conceito").value,
       nivel: Number(document.getElementById("nivel").value || 1),

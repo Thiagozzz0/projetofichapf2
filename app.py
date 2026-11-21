@@ -7,8 +7,10 @@ from typing import Any
 from flask import Flask, Response, jsonify, render_template, request
 
 from motor import (
+    CLASSES_DIVINDADE_OBRIGATORIA,
     ErroValidacao,
     carregar_dados,
+    divindades_compativeis_conceito,
     exportar_ficha_docx,
     exportar_ficha_txt,
     gerar_personagem,
@@ -144,10 +146,17 @@ def api_conceitos_por_classe(classe_id: str):
             ),
             "resumo_proposta": c["resumo_proposta"],
             "sinergia_mecanica": c.get("sinergia_mecanica", ""),
+            "divindades_compativeis_ids": divindades_compativeis_conceito(dados, classe_id, c),
         }
         for c in dados.conceitos_da_classe(classe_id)
     ]
-    return jsonify({"classe_id": classe_id, "conceitos": conceitos})
+    return jsonify(
+        {
+            "classe_id": classe_id,
+            "divindade_obrigatoria": classe_id in CLASSES_DIVINDADE_OBRIGATORIA,
+            "conceitos": conceitos,
+        }
+    )
 
 
 @app.post("/api/gerar")

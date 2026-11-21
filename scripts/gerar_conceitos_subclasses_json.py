@@ -59,6 +59,7 @@ def _conceito(
     conjuracao_recomendada: dict[str, Any] | None = None,
     conjuracao_por_tradicao: dict[str, dict[str, Any]] | None = None,
     fonte_divina_preferida: str | None = None,
+    fontes_divinas_aceitas: list[str] | None = None,
     tendencia_preferida: str | None = None,
     tese_arcana_id: str | None = None,
     aliado_divino_sugerido: str | None = None,
@@ -101,6 +102,11 @@ def _conceito(
         "conjuracao_recomendada": conjuracao_recomendada,
         "conjuracao_por_tradicao": conjuracao_por_tradicao,
         "fonte_divina_preferida": fonte_divina_preferida,
+        "fontes_divinas_aceitas": (
+            fontes_divinas_aceitas
+            if fontes_divinas_aceitas is not None
+            else ([fonte_divina_preferida] if fonte_divina_preferida else None)
+        ),
         "tendencia_preferida": tendencia_preferida,
         "tese_arcana_id": tese_arcana_id,
         "aliado_divino_sugerido": aliado_divino_sugerido,
@@ -899,6 +905,7 @@ def construir_conceitos() -> list[dict[str, Any]]:
                 magias_nivel_1_prioritarias=["arma_magica", "bencao", "curar", "protecao"],
             ),
             fonte_divina_preferida="cura",
+            fontes_divinas_aceitas=["cura", "ferimento"],
         ),
         _conceito(
             id_conceito="clerigo_ceifador_sombrio",
@@ -980,6 +987,7 @@ def construir_conceitos() -> list[dict[str, Any]]:
                 magias_nivel_1_prioritarias=["bencao", "curar", "comando", "protecao"],
             ),
             fonte_divina_preferida="cura",
+            fontes_divinas_aceitas=["cura", "ferimento"],
         ),
 
         # =====================================================================
