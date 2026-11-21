@@ -14,8 +14,9 @@ ORCAMENTO_INICIAL_PC = 1500  # 15 po = 150 pp = 1.500 pc
 def calcular_proficiencias_combate(
     classe: dict[str, Any],
     subclasse: dict[str, Any] | None,
+    talentos_classe_ids: list[str] | None = None,
 ) -> dict[str, Any]:
-    """Resolve as proficiências de armaduras e armas considerando classe e subclasse."""
+    """Resolve as proficiências de armaduras e armas considerando classe, subclasse e talentos."""
     defesas_brutas = classe["proficiencias_iniciais"]["defesas"]
     defesas = {
         "sem_armadura": grau_normalizado(defesas_brutas.get("defesa_sem_armadura")),
@@ -43,12 +44,15 @@ def calcular_proficiencias_combate(
         lista_esp = []
         grau_esp = "destreinado"
 
+    armas_monge_treinadas = classe["id"] == "monge" and "arsenal_monastico" in (talentos_classe_ids or [])
+
     armas = {
         "simples": grau_normalizado(ataques_brutos.get("armas_simples")),
         "marcial": grau_normalizado(ataques_brutos.get("armas_marciais")),
         "avancada": grau_normalizado(ataques_brutos.get("armas_avancadas")),
         "desarmado": grau_normalizado(ataques_brutos.get("ataques_desarmados")),
         "bombas_alquimicas": grau_normalizado(ataques_brutos.get("bombas_alquimicas")),
+        "armas_traco_monge": "treinado" if armas_monge_treinadas else "destreinado",
         "especificas_lista": lista_esp,
         "especificas_grau": grau_esp,
     }
@@ -64,11 +68,18 @@ def grau_arma(arma: dict[str, Any], profs_armas: dict[str, Any]) -> str:
     """Determina o grau de proficiência do personagem com uma arma específica."""
     cat = normalizar(arma.get("categoria"))
     nome_norm = normalizar(arma.get("nome"))
+    tracos_norm = [normalizar(t) for t in arma.get("tracos", [])]
 
     if arma.get("id") == "bomba_alquimica":
         return profs_armas.get("bombas_alquimicas", "destreinado") or profs_armas.get("marcial", "destreinado")
     if "desarmado" in cat:
         return profs_armas["desarmado"]
+    if (
+        profs_armas.get("armas_traco_monge", "destreinado") != "destreinado"
+        and "monge" in tracos_norm
+        and ("simples" in cat or "marcial" in cat)
+    ):
+        return profs_armas["armas_traco_monge"]
     if nome_norm in profs_armas["especificas_lista"]:
         return profs_armas["especificas_grau"]
     if "simples" in cat:
@@ -105,7 +116,7 @@ def _municao_para_arma(dados: BaseDados, arma: dict[str, Any]) -> dict[str, Any]
     return None
 
 
-def _ferramenta_essencial(classe_id: str, conceito_id: str) -> list[str]:
+def _ferramenta_essencial(classe_id: str, conceito_id: str, subclasse_id: str = "") -> list[str]:
     mapa = {
         "alquimista": ["ferramentas_de_alquimista", "livro_basico_de_manufatura"],
         "bardo": ["instrumento_musical_portatil"],
@@ -115,7 +126,9 @@ def _ferramenta_essencial(classe_id: str, conceito_id: str) -> list[str]:
         "mago": ["bolsa_de_componentes_materiais", "conjunto_de_escrita"],
     }
     itens = list(mapa.get(classe_id, []))
-    if "cirurgiao" in conceito_id or "curandeiro" in conceito_id:
+    if subclasse_id == "cirurgiao" or any(
+        termo in conceito_id for termo in ("cirurgiao", "curandeiro", "medico", "hospitalario")
+    ):
         itens.append("ferramentas_de_curandeiro")
     return itens
 
@@ -128,6 +141,7 @@ def comprar_equipamentos(
     mod_for: int,
     profs_combate: dict[str, Any],
     mod_int: int = 0,
+    subclasse: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Executa a compra procedural dentro de 15 po (1.500 pc) e calcula o Volume."""
     saldo_pc = ORCAMENTO_INICIAL_PC
@@ -324,7 +338,8 @@ def comprar_equipamentos(
         registrar_item(itens_preparados, "Livro de Fórmulas e Reagentes Infundidos", reagentes_qtd, "L", 0.1, 0)
 
     # Ferramentas essenciais da classe
-    for fid in _ferramenta_essencial(classe["id"], conceito["id"]):
+    sub_id = subclasse["id"] if subclasse else ""
+    for fid in _ferramenta_essencial(classe["id"], conceito["id"], sub_id):
         fitem = dados.itens_gerais.get(fid)
         if fitem and (fitem.get("preco_pc") or 0) <= saldo_pc:
             saldo_pc -= fitem.get("preco_pc") or 0

@@ -134,12 +134,15 @@ def _resolver_magia_foco_dominio(
         return None
     conj_rec = conceito.get("conjuracao_recomendada") or {}
     keywords = [normalizar(k) for k in conj_rec.get("tracos_prioritarios", [])]
-    if "cura" in conceito["id"] or "curandeiro" in conceito["id"]:
+    cid = conceito["id"]
+    if any(k in cid for k in ("cura", "curandeiro", "hospitalario")):
         keywords.append("cura")
-    elif "guerra" in conceito["id"]:
+    elif any(k in cid for k in ("guerra", "arauto")):
         keywords.extend(["arma", "forca", "fervor"])
-    elif "exorcista" in conceito["id"]:
-        keywords.extend(["sol", "luz", "positivo"])
+    elif any(k in cid for k in ("ceifador", "sombrio")):
+        keywords.extend(["morte", "dor", "noite", "destruicao"])
+    elif any(k in cid for k in ("teologo", "dominio", "exorcista")):
+        keywords.extend(["sol", "luz", "fogo", "conhecimento"])
 
     avaliados = []
     for m in candidatos:
@@ -161,12 +164,14 @@ def gerar_conjuracao(
     modificadores: dict[str, int],
     talentos_classe_ids: list[str],
     nivel: int = 1,
+    fonte_divina: str = "cura",
     rng: random.Random | None = None,
 ) -> dict[str, Any]:
     """Calcula ataque/CD de magia, espaços por dia, truques, magias N1, foco e inatas."""
     prof_magia_info = classe["proficiencias_iniciais"].get("magias")
     sub_id = subclasse["id"] if subclasse else ""
     classe_id = classe["id"]
+    conj_por_trad = conceito.get("conjuracao_por_tradicao") or {}
     conj_rec = conceito.get("conjuracao_recomendada") or {}
 
     # ------------------------------------------------------------------
@@ -252,6 +257,7 @@ def gerar_conjuracao(
     fonte_divina_info: dict[str, Any] | None = None
 
     if conjuracao_plena and tradicao:
+        conj_rec = conj_por_trad.get(tradicao) or conj_rec
         tabela = _tabela_magias_classe(classe) or {"truques_magicos": 5, "espacos_por_circulo": {"1": 2}}
         qtd_truques = int(tabela.get("truques_magicos", 5))
         espacos_n1 = int(tabela.get("espacos_por_circulo", {}).get("1", 2))
@@ -260,7 +266,7 @@ def gerar_conjuracao(
 
         if classe_id == "clerigo":
             fonte_divina_info = {
-                "tipo": "Cura (Curar)",
+                "tipo": "Ferimento (Ferir)" if fonte_divina == "ferimento" else "Cura (Curar)",
                 "espacos": 1 + max(0, modificadores["car"]),
                 "circulo": 1,
             }
@@ -443,14 +449,15 @@ def preencher_bloco_conjuracao_ficha(
     magias_lista = list(resumo_magias["magias_n1"])
     fonte = resumo_magias.get("fonte_divina")
     if fonte and len(magias_lista) < len(bloco_conjuracao["magias"]):
+        nome_magia_fonte = "Ferir" if "ferimento" in fonte["tipo"].lower() else "Curar"
         magias_lista.append(
             {
-                "nome": f"Curar (Fonte Divina ×{fonte['espacos']})",
+                "nome": f"{nome_magia_fonte} (Fonte Divina ×{fonte['espacos']})",
                 "nivel": 1,
                 "acoes": "1 a 3",
                 "componentes": ["somático", "verbal"],
                 "preparada": True,
-                "resumo_lista": f"{fonte['espacos']} espaços extras de Fonte Divina",
+                "resumo_lista": f"{fonte['espacos']} espaços extras de Fonte Divina ({fonte['tipo']})",
             }
         )
 

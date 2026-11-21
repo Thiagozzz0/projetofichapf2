@@ -287,6 +287,9 @@ def calcular_matematica_final(
     elif armas_prof["bombas_alquimicas"] != "destreinado":
         ficha["proficiencia_armas"][3]["rotulo"] = "BOMBAS ALQUÍMICAS"
         ficha["proficiencia_armas"][3]["grau_proficiencia"] = armas_prof["bombas_alquimicas"]
+    elif armas_prof.get("armas_traco_monge", "destreinado") != "destreinado":
+        ficha["proficiencia_armas"][3]["rotulo"] = "ARMAS DE MONGE"
+        ficha["proficiencia_armas"][3]["grau_proficiencia"] = armas_prof["armas_traco_monge"]
     elif armas_prof["avancada"] != "destreinado":
         ficha["proficiencia_armas"][3]["rotulo"] = "AVANÇADAS"
         ficha["proficiencia_armas"][3]["grau_proficiencia"] = armas_prof["avancada"]

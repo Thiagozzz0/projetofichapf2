@@ -122,7 +122,7 @@
     (cls ? cls.conceitos : []).forEach((c) => {
       const opt = document.createElement("option");
       opt.value = c.id;
-      opt.textContent = `${c.nome} (${c.subclasse_oficial_nome})`;
+      opt.textContent = c.nome;
       sel.appendChild(opt);
     });
     atualizarResumoConceito();
@@ -138,10 +138,22 @@
       el.innerHTML = "";
       return;
     }
+    const nomesSubs =
+      Array.isArray(con.subclasses_oficiais_nomes) && con.subclasses_oficiais_nomes.length
+        ? con.subclasses_oficiais_nomes
+        : [con.subclasse_oficial_nome];
+    const subTexto =
+      nomesSubs.length > 1
+        ? `Automática entre: ${nomesSubs.join(" ou ")}`
+        : `Automática: ${nomesSubs[0]}`;
     el.innerHTML =
-      `<strong>${esc(con.titulo_completo)} (${esc(con.subclasse_oficial_nome)})</strong>` +
+      `<strong>${esc(con.titulo_completo)}</strong>` +
       `<div>PV/Nível: ${esc(cls.pontos_de_vida_por_nivel)} • Chave: ${esc(cls.atributo_chave.join(" / "))}</div>` +
-      `<div style="margin-top:4px">${esc(con.resumo_proposta)}</div>`;
+      `<div class="conceito-desc"><b>O que faz:</b> ${esc(con.resumo_proposta)}</div>` +
+      (con.sinergia_mecanica
+        ? `<div class="conceito-sinergia"><b>Sinergia:</b> ${esc(con.sinergia_mecanica)}</div>`
+        : "") +
+      `<div class="conceito-sub-tag">Subclasse PF2E: ${esc(subTexto)}</div>`;
   }
 
   async function inicializar() {
@@ -257,8 +269,16 @@
       renderCampo("Biografia", `${esc(cab.biografia)} (${m.biografia_procedural ? "Procedural" : "Manual"})`, "span-2"),
       renderCampo("Tamanho / Tendência", `${esc(cab.tamanho)} • ${esc(cab.tendencia)}`),
       renderCampo("Nome do Jogador", esc(cab.nome_jogador || "—")),
-      renderCampo("Traços", (cab.tracos || []).map((t) => `<span class="pill">${esc(t)}</span>`).join(""), "span-3"),
-      renderCampo("Divindade", esc(cab.divindade || "—"), "span-2"),
+      renderCampo("Traços", (cab.tracos || []).map((t) => `<span class="pill">${esc(t)}</span>`).join(""), "span-2"),
+      renderCampo(
+        "Subclasse PF2E",
+        esc(
+          (m.subclasse_oficial_nome || "—") +
+            (m.tese_arcana_nome ? ` • Tese: ${m.tese_arcana_nome}` : "")
+        ),
+        "span-2"
+      ),
+      renderCampo("Divindade", esc(cab.divindade || "—")),
       renderCampo("Seed / Saldo", `${esc(m.seed)} • ${esc(m.saldo_restante)}`),
     ].join("");
 
@@ -594,14 +614,14 @@
       document.getElementById("heranca").value = "elfo_vidente";
       document.getElementById("classe").value = "mago";
       atualizarConceitos();
-      document.getElementById("conceito").value = "mago_elementalista";
+      document.getElementById("conceito").value = "mago_evocador_artilharia";
     } else if (chave === "guerreiro") {
       document.getElementById("ancestralidade").value = "humano";
       atualizarHerancas();
       document.getElementById("heranca").value = "heranca_versatil";
       document.getElementById("classe").value = "guerreiro";
       atualizarConceitos();
-      document.getElementById("conceito").value = "guerreiro_espada_duas_maos";
+      document.getElementById("conceito").value = "guerreiro_colosso_demolidor";
     }
     document.getElementById("biografia").value = "procedural";
     document.getElementById("nome").value = "";

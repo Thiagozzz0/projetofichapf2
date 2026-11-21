@@ -95,23 +95,23 @@ def main() -> None:
     assert len(opcoes["ancestralidades"]) == 6
     assert len(opcoes["biografias"]) == 35
     assert len(opcoes["classes"]) == 12
-    assert opcoes["total_conceitos"] == 38
+    assert opcoes["total_conceitos"] == 56
 
     # ------------------------------------------------------------------
     # 1. Determinismo com seed fixa e variação com seeds distintas
     # ------------------------------------------------------------------
-    a1 = gerar_personagem("humano", "heranca_versatil", "guerreiro", "guerreiro_espada_duas_maos", seed=42)
-    a2 = gerar_personagem("humano", "heranca_versatil", "guerreiro", "guerreiro_espada_duas_maos", seed=42)
+    a1 = gerar_personagem("humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor", seed=42)
+    a2 = gerar_personagem("humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor", seed=42)
     assert a1 == a2, "Mesma seed deve gerar ficha exatamente idêntica"
 
-    b1 = gerar_personagem("elfo", "elfo_vidente", "mago", "mago_elementalista", seed=101)
-    b2 = gerar_personagem("elfo", "elfo_vidente", "mago", "mago_elementalista", seed=202)
+    b1 = gerar_personagem("elfo", "elfo_vidente", "mago", "mago_evocador_artilharia", seed=101)
+    b2 = gerar_personagem("elfo", "elfo_vidente", "mago", "mago_evocador_artilharia", seed=202)
     assert b1["ficha"]["cabecalho"]["nome_personagem"] != b2["ficha"]["cabecalho"]["nome_personagem"] or (
         b1["meta_geracao"]["biografia_id"] != b2["meta_geracao"]["biografia_id"]
     )
 
     # ------------------------------------------------------------------
-    # 2. Cobertura total de 38 conceitos + todas as 29 heranças
+    # 2. Cobertura total de 56 conceitos + todas as 29 heranças
     # ------------------------------------------------------------------
     todas_herancas = [
         (anc["id"], her["id"])
@@ -121,6 +121,7 @@ def main() -> None:
     assert len(todas_herancas) == 29
 
     todos_conceitos = list(dados.conceitos.values())
+    assert len(todos_conceitos) == 56
     total_combinacoes = max(len(todas_herancas), len(todos_conceitos))
     for i in range(total_combinacoes):
         anc_id, her_id = todas_herancas[i % len(todas_herancas)]
@@ -139,16 +140,16 @@ def main() -> None:
     # 3. Casos especiais de ancestralidade/herança e biografia manual
     # ------------------------------------------------------------------
     casos_especiais = [
-        ("anao", "anao_da_forja", "campeao", "campeao_paladino_baluarte", "soldado"),
-        ("elfo", "elfo_vidente", "guerreiro", "guerreiro_arqueiro_precisao", "batedor"),
-        ("gnomo", "gnomo_tocado_pelas_fadas", "bardo", "bardo_maestro_inspirador", "animador"),
-        ("gnomo", "gnomo_manancial", "clerigo", "clerigo_sacerdote_curandeiro", "acolito"),
-        ("goblin", "goblin_inquebravel", "barbaro", "barbaro_draconico_duas_maos", None),
-        ("goblin", "goblin_dentes_de_navalha", "ladino", "ladino_ladrao_acrobata", None),
-        ("humano", "meio_elfo", "patrulheiro", "patrulheiro_arqueiro_precisao", None),
-        ("humano", "meio_orc", "guerreiro", "guerreiro_espada_duas_maos", None),
-        ("humano", "heranca_perita", "mago", "mago_elementalista", None),
-        ("humano", "heranca_versatil", "ladino", "ladino_malandro_social", None),
+        ("anao", "anao_da_forja", "campeao", "campeao_bastiao_impenetravel", "soldado"),
+        ("elfo", "elfo_vidente", "guerreiro", "guerreiro_atirador_elite", "batedor"),
+        ("gnomo", "gnomo_tocado_pelas_fadas", "bardo", "bardo_comandante_inspirador", "animador"),
+        ("gnomo", "gnomo_manancial", "clerigo", "clerigo_hospitalario_sagrado", "acolito"),
+        ("goblin", "goblin_inquebravel", "barbaro", "barbaro_guerreiro_draconico", None),
+        ("goblin", "goblin_dentes_de_navalha", "ladino", "ladino_sombra_silenciosa", None),
+        ("humano", "meio_elfo", "patrulheiro", "patrulheiro_metralhadora_flechas", None),
+        ("humano", "meio_orc", "guerreiro", "guerreiro_colosso_demolidor", None),
+        ("humano", "heranca_perita", "mago", "mago_evocador_artilharia", None),
+        ("humano", "heranca_versatil", "ladino", "ladino_duelista_fanfarrao", None),
     ]
     for idx, (aid, hid, cid, conid, bid) in enumerate(casos_especiais):
         res = gerar_personagem(aid, hid, cid, conid, biografia_id=bid, seed=500 + idx, dados=dados)
@@ -168,21 +169,66 @@ def main() -> None:
             assert res["ficha"]["conjuracao"]["magias_inatas"][0]["nome"] == "Detectar Magia"
 
     # ------------------------------------------------------------------
-    # 4. Sinergia temática dos conceitos solicitados pelo usuário
+    # 4. Sinergia temática e mapeamento procedural Conceito -> Subclasse
     # ------------------------------------------------------------------
-    mago_elem = gerar_personagem("elfo", "elfo_das_florestas", "mago", "mago_elementalista", seed=77, dados=dados)
+    mago_elem = gerar_personagem("elfo", "elfo_das_florestas", "mago", "mago_evocador_artilharia", seed=77, dados=dados)
     nomes_magias_mago = {
         normalizar(m["nome"])
         for m in mago_elem["ficha"]["conjuracao"]["truques_magicos"] + mago_elem["ficha"]["conjuracao"]["magias"]
         if m["nome"]
     }
+    assert mago_elem["meta_geracao"]["subclasse_oficial_id"] == "evocacao"
+    assert mago_elem["meta_geracao"]["tese_arcana_id"] == "mescla_de_magia"
     assert mago_elem["ficha"]["conjuracao"]["tradicoes_marcadas"]["arcana"] is True
     assert "produzir chama" in nomes_magias_mago
     assert "maos flamejantes" in nomes_magias_mago
 
-    guer_2m = gerar_personagem("humano", "heranca_versatil", "guerreiro", "guerreiro_espada_duas_maos", seed=88, dados=dados)
+    guer_2m = gerar_personagem("humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor", seed=88, dados=dados)
+    assert guer_2m["meta_geracao"]["subclasse_oficial_id"] == "agressor"
     assert guer_2m["ficha"]["golpes_corpo_a_corpo"][0]["arma"] == "Montante"
     assert guer_2m["ficha"]["habilidades_e_talentos"]["classe"][2]["nome"] == "Ataque Poderoso"
+
+    # Multi-subclasse procedural (Feiticeiro: Dracônica [arcana] ou Elemental [primal])
+    linhagens_vistas: set[str] = set()
+    for s in range(1, 31):
+        feit = gerar_personagem(
+            "humano", "heranca_versatil", "feiticeiro", "feiticeiro_artifice_elemental_draconico", seed=s, dados=dados
+        )
+        verificar_contrato_e_matematica(feit, dados)
+        sub_f = feit["meta_geracao"]["subclasse_oficial_id"]
+        linhagens_vistas.add(sub_f)
+        if sub_f == "draconica":
+            assert feit["ficha"]["conjuracao"]["tradicoes_marcadas"]["arcana"] is True
+        else:
+            assert sub_f == "elemental"
+            assert feit["ficha"]["conjuracao"]["tradicoes_marcadas"]["primal"] is True
+    assert linhagens_vistas == {"draconica", "elemental"}, f"Esperadas ambas linhagens, vistas: {linhagens_vistas}"
+
+    # Bárbaro Instinto do Furor ganha 2 talentos de classe de 1º nível
+    furor = gerar_personagem("anao", "anao_das_rochas", "barbaro", "barbaro_incursor_vanguarda", seed=12, dados=dados)
+    assert furor["meta_geracao"]["subclasse_oficial_id"] == "instinto_do_furor"
+    assert furor["ficha"]["habilidades_e_talentos"]["classe"][2]["nome"] == "Investida Súbita"
+    assert any(
+        b["nome"] == "Arremessador Enfurecido" for b in furor["ficha"]["habilidades_e_talentos"]["bonus"]
+    )
+
+    # Clérigo Ceifador Sombrio usa Fonte de Ferimento e tendência neutra
+    ceifador = gerar_personagem("humano", "heranca_perita", "clerigo", "clerigo_ceifador_sombrio", seed=19, dados=dados)
+    assert ceifador["ficha"]["cabecalho"]["tendencia"] == "N"
+    assert any(
+        "Ferir (Fonte Divina" in (m["nome"] or "") for m in ceifador["ficha"]["conjuracao"]["magias"]
+    )
+
+    # Monge Arsenal Monástico ganha proficiência treinado em armas com traço monge
+    kensei = gerar_personagem("humano", "heranca_perita", "monge", "monge_guerreiro_armas_monasticas", seed=25, dados=dados)
+    assert kensei["ficha"]["proficiencia_armas"][3]["rotulo"] == "ARMAS DE MONGE"
+    assert kensei["ficha"]["proficiencia_armas"][3]["grau_proficiencia"] == "treinado"
+    assert kensei["ficha"]["golpes_corpo_a_corpo"][0]["ataque"]["grau_proficiencia"] == "treinado"
+
+    # Mago Ilusionista com Tese Sintonização com Familiar Aprimorada ganha Familiar
+    ilus = gerar_personagem("elfo", "elfo_artico", "mago", "mago_ilusionista_enganador", seed=31, dados=dados)
+    assert ilus["meta_geracao"]["tese_arcana_id"] == "sintonizacao_com_familiar_aprimorada"
+    assert ilus["ficha"]["habilidades_e_talentos"]["classe"][2]["nome"] == "Familiar"
 
     # ------------------------------------------------------------------
     # 5. Rotas Flask via test_client()
@@ -204,7 +250,7 @@ def main() -> None:
 
     r_saude = client.get("/api/saude")
     assert r_saude.status_code == 200
-    assert r_saude.get_json()["conceitos"] == 38
+    assert r_saude.get_json()["conceitos"] == 56
 
     r_opcoes = client.get("/api/opcoes")
     assert r_opcoes.status_code == 200
@@ -215,7 +261,9 @@ def main() -> None:
     assert client.get("/api/ancestralidades/inexistente/herancas").status_code == 404
 
     r_con = client.get("/api/classes/mago/conceitos")
-    assert r_con.status_code == 200 and len(r_con.get_json()["conceitos"]) == 4
+    assert r_con.status_code == 200 and len(r_con.get_json()["conceitos"]) == 5
+    primeiro_con = r_con.get_json()["conceitos"][0]
+    assert "subclasses_oficiais_candidatas" in primeiro_con and "sinergia_mecanica" in primeiro_con
     assert client.get("/api/classes/inexistente/conceitos").status_code == 404
 
     r_ok = client.post(
@@ -224,7 +272,7 @@ def main() -> None:
             "ancestralidade_id": "humano",
             "heranca_id": "heranca_versatil",
             "classe_id": "mago",
-            "conceito_id": "mago_elementalista",
+            "conceito_id": "mago_evocador_artilharia",
             "seed": 12345,
         },
     )
@@ -240,7 +288,7 @@ def main() -> None:
             "ancestralidade_id": "humano",
             "heranca_id": "heranca_versatil",
             "classe_id": "mago",
-            "conceito_id": "guerreiro_espada_duas_maos",
+            "conceito_id": "guerreiro_colosso_demolidor",
         },
     ).status_code == 400
     assert client.post(
@@ -249,7 +297,7 @@ def main() -> None:
             "ancestralidade_id": "humano",
             "heranca_id": "heranca_versatil",
             "classe_id": "mago",
-            "conceito_id": "mago_elementalista",
+            "conceito_id": "mago_evocador_artilharia",
             "nivel": 2,
         },
     ).status_code == 400
@@ -265,7 +313,7 @@ def main() -> None:
     assert "attachment;" in disp_txt and disp_txt.endswith('.txt"')
     txt_body = r_txt_res.get_data(as_text=True)
     assert mago_elem["ficha"]["cabecalho"]["nome_personagem"] in txt_body
-    assert "Mago — Elementalista" in txt_body
+    assert "Evocador de Artilharia" in txt_body
     assert "PERÍCIAS (18 LINHAS OFICIAIS)" in txt_body
     assert "PÁGINA 4 (p. 583) — CONJURAÇÃO E MAGIAS" in txt_body
     assert "Mãos Flamejantes" in txt_body
@@ -277,7 +325,7 @@ def main() -> None:
             "ancestralidade_id": "humano",
             "heranca_id": "heranca_versatil",
             "classe_id": "guerreiro",
-            "conceito_id": "guerreiro_espada_duas_maos",
+            "conceito_id": "guerreiro_colosso_demolidor",
             "seed": 88,
         },
     )
@@ -285,7 +333,7 @@ def main() -> None:
     txt_guer = r_txt_params.get_data(as_text=True)
     assert "Montante" in txt_guer and "Ataque Poderoso" in txt_guer
 
-    # Exportação DOCX (Mago Elementalista + Guerreiro Montante) com validação OOXML/XML completa
+    # Exportação DOCX (Mago Evocador + Guerreiro Colosso) com validação OOXML/XML completa
     arquivos_esperados_docx = {
         "[Content_Types].xml",
         "_rels/.rels",
@@ -294,7 +342,7 @@ def main() -> None:
         "word/document.xml",
     }
     for caso_res, trechos_esperados in (
-        (mago_elem, [mago_elem["ficha"]["cabecalho"]["nome_personagem"], "Elementalista", "Flamejantes"]),
+        (mago_elem, [mago_elem["ficha"]["cabecalho"]["nome_personagem"], "Evocador de Artilharia", "Flamejantes"]),
         (guer_2m, [guer_2m["ficha"]["cabecalho"]["nome_personagem"], "Montante", "Ataque Poderoso"]),
     ):
         r_docx = client.post("/api/exportar/docx", json={"resultado": caso_res})
@@ -318,7 +366,7 @@ def main() -> None:
     assert client.post("/api/exportar/docx", json={"ficha": {}}).status_code == 400
 
     print("SUCESSO TOTAL — Validação da Etapa 3 + Etapa 4 concluída!")
-    print(f"Conceitos validados: {len(todos_conceitos)}/38 | Heranças validadas: {len(todas_herancas)}/29")
+    print(f"Conceitos validados: {len(todos_conceitos)}/56 | Heranças validadas: {len(todas_herancas)}/29")
     print(f"Casos especiais validados: {len(casos_especiais)} | Rotas Flask validadas: 8 endpoints + static (200/400/404)")
     print("Exportadores validados: .txt (UTF-8) e .docx (ZIP/OOXML/XML íntegros)")
 

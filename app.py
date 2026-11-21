@@ -134,7 +134,14 @@ def api_conceitos_por_classe(classe_id: str):
             "titulo_completo": c["titulo_completo"],
             "subclasse_oficial_id": c["subclasse_oficial_id"],
             "subclasse_oficial_nome": c["subclasse_oficial_nome"],
+            "subclasses_oficiais_candidatas": c.get(
+                "subclasses_oficiais_candidatas", [c["subclasse_oficial_id"]]
+            ),
+            "subclasses_oficiais_nomes": c.get(
+                "subclasses_oficiais_nomes", [c["subclasse_oficial_nome"]]
+            ),
             "resumo_proposta": c["resumo_proposta"],
+            "sinergia_mecanica": c.get("sinergia_mecanica", ""),
         }
         for c in dados.conceitos_da_classe(classe_id)
     ]

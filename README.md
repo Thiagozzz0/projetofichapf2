@@ -46,7 +46,7 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 │   ├── classes02.json            # Capítulo 3 (Leva 02: Clérigo, Druida, Feiticeiro e Guerreiro)
 │   ├── classes03.json            # Capítulo 3 (Leva 03: Ladino, Mago, Monge e Patrulheiro)
 │   ├── companheiros_familiares.json     # Capítulo 3 (Companheiros Animais e Familiares)
-│   ├── conceitos_subclasses.json        # Etapa 2: 38 conceitos procedurais para as 12 classes
+│   ├── conceitos_subclasses.json        # Etapa 2: 56 conceitos procedurais (mapeando subclasses PF2E) para as 12 classes
 │   ├── equipamentos.json         # Capítulo 6 completo (Equipamentos) convertido e validado
 │   ├── estrutura_ficha.json      # Ficha Oficial PF2E (pp. 580–583): blueprint das 4 páginas e contrato vazio
 │   ├── magias01.json             # Capítulo 7 (Parte 1: Regras, Listas Completas e Descrições A–M)
@@ -131,7 +131,7 @@ Os PDFs de referência estão sendo convertidos **um por vez** para garantir fid
 | `ref/Enchacent02.pdf` | `dados/magias02.json` | Cap. 7 (Parte 2): `159` descrições M–Z (`379/379` combinado), quadro Servo Invisível, `158` Magias de Foco, Regras/Tabelas de Rituais e `20` Rituais | Concluído (`11.md`) |
 | `ref/Compendium specific tools.pdf` | `dados/itens_magicos_tesouros.json` | Runas, materiais preciosos, itens alquímicos completos e tesouros | Adiado (futuro) |
 | `ref/Sheet Update.pdf` | `dados/estrutura_ficha.json` | Estrutura oficial das 4 páginas da ficha (`pp. 580–583`), legendas, fórmulas de cálculo, `18` linhas de perícia cruzadas com `pericias.json` e contrato `modelo_ficha_vazia` | Concluído (`12.md`) |
-| *Etapa 2 (Conceitos)* | `dados/conceitos_subclasses.json` | `38` conceitos ("nortes") para todas as `12` classes conectando atributos, biografias, perícias, talentos, equipamentos (`15 po`) e magias | Concluído (`13.md`) |
+| *Etapa 2 (Conceitos)* | `dados/conceitos_subclasses.json` | `56` conceitos ("nortes") para todas as `12` classes com mapeamento procedural de subclasses PF2E, atributos, biografias, perícias, talentos, equipamentos (`15 po`) e magias | Concluído (`13.md` / `20.md`) |
 | *Etapa 3 (Motor & Flask)* | `motor/`, `app.py`, `templates/index.html` | Motor procedural PF2E (1º nível, `seed` opcional), API REST Flask e tela simples de teste | Concluído (`14.md`) |
 | *Etapa 4 (Front-End & Export)* | `templates/`, `templates/static/`, `motor/exportacao.py`, `requirements.txt` | Interface completa em 4 páginas inspirada na ficha oficial (`pp. 580–583`), impressão e download `.docx`/`.txt` | Concluído (`16.md` / `17.md`) |
 

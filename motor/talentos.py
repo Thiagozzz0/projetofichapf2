@@ -167,6 +167,7 @@ def selecionar_talentos(
     pericia_bio_id: str | None = None,
     tendencia: str = "NB",
     fonte_divina: str = "cura",
+    tese_arcana_id: str | None = None,
     rng: random.Random | None = None,
 ) -> dict[str, Any]:
     """Seleciona todos os talentos e características aplicáveis ao 1º nível."""
@@ -285,6 +286,46 @@ def selecionar_talentos(
         )
         if escolhido:
             adicionar_classe_talento(escolhido["id"], f"Classe ({classe['nome']} 1º Nível)")
+
+    # Subclasse Bárbaro Instinto do Furor: concede +1 talento de bárbaro de 1º nível
+    if (
+        classe["id"] == "barbaro"
+        and subclasse
+        and isinstance(subclasse.get("habilidade_instinto"), dict)
+        and subclasse["habilidade_instinto"].get("talento_bonus_1_nivel")
+    ):
+        validos_furor = [
+            t for t in talentos_classe_n1_all
+            if t["id"] not in escolhidos_classe_ids and atende_prerequisitos(t.get("pre_requisitos"), ctx)
+        ]
+        escolhido_furor = _escolher_por_lista_ou_afinidade(
+            validos_furor,
+            conceito["talentos_recomendados"]["classe_nivel_1"],
+            keywords,
+            escolhidos_classe_ids,
+            rng,
+        )
+        if escolhido_furor:
+            adicionar_classe_talento(escolhido_furor["id"], f"Subclasse ({subclasse['nome']})")
+
+    # Tese Arcana do Mago que concede talento bônus de 1º nível
+    if classe["id"] == "mago" and tese_arcana_id:
+        if tese_arcana_id == "sintonizacao_com_familiar_aprimorada":
+            adicionar_classe_talento("familiar", "Tese Arcana (Sintonização com Familiar Aprimorada)")
+        elif tese_arcana_id == "experimentacao_metamagica":
+            validos_meta = [
+                t for t in talentos_classe_n1_all
+                if t["id"] not in escolhidos_classe_ids and "metamagia" in " ".join(normalizar(x) for x in t.get("tracos", []))
+            ]
+            escolhido_meta = _escolher_por_lista_ou_afinidade(
+                validos_meta,
+                conceito["talentos_recomendados"]["classe_nivel_1"],
+                keywords,
+                escolhidos_classe_ids,
+                rng,
+            )
+            if escolhido_meta:
+                adicionar_classe_talento(escolhido_meta["id"], "Tese Arcana (Experimentação Metamágica)")
 
     # Humano: Ambição Natural concede +1 talento de classe N1
     if talento_ancestral["id"] == "ambicao_natural":

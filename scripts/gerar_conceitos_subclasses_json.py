@@ -1,8 +1,9 @@
 """Gera e valida o catálogo de Conceitos/Subclasses procedurais (`dados/conceitos_subclasses.json`).
 
-Etapa 2 do projeto: define a proposta temática e mecânica ("norte") de cada
-conceito para todas as 12 classes básicas do Pathfinder 2E, conectando:
-- Subclasse oficial da classe (quando aplicável);
+Etapa 2 (v2.0) do projeto: define 56 conceitos temáticos e mecânicos cobrindo todas
+as 12 classes básicas do Pathfinder 2E. O jogador escolhe a Classe e o Conceito, e
+o motor resolve proceduralmente a Subclasse Oficial mais adequada (exata ou
+dentre `subclasses_oficiais_candidatas`), além de:
 - Prioridade de atributos para distribuição ABCD;
 - Biografias condizentes para geração procedural;
 - Perícias e Saberes prioritários;
@@ -30,9 +31,9 @@ def _conceito(
     classe_id: str,
     classe_nome: str,
     nome: str,
-    subclasse_oficial_id: str,
-    subclasse_oficial_nome: str,
+    subclasses_oficiais: list[tuple[str, str]],
     resumo_proposta: str,
+    sinergia_mecanica: str,
     prioridade_atributos: list[str],
     biografias_recomendadas: list[str],
     pericias_prioritarias: list[str],
@@ -50,17 +51,26 @@ def _conceito(
     armas_distancia_ids: list[str],
     estilo_empunhadura: str,
     conjuracao_recomendada: dict[str, Any] | None = None,
+    conjuracao_por_tradicao: dict[str, dict[str, Any]] | None = None,
+    fonte_divina_preferida: str | None = None,
+    tendencia_preferida: str | None = None,
+    tese_arcana_id: str | None = None,
+    aliado_divino_sugerido: str | None = None,
 ) -> dict[str, Any]:
     """Constrói um objeto de conceito estruturado de forma uniforme."""
+    sub_id_principal, sub_nome_principal = subclasses_oficiais[0]
     return {
         "id": id_conceito,
         "classe_id": classe_id,
         "classe_nome": classe_nome,
         "nome": nome,
         "titulo_completo": f"{classe_nome} — {nome}",
-        "subclasse_oficial_id": subclasse_oficial_id,
-        "subclasse_oficial_nome": subclasse_oficial_nome,
+        "subclasse_oficial_id": sub_id_principal,
+        "subclasse_oficial_nome": sub_nome_principal,
+        "subclasses_oficiais_candidatas": [sid for sid, _ in subclasses_oficiais],
+        "subclasses_oficiais_nomes": [snome for _, snome in subclasses_oficiais],
         "resumo_proposta": resumo_proposta,
+        "sinergia_mecanica": sinergia_mecanica,
         "prioridade_atributos": prioridade_atributos,
         "biografias_recomendadas": biografias_recomendadas,
         "pericias_prioritarias": pericias_prioritarias,
@@ -83,6 +93,11 @@ def _conceito(
             "kit_classe_preferido": classe_nome,
         },
         "conjuracao_recomendada": conjuracao_recomendada,
+        "conjuracao_por_tradicao": conjuracao_por_tradicao,
+        "fonte_divina_preferida": fonte_divina_preferida,
+        "tendencia_preferida": tendencia_preferida,
+        "tese_arcana_id": tese_arcana_id,
+        "aliado_divino_sugerido": aliado_divino_sugerido,
     }
 
 
@@ -104,28 +119,32 @@ def _conjuracao(
 
 
 def construir_conceitos() -> list[dict[str, Any]]:
-    """Define os 38 conceitos iniciais cobrindo todas as 12 classes básicas."""
+    """Define os 56 conceitos cobrindo todas as 12 classes básicas do Livro Básico."""
     return [
         # =====================================================================
-        # 1. ALQUIMISTA (3)
+        # 1. ALQUIMISTA (5)
         # =====================================================================
         _conceito(
-            id_conceito="alquimista_bombardeiro",
+            id_conceito="alquimista_artilheiro_linha_frente",
             classe_id="alquimista",
             classe_nome="Alquimista",
-            nome="Bombardeiro Elemental",
-            subclasse_oficial_id="bombardeiro",
-            subclasse_oficial_nome="Bombardeiro",
+            nome="Artilheiro de Linha de Frente (Bombardeiro Puro)",
+            subclasses_oficiais=[("bombardeiro", "Bombardeiro")],
             resumo_proposta=(
-                "Especialista em arremesso de bombas alquímicas de fogo, ácido, frio e "
-                "eletricidade à distância, controlando áreas e explorando fraquezas."
+                "Artilheiro focado em bombas alquímicas infundidas de dano elemental "
+                "à distância e controle de respingo sem atingir aliados."
+            ),
+            sinergia_mecanica=(
+                "Usa Alquimia Rápida com Bombardeiro Rápido (1º) e Lançador Longínquo (1º) "
+                "para sacar e arremessar bombas longe na mesma rodada; evolui com Respingo "
+                "Calculado (4º), Bombas Direcionais (6º) e Respingo Expandido (10º)."
             ),
             prioridade_atributos=["int", "des", "con", "sab", "car", "for"],
             biografias_recomendadas=["funileiro", "estudioso", "artesao", "batedor"],
             pericias_prioritarias=["manufatura", "acrobatismo", "furtividade", "arcanismo", "sociedade"],
             saber_sugerido="Saber de Alquimia",
             talentos_classe_n1=["bombardeiro_rapido", "lancador_longinquo", "alquimico_sagaz"],
-            talentos_classe_n2_mais=["bomba_de_fumaca"],
+            talentos_classe_n2_mais=["respingo_calculado", "bombas_direcionais", "respingo_expandido"],
             talentos_pericia=["manufatura_alquimica", "especialidade_de_manufatura", "reparo_rapido"],
             talentos_gerais=["iniciativa_incrivel", "veloz", "vitalidade"],
             tracos_ancestralidade_afinidade=["alquimia", "fogo", "engenho", "saber"],
@@ -138,22 +157,64 @@ def construir_conceitos() -> list[dict[str, Any]]:
             estilo_empunhadura="distancia",
         ),
         _conceito(
-            id_conceito="alquimista_cirurgiao",
+            id_conceito="alquimista_sabotador_debilitante",
             classe_id="alquimista",
             classe_nome="Alquimista",
-            nome="Cirurgião de Campo",
-            subclasse_oficial_id="cirurgiao",
-            subclasse_oficial_nome="Cirurgião",
+            nome="Sabotador Debilitante (Controle de Grupo)",
+            subclasses_oficiais=[("bombardeiro", "Bombardeiro"), ("mutagenista", "Mutagenista")],
             resumo_proposta=(
-                "Suporte tático focado em elixires de vida, antídotos e medicina de combate "
-                "para manter o grupo vivo sob pressão."
+                "Tático de campo que sacrifica dano bruto para cegar, enfraquecer, "
+                "desacelerar e deixar chefes desprevenidos com aditivos alquímicos."
+            ),
+            sinergia_mecanica=(
+                "Combina aditivos como Bomba de Fumaça (2º) para dar cobertura ao grupo "
+                "com Bomba Debilitante (6º / 10º / 14º) e Bomba Grudenta (8º) para "
+                "aplicar condições severas em inimigos prioritários."
+            ),
+            prioridade_atributos=["int", "des", "con", "sab", "car", "for"],
+            biografias_recomendadas=["funileiro", "batedor", "criminoso", "estudioso"],
+            pericias_prioritarias=["manufatura", "furtividade", "ladroagem", "acrobatismo", "sociedade"],
+            saber_sugerido="Saber de Alquimia",
+            talentos_classe_n1=["bombardeiro_rapido", "alquimico_sagaz", "lancador_longinquo"],
+            talentos_classe_n2_mais=[
+                "bomba_de_fumaca",
+                "bomba_debilitante",
+                "bomba_grudenta",
+                "bomba_debilitante_maior",
+                "bomba_debilitante_verdadeira",
+            ],
+            talentos_pericia=["manufatura_alquimica", "identificacao_rapida", "esgueirador_de_terreno"],
+            talentos_gerais=["iniciativa_incrivel", "veloz", "vitalidade"],
+            tracos_ancestralidade_afinidade=["alquimia", "furtividade", "engenho"],
+            categoria_armadura_preferida="leve",
+            armaduras_ids=["couro_batido", "couro"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=["adaga", "clava"],
+            armas_distancia_ids=["bomba_alquimica", "funda", "dardo"],
+            estilo_empunhadura="distancia",
+        ),
+        _conceito(
+            id_conceito="alquimista_medico_combate",
+            classe_id="alquimista",
+            classe_nome="Alquimista",
+            nome="Médico de Combate (Suporte e Cura)",
+            subclasses_oficiais=[("cirurgiao", "Cirurgião")],
+            resumo_proposta=(
+                "Curandeiro científico que substitui Medicina por Manufatura e produz "
+                "lotes extras de elixires restauradores para sustentar o grupo."
+            ),
+            sinergia_mecanica=(
+                "Usa o Campo de Pesquisa Cirurgião com ferramentas de curandeiro, "
+                "Alquímico Sagaz (1º) e Familiar Alquímico (1º); escala com Combinar "
+                "Elixires (6º) e Elixir Misericordioso (10º) para curar e remover condições."
             ),
             prioridade_atributos=["int", "sab", "des", "con", "car", "for"],
             biografias_recomendadas=["medico_de_campo", "herbalista", "estudioso", "acolito"],
             pericias_prioritarias=["manufatura", "medicina", "natureza", "diplomacia", "sociedade"],
             saber_sugerido="Saber de Anatomia",
             talentos_classe_n1=["alquimico_sagaz", "familiar_alquimico", "bombardeiro_rapido"],
-            talentos_classe_n2_mais=["resistencia_a_veneno"],
+            talentos_classe_n2_mais=["combinar_elixires", "elixir_misericordioso", "resistencia_a_veneno"],
             talentos_pericia=["medicina_de_batalha", "manufatura_alquimica", "medicina_natural"],
             talentos_gerais=["vitalidade", "recuperacao_rapida", "duro_de_matar"],
             tracos_ancestralidade_afinidade=["cura", "sabedoria", "alquimia"],
@@ -166,22 +227,26 @@ def construir_conceitos() -> list[dict[str, Any]]:
             estilo_empunhadura="uma_mao_e_escudo",
         ),
         _conceito(
-            id_conceito="alquimista_mutagenista",
+            id_conceito="alquimista_aberracao_mutante",
             classe_id="alquimista",
             classe_nome="Alquimista",
-            nome="Mutagenista Bestial",
-            subclasse_oficial_id="mutagenista",
-            subclasse_oficial_nome="Mutagenista",
+            nome="Aberração Mutante (Combatente Corpo a Corpo)",
+            subclasses_oficiais=[("mutagenista", "Mutagenista")],
             resumo_proposta=(
-                "Combatente alquímico que consome mutagênicos para ampliar força e resistência "
-                "física, entrando na linha de frente."
+                "Combatente físico de linha de frente que consome mutagênicos bestiais "
+                "ou irrefreáveis para ampliar força, garras e resistência a dano."
+            ),
+            sinergia_mecanica=(
+                "Combina Força secundária e Campo Mutagenista com Mutagênico Revivificante "
+                "(2º) para recuperar PV, Mutagênico Feral (8º) para ataques naturais letais "
+                "e Mutagênico Invencível (12º) para resistência física."
             ),
             prioridade_atributos=["int", "for", "con", "des", "sab", "car"],
             biografias_recomendadas=["mineiro", "prisioneiro", "operario", "funileiro"],
             pericias_prioritarias=["manufatura", "atletismo", "intimidacao", "medicina", "sobrevivencia"],
             saber_sugerido="Saber de Alquimia",
             talentos_classe_n1=["familiar_alquimico", "alquimico_sagaz"],
-            talentos_classe_n2_mais=["mutagenico_revivificante", "resistencia_a_veneno"],
+            talentos_classe_n2_mais=["mutagenico_revivificante", "mutagenico_feral", "mutagenico_invencivel"],
             talentos_pericia=["carregador_robusto", "olhar_intimidante", "manufatura_alquimica"],
             talentos_gerais=["vitalidade", "duro_de_matar", "proficiencia_com_armas"],
             tracos_ancestralidade_afinidade=["resistencia", "forca", "garras", "mordida"],
@@ -193,55 +258,67 @@ def construir_conceitos() -> list[dict[str, Any]]:
             armas_distancia_ids=["azagaia"],
             estilo_empunhadura="uma_mao",
         ),
-
-        # =====================================================================
-        # 2. BÁRBARO (3)
-        # =====================================================================
         _conceito(
-            id_conceito="barbaro_draconico_duas_maos",
-            classe_id="barbaro",
-            classe_nome="Bárbaro",
-            nome="Fúria Dracônica (Duas Mãos)",
-            subclasse_oficial_id="instinto_de_dragao",
-            subclasse_oficial_nome="Instinto de Dragão",
+            id_conceito="alquimista_mestre_venenos",
+            classe_id="alquimista",
+            classe_nome="Alquimista",
+            nome="Mestre dos Venenos e Infiltração",
+            subclasses_oficiais=[
+                ("mutagenista", "Mutagenista"),
+                ("bombardeiro", "Bombardeiro"),
+                ("cirurgiao", "Cirurgião"),
+            ],
             resumo_proposta=(
-                "Guerreiro furioso canalizando poder dracônico elementar em golpes devastadores "
-                "com armas pesadas de duas mãos."
+                "Infiltrador furtivo que prepara venenos de contato e ferimento para "
+                "revestir armas próprias e dos aliados antes dos combates."
             ),
-            prioridade_atributos=["for", "con", "des", "car", "sab", "int"],
-            biografias_recomendadas=["soldado", "gladiador", "nomade", "mineiro"],
-            pericias_prioritarias=["atletismo", "intimidacao", "sobrevivencia", "acrobatismo", "natureza"],
-            saber_sugerido="Saber de Dragões",
-            talentos_classe_n1=["investida_subita", "intimidacao_enfurecida"],
-            talentos_classe_n2_mais=["finalizacao_furiosa", "sem_escapatoria"],
-            talentos_pericia=["olhar_intimidante", "lutador_titanico", "salto_rapido"],
-            talentos_gerais=["vitalidade", "iniciativa_incrivel", "veloz"],
-            tracos_ancestralidade_afinidade=["fogo", "dragao", "forca", "intimidacao"],
-            categoria_armadura_preferida="media",
-            armaduras_ids=["cota_de_escamas", "gibao_de_peles"],
+            sinergia_mecanica=(
+                "Prioriza Furtividade, Ladroagem e Manufatura para preparar toxinas; "
+                "escala com Resistência a Veneno (2º), Alquimia Poderosa (8º) e "
+                "Envenenador Potente (10º) para elevar a CD dos venenos."
+            ),
+            prioridade_atributos=["int", "des", "con", "sab", "car", "for"],
+            biografias_recomendadas=["criminoso", "charlatao", "batedor", "herbalista"],
+            pericias_prioritarias=["manufatura", "furtividade", "ladroagem", "dissimulacao", "natureza"],
+            saber_sugerido="Saber de Venenos",
+            talentos_classe_n1=["alquimico_sagaz", "familiar_alquimico", "bombardeiro_rapido"],
+            talentos_classe_n2_mais=["resistencia_a_veneno", "alquimia_poderosa", "envenenador_potente"],
+            talentos_pericia=["manufatura_alquimica", "contrabandista_experiente", "furto_subito"],
+            talentos_gerais=["iniciativa_incrivel", "veloz", "duro_de_matar"],
+            tracos_ancestralidade_afinidade=["veneno", "furtividade", "alquimia"],
+            categoria_armadura_preferida="leve",
+            armaduras_ids=["couro_batido", "couro"],
             usa_escudo=False,
             escudos_ids=[],
-            armas_corpo_a_corpo_ids=["machado_longo", "montante", "malho"],
-            armas_distancia_ids=["azagaia"],
-            estilo_empunhadura="duas_maos",
+            armas_corpo_a_corpo_ids=["adaga", "foice"],
+            armas_distancia_ids=["zarabatana", "dardo", "besta_de_mao"],
+            estilo_empunhadura="distancia",
         ),
+
+        # =====================================================================
+        # 2. BÁRBARO (5)
+        # =====================================================================
         _conceito(
-            id_conceito="barbaro_animal_agarrador",
+            id_conceito="barbaro_fera_selvagem",
             classe_id="barbaro",
             classe_nome="Bárbaro",
-            nome="Predador Selvagem",
-            subclasse_oficial_id="instinto_animal",
-            subclasse_oficial_nome="Instinto Animal",
+            nome="Fera Selvagem (Combatente Desarmado)",
+            subclasses_oficiais=[("instinto_animal", "Instinto Animal")],
             resumo_proposta=(
-                "Combatente feroz que assume traços bestiais durante a fúria para agarrar, "
-                "derrubar e dilacerar inimigos."
+                "Lutador primal que entra em Fúria manifestando garras e mandíbulas "
+                "animais que escalam de dano no combate corpo a corpo."
+            ),
+            sinergia_mecanica=(
+                "Instinto Animal fornece ataques naturais ferozes; combina Visão "
+                "Aguçada (1º) com Pele de Animal (6º) para compensar a perda de CA da "
+                "Fúria e Atracar Furioso (12º) para imobilizar presas."
             ),
             prioridade_atributos=["for", "con", "des", "sab", "car", "int"],
             biografias_recomendadas=["cacador", "eremita", "encantador_de_animais", "nomade"],
             pericias_prioritarias=["atletismo", "natureza", "sobrevivencia", "intimidacao", "acrobatismo"],
             saber_sugerido="Saber de Feras",
             talentos_classe_n1=["visao_agucada", "investida_subita"],
-            talentos_classe_n2_mais=["faro_agucado", "retomar_o_folego"],
+            talentos_classe_n2_mais=["pele_de_animal", "furia_animal", "atracar_furioso", "faro_agucado"],
             talentos_pericia=["lutador_titanico", "escalador_de_combate", "forrageador"],
             talentos_gerais=["duro_de_matar", "vitalidade", "veloz"],
             tracos_ancestralidade_afinidade=["garras", "mordida", "sentidos", "selvagem"],
@@ -254,22 +331,26 @@ def construir_conceitos() -> list[dict[str, Any]]:
             estilo_empunhadura="desarmado",
         ),
         _conceito(
-            id_conceito="barbaro_gigante_esmagador",
+            id_conceito="barbaro_colosso_titanico",
             classe_id="barbaro",
             classe_nome="Bárbaro",
-            nome="Colosso Esmagador",
-            subclasse_oficial_id="instinto_de_gigante",
-            subclasse_oficial_nome="Instinto de Gigante",
+            nome="Colosso Titânico (Destruidor de Área)",
+            subclasses_oficiais=[("instinto_de_gigante", "Instinto de Gigante")],
             resumo_proposta=(
-                "Brutamontes imparável que empunha armas massivas de impacto para quebrar "
-                "linhas inimigas com dano bruto."
+                "Brutamontes colossal que empunha armas forjadas para criaturas Grandes "
+                "para esmagar múltiplos inimigos com alcance ampliado."
+            ),
+            sinergia_mecanica=(
+                "Empunhadura Titânica soma bônus massivo de Fúria com montantes ou "
+                "machados grandes; escala com Investida Súbita (1º), Trespassar (6º), "
+                "Estatura de Gigante (6º) e Estatura de Titã (12º)."
             ),
             prioridade_atributos=["for", "con", "sab", "des", "car", "int"],
             biografias_recomendadas=["operario", "gladiador", "prisioneiro", "guarda"],
             pericias_prioritarias=["atletismo", "intimidacao", "sobrevivencia", "medicina"],
             saber_sugerido="Saber de Guerra",
-            talentos_classe_n1=["investida_subita", "arremessador_enfurecido"],
-            talentos_classe_n2_mais=["finalizacao_furiosa", "restabelecer_se"],
+            talentos_classe_n1=["investida_subita", "intimidacao_enfurecida"],
+            talentos_classe_n2_mais=["trespassar", "estatura_de_gigante", "estatura_de_tita", "finalizacao_furiosa"],
             talentos_pericia=["carregador_robusto", "lutador_titanico", "coagir_grupo"],
             talentos_gerais=["vitalidade", "duro_de_matar", "recuperacao_rapida"],
             tracos_ancestralidade_afinidade=["forca", "resistencia", "tamanho"],
@@ -277,588 +358,1014 @@ def construir_conceitos() -> list[dict[str, Any]]:
             armaduras_ids=["cota_de_escamas", "gibao_de_peles"],
             usa_escudo=False,
             escudos_ids=[],
-            armas_corpo_a_corpo_ids=["malho", "clava_pesada", "picareta_pesada"],
+            armas_corpo_a_corpo_ids=["montante", "machado_longo", "malho"],
             armas_distancia_ids=["azagaia"],
             estilo_empunhadura="duas_maos",
         ),
+        _conceito(
+            id_conceito="barbaro_guerreiro_draconico",
+            classe_id="barbaro",
+            classe_nome="Bárbaro",
+            nome="Guerreiro Dracônico (Elemental e Intimidador)",
+            subclasses_oficiais=[("instinto_de_dragao", "Instinto de Dragão")],
+            resumo_proposta=(
+                "Guerreiro feroz que canaliza o poder de um dragão para converter "
+                "o dano adicional da Fúria em dano elemental e intimidar o campo."
+            ),
+            sinergia_mecanica=(
+                "Une Intimidação Enfurecida (1º) para Desmoralizar em plena Fúria "
+                "com Sopro de Fúria do Dragão (6º), Brado Aterrorizante (10º) e "
+                "Asas da Fúria do Dragão (12º) para mobilidade aérea e área elemental."
+            ),
+            prioridade_atributos=["for", "con", "des", "car", "sab", "int"],
+            biografias_recomendadas=["soldado", "gladiador", "nomade", "mineiro"],
+            pericias_prioritarias=["atletismo", "intimidacao", "sobrevivencia", "acrobatismo", "natureza"],
+            saber_sugerido="Saber de Dragões",
+            talentos_classe_n1=["intimidacao_enfurecida", "investida_subita"],
+            talentos_classe_n2_mais=[
+                "sopro_de_furia_do_dragao",
+                "asas_da_furia_do_dragao",
+                "brado_aterrorizante",
+                "finalizacao_furiosa",
+            ],
+            talentos_pericia=["olhar_intimidante", "lutador_titanico", "salto_rapido"],
+            talentos_gerais=["vitalidade", "iniciativa_incrivel", "veloz"],
+            tracos_ancestralidade_afinidade=["fogo", "dragao", "forca", "intimidacao"],
+            categoria_armadura_preferida="media",
+            armaduras_ids=["cota_de_escamas", "gibao_de_peles"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=["machado_longo", "montante", "espada_bastarda"],
+            armas_distancia_ids=["azagaia"],
+            estilo_empunhadura="duas_maos",
+        ),
+        _conceito(
+            id_conceito="barbaro_cacador_assombracoes",
+            classe_id="barbaro",
+            classe_nome="Bárbaro",
+            nome="Caçador de Assombrações (Guerreiro Ancestral)",
+            subclasses_oficiais=[("instinto_espiritual", "Instinto Espiritual")],
+            resumo_proposta=(
+                "Combatente espiritual que canaliza ancestrais para causar dano "
+                "positivo ou negativo e ferir criaturas incorpóreas sem penalidade."
+            ),
+            sinergia_mecanica=(
+                "O Instinto Espiritual concede efeito automático de toque fantasma em "
+                "Fúria; combina Visão Aguçada (1º) e Momento de Clareza (1º) com "
+                "Interferência dos Espíritos (6º) e Ira do Espírito (12º)."
+            ),
+            prioridade_atributos=["for", "con", "sab", "des", "car", "int"],
+            biografias_recomendadas=["eremita", "acolito", "vidente", "nomade"],
+            pericias_prioritarias=["atletismo", "religiao", "ocultismo", "sobrevivencia", "intimidacao"],
+            saber_sugerido="Saber de Espíritos",
+            talentos_classe_n1=["visao_agucada", "investida_subita", "momento_de_clareza"],
+            talentos_classe_n2_mais=["interferencia_dos_espiritos", "ira_do_espirito", "sem_escapatoria"],
+            talentos_pericia=["estudante_do_canone", "identificar_estranhezas", "olhar_intimidante"],
+            talentos_gerais=["duro_de_matar", "vitalidade", "iniciativa_incrivel"],
+            tracos_ancestralidade_afinidade=["espirito", "visao", "religiao", "resistencia"],
+            categoria_armadura_preferida="media",
+            armaduras_ids=["cota_de_escamas", "gibao_de_peles"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=["machado_de_batalha", "espada_longa", "lanca_longa"],
+            armas_distancia_ids=["azagaia"],
+            estilo_empunhadura="uma_mao",
+        ),
+        _conceito(
+            id_conceito="barbaro_incursor_vanguarda",
+            classe_id="barbaro",
+            classe_nome="Bárbaro",
+            nome="Incursor de Vanguarda (Mobilidade e Arremesso)",
+            subclasses_oficiais=[("instinto_do_furor", "Instinto do Furor")],
+            resumo_proposta=(
+                "Escaramuçador agressivo sem anátema que ganha talento extra no 1º "
+                "nível para combinar arremesso enfurecido e avanço imediato."
+            ),
+            sinergia_mecanica=(
+                "O Instinto do Furor libera dois talentos no 1º nível (Investida Súbita "
+                "+ Arremessador Enfurecido), abrindo combate com machadinhas/azagaias "
+                "em Fúria antes de fechar distância com Movimento Veloz (4º)."
+            ),
+            prioridade_atributos=["for", "des", "con", "sab", "car", "int"],
+            biografias_recomendadas=["batedor", "soldado", "cacador", "marinheiro"],
+            pericias_prioritarias=["atletismo", "acrobatismo", "sobrevivencia", "intimidacao", "natureza"],
+            saber_sugerido="Saber de Terreno",
+            talentos_classe_n1=["investida_subita", "arremessador_enfurecido"],
+            talentos_classe_n2_mais=["movimento_veloz", "sem_escapatoria", "salto_subito"],
+            talentos_pericia=["salto_rapido", "escalador_de_combate", "olhar_intimidante"],
+            talentos_gerais=["veloz", "iniciativa_incrivel", "vitalidade"],
+            tracos_ancestralidade_afinidade=["velocidade", "forca", "arremesso"],
+            categoria_armadura_preferida="media",
+            armaduras_ids=["gibao_de_peles", "couro_batido", "cota_de_escamas"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=["machado_de_batalha", "machadinha"],
+            armas_distancia_ids=["azagaia", "dardo"],
+            estilo_empunhadura="uma_mao",
+        ),
 
         # =====================================================================
-        # 3. BARDO (3)
+        # 3. BARDO (4)
         # =====================================================================
         _conceito(
-            id_conceito="bardo_maestro_inspirador",
+            id_conceito="bardo_comandante_inspirador",
             classe_id="bardo",
             classe_nome="Bardo",
-            nome="Maestro Inspirador",
-            subclasse_oficial_id="maestro",
-            subclasse_oficial_nome="Maestro",
+            nome="Comandante Inspirador (Suporte de Grupo)",
+            subclasses_oficiais=[("maestro", "Maestro")],
             resumo_proposta=(
-                "Líder inspirador e conjurador ocultista focado em composições musicais, "
-                "bônus ao grupo e controle emocional."
+                "Líder inspirador de suporte que mantém bônus de ataque e defesa "
+                "ativos para todo o grupo durante praticamente todo o combate."
+            ),
+            sinergia_mecanica=(
+                "A Musa Maestro concede Composição Prolongada (1º) para estender "
+                "Inspirar Coragem ou Inspirar Defesa sem gastar ações toda rodada, "
+                "culminando em Inspirar Heroísmo (8º) para picos de poder."
             ),
             prioridade_atributos=["car", "des", "con", "sab", "int", "for"],
             biografias_recomendadas=["animador", "artista", "emissario", "nobre"],
-            pericias_prioritarias=["performance", "ocultismo", "diplomacia", "dissimulacao", "sociedade"],
-            saber_sugerido="Saber de Teatro",
+            pericias_prioritarias=["performance", "ocultismo", "diplomacia", "intimidacao", "sociedade"],
+            saber_sugerido="Saber de Batalha",
             talentos_classe_n1=["composicao_prolongada", "magia_de_alcance"],
-            talentos_classe_n2_mais=["inspirar_competencia", "expansao_de_truque_magico"],
-            talentos_pericia=["performance_impressionante", "artista_virtuoso", "camarada"],
+            talentos_classe_n2_mais=["inspirar_defesa", "inspirar_heroismo", "tempo_triplo"],
+            talentos_pericia=["performance_impressionante", "impressionar_grupo", "artista_virtuoso"],
             talentos_gerais=["iniciativa_incrivel", "veloz", "vitalidade"],
-            tracos_ancestralidade_afinidade=["carisma", "som", "diplomacia", "magia"],
-            categoria_armadura_preferida="leve",
-            armaduras_ids=["couro_batido", "couro"],
-            usa_escudo=False,
-            escudos_ids=[],
-            armas_corpo_a_corpo_ids=["rapieira", "adaga"],
-            armas_distancia_ids=["funda", "besta_leve"],
-            estilo_empunhadura="conjurador",
-            conjuracao_recomendada=_conjuracao(
-                tradicao="ocultista",
-                tracos_prioritarios=["Mental", "Emoção", "Auditivo", "Cura"],
-                escolas_prioritarias=["Encantamento", "Ilusão"],
-                truques_prioritarios=["escudo_mistico", "projetil_telecinetico", "mensagem", "detectar_magia", "pasmar"],
-                magias_nivel_1_prioritarias=["abrandar", "bencao", "medo", "objeto_ilusorio"],
-            ),
-        ),
-        _conceito(
-            id_conceito="bardo_enigma_erudito",
-            classe_id="bardo",
-            classe_nome="Bardo",
-            nome="Erudito do Enigma",
-            subclasse_oficial_id="enigma",
-            subclasse_oficial_nome="Enigma",
-            resumo_proposta=(
-                "Investigador místico que desvenda segredos antigos com Saber Bárdico e "
-                "magias ocultistas de adivinhação e ilusão."
-            ),
-            prioridade_atributos=["car", "int", "des", "con", "sab", "for"],
-            biografias_recomendadas=["estudioso", "detetive", "advogado", "vidente"],
-            pericias_prioritarias=["ocultismo", "performance", "sociedade", "arcanismo", "religiao"],
-            saber_sugerido="Saber de Mistérios",
-            talentos_classe_n1=["saber_bardico", "magia_de_alcance"],
-            talentos_classe_n2_mais=["etude_do_mestre_do_saber", "expansao_de_truque_magico"],
-            talentos_pericia=["identificar_estranhezas", "reconhecer_magia", "poliglota"],
-            talentos_gerais=["perspicacia_astuta", "iniciativa_incrivel", "vitalidade"],
-            tracos_ancestralidade_afinidade=["conhecimento", "sabedoria", "idiomas", "oculto"],
-            categoria_armadura_preferida="leve",
-            armaduras_ids=["couro", "armadura_acolchoada"],
-            usa_escudo=False,
-            escudos_ids=[],
-            armas_corpo_a_corpo_ids=["adaga", "cajado"],
-            armas_distancia_ids=["besta_leve", "funda"],
-            estilo_empunhadura="conjurador",
-            conjuracao_recomendada=_conjuracao(
-                tradicao="ocultista",
-                tracos_prioritarios=["Detecção", "Mental", "Ilusão", "Adivinhação"],
-                escolas_prioritarias=["Adivinhação", "Ilusão"],
-                truques_prioritarios=["detectar_magia", "ler_aura", "som_fantasma", "escudo_mistico", "mensagem"],
-                magias_nivel_1_prioritarias=["vinculo_mental", "objeto_ilusorio", "disfarce_ilusorio", "golpe_certo"],
-            ),
-        ),
-        _conceito(
-            id_conceito="bardo_polimata_esgrimista",
-            classe_id="bardo",
-            classe_nome="Bardo",
-            nome="Polímata Versátil",
-            subclasse_oficial_id="polimata",
-            subclasse_oficial_nome="Polímata",
-            resumo_proposta=(
-                "Aventureiro multifacetado que combina esgrima ágil, versatilidade social "
-                "e repertório ocultista adaptável."
-            ),
-            prioridade_atributos=["car", "des", "int", "con", "sab", "for"],
-            biografias_recomendadas=["charlatao", "emissario", "acrobata", "marinheiro"],
-            pericias_prioritarias=["performance", "dissimulacao", "acrobatismo", "diplomacia", "ocultismo"],
-            saber_sugerido="Saber de Bardo",
-            talentos_classe_n1=["performance_versatil", "composicao_prolongada"],
-            talentos_classe_n2_mais=["polimata_esoterico", "musa_multifacetada"],
-            talentos_pericia=["mentiroso_charmoso", "distracao_prolongada", "performance_fascinante"],
-            talentos_gerais=["veloz", "iniciativa_incrivel", "passo_aprumado"],
-            tracos_ancestralidade_afinidade=["agilidade", "social", "versatilidade"],
+            tracos_ancestralidade_afinidade=["carisma", "som", "inspiracao", "diplomacia"],
             categoria_armadura_preferida="leve",
             armaduras_ids=["couro_batido", "couro"],
             usa_escudo=False,
             escudos_ids=[],
             armas_corpo_a_corpo_ids=["rapieira", "espada_curta", "adaga"],
-            armas_distancia_ids=["besta_de_mao", "funda"],
+            armas_distancia_ids=["arco_curto", "funda"],
             estilo_empunhadura="uma_mao",
             conjuracao_recomendada=_conjuracao(
                 tradicao="ocultista",
-                tracos_prioritarios=["Ilusão", "Mental", "Força"],
-                escolas_prioritarias=["Ilusão", "Encantamento"],
-                truques_prioritarios=["projetil_telecinetico", "escudo_mistico", "som_fantasma", "prestidigitacao", "luz"],
-                magias_nivel_1_prioritarias=["disfarce_ilusorio", "cativar", "misseis_magicos", "abrandar"],
+                tracos_prioritarios=["emocao", "mental", "sonico", "encantamento"],
+                escolas_prioritarias=["encantamento", "ilusao", "abjuracao"],
+                truques_prioritarios=["orientacao", "escudo_mistico", "pasmar", "detectar_magia", "mensagem"],
+                magias_nivel_1_prioritarias=["bencao", "protecao", "abrandar", "medo"],
+            ),
+        ),
+        _conceito(
+            id_conceito="bardo_erudito_ocultista",
+            classe_id="bardo",
+            classe_nome="Bardo",
+            nome="Erudito Ocultista (Enciclopédia Viva)",
+            subclasses_oficiais=[("enigma", "Enigma")],
+            resumo_proposta=(
+                "Estudioso de mistérios capaz de identificar qualquer monstro, "
+                "maldição ou enigma histórico com uma única perícia universal."
+            ),
+            sinergia_mecanica=(
+                "A Musa Enigma garante Saber Bárdico (1º) como conhecimento "
+                "universal, escalando com Étude do Mestre do Saber (2º), Sabe-Tudo (8º) "
+                "e Hipercognição Verdadeira (14º) para dominar Recordar Conhecimento."
+            ),
+            prioridade_atributos=["car", "int", "des", "con", "sab", "for"],
+            biografias_recomendadas=["estudioso", "detetive", "advogado", "acolito"],
+            pericias_prioritarias=["ocultismo", "performance", "arcanismo", "sociedade", "religiao"],
+            saber_sugerido="Saber Oculto",
+            talentos_classe_n1=["saber_bardico", "magia_de_alcance"],
+            talentos_classe_n2_mais=["etude_do_mestre_do_saber", "sabe_tudo", "hipercognicao_verdadeira"],
+            talentos_pericia=["conhecimento_duvidoso", "identificar_estranhezas", "poliglota"],
+            talentos_gerais=["perspicacia_astuta", "iniciativa_incrivel", "vitalidade"],
+            tracos_ancestralidade_afinidade=["saber", "adivinhacao", "ocultismo", "inteligencia"],
+            categoria_armadura_preferida="leve",
+            armaduras_ids=["couro", "armadura_acolchoada"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=["adaga", "porrete"],
+            armas_distancia_ids=["besta_leve", "funda"],
+            estilo_empunhadura="distancia",
+            conjuracao_recomendada=_conjuracao(
+                tradicao="ocultista",
+                tracos_prioritarios=["adivinhacao", "mental", "deteccao"],
+                escolas_prioritarias=["adivinhacao", "encantamento", "abjuracao"],
+                truques_prioritarios=["detectar_magia", "ler_aura", "orientacao", "mensagem", "escudo_mistico"],
+                magias_nivel_1_prioritarias=["cativar", "bencao", "protecao", "misseis_magicos"],
+            ),
+        ),
+        _conceito(
+            id_conceito="bardo_duelista_gracioso",
+            classe_id="bardo",
+            classe_nome="Bardo",
+            nome="Duelista Gracioso (Esgrimista Arcano)",
+            subclasses_oficiais=[("polimata", "Polímata")],
+            resumo_proposta=(
+                "Esgrimista carismático que usa Performance no lugar das perícias "
+                "sociais e combina esgrima ágil com ilusões e encantamentos."
+            ),
+            sinergia_mecanica=(
+                "A Musa Polímata concede Performance Versátil (1º) para Fintar, "
+                "Desmoralizar e Impressionar usando Performance, apoiado por Destreza "
+                "alta, Polímata Esotérico (2º) e Inspirar Defesa (4º) em combate próximo."
+            ),
+            prioridade_atributos=["car", "des", "con", "sab", "int", "for"],
+            biografias_recomendadas=["animador", "nobre", "charlatao", "gladiador"],
+            pericias_prioritarias=["performance", "ocultismo", "acrobatismo", "diplomacia", "dissimulacao"],
+            saber_sugerido="Saber de Teatro",
+            talentos_classe_n1=["performance_versatil", "magia_de_alcance"],
+            talentos_classe_n2_mais=["polimata_esoterico", "inspirar_defesa", "versatilidade_emblematica"],
+            talentos_pericia=["performance_fascinante", "artista_virtuoso", "gracejos_da_corte"],
+            talentos_gerais=["veloz", "iniciativa_incrivel", "vitalidade"],
+            tracos_ancestralidade_afinidade=["agilidade", "carisma", "ilusao", "arma"],
+            categoria_armadura_preferida="leve",
+            armaduras_ids=["couro_batido", "couro"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=["rapieira", "espada_curta", "chicote"],
+            armas_distancia_ids=["adaga", "arco_curto"],
+            estilo_empunhadura="uma_mao",
+            conjuracao_recomendada=_conjuracao(
+                tradicao="ocultista",
+                tracos_prioritarios=["ilusao", "encantamento", "mental"],
+                escolas_prioritarias=["ilusao", "encantamento", "abjuracao"],
+                truques_prioritarios=["escudo_mistico", "projetil_telecinetico", "som_fantasma", "prestidigitacao", "orientacao"],
+                magias_nivel_1_prioritarias=["disfarce_ilusorio", "cativar", "golpe_certo", "medo"],
+            ),
+        ),
+        _conceito(
+            id_conceito="bardo_controlador_mental",
+            classe_id="bardo",
+            classe_nome="Bardo",
+            nome="Controlador Mental e Disruptor",
+            subclasses_oficiais=[("maestro", "Maestro"), ("enigma", "Enigma")],
+            resumo_proposta=(
+                "Manipulador ocultista especializado em anular efeitos sonoros/visuais "
+                "inimigos e impor condições de medo e controle mental."
+            ),
+            sinergia_mecanica=(
+                "Usa Contraperformance como reação defensiva e alterna entre truques "
+                "mentais/sônicos, Lamento da Condenação (6º), Harmonizar (6º) e "
+                "Conjuração Consistente (6º) com magias ocultistas de controle."
+            ),
+            prioridade_atributos=["car", "des", "con", "sab", "int", "for"],
+            biografias_recomendadas=["charlatao", "vidente", "artista", "emissario"],
+            pericias_prioritarias=["ocultismo", "performance", "intimidacao", "dissimulacao", "diplomacia"],
+            saber_sugerido="Saber Oculto",
+            talentos_classe_n1=["composicao_prolongada", "saber_bardico", "magia_de_alcance"],
+            talentos_classe_n2_mais=["lamento_da_condenacao", "harmonizar", "conjuracao_consistente"],
+            talentos_pericia=["olhar_intimidante", "distracao_prolongada", "mente_na_minha_cara"],
+            talentos_gerais=["iniciativa_incrivel", "perspicacia_astuta", "vitalidade"],
+            tracos_ancestralidade_afinidade=["mental", "ilusao", "sonico", "carisma"],
+            categoria_armadura_preferida="leve",
+            armaduras_ids=["couro_batido", "couro"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=["adaga", "chicote", "porrete"],
+            armas_distancia_ids=["funda", "besta_leve"],
+            estilo_empunhadura="distancia",
+            conjuracao_recomendada=_conjuracao(
+                tradicao="ocultista",
+                tracos_prioritarios=["mental", "medo", "emocao", "ilusao"],
+                escolas_prioritarias=["encantamento", "ilusao", "necromancia"],
+                truques_prioritarios=["pasmar", "som_fantasma", "projetil_telecinetico", "escudo_mistico", "detectar_magia"],
+                magias_nivel_1_prioritarias=["medo", "comando", "sono", "dor_fantasma"],
             ),
         ),
 
         # =====================================================================
-        # 4. CAMPEÃO (3)
+        # 4. CAMPEÃO (5)
         # =====================================================================
         _conceito(
-            id_conceito="campeao_paladino_baluarte",
+            id_conceito="campeao_bastiao_impenetravel",
             classe_id="campeao",
             classe_nome="Campeão",
-            nome="Paladino Baluarte de Escudo",
-            subclasse_oficial_id="paladino",
-            subclasse_oficial_nome="Paladino",
+            nome="Bastião Impenetrável (Tanque de Escudo)",
+            subclasses_oficiais=[("redentor", "Redentor")],
             resumo_proposta=(
-                "Defensor sagrado da linha de frente que protege aliados com Retribuição "
-                "Justa, Bloqueio com Escudo e armadura resistente."
+                "Guardião blindado que enfraquece atacantes inimigos e usa o escudo "
+                "para absorver diretamente o dano direcionado aos aliados."
+            ),
+            sinergia_mecanica=(
+                "Causa Redentor (Vislumbre de Redenção) somada a Bloqueio com Escudo, "
+                "Peso da Culpa (1º), Guardião de Escudo (6º), Bloqueio Rápido (8º) e "
+                "Escudo da Retribuição (10º) com futuro Aliado de Escudo (3º)."
             ),
             prioridade_atributos=["for", "con", "car", "sab", "des", "int"],
-            biografias_recomendadas=["guarda", "soldado", "acolito", "nobre"],
-            pericias_prioritarias=["religiao", "atletismo", "diplomacia", "intimidacao", "medicina"],
+            biografias_recomendadas=["guarda", "acolito", "soldado", "medico_de_campo"],
+            pericias_prioritarias=["religiao", "atletismo", "diplomacia", "medicina", "intimidacao"],
             saber_sugerido="Saber de Heráldica",
             talentos_classe_n1=["peso_da_culpa", "dominio_de_divindade"],
-            talentos_classe_n2_mais=["graca_divina", "juramento_reluzente"],
-            talentos_pericia=["carregador_robusto", "olhar_intimidante", "estudante_do_canone"],
+            talentos_classe_n2_mais=["guardiao_de_escudo", "bloqueio_rapido", "escudo_da_retribuicao"],
+            talentos_pericia=["carregador_robusto", "medicina_de_batalha", "estudante_do_canone"],
             talentos_gerais=["vitalidade", "duro_de_matar", "recuperacao_rapida"],
-            tracos_ancestralidade_afinidade=["protecao", "resistencia", "divino"],
+            tracos_ancestralidade_afinidade=["resistencia", "escudo", "cura", "forca"],
             categoria_armadura_preferida="pesada",
-            armaduras_ids=["cota_de_talas", "cota_de_malha", "cota_de_escamas"],
+            armaduras_ids=["placa_peitoral", "cota_de_malha", "cota_de_escamas"],
             usa_escudo=True,
             escudos_ids=["escudo_de_aco", "escudo_de_madeira"],
             armas_corpo_a_corpo_ids=["espada_longa", "martelo_de_guerra", "maca"],
             armas_distancia_ids=["azagaia"],
             estilo_empunhadura="uma_mao_e_escudo",
+            aliado_divino_sugerido="escudo",
         ),
         _conceito(
-            id_conceito="campeao_redentor_protetor",
+            id_conceito="campeao_cruzado_vingador",
             classe_id="campeao",
             classe_nome="Campeão",
-            nome="Redentor Protetor",
-            subclasse_oficial_id="redentor",
-            subclasse_oficial_nome="Redentor",
+            nome="Cruzado Vingador (Linha de Frente Ofensiva)",
+            subclasses_oficiais=[("paladino", "Paladino")],
             resumo_proposta=(
-                "Guardião compassivo que enfraquece atacantes inimigos, cura feridos com "
-                "Imposição de Mãos e resolve conflitos com diplomacia."
+                "Guerreiro sagrado de linha de frente que pune qualquer adversário "
+                "ousado o bastante para ferir seus companheiros próximos."
+            ),
+            sinergia_mecanica=(
+                "Causa Paladino (Golpe Retributivo) combinada com Represália à "
+                "Distância (1º), Punir o Mal (6º), Ataque de Oportunidade (6º) e "
+                "Espírito da Lâmina Radiante (10º) com futuro Aliado de Lâmina (3º)."
             ),
             prioridade_atributos=["for", "car", "con", "sab", "des", "int"],
-            biografias_recomendadas=["acolito", "medico_de_campo", "emissario", "guarda"],
-            pericias_prioritarias=["religiao", "diplomacia", "medicina", "atletismo", "sociedade"],
-            saber_sugerido="Saber de Teologia",
-            talentos_classe_n1=["peso_da_culpa", "dominio_de_divindade"],
-            talentos_classe_n2_mais=["graca_divina", "juramento_reluzente"],
-            talentos_pericia=["medicina_de_batalha", "camarada", "impressionar_grupo"],
-            talentos_gerais=["vitalidade", "recuperacao_rapida", "iniciativa_incrivel"],
-            tracos_ancestralidade_afinidade=["cura", "diplomacia", "luz"],
-            categoria_armadura_preferida="media",
-            armaduras_ids=["cota_de_malha", "cota_de_escamas"],
-            usa_escudo=True,
-            escudos_ids=["escudo_de_aco", "escudo_de_madeira"],
-            armas_corpo_a_corpo_ids=["maca", "espada_longa"],
-            armas_distancia_ids=["funda"],
-            estilo_empunhadura="uma_mao_e_escudo",
-        ),
-        _conceito(
-            id_conceito="campeao_libertador_duas_maos",
-            classe_id="campeao",
-            classe_nome="Campeão",
-            nome="Libertador Vingador (Duas Mãos)",
-            subclasse_oficial_id="libertador",
-            subclasse_oficial_nome="Libertador",
-            resumo_proposta=(
-                "Campeão móvel que liberta aliados de amarras e pune opressores com "
-                "golpes pesados de espada longa de duas mãos ou haste."
-            ),
-            prioridade_atributos=["for", "con", "car", "des", "sab", "int"],
-            biografias_recomendadas=["prisioneiro", "nomade", "soldado", "cacador_de_recompensas"],
-            pericias_prioritarias=["religiao", "atletismo", "intimidacao", "acrobatismo", "sobrevivencia"],
-            saber_sugerido="Saber de Heráldica",
-            talentos_classe_n1=["passo_desimpedido", "dominio_de_divindade"],
-            talentos_classe_n2_mais=["juramento_vingativo", "graca_divina"],
-            talentos_pericia=["salto_rapido", "lutador_titanico", "olhar_intimidante"],
-            talentos_gerais=["veloz", "vitalidade", "iniciativa_incrivel"],
-            tracos_ancestralidade_afinidade=["mobilidade", "liberdade", "forca"],
-            categoria_armadura_preferida="media",
-            armaduras_ids=["cota_de_malha", "cota_de_escamas"],
+            biografias_recomendadas=["soldado", "acolito", "guarda", "nobre"],
+            pericias_prioritarias=["religiao", "atletismo", "intimidacao", "diplomacia", "sociedade"],
+            saber_sugerido="Saber de Guerra",
+            talentos_classe_n1=["represalia_a_distancia", "dominio_de_divindade"],
+            talentos_classe_n2_mais=["punir_o_mal", "ataque_de_oportunidade", "espirito_da_lamina_radiante"],
+            talentos_pericia=["olhar_intimidante", "lutador_titanico", "estudante_do_canone"],
+            talentos_gerais=["vitalidade", "iniciativa_incrivel", "veloz"],
+            tracos_ancestralidade_afinidade=["arma", "forca", "sagrado", "coragem"],
+            categoria_armadura_preferida="pesada",
+            armaduras_ids=["placa_peitoral", "cota_de_malha", "cota_de_escamas"],
             usa_escudo=False,
             escudos_ids=[],
-            armas_corpo_a_corpo_ids=["montante", "alabarda", "glaive"],
+            armas_corpo_a_corpo_ids=["montante", "espada_bastarda", "machado_longo"],
             armas_distancia_ids=["azagaia"],
             estilo_empunhadura="duas_maos",
+            aliado_divino_sugerido="lamina",
+        ),
+        _conceito(
+            id_conceito="campeao_cavaleiro_montado",
+            classe_id="campeao",
+            classe_nome="Campeão",
+            nome="Cavaleiro Montado (Mobilidade e Investida)",
+            subclasses_oficiais=[
+                ("paladino", "Paladino"),
+                ("redentor", "Redentor"),
+                ("libertador", "Libertador"),
+            ],
+            resumo_proposta=(
+                "Cavaleiro blindado de alta mobilidade projetado para investir em "
+                "campo aberto e comandar uma montaria fiel em combate."
+            ),
+            sinergia_mecanica=(
+                "Prepara o personagem para Aliado Montaria (3º), Cavalo de Guerra "
+                "Leal (6º), Curar Montaria (8º) e Corcel Imponente (10º), apoiado por "
+                "Cavalgar, lança de cavalaria e Natureza/Atletismo elevados."
+            ),
+            prioridade_atributos=["for", "con", "car", "sab", "des", "int"],
+            biografias_recomendadas=["nobre", "soldado", "encantador_de_animais", "guarda"],
+            pericias_prioritarias=["religiao", "atletismo", "natureza", "diplomacia", "intimidacao"],
+            saber_sugerido="Saber de Cavalaria",
+            talentos_classe_n1=[
+                "represalia_a_distancia",
+                "peso_da_culpa",
+                "passo_desimpedido",
+                "dominio_de_divindade",
+            ],
+            talentos_classe_n2_mais=["cavalo_de_guerra_leal", "curar_montaria", "corcel_imponente"],
+            talentos_pericia=["treinar_animal", "carregador_robusto", "estudante_do_canone"],
+            talentos_gerais=["cavalgar", "veloz", "vitalidade"],
+            tracos_ancestralidade_afinidade=["velocidade", "forca", "coragem"],
+            categoria_armadura_preferida="pesada",
+            armaduras_ids=["placa_peitoral", "cota_de_malha", "cota_de_escamas"],
+            usa_escudo=True,
+            escudos_ids=["escudo_de_aco", "escudo_de_madeira"],
+            armas_corpo_a_corpo_ids=["lanca_de_cavalaria", "espada_longa", "martelo_de_guerra"],
+            armas_distancia_ids=["azagaia"],
+            estilo_empunhadura="uma_mao_e_escudo",
+            aliado_divino_sugerido="montaria",
+        ),
+        _conceito(
+            id_conceito="campeao_quebrador_correntes",
+            classe_id="campeao",
+            classe_nome="Campeão",
+            nome="Quebrador de Correntes (Anticontrole e Mobilidade)",
+            subclasses_oficiais=[("libertador", "Libertador")],
+            resumo_proposta=(
+                "Campeão ágil e incansável que liberta aliados de agarrões, paralisia "
+                "e controle enquanto os reposiciona fora do perigo."
+            ),
+            sinergia_mecanica=(
+                "Causa Libertador (Passo Libertador) unida a Passo Desimpedido (1º), "
+                "Aura de Coragem (4º) e Andar Liberador (12º) para manter o grupo "
+                "livre de restrições e medo."
+            ),
+            prioridade_atributos=["for", "des", "con", "car", "sab", "int"],
+            biografias_recomendadas=["prisioneiro", "marinheiro", "nomade", "gladiador"],
+            pericias_prioritarias=["religiao", "atletismo", "acrobatismo", "diplomacia", "sobrevivencia"],
+            saber_sugerido="Saber de Navegação",
+            talentos_classe_n1=["passo_desimpedido", "dominio_de_divindade"],
+            talentos_classe_n2_mais=["aura_de_coragem", "guardiao_de_escudo", "andar_liberador"],
+            talentos_pericia=["salto_rapido", "queda_do_gato", "escalador_de_combate"],
+            talentos_gerais=["veloz", "iniciativa_incrivel", "vitalidade"],
+            tracos_ancestralidade_afinidade=["liberdade", "velocidade", "forca"],
+            categoria_armadura_preferida="media",
+            armaduras_ids=["cota_de_malha", "cota_de_escamas", "gibao_de_peles"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=["espada_bastarda", "machado_longo", "espada_longa"],
+            armas_distancia_ids=["azagaia", "machadinha"],
+            estilo_empunhadura="duas_maos",
+            aliado_divino_sugerido="lamina",
+        ),
+        _conceito(
+            id_conceito="campeao_inquisidor_litanias",
+            classe_id="campeao",
+            classe_nome="Campeão",
+            nome="Inquisidor de Litanias (Caçador de Ímpios)",
+            subclasses_oficiais=[
+                ("paladino", "Paladino"),
+                ("redentor", "Redentor"),
+                ("libertador", "Libertador"),
+            ],
+            resumo_proposta=(
+                "Caçador devoto com Carisma e Religião elevados que utiliza magias de "
+                "devoção, litanias e auras sagradas contra mortos-vivos e ímpios."
+            ),
+            sinergia_mecanica=(
+                "Maximiza Imposição de Mãos ofensiva/curativa e CD divina via Carisma "
+                "alto; escala com Domínio de Divindade (1º), Aura de Coragem (4º) e "
+                "Litania Contra Ira (6º)."
+            ),
+            prioridade_atributos=["for", "car", "con", "sab", "des", "int"],
+            biografias_recomendadas=["acolito", "detetive", "advogado", "guarda"],
+            pericias_prioritarias=["religiao", "intimidacao", "diplomacia", "atletismo", "sociedade"],
+            saber_sugerido="Saber de Teologia",
+            talentos_classe_n1=[
+                "dominio_de_divindade",
+                "represalia_a_distancia",
+                "peso_da_culpa",
+                "passo_desimpedido",
+            ],
+            talentos_classe_n2_mais=["aura_de_coragem", "litania_contra_ira", "juramento_reluzente"],
+            talentos_pericia=["estudante_do_canone", "olhar_intimidante", "identificacao_rapida"],
+            talentos_gerais=["vitalidade", "duro_de_matar", "perspicacia_astuta"],
+            tracos_ancestralidade_afinidade=["religiao", "luz", "carisma", "coragem"],
+            categoria_armadura_preferida="pesada",
+            armaduras_ids=["placa_peitoral", "cota_de_malha", "cota_de_escamas"],
+            usa_escudo=True,
+            escudos_ids=["escudo_de_aco", "escudo_de_madeira"],
+            armas_corpo_a_corpo_ids=["martelo_de_guerra", "espada_longa", "maca_estrela"],
+            armas_distancia_ids=["azagaia"],
+            estilo_empunhadura="uma_mao_e_escudo",
+            aliado_divino_sugerido="lamina",
         ),
 
         # =====================================================================
-        # 5. CLÉRIGO (3)
+        # 5. CLÉRIGO (4)
         # =====================================================================
         _conceito(
-            id_conceito="clerigo_sacerdote_curandeiro",
+            id_conceito="clerigo_hospitalario_sagrado",
             classe_id="clerigo",
             classe_nome="Clérigo",
-            nome="Sacerdote Curandeiro e Protetor",
-            subclasse_oficial_id="sacerdote_enclausurado",
-            subclasse_oficial_nome="Sacerdote Enclausurado",
+            nome="Hospitalário Sagrado (Curandeiro Supremo)",
+            subclasses_oficiais=[("sacerdote_enclausurado", "Sacerdote Enclausurado")],
             resumo_proposta=(
-                "Conjurador divino devotado à cura massiva, remoção de condições e "
-                "proteção sagrada do grupo."
+                "Sacerdote devotado à restauração que amplifica ao máximo sua Fonte "
+                "de Cura com espaços extras de círculo máximo para salvar o grupo."
+            ),
+            sinergia_mecanica=(
+                "Clérigo Claustro com Carisma alto para mais usos da Fonte de Cura, "
+                "Mãos Curandeiras (1º) para dados d10 de cura, Cura Comunal (2º) e "
+                "Socorro Canalizado (8º)."
             ),
             prioridade_atributos=["sab", "car", "con", "des", "int", "for"],
-            biografias_recomendadas=["acolito", "medico_de_campo", "eremita", "herbalista"],
-            pericias_prioritarias=["religiao", "medicina", "diplomacia", "sociedade", "natureza"],
+            biografias_recomendadas=["acolito", "medico_de_campo", "herbalista", "emissario"],
+            pericias_prioritarias=["religiao", "medicina", "diplomacia", "natureza", "sociedade"],
             saber_sugerido="Saber de Teologia",
             talentos_classe_n1=["maos_curandeiras", "iniciado_no_dominio", "magia_de_alcance"],
-            talentos_classe_n2_mais=["cura_comunal", "fonte_versatil"],
-            talentos_pericia=["medicina_de_batalha", "estudante_do_canone", "camarada"],
-            talentos_gerais=["vitalidade", "iniciativa_incrivel", "recuperacao_rapida"],
-            tracos_ancestralidade_afinidade=["cura", "positivo", "sabedoria"],
+            talentos_classe_n2_mais=["cura_comunal", "cura_comunal_aprimorada", "socorro_canalizado"],
+            talentos_pericia=["medicina_de_batalha", "estudante_do_canone", "medicina_natural"],
+            talentos_gerais=["vitalidade", "recuperacao_rapida", "iniciativa_incrivel"],
+            tracos_ancestralidade_afinidade=["cura", "divino", "sabedoria", "vida"],
             categoria_armadura_preferida="sem_armadura",
-            armaduras_ids=["roupa_de_explorador"],
-            usa_escudo=True,
-            escudos_ids=["escudo_de_madeira", "broquel"],
-            armas_corpo_a_corpo_ids=["cajado", "maca_leve"],
+            armaduras_ids=["roupa_de_explorador", "nenhuma_armadura"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=["clava", "adaga"],
             armas_distancia_ids=["funda"],
-            estilo_empunhadura="conjurador",
+            estilo_empunhadura="uma_mao",
             conjuracao_recomendada=_conjuracao(
                 tradicao="divina",
-                tracos_prioritarios=["Cura", "Positivo", "Abjuração", "Luz"],
-                escolas_prioritarias=["Necromancia", "Abjuração", "Encantamento"],
-                truques_prioritarios=["estabilizar", "luz", "escudo_mistico", "orientacao", "detectar_magia"],
-                magias_nivel_1_prioritarias=["curar", "bencao", "santuario", "protecao"],
+                tracos_prioritarios=["cura", "positivo", "luz", "abjuracao"],
+                escolas_prioritarias=["necromancia", "abjuracao", "encantamento"],
+                truques_prioritarios=["estabilizar", "orientacao", "luz", "escudo_mistico", "disrupcao_de_morto_vivo"],
+                magias_nivel_1_prioritarias=["curar", "bencao", "protecao", "santuario"],
             ),
+            fonte_divina_preferida="cura",
         ),
         _conceito(
-            id_conceito="clerigo_capelao_guerra",
+            id_conceito="clerigo_arauto_guerra",
             classe_id="clerigo",
             classe_nome="Clérigo",
-            nome="Capelão da Guerra",
-            subclasse_oficial_id="capelao_da_guerra",
-            subclasse_oficial_nome="Capelão da Guerra",
+            nome="Arauto da Guerra (Sacerdote Blindado)",
+            subclasses_oficiais=[("capelao_da_guerra", "Capelão da Guerra")],
             resumo_proposta=(
-                "Clérigo combatente que marcha de armadura e escudo na linha de frente, "
-                "canalizando poder divino em sua arma predileta."
+                "Sacerdote marcial blindado que luta na linha de frente e canaliza "
+                "energia divina através da própria arma."
+            ),
+            sinergia_mecanica=(
+                "A Doutrina Capelão da Guerra concede armaduras médias, escudo e arma "
+                "favorita; combina Simplicidade Mortal (1º) com Ornar Armamento (2º), "
+                "Canalizar Punição (4º) e Arma Divina (6º)."
             ),
             prioridade_atributos=["sab", "for", "con", "car", "des", "int"],
-            biografias_recomendadas=["soldado", "guarda", "acolito", "medico_de_campo"],
-            pericias_prioritarias=["religiao", "atletismo", "medicina", "intimidacao", "diplomacia"],
+            biografias_recomendadas=["soldado", "acolito", "guarda", "gladiador"],
+            pericias_prioritarias=["religiao", "atletismo", "intimidacao", "medicina", "diplomacia"],
             saber_sugerido="Saber de Guerra",
-            talentos_classe_n1=["castigo_sagrado", "simplicidade_mortal", "maos_agressoras"],
-            talentos_classe_n2_mais=["ornar_armamento", "fonte_versatil"],
+            talentos_classe_n1=["simplicidade_mortal", "maos_curandeiras", "castigo_sagrado"],
+            talentos_classe_n2_mais=["ornar_armamento", "canalizar_punicao", "arma_divina"],
             talentos_pericia=["olhar_intimidante", "medicina_de_batalha", "carregador_robusto"],
-            talentos_gerais=["vitalidade", "duro_de_matar", "bloqueio_com_escudo"],
-            tracos_ancestralidade_afinidade=["forca", "guerra", "resistencia"],
+            talentos_gerais=["vitalidade", "duro_de_matar", "proficiencia_com_armaduras"],
+            tracos_ancestralidade_afinidade=["arma", "forca", "guerra", "resistencia"],
             categoria_armadura_preferida="media",
             armaduras_ids=["cota_de_escamas", "gibao_de_peles", "couro_batido"],
             usa_escudo=True,
             escudos_ids=["escudo_de_aco", "escudo_de_madeira"],
-            armas_corpo_a_corpo_ids=["maca", "lanca", "maca_estrela"],
-            armas_distancia_ids=["azagaia", "funda"],
+            armas_corpo_a_corpo_ids=["maca", "lanca", "adaga"],
+            armas_distancia_ids=["azagaia"],
             estilo_empunhadura="uma_mao_e_escudo",
             conjuracao_recomendada=_conjuracao(
                 tradicao="divina",
-                tracos_prioritarios=["Cura", "Positivo", "Encantamento", "Abjuração"],
-                escolas_prioritarias=["Transmutação", "Encantamento", "Necromancia"],
-                truques_prioritarios=["lanca_divina", "escudo_mistico", "estabilizar", "orientacao", "luz"],
-                magias_nivel_1_prioritarias=["arma_magica", "curar", "bencao", "medo"],
+                tracos_prioritarios=["abjuracao", "encantamento", "positivo"],
+                escolas_prioritarias=["abjuracao", "encantamento", "transmutacao"],
+                truques_prioritarios=["escudo_mistico", "orientacao", "lanca_divina", "estabilizar", "luz"],
+                magias_nivel_1_prioritarias=["arma_magica", "bencao", "curar", "protecao"],
             ),
+            fonte_divina_preferida="cura",
         ),
         _conceito(
-            id_conceito="clerigo_exorcista_radiante",
+            id_conceito="clerigo_ceifador_sombrio",
             classe_id="clerigo",
             classe_nome="Clérigo",
-            nome="Exorcista da Luz",
-            subclasse_oficial_id="sacerdote_enclausurado",
-            subclasse_oficial_nome="Sacerdote Enclausurado",
+            nome="Ceifador Sombrio (Canalizador Negativo)",
+            subclasses_oficiais=[("sacerdote_enclausurado", "Sacerdote Enclausurado")],
             resumo_proposta=(
-                "Caçador sagrado de mortos-vivos e abominações, combinando energia positiva "
-                "ofensiva e proteções contra trevas."
+                "Clérigo de energia negativa que usa Fonte de Ferimento para devastar "
+                "inimigos vivos em área e comandar mortos-vivos."
             ),
-            prioridade_atributos=["sab", "car", "des", "con", "int", "for"],
-            biografias_recomendadas=["acolito", "estudioso", "vidente", "detetive"],
-            pericias_prioritarias=["religiao", "ocultismo", "medicina", "diplomacia", "sociedade"],
-            saber_sugerido="Saber de Mortos-Vivos",
-            talentos_classe_n1=["iniciado_no_dominio", "maos_agressoras", "maos_curandeiras"],
-            talentos_classe_n2_mais=["afastar_mortos_vivos", "expansao_de_truque_magico"],
-            talentos_pericia=["estudante_do_canone", "reconhecer_magia", "identificar_estranhezas"],
-            talentos_gerais=["iniciativa_incrivel", "vitalidade", "perspicacia_astuta"],
-            tracos_ancestralidade_afinidade=["luz", "positivo", "visao"],
+            sinergia_mecanica=(
+                "Fonte de Ferimento com Mãos Agressoras (1º) ou Magia de Alcance (1º) "
+                "e Carisma secundário; evolui com Canalização Direcionada (4º) para "
+                "cones de dano negativo e Comandar Mortos-Vivos (4º)."
+            ),
+            prioridade_atributos=["sab", "car", "con", "des", "int", "for"],
+            biografias_recomendadas=["eremita", "acolito", "vidente", "estudioso"],
+            pericias_prioritarias=["religiao", "intimidacao", "ocultismo", "medicina", "sociedade"],
+            saber_sugerido="Saber Necromântico",
+            talentos_classe_n1=["maos_agressoras", "magia_de_alcance", "iniciado_no_dominio"],
+            talentos_classe_n2_mais=["canalizacao_direcionada", "comandar_mortos_vivos", "infusao_necrotica"],
+            talentos_pericia=["olhar_intimidante", "estudante_do_canone", "identificacao_rapida"],
+            talentos_gerais=["iniciativa_incrivel", "vitalidade", "duro_de_matar"],
+            tracos_ancestralidade_afinidade=["morte", "sombra", "negativo", "intimidacao"],
             categoria_armadura_preferida="sem_armadura",
-            armaduras_ids=["roupa_de_explorador"],
+            armaduras_ids=["roupa_de_explorador", "nenhuma_armadura"],
             usa_escudo=False,
             escudos_ids=[],
-            armas_corpo_a_corpo_ids=["cajado", "adaga"],
+            armas_corpo_a_corpo_ids=["foice", "adaga"],
             armas_distancia_ids=["funda"],
-            estilo_empunhadura="conjurador",
+            estilo_empunhadura="uma_mao",
             conjuracao_recomendada=_conjuracao(
                 tradicao="divina",
-                tracos_prioritarios=["Positivo", "Luz", "Cura", "Detecção"],
-                escolas_prioritarias=["Necromancia", "Evocação", "Abjuração"],
-                truques_prioritarios=["disrupcao_de_morto_vivo", "lanca_divina", "luz", "detectar_magia", "estabilizar"],
-                magias_nivel_1_prioritarias=["curar", "armas_de_disrupcao", "protecao", "detectar_tendencia"],
+                tracos_prioritarios=["negativo", "morte", "medo", "necromancia"],
+                escolas_prioritarias=["necromancia", "encantamento", "evocacao"],
+                truques_prioritarios=["toque_gelido", "lanca_divina", "escudo_mistico", "pasmar", "ler_aura"],
+                magias_nivel_1_prioritarias=["ferir", "ruina", "medo", "raio_de_enfraquecimento"],
             ),
+            fonte_divina_preferida="ferimento",
+            tendencia_preferida="N",
+        ),
+        _conceito(
+            id_conceito="clerigo_teologo_dominios",
+            classe_id="clerigo",
+            classe_nome="Clérigo",
+            nome="Teólogo dos Domínios (Conjurador Especialista)",
+            subclasses_oficiais=[("sacerdote_enclausurado", "Sacerdote Enclausurado")],
+            resumo_proposta=(
+                "Erudito religioso que extrai o máximo das magias de foco dos domínios "
+                "de sua divindade e de conjuração divina versátil."
+            ),
+            sinergia_mecanica=(
+                "Clérigo Claustro recebe Iniciado no Domínio (1º) gratuitamente e "
+                "escala para Domínio Avançado (8º) e Foco de Domínio (12º), "
+                "combinado com Magia de Alcance (1º) e Expansão de Truque Mágico (2º)."
+            ),
+            prioridade_atributos=["sab", "con", "des", "car", "int", "for"],
+            biografias_recomendadas=["acolito", "estudioso", "vidente", "emissario"],
+            pericias_prioritarias=["religiao", "diplomacia", "ocultismo", "sociedade", "medicina"],
+            saber_sugerido="Saber de Teologia",
+            talentos_classe_n1=["iniciado_no_dominio", "magia_de_alcance", "castigo_sagrado"],
+            talentos_classe_n2_mais=["expansao_de_truque_magico", "dominio_avancado", "foco_de_dominio"],
+            talentos_pericia=["estudante_do_canone", "reconhecer_magia", "poliglota"],
+            talentos_gerais=["iniciativa_incrivel", "perspicacia_astuta", "vitalidade"],
+            tracos_ancestralidade_afinidade=["divino", "fogo", "luz", "saber"],
+            categoria_armadura_preferida="sem_armadura",
+            armaduras_ids=["roupa_de_explorador", "nenhuma_armadura"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=["cajado", "clava"],
+            armas_distancia_ids=["funda"],
+            estilo_empunhadura="distancia",
+            conjuracao_recomendada=_conjuracao(
+                tradicao="divina",
+                tracos_prioritarios=["fogo", "luz", "positivo", "divino"],
+                escolas_prioritarias=["evocacao", "abjuracao", "adivinhacao"],
+                truques_prioritarios=["lanca_divina", "disrupcao_de_morto_vivo", "luz", "orientacao", "detectar_magia"],
+                magias_nivel_1_prioritarias=["bencao", "curar", "comando", "protecao"],
+            ),
+            fonte_divina_preferida="cura",
         ),
 
         # =====================================================================
-        # 6. DRUIDA (3)
+        # 6. DRUIDA (4) — Restrição obrigatória: sem armadura/escudo de metal
         # =====================================================================
         _conceito(
-            id_conceito="druida_tempestade_elemental",
+            id_conceito="druida_metamorfo_primal",
             classe_id="druida",
             classe_nome="Druida",
-            nome="Druida da Tempestade Elemental",
-            subclasse_oficial_id="tempestade",
-            subclasse_oficial_nome="Ordem da Tempestade",
+            nome="Metamorfo Primal (Combatente Bestial)",
+            subclasses_oficiais=[("selvagens", "Selvagens")],
             resumo_proposta=(
-                "Conjurador primal ofensivo que invoca relâmpagos, ventos e fúria elemental "
-                "contra os inimigos da natureza."
+                "Druida combatente que assume garras, mordidas e formas bestiais ou "
+                "elementais para lutar diretamente na linha de frente."
             ),
-            prioridade_atributos=["sab", "des", "con", "int", "car", "for"],
-            biografias_recomendadas=["eremita", "marinheiro", "nomade", "vidente"],
-            pericias_prioritarias=["natureza", "sobrevivencia", "acrobatismo", "medicina", "atletismo"],
-            saber_sugerido="Saber de Clima",
-            talentos_classe_n1=["nascido_da_tempestade", "ampliar_magia", "magia_de_alcance"],
-            talentos_classe_n2_mais=["explorador_de_ordem", "resistencia_a_veneno"],
-            talentos_pericia=["especialidade_em_terreno", "forrageador", "medicina_natural"],
-            talentos_gerais=["iniciativa_incrivel", "veloz", "vitalidade"],
-            tracos_ancestralidade_afinidade=["tempestade", "ar", "eletricidade", "elemental"],
+            sinergia_mecanica=(
+                "A Ordem dos Selvagens concede morfia selvagem e Aspecto Selvagem (1º), "
+                "evoluindo para Aspecto de Inseto (6º), Aspecto de Elemental (10º) e "
+                "Aspecto de Dragão (12º) para manter relevância marcial."
+            ),
+            prioridade_atributos=["sab", "for", "con", "des", "int", "car"],
+            biografias_recomendadas=["eremita", "nomade", "cacador", "herbalista"],
+            pericias_prioritarias=["natureza", "atletismo", "intimidacao", "sobrevivencia", "acrobatismo"],
+            saber_sugerido="Saber de Feras",
+            talentos_classe_n1=["aspecto_selvagem", "magia_de_alcance"],
+            talentos_classe_n2_mais=["aspecto_de_inseto", "aspecto_de_elemental", "aspecto_de_dragao"],
+            talentos_pericia=["lutador_titanico", "escalador_de_combate", "forrageador"],
+            talentos_gerais=["vitalidade", "duro_de_matar", "veloz"],
+            tracos_ancestralidade_afinidade=["garras", "mordida", "forca", "selvagem"],
             categoria_armadura_preferida="media",
             armaduras_ids=["gibao_de_peles", "couro_batido", "couro"],
             usa_escudo=True,
             escudos_ids=["escudo_de_madeira"],
-            armas_corpo_a_corpo_ids=["cajado", "lanca"],
+            armas_corpo_a_corpo_ids=["lanca", "clava", "adaga"],
             armas_distancia_ids=["funda"],
-            estilo_empunhadura="conjurador",
+            estilo_empunhadura="uma_mao_e_escudo",
             conjuracao_recomendada=_conjuracao(
                 tradicao="primal",
-                tracos_prioritarios=["Ar", "Eletricidade", "Água", "Fogo", "Frio", "Evocação"],
-                escolas_prioritarias=["Evocação", "Conjuração"],
-                truques_prioritarios=["arco_eletrico", "produzir_chama", "raio_de_gelo", "orientacao", "detectar_magia"],
-                magias_nivel_1_prioritarias=["toque_chocante", "lufada_de_vento", "empurrao_hidraulico", "curar"],
+                tracos_prioritarios=["metamorfose", "transmutacao", "cura"],
+                escolas_prioritarias=["transmutacao", "evocacao", "necromancia"],
+                truques_prioritarios=["produzir_chama", "emaranhape", "orientacao", "estabilizar", "detectar_magia"],
+                magias_nivel_1_prioritarias=["presa_magica", "passos_velozes", "curar", "salto"],
             ),
         ),
         _conceito(
-            id_conceito="druida_animais_companheiro",
+            id_conceito="druida_senhor_matilha",
             classe_id="druida",
             classe_nome="Druida",
-            nome="Guardião das Feras",
-            subclasse_oficial_id="animais",
-            subclasse_oficial_nome="Ordem dos Animais",
+            nome="Senhor da Matilha (Dupla Tática)",
+            subclasses_oficiais=[("animais", "Animais")],
             resumo_proposta=(
-                "Protetor dos ermos acompanhado por um companheiro animal leal, combinando "
-                "magia primal de suporte, plantas e cura."
+                "Guardião selvagem que entra em combate acompanhado por uma fera "
+                "leal para flanquear, derrubar e pressionar adversários juntos."
             ),
-            prioridade_atributos=["sab", "des", "con", "for", "car", "int"],
-            biografias_recomendadas=["encantador_de_animais", "cacador", "herbalista", "lavrador"],
-            pericias_prioritarias=["natureza", "sobrevivencia", "medicina", "atletismo", "diplomacia"],
-            saber_sugerido="Saber de Animais",
-            talentos_classe_n1=["companheiro_animal", "ampliar_magia"],
-            talentos_classe_n2_mais=["chamado_dos_ermos", "explorador_de_ordem"],
-            talentos_pericia=["treinar_animal", "medicina_natural", "rastreador_experiente"],
-            talentos_gerais=["vitalidade", "cavalgar", "iniciativa_incrivel"],
-            tracos_ancestralidade_afinidade=["animal", "planta", "natureza", "cura"],
+            sinergia_mecanica=(
+                "A Ordem Animal concede Companheiro Animal (1º) gratuito, escalando "
+                "com Companheiro Animal Maduro (4º), Companheiro Incrível (8º) e "
+                "Companheiro Especializado (14º) mais magias de apoio."
+            ),
+            prioridade_atributos=["sab", "con", "des", "for", "car", "int"],
+            biografias_recomendadas=["encantador_de_animais", "cacador", "herbalista", "batedor"],
+            pericias_prioritarias=["natureza", "sobrevivencia", "atletismo", "medicina", "diplomacia"],
+            saber_sugerido="Saber de Fauna",
+            talentos_classe_n1=["companheiro_animal", "magia_de_alcance"],
+            talentos_classe_n2_mais=["companheiro_animal_maduro", "companheiro_incrivel", "companheiro_especializado"],
+            talentos_pericia=["treinar_animal", "medicina_natural", "forrageador"],
+            talentos_gerais=["cavalgar", "vitalidade", "iniciativa_incrivel"],
+            tracos_ancestralidade_afinidade=["animal", "natureza", "floresta"],
             categoria_armadura_preferida="media",
-            armaduras_ids=["gibao_de_peles", "couro"],
+            armaduras_ids=["gibao_de_peles", "couro_batido", "couro"],
             usa_escudo=True,
             escudos_ids=["escudo_de_madeira"],
-            armas_corpo_a_corpo_ids=["lanca", "cajado"],
+            armas_corpo_a_corpo_ids=["lanca_longa", "lanca", "foice"],
             armas_distancia_ids=["funda", "dardo"],
             estilo_empunhadura="uma_mao_e_escudo",
             conjuracao_recomendada=_conjuracao(
                 tradicao="primal",
-                tracos_prioritarios=["Cura", "Planta", "Positivo", "Transmutação"],
-                escolas_prioritarias=["Conjuração", "Transmutação", "Necromancia"],
-                truques_prioritarios=["emaranhape", "estabilizar", "orientacao", "luz", "detectar_magia"],
-                magias_nivel_1_prioritarias=["curar", "presa_magica", "convocar_animal", "passos_largos"],
+                tracos_prioritarios=["animal", "cura", "transmutacao"],
+                escolas_prioritarias=["conjuracao", "transmutacao", "necromancia"],
+                truques_prioritarios=["orientacao", "estabilizar", "emaranhape", "produzir_chama", "arco_eletrico"],
+                magias_nivel_1_prioritarias=["presa_magica", "convocar_animal", "curar", "passos_largos"],
             ),
         ),
         _conceito(
-            id_conceito="druida_selvagem_metamorfo",
+            id_conceito="druida_furia_elementos",
             classe_id="druida",
             classe_nome="Druida",
-            nome="Metamorfo Selvagem",
-            subclasse_oficial_id="selvagens",
-            subclasse_oficial_nome="Ordem Selvagem",
+            nome="Fúria dos Elementos (Artilheiro Primal)",
+            subclasses_oficiais=[("tempestade", "Tempestade")],
             resumo_proposta=(
-                "Druida de combate corpo a corpo que utiliza formas selvagens, garras "
-                "mágicas e vigor físico no coração da batalha."
+                "Conjurador primal ofensivo que invoca raios, ventos e tempestades "
+                "para causar dano elemental em área sem sofrer penalidades climáticas."
             ),
-            prioridade_atributos=["sab", "for", "con", "des", "car", "int"],
-            biografias_recomendadas=["nomade", "cacador", "eremita", "operario"],
-            pericias_prioritarias=["natureza", "atletismo", "sobrevivencia", "acrobatismo", "intimidacao"],
-            saber_sugerido="Saber de Feras",
-            talentos_classe_n1=["aspecto_selvagem", "ampliar_magia"],
-            talentos_classe_n2_mais=["explorador_de_ordem", "resistencia_a_veneno"],
-            talentos_pericia=["lutador_titanico", "escalador_de_combate", "forrageador"],
-            talentos_gerais=["vitalidade", "duro_de_matar", "veloz"],
-            tracos_ancestralidade_afinidade=["polimorfia", "garras", "forca", "selvagem"],
+            sinergia_mecanica=(
+                "Ordem da Tempestade começa com 2 Pontos de Foco, surto da tempestade "
+                "e Nascido da Tempestade (1º); escala com Ampliar Magia (1º), "
+                "Retribuição da Tempestade (6º) e Invocador de Ventos (8º)."
+            ),
+            prioridade_atributos=["sab", "des", "con", "int", "car", "for"],
+            biografias_recomendadas=["marinheiro", "nomade", "eremita", "estudioso"],
+            pericias_prioritarias=["natureza", "acrobatismo", "sobrevivencia", "medicina", "atletismo"],
+            saber_sugerido="Saber de Clima",
+            talentos_classe_n1=["nascido_da_tempestade", "ampliar_magia", "magia_de_alcance"],
+            talentos_classe_n2_mais=["retribuicao_da_tempestade", "invocador_de_ventos", "energia_avassaladora"],
+            talentos_pericia=["esgueirador_de_terreno", "forrageador", "reconhecer_magia"],
+            talentos_gerais=["iniciativa_incrivel", "veloz", "vitalidade"],
+            tracos_ancestralidade_afinidade=["eletricidade", "vento", "tempestade", "ar"],
             categoria_armadura_preferida="media",
-            armaduras_ids=["gibao_de_peles", "couro_batido"],
+            armaduras_ids=["gibao_de_peles", "couro_batido", "couro"],
             usa_escudo=True,
             escudos_ids=["escudo_de_madeira"],
-            armas_corpo_a_corpo_ids=["lanca", "clava", "foice"],
-            armas_distancia_ids=["azagaia"],
+            armas_corpo_a_corpo_ids=["cajado", "lanca", "adaga"],
+            armas_distancia_ids=["funda"],
             estilo_empunhadura="uma_mao_e_escudo",
             conjuracao_recomendada=_conjuracao(
                 tradicao="primal",
-                tracos_prioritarios=["Polimorfia", "Transmutação", "Cura"],
-                escolas_prioritarias=["Transmutação", "Necromancia"],
-                truques_prioritarios=["produzir_chama", "estabilizar", "orientacao", "emaranhape"],
-                magias_nivel_1_prioritarias=["presa_magica", "passos_largos", "forma_de_peste", "curar"],
+                tracos_prioritarios=["eletricidade", "ar", "fogo", "frio", "agua"],
+                escolas_prioritarias=["evocacao", "conjuracao"],
+                truques_prioritarios=["arco_eletrico", "produzir_chama", "raio_de_gelo", "emaranhape", "detectar_magia"],
+                magias_nivel_1_prioritarias=["toque_chocante", "maos_flamejantes", "lufada_de_vento", "empurrao_hidraulico"],
+            ),
+        ),
+        _conceito(
+            id_conceito="druida_guardiao_botanico",
+            classe_id="druida",
+            classe_nome="Druida",
+            nome="Guardião Botânico (Suporte e Familiar)",
+            subclasses_oficiais=[("folha", "Folha")],
+            resumo_proposta=(
+                "Protetor das florestas focado em cura constante fora de combate, "
+                "controle de terreno natural e apoio de um familiar planta."
+            ),
+            sinergia_mecanica=(
+                "A Ordem da Folha concede Familiar Leshy (1º) e a magia boa baga; "
+                "escala com Familiar Melhorado (2º), Empatia Verde (6º) e Aspecto de "
+                "Planta (10º) com magias de controle vegetal e cura."
+            ),
+            prioridade_atributos=["sab", "con", "des", "car", "int", "for"],
+            biografias_recomendadas=["herbalista", "eremita", "lavrador", "medico_de_campo"],
+            pericias_prioritarias=["natureza", "diplomacia", "medicina", "sobrevivencia", "manufatura"],
+            saber_sugerido="Saber de Botânica",
+            talentos_classe_n1=["familiar_leshy", "magia_de_alcance", "ampliar_magia"],
+            talentos_classe_n2_mais=["familiar_melhorado", "empatia_verde", "aspecto_de_planta"],
+            talentos_pericia=["medicina_natural", "forrageador", "medicina_de_batalha"],
+            talentos_gerais=["vitalidade", "recuperacao_rapida", "duro_de_matar"],
+            tracos_ancestralidade_afinidade=["planta", "floresta", "cura", "fada"],
+            categoria_armadura_preferida="leve",
+            armaduras_ids=["couro", "gibao_de_peles", "armadura_acolchoada"],
+            usa_escudo=True,
+            escudos_ids=["escudo_de_madeira"],
+            armas_corpo_a_corpo_ids=["cajado", "foice", "clava"],
+            armas_distancia_ids=["funda"],
+            estilo_empunhadura="uma_mao_e_escudo",
+            conjuracao_recomendada=_conjuracao(
+                tradicao="primal",
+                tracos_prioritarios=["planta", "cura", "terra", "agua"],
+                escolas_prioritarias=["conjuracao", "transmutacao", "necromancia"],
+                truques_prioritarios=["emaranhape", "estabilizar", "orientacao", "jorro_acido", "luz"],
+                magias_nivel_1_prioritarias=["bastao_de_abrunheiro", "curar", "convocar_planta_ou_fungo", "passos_sem_pegadas"],
             ),
         ),
 
         # =====================================================================
-        # 7. FEITICEIRO (3)
+        # 7. FEITICEIRO (4)
         # =====================================================================
         _conceito(
-            id_conceito="feiticeiro_elemental_piromante",
+            id_conceito="feiticeiro_artifice_elemental_draconico",
             classe_id="feiticeiro",
             classe_nome="Feiticeiro",
-            nome="Feiticeiro Elemental",
-            subclasse_oficial_id="elemental",
-            subclasse_oficial_nome="Linhagem Elemental",
+            nome="Artífice Elemental / Dracônico (Explosão Bruta)",
+            subclasses_oficiais=[("draconica", "Dracônica"), ("elemental", "Elemental")],
             resumo_proposta=(
-                "Conjurador espontâneo primal de alto impacto cujo sangue canaliza chamas, "
-                "geadas, ventos e tempestades."
+                "Conjurador espontâneo destrutivo focado em bônus direto no dano "
+                "elemental e explosões em área para limpar grupos inteiros."
+            ),
+            sinergia_mecanica=(
+                "Linhagem Dracônica ou Elemental soma bônus de magia sanguínea no dano, "
+                "potencializado por Feitiçaria Perigosa (1º), Ampliar Magia (1º), "
+                "Linhagem Avançada (6º) e Energia Avassaladora (10º)."
             ),
             prioridade_atributos=["car", "des", "con", "sab", "int", "for"],
-            biografias_recomendadas=["nomade", "eremita", "marinheiro", "mineiro"],
-            pericias_prioritarias=["natureza", "intimidacao", "acrobatismo", "sobrevivencia", "diplomacia"],
+            biografias_recomendadas=["nobre", "vidente", "nomade", "charlatao"],
+            pericias_prioritarias=["arcanismo", "natureza", "intimidacao", "acrobatismo", "diplomacia"],
             saber_sugerido="Saber Elemental",
             talentos_classe_n1=["feiticaria_perigosa", "ampliar_magia", "magia_de_alcance"],
-            talentos_classe_n2_mais=["expansao_de_truque_magico"],
-            talentos_pericia=["olhar_intimidante", "reconhecer_magia", "forrageador"],
+            talentos_classe_n2_mais=["linhagem_avancada", "resistencia_de_linhagem", "energia_avassaladora"],
+            talentos_pericia=["olhar_intimidante", "reconhecer_magia", "identificacao_rapida"],
             talentos_gerais=["iniciativa_incrivel", "veloz", "vitalidade"],
-            tracos_ancestralidade_afinidade=["fogo", "elemental", "ar", "agua", "terra"],
+            tracos_ancestralidade_afinidade=["fogo", "dragao", "elemental", "evocacao"],
             categoria_armadura_preferida="sem_armadura",
-            armaduras_ids=["roupa_de_explorador"],
+            armaduras_ids=["roupa_de_explorador", "nenhuma_armadura"],
             usa_escudo=False,
             escudos_ids=[],
-            armas_corpo_a_corpo_ids=["adaga", "cajado"],
-            armas_distancia_ids=["funda"],
-            estilo_empunhadura="conjurador",
+            armas_corpo_a_corpo_ids=["adaga", "clava"],
+            armas_distancia_ids=["besta_leve", "funda"],
+            estilo_empunhadura="distancia",
+            conjuracao_recomendada=_conjuracao(
+                tradicao="arcana",
+                tracos_prioritarios=["fogo", "eletricidade", "frio", "acido", "evocacao"],
+                escolas_prioritarias=["evocacao", "abjuracao"],
+                truques_prioritarios=["produzir_chama", "arco_eletrico", "raio_de_gelo", "escudo_mistico", "detectar_magia"],
+                magias_nivel_1_prioritarias=["maos_flamejantes", "misseis_magicos", "toque_chocante", "armadura_mistica"],
+            ),
+            conjuracao_por_tradicao={
+                "arcana": _conjuracao(
+                    tradicao="arcana",
+                    tracos_prioritarios=["fogo", "eletricidade", "frio", "acido", "evocacao"],
+                    escolas_prioritarias=["evocacao", "abjuracao"],
+                    truques_prioritarios=["produzir_chama", "arco_eletrico", "raio_de_gelo", "escudo_mistico", "detectar_magia"],
+                    magias_nivel_1_prioritarias=["maos_flamejantes", "misseis_magicos", "toque_chocante", "armadura_mistica"],
+                ),
+                "primal": _conjuracao(
+                    tradicao="primal",
+                    tracos_prioritarios=["fogo", "eletricidade", "frio", "ar", "terra"],
+                    escolas_prioritarias=["evocacao", "transmutacao"],
+                    truques_prioritarios=["produzir_chama", "arco_eletrico", "raio_de_gelo", "jorro_acido", "detectar_magia"],
+                    magias_nivel_1_prioritarias=["maos_flamejantes", "toque_chocante", "empurrao_hidraulico", "lufada_de_vento"],
+                ),
+            },
+        ),
+        _conceito(
+            id_conceito="feiticeiro_manipulador_feerico_aberrante",
+            classe_id="feiticeiro",
+            classe_nome="Feiticeiro",
+            nome="Manipulador Feérico / Aberrante (Controle Mental)",
+            subclasses_oficiais=[("feerica", "Feérica"), ("aberrante", "Aberrante")],
+            resumo_proposta=(
+                "Conjurador sutil especializado em ilusões, encantamentos e "
+                "debilitamentos mentais em cenas sociais ou emboscadas."
+            ),
+            sinergia_mecanica=(
+                "Linhagem Feérica ou Aberrante combina Magia de Alcance (1º) e "
+                "Familiar (1º) com Expansão de Truque Mágico (2º), Linhagem Avançada "
+                "(6º) e Conjuração Consistente (6º) para controle tático."
+            ),
+            prioridade_atributos=["car", "des", "con", "sab", "int", "for"],
+            biografias_recomendadas=["charlatao", "vidente", "emissario", "animador"],
+            pericias_prioritarias=["dissimulacao", "diplomacia", "natureza", "ocultismo", "furtividade"],
+            saber_sugerido="Saber de Fadas",
+            talentos_classe_n1=["magia_de_alcance", "familiar", "ampliar_magia"],
+            talentos_classe_n2_mais=["expansao_de_truque_magico", "linhagem_avancada", "conjuracao_consistente"],
+            talentos_pericia=["mentiroso_charmoso", "distracao_prolongada", "identificar_estranhezas"],
+            talentos_gerais=["iniciativa_incrivel", "perspicacia_astuta", "vitalidade"],
+            tracos_ancestralidade_afinidade=["fada", "ilusao", "mental", "carisma"],
+            categoria_armadura_preferida="sem_armadura",
+            armaduras_ids=["roupa_de_explorador", "nenhuma_armadura"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=["adaga", "clava"],
+            armas_distancia_ids=["funda", "besta_leve"],
+            estilo_empunhadura="distancia",
             conjuracao_recomendada=_conjuracao(
                 tradicao="primal",
-                tracos_prioritarios=["Fogo", "Água", "Ar", "Frio", "Eletricidade", "Ácido", "Evocação"],
-                escolas_prioritarias=["Evocação"],
-                truques_prioritarios=["produzir_chama", "arco_eletrico", "raio_de_gelo", "jorro_acido", "detectar_magia"],
-                magias_nivel_1_prioritarias=["maos_flamejantes", "empurrao_hidraulico", "toque_chocante", "curar"],
+                tracos_prioritarios=["mental", "ilusao", "encantamento", "emocao"],
+                escolas_prioritarias=["encantamento", "ilusao", "adivinhacao"],
+                truques_prioritarios=["emaranhape", "luzes_dancantes", "prestidigitacao", "orientacao", "detectar_magia"],
+                magias_nivel_1_prioritarias=["cativar", "medo", "convocar_fada", "passos_sem_pegadas"],
+            ),
+            conjuracao_por_tradicao={
+                "primal": _conjuracao(
+                    tradicao="primal",
+                    tracos_prioritarios=["mental", "ilusao", "encantamento", "emocao"],
+                    escolas_prioritarias=["encantamento", "ilusao", "adivinhacao"],
+                    truques_prioritarios=["emaranhape", "luzes_dancantes", "prestidigitacao", "orientacao", "detectar_magia"],
+                    magias_nivel_1_prioritarias=["cativar", "medo", "convocar_fada", "passos_sem_pegadas"],
+                ),
+                "ocultista": _conjuracao(
+                    tradicao="ocultista",
+                    tracos_prioritarios=["mental", "ilusao", "encantamento", "emocao"],
+                    escolas_prioritarias=["encantamento", "ilusao", "adivinhacao"],
+                    truques_prioritarios=["pasmar", "som_fantasma", "projetil_telecinetico", "escudo_mistico", "detectar_magia"],
+                    magias_nivel_1_prioritarias=["cativar", "medo", "sono", "disfarce_ilusorio"],
+                ),
+            },
+        ),
+        _conceito(
+            id_conceito="feiticeiro_emissario_celestial_infernal",
+            classe_id="feiticeiro",
+            classe_nome="Feiticeiro",
+            nome="Emissário Celestial ou Infernal (Suporte ou Maldição)",
+            subclasses_oficiais=[
+                ("angelical", "Angelical"),
+                ("diabolica", "Diabólica"),
+                ("demoniaca", "Demoníaca"),
+            ],
+            resumo_proposta=(
+                "Canalizador espontâneo de magia divina que abençoa aliados com "
+                "aura angelical ou amaldiçoa inimigos com fogo infernal."
+            ),
+            sinergia_mecanica=(
+                "Linhagens Divinas combinam magias de linhagem (halo angelical / "
+                "fogo infernal / gula demoníaca) com Magia de Alcance (1º), Feitiçaria "
+                "Perigosa (1º) e Evolução Divina (4º) para espaços extras de curar/ferir."
+            ),
+            prioridade_atributos=["car", "con", "des", "sab", "int", "for"],
+            biografias_recomendadas=["acolito", "emissario", "nobre", "advogado"],
+            pericias_prioritarias=["religiao", "diplomacia", "intimidacao", "dissimulacao", "medicina"],
+            saber_sugerido="Saber Planar",
+            talentos_classe_n1=["magia_de_alcance", "feiticaria_perigosa", "ampliar_magia"],
+            talentos_classe_n2_mais=["evolucao_divina", "linhagem_avancada", "resistencia_de_linhagem"],
+            talentos_pericia=["estudante_do_canone", "olhar_intimidante", "gracejos_da_corte"],
+            talentos_gerais=["vitalidade", "duro_de_matar", "iniciativa_incrivel"],
+            tracos_ancestralidade_afinidade=["divino", "fogo", "cura", "carisma"],
+            categoria_armadura_preferida="sem_armadura",
+            armaduras_ids=["roupa_de_explorador", "nenhuma_armadura"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=["adaga", "clava"],
+            armas_distancia_ids=["funda", "besta_leve"],
+            estilo_empunhadura="distancia",
+            conjuracao_recomendada=_conjuracao(
+                tradicao="divina",
+                tracos_prioritarios=["cura", "divino", "fogo", "medo"],
+                escolas_prioritarias=["encantamento", "abjuracao", "necromancia"],
+                truques_prioritarios=["lanca_divina", "escudo_mistico", "orientacao", "estabilizar", "luz"],
+                magias_nivel_1_prioritarias=["curar", "bencao", "ferir", "comando"],
             ),
         ),
         _conceito(
-            id_conceito="feiticeiro_draconico_arcano",
+            id_conceito="feiticeiro_arquimago_versatil",
             classe_id="feiticeiro",
             classe_nome="Feiticeiro",
-            nome="Feiticeiro Dracônico",
-            subclasse_oficial_id="draconica",
-            subclasse_oficial_nome="Linhagem Dracônica",
+            nome="Arquimago Versátil (Mestre do Repertório)",
+            subclasses_oficiais=[("imperial", "Imperial")],
             resumo_proposta=(
-                "Herdeiro de sangue dracônico focado em magia arcana explosiva, presença "
-                "imponente e defesa mística."
+                "Herdeiro de linhagem arcana antiga que amplia perícias com magia "
+                "ancestral e ganha acesso a grimório auxiliar mesmo sendo espontâneo."
+            ),
+            sinergia_mecanica=(
+                "Linhagem Imperial combina Contramágica (1º), Magia de Alcance (1º) "
+                "e Familiar (1º) com Evolução Arcana (4º) e Expansão de Truque Mágico "
+                "(2º) para máxima flexibilidade de magias conhecidas."
             ),
             prioridade_atributos=["car", "des", "con", "int", "sab", "for"],
-            biografias_recomendadas=["nobre", "emissario", "estudioso", "charlatao"],
-            pericias_prioritarias=["arcanismo", "intimidacao", "diplomacia", "dissimulacao", "acrobatismo"],
-            saber_sugerido="Saber de Dragões",
-            talentos_classe_n1=["feiticaria_perigosa", "magia_de_alcance", "contramagica"],
-            talentos_classe_n2_mais=["expansao_de_truque_magico"],
-            talentos_pericia=["olhar_intimidante", "sentido_arcano", "reconhecer_magia"],
-            talentos_gerais=["iniciativa_incrivel", "vitalidade", "perspicacia_astuta"],
-            tracos_ancestralidade_afinidade=["dragao", "arcano", "fogo", "carisma"],
+            biografias_recomendadas=["estudioso", "nobre", "emissario", "advogado"],
+            pericias_prioritarias=["arcanismo", "sociedade", "diplomacia", "ocultismo", "acrobatismo"],
+            saber_sugerido="Saber Arcano",
+            talentos_classe_n1=["contramagica", "magia_de_alcance", "familiar"],
+            talentos_classe_n2_mais=["evolucao_arcana", "expansao_de_truque_magico", "linhagem_avancada"],
+            talentos_pericia=["sentido_arcano", "reconhecer_magia", "identificacao_rapida"],
+            talentos_gerais=["iniciativa_incrivel", "perspicacia_astuta", "vitalidade"],
+            tracos_ancestralidade_afinidade=["arcano", "saber", "inteligencia"],
             categoria_armadura_preferida="sem_armadura",
-            armaduras_ids=["roupa_de_explorador"],
+            armaduras_ids=["roupa_de_explorador", "nenhuma_armadura"],
             usa_escudo=False,
             escudos_ids=[],
             armas_corpo_a_corpo_ids=["adaga", "cajado"],
             armas_distancia_ids=["besta_leve", "funda"],
-            estilo_empunhadura="conjurador",
+            estilo_empunhadura="distancia",
             conjuracao_recomendada=_conjuracao(
                 tradicao="arcana",
-                tracos_prioritarios=["Evocação", "Abjuração", "Força", "Fogo"],
-                escolas_prioritarias=["Evocação", "Abjuração"],
-                truques_prioritarios=["escudo_mistico", "produzir_chama", "raio_de_gelo", "projetil_telecinetico", "detectar_magia"],
-                magias_nivel_1_prioritarias=["misseis_magicos", "armadura_mistica", "maos_flamejantes", "medo"],
-            ),
-        ),
-        _conceito(
-            id_conceito="feiticeiro_angelical_suporte",
-            classe_id="feiticeiro",
-            classe_nome="Feiticeiro",
-            nome="Feiticeiro Angelical",
-            subclasse_oficial_id="angelical",
-            subclasse_oficial_nome="Linhagem Angelical",
-            resumo_proposta=(
-                "Portador de centelha celestial voltado à tradição divina, combinando cura "
-                "espontânea, bênçãos e diplomacia inspiradora."
-            ),
-            prioridade_atributos=["car", "con", "des", "sab", "int", "for"],
-            biografias_recomendadas=["acolito", "emissario", "nobre", "medico_de_campo"],
-            pericias_prioritarias=["religiao", "diplomacia", "medicina", "performance", "sociedade"],
-            saber_sugerido="Saber Celestial",
-            talentos_classe_n1=["familiar", "ampliar_magia", "magia_de_alcance"],
-            talentos_classe_n2_mais=["familiar_melhorado", "expansao_de_truque_magico"],
-            talentos_pericia=["camarada", "impressionar_grupo", "medicina_de_batalha"],
-            talentos_gerais=["vitalidade", "recuperacao_rapida", "iniciativa_incrivel"],
-            tracos_ancestralidade_afinidade=["celestial", "luz", "cura", "carisma"],
-            categoria_armadura_preferida="sem_armadura",
-            armaduras_ids=["roupa_de_explorador"],
-            usa_escudo=False,
-            escudos_ids=[],
-            armas_corpo_a_corpo_ids=["adaga", "cajado"],
-            armas_distancia_ids=["funda"],
-            estilo_empunhadura="conjurador",
-            conjuracao_recomendada=_conjuracao(
-                tradicao="divina",
-                tracos_prioritarios=["Cura", "Positivo", "Luz", "Abjuração"],
-                escolas_prioritarias=["Necromancia", "Encantamento", "Abjuração"],
-                truques_prioritarios=["estabilizar", "luz", "lanca_divina", "escudo_mistico", "orientacao"],
-                magias_nivel_1_prioritarias=["curar", "bencao", "santuario", "comando"],
+                tracos_prioritarios=["forca", "abjuracao", "evocacao", "adivinhacao"],
+                escolas_prioritarias=["evocacao", "abjuracao", "transmutacao"],
+                truques_prioritarios=["escudo_mistico", "projetil_telecinetico", "detectar_magia", "arco_eletrico", "prestidigitacao"],
+                magias_nivel_1_prioritarias=["misseis_magicos", "armadura_mistica", "golpe_certo", "queda_suave"],
             ),
         ),
 
         # =====================================================================
-        # 8. GUERREIRO (4) — incluindo exemplo citado pelo usuário!
+        # 8. GUERREIRO (6)
         # =====================================================================
         _conceito(
-            id_conceito="guerreiro_espada_duas_maos",
+            id_conceito="guerreiro_muralha_aco",
             classe_id="guerreiro",
             classe_nome="Guerreiro",
-            nome="Mestre da Espada de Duas Mãos",
-            subclasse_oficial_id="agressor",
-            subclasse_oficial_nome="Agressor",
+            nome="Muralha de Aço (Arma e Escudo)",
+            subclasses_oficiais=[("duelista", "Duelista (Arma de Uma Mão e Mão Livre)")],
             resumo_proposta=(
-                "Combatente de elite focado em espadas pesadas de duas mãos (como Montante), "
-                "priorizando golpes devastadores, investidas e presença marcial."
+                "Defensor implacável de espada e escudo que controla o terreno com "
+                "Ataque de Oportunidade, reações defensivas e proteção aos aliados."
+            ),
+            sinergia_mecanica=(
+                "Une Bloqueio com Escudo gratuito a Escudo Reativo (1º), evoluindo "
+                "para Bloqueio Agressivo (2º), Guardião de Escudo (6º), Escudo "
+                "Reflexivo (6º) e Bloqueio Rápido com Escudo (8º)."
             ),
             prioridade_atributos=["for", "con", "des", "sab", "car", "int"],
-            biografias_recomendadas=["soldado", "gladiador", "guarda", "discipulo_marcial"],
-            pericias_prioritarias=["atletismo", "intimidacao", "acrobatismo", "sobrevivencia", "medicina"],
+            biografias_recomendadas=["guarda", "soldado", "nobre", "operario"],
+            pericias_prioritarias=["atletismo", "intimidacao", "medicina", "sobrevivencia", "acrobatismo"],
             saber_sugerido="Saber de Guerra",
-            talentos_classe_n1=["ataque_poderoso", "investida_subita", "golpe_de_exatidao"],
-            talentos_classe_n2_mais=["golpe_intimidante", "empurrao_brutal", "estocada"],
-            talentos_pericia=["olhar_intimidante", "lutador_titanico", "salto_rapido"],
-            talentos_gerais=["vitalidade", "iniciativa_incrivel", "veloz"],
-            tracos_ancestralidade_afinidade=["forca", "espada", "marcial", "resistencia"],
+            talentos_classe_n1=["escudo_reativo", "investida_subita", "ataque_fisgador"],
+            talentos_classe_n2_mais=[
+                "bloqueio_agressivo",
+                "deslocamento_com_escudo",
+                "guardiao_de_escudo",
+                "bloqueio_rapido_com_escudo",
+            ],
+            talentos_pericia=["carregador_robusto", "olhar_intimidante", "medicina_de_batalha"],
+            talentos_gerais=["vitalidade", "duro_de_matar", "iniciativa_incrivel"],
+            tracos_ancestralidade_afinidade=["escudo", "forca", "resistencia"],
             categoria_armadura_preferida="pesada",
-            armaduras_ids=["cota_de_malha", "cota_de_escamas", "cota_de_talas"],
-            usa_escudo=False,
-            escudos_ids=[],
-            armas_corpo_a_corpo_ids=["montante", "espada_bastarda", "bracamante"],
-            armas_distancia_ids=["azagaia"],
-            estilo_empunhadura="duas_maos",
-        ),
-        _conceito(
-            id_conceito="guerreiro_baluarte_escudo",
-            classe_id="guerreiro",
-            classe_nome="Guerreiro",
-            nome="Baluarte de Espada e Escudo",
-            subclasse_oficial_id="agressor",
-            subclasse_oficial_nome="Agressor",
-            resumo_proposta=(
-                "Linha de frente altamente defensiva que combina Espada Longa e Escudo de Aço "
-                "para segurar inimigos e contra-atacar com precisão."
-            ),
-            prioridade_atributos=["for", "con", "des", "sab", "car", "int"],
-            biografias_recomendadas=["guarda", "soldado", "nobre", "mineiro"],
-            pericias_prioritarias=["atletismo", "intimidacao", "medicina", "sobrevivencia"],
-            saber_sugerido="Saber de Tática",
-            talentos_classe_n1=["escudo_reativo", "golpe_de_exatidao", "ataque_fisgador"],
-            talentos_classe_n2_mais=["bloqueio_agressivo", "atracar_em_combate"],
-            talentos_pericia=["carregador_robusto", "medicina_de_batalha", "olhar_intimidante"],
-            talentos_gerais=["vitalidade", "duro_de_matar", "recuperacao_rapida"],
-            tracos_ancestralidade_afinidade=["resistencia", "escudo", "forca"],
-            categoria_armadura_preferida="pesada",
-            armaduras_ids=["cota_de_malha", "cota_de_escamas"],
+            armaduras_ids=["placa_peitoral", "cota_de_malha", "cota_de_escamas"],
             usa_escudo=True,
             escudos_ids=["escudo_de_aco", "escudo_de_madeira"],
             armas_corpo_a_corpo_ids=["espada_longa", "martelo_de_guerra", "machado_de_batalha"],
@@ -866,53 +1373,691 @@ def construir_conceitos() -> list[dict[str, Any]]:
             estilo_empunhadura="uma_mao_e_escudo",
         ),
         _conceito(
-            id_conceito="guerreiro_duelista_duas_armas",
+            id_conceito="guerreiro_tempestade_laminas",
             classe_id="guerreiro",
             classe_nome="Guerreiro",
-            nome="Duelista de Duas Armas",
-            subclasse_oficial_id="duelista",
-            subclasse_oficial_nome="Duelista",
+            nome="Tempestade de Lâminas (Combate com Duas Armas)",
+            subclasses_oficiais=[("duelista", "Duelista (Arma de Uma Mão e Mão Livre)")],
             resumo_proposta=(
-                "Esgrimista veloz especializado em combater com duas lâminas simultâneas, "
-                "desferindo cortes duplos de alta acurácia."
+                "Duelista ofensivo com duas lâminas que desfere dois golpes precisos "
+                "sem penalidade de ataques múltiplos enquanto apara contra-ataques."
             ),
-            prioridade_atributos=["des", "for", "con", "sab", "car", "int"],
-            biografias_recomendadas=["gladiador", "acrobata", "marinheiro", "nobre"],
-            pericias_prioritarias=["acrobatismo", "atletismo", "diplomacia", "dissimulacao", "intimidacao"],
+            sinergia_mecanica=(
+                "Usa Corte Duplo (1º) com arma ágil na mão secundária, evoluindo com "
+                "Aparada Dupla (4º), Agressão Vantajosa (6º) e Rajada com Duas Armas (14º)."
+            ),
+            prioridade_atributos=["for", "des", "con", "sab", "car", "int"],
+            biografias_recomendadas=["gladiador", "marinheiro", "discipulo_marcial", "soldado"],
+            pericias_prioritarias=["acrobatismo", "atletismo", "intimidacao", "diplomacia", "furtividade"],
             saber_sugerido="Saber de Esgrima",
-            talentos_classe_n1=["corte_duplo", "golpe_de_exatidao"],
-            talentos_classe_n2_mais=["aparada_de_duelo", "estocada"],
-            talentos_pericia=["equilibrio_estavel", "queda_do_gato", "olhar_intimidante"],
-            talentos_gerais=["iniciativa_incrivel", "veloz", "passo_aprumado"],
+            talentos_classe_n1=["corte_duplo", "golpe_de_exatidao", "investida_subita"],
+            talentos_classe_n2_mais=["aparada_dupla", "reversao_rapida", "agressao_vantajosa"],
+            talentos_pericia=["queda_do_gato", "salto_rapido", "olhar_intimidante"],
+            talentos_gerais=["veloz", "iniciativa_incrivel", "vitalidade"],
             tracos_ancestralidade_afinidade=["agilidade", "espada", "velocidade"],
-            categoria_armadura_preferida="leve",
-            armaduras_ids=["couro_batido", "camisao_de_malha", "couro"],
+            categoria_armadura_preferida="media",
+            armaduras_ids=["cota_de_malha", "cota_de_escamas", "couro_batido"],
             usa_escudo=False,
             escudos_ids=[],
-            armas_corpo_a_corpo_ids=["espada_longa", "espada_curta", "rapieira"],
-            armas_distancia_ids=["adaga"],
+            armas_corpo_a_corpo_ids=["espada_longa", "espada_curta", "adaga"],
+            armas_distancia_ids=["adaga", "azagaia"],
             estilo_empunhadura="duas_armas",
         ),
         _conceito(
-            id_conceito="guerreiro_arqueiro_precisao",
+            id_conceito="guerreiro_colosso_demolidor",
             classe_id="guerreiro",
             classe_nome="Guerreiro",
-            nome="Arqueiro de Precisão",
-            subclasse_oficial_id="arqueiro",
-            subclasse_oficial_nome="Arqueiro",
+            nome="Colosso Demolidor (Arma de Duas Mãos)",
+            subclasses_oficiais=[("agressor", "Agressor (Arma de Duas Mãos)")],
             resumo_proposta=(
-                "Atirador de elite com proficiência superior em arcos, focado em acertos "
-                "críticos a longa distância e apoio tático."
+                "Guerreiro de choque focado em golpes únicos devastadores com armas "
+                "pesadas de duas mãos para quebrar armaduras e derrubar alvos."
+            ),
+            sinergia_mecanica=(
+                "Combina Ataque Poderoso (1º) e Investida Súbita (1º) com Empurrão "
+                "Brutal (2º), Assalto de Duas Mãos (4º) e Estilhaçar Defesas (6º)."
+            ),
+            prioridade_atributos=["for", "con", "des", "sab", "car", "int"],
+            biografias_recomendadas=["soldado", "operario", "gladiador", "mineiro"],
+            pericias_prioritarias=["atletismo", "intimidacao", "sobrevivencia", "medicina"],
+            saber_sugerido="Saber de Guerra",
+            talentos_classe_n1=["ataque_poderoso", "investida_subita", "golpe_de_exatidao"],
+            talentos_classe_n2_mais=["empurrao_brutal", "assalto_de_duas_maos", "estilhacar_defesas"],
+            talentos_pericia=["lutador_titanico", "olhar_intimidante", "carregador_robusto"],
+            talentos_gerais=["vitalidade", "iniciativa_incrivel", "duro_de_matar"],
+            tracos_ancestralidade_afinidade=["forca", "arma", "resistencia"],
+            categoria_armadura_preferida="pesada",
+            armaduras_ids=["placa_peitoral", "cota_de_malha", "cota_de_escamas"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=["montante", "machado_longo", "malho"],
+            armas_distancia_ids=["azagaia"],
+            estilo_empunhadura="duas_maos",
+        ),
+        _conceito(
+            id_conceito="guerreiro_sentinela_haste",
+            classe_id="guerreiro",
+            classe_nome="Guerreiro",
+            nome="Sentinela de Haste (Controle de Área e Alcance)",
+            subclasses_oficiais=[("agressor", "Agressor (Arma de Duas Mãos)")],
+            resumo_proposta=(
+                "Controlador de corredores e vanguarda equipado com armas de haste "
+                "para punir qualquer inimigo que tente se aproximar."
+            ),
+            sinergia_mecanica=(
+                "Maximiza Ataque de Oportunidade a 3m com alabarda, glaive ou bisarma; "
+                "escala com Investida Súbita (1º), Estocada (2º), Tombar (4º) e "
+                "Postura de Estocada (12º)."
+            ),
+            prioridade_atributos=["for", "con", "des", "sab", "car", "int"],
+            biografias_recomendadas=["guarda", "soldado", "lavrador", "batedor"],
+            pericias_prioritarias=["atletismo", "acrobatismo", "intimidacao", "sobrevivencia"],
+            saber_sugerido="Saber de Tática",
+            talentos_classe_n1=["investida_subita", "ataque_poderoso", "golpe_de_exatidao"],
+            talentos_classe_n2_mais=["estocada", "tombar", "postura_de_estocada"],
+            talentos_pericia=["lutador_titanico", "salto_rapido", "olhar_intimidante"],
+            talentos_gerais=["iniciativa_incrivel", "veloz", "vitalidade"],
+            tracos_ancestralidade_afinidade=["alcance", "forca", "arma"],
+            categoria_armadura_preferida="pesada",
+            armaduras_ids=["placa_peitoral", "cota_de_malha", "cota_de_escamas"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=["alabarda", "glaive", "bisarma", "ranseur"],
+            armas_distancia_ids=["azagaia"],
+            estilo_empunhadura="duas_maos",
+        ),
+        _conceito(
+            id_conceito="guerreiro_atirador_elite",
+            classe_id="guerreiro",
+            classe_nome="Guerreiro",
+            nome="Atirador de Elite (Arqueiro ou Besteiro)",
+            subclasses_oficiais=[("arqueiro", "Arqueiro (Combate à Distância)")],
+            resumo_proposta=(
+                "Atirador de precisão extrema com proficiência Especialista já no 1º "
+                "nível, letal tanto de longe quanto em combate à queima-roupa."
+            ),
+            sinergia_mecanica=(
+                "Usa Tiro Certeiro (1º) para ignorar penalidade de voleio e somar +2 "
+                "de dano próximo; evolui com Tiro Duplo (4º), Tiro Triplo (6º) e "
+                "Tiro Debilitante (10º)."
             ),
             prioridade_atributos=["des", "for", "con", "sab", "int", "car"],
-            biografias_recomendadas=["batedor", "cacador", "soldado", "guarda"],
-            pericias_prioritarias=["acrobatismo", "furtividade", "sobrevivencia", "atletismo", "natureza"],
-            saber_sugerido="Saber de Arquearia",
+            biografias_recomendadas=["cacador", "batedor", "soldado", "cacador_de_recompensas"],
+            pericias_prioritarias=["acrobatismo", "furtividade", "sobrevivencia", "atletismo", "medicina"],
+            saber_sugerido="Saber de Balística",
             talentos_classe_n1=["tiro_certeiro", "golpe_de_exatidao"],
-            talentos_classe_n2_mais=["tiro_de_assistencia"],
-            talentos_pericia=["esgueirador_de_terreno", "queda_do_gato", "rastreador_experiente"],
+            talentos_classe_n2_mais=["tiro_de_assistencia", "tiro_duplo", "tiro_triplo", "tiro_debilitante"],
+            talentos_pericia=["esgueirador_de_terreno", "rastreador_experiente", "salto_rapido"],
+            talentos_gerais=["iniciativa_incrivel", "veloz", "vitalidade"],
+            tracos_ancestralidade_afinidade=["arco", "elfo", "agilidade", "sentidos"],
+            categoria_armadura_preferida="media",
+            armaduras_ids=["couro_batido", "gibao_de_peles", "couro"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=["espada_curta", "adaga"],
+            armas_distancia_ids=["arco_longo", "arco_curto", "besta_pesada"],
+            estilo_empunhadura="distancia",
+        ),
+        _conceito(
+            id_conceito="guerreiro_lutador_arena",
+            classe_id="guerreiro",
+            classe_nome="Guerreiro",
+            nome="Lutador de Arena (Mão Livre e Agarrador)",
+            subclasses_oficiais=[("duelista", "Duelista (Arma de Uma Mão e Mão Livre)")],
+            resumo_proposta=(
+                "Combatente versátil que mantém uma mão livre para agarrar, "
+                "derrubar, desarmar e aparar enquanto golpeia com espada ou machado."
+            ),
+            sinergia_mecanica=(
+                "Combina Ataque Fisgador (1º) e Golpe de Exatidão (1º) com Atracar "
+                "em Combate (2º), Aparada de Duelo (2º) e Arrebatar (4º) para "
+                "neutralizar adversários no mano a mano."
+            ),
+            prioridade_atributos=["for", "con", "des", "sab", "car", "int"],
+            biografias_recomendadas=["gladiador", "discipulo_marcial", "cacador_de_recompensas", "soldado"],
+            pericias_prioritarias=["atletismo", "acrobatismo", "intimidacao", "diplomacia"],
+            saber_sugerido="Saber de Gladiador",
+            talentos_classe_n1=["ataque_fisgador", "golpe_de_exatidao", "investida_subita"],
+            talentos_classe_n2_mais=["atracar_em_combate", "aparada_de_duelo", "arrebatar"],
+            talentos_pericia=["lutador_titanico", "escalador_de_combate", "olhar_intimidante"],
+            talentos_gerais=["vitalidade", "iniciativa_incrivel", "duro_de_matar"],
+            tracos_ancestralidade_afinidade=["forca", "agilidade", "combate"],
+            categoria_armadura_preferida="media",
+            armaduras_ids=["cota_de_malha", "cota_de_escamas", "couro_batido"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=["espada_longa", "machado_de_batalha", "espada_bastarda"],
+            armas_distancia_ids=["azagaia"],
+            estilo_empunhadura="uma_mao",
+        ),
+
+        # =====================================================================
+        # 9. LADINO (4)
+        # =====================================================================
+        _conceito(
+            id_conceito="ladino_valentao_brutal",
+            classe_id="ladino",
+            classe_nome="Ladino",
+            nome="Valentão Brutal (Esquema Rufião)",
+            subclasses_oficiais=[("rufiao", "Rufião")],
+            resumo_proposta=(
+                "Ladino robusto de armadura média e Força alta que aplica Ataque "
+                "Furtivo com armas simples contundentes ou de haste e intimida inimigos."
+            ),
+            sinergia_mecanica=(
+                "Esquema Rufião libera Força como atributo-chave e armadura média; "
+                "combina Você É o Próximo (1º) com Surra Brutal (2º) e Golpeador "
+                "Pavoroso (4º) para deixar alvos assustados e desprevenidos."
+            ),
+            prioridade_atributos=["for", "con", "des", "car", "sab", "int"],
+            biografias_recomendadas=["prisioneiro", "criminoso", "guarda", "gladiador"],
+            pericias_prioritarias=["intimidacao", "atletismo", "furtividade", "ladroagem", "acrobatismo"],
+            saber_sugerido="Saber do Submundo",
+            talentos_classe_n1=["voce_e_o_proximo", "esquiva_agil"],
+            talentos_classe_n2_mais=["surra_brutal", "golpeador_pavoroso", "mobilidade"],
+            talentos_pericia=["olhar_intimidante", "lutador_titanico", "coagir_grupo"],
+            talentos_gerais=["vitalidade", "duro_de_matar", "iniciativa_incrivel"],
+            tracos_ancestralidade_afinidade=["forca", "intimidacao", "resistencia"],
+            categoria_armadura_preferida="media",
+            armaduras_ids=["cota_de_escamas", "gibao_de_peles", "couro_batido"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=["maca", "lanca", "porrete"],
+            armas_distancia_ids=["azagaia", "dardo"],
+            estilo_empunhadura="uma_mao",
+        ),
+        _conceito(
+            id_conceito="ladino_duelista_fanfarrao",
+            classe_id="ladino",
+            classe_nome="Ladino",
+            nome="Duelista Fanfarrão (Esquema Malandro)",
+            subclasses_oficiais=[("malandro", "Malandro")],
+            resumo_proposta=(
+                "Esgrimista audacioso focado em Dissimulação e Fintas rápidas para "
+                "gerar Ataque Furtivo cara a cara mesmo sem precisar flanquear."
+            ),
+            sinergia_mecanica=(
+                "Esquema Malandro com Carisma alto une Finta Dupla (1º) a Finta de "
+                "Distração (2º) e Golpe Desequilibrante (2º), deixando o alvo "
+                "desprevenido após uma finta bem-sucedida."
+            ),
+            prioridade_atributos=["des", "car", "con", "int", "sab", "for"],
+            biografias_recomendadas=["charlatao", "apostador", "animador", "nobre"],
+            pericias_prioritarias=["dissimulacao", "diplomacia", "acrobatismo", "intimidacao", "ladroagem"],
+            saber_sugerido="Saber de Sociedade",
+            talentos_classe_n1=["finta_dupla", "esquiva_agil", "voce_e_o_proximo"],
+            talentos_classe_n2_mais=["finta_de_distracao", "golpe_desequilibrante", "mobilidade"],
+            talentos_pericia=["mentiroso_charmoso", "distracao_prolongada", "gracejos_da_corte"],
+            talentos_gerais=["iniciativa_incrivel", "veloz", "vitalidade"],
+            tracos_ancestralidade_afinidade=["carisma", "agilidade", "enganacao"],
+            categoria_armadura_preferida="leve",
+            armaduras_ids=["couro_batido", "couro"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=["rapieira", "espada_curta", "adaga"],
+            armas_distancia_ids=["arco_curto", "dardo"],
+            estilo_empunhadura="uma_mao",
+        ),
+        _conceito(
+            id_conceito="ladino_sombra_silenciosa",
+            classe_id="ladino",
+            classe_nome="Ladino",
+            nome="Sombra Silenciosa (Esquema Ladrão)",
+            subclasses_oficiais=[("ladrao", "Ladrão")],
+            resumo_proposta=(
+                "Infiltrador clássico e letal que soma Destreza no dano corpo a corpo, "
+                "desarma armadilhas e se move pelas sombras sem provocar reações."
+            ),
+            sinergia_mecanica=(
+                "Esquema Ladrão combina Descobridor de Armadilha (1º) e Esquiva Ágil "
+                "(1º) com Mobilidade (2º), Passo Leve (6º) e Infiltração Implausível "
+                "(18º) com armas ágeis de acuidade."
+            ),
+            prioridade_atributos=["des", "con", "sab", "int", "car", "for"],
+            biografias_recomendadas=["criminoso", "crianca_de_rua", "batedor", "detetive"],
+            pericias_prioritarias=["furtividade", "ladroagem", "acrobatismo", "sobrevivencia", "sociedade"],
+            saber_sugerido="Saber do Submundo",
+            talentos_classe_n1=["esquiva_agil", "descobridor_de_armadilha"],
+            talentos_classe_n2_mais=["mobilidade", "saque_rapido", "passo_leve"],
+            talentos_pericia=["queda_do_gato", "furto_subito", "esgueirador_de_terreno"],
+            talentos_gerais=["veloz", "iniciativa_incrivel", "perspicacia_astuta"],
+            tracos_ancestralidade_afinidade=["furtividade", "agilidade", "sombra", "noite"],
+            categoria_armadura_preferida="leve",
+            armaduras_ids=["couro_batido", "couro"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=["espada_curta", "rapieira", "adaga"],
+            armas_distancia_ids=["arco_curto", "dardo"],
+            estilo_empunhadura="duas_armas",
+        ),
+        _conceito(
+            id_conceito="ladino_sabotador_venenoso",
+            classe_id="ladino",
+            classe_nome="Ladino",
+            nome="Sabotador Venenoso (Atirador Furtivo)",
+            subclasses_oficiais=[("ladrao", "Ladrão"), ("malandro", "Malandro")],
+            resumo_proposta=(
+                "Emboscador à distância que dispara das sombras com arcos curtos ou "
+                "adagas arremessadas, sabotando itens e envenenando alvos."
+            ),
+            sinergia_mecanica=(
+                "Une Esquiva Ágil (1º) e Descobridor de Armadilha (1º) a Envenenar "
+                "Arma (4º), Sabotagem (4º) e Envenenar Arma Aprimorado (8º) para "
+                "drenar inimigos à distância."
+            ),
+            prioridade_atributos=["des", "int", "con", "sab", "car", "for"],
+            biografias_recomendadas=["criminoso", "batedor", "cacador", "herbalista"],
+            pericias_prioritarias=["furtividade", "ladroagem", "manufatura", "acrobatismo", "natureza"],
+            saber_sugerido="Saber de Venenos",
+            talentos_classe_n1=["esquiva_agil", "descobridor_de_armadilha", "finta_dupla"],
+            talentos_classe_n2_mais=["envenenar_arma", "sabotagem", "envenenar_arma_aprimorado"],
+            talentos_pericia=["esgueirador_de_terreno", "contrabandista_experiente", "manufatura_alquimica"],
+            talentos_gerais=["iniciativa_incrivel", "veloz", "vitalidade"],
+            tracos_ancestralidade_afinidade=["veneno", "furtividade", "arco", "agilidade"],
+            categoria_armadura_preferida="leve",
+            armaduras_ids=["couro_batido", "couro"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=["espada_curta", "adaga"],
+            armas_distancia_ids=["arco_curto", "adaga", "zarabatana"],
+            estilo_empunhadura="distancia",
+        ),
+
+        # =====================================================================
+        # 10. MAGO (5)
+        # =====================================================================
+        _conceito(
+            id_conceito="mago_evocador_artilharia",
+            classe_id="mago",
+            classe_nome="Mago",
+            nome="Evocador de Artilharia (Dano em Área)",
+            subclasses_oficiais=[("evocacao", "Evocação")],
+            resumo_proposta=(
+                "Artilheiro arcano especialista em explosões elementais e conversão "
+                "de espaços menores em conjurações de maior impacto."
+            ),
+            sinergia_mecanica=(
+                "Escola de Evocação (raio de força) + Tese Mescla de Magia para "
+                "fundir espaços em círculos altos; combina Ampliar Magia (1º) com "
+                "Conjuração Consistente (6º) e Energia Avassaladora (10º)."
+            ),
+            prioridade_atributos=["int", "des", "con", "sab", "car", "for"],
+            biografias_recomendadas=["estudioso", "funileiro", "vidente", "acolito"],
+            pericias_prioritarias=["arcanismo", "ocultismo", "sociedade", "natureza", "manufatura"],
+            saber_sugerido="Saber Arcano",
+            talentos_classe_n1=["ampliar_magia", "magia_de_alcance"],
+            talentos_classe_n2_mais=["conjuracao_consistente", "energia_avassaladora", "conjuracao_acelerada"],
+            talentos_pericia=["sentido_arcano", "reconhecer_magia", "identificacao_rapida"],
+            talentos_gerais=["iniciativa_incrivel", "veloz", "vitalidade"],
+            tracos_ancestralidade_afinidade=["arcano", "fogo", "inteligencia", "magia"],
+            categoria_armadura_preferida="sem_armadura",
+            armaduras_ids=["roupa_de_explorador", "nenhuma_armadura"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=["cajado", "adaga"],
+            armas_distancia_ids=["besta_leve"],
+            estilo_empunhadura="distancia",
+            conjuracao_recomendada=_conjuracao(
+                tradicao="arcana",
+                tracos_prioritarios=["fogo", "eletricidade", "frio", "forca", "evocacao"],
+                escolas_prioritarias=["evocacao"],
+                truques_prioritarios=["produzir_chama", "arco_eletrico", "raio_de_gelo", "escudo_mistico", "detectar_magia"],
+                magias_nivel_1_prioritarias=["maos_flamejantes", "misseis_magicos", "toque_chocante", "armadura_mistica", "golpe_certo"],
+            ),
+            tese_arcana_id="mescla_de_magia",
+        ),
+        _conceito(
+            id_conceito="mago_duelista_contramagica",
+            classe_id="mago",
+            classe_nome="Mago",
+            nome="Duelista de Contramágica (Especialista em Abjuração)",
+            subclasses_oficiais=[("abjuracao", "Abjuração")],
+            resumo_proposta=(
+                "Protetor arcano que ergue barreiras defensivas para o grupo e "
+                "neutraliza conjuradores inimigos com contramágicas precisas."
+            ),
+            sinergia_mecanica=(
+                "Escola de Abjuração + Tese Substituição de Magia para adaptar a "
+                "defesa certa em 10 minutos; une Contramágica (1º) a Penetração de "
+                "Magia (6º), Trespassar Contramágica (12º) e Refletir Magia (14º)."
+            ),
+            prioridade_atributos=["int", "con", "des", "sab", "car", "for"],
+            biografias_recomendadas=["estudioso", "advogado", "detetive", "guarda"],
+            pericias_prioritarias=["arcanismo", "ocultismo", "religiao", "natureza", "sociedade"],
+            saber_sugerido="Saber Arcano",
+            talentos_classe_n1=["contramagica", "magia_de_alcance"],
+            talentos_classe_n2_mais=["penetracao_de_magia", "trespassar_contramagica", "refletir_magia"],
+            talentos_pericia=["reconhecer_magia", "identificacao_rapida", "sentido_arcano"],
+            talentos_gerais=["iniciativa_incrivel", "vitalidade", "duro_de_matar"],
+            tracos_ancestralidade_afinidade=["abjuracao", "protecao", "arcano", "inteligencia"],
+            categoria_armadura_preferida="sem_armadura",
+            armaduras_ids=["roupa_de_explorador", "nenhuma_armadura"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=["cajado", "adaga"],
+            armas_distancia_ids=["besta_leve"],
+            estilo_empunhadura="distancia",
+            conjuracao_recomendada=_conjuracao(
+                tradicao="arcana",
+                tracos_prioritarios=["abjuracao", "forca", "protecao"],
+                escolas_prioritarias=["abjuracao", "evocacao"],
+                truques_prioritarios=["escudo_mistico", "detectar_magia", "ler_aura", "projetil_telecinetico", "luz"],
+                magias_nivel_1_prioritarias=["armadura_mistica", "alarme", "trancar", "misseis_magicos", "queda_suave"],
+            ),
+            tese_arcana_id="substituicao_de_magia",
+        ),
+        _conceito(
+            id_conceito="mago_ilusionista_enganador",
+            classe_id="mago",
+            classe_nome="Mago",
+            nome="Ilusionista e Enganador (Controle Tático)",
+            subclasses_oficiais=[("ilusao", "Ilusão")],
+            resumo_proposta=(
+                "Estrategista arcano que divide o campo de batalha com paredes "
+                "falsas, duplicatas e sons enganosos sem depender de dano direto."
+            ),
+            sinergia_mecanica=(
+                "Escola de Ilusão + Tese Sintonização com Familiar Aprimorada (ganha "
+                "Familiar bônus); combina Ignorar Materiais (1º) com Ocultar Magia "
+                "(2º) e Magia Silenciosa (4º) para conjurar escondido."
+            ),
+            prioridade_atributos=["int", "des", "con", "car", "sab", "for"],
+            biografias_recomendadas=["charlatao", "artista", "detetive", "estudioso"],
+            pericias_prioritarias=["arcanismo", "dissimulacao", "furtividade", "ocultismo", "sociedade"],
+            saber_sugerido="Saber de Ilusões",
+            talentos_classe_n1=["magia_de_alcance", "ignorar_materiais", "familiar"],
+            talentos_classe_n2_mais=["ocultar_magia", "magia_silenciosa", "familiar_melhorado"],
+            talentos_pericia=["sentido_arcano", "distracao_prolongada", "identificacao_rapida"],
             talentos_gerais=["iniciativa_incrivel", "veloz", "perspicacia_astuta"],
-            tracos_ancestralidade_afinidade=["arco", "elfo", "agilidade", "visao"],
+            tracos_ancestralidade_afinidade=["ilusao", "fada", "sombra", "arcano"],
+            categoria_armadura_preferida="sem_armadura",
+            armaduras_ids=["roupa_de_explorador", "nenhuma_armadura"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=["adaga", "cajado"],
+            armas_distancia_ids=["besta_leve"],
+            estilo_empunhadura="distancia",
+            conjuracao_recomendada=_conjuracao(
+                tradicao="arcana",
+                tracos_prioritarios=["ilusao", "mental", "encantamento"],
+                escolas_prioritarias=["ilusao", "encantamento"],
+                truques_prioritarios=["som_fantasma", "luzes_dancantes", "prestidigitacao", "mao_mistica", "detectar_magia"],
+                magias_nivel_1_prioritarias=["objeto_ilusorio", "disfarce_ilusorio", "leque_de_cores", "item_de_fachada", "ventriloquismo"],
+            ),
+            tese_arcana_id="sintonizacao_com_familiar_aprimorada",
+        ),
+        _conceito(
+            id_conceito="mago_invocador_necromante",
+            classe_id="mago",
+            classe_nome="Mago",
+            nome="Invocador / Necromante (Exército de Lacaios)",
+            subclasses_oficiais=[("conjuracao", "Conjuração"), ("necromancia", "Necromancia")],
+            resumo_proposta=(
+                "Mestre da invocação que traz criaturas elementais, constructos ou "
+                "forças necromânticas para controlar o ritmo do campo de batalha."
+            ),
+            sinergia_mecanica=(
+                "Escola de Conjuração ou Necromancia + Tese Sintonização com Familiar "
+                "Aprimorada; evolui com Familiar Melhorado (2º), Conjuração Consistente "
+                "(6º) e Concentração Sem Esforço (16º) para sustentar invocações."
+            ),
+            prioridade_atributos=["int", "con", "des", "sab", "car", "for"],
+            biografias_recomendadas=["eremita", "estudioso", "acolito", "vidente"],
+            pericias_prioritarias=["arcanismo", "ocultismo", "natureza", "religiao", "sociedade"],
+            saber_sugerido="Saber Planar",
+            talentos_classe_n1=["magia_de_alcance", "ampliar_magia", "familiar"],
+            talentos_classe_n2_mais=["familiar_melhorado", "conjuracao_consistente", "concentracao_sem_esforco"],
+            talentos_pericia=["sentido_arcano", "identificar_estranhezas", "reconhecer_magia"],
+            talentos_gerais=["vitalidade", "duro_de_matar", "iniciativa_incrivel"],
+            tracos_ancestralidade_afinidade=["invocacao", "morte", "arcano", "inteligencia"],
+            categoria_armadura_preferida="sem_armadura",
+            armaduras_ids=["roupa_de_explorador", "nenhuma_armadura"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=["cajado", "adaga"],
+            armas_distancia_ids=["besta_leve"],
+            estilo_empunhadura="distancia",
+            conjuracao_recomendada=_conjuracao(
+                tradicao="arcana",
+                tracos_prioritarios=["conjuracao", "necromancia", "negativo"],
+                escolas_prioritarias=["conjuracao", "necromancia"],
+                truques_prioritarios=["toque_gelido", "mao_mistica", "escudo_mistico", "detectar_magia", "projetil_telecinetico"],
+                magias_nivel_1_prioritarias=["convocar_animal", "convocar_constructo", "servo_invisivel", "raio_de_enfraquecimento", "medo"],
+            ),
+            tese_arcana_id="sintonizacao_com_familiar_aprimorada",
+        ),
+        _conceito(
+            id_conceito="mago_arquimago_enciclopedico",
+            classe_id="mago",
+            classe_nome="Mago",
+            nome="Arquimago Enciclopédico (Versatilidade Total)",
+            subclasses_oficiais=[("universalista", "Universalista")],
+            resumo_proposta=(
+                "Mago universalista sem restrição de escola que drena seu item "
+                "vinculado por círculo e troca magias preparadas durante o dia."
+            ),
+            sinergia_mecanica=(
+                "Escola Universalista (ganha Mão do Aprendiz gratuita) + Tese "
+                "Substituição de Magia para trocar preparações em 10 minutos; escala "
+                "com Expansão de Truque Mágico (2º), Versatilidade Universal (8º) e Rearranjar Magia (16º)."
+            ),
+            prioridade_atributos=["int", "des", "con", "sab", "car", "for"],
+            biografias_recomendadas=["estudioso", "advogado", "detetive", "funileiro"],
+            pericias_prioritarias=["arcanismo", "sociedade", "ocultismo", "natureza", "religiao"],
+            saber_sugerido="Saber Acadêmico",
+            talentos_classe_n1=["mao_do_aprendiz", "contramagica", "magia_de_alcance"],
+            talentos_classe_n2_mais=["expansao_de_truque_magico", "versatilidade_universal", "rearranjar_magia"],
+            talentos_pericia=["poliglota", "reconhecer_magia", "identificacao_rapida"],
+            talentos_gerais=["perspicacia_astuta", "iniciativa_incrivel", "vitalidade"],
+            tracos_ancestralidade_afinidade=["saber", "inteligencia", "arcano"],
+            categoria_armadura_preferida="sem_armadura",
+            armaduras_ids=["roupa_de_explorador", "nenhuma_armadura"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=["cajado", "adaga"],
+            armas_distancia_ids=["besta_leve"],
+            estilo_empunhadura="distancia",
+            conjuracao_recomendada=_conjuracao(
+                tradicao="arcana",
+                tracos_prioritarios=["forca", "adivinhacao", "transmutacao", "abjuracao"],
+                escolas_prioritarias=["evocacao", "abjuracao", "transmutacao", "adivinhacao"],
+                truques_prioritarios=["detectar_magia", "escudo_mistico", "ler_aura", "prestidigitacao", "arco_eletrico"],
+                magias_nivel_1_prioritarias=["misseis_magicos", "armadura_mistica", "passos_velozes", "queda_suave", "alarme"],
+            ),
+            tese_arcana_id="substituicao_de_magia",
+        ),
+
+        # =====================================================================
+        # 11. MONGE (5)
+        # =====================================================================
+        _conceito(
+            id_conceito="monge_artista_posturas",
+            classe_id="monge",
+            classe_nome="Monge",
+            nome="Artista das Posturas (Golpeador Ágil)",
+            subclasses_oficiais=[("monge_da_garca", "Monge da Garça")],
+            resumo_proposta=(
+                "Lutador acrobático e veloz que combina Rajada de Golpes com "
+                "posturas ágeis para entrar, golpear e flanquear com mobilidade máxima."
+            ),
+            sinergia_mecanica=(
+                "Destreza alta com Postura do Tigre (1º), Postura do Lobo (1º) ou "
+                "Postura da Garça (1º); evolui com Folha Dançante (2º), Chute "
+                "Voador (4º) e Corte do Tigre / Arrasto do Lobo (6º)."
+            ),
+            prioridade_atributos=["des", "for", "con", "sab", "car", "int"],
+            biografias_recomendadas=["acrobata", "discipulo_marcial", "batedor", "crianca_de_rua"],
+            pericias_prioritarias=["acrobatismo", "atletismo", "furtividade", "diplomacia", "medicina"],
+            saber_sugerido="Saber de Artes Marciais",
+            talentos_classe_n1=["postura_do_tigre", "postura_do_lobo", "postura_da_garca"],
+            talentos_classe_n2_mais=["folha_dancante", "chute_voador", "corte_do_tigre", "arrasto_do_lobo"],
+            talentos_pericia=["queda_do_gato", "equilibrio_estavel", "salto_rapido"],
+            talentos_gerais=["veloz", "iniciativa_incrivel", "vitalidade"],
+            tracos_ancestralidade_afinidade=["agilidade", "velocidade", "desarmado"],
+            categoria_armadura_preferida="sem_armadura",
+            armaduras_ids=["roupa_de_explorador", "nenhuma_armadura"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=[],
+            armas_distancia_ids=["dardo"],
+            estilo_empunhadura="desarmado",
+        ),
+        _conceito(
+            id_conceito="monge_muralha_pedra",
+            classe_id="monge",
+            classe_nome="Monge",
+            nome="Muralha de Pedra (Tanque Sem Armadura)",
+            subclasses_oficiais=[("monge_da_garca", "Monge da Garça"), ("monge_do_ki", "Monge do Ki")],
+            resumo_proposta=(
+                "Vanguarda inabalável que atinge CA altíssima sem usar armadura "
+                "e segura inimigos na linha de frente com golpes atordoantes."
+            ),
+            sinergia_mecanica=(
+                "Postura da Montanha (1º) soma bônus de item à CA sem armadura; "
+                "escala com Punho Atordoante (2º), Impedir Movimento (4º) e "
+                "Fortaleza da Montanha (6º) para sustentar a linha de frente."
+            ),
+            prioridade_atributos=["for", "con", "des", "sab", "car", "int"],
+            biografias_recomendadas=["discipulo_marcial", "guarda", "operario", "gladiador"],
+            pericias_prioritarias=["atletismo", "intimidacao", "medicina", "sobrevivencia", "acrobatismo"],
+            saber_sugerido="Saber de Fortaleza",
+            talentos_classe_n1=["postura_da_montanha", "postura_da_garca"],
+            talentos_classe_n2_mais=["punho_atordoante", "impedir_movimento", "fortaleza_da_montanha"],
+            talentos_pericia=["lutador_titanico", "carregador_robusto", "olhar_intimidante"],
+            talentos_gerais=["vitalidade", "duro_de_matar", "recuperacao_rapida"],
+            tracos_ancestralidade_afinidade=["terra", "pedra", "resistencia", "forca"],
+            categoria_armadura_preferida="sem_armadura",
+            armaduras_ids=["roupa_de_explorador", "nenhuma_armadura"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=[],
+            armas_distancia_ids=["dardo"],
+            estilo_empunhadura="desarmado",
+        ),
+        _conceito(
+            id_conceito="monge_mestre_ki_mistico",
+            classe_id="monge",
+            classe_nome="Monge",
+            nome="Mestre do Ki Místico (Poderes Espirituais)",
+            subclasses_oficiais=[("monge_do_ki", "Monge do Ki")],
+            resumo_proposta=(
+                "Asceta disciplinado que desperta magia de foco ocultista para "
+                "potencializar ataques desarmados, curar-se e disparar rajadas de ki."
+            ),
+            sinergia_mecanica=(
+                "Sabedoria elevada com Golpe de Ki (1º) ou Disparada de Ki (1º), "
+                "evoluindo com Punho Elemental (2º), Integridade Corporal (4º) e "
+                "Rajada de Ki (6º) para dano energético e autossuficiência."
+            ),
+            prioridade_atributos=["des", "sab", "con", "for", "car", "int"],
+            biografias_recomendadas=["eremita", "acolito", "discipulo_marcial", "vidente"],
+            pericias_prioritarias=["acrobatismo", "religiao", "ocultismo", "medicina", "atletismo"],
+            saber_sugerido="Saber Monástico",
+            talentos_classe_n1=["golpe_de_ki", "disparada_de_ki"],
+            talentos_classe_n2_mais=["punho_elemental", "integridade_corporal", "rajada_de_ki"],
+            talentos_pericia=["medicina_de_batalha", "equilibrio_estavel", "queda_do_gato"],
+            talentos_gerais=["iniciativa_incrivel", "veloz", "vitalidade"],
+            tracos_ancestralidade_afinidade=["sabedoria", "espirito", "ki", "agilidade"],
+            categoria_armadura_preferida="sem_armadura",
+            armaduras_ids=["roupa_de_explorador", "nenhuma_armadura"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=[],
+            armas_distancia_ids=["dardo"],
+            estilo_empunhadura="desarmado",
+        ),
+        _conceito(
+            id_conceito="monge_guerreiro_armas_monasticas",
+            classe_id="monge",
+            classe_nome="Monge",
+            nome="Guerreiro das Armas Monásticas (Kensei / Arqueiro Zen)",
+            subclasses_oficiais=[("monge_do_ki", "Monge do Ki"), ("monge_da_garca", "Monge da Garça")],
+            resumo_proposta=(
+                "Mestre de armas tradicionais de monastério capaz de aplicar Rajada "
+                "de Golpes e técnicas monásticas usando espadas de templo, bos e shurikens."
+            ),
+            sinergia_mecanica=(
+                "Arsenal Monástico (1º) libera armas com traço monge (bo, espada de "
+                "templo, kama, sai, shuriken) com escala automática de proficiência; "
+                "combina com Defletir Projétil (4º) e Rajada de Manobras (4º)."
+            ),
+            prioridade_atributos=["des", "for", "con", "sab", "car", "int"],
+            biografias_recomendadas=["discipulo_marcial", "soldado", "guarda", "artesao"],
+            pericias_prioritarias=["acrobatismo", "atletismo", "religiao", "furtividade", "medicina"],
+            saber_sugerido="Saber de Armas Marciais",
+            talentos_classe_n1=["arsenal_monastico", "golpe_de_ki"],
+            talentos_classe_n2_mais=["foco_em_pugilato", "defletir_projetil", "rajada_de_manobras"],
+            talentos_pericia=["queda_do_gato", "equilibrio_estavel", "salto_rapido"],
+            talentos_gerais=["veloz", "iniciativa_incrivel", "vitalidade"],
+            tracos_ancestralidade_afinidade=["arma", "agilidade", "disciplina"],
+            categoria_armadura_preferida="sem_armadura",
+            armaduras_ids=["roupa_de_explorador", "nenhuma_armadura"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=["bo", "espada_de_templo", "kama", "sai", "katar_adaga_de_soco"],
+            armas_distancia_ids=["shuriken", "dardo"],
+            estilo_empunhadura="uma_mao",
+        ),
+        _conceito(
+            id_conceito="monge_mestre_arremessos",
+            classe_id="monge",
+            classe_nome="Monge",
+            nome="Mestre dos Arremessos (Agarrador e Controlador)",
+            subclasses_oficiais=[("monge_do_ki", "Monge do Ki"), ("monge_da_garca", "Monge da Garça")],
+            resumo_proposta=(
+                "Especialista em combate físico próximo focado em agarrar, derrubar, "
+                "arremessar oponentes contra outros alvos e controlar posicionamento."
+            ),
+            sinergia_mecanica=(
+                "Força alta com Postura do Dragão (1º) ou Postura da Montanha (1º), "
+                "escalando com Agarrão Esmagador (2º), Rajada de Manobras (4º) e "
+                "Arremesso Giratório (6º)."
+            ),
+            prioridade_atributos=["for", "con", "des", "sab", "car", "int"],
+            biografias_recomendadas=["discipulo_marcial", "gladiador", "operario", "marinheiro"],
+            pericias_prioritarias=["atletismo", "acrobatismo", "intimidacao", "medicina", "sobrevivencia"],
+            saber_sugerido="Saber de Luta Livre",
+            talentos_classe_n1=["postura_do_dragao", "postura_da_montanha"],
+            talentos_classe_n2_mais=["agarrao_esmagador", "rajada_de_manobras", "arremesso_giratorio"],
+            talentos_pericia=["lutador_titanico", "escalador_de_combate", "olhar_intimidante"],
+            talentos_gerais=["vitalidade", "duro_de_matar", "veloz"],
+            tracos_ancestralidade_afinidade=["forca", "combate", "resistencia"],
+            categoria_armadura_preferida="sem_armadura",
+            armaduras_ids=["roupa_de_explorador", "nenhuma_armadura"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=[],
+            armas_distancia_ids=["dardo"],
+            estilo_empunhadura="desarmado",
+        ),
+
+        # =====================================================================
+        # 12. PATRULHEIRO (5)
+        # =====================================================================
+        _conceito(
+            id_conceito="patrulheiro_metralhadora_flechas",
+            classe_id="patrulheiro",
+            classe_nome="Patrulheiro",
+            nome="Metralhadora de Flechas (Arqueiro de Rajada)",
+            subclasses_oficiais=[("rajada", "Rajada")],
+            resumo_proposta=(
+                "Arqueiro veloz que marca uma presa e reduz drasticamente a "
+                "penalidade de ataques múltiplos para disparar saraivadas de flechas."
+            ),
+            sinergia_mecanica=(
+                "Excelência Rajada somada a Tiro à Caça (1º) para dois disparos por "
+                "uma ação; evolui com Mira do Caçador (2º), Tiro Longo (4º), Tiro "
+                "Penetrante (10º) e Saraivada Impossível (18º)."
+            ),
+            prioridade_atributos=["des", "for", "con", "sab", "int", "car"],
+            biografias_recomendadas=["cacador", "batedor", "soldado", "nomade"],
+            pericias_prioritarias=["natureza", "sobrevivencia", "furtividade", "acrobatismo", "atletismo"],
+            saber_sugerido="Saber de Caça",
+            talentos_classe_n1=["tiro_a_caca", "cacador_de_monstros"],
+            talentos_classe_n2_mais=["mira_do_cacador", "tiro_longo", "tiro_penetrante", "saraivada_impossivel"],
+            talentos_pericia=["esgueirador_de_terreno", "rastreador_experiente", "forrageador"],
+            talentos_gerais=["iniciativa_incrivel", "veloz", "vitalidade"],
+            tracos_ancestralidade_afinidade=["arco", "elfo", "agilidade", "velocidade"],
             categoria_armadura_preferida="leve",
             armaduras_ids=["couro_batido", "couro"],
             usa_escudo=False,
@@ -921,380 +2066,63 @@ def construir_conceitos() -> list[dict[str, Any]]:
             armas_distancia_ids=["arco_longo", "arco_curto"],
             estilo_empunhadura="distancia",
         ),
-
-        # =====================================================================
-        # 9. LADINO (3)
-        # =====================================================================
         _conceito(
-            id_conceito="ladino_ladrao_acrobata",
-            classe_id="ladino",
-            classe_nome="Ladino",
-            nome="Ladrão Acrobata Furtivo",
-            subclasse_oficial_id="ladrao",
-            subclasse_oficial_nome="Ladrão",
-            resumo_proposta=(
-                "Infiltrador ágil que usa Destreza no dano de acuidade, desarma armadilhas, "
-                "flanqueia com acrobacia e ataca das sombras."
-            ),
-            prioridade_atributos=["des", "con", "car", "sab", "int", "for"],
-            biografias_recomendadas=["criminoso", "crianca_de_rua", "acrobata", "batedor"],
-            pericias_prioritarias=["furtividade", "ladroagem", "acrobatismo", "dissimulacao", "sociedade"],
-            saber_sugerido="Saber do Submundo",
-            talentos_classe_n1=["esquiva_agil", "descobridor_de_armadilha"],
-            talentos_classe_n2_mais=["mobilidade", "saque_rapido"],
-            talentos_pericia=["punga", "queda_do_gato", "contrabandista_experiente"],
-            talentos_gerais=["veloz", "iniciativa_incrivel", "passo_aprumado"],
-            tracos_ancestralidade_afinidade=["furtividade", "agilidade", "visao_no_escuro"],
-            categoria_armadura_preferida="leve",
-            armaduras_ids=["couro", "couro_batido"],
-            usa_escudo=False,
-            escudos_ids=[],
-            armas_corpo_a_corpo_ids=["rapieira", "espada_curta", "adaga"],
-            armas_distancia_ids=["arco_curto", "adaga", "dardo"],
-            estilo_empunhadura="uma_mao",
-        ),
-        _conceito(
-            id_conceito="ladino_malandro_social",
-            classe_id="ladino",
-            classe_nome="Ladino",
-            nome="Malandro Social e Fintador",
-            subclasse_oficial_id="malandro",
-            subclasse_oficial_nome="Malandro",
-            resumo_proposta=(
-                "Manipulador carismático que deixa alvos desprevenidos com fintas e "
-                "enganações antes de aplicar ataques furtivos."
-            ),
-            prioridade_atributos=["des", "car", "con", "int", "sab", "for"],
-            biografias_recomendadas=["charlatao", "apostador", "detetive", "emissario"],
-            pericias_prioritarias=["dissimulacao", "diplomacia", "intimidacao", "ladroagem", "furtividade"],
-            saber_sugerido="Saber das Ruas",
-            talentos_classe_n1=["finta_dupla", "voce_e_o_proximo", "esquiva_agil"],
-            talentos_classe_n2_mais=["finta_de_distracao", "magica_menor"],
-            talentos_pericia=["mentiroso_charmoso", "distracao_prolongada", "manha_das_ruas"],
-            talentos_gerais=["iniciativa_incrivel", "perspicacia_astuta", "veloz"],
-            tracos_ancestralidade_afinidade=["carisma", "engano", "social"],
-            categoria_armadura_preferida="leve",
-            armaduras_ids=["couro", "armadura_acolchoada"],
-            usa_escudo=False,
-            escudos_ids=[],
-            armas_corpo_a_corpo_ids=["rapieira", "adaga"],
-            armas_distancia_ids=["besta_de_mao", "adaga"],
-            estilo_empunhadura="uma_mao",
-        ),
-        _conceito(
-            id_conceito="ladino_rufiao_brutal",
-            classe_id="ladino",
-            classe_nome="Ladino",
-            nome="Rufião Intimidador",
-            subclasse_oficial_id="rufiao",
-            subclasse_oficial_nome="Rufião",
-            resumo_proposta=(
-                "Bandido vigoroso focado em Força e Intimidação, usando armadura média e "
-                "golpes pesados para assustar e derrubar oponentes."
-            ),
-            prioridade_atributos=["for", "des", "con", "car", "sab", "int"],
-            biografias_recomendadas=["prisioneiro", "criminoso", "guarda", "gladiador"],
-            pericias_prioritarias=["intimidacao", "atletismo", "ladroagem", "furtividade", "sociedade"],
-            saber_sugerido="Saber do Submundo",
-            talentos_classe_n1=["voce_e_o_proximo", "esquiva_agil"],
-            talentos_classe_n2_mais=["surra_brutal", "golpe_desequilibrante"],
-            talentos_pericia=["olhar_intimidante", "coagir_grupo", "lutador_titanico"],
-            talentos_gerais=["vitalidade", "duro_de_matar", "iniciativa_incrivel"],
-            tracos_ancestralidade_afinidade=["forca", "intimidacao", "resistencia"],
-            categoria_armadura_preferida="media",
-            armaduras_ids=["gibao_de_peles", "couro_batido"],
-            usa_escudo=False,
-            escudos_ids=[],
-            armas_corpo_a_corpo_ids=["espada_curta", "maca", "porrete"],
-            armas_distancia_ids=["azagaia", "dardo"],
-            estilo_empunhadura="uma_mao",
-        ),
-
-        # =====================================================================
-        # 10. MAGO (4) — incluindo exemplo exato citado pelo usuário!
-        # =====================================================================
-        _conceito(
-            id_conceito="mago_elementalista",
-            classe_id="mago",
-            classe_nome="Mago",
-            nome="Elementalista",
-            subclasse_oficial_id="evocacao",
-            subclasse_oficial_nome="Escola de Evocação",
-            resumo_proposta=(
-                "Mago especializado em canalizar fogo, frio, eletricidade, ácido e "
-                "ventos arcanos por meio da Escola de Evocação para dano elemental e controle."
-            ),
-            prioridade_atributos=["int", "des", "con", "sab", "car", "for"],
-            biografias_recomendadas=["estudioso", "eremita", "funileiro", "vidente"],
-            pericias_prioritarias=["arcanismo", "natureza", "manufatura", "ocultismo", "sociedade"],
-            saber_sugerido="Saber Elemental",
-            talentos_classe_n1=["ampliar_magia", "magia_de_alcance", "familiar"],
-            talentos_classe_n2_mais=["expansao_de_truque_magico", "ocultar_magia"],
-            talentos_pericia=["sentido_arcano", "reconhecer_magia", "identificacao_rapida"],
-            talentos_gerais=["iniciativa_incrivel", "veloz", "vitalidade"],
-            tracos_ancestralidade_afinidade=["fogo", "elemental", "arcano", "inteligencia"],
-            categoria_armadura_preferida="sem_armadura",
-            armaduras_ids=["roupa_de_explorador"],
-            usa_escudo=False,
-            escudos_ids=[],
-            armas_corpo_a_corpo_ids=["cajado", "adaga"],
-            armas_distancia_ids=["besta_leve"],
-            estilo_empunhadura="conjurador",
-            conjuracao_recomendada=_conjuracao(
-                tradicao="arcana",
-                tracos_prioritarios=["Fogo", "Água", "Terra", "Ar", "Frio", "Eletricidade", "Ácido", "Evocação"],
-                escolas_prioritarias=["Evocação"],
-                truques_prioritarios=["produzir_chama", "raio_de_gelo", "arco_eletrico", "jorro_acido", "escudo_mistico"],
-                magias_nivel_1_prioritarias=["maos_flamejantes", "toque_chocante", "empurrao_hidraulico", "lufada_de_vento", "misseis_magicos"],
-            ),
-        ),
-        _conceito(
-            id_conceito="mago_ilusionista_controlador",
-            classe_id="mago",
-            classe_nome="Mago",
-            nome="Ilusionista e Controlador",
-            subclasse_oficial_id="ilusao",
-            subclasse_oficial_nome="Escola de Ilusão",
-            resumo_proposta=(
-                "Mestre da enganação arcana que confunde sentidos, cria miragens táticas "
-                "e manipula o campo de batalha sem confronto direto."
-            ),
-            prioridade_atributos=["int", "des", "car", "con", "sab", "for"],
-            biografias_recomendadas=["charlatao", "artista", "detetive", "estudioso"],
-            pericias_prioritarias=["arcanismo", "dissimulacao", "ocultismo", "sociedade", "furtividade"],
-            saber_sugerido="Saber de Ilusões",
-            talentos_classe_n1=["familiar", "magia_de_alcance", "ampliar_magia"],
-            talentos_classe_n2_mais=["ocultar_magia", "familiar_melhorado"],
-            talentos_pericia=["sentido_arcano", "distracao_prolongada", "reconhecer_magia"],
-            talentos_gerais=["iniciativa_incrivel", "perspicacia_astuta", "veloz"],
-            tracos_ancestralidade_afinidade=["ilusao", "gnomo", "arcano", "mental"],
-            categoria_armadura_preferida="sem_armadura",
-            armaduras_ids=["roupa_de_explorador"],
-            usa_escudo=False,
-            escudos_ids=[],
-            armas_corpo_a_corpo_ids=["adaga", "cajado"],
-            armas_distancia_ids=["besta_leve"],
-            estilo_empunhadura="conjurador",
-            conjuracao_recomendada=_conjuracao(
-                tradicao="arcana",
-                tracos_prioritarios=["Ilusão", "Visual", "Mental", "Auditivo"],
-                escolas_prioritarias=["Ilusão", "Encantamento"],
-                truques_prioritarios=["som_fantasma", "mensagem", "escudo_mistico", "detectar_magia", "luzes_dancantes"],
-                magias_nivel_1_prioritarias=["objeto_ilusorio", "leque_de_cores", "disfarce_ilusorio", "sono"],
-            ),
-        ),
-        _conceito(
-            id_conceito="mago_abjurador_protetor",
-            classe_id="mago",
-            classe_nome="Mago",
-            nome="Abjurador Protetor",
-            subclasse_oficial_id="abjuracao",
-            subclasse_oficial_nome="Escola de Abjuração",
-            resumo_proposta=(
-                "Arcanista defensivo focado em barreiras mágicas, anulação de feitiços "
-                "inimigos e preservação da equipe."
-            ),
-            prioridade_atributos=["int", "con", "des", "sab", "car", "for"],
-            biografias_recomendadas=["estudioso", "advogado", "guarda", "nobre"],
-            pericias_prioritarias=["arcanismo", "sociedade", "ocultismo", "manufatura", "diplomacia"],
-            saber_sugerido="Saber Arcano",
-            talentos_classe_n1=["contramagica", "familiar", "ignorar_materiais"],
-            talentos_classe_n2_mais=["familiar_melhorado", "expansao_de_truque_magico"],
-            talentos_pericia=["reconhecer_magia", "sentido_arcano", "identificacao_rapida"],
-            talentos_gerais=["vitalidade", "iniciativa_incrivel", "duro_de_matar"],
-            tracos_ancestralidade_afinidade=["abjuracao", "protecao", "arcano"],
-            categoria_armadura_preferida="sem_armadura",
-            armaduras_ids=["roupa_de_explorador"],
-            usa_escudo=False,
-            escudos_ids=[],
-            armas_corpo_a_corpo_ids=["cajado", "adaga"],
-            armas_distancia_ids=["besta_leve"],
-            estilo_empunhadura="conjurador",
-            conjuracao_recomendada=_conjuracao(
-                tradicao="arcana",
-                tracos_prioritarios=["Abjuração", "Força", "Detecção"],
-                escolas_prioritarias=["Abjuração", "Adivinhação"],
-                truques_prioritarios=["escudo_mistico", "detectar_magia", "ler_aura", "projetil_telecinetico", "luz"],
-                magias_nivel_1_prioritarias=["armadura_mistica", "alarme", "queda_suave", "misseis_magicos"],
-            ),
-        ),
-        _conceito(
-            id_conceito="mago_necromante_sombrio",
-            classe_id="mago",
-            classe_nome="Mago",
-            nome="Necromante Erudito",
-            subclasse_oficial_id="necromancia",
-            subclasse_oficial_nome="Escola de Necromancia",
-            resumo_proposta=(
-                "Estudioso das fronteiras entre vida e morte que drena vitalidade, "
-                "enfraquece adversários e domina magia sombria."
-            ),
-            prioridade_atributos=["int", "con", "des", "sab", "car", "for"],
-            biografias_recomendadas=["estudioso", "eremita", "medico_de_campo", "vidente"],
-            pericias_prioritarias=["arcanismo", "ocultismo", "religiao", "medicina", "intimidacao"],
-            saber_sugerido="Saber de Necromancia",
-            talentos_classe_n1=["ignorar_materiais", "familiar", "magia_de_alcance"],
-            talentos_classe_n2_mais=["familiar_melhorado", "ocultar_magia"],
-            talentos_pericia=["sentido_arcano", "identificar_estranhezas", "reconhecer_magia"],
-            talentos_gerais=["vitalidade", "duro_de_matar", "iniciativa_incrivel"],
-            tracos_ancestralidade_afinidade=["sombra", "negativo", "necromancia"],
-            categoria_armadura_preferida="sem_armadura",
-            armaduras_ids=["roupa_de_explorador"],
-            usa_escudo=False,
-            escudos_ids=[],
-            armas_corpo_a_corpo_ids=["cajado", "adaga"],
-            armas_distancia_ids=["besta_leve"],
-            estilo_empunhadura="conjurador",
-            conjuracao_recomendada=_conjuracao(
-                tradicao="arcana",
-                tracos_prioritarios=["Necromancia", "Negativo", "Medo", "Doença"],
-                escolas_prioritarias=["Necromancia"],
-                truques_prioritarios=["toque_gelido", "escudo_mistico", "detectar_magia", "projetil_telecinetico"],
-                magias_nivel_1_prioritarias=["raio_de_enfraquecimento", "gavinhas_sombrias", "medo", "armadura_mistica"],
-            ),
-        ),
-
-        # =====================================================================
-        # 11. MONGE (3)
-        # =====================================================================
-        _conceito(
-            id_conceito="monge_postura_montanha",
-            classe_id="monge",
-            classe_nome="Monge",
-            nome="Muralha da Postura da Montanha",
-            subclasse_oficial_id="monge_da_garca",
-            subclasse_oficial_nome="Estilo de Combate / Postura Marcial",
-            resumo_proposta=(
-                "Artista marcial focado em Força e resistência que usa a Postura da Montanha "
-                "para compensar Destreza baixa e desferir golpes pesados."
-            ),
-            prioridade_atributos=["for", "con", "sab", "des", "car", "int"],
-            biografias_recomendadas=["discipulo_marcial", "mineiro", "guarda", "operario"],
-            pericias_prioritarias=["atletismo", "intimidacao", "medicina", "religiao", "sobrevivencia"],
-            saber_sugerido="Saber de Artes Marciais",
-            talentos_classe_n1=["postura_da_montanha", "postura_do_dragao"],
-            talentos_classe_n2_mais=["agarrao_esmagador", "punho_atordoante"],
-            talentos_pericia=["lutador_titanico", "olhar_intimidante", "carregador_robusto"],
-            talentos_gerais=["vitalidade", "duro_de_matar", "recuperacao_rapida"],
-            tracos_ancestralidade_afinidade=["forca", "terra", "resistencia"],
-            categoria_armadura_preferida="sem_armadura",
-            armaduras_ids=["roupa_de_explorador"],
-            usa_escudo=False,
-            escudos_ids=[],
-            armas_corpo_a_corpo_ids=["manopla"],
-            armas_distancia_ids=["funda"],
-            estilo_empunhadura="desarmado",
-        ),
-        _conceito(
-            id_conceito="monge_tigre_agil",
-            classe_id="monge",
-            classe_nome="Monge",
-            nome="Garras da Postura do Tigre",
-            subclasse_oficial_id="monge_da_garca",
-            subclasse_oficial_nome="Estilo de Combate / Postura Marcial",
-            resumo_proposta=(
-                "Combatente veloz e acrobático que ataca com golpes cortantes ágeis, "
-                "alta Classe de Armadura sem armadura e mobilidade extrema."
-            ),
-            prioridade_atributos=["des", "for", "con", "sab", "car", "int"],
-            biografias_recomendadas=["discipulo_marcial", "acrobata", "batedor", "crianca_de_rua"],
-            pericias_prioritarias=["acrobatismo", "furtividade", "atletismo", "sobrevivencia", "medicina"],
-            saber_sugerido="Saber de Artes Marciais",
-            talentos_classe_n1=["postura_do_tigre", "postura_da_garca", "postura_do_lobo"],
-            talentos_classe_n2_mais=["folha_dancante", "punho_atordoante"],
-            talentos_pericia=["queda_do_gato", "equilibrio_estavel", "esgueirador_de_terreno"],
-            talentos_gerais=["veloz", "iniciativa_incrivel", "passo_aprumado"],
-            tracos_ancestralidade_afinidade=["agilidade", "velocidade", "garras"],
-            categoria_armadura_preferida="sem_armadura",
-            armaduras_ids=["roupa_de_explorador"],
-            usa_escudo=False,
-            escudos_ids=[],
-            armas_corpo_a_corpo_ids=["manopla"],
-            armas_distancia_ids=["dardo", "funda"],
-            estilo_empunhadura="desarmado",
-        ),
-        _conceito(
-            id_conceito="monge_mestre_ki",
-            classe_id="monge",
-            classe_nome="Monge",
-            nome="Mestre do Ki Elemental",
-            subclasse_oficial_id="monge_do_ki",
-            subclasse_oficial_nome="Caminho do Ki",
-            resumo_proposta=(
-                "Monge místico que canaliza energia espiritual (ki) para curar, acelerar "
-                "movimentos e infundir elementos nos próprios punhos."
-            ),
-            prioridade_atributos=["des", "sab", "for", "con", "car", "int"],
-            biografias_recomendadas=["discipulo_marcial", "eremita", "acolito", "vidente"],
-            pericias_prioritarias=["acrobatismo", "religiao", "medicina", "ocultismo", "atletismo"],
-            saber_sugerido="Saber Monástico",
-            talentos_classe_n1=["golpe_de_ki", "disparada_de_ki", "arsenal_monastico"],
-            talentos_classe_n2_mais=["punho_elemental", "punho_atordoante"],
-            talentos_pericia=["medicina_de_batalha", "queda_do_gato", "estudante_do_canone"],
-            talentos_gerais=["iniciativa_incrivel", "veloz", "vitalidade"],
-            tracos_ancestralidade_afinidade=["sabedoria", "ki", "elemental"],
-            categoria_armadura_preferida="sem_armadura",
-            armaduras_ids=["roupa_de_explorador"],
-            usa_escudo=False,
-            escudos_ids=[],
-            armas_corpo_a_corpo_ids=["manopla", "cajado"],
-            armas_distancia_ids=["dardo", "funda"],
-            estilo_empunhadura="desarmado",
-        ),
-
-        # =====================================================================
-        # 12. PATRULHEIRO (3)
-        # =====================================================================
-        _conceito(
-            id_conceito="patrulheiro_arqueiro_precisao",
+            id_conceito="patrulheiro_atirador_precisao",
             classe_id="patrulheiro",
             classe_nome="Patrulheiro",
-            nome="Atirador de Precisão",
-            subclasse_oficial_id="precisao",
-            subclasse_oficial_nome="Precisão",
+            nome="Atirador de Precisão (Sniper de Um Tiro)",
+            subclasses_oficiais=[("precisao", "Precisão")],
             resumo_proposta=(
-                "Caçador especialista em Caçar Presa com arco longo ou besta, maximizando "
-                "dano de precisão no primeiro disparo do turno."
+                "Franco-atirador furtivo de besta pesada ou arco longo focado em "
+                "maximizar o dano letal do primeiro disparo contra sua presa."
+            ),
+            sinergia_mecanica=(
+                "Excelência Precisão (+1d8 de precisão) com Ás com Besta (1º) e "
+                "Tiro à Caça (1º), evoluindo para Recarga em Movimento (4º) e "
+                "Camuflagem (10º) para atirar sem sair das sombras."
             ),
             prioridade_atributos=["des", "sab", "con", "for", "int", "car"],
-            biografias_recomendadas=["cacador", "batedor", "cacador_de_recompensas", "nomade"],
-            pericias_prioritarias=["natureza", "sobrevivencia", "furtividade", "acrobatismo", "medicina"],
-            saber_sugerido="Saber de Caça",
-            talentos_classe_n1=["tiro_a_caca", "as_com_besta", "cacador_de_monstros"],
-            talentos_classe_n2_mais=["mira_do_cacador", "terreno_predileto"],
-            talentos_pericia=["rastreador_experiente", "esgueirador_de_terreno", "forrageador"],
-            talentos_gerais=["iniciativa_incrivel", "veloz", "vitalidade"],
-            tracos_ancestralidade_afinidade=["arco", "elfo", "sentidos", "agilidade"],
+            biografias_recomendadas=["cacador", "cacador_de_recompensas", "batedor", "eremita"],
+            pericias_prioritarias=["furtividade", "natureza", "sobrevivencia", "acrobatismo", "medicina"],
+            saber_sugerido="Saber de Emboscada",
+            talentos_classe_n1=["as_com_besta", "tiro_a_caca", "cacador_de_monstros"],
+            talentos_classe_n2_mais=["mira_do_cacador", "recarga_em_movimento", "camuflagem"],
+            talentos_pericia=["esgueirador_de_terreno", "rastreador_experiente", "forrageador"],
+            talentos_gerais=["iniciativa_incrivel", "veloz", "perspicacia_astuta"],
+            tracos_ancestralidade_afinidade=["furtividade", "sentidos", "arco", "elfo"],
             categoria_armadura_preferida="leve",
             armaduras_ids=["couro_batido", "couro"],
             usa_escudo=False,
             escudos_ids=[],
             armas_corpo_a_corpo_ids=["espada_curta", "adaga"],
-            armas_distancia_ids=["arco_longo", "arco_curto", "besta_pesada"],
+            armas_distancia_ids=["besta_pesada", "arco_longo", "besta_leve"],
             estilo_empunhadura="distancia",
         ),
         _conceito(
-            id_conceito="patrulheiro_duas_armas_rajada",
+            id_conceito="patrulheiro_tormenta_duas_laminas",
             classe_id="patrulheiro",
             classe_nome="Patrulheiro",
-            nome="Caçador de Rajada (Duas Armas)",
-            subclasse_oficial_id="rajada",
-            subclasse_oficial_nome="Rajada",
+            nome="Tormenta de Duas Lâminas (Combate Corpo a Corpo)",
+            subclasses_oficiais=[("rajada", "Rajada"), ("precisao", "Precisão")],
             resumo_proposta=(
-                "Combatente agressivo dos ermos que reduz penalidades de ataques múltiplos "
-                "para desferir sequências rápidas com duas armas."
+                "Combatente agressivo com duas armas que ataca e apara em ritmo "
+                "acelerado contra a presa marcada no corpo a corpo."
+            ),
+            sinergia_mecanica=(
+                "Combina Abate Duplo (1º) com Saque Rápido (2º), Aparada Dupla (4º) "
+                "para ganhar bônus na CA e Golpe Escaramuçador (6º) para manter pressão."
             ),
             prioridade_atributos=["for", "des", "con", "sab", "int", "car"],
             biografias_recomendadas=["cacador", "soldado", "marinheiro", "mineiro"],
-            pericias_prioritarias=["natureza", "sobrevivencia", "atletismo", "acrobatismo", "intimidacao"],
+            pericias_prioritarias=["atletismo", "natureza", "sobrevivencia", "acrobatismo", "intimidacao"],
             saber_sugerido="Saber de Sobrevivência",
             talentos_classe_n1=["abate_duplo", "cacador_de_monstros"],
-            talentos_classe_n2_mais=["saque_rapido", "guardiao_contra_monstros"],
+            talentos_classe_n2_mais=["saque_rapido", "aparada_dupla", "golpe_escaramucador"],
             talentos_pericia=["escalador_de_combate", "rastreador_experiente", "salto_rapido"],
             talentos_gerais=["vitalidade", "veloz", "iniciativa_incrivel"],
             tracos_ancestralidade_afinidade=["forca", "agilidade", "selvagem"],
             categoria_armadura_preferida="media",
-            armaduras_ids=["couro_batido", "gibao_de_peles", "cota_de_escamas"],
+            armaduras_ids=["gibao_de_peles", "cota_de_escamas", "couro_batido"],
             usa_escudo=False,
             escudos_ids=[],
             armas_corpo_a_corpo_ids=["espada_longa", "espada_curta", "machadinha"],
@@ -1302,31 +2130,73 @@ def construir_conceitos() -> list[dict[str, Any]]:
             estilo_empunhadura="duas_armas",
         ),
         _conceito(
-            id_conceito="patrulheiro_senhor_feras",
+            id_conceito="patrulheiro_mestre_feras",
             classe_id="patrulheiro",
             classe_nome="Patrulheiro",
-            nome="Batedor Senhor das Feras",
-            subclasse_oficial_id="despiste",
-            subclasse_oficial_nome="Despiste",
+            nome="Mestre das Feras (Combate Sincronizado)",
+            subclasses_oficiais=[("precisao", "Precisão"), ("rajada", "Rajada"), ("despiste", "Despiste")],
             resumo_proposta=(
-                "Explorador tático que atua em dupla com um companheiro animal, dominando "
-                "rastreamento, emboscadas e empatia selvagem."
+                "Caçador em sintonia com um companheiro animal que compartilha os "
+                "bônus de Caçar Presa e da Vantagem do Caçador em equipe."
+            ),
+            sinergia_mecanica=(
+                "Companheiro Animal (1º) recebe sua Excelência de Caçador e escala "
+                "com Empatia Selvagem (2º), Brado do Companheiro (4º), Companheiro "
+                "Animal Maduro (6º), Companheiro Incrível (10º) e Lado a Lado (12º)."
             ),
             prioridade_atributos=["des", "sab", "con", "for", "car", "int"],
-            biografias_recomendadas=["encantador_de_animais", "batedor", "herbalista", "cacador"],
-            pericias_prioritarias=["natureza", "sobrevivencia", "furtividade", "medicina", "acrobatismo"],
+            biografias_recomendadas=["encantador_de_animais", "cacador", "herbalista", "batedor"],
+            pericias_prioritarias=["natureza", "sobrevivencia", "medicina", "diplomacia", "acrobatismo"],
             saber_sugerido="Saber de Fauna",
-            talentos_classe_n1=["companheiro_animal", "cacador_de_monstros"],
-            talentos_classe_n2_mais=["empatia_selvagem", "terreno_predileto"],
+            talentos_classe_n1=["companheiro_animal", "tiro_a_caca", "abate_duplo"],
+            talentos_classe_n2_mais=[
+                "empatia_selvagem",
+                "brado_do_companheiro",
+                "companheiro_animal_maduro",
+                "companheiro_incrivel",
+                "lado_a_lado",
+            ],
             talentos_pericia=["treinar_animal", "medicina_natural", "rastreador_experiente"],
             talentos_gerais=["cavalgar", "vitalidade", "iniciativa_incrivel"],
-            tracos_ancestralidade_afinidade=["animal", "natureza", "furtividade"],
+            tracos_ancestralidade_afinidade=["animal", "natureza", "floresta"],
             categoria_armadura_preferida="leve",
-            armaduras_ids=["couro", "couro_batido"],
+            armaduras_ids=["couro_batido", "couro"],
             usa_escudo=False,
             escudos_ids=[],
             armas_corpo_a_corpo_ids=["lanca", "espada_curta", "adaga"],
             armas_distancia_ids=["arco_curto", "funda"],
+            estilo_empunhadura="distancia",
+        ),
+        _conceito(
+            id_conceito="patrulheiro_mestre_arapucas",
+            classe_id="patrulheiro",
+            classe_nome="Patrulheiro",
+            nome="Mestre das Arapucas e Caçador de Monstros (Tático)",
+            subclasses_oficiais=[("despiste", "Despiste")],
+            resumo_proposta=(
+                "Caçador engenhoso que analisa monstros para conceder bônus ao grupo "
+                "e arma arapucas táticas rapidamente no campo de batalha."
+            ),
+            sinergia_mecanica=(
+                "Excelência Despiste (bônus em Manufatura, Natureza e Sobrevivência "
+                "contra a presa) unida a Caçador de Monstros (1º), Guardião Contra "
+                "Monstros (2º), Especialista em Arapuca (4º) e Arapucas Rápidas (6º)."
+            ),
+            prioridade_atributos=["des", "int", "sab", "con", "for", "car"],
+            biografias_recomendadas=["cacador", "funileiro", "batedor", "estudioso"],
+            pericias_prioritarias=["manufatura", "natureza", "sobrevivencia", "furtividade", "ladroagem"],
+            saber_sugerido="Saber de Monstros",
+            talentos_classe_n1=["cacador_de_monstros", "tiro_a_caca"],
+            talentos_classe_n2_mais=["guardiao_contra_monstros", "especialista_em_arapuca", "arapucas_rapidas"],
+            talentos_pericia=["manufatura_de_arapuca", "rastreador_experiente", "identificacao_rapida"],
+            talentos_gerais=["perspicacia_astuta", "iniciativa_incrivel", "vitalidade"],
+            tracos_ancestralidade_afinidade=["engenho", "saber", "armadilha", "natureza"],
+            categoria_armadura_preferida="leve",
+            armaduras_ids=["couro_batido", "couro"],
+            usa_escudo=False,
+            escudos_ids=[],
+            armas_corpo_a_corpo_ids=["espada_curta", "adaga"],
+            armas_distancia_ids=["arco_curto", "besta_leve"],
             estilo_empunhadura="distancia",
         ),
     ]
@@ -1342,16 +2212,22 @@ def gerar_estrutura_conceitos() -> dict[str, Any]:
     return {
         "meta": {
             "titulo": "Pathfinder 2ª Edição — Catálogo de Conceitos e Subclasses Procedurais",
-            "versao": "1.0",
+            "versao": "2.0",
             "total_classes_cobertas": len(indice_por_classe),
             "total_conceitos": len(conceitos),
             "descricao": (
-                "Cada conceito define o 'norte' temático e mecânico do personagem, conectando "
-                "subclasse oficial, prioridade de atributos (ABCD), biografias, perícias, "
-                "talentos, equipamentos iniciais (15 po) e conjuração."
+                "Catálogo com 56 conceitos temáticos cobrindo todas as 12 classes básicas. "
+                "O jogador escolhe a Classe e o Conceito, e o motor seleciona proceduralmente "
+                "a Subclasse Oficial do PF2E mais compatível (exata ou dentre candidatas), "
+                "atributos ABCD, biografia, perícias, talentos, equipamentos (15 po) e magias."
             ),
         },
         "regras_uso_procedural": {
+            "subclasse_procedural": (
+                "A partir do conceito escolhido, o motor resolve a subclasse oficial consultando "
+                "`subclasses_oficiais_candidatas` (usando a subclasse exata quando única ou "
+                "selecionando deterministicamente via seed entre as candidatas compatíveis)."
+            ),
             "atributos_abcd": (
                 "Distribuir melhorias livres (Ancestralidade, Biografia e Etapa D) seguindo "
                 "a ordem de `prioridade_atributos`, respeitando máximo +1 por etapa e teto 18 no 1º nível."
@@ -1373,9 +2249,10 @@ def gerar_estrutura_conceitos() -> dict[str, Any]:
                 "em `equipamento_recomendado` dentro do orçamento inicial de 15 po (1.500 pc)."
             ),
             "conjuracao": (
-                "Quando `conjuracao_recomendada` não for nulo, preencher primeiro os espaços com "
-                "`truques_prioritarios` e `magias_nivel_1_prioritarias`, completando eventuais vagas com "
-                "magias da `tradicao` que possuam traços em `tracos_prioritarios` ou escolas em `escolas_prioritarias`."
+                "Quando `conjuracao_recomendada` ou `conjuracao_por_tradicao` não for nulo, preencher "
+                "primeiro os espaços com `truques_prioritarios` e `magias_nivel_1_prioritarias`, "
+                "completando eventuais vagas com magias da `tradicao` que possuam traços em "
+                "`tracos_prioritarios` ou escolas em `escolas_prioritarias`."
             ),
         },
         "indice_por_classe": indice_por_classe,
@@ -1386,6 +2263,25 @@ def gerar_estrutura_conceitos() -> dict[str, Any]:
 def _carregar_json(nome_arquivo: str) -> dict[str, Any]:
     with (DIR_DADOS / nome_arquivo).open("r", encoding="utf-8") as f:
         return json.load(f)
+
+
+def _validar_bloco_conjuracao(
+    conj: dict[str, Any],
+    magias_por_id: dict[str, dict[str, Any]],
+    cid: str,
+) -> None:
+    trad = conj["tradicao"]
+    assert trad in {"arcana", "divina", "ocultista", "primal"}, f"Tradição inválida '{trad}' em {cid}"
+    for mid in conj["truques_prioritarios"]:
+        assert mid in magias_por_id, f"Truque inválido '{mid}' em {cid}"
+        m = magias_por_id[mid]
+        assert "Truque Mágico" in m.get("tracos", []), f"'{mid}' não é Truque Mágico"
+        assert trad in m.get("tradicoes", []), f"Truque '{mid}' não pertence à tradição '{trad}'"
+    for mid in conj["magias_nivel_1_prioritarias"]:
+        assert mid in magias_por_id, f"Magia N1 inválida '{mid}' em {cid}"
+        m = magias_por_id[mid]
+        assert m.get("nivel") == 1, f"Magia '{mid}' não é nível 1"
+        assert trad in m.get("tradicoes", []), f"Magia '{mid}' não pertence à tradição '{trad}'"
 
 
 def validar_conceitos(dados: dict[str, Any]) -> None:
@@ -1413,10 +2309,18 @@ def validar_conceitos(dados: dict[str, Any]) -> None:
     magias_lista = _carregar_json("magias01.json")["magias"] + _carregar_json("magias02.json")["magias"]
     magias_por_id = {m["id"]: m for m in magias_lista}
 
+    tese_arcana_ids = {
+        op["id"]
+        for car in classes_por_id["mago"]["caracteristicas_de_classe"]
+        if car["id"] == "tese_arcana"
+        for op in car["detalhes"]["opcoes"]
+    }
+
     atributos_validos = {"for", "des", "con", "int", "sab", "car"}
     conceitos = dados["conceitos"]
     ids_vistos: set[str] = set()
 
+    assert len(conceitos) == 56, f"Esperados 56 conceitos, encontrados {len(conceitos)}"
     assert len(dados["indice_por_classe"]) == 12, "Todas as 12 classes devem possuir conceitos"
     for cid in classes_por_id:
         assert cid in dados["indice_por_classe"], f"Classe '{cid}' sem conceitos mapeados"
@@ -1428,12 +2332,27 @@ def validar_conceitos(dados: dict[str, Any]) -> None:
 
         classe = classes_por_id[c["classe_id"]]
         assert c["classe_nome"] == classe["nome"]
+        assert c["resumo_proposta"].strip(), f"resumo_proposta vazio em {cid}"
+        assert c["sinergia_mecanica"].strip(), f"sinergia_mecanica vazio em {cid}"
 
-        # Subclasse oficial
-        sub_opcoes = {op["id"] for op in classe["subclasses"]["opcoes"]}
-        assert c["subclasse_oficial_id"] in sub_opcoes, (
-            f"Subclasse '{c['subclasse_oficial_id']}' não existe em {c['classe_id']}: {sub_opcoes}"
-        )
+        # Subclasses oficiais candidatas
+        sub_por_id = {op["id"]: op for op in classe["subclasses"]["opcoes"]}
+        candidatas = c["subclasses_oficiais_candidatas"]
+        assert len(candidatas) >= 1, f"Sem subclasses candidatas em {cid}"
+        assert candidatas[0] == c["subclasse_oficial_id"]
+        assert len(candidatas) == len(c["subclasses_oficiais_nomes"])
+        for sub_id, sub_nome in zip(candidatas, c["subclasses_oficiais_nomes"]):
+            assert sub_id in sub_por_id, (
+                f"Subclasse '{sub_id}' não existe em {c['classe_id']}: {list(sub_por_id)}"
+            )
+            assert sub_por_id[sub_id]["nome"] == sub_nome, (
+                f"Nome divergente de subclasse '{sub_id}': {sub_nome!r} != {sub_por_id[sub_id]['nome']!r}"
+            )
+
+        # Tese Arcana (Mago)
+        if c.get("tese_arcana_id") is not None:
+            assert c["classe_id"] == "mago"
+            assert c["tese_arcana_id"] in tese_arcana_ids, f"Tese Arcana inválida '{c['tese_arcana_id']}'"
 
         # Prioridade de atributos
         assert len(c["prioridade_atributos"]) == 6
@@ -1463,17 +2382,10 @@ def validar_conceitos(dados: dict[str, Any]) -> None:
             assert tid in talentos_por_id, f"Talento geral inválido '{tid}' em {cid}"
             assert talentos_por_id[tid]["categoria"] == "geral", f"'{tid}' não é Talento Geral"
 
-        # Equipamentos e proficiência base (1º nível)
+        # Equipamentos e proficiência base (1º nível) validada contra TODAS as subclasses candidatas
         eq_rec = c["equipamento_recomendado"]
         assert eq_rec["kit_classe_preferido"] in kits_classes
         assert len(eq_rec["armaduras_ids"]) >= 1
-
-        prof_def = dict(classe["proficiencias_iniciais"]["defesas"])
-        if c["classe_id"] == "clerigo" and c["subclasse_oficial_id"] == "capelao_da_guerra":
-            prof_def["armaduras_leves"] = "treinado"
-            prof_def["armaduras_medias"] = "treinado"
-        elif c["classe_id"] == "ladino" and c["subclasse_oficial_id"] == "rufiao":
-            prof_def["armaduras_medias"] = "treinado"
 
         mapa_cat_arm = {
             "Sem Armadura": "defesa_sem_armadura",
@@ -1481,18 +2393,26 @@ def validar_conceitos(dados: dict[str, Any]) -> None:
             "Armadura Média": "armaduras_medias",
             "Armadura Pesada": "armaduras_pesadas",
         }
-        for aid in eq_rec["armaduras_ids"]:
-            assert aid in armaduras_por_id, f"Armadura inválida '{aid}' em {cid}"
-            arm = armaduras_por_id[aid]
-            chave_def = mapa_cat_arm[arm["categoria"]]
-            grau_def = str(prof_def.get(chave_def, "destreinado")).lower()
-            assert not grau_def.startswith("destreinado"), (
-                f"Armadura '{aid}' sem proficiência no 1º nível em {cid}"
-            )
-            if c["classe_id"] == "druida":
-                assert (arm.get("material") or "").lower() != "metal", (
-                    f"Druida não pode usar armadura de metal '{aid}' em {cid}"
+        for sub_id in candidatas:
+            prof_def = dict(classe["proficiencias_iniciais"]["defesas"])
+            if c["classe_id"] == "clerigo" and sub_id == "capelao_da_guerra":
+                prof_def["armaduras_leves"] = "treinado"
+                prof_def["armaduras_medias"] = "treinado"
+            elif c["classe_id"] == "ladino" and sub_id == "rufiao":
+                prof_def["armaduras_medias"] = "treinado"
+
+            for aid in eq_rec["armaduras_ids"]:
+                assert aid in armaduras_por_id, f"Armadura inválida '{aid}' em {cid}"
+                arm = armaduras_por_id[aid]
+                chave_def = mapa_cat_arm[arm["categoria"]]
+                grau_def = str(prof_def.get(chave_def, "destreinado")).lower()
+                assert not grau_def.startswith("destreinado"), (
+                    f"Armadura '{aid}' sem proficiência no 1º nível em {cid} (sub={sub_id})"
                 )
+                if c["classe_id"] == "druida":
+                    assert (arm.get("material") or "").lower() != "metal", (
+                        f"Druida não pode usar armadura de metal '{aid}' em {cid}"
+                    )
 
         for sid in eq_rec["escudos_ids"]:
             assert sid in escudos_por_id, f"Escudo inválido '{sid}' em {cid}"
@@ -1506,6 +2426,11 @@ def validar_conceitos(dados: dict[str, Any]) -> None:
             if isinstance(esp_raw, dict)
             else ({n.lower() for n in esp_raw} if isinstance(esp_raw, list) else set())
         )
+        tem_arsenal_monastico = (
+            c["classe_id"] == "monge"
+            and c["talentos_recomendados"]["classe_nivel_1"]
+            and c["talentos_recomendados"]["classe_nivel_1"][0] == "arsenal_monastico"
+        )
         armas_todas = armas_cc_por_id | armas_dist_por_id
         for wid in eq_rec["armas_corpo_a_corpo_ids"]:
             assert wid in armas_cc_por_id, f"Arma CC inválida '{wid}' em {cid}"
@@ -1514,8 +2439,11 @@ def validar_conceitos(dados: dict[str, Any]) -> None:
         for wid in eq_rec["armas_corpo_a_corpo_ids"] + eq_rec["armas_distancia_ids"]:
             arma = armas_todas[wid]
             cat = arma["categoria"]
+            tracos_l = [t.lower() for t in arma.get("tracos", [])]
             if wid == "bomba_alquimica":
                 ok = not str(prof_atk.get("bombas_alquimicas", "destreinado")).startswith("destreinado")
+            elif tem_arsenal_monastico and "monge" in tracos_l:
+                ok = True
             elif arma["nome"].lower() in esp_nomes:
                 ok = True
             elif cat == "Arma Simples":
@@ -1531,18 +2459,18 @@ def validar_conceitos(dados: dict[str, Any]) -> None:
         # Conjuração (quando aplicável)
         conj = c["conjuracao_recomendada"]
         if conj is not None:
-            trad = conj["tradicao"]
-            assert trad in {"arcana", "divina", "ocultista", "primal"}
-            for mid in conj["truques_prioritarios"]:
-                assert mid in magias_por_id, f"Truque inválido '{mid}' em {cid}"
-                m = magias_por_id[mid]
-                assert "Truque Mágico" in m.get("tracos", []), f"'{mid}' não é Truque Mágico"
-                assert trad in m.get("tradicoes", []), f"Truque '{mid}' não pertence à tradição '{trad}'"
-            for mid in conj["magias_nivel_1_prioritarias"]:
-                assert mid in magias_por_id, f"Magia N1 inválida '{mid}' em {cid}"
-                m = magias_por_id[mid]
-                assert m.get("nivel") == 1, f"Magia '{mid}' não é nível 1"
-                assert trad in m.get("tradicoes", []), f"Magia '{mid}' não pertence à tradição '{trad}'"
+            _validar_bloco_conjuracao(conj, magias_por_id, cid)
+
+        conj_trad = c.get("conjuracao_por_tradicao")
+        if conj_trad is not None:
+            for trad_k, bloco in conj_trad.items():
+                assert bloco["tradicao"] == trad_k
+                _validar_bloco_conjuracao(bloco, magias_por_id, cid)
+            if c["classe_id"] == "feiticeiro":
+                trads_req = {sub_por_id[sid]["tradicao_magica"] for sid in candidatas}
+                assert trads_req.issubset(set(conj_trad.keys())), (
+                    f"conjuracao_por_tradicao incompleto em {cid}: {trads_req} vs {set(conj_trad)}"
+                )
 
 
 def main() -> None:

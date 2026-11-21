@@ -42,8 +42,8 @@ Lista viva de todas as entregas e tarefas que ainda precisam ser realizadas até
 
 ## Etapa 2 — Subclasses / Conceitos Procedurais
 
-- [x] **Definir e estruturar `dados/conceitos_subclasses.json`** *(Concluído em `19/11/2026 — 10:54` → [finalizado/13.md](finalizado/13.md))*
-  - Criados `38` conceitos ("nortes") cobrindo todas as `12` classes (incluindo *Mago — Elementalista*, *Guerreiro — Mestre da Espada de Duas Mãos*, entre outros), com prioridade de atributos, biografias recomendadas, perícias/saberes, talentos (Classe, Perícia, Gerais e afinidade ancestral), equipamentos compatíveis com `15 po` e diretrizes de conjuração, validados 1:1 contra todos os JSONs de `dados/`.
+- [x] **Definir e estruturar `dados/conceitos_subclasses.json`** *(Concluído em `19/11/2026 — 10:54` → [finalizado/13.md](finalizado/13.md); atualizado em `21/11/2026 — 10:35` → [finalizado/20.md](finalizado/20.md))*
+  - Substituído para `56` conceitos ("nortes") cobrindo todas as `12` classes (com descrição, sinergia e resolução procedural da subclasse oficial PF2E mais próxima/exata), prioridade de atributos, biografias recomendadas, perícias/saberes, talentos (Classe, Perícia, Gerais e afinidade ancestral), equipamentos compatíveis com `15 po` e diretrizes de conjuração, validados 1:1 contra todos os JSONs de `dados/`.
 
 ---
 
@@ -74,7 +74,7 @@ Lista viva de todas as entregas e tarefas que ainda precisam ser realizadas até
 ## Etapa 5 — Testes e Validação Final
 
 - [x] **Testes integrados ponta a ponta via Flask (`scripts/validar_motor_procedural.py`)** *(Concluído em `19/11/2026 — 14:29` → [finalizado/16.md](finalizado/16.md))*
-  - Cobertura de todos os `38` conceitos nas `12` classes, `29` heranças das `6` ancestralidades, `10` casos especiais, `8` endpoints Flask + arquivos estáticos e validação estrutural completa das exportações `.txt` e `.docx` (OOXML/XML).
+  - Cobertura de todos os `56` conceitos nas `12` classes, `29` heranças das `6` ancestralidades, `10` casos especiais, `8` endpoints Flask + arquivos estáticos e validação estrutural completa das exportações `.txt` e `.docx` (OOXML/XML).
 - [ ] **Suíte unitária dedicada de casos de borda matemáticos de PF2E** *(sugerido detalhamento em [sugestoes/02_melhorias_motor_e_regras.md](sugestoes/02_melhorias_motor_e_regras.md))*
   - Testes isolados de CA com Limite de Destreza, penalidade por `FOR < forca_minima` vs `Ferro Desimpedido`, sobrecarga (`-3m` respeitando mínimo `1,5m`), `Acuidade` / `Ladrão` / `Propulsivo` (FOR positiva e negativa) e `Capelão da Guerra`.
 - [ ] **Validação visual interativa em navegador real (`python app.py`)**

@@ -138,6 +138,29 @@ body {
   margin-bottom: 2px;
 }
 
+.conceito-desc {
+  margin-top: 4px;
+  color: var(--ink);
+}
+
+.conceito-sinergia {
+  margin-top: 4px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.conceito-sub-tag {
+  margin-top: 6px;
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: var(--tint-strong);
+  border: 1px solid var(--border);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent-dark);
+}
+
 .barra-acoes {
   display: flex;
   flex-wrap: wrap;

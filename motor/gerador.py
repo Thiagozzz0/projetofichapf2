@@ -36,12 +36,46 @@ def _sortear_nome_personagem(ancestralidade: dict[str, Any], rng: random.Random)
     return rng.choice(pool)
 
 
-def _determinar_tendencia(classe_id: str, subclasse_id: str) -> str:
+def _determinar_tendencia(
+    classe_id: str,
+    subclasse_id: str,
+    conceito: dict[str, Any] | None = None,
+) -> str:
+    if conceito and conceito.get("tendencia_preferida"):
+        return str(conceito["tendencia_preferida"])
     if classe_id == "campeao":
         return {"paladino": "OB", "redentor": "NB", "libertador": "CB"}.get(subclasse_id, "NB")
     if classe_id == "druida":
         return "N"
     return "NB"
+
+
+def _selecionar_subclasse_procedural(
+    db: BaseDados,
+    classe_id: str,
+    conceito: dict[str, Any],
+    rng: random.Random,
+) -> dict[str, Any] | None:
+    """Resolve a subclasse oficial a partir do conceito (exata ou dentre candidatas)."""
+    candidatas = list(conceito.get("subclasses_oficiais_candidatas") or [])
+    if not candidatas and conceito.get("subclasse_oficial_id"):
+        candidatas = [conceito["subclasse_oficial_id"]]
+    validas = [s for sid in candidatas if (s := db.subclasse(classe_id, sid)) is not None]
+    if not validas:
+        return db.subclasse(classe_id, conceito.get("subclasse_oficial_id", ""))
+    return validas[0] if len(validas) == 1 else rng.choice(validas)
+
+
+def _resolver_tese_arcana(classe: dict[str, Any], tese_id: str | None) -> dict[str, Any] | None:
+    if not tese_id:
+        return None
+    for car in classe.get("caracteristicas_de_classe", []):
+        if car.get("id") == "tese_arcana":
+            opcoes = car.get("detalhes", {}).get("opcoes", [])
+            for op in opcoes:
+                if op.get("id") == tese_id:
+                    return op
+    return None
 
 
 def _preencher_pagina_talentos(
@@ -51,6 +85,7 @@ def _preencher_pagina_talentos(
     classe: dict[str, Any],
     subclasse: dict[str, Any] | None,
     talentos_res: dict[str, Any],
+    tese_arcana: dict[str, Any] | None = None,
 ) -> None:
     hab_tal = ficha["habilidades_e_talentos"]
 
@@ -82,7 +117,16 @@ def _preencher_pagina_talentos(
 
     # Classe — slots 0 e 1 (CARACTERÍSTICA 1º) e slot 2 (TALENTO 1º)
     caracts = talentos_res["caracteristicas_classe_n1"]
-    if subclasse:
+    if subclasse and tese_arcana:
+        hab_tal["classe"][0]["nome"] = (
+            f"{classe['subclasses']['nome_tipo']}: {subclasse['nome']} | Tese: {tese_arcana['nome']}"
+        )
+        hab_tal["classe"][0]["origem_regra"] = f"Classe ({classe['nome']})"
+        hab_tal["classe"][0]["resumo"] = (
+            f"{subclasse.get('descricao', '')} | Tese Arcana ({tese_arcana['nome']}): "
+            f"{tese_arcana.get('descricao', '')}"
+        ).strip()
+    elif subclasse:
         hab_tal["classe"][0]["nome"] = f"{classe['subclasses']['nome_tipo']}: {subclasse['nome']}"
         hab_tal["classe"][0]["origem_regra"] = f"Classe ({classe['nome']})"
         hab_tal["classe"][0]["resumo"] = subclasse.get("descricao", "")
@@ -172,8 +216,16 @@ def listar_opcoes_criacao(dados: BaseDados | None = None) -> dict[str, Any]:
                     "id": con["id"],
                     "nome": con["nome"],
                     "titulo_completo": con["titulo_completo"],
+                    "subclasse_oficial_id": con["subclasse_oficial_id"],
                     "subclasse_oficial_nome": con["subclasse_oficial_nome"],
+                    "subclasses_oficiais_candidatas": con.get(
+                        "subclasses_oficiais_candidatas", [con["subclasse_oficial_id"]]
+                    ),
+                    "subclasses_oficiais_nomes": con.get(
+                        "subclasses_oficiais_nomes", [con["subclasse_oficial_nome"]]
+                    ),
                     "resumo_proposta": con["resumo_proposta"],
+                    "sinergia_mecanica": con.get("sinergia_mecanica", ""),
                 }
                 for con in db.conceitos_da_classe(c["id"])
             ],
@@ -230,8 +282,6 @@ def gerar_personagem(
             f"O conceito '{conceito_id}' pertence à classe '{conceito['classe_id']}', não a '{classe_id}'."
         )
 
-    subclasse = db.subclasse(classe_id, conceito["subclasse_oficial_id"])
-
     # Seed opcional: se não informada, cria uma seed aleatória rastreável
     if seed is None or str(seed).strip() == "":
         seed_usada: int | str = random.SystemRandom().randint(1, 999_999_999)
@@ -239,6 +289,9 @@ def gerar_personagem(
         seed_str = str(seed).strip()
         seed_usada = int(seed_str) if seed_str.isdigit() else seed_str
     rng = random.Random(seed_usada)
+
+    subclasse = _selecionar_subclasse_procedural(db, classe_id, conceito, rng)
+    tese_arcana = _resolver_tese_arcana(classe, conceito.get("tese_arcana_id")) if classe_id == "mago" else None
 
     # ------------------------------------------------------------------
     # 2. Seleção de Biografia (Manual ou Procedural) + Atributos (ABCD)
@@ -260,8 +313,10 @@ def gerar_personagem(
     pericias_base = calcular_pericias(
         db, ancestralidade, heranca, biografia, classe, subclasse, conceito, mod_int, extras_pericias=0, rng=rng
     )
-    tendencia = _determinar_tendencia(classe_id, subclasse["id"] if subclasse else "")
-    fonte_divina = "ferimento" if "exaurir" in conceito["id"] else "cura"
+    tendencia = _determinar_tendencia(classe_id, subclasse["id"] if subclasse else "", conceito=conceito)
+    fonte_divina = conceito.get("fonte_divina_preferida") or (
+        "ferimento" if ("ceifador" in conceito["id"] or "exaurir" in conceito["id"]) else "cura"
+    )
 
     talentos_res = selecionar_talentos(
         db,
@@ -275,6 +330,7 @@ def gerar_personagem(
         pericia_bio_id=pericias_base["pericia_biografia_id"],
         tendencia=tendencia,
         fonte_divina=fonte_divina,
+        tese_arcana_id=tese_arcana["id"] if tese_arcana else None,
         rng=rng,
     )
 
@@ -301,9 +357,11 @@ def gerar_personagem(
     # ------------------------------------------------------------------
     # 4. Equipamentos (15 po), Volume e Conjuração
     # ------------------------------------------------------------------
-    profs_combate = calcular_proficiencias_combate(classe, subclasse)
+    profs_combate = calcular_proficiencias_combate(
+        classe, subclasse, talentos_classe_ids=talentos_res["talentos_classe_ids"]
+    )
     equip_res = comprar_equipamentos(
-        db, ancestralidade, classe, conceito, mod_for, profs_combate, mod_int=mod_int
+        db, ancestralidade, classe, conceito, mod_for, profs_combate, mod_int=mod_int, subclasse=subclasse
     )
     magias_res = gerar_conjuracao(
         db,
@@ -314,6 +372,7 @@ def gerar_personagem(
         atributos_res["modificadores"],
         talentos_res["talentos_classe_ids"],
         nivel=nivel,
+        fonte_divina=fonte_divina,
         rng=rng,
     )
 
@@ -332,6 +391,14 @@ def gerar_personagem(
         if t and normalizar(t) not in {normalizar(x) for x in tracos}:
             tracos.append(t)
 
+    divindade_texto = ""
+    if classe_id in ("campeao", "clerigo"):
+        divindade_texto = (
+            "Pharasma / Divindade Neutra (Fonte de Ferimento)"
+            if fonte_divina == "ferimento"
+            else "Sarenrae / Divindade Bondosa"
+        )
+
     ficha["cabecalho"] = {
         "nome_personagem": nome_final,
         "nome_jogador": nome_jogador.strip(),
@@ -342,7 +409,7 @@ def gerar_personagem(
         "tamanho": ancestralidade["tamanho"],
         "tendencia": tendencia,
         "tracos": tracos,
-        "divindade": "Sarenrae / Divindade Bondosa" if classe_id in ("campeao", "clerigo") else "",
+        "divindade": divindade_texto,
         "nivel": nivel,
         "pontos_heroismo": 1,
     }
@@ -353,7 +420,9 @@ def gerar_personagem(
             "modificador": atributos_res["modificadores"][aid],
         }
 
-    _preencher_pagina_talentos(ficha, ancestralidade, heranca, classe, subclasse, talentos_res)
+    _preencher_pagina_talentos(
+        ficha, ancestralidade, heranca, classe, subclasse, talentos_res, tese_arcana=tese_arcana
+    )
     preencher_bloco_conjuracao_ficha(ficha["conjuracao"], magias_res)
     notas_combate = calcular_matematica_final(
         ficha=ficha,
@@ -371,12 +440,15 @@ def gerar_personagem(
         nivel=nivel,
     )
 
+    sub_nome_final = subclasse["nome"] if subclasse else conceito["subclasse_oficial_nome"]
+    tese_nota = f" | Tese: {tese_arcana['nome']}" if tese_arcana else ""
     ficha["perfil_e_campanha"]["dados_biograficos"]["idade"] = str(ancestralidade.get("maturidade_anos", 20))
     ficha["perfil_e_campanha"]["anotacoes_campanha"]["anotacoes"] = (
-        f"Conceito: {conceito['titulo_completo']} ({conceito['subclasse_oficial_nome']}). "
+        f"Conceito: {conceito['titulo_completo']} (Subclasse PF2E: {sub_nome_final}{tese_nota}). "
         f"{conceito['resumo_proposta']} "
+        f"Sinergia: {conceito.get('sinergia_mecanica', '')} "
         f"Biografia: {biografia['descricao']}"
-    )
+    ).strip()
 
     return {
         "meta_geracao": {
@@ -389,6 +461,9 @@ def gerar_personagem(
             "classe_id": classe_id,
             "conceito_id": conceito_id,
             "subclasse_oficial_id": subclasse["id"] if subclasse else None,
+            "subclasse_oficial_nome": sub_nome_final,
+            "tese_arcana_id": tese_arcana["id"] if tese_arcana else None,
+            "tese_arcana_nome": tese_arcana["nome"] if tese_arcana else None,
             "atributo_chave": atributos_res["atributo_chave"],
             "historico_abcd": atributos_res["historico_abcd"],
             "orcamento_inicial": "15 po",
