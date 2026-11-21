@@ -15,8 +15,9 @@ def calcular_proficiencias_combate(
     classe: dict[str, Any],
     subclasse: dict[str, Any] | None,
     talentos_classe_ids: list[str] | None = None,
+    divindade: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Resolve as proficiências de armaduras e armas considerando classe, subclasse e talentos."""
+    """Resolve as proficiências de armaduras e armas considerando classe, subclasse, talentos e divindade."""
     defesas_brutas = classe["proficiencias_iniciais"]["defesas"]
     defesas = {
         "sem_armadura": grau_normalizado(defesas_brutas.get("defesa_sem_armadura")),
@@ -44,13 +45,25 @@ def calcular_proficiencias_combate(
         lista_esp = []
         grau_esp = "destreinado"
 
+    desarmado_grau = grau_normalizado(ataques_brutos.get("ataques_desarmados"))
+    if classe["id"] == "clerigo" and divindade:
+        wid_fav = divindade.get("arma_favorecida_id")
+        nome_fav = normalizar(divindade.get("arma_favorecida_nome"))
+        if wid_fav == "punho":
+            if desarmado_grau == "destreinado":
+                desarmado_grau = "treinado"
+        elif nome_fav and nome_fav not in lista_esp:
+            lista_esp.append(nome_fav)
+            if grau_esp == "destreinado":
+                grau_esp = "treinado"
+
     armas_monge_treinadas = classe["id"] == "monge" and "arsenal_monastico" in (talentos_classe_ids or [])
 
     armas = {
         "simples": grau_normalizado(ataques_brutos.get("armas_simples")),
         "marcial": grau_normalizado(ataques_brutos.get("armas_marciais")),
         "avancada": grau_normalizado(ataques_brutos.get("armas_avancadas")),
-        "desarmado": grau_normalizado(ataques_brutos.get("ataques_desarmados")),
+        "desarmado": desarmado_grau,
         "bombas_alquimicas": grau_normalizado(ataques_brutos.get("bombas_alquimicas")),
         "armas_traco_monge": "treinado" if armas_monge_treinadas else "destreinado",
         "especificas_lista": lista_esp,
@@ -142,6 +155,8 @@ def comprar_equipamentos(
     profs_combate: dict[str, Any],
     mod_int: int = 0,
     subclasse: dict[str, Any] | None = None,
+    efeitos_talentos: dict[str, Any] | None = None,
+    divindade: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Executa a compra procedural dentro de 15 po (1.500 pc) e calcula o Volume."""
     saldo_pc = ORCAMENTO_INICIAL_PC
@@ -152,11 +167,21 @@ def comprar_equipamentos(
     eq_rec = conceito["equipamento_recomendado"]
     estilo = eq_rec["estilo_empunhadura"]
 
+    armas_cc_ids = list(eq_rec["armas_corpo_a_corpo_ids"])
+    armas_dist_ids = list(eq_rec["armas_distancia_ids"])
+    if classe["id"] == "clerigo" and subclasse and subclasse.get("id") == "capelao_da_guerra" and divindade:
+        wid_fav = divindade.get("arma_favorecida_id")
+        if wid_fav and wid_fav in dados.armas:
+            if dados.armas[wid_fav].get("tipo_ataque") == "distancia":
+                armas_dist_ids = [wid_fav] + [x for x in armas_dist_ids if x != wid_fav]
+            else:
+                armas_cc_ids = [wid_fav] + [x for x in armas_cc_ids if x != wid_fav]
+
     # Reserva mínima para comprar pelo menos o kit de aventureiro (70 pc) e 1 arma viável
     reserva_kit = 70
     armas_candidatas_preco = [
         dados.armas[wid]["preco_pc"]
-        for wid in eq_rec["armas_corpo_a_corpo_ids"] + eq_rec["armas_distancia_ids"]
+        for wid in armas_cc_ids + armas_dist_ids
         if wid in dados.armas and dados.armas[wid].get("preco_pc") is not None
         and grau_arma(dados.armas[wid], armas_prof) != "destreinado"
     ]
@@ -217,28 +242,28 @@ def comprar_equipamentos(
         return True
 
     if estilo == "distancia":
-        for wid in eq_rec["armas_distancia_ids"]:
+        for wid in armas_dist_ids:
             if tentar_comprar_arma(wid):
                 break
-        for wid in eq_rec["armas_corpo_a_corpo_ids"]:
+        for wid in armas_cc_ids:
             if tentar_comprar_arma(wid):
                 break
     elif estilo == "duas_armas":
-        for wid in eq_rec["armas_corpo_a_corpo_ids"]:
+        for wid in armas_cc_ids:
             if len(armas_compradas) >= 2:
                 break
             tentar_comprar_arma(wid)
-        if len(armas_compradas) < 2 and eq_rec["armas_corpo_a_corpo_ids"]:
+        if len(armas_compradas) < 2 and armas_cc_ids:
             # Caso só tenha 1 arma viável no saldo, permite par da arma barata se houver saldo
             tentar_comprar_arma("adaga")
-        for wid in eq_rec["armas_distancia_ids"]:
+        for wid in armas_dist_ids:
             if tentar_comprar_arma(wid):
                 break
     else:
-        for wid in eq_rec["armas_corpo_a_corpo_ids"]:
+        for wid in armas_cc_ids:
             if tentar_comprar_arma(wid):
                 break
-        for wid in eq_rec["armas_distancia_ids"]:
+        for wid in armas_dist_ids:
             if tentar_comprar_arma(wid):
                 break
 
@@ -327,7 +352,8 @@ def comprar_equipamentos(
     # Anão recebe Adaga de Clã gratuita no 1º nível; Mago recebe Grimório gratuito
     if ancestralidade["id"] == "anao":
         adaga_cla = dados.armas["adaga_de_cla"]
-        armas_compradas.append(adaga_cla)
+        if grau_arma(adaga_cla, armas_prof) != "destreinado":
+            armas_compradas.append(adaga_cla)
         registrar_item(itens_vestidos, f"{adaga_cla['nome']} (Ancestral)", 1, adaga_cla["volume"], float(adaga_cla["volume_valor"]), 0)
 
     if classe["id"] == "mago":
@@ -365,20 +391,41 @@ def comprar_equipamentos(
             kit_av["preco_pc"],
         )
 
-    # Cálculo exato de Volume PF2E: inteiros + floor(qtd_leves / 10)
-    todos = itens_vestidos + itens_preparados + outros_itens
-    soma_inteiros = 0
-    soma_leves = 0
-    for item in todos:
-        vv = float(item.get("volume_valor") or 0.0)
-        if vv >= 1.0:
-            soma_inteiros += int(round(vv))
-        elif 0.05 <= vv < 1.0:
-            soma_leves += max(1, int(round(vv * 10)))
+    # Cálculo exato de Volume PF2E: inteiros + floor(qtd_leves / 10) + isenção da mochila (2 Vol)
+    def _somar_volumes(lista_itens: list[dict[str, Any]]) -> tuple[int, int]:
+        inteiros, leves = 0, 0
+        for item in lista_itens:
+            vv = float(item.get("volume_valor") or 0.0)
+            if vv >= 1.0:
+                inteiros += int(round(vv))
+            elif 0.05 <= vv < 1.0:
+                leves += max(1, int(round(vv * 10)))
+        return inteiros, leves
 
+    int_vest, lev_vest = _somar_volumes(itens_vestidos + itens_preparados)
+    int_outros, lev_outros = _somar_volumes(outros_itens)
+    tem_mochila = any(
+        "kit de aventureiro" in normalizar(it["nome"]) or "mochila" in normalizar(it["nome"])
+        for it in outros_itens
+    )
+    if tem_mochila:
+        if int_outros >= 2:
+            int_outros_efetivo = int_outros - 2
+            lev_outros_efetivo = lev_outros
+        else:
+            folga_leves = (2 - int_outros) * 10
+            int_outros_efetivo = 0
+            lev_outros_efetivo = max(0, lev_outros - folga_leves)
+    else:
+        int_outros_efetivo, lev_outros_efetivo = int_outros, lev_outros
+
+    soma_inteiros = int_vest + int_outros_efetivo
+    soma_leves = lev_vest + lev_outros_efetivo
     volume_total = soma_inteiros + (soma_leves // 10)
-    sobrecarregado_lim = 5 + mod_for
-    maximo_lim = 10 + mod_for
+
+    bonus_carga = 2 if (efeitos_talentos or {}).get("carregador_robusto") else 0
+    sobrecarregado_lim = 5 + mod_for + bonus_carga
+    maximo_lim = 10 + mod_for + bonus_carga
 
     return {
         "armadura": armadura_escolhida,

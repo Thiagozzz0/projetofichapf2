@@ -99,7 +99,17 @@ def _avaliar_clausula(
         return classe_id == "clerigo" and ctx.get("fonte_divina", "cura") == "ferimento"
 
     if "arma favorita simples" in c:
-        return classe_id == "clerigo" and subclasse_id == "capelao_da_guerra"
+        if classe_id != "clerigo":
+            return False
+        div = ctx.get("divindade")
+        if div:
+            dados_ctx: BaseDados | None = ctx.get("dados")
+            wid = div.get("arma_favorecida_id")
+            if wid == "punho":
+                return True
+            arma = dados_ctx.armas.get(wid) if (dados_ctx and wid) else None
+            return arma is not None and arma.get("categoria") == "Arma Simples"
+        return subclasse_id == "capelao_da_guerra"
 
     if "caracteristica de classe de conjuracao" in c:
         return conjuracao_plena
@@ -168,6 +178,7 @@ def selecionar_talentos(
     tendencia: str = "NB",
     fonte_divina: str = "cura",
     tese_arcana_id: str | None = None,
+    divindade: dict[str, Any] | None = None,
     rng: random.Random | None = None,
 ) -> dict[str, Any]:
     """Seleciona todos os talentos e características aplicáveis ao 1º nível."""
@@ -182,6 +193,7 @@ def selecionar_talentos(
         "conjuracao_plena": classe["id"] in _CLASSES_CONJURADORAS_PLENAS,
         "tendencia_bondosa": "B" in tendencia.upper(),
         "fonte_divina": fonte_divina,
+        "divindade": divindade,
     }
 
     # ------------------------------------------------------------------
@@ -265,7 +277,15 @@ def selecionar_talentos(
         if sub_id == "sacerdote_enclausurado":
             adicionar_classe_talento("iniciado_no_dominio", "Doutrina (Primeira Doutrina)")
         elif sub_id == "capelao_da_guerra":
-            adicionar_classe_talento("simplicidade_mortal", "Doutrina (Primeira Doutrina)")
+            wid_div = divindade.get("arma_favorecida_id") if divindade else None
+            arma_div = dados.armas.get(wid_div) if wid_div else None
+            arma_eh_simples = (
+                divindade is None
+                or wid_div == "punho"
+                or (arma_div is not None and arma_div.get("categoria") == "Arma Simples")
+            )
+            if arma_eh_simples:
+                adicionar_classe_talento("simplicidade_mortal", "Doutrina (Primeira Doutrina)")
 
     # Classes que possuem talento de classe livre no 1º nível (tabela_progressao[0])
     prog1 = [normalizar(x) for x in classe["tabela_progressao"][0]["caracteristicas"]]
@@ -369,6 +389,7 @@ def selecionar_talentos(
             talentos_bonus_slots.append(
                 {
                     "nome": tp_ladino["nome"],
+                    "categoria": "pericia",
                     "origem_regra": "Classe (Ladino — Talento de Perícia 1º Nível)",
                     "pagina": None,
                     "resumo": tp_ladino.get("resumo_beneficio") or tp_ladino.get("descricao", ""),
@@ -415,6 +436,7 @@ def selecionar_talentos(
             talentos_bonus_slots.append(
                 {
                     "nome": tg["nome"],
+                    "categoria": "geral",
                     "origem_regra": origens_extras_gerais[i],
                     "pagina": None,
                     "resumo": tg.get("resumo_beneficio") or tg.get("descricao", ""),
@@ -433,12 +455,22 @@ def selecionar_talentos(
         and not c["id"].startswith("talentos_de_")
     ]
 
+    regras_morr = dados.regras_especificas.get("morrendo_e_testes_de_recuperacao", {})
+    limite_morr_padrao = int(regras_morr.get("limite_morrendo_padrao", 4))
+    duro_de_matar = "duro_de_matar" in talentos_gerais_ativos
+    vitalidade_ativo = "vitalidade" in talentos_gerais_ativos
+
     efeitos = {
         "extras_pericias": 2 if talento_ancestral["id"] == "pericia_natural" else 0,
-        "vitalidade": "vitalidade" in talentos_gerais_ativos,
+        "vitalidade": vitalidade_ativo,
         "veloz": "veloz" in talentos_gerais_ativos,
         "iniciativa_incrivel": "iniciativa_incrivel" in talentos_gerais_ativos,
         "bloqueio_com_escudo": "bloqueio_com_escudo" in talentos_gerais_ativos,
+        "carregador_robusto": "carregador_robusto" in ids_gerais_pericia_usados,
+        "duro_de_matar": duro_de_matar,
+        "simplicidade_mortal": "simplicidade_mortal" in escolhidos_classe_ids,
+        "limite_morrendo": 5 if duro_de_matar else limite_morr_padrao,
+        "cd_recuperacao_base": 9 if vitalidade_ativo else int(regras_morr.get("cd_recuperacao_base_padrao", 10)),
         "elfo_ligeiro": talento_ancestral["id"] == "elfo_ligeiro",
         "ferro_desimpedido": talento_ancestral["id"] == "ferro_desimpedido",
         "dentes_de_navalha": heranca["id"] == "goblin_dentes_de_navalha",

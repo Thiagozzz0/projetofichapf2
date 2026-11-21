@@ -48,7 +48,7 @@ def _preencher_golpe(
 
     if eh_distancia:
         mod_atk = modificadores["des"]
-        if "propulsivo" in tracos_norm:
+        if "propulsiv" in tracos_norm:
             terceiro_dano = modificadores["for"] // 2 if modificadores["for"] >= 0 else modificadores["for"]
         elif "arremesso" in tracos_norm:
             terceiro_dano = modificadores["for"]
@@ -102,6 +102,52 @@ def _sentidos_personagem(ancestralidade: dict[str, Any], heranca: dict[str, Any]
     return sentidos
 
 
+_MONGE_POSTURAS_GOLPES = {
+    "postura_do_tigre": {
+        "nome": "Garra do Tigre (Postura)",
+        "dano_quantidade": 1,
+        "dano_dado": "d8",
+        "dano_tipo": "Ct",
+        "tracos": ["Acuidade", "Ágil", "Desarmado", "Não-Letal"],
+        "nota_ca": None,
+    },
+    "postura_do_lobo": {
+        "nome": "Mandíbula do Lobo (Postura)",
+        "dano_quantidade": 1,
+        "dano_dado": "d8",
+        "dano_tipo": "Pf",
+        "tracos": ["Acuidade", "Ágil", "Apunhaladora", "Desarmado", "Não-Letal"],
+        "nota_ca": None,
+    },
+    "postura_da_montanha": {
+        "nome": "Pedra Cadente (Postura)",
+        "dano_quantidade": 1,
+        "dano_dado": "d8",
+        "dano_tipo": "Cn",
+        "tracos": ["Enérgico", "Desarmado", "Não-Letal"],
+        "nota_ca": "Postura da Montanha (ativa): +4 bônus de estado na CA (Lim Des +0, -1,5m Vel.)",
+    },
+    "postura_da_garca": {
+        "nome": "Asa da Garça (Postura)",
+        "dano_quantidade": 1,
+        "dano_dado": "d6",
+        "dano_tipo": "Cn",
+        "tracos": ["Acuidade", "Ágil", "Desarmado", "Não-Letal"],
+        "nota_ca": "Postura da Garça (ativa): +1 bônus de circunstância na CA",
+    },
+    "postura_do_dragao": {
+        "nome": "Cauda do Dragão (Postura)",
+        "dano_quantidade": 1,
+        "dano_dado": "d10",
+        "dano_tipo": "Cn",
+        "tracos": ["Desarmado", "Não-Letal", "Oscilante"],
+        "nota_ca": None,
+    },
+}
+
+_PASSO_DADO = {"d4": "d6", "d6": "d8", "d8": "d10", "d10": "d12", "d12": "d12"}
+
+
 def calcular_matematica_final(
     ficha: dict[str, Any],
     dados: Any,
@@ -116,6 +162,8 @@ def calcular_matematica_final(
     profs_combate: dict[str, Any],
     equip_res: dict[str, Any],
     nivel: int = 1,
+    tese_arcana: dict[str, Any] | None = None,
+    divindade: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Consolida PV, CA, Velocidade, Salvamentos, Percepção, Golpes, Perícias e Ações na ficha."""
     valores = atributos_res["valores"]
@@ -251,6 +299,8 @@ def calcular_matematica_final(
     # ------------------------------------------------------------------
     # 5. Perícias (18 linhas oficiais na ordem exata de estrutura_ficha.json)
     # ------------------------------------------------------------------
+    tracos_arm = {normalizar(t) for t in armadura.get("tracos", [])}
+    pen_bruta_arm = int(armadura.get("penalidade_testes") or 0)
     graus_per = pericias_res["graus"]
     saberes = pericias_res["saberes"]
     for linha in ficha["pericias"]:
@@ -263,7 +313,15 @@ def calcular_matematica_final(
         else:
             grau = graus_per.get(slot_id, "destreinado")
         prof = bonus_proficiencia(grau, nivel)
-        pen_arm = pen_testes_arm if linha["penalidade_armadura"] is not None else 0
+        if linha["penalidade_armadura"] is not None:
+            if slot_id == "furtividade" and "barulhenta" in tracos_arm:
+                pen_arm = pen_bruta_arm
+            elif slot_id in ("acrobatismo", "atletismo") and "flexivel" in tracos_arm:
+                pen_arm = 0
+            else:
+                pen_arm = pen_testes_arm
+        else:
+            pen_arm = 0
         linha["grau_proficiencia"] = grau
         linha["proficiencia"] = prof
         linha["mod_atributo"] = mods[atr]
@@ -299,6 +357,14 @@ def calcular_matematica_final(
 
     # Golpes Corpo a Corpo (3 slots)
     idx_cc = 0
+    wid_div = divindade.get("arma_favorecida_id") if divindade else None
+
+    def _override_simplicidade(arma_obj: dict[str, Any]) -> tuple[int, str] | None:
+        if efeitos.get("simplicidade_mortal") and wid_div and arma_obj.get("id") == wid_div:
+            dado_atual = arma_obj.get("dano_dado") or "d4"
+            return (arma_obj.get("dano_quantidade") or 1, _PASSO_DADO.get(dado_atual, dado_atual))
+        return None
+
     for w in armas_cc:
         if idx_cc >= 3:
             break
@@ -307,6 +373,47 @@ def calcular_matematica_final(
             w,
             False,
             grau_arma(w, armas_prof),
+            nivel,
+            mods,
+            classe_id,
+            sub_id,
+            dano_override=_override_simplicidade(w),
+        )
+        idx_cc += 1
+
+    # Golpe especial de Postura de Monge (1º nível) ou Instinto Animal (Bárbaro)
+    nota_postura = ""
+    if classe_id == "monge":
+        for tid in talentos_res["talentos_classe_ids"]:
+            post = _MONGE_POSTURAS_GOLPES.get(tid)
+            if post and idx_cc < 3:
+                _preencher_golpe(
+                    ficha["golpes_corpo_a_corpo"][idx_cc],
+                    post,
+                    False,
+                    armas_prof["desarmado"],
+                    nivel,
+                    mods,
+                    classe_id,
+                    sub_id,
+                )
+                idx_cc += 1
+                if post["nota_ca"]:
+                    nota_postura = post["nota_ca"]
+                break
+    elif classe_id == "barbaro" and sub_id == "instinto_animal" and idx_cc < 3:
+        bestial = {
+            "nome": "Ataque Bestial (Instinto Animal)",
+            "dano_quantidade": 1,
+            "dano_dado": "d10",
+            "dano_tipo": "Pf",
+            "tracos": ["Desarmado", "Morfia"],
+        }
+        _preencher_golpe(
+            ficha["golpes_corpo_a_corpo"][idx_cc],
+            bestial,
+            False,
+            armas_prof["desarmado"],
             nivel,
             mods,
             classe_id,
@@ -337,7 +444,7 @@ def calcular_matematica_final(
 
     if idx_cc < 3:
         punho = dados.ataques_desarmados["punho"]
-        override = (1, "d6") if classe_id == "monge" else None
+        override = (1, "d6") if classe_id == "monge" else _override_simplicidade(punho)
         _preencher_golpe(
             ficha["golpes_corpo_a_corpo"][idx_cc],
             punho,
@@ -379,6 +486,7 @@ def calcular_matematica_final(
             mods,
             classe_id,
             sub_id,
+            dano_override=_override_simplicidade(w),
         )
         idx_dist += 1
 
@@ -396,6 +504,7 @@ def calcular_matematica_final(
                 mods,
                 classe_id,
                 sub_id,
+                dano_override=_override_simplicidade(w),
             )
             idx_dist += 1
 
@@ -419,10 +528,24 @@ def calcular_matematica_final(
     acoes_ativas: list[dict[str, Any]] = []
     acoes_reativas: list[dict[str, Any]] = []
 
-    fontes_acoes = list(talentos_res["talentos_classe"]) + [
-        talentos_res["talento_ancestral"],
-        talentos_res["talento_biografia"].get("dados_completos"),
-    ]
+    fontes_acoes: list[dict[str, Any] | None] = []
+    # Ações concedidas por características de classe de 1º nível e subclasse
+    for car in talentos_res["caracteristicas_classe_n1"]:
+        if car.get("id") == "elo_arcano" and tese_arcana and tese_arcana.get("acao_substituta"):
+            fontes_acoes.append(tese_arcana["acao_substituta"])
+            continue
+        for acao_c in car.get("acoes_concedidas") or []:
+            if car.get("id") == "reacao_de_campeao" and subclasse and subclasse.get("reacao_campeao"):
+                if normalizar(acao_c.get("nome")) != normalizar(subclasse["reacao_campeao"]):
+                    continue
+            fontes_acoes.append(acao_c)
+    if subclasse:
+        for acao_s in subclasse.get("acoes_concedidas") or []:
+            fontes_acoes.append(acao_s)
+
+    fontes_acoes.extend(list(talentos_res["talentos_classe"]))
+    fontes_acoes.append(talentos_res["talento_ancestral"])
+    fontes_acoes.append(talentos_res["talento_biografia"].get("dados_completos"))
     for b in talentos_res["talentos_bonus"]:
         fontes_acoes.append(b.get("dados_completos"))
     if heranca.get("habilidade_acao"):
@@ -474,8 +597,13 @@ def calcular_matematica_final(
         slot["acionamento"] = item["acionamento"]
         slot["descricao"] = item["descricao"]
 
+    escudo_bonus = int(equip_res["escudo"]["bonus_ca"]) if equip_res["escudo"] else 0
     return {
         "penalidade_armadura_testes": pen_testes_arm,
         "penalidade_armadura_velocidade": pen_vel_arm,
         "esta_sobrecarregado": equip_res["esta_sobrecarregado"],
+        "limite_morrendo": efeitos.get("limite_morrendo", 4),
+        "cd_recuperacao_base": efeitos.get("cd_recuperacao_base", 10),
+        "ca_com_escudo": (ca_total + escudo_bonus) if escudo_bonus else None,
+        "nota_postura": nota_postura,
     }

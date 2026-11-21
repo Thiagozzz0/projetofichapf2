@@ -251,10 +251,12 @@ def main() -> None:
     r_saude = client.get("/api/saude")
     assert r_saude.status_code == 200
     assert r_saude.get_json()["conceitos"] == 56
+    assert r_saude.get_json()["divindades"] == 20
 
     r_opcoes = client.get("/api/opcoes")
     assert r_opcoes.status_code == 200
     assert len(r_opcoes.get_json()["classes"]) == 12
+    assert len(r_opcoes.get_json()["divindades"]) == 20
 
     r_her = client.get("/api/ancestralidades/elfo/herancas")
     assert r_her.status_code == 200 and len(r_her.get_json()["herancas"]) == 5
@@ -333,7 +335,25 @@ def main() -> None:
     txt_guer = r_txt_params.get_data(as_text=True)
     assert "Montante" in txt_guer and "Ataque Poderoso" in txt_guer
 
-    # Exportação DOCX (Mago Evocador + Guerreiro Colosso) com validação OOXML/XML completa
+    cl_iomedae = gerar_personagem(
+        "humano", "heranca_perita", "clerigo", "clerigo_arauto_guerra", divindade_id="iomedae", seed=77, dados=dados
+    )
+    verificar_contrato_e_matematica(cl_iomedae, dados)
+    dr_matilha = gerar_personagem("elfo", "elfo_das_florestas", "druida", "druida_senhor_matilha", seed=77, dados=dados)
+    verificar_contrato_e_matematica(dr_matilha, dados)
+
+    # Exportação TXT de Clérigo (Divindade) e Druida (Companheiro Animal)
+    r_txt_cl = client.post("/api/exportar/txt", json={"resultado": cl_iomedae})
+    assert r_txt_cl.status_code == 200
+    txt_cl = r_txt_cl.get_data(as_text=True)
+    assert "Iomedae" in txt_cl and "Arma Favorecida" in txt_cl
+
+    r_txt_dr = client.post("/api/exportar/txt", json={"resultado": dr_matilha})
+    assert r_txt_dr.status_code == 200
+    txt_dr = r_txt_dr.get_data(as_text=True)
+    assert "Companheiro Animal" in txt_dr
+
+    # Exportação DOCX (Mago Evocador + Guerreiro Colosso + Clérigo Iomedae + Druida Matilha) com validação OOXML/XML completa
     arquivos_esperados_docx = {
         "[Content_Types].xml",
         "_rels/.rels",
@@ -344,6 +364,8 @@ def main() -> None:
     for caso_res, trechos_esperados in (
         (mago_elem, [mago_elem["ficha"]["cabecalho"]["nome_personagem"], "Evocador de Artilharia", "Flamejantes"]),
         (guer_2m, [guer_2m["ficha"]["cabecalho"]["nome_personagem"], "Montante", "Ataque Poderoso"]),
+        (cl_iomedae, [cl_iomedae["ficha"]["cabecalho"]["nome_personagem"], "Iomedae", "Arma Favorecida"]),
+        (dr_matilha, [dr_matilha["ficha"]["cabecalho"]["nome_personagem"], "Companheiro Animal"]),
     ):
         r_docx = client.post("/api/exportar/docx", json={"resultado": caso_res})
         assert r_docx.status_code == 200

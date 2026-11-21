@@ -189,6 +189,20 @@
         selCls.appendChild(opt);
       });
 
+      const selDiv = document.getElementById("divindade");
+      if (selDiv) {
+        const optDivAuto = document.createElement("option");
+        optDivAuto.value = "procedural";
+        optDivAuto.textContent = "Procedural (recomendada pelo conceito)";
+        selDiv.appendChild(optDivAuto);
+        (OPCOES.divindades || []).forEach((d) => {
+          const opt = document.createElement("option");
+          opt.value = d.id;
+          opt.textContent = `${d.nome} (${d.tendencia} • ${d.arma_favorecida_nome})`;
+          selDiv.appendChild(opt);
+        });
+      }
+
       selAnc.addEventListener("change", atualizarHerancas);
       document.getElementById("heranca").addEventListener("change", atualizarResumoAncestralidade);
       selBio.addEventListener("change", atualizarResumoBiografia);
@@ -328,12 +342,15 @@
       .map(([k, v]) => `<div class="prof-item"><span>${esc(k.replace("_", " ").toUpperCase())}</span>${renderTeml(v)}</div>`)
       .join("");
 
+    const obsComb = m.observacoes_combate || {};
+    const caEscudoTxt = obsComb.ca_com_escudo ? ` (${obsComb.ca_com_escudo} c/ Escudo)` : "";
     document.getElementById("p1-ca").innerHTML =
       `<div class="ca-destaque">` +
       `<div class="escudo-ca"><small>CA</small><strong>${esc(ca.total)}</strong></div>` +
       `<div class="formula-ca">` +
-      `<div><strong>10</strong> Base + <strong>${fmtMod(ca.des_ou_limite)}</strong> DES${ca.limite_des_armadura !== null ? ` (Lim +${ca.limite_des_armadura})` : ""} + <strong>${fmtMod(ca.proficiencia)}</strong> Prof ${renderTeml(ca.grau_proficiencia)} + <strong>+${esc(ca.item)}</strong> Item</div>` +
+      `<div><strong>10</strong> Base + <strong>${fmtMod(ca.des_ou_limite)}</strong> DES${ca.limite_des_armadura !== null ? ` (Lim +${ca.limite_des_armadura})` : ""} + <strong>${fmtMod(ca.proficiencia)}</strong> Prof ${renderTeml(ca.grau_proficiencia)} + <strong>+${esc(ca.item)}</strong> Item${esc(caEscudoTxt)}</div>` +
       `<div><strong>Armadura:</strong> ${esc(m.armadura_equipada)}</div>` +
+      (obsComb.nota_postura ? `<div class="nota-campo">${esc(obsComb.nota_postura)}</div>` : "") +
       `</div>` +
       `</div>` +
       `<div class="prof-tira">${profArmHtml}</div>` +
@@ -365,11 +382,14 @@
     // PV & Percepção
     const pv = f.pontos_vida;
     const perc = f.percepcao;
+    const morrLim = m.limite_morrendo || 4;
+    const cdRec = m.cd_recuperacao_base || 10;
     document.getElementById("p1-pv-percepcao").innerHTML =
       `<div class="stat-linha">` +
       `<div><strong>Pontos de Vida Máx:</strong> <span class="pv-badge">${esc(pv.max)}</span></div>` +
       `<div><strong>Percepção:</strong> <span class="pv-badge">${fmtMod(perc.total)}</span> ${renderTeml(perc.grau_proficiencia)}</div>` +
       `</div>` +
+      (morrLim !== 4 || cdRec !== 10 ? `<div class="nota-campo"><strong>Morrendo Máx:</strong> ${esc(morrLim)} • <strong>CD Recuperação:</strong> ${esc(cdRec)} + Morrendo</div>` : "") +
       (pv.resistencias_e_imunidades ? `<div><strong>Resistências:</strong> ${esc(pv.resistencias_e_imunidades)}</div>` : "") +
       `<div class="nota-campo"><strong>Sentidos:</strong> ${esc((perc.sentidos || []).join(", ") || "Visão normal")}</div>`;
 
@@ -432,6 +452,41 @@
       `<div class="moeda-card"><small>PL</small><strong>${esc(inv.riqueza.pl)}</strong></div>` +
       `</div>`;
 
+    // Companheiro Animal ou Familiar (Página 2)
+    const compWrap = document.getElementById("p2-companheiro-wrap");
+    const compBox = document.getElementById("p2-companheiro");
+    const comp = m.companheiro_ou_familiar;
+    if (compWrap && compBox) {
+      if (!comp) {
+        compWrap.hidden = true;
+        compBox.innerHTML = "";
+      } else if (comp.categoria === "Companheiro Animal") {
+        compWrap.hidden = false;
+        const atks = (comp.ataques || [])
+          .map((a) => `<li><strong>${esc(a.nome)}</strong> ${fmtMod(a.ataque_total)} • ${esc(a.dano)} (${esc((a.tracos || []).join(", "))})</li>`)
+          .join("");
+        const pers = (comp.pericias || []).map((p) => `${esc(p.nome)} ${fmtMod(p.total)}`).join(" • ");
+        compBox.innerHTML =
+          `<div><strong>${esc(comp.nome)}</strong> (${esc(comp.estagio)} • ${esc(comp.tamanho)})</div>` +
+          `<div>PV <strong>${esc(comp.pv_max)}</strong> • CA <strong>${esc(comp.ca)}</strong> • Vel: ${esc(comp.velocidades)} • Perc ${fmtMod(comp.percepcao)}</div>` +
+          `<div>Fort ${fmtMod(comp.fortitude)} • Ref ${fmtMod(comp.reflexos)} • Von ${fmtMod(comp.vontade)}</div>` +
+          `<div class="nota-campo"><strong>Sentidos:</strong> ${esc(comp.sentidos)} • <strong>Perícias:</strong> ${pers}</div>` +
+          `<ul class="slot-lista" style="margin-top:6px">${atks}</ul>` +
+          `<div class="slot-resumo" style="margin-top:4px"><strong>Benefício de Suporte:</strong> ${esc(comp.beneficio_de_suporte)}</div>`;
+      } else {
+        compWrap.hidden = false;
+        const habs = (comp.habilidades_selecionadas || [])
+          .map((h) => `<li class="slot-item"><strong>${esc(h.nome)}</strong> <span class="slot-origem">${esc(h.tipo)}</span><span class="slot-resumo">${esc(h.descricao)}</span></li>`)
+          .join("");
+        compBox.innerHTML =
+          `<div><strong>${esc(comp.nome)}</strong> (${esc(comp.tamanho)})</div>` +
+          `<div>PV <strong>${esc(comp.pv_max)}</strong> • CA <strong>${esc(comp.ca)}</strong> • Vel: ${esc(comp.velocidade)}</div>` +
+          `<div>Percepção / Acrobatismo / Furtividade: <strong>${fmtMod(comp.percepcao)}</strong> • Salvamentos: Fort ${fmtMod(comp.fortitude)}, Ref ${fmtMod(comp.reflexos)}, Von ${fmtMod(comp.vontade)}</div>` +
+          `<div class="nota-campo"><strong>Sentidos:</strong> ${esc(comp.sentidos)}</div>` +
+          `<ul class="slot-lista" style="margin-top:6px">${habs}</ul>`;
+      }
+    }
+
     // Página 3
     document.getElementById("p3-rascunho").innerHTML =
       `<strong style="color:var(--accent);font-size:1.1rem">${esc(cab.nome_personagem)}</strong>` +
@@ -440,9 +495,17 @@
       `<div style="margin-top:8px"><span class="pill">Nível ${esc(cab.nivel)}</span><span class="pill">${esc(cab.tamanho)}</span><span class="pill">${esc(cab.tendencia)}</span></div>`;
 
     const perf = f.perfil_e_campanha;
+    const divDet = m.divindade_detalhes;
     document.getElementById("p3-perfil").innerHTML =
       `<div><strong>Idade Base:</strong> ${esc(perf.dados_biograficos.idade || "—")} anos</div>` +
-      `<div style="margin-top:6px"><strong>Conceito &amp; Biografia:</strong> ${esc(perf.anotacoes_campanha.anotacoes || "—")}</div>`;
+      `<div style="margin-top:6px"><strong>Conceito &amp; Biografia:</strong> ${esc(perf.anotacoes_campanha.anotacoes || "—")}</div>` +
+      (divDet
+        ? `<div class="abcd-historico" style="margin-top:8px">` +
+          `<strong>Divindade: ${esc(divDet.nome)} (${esc(divDet.tendencia)})</strong> • Arma Favorecida: ${esc(divDet.arma_favorecida_nome)} • Domínios: ${esc((divDet.dominios || []).join(", "))}` +
+          `<div><strong>Éditos:</strong> ${esc(divDet.editos)}</div>` +
+          `<div><strong>Anátema:</strong> ${esc(divDet.anatema)}</div>` +
+          `</div>`
+        : "");
 
     document.getElementById("p3-acoes").innerHTML = f.acoes_e_atividades
       .map((a) =>
@@ -542,10 +605,12 @@
   async function gerarFichaAtual(forcarNovaSeed = false) {
     setStatus("Gerando ficha procedural...");
     const seedInput = document.getElementById("seed");
+    const divSelect = document.getElementById("divindade");
     const payload = {
       ancestralidade_id: document.getElementById("ancestralidade").value,
       heranca_id: document.getElementById("heranca").value,
       biografia_id: document.getElementById("biografia").value,
+      divindade_id: divSelect ? divSelect.value : "procedural",
       classe_id: document.getElementById("classe").value,
       conceito_id: document.getElementById("conceito").value,
       nivel: Number(document.getElementById("nivel").value || 1),

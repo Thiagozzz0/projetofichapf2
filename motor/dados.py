@@ -203,6 +203,22 @@ class BaseDados:
     def magias_foco(self) -> dict[str, dict]:
         return {m["id"]: m for m in self.json("magias02.json")["magias_de_foco"]["lista"]}
 
+    @cached_property
+    def regras_especificas(self) -> dict[str, Any]:
+        return self.json("regras_específicas.json")
+
+    @cached_property
+    def companheiros_familiares(self) -> dict[str, Any]:
+        return self.json("companheiros_familiares.json")
+
+    @cached_property
+    def divindades(self) -> dict[str, dict]:
+        return {d["id"]: d for d in self.json("divindades.json")["divindades"]}
+
+    @cached_property
+    def dominios(self) -> dict[str, dict]:
+        return {d["id"]: d for d in self.json("divindades.json")["dominios"]}
+
     def resolver_magia(self, nome: str | None) -> dict | None:
         if not nome:
             return None

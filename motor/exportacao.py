@@ -183,14 +183,21 @@ def exportar_ficha_txt(resultado: dict[str, Any]) -> str:
     perc = ficha["percepcao"]
     cd = ficha["cd_classe"]
     salv = ficha["jogadas_salvamento"]
-    linhas.append(f"  Pontos de Vida : {pv['max']} (Atuais: {pv['atuais']})")
+    obs_comb = meta.get("observacoes_combate") or {}
+    morr_lim = meta.get("limite_morrendo") or obs_comb.get("limite_morrendo")
+    cd_rec = meta.get("cd_recuperacao_base") or obs_comb.get("cd_recuperacao_base")
+    morr_txt = f" | Morrendo Máx: {morr_lim} (CD Recup. {cd_rec}+)" if morr_lim and morr_lim != 4 else ""
+    linhas.append(f"  Pontos de Vida : {pv['max']} (Atuais: {pv['atuais']}){morr_txt}")
     if pv.get("resistencias_e_imunidades"):
         linhas.append(f"  Resistências   : {pv['resistencias_e_imunidades']}")
+    ca_esc_txt = f" | {obs_comb['ca_com_escudo']} c/ Escudo Erguido" if obs_comb.get("ca_com_escudo") else ""
     linhas.append(
-        f"  Classe Armad.  : {ca['total']} "
+        f"  Classe Armad.  : {ca['total']}{ca_esc_txt} "
         f"(10 + DES/Lim {formatar_bonus(ca['des_ou_limite'])} + Prof {formatar_bonus(ca['proficiencia'])} "
         f"[{_formatar_grau_curto(ca['grau_proficiencia'])}] + Item {formatar_bonus(ca['item'])})"
     )
+    if obs_comb.get("nota_postura"):
+        linhas.append(f"  Postura        : {obs_comb['nota_postura']}")
     esc = ca["escudo"]
     if esc.get("nome"):
         linhas.append(
@@ -288,6 +295,43 @@ def exportar_ficha_txt(resultado: dict[str, Any]) -> str:
     linhas.append(f"  Idade Base  : {perfil['dados_biograficos'].get('idade') or '—'}")
     if perfil["anotacoes_campanha"].get("anotacoes"):
         linhas.append(f"  Anotações   : {perfil['anotacoes_campanha']['anotacoes']}")
+
+    div_det = meta.get("divindade_detalhes")
+    if div_det:
+        sub(f"DIVINDADE — {div_det['nome']} ({div_det['tendencia']})")
+        linhas.append(
+            f"  Arma Favorecida: {div_det['arma_favorecida_nome']} | "
+            f"Domínios: {', '.join(div_det['dominios'])}"
+        )
+        linhas.append(f"  Éditos         : {div_det['editos']}")
+        linhas.append(f"  Anátema        : {div_det['anatema']}")
+
+    comp = meta.get("companheiro_ou_familiar")
+    if comp:
+        sub(f"{comp['categoria'].upper()} — {comp['nome']}")
+        if comp["categoria"] == "Companheiro Animal":
+            linhas.append(
+                f"  Estágio: {comp['estagio']} ({comp['tamanho']}) | PV {comp['pv_max']} | CA {comp['ca']} | "
+                f"Vel: {comp['velocidades']}"
+            )
+            linhas.append(
+                f"  Percepção {formatar_bonus(comp['percepcao'])} | "
+                f"Fort {formatar_bonus(comp['fortitude'])}, Ref {formatar_bonus(comp['reflexos'])}, Von {formatar_bonus(comp['vontade'])}"
+            )
+            atks = "; ".join(
+                f"{a['nome']} {formatar_bonus(a['ataque_total'])} ({a['dano']})" for a in comp["ataques"]
+            )
+            linhas.append(f"  Ataques        : {atks}")
+            linhas.append(f"  Suporte        : {comp['beneficio_de_suporte']}")
+        else:
+            linhas.append(
+                f"  Tamanho: {comp['tamanho']} | PV {comp['pv_max']} | CA {comp['ca']} | Vel: {comp['velocidade']}"
+            )
+            linhas.append(
+                f"  Percepção/Acrob./Furt.: {formatar_bonus(comp['percepcao'])} | "
+                f"Habilidades ({comp['habilidades_diarias_max']}): "
+                + ", ".join(h["nome"] for h in comp["habilidades_selecionadas"])
+            )
 
     acoes_at = [a for a in ficha["acoes_e_atividades"] if a.get("nome")]
     if acoes_at:
@@ -538,13 +582,22 @@ def _montar_document_xml(resultado: dict[str, Any]) -> str:
     perc = ficha["percepcao"]
     cd = ficha["cd_classe"]
     salv = ficha["jogadas_salvamento"]
+    obs_comb = meta.get("observacoes_combate") or {}
+    morr_lim = meta.get("limite_morrendo") or obs_comb.get("limite_morrendo")
+    pv_txt = f"{pv['max']} PV" + (f" (Morrendo Máx {morr_lim})" if morr_lim and morr_lim != 4 else "")
+    ca_txt = f"{ca['total']} [{_formatar_grau_curto(ca['grau_proficiencia'])}]"
+    if obs_comb.get("ca_com_escudo"):
+        ca_txt += f" ({obs_comb['ca_com_escudo']} c/ Escudo)"
     linhas_comb = [
-        ["Pontos de Vida", f"{pv['max']} PV", "Classe de Armadura", f"{ca['total']} [{_formatar_grau_curto(ca['grau_proficiencia'])}]"],
+        ["Pontos de Vida", pv_txt, "Classe de Armadura", ca_txt],
         ["Velocidade", f"{formatar_metros(vel['metros'])} m", "Percepção", f"{formatar_bonus(perc['total'])} [{_formatar_grau_curto(perc['grau_proficiencia'])}]"],
         ["CD de Classe", f"{cd['total']} [{_formatar_grau_curto(cd['grau_proficiencia'])}]", "Fortitude", f"{formatar_bonus(salv['fortitude']['total'])} [{_formatar_grau_curto(salv['fortitude']['grau_proficiencia'])}]"],
         ["Reflexos", f"{formatar_bonus(salv['reflexos']['total'])} [{_formatar_grau_curto(salv['reflexos']['grau_proficiencia'])}]", "Vontade", f"{formatar_bonus(salv['vontade']['total'])} [{_formatar_grau_curto(salv['vontade']['grau_proficiencia'])}]"],
     ]
     partes.append(_xml_tabela(["Estatística", "Valor", "Estatística", "Valor"], linhas_comb, [2300, 2933, 2300, 2933]))
+
+    if obs_comb.get("nota_postura"):
+        partes.append(_xml_p_rotulo("Postura de Combate", obs_comb["nota_postura"]))
 
     if perc.get("sentidos"):
         partes.append(_xml_p_rotulo("Sentidos", ", ".join(perc["sentidos"])))
@@ -623,6 +676,46 @@ def _montar_document_xml(resultado: dict[str, Any]) -> str:
     anot = ficha["perfil_e_campanha"]["anotacoes_campanha"].get("anotacoes")
     if anot:
         partes.append(_xml_p_rotulo("Proposta e Campanha", anot))
+    div_det = meta.get("divindade_detalhes")
+    if div_det:
+        partes.append(_xml_p(f"Divindade — {div_det['nome']} ({div_det['tendencia']})", estilo="SubsecaoTitulo"))
+        partes.append(
+            _xml_tabela(
+                ["Arma Favorecida", "Domínios", "Éditos", "Anátema"],
+                [[div_det["arma_favorecida_nome"], ", ".join(div_det["dominios"]), div_det["editos"], div_det["anatema"]]],
+                [1800, 2300, 3183, 3183],
+            )
+        )
+    comp = meta.get("companheiro_ou_familiar")
+    if comp:
+        partes.append(_xml_p(f"{comp['categoria']} — {comp['nome']}", estilo="SubsecaoTitulo"))
+        if comp["categoria"] == "Companheiro Animal":
+            atks_txt = "; ".join(f"{a['nome']} {formatar_bonus(a['ataque_total'])} ({a['dano']})" for a in comp["ataques"])
+            partes.append(
+                _xml_tabela(
+                    ["Estágio / Tamanho", "PV / CA / Vel", "Ataques", "Benefício de Suporte"],
+                    [[
+                        f"{comp['estagio']} ({comp['tamanho']})",
+                        f"PV {comp['pv_max']} | CA {comp['ca']} | {comp['velocidades']}",
+                        atks_txt,
+                        comp["beneficio_de_suporte"],
+                    ]],
+                    [2000, 2200, 2500, 3766],
+                )
+            )
+        else:
+            habs_txt = "; ".join(f"{h['nome']}: {h['descricao']}" for h in comp["habilidades_selecionadas"])
+            partes.append(
+                _xml_tabela(
+                    ["Espécie / Tamanho", "PV / CA / Percepção", "Habilidades Selecionadas"],
+                    [[
+                        f"{comp['nome']} ({comp['tamanho']})",
+                        f"PV {comp['pv_max']} | CA {comp['ca']} | Perc/Acrob/Furt {formatar_bonus(comp['percepcao'])}",
+                        habs_txt,
+                    ]],
+                    [2300, 2400, 5766],
+                )
+            )
     linhas_acoes = []
     for a in ficha["acoes_e_atividades"]:
         if a.get("nome"):

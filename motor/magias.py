@@ -56,9 +56,11 @@ def _selecionar_magias_por_nivel(
     escolas_pri: list[str],
     ja_selecionadas: set[str],
     rng: random.Random | None,
+    extras_permitidas_ids: set[str] | None = None,
 ) -> list[dict[str, Any]]:
     """Seleciona magias comuns da tradição priorizando a lista do conceito e depois os traços/escolas."""
     escolhidas: list[dict[str, Any]] = []
+    extras = extras_permitidas_ids or set()
 
     def tentar_adicionar(magia: dict[str, Any] | None) -> None:
         if not magia or len(escolhidas) >= quantidade:
@@ -66,7 +68,7 @@ def _selecionar_magias_por_nivel(
         mid = magia["id"]
         if mid in ja_selecionadas:
             return
-        if tradicao not in magia.get("tradicoes", []):
+        if tradicao not in magia.get("tradicoes", []) and mid not in extras:
             return
         tracos = magia.get("tracos", [])
         if eh_truque and "Truque Mágico" not in tracos:
@@ -125,11 +127,17 @@ def _resolver_magia_foco_dominio(
     dados: BaseDados,
     conceito: dict[str, Any],
     rng: random.Random | None,
+    divindade: dict[str, Any] | None = None,
 ) -> dict[str, Any] | None:
     candidatos = [
         m for m in dados.magias_foco.values()
         if m.get("classe_id") == "clerigo" and m.get("nivel") == 1
     ]
+    if divindade and divindade.get("dominios"):
+        doms_div = {normalizar(d) for d in divindade["dominios"]}
+        filtrados = [m for m in candidatos if normalizar(m.get("dominio")) in doms_div]
+        if filtrados:
+            candidatos = filtrados
     if not candidatos:
         return None
     conj_rec = conceito.get("conjuracao_recomendada") or {}
@@ -165,6 +173,7 @@ def gerar_conjuracao(
     talentos_classe_ids: list[str],
     nivel: int = 1,
     fonte_divina: str = "cura",
+    divindade: dict[str, Any] | None = None,
     rng: random.Random | None = None,
 ) -> dict[str, Any]:
     """Calcula ataque/CD de magia, espaços por dia, truques, magias N1, foco e inatas."""
@@ -302,7 +311,8 @@ def gerar_conjuracao(
 
         # Quantidade de magias conhecidas/no grimório N1
         if classe_id == "mago":
-            qtd_magias_n1 = 5  # Grimório inicial (5 comuns N1 + 1 escola = exibimos até 5 nos slots)
+            # Grimório inicial: 5 comuns N1 (+ 1 da Escola Arcana se especialista)
+            qtd_magias_n1 = 6 if (subclasse and sub_id != "universalista") else 5
         elif classe_id == "bardo":
             qtd_magias_n1 = 3 if subclasse and subclasse.get("magia_adicionada_repertorio") else 2
         elif classe_id == "feiticeiro":
@@ -311,9 +321,27 @@ def gerar_conjuracao(
             # Clérigo e Druida conhecem toda a lista comum; preparam `espacos_n1`
             qtd_magias_n1 = espacos_n1
 
+        extras_divinas: set[str] = set()
+        if classe_id == "clerigo" and divindade:
+            mag_div_1 = (divindade.get("magias_clerigo") or {}).get("1")
+            if mag_div_1 and mag_div_1 in dados.magias:
+                extras_divinas.add(mag_div_1)
+                if mag_div_1 not in magias_n1_pri:
+                    magias_n1_pri.append(mag_div_1)
+
         ids_magias_usados: set[str] = set()
         magias_selecionadas = _selecionar_magias_por_nivel(
-            dados, tradicao, 1, False, qtd_magias_n1, magias_n1_pri, tracos_pri, escolas_pri, ids_magias_usados, rng
+            dados,
+            tradicao,
+            1,
+            False,
+            qtd_magias_n1,
+            magias_n1_pri,
+            tracos_pri,
+            escolas_pri,
+            ids_magias_usados,
+            rng,
+            extras_permitidas_ids=extras_divinas,
         )
 
         # Marca quais ficam preparadas na ficha oficial
@@ -343,7 +371,7 @@ def gerar_conjuracao(
         add_foco(dados.magias_foco.get("imposicao_de_maos"))
     elif classe_id == "clerigo" and "iniciado_no_dominio" in talentos_classe_ids:
         pontos_foco = 1
-        add_foco(_resolver_magia_foco_dominio(dados, conceito, rng))
+        add_foco(_resolver_magia_foco_dominio(dados, conceito, rng, divindade=divindade))
     elif classe_id == "druida" and subclasse:
         pontos_foco = 1 + int(subclasse.get("pontos_foco_adicionais") or 0)
         add_foco(dados.resolver_magia_foco(subclasse.get("magia_ordem")))

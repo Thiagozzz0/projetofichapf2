@@ -47,6 +47,7 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 │   ├── classes03.json            # Capítulo 3 (Leva 03: Ladino, Mago, Monge e Patrulheiro)
 │   ├── companheiros_familiares.json     # Capítulo 3 (Companheiros Animais e Familiares)
 │   ├── conceitos_subclasses.json        # Etapa 2: 56 conceitos procedurais (mapeando subclasses PF2E) para as 12 classes
+│   ├── divindades.json           # 20 divindades principais do Livro Básico e seus 37 domínios (com fontes, armas e perícias divinas)
 │   ├── equipamentos.json         # Capítulo 6 completo (Equipamentos) convertido e validado
 │   ├── estrutura_ficha.json      # Ficha Oficial PF2E (pp. 580–583): blueprint das 4 páginas e contrato vazio
 │   ├── magias01.json             # Capítulo 7 (Parte 1: Regras, Listas Completas e Descrições A–M)
@@ -132,6 +133,9 @@ Os PDFs de referência estão sendo convertidos **um por vez** para garantir fid
 | `ref/Compendium specific tools.pdf` | `dados/itens_magicos_tesouros.json` | Runas, materiais preciosos, itens alquímicos completos e tesouros | Adiado (futuro) |
 | `ref/Sheet Update.pdf` | `dados/estrutura_ficha.json` | Estrutura oficial das 4 páginas da ficha (`pp. 580–583`), legendas, fórmulas de cálculo, `18` linhas de perícia cruzadas com `pericias.json` e contrato `modelo_ficha_vazia` | Concluído (`12.md`) |
 | *Etapa 2 (Conceitos)* | `dados/conceitos_subclasses.json` | `56` conceitos ("nortes") para todas as `12` classes com mapeamento procedural de subclasses PF2E, atributos, biografias, perícias, talentos, equipamentos (`15 po`) e magias | Concluído (`13.md` / `20.md`) |
+| *Etapa 2B (Divindades)* | `dados/divindades.json` | `20` divindades do Livro Básico, `37` domínios, tendências aceitas, armas prediletas, perícias divinas, fontes e magias de clérigo | Concluído (`22.md`) |
+| *Etapa 3B (Companheiros)* | `motor/companheiros.py` | Geração matemática de Companheiro Animal Jovem (Druida/Patrulheiro) e Familiar Aprimorado/Padrão (Mago/Druida/Talentos) | Concluído (`22.md`) |
+| *Etapa 5 (Casos de Borda)* | `scripts/validar_casos_borda_pf2e.py` | Suíte unitária de casos de borda PF2E (CA/Limite DES, `Barulhenta`/`Flexível`/`Ferro Desimpedido`, `Propulsiva`, idiomas, `Duro de Matar`, mochila/carga, divindades e companheiros) | Concluído (`21.md`) |
 | *Etapa 3 (Motor & Flask)* | `motor/`, `app.py`, `templates/index.html` | Motor procedural PF2E (1º nível, `seed` opcional), API REST Flask e tela simples de teste | Concluído (`14.md`) |
 | *Etapa 4 (Front-End & Export)* | `templates/`, `templates/static/`, `motor/exportacao.py`, `requirements.txt` | Interface completa em 4 páginas inspirada na ficha oficial (`pp. 580–583`), impressão e download `.docx`/`.txt` | Concluído (`16.md` / `17.md`) |
 
@@ -155,8 +159,10 @@ python scripts/gerar_magias_01_json.py
 python scripts/gerar_magias_02_json.py
 python scripts/gerar_estrutura_ficha_json.py
 python scripts/gerar_conceitos_subclasses_json.py
+python scripts/gerar_divindades_json.py
 python scripts/gerar_regras_especificas_json.py
 python scripts/validar_motor_procedural.py
+python scripts/validar_casos_borda_pf2e.py
 ```
 
 Para instalar dependências e iniciar o servidor Flask local (interface completa com exportação em `.docx`, `.txt` e impressão em `http://127.0.0.1:5000`):

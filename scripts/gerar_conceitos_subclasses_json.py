@@ -17,11 +17,17 @@ Todas as referências são validadas 1:1 contra os JSONs reais de `dados/`.
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 from typing import Any
 
 
 RAIZ_PROJETO = Path(__file__).resolve().parent.parent
+if str(RAIZ_PROJETO) not in sys.path:
+    sys.path.insert(0, str(RAIZ_PROJETO))
+
+from motor.equipamentos import calcular_proficiencias_combate, grau_arma
+
 DIR_DADOS = RAIZ_PROJETO / "dados"
 CAMINHO_SAIDA = DIR_DADOS / "conceitos_subclasses.json"
 
@@ -2382,79 +2388,50 @@ def validar_conceitos(dados: dict[str, Any]) -> None:
             assert tid in talentos_por_id, f"Talento geral inválido '{tid}' em {cid}"
             assert talentos_por_id[tid]["categoria"] == "geral", f"'{tid}' não é Talento Geral"
 
-        # Equipamentos e proficiência base (1º nível) validada contra TODAS as subclasses candidatas
+        # Equipamentos e proficiência base (1º nível) unificada com o motor
         eq_rec = c["equipamento_recomendado"]
         assert eq_rec["kit_classe_preferido"] in kits_classes
         assert len(eq_rec["armaduras_ids"]) >= 1
 
         mapa_cat_arm = {
-            "Sem Armadura": "defesa_sem_armadura",
-            "Armadura Leve": "armaduras_leves",
-            "Armadura Média": "armaduras_medias",
-            "Armadura Pesada": "armaduras_pesadas",
+            "Sem Armadura": "sem_armadura",
+            "Armadura Leve": "leve",
+            "Armadura Média": "media",
+            "Armadura Pesada": "pesada",
         }
-        for sub_id in candidatas:
-            prof_def = dict(classe["proficiencias_iniciais"]["defesas"])
-            if c["classe_id"] == "clerigo" and sub_id == "capelao_da_guerra":
-                prof_def["armaduras_leves"] = "treinado"
-                prof_def["armaduras_medias"] = "treinado"
-            elif c["classe_id"] == "ladino" and sub_id == "rufiao":
-                prof_def["armaduras_medias"] = "treinado"
-
-            for aid in eq_rec["armaduras_ids"]:
-                assert aid in armaduras_por_id, f"Armadura inválida '{aid}' em {cid}"
-                arm = armaduras_por_id[aid]
-                chave_def = mapa_cat_arm[arm["categoria"]]
-                grau_def = str(prof_def.get(chave_def, "destreinado")).lower()
-                assert not grau_def.startswith("destreinado"), (
-                    f"Armadura '{aid}' sem proficiência no 1º nível em {cid} (sub={sub_id})"
-                )
-                if c["classe_id"] == "druida":
-                    assert (arm.get("material") or "").lower() != "metal", (
-                        f"Druida não pode usar armadura de metal '{aid}' em {cid}"
-                    )
-
-        for sid in eq_rec["escudos_ids"]:
-            assert sid in escudos_por_id, f"Escudo inválido '{sid}' em {cid}"
-            if c["classe_id"] == "druida":
-                assert "aco" not in sid, f"Druida não pode usar escudo de metal '{sid}' em {cid}"
-
-        prof_atk = classe["proficiencias_iniciais"]["ataques"]
-        esp_raw = prof_atk.get("armas_especificas")
-        esp_nomes = (
-            {n.lower() for n in esp_raw.get("armas", [])}
-            if isinstance(esp_raw, dict)
-            else ({n.lower() for n in esp_raw} if isinstance(esp_raw, list) else set())
-        )
-        tem_arsenal_monastico = (
-            c["classe_id"] == "monge"
-            and c["talentos_recomendados"]["classe_nivel_1"]
-            and c["talentos_recomendados"]["classe_nivel_1"][0] == "arsenal_monastico"
-        )
         armas_todas = armas_cc_por_id | armas_dist_por_id
         for wid in eq_rec["armas_corpo_a_corpo_ids"]:
             assert wid in armas_cc_por_id, f"Arma CC inválida '{wid}' em {cid}"
         for wid in eq_rec["armas_distancia_ids"]:
             assert wid in armas_dist_por_id or wid in armas_cc_por_id, f"Arma distância inválida '{wid}' em {cid}"
-        for wid in eq_rec["armas_corpo_a_corpo_ids"] + eq_rec["armas_distancia_ids"]:
-            arma = armas_todas[wid]
-            cat = arma["categoria"]
-            tracos_l = [t.lower() for t in arma.get("tracos", [])]
-            if wid == "bomba_alquimica":
-                ok = not str(prof_atk.get("bombas_alquimicas", "destreinado")).startswith("destreinado")
-            elif tem_arsenal_monastico and "monge" in tracos_l:
-                ok = True
-            elif arma["nome"].lower() in esp_nomes:
-                ok = True
-            elif cat == "Arma Simples":
-                ok = not str(prof_atk.get("armas_simples", "destreinado")).startswith("destreinado")
-            elif cat == "Arma Marcial":
-                ok = not str(prof_atk.get("armas_marciais", "destreinado")).startswith("destreinado")
-            elif cat == "Arma Avançada":
-                ok = not str(prof_atk.get("armas_avancadas", "destreinado")).startswith("destreinado")
-            else:
-                ok = False
-            assert ok, f"Arma '{wid}' ({cat}) sem proficiência no 1º nível em {cid}"
+
+        tal_n1 = c["talentos_recomendados"]["classe_nivel_1"]
+        for sub_id in candidatas:
+            profs = calcular_proficiencias_combate(
+                classe, sub_por_id[sub_id], talentos_classe_ids=tal_n1
+            )
+            for aid in eq_rec["armaduras_ids"]:
+                assert aid in armaduras_por_id, f"Armadura inválida '{aid}' em {cid}"
+                arm = armaduras_por_id[aid]
+                chave_def = mapa_cat_arm[arm["categoria"]]
+                assert profs["defesas"].get(chave_def, "destreinado") != "destreinado", (
+                    f"Armadura '{aid}' sem proficiência no 1º nível em {cid} (sub={sub_id})"
+                )
+                if profs["restricao_nao_metal"]:
+                    assert (arm.get("material") or "").lower() != "metal", (
+                        f"Druida não pode usar armadura de metal '{aid}' em {cid}"
+                    )
+
+            for sid in eq_rec["escudos_ids"]:
+                assert sid in escudos_por_id, f"Escudo inválido '{sid}' em {cid}"
+                if profs["restricao_nao_metal"]:
+                    assert "aco" not in sid, f"Druida não pode usar escudo de metal '{sid}' em {cid}"
+
+            for wid in eq_rec["armas_corpo_a_corpo_ids"] + eq_rec["armas_distancia_ids"]:
+                arma = armas_todas[wid]
+                assert grau_arma(arma, profs["armas"]) != "destreinado", (
+                    f"Arma '{wid}' ({arma['categoria']}) sem proficiência no 1º nível em {cid}"
+                )
 
         # Conjuração (quando aplicável)
         conj = c["conjuracao_recomendada"]

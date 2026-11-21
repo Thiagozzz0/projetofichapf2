@@ -75,8 +75,10 @@ Lista viva de todas as entregas e tarefas que ainda precisam ser realizadas até
 
 - [x] **Testes integrados ponta a ponta via Flask (`scripts/validar_motor_procedural.py`)** *(Concluído em `19/11/2026 — 14:29` → [finalizado/16.md](finalizado/16.md))*
   - Cobertura de todos os `56` conceitos nas `12` classes, `29` heranças das `6` ancestralidades, `10` casos especiais, `8` endpoints Flask + arquivos estáticos e validação estrutural completa das exportações `.txt` e `.docx` (OOXML/XML).
-- [ ] **Suíte unitária dedicada de casos de borda matemáticos de PF2E** *(sugerido detalhamento em [sugestoes/02_melhorias_motor_e_regras.md](sugestoes/02_melhorias_motor_e_regras.md))*
-  - Testes isolados de CA com Limite de Destreza, penalidade por `FOR < forca_minima` vs `Ferro Desimpedido`, sobrecarga (`-3m` respeitando mínimo `1,5m`), `Acuidade` / `Ladrão` / `Propulsivo` (FOR positiva e negativa) e `Capelão da Guerra`.
+- [x] **Suíte unitária dedicada de casos de borda matemáticos de PF2E + Correções de Regras PF2E (`scripts/validar_casos_borda_pf2e.py`)** *(Concluído em `21/11/2026 — 11:50` → [finalizado/21.md](finalizado/21.md))*
+  - Correção integral de bugs de regras encontrados na auditoria (`idiomas` de Humano e texto descritivo bruto, ações de classe/subclasse na Pág. 3, preservação sem descarte de >2 talentos bônus, consumo de `regras_específicas.json` com `Duro de Matar`/`Carregador Robusto` e isenção de mochila, `Barulhenta`/`Flexível`, `Propulsiva`, `Adaga de Clã` em destreinado, `6` magias N1 no grimório de especialista, golpes de Postura do Monge e `Instinto Animal`), validada pela suíte dedicada.
+- [x] **Divindades Reais (`dados/divindades.json`), Companheiros Animais e Familiares (`motor/companheiros.py`)** *(Concluído em `21/11/2026 — 11:50` → [finalizado/22.md](finalizado/22.md))*
+  - Extração integral das `20` divindades principais e `37` domínios do Livro Básico (`scripts/gerar_divindades_json.py`), seleção manual/procedural em API/UI, regras de `Simplicidade Mortal` e magias de divindade/domínio, além de geração matemática pronta de Companheiro Animal Jovem e Familiar no motor, interface web e exportadores `.txt`/`.docx`.
 - [ ] **Validação visual interativa em navegador real (`python app.py`)**
   - Conferir layout desktop/mobile, impressão/PDF pelo navegador e abertura real dos arquivos `.docx` baixados no Microsoft Word / LibreOffice.
 - [x] **Atualização do `README.md`** com instruções de instalação (`requirements.txt`) e execução do projeto Flask. *(Concluído em `19/11/2026 — 14:29`)*

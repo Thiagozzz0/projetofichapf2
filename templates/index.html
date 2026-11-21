@@ -39,6 +39,11 @@
             <small class="nota-campo">A subclasse oficial do PF2E é vinculada automaticamente pelo conceito.</small>
           </div>
           <div class="campo-grupo">
+            <label for="divindade">Divindade (Clérigo / Campeão)</label>
+            <select id="divindade"></select>
+            <small class="nota-campo">Opcional para demais classes; define arma favorecida, perícia e domínios.</small>
+          </div>
+          <div class="campo-grupo">
             <label for="nivel">Nível</label>
             <select id="nivel" name="nivel">
               <option value="1" selected>1º Nível</option>
@@ -203,6 +208,10 @@
             <div class="bloco">
               <h3 class="bloco-titulo">Inventário, Volume e Riqueza</h3>
               <div id="p2-inventario"></div>
+            </div>
+            <div class="bloco" id="p2-companheiro-wrap" hidden>
+              <h3 class="bloco-titulo">Companheiro Animal / Familiar</h3>
+              <div id="p2-companheiro"></div>
             </div>
           </div>
         </div>

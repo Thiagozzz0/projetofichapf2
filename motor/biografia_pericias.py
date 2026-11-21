@@ -83,6 +83,7 @@ def calcular_pericias(
     conceito: dict[str, Any],
     mod_int: int,
     extras_pericias: int = 0,
+    divindade: dict[str, Any] | None = None,
     rng: random.Random | None = None,
 ) -> dict[str, Any]:
     """Determina todas as perícias treinadas e os 2 slots de Saber do personagem."""
@@ -138,9 +139,14 @@ def calcular_pericias(
 
     condicionais = prof_pericias.get("condicionais", [])
     if "pericia_determinada_pela_divindade" in condicionais:
-        candidatos_div = [p for p in prioridades if p not in treinadas and p != "religiao"]
-        div_p = candidatos_div[0] if candidatos_div else "diplomacia"
-        conceder(div_p, "Divindade (Conceito)")
+        if divindade and divindade.get("pericia_divina"):
+            opcoes_div = [p for p in divindade["pericia_divina"] if p in dados.pericias]
+            div_p = escolher_melhor_opcao(opcoes_div)
+            conceder(div_p, f"Divindade ({divindade['nome']})")
+        else:
+            candidatos_div = [p for p in prioridades if p not in treinadas and p != "religiao"]
+            div_p = candidatos_div[0] if candidatos_div else "diplomacia"
+            conceder(div_p, "Divindade (Conceito)")
 
     # 4. Herança Perita (+1 perícia) e talentos extras (ex: Perícia Natural humano = +2)
     if heranca.get("id") == "heranca_perita":
@@ -211,11 +217,20 @@ def calcular_idiomas(
     if classe["id"] == "druida" and "Druídico" not in idiomas:
         idiomas.append("Druídico")
 
-    qtd_extras = max(0, mod_int) + int(heranca.get("idiomas_adicionais", 0) or 0)
+    regra_idiomas = normalizar(ancestralidade.get("regra_idiomas_adicionais", ""))
+    if ancestralidade["id"] == "humano" or "1 + modificador" in regra_idiomas:
+        base_extras = max(1, 1 + mod_int)
+    else:
+        base_extras = max(0, mod_int)
+    qtd_extras = base_extras + int(heranca.get("idiomas_adicionais", 0) or 0)
     if qtd_extras <= 0:
         return idiomas
 
-    pool_anc = [i for i in ancestralidade.get("idiomas_adicionais_opcoes", []) if i not in idiomas]
+    pool_anc = [
+        i
+        for i in ancestralidade.get("idiomas_adicionais_opcoes", [])
+        if i not in idiomas and "qualquer" not in normalizar(i) and len(i) <= 25
+    ]
     tabela_comuns = [
         item["idioma"]
         for item in dados.json("ancestralidades_biografias.json")["idiomas"]["tabela_2_1_idiomas_comuns"]

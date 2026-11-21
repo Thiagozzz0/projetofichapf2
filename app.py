@@ -45,6 +45,7 @@ def _gerar_a_partir_payload(payload: dict[str, Any]) -> dict[str, Any]:
         classe_id=str(payload["classe_id"]).strip(),
         conceito_id=str(payload["conceito_id"]).strip(),
         biografia_id=payload.get("biografia_id"),
+        divindade_id=payload.get("divindade_id"),
         nome_personagem=payload.get("nome_personagem"),
         nome_jogador=str(payload.get("nome_jogador") or ""),
         nivel=nivel,
@@ -99,6 +100,7 @@ def api_saude():
             "conceitos": len(dados.conceitos),
             "pericias": len(dados.pericias),
             "magias": len(dados.magias),
+            "divindades": len(dados.divindades),
         }
     )
 

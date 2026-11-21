@@ -1,0 +1,915 @@
+{
+  "meta": {
+    "titulo": "Pathfinder 2ª Edição — Divindades Principais e Domínios",
+    "paginas_livro": "437–441",
+    "total_divindades": 20,
+    "total_dominios": 37
+  },
+  "divindades": [
+    {
+      "id": "abadar",
+      "nome": "Abadar",
+      "tendencia": "ON",
+      "resumo": "O Mestre do Primeiro Cofre tem influência sobre as cidades, as leis, os mercadores e as riquezas.",
+      "editos": "leve a civilização às fronteiras, ganhe riqueza através de trabalho duro e comércio, siga o estado de direito",
+      "anatema": "engaje em bandidagem ou pirataria, roube, enfraqueça um tribunal cumpridor da lei",
+      "tendencias_seguidores": [
+        "OB",
+        "ON",
+        "OM"
+      ],
+      "fontes_divinas": [
+        "curar",
+        "ferir"
+      ],
+      "pericia_divina": [
+        "sociedade"
+      ],
+      "arma_favorecida_id": "besta_leve",
+      "arma_favorecida_nome": "Besta leve",
+      "dominios": [
+        "Cidades",
+        "Riqueza",
+        "Terra",
+        "Viagem"
+      ],
+      "magias_clerigo": {
+        "1": "objeto_ilusorio",
+        "4": "criacao",
+        "7": "mansao_magnifica"
+      }
+    },
+    {
+      "id": "asmodeus",
+      "nome": "Asmodeus",
+      "tendencia": "OM",
+      "resumo": "O Príncipe das Trevas reina sobre os contratos, o orgulho, a escravidão e a tirania.",
+      "editos": "negocie contratos em seu benefício, governe tiranicamente e torture seres mais fracos, mostre subserviência aos seus superiores",
+      "anatema": "quebre um contrato, liberte um escravo, insulte Asmodeus demonstrando misericórdia aos seus inimigos",
+      "tendencias_seguidores": [
+        "OM"
+      ],
+      "fontes_divinas": [
+        "ferir"
+      ],
+      "pericia_divina": [
+        "dissimulacao"
+      ],
+      "arma_favorecida_id": "maca",
+      "arma_favorecida_nome": "Maça",
+      "dominios": [
+        "Confiança",
+        "Enganação",
+        "Fogo",
+        "Tirania"
+      ],
+      "magias_clerigo": {
+        "1": "cativar",
+        "4": "sugestao",
+        "6": "despistar"
+      }
+    },
+    {
+      "id": "calistria",
+      "nome": "Calístria",
+      "tendencia": "CN",
+      "resumo": "A Doce Ferroada enaltece as virtudes da luxúria, da vingança e da enganação.",
+      "editos": "persiga sua liberdade individual, busque emoções hedonistas, vingue-se",
+      "anatema": "seja consumido demais por amor ou por necessidade de vingança, deixe uma ofensa passar em branco",
+      "tendencias_seguidores": [
+        "CB",
+        "CN",
+        "CM"
+      ],
+      "fontes_divinas": [
+        "curar",
+        "ferir"
+      ],
+      "pericia_divina": [
+        "dissimulacao"
+      ],
+      "arma_favorecida_id": "chicote",
+      "arma_favorecida_nome": "Chicote",
+      "dominios": [
+        "Dor",
+        "Enganação",
+        "Paixão",
+        "Segredos"
+      ],
+      "magias_clerigo": {
+        "1": "cativar",
+        "3": "subjugar",
+        "6": "despistar"
+      }
+    },
+    {
+      "id": "cayden_cailean",
+      "nome": "Cayden Cailean",
+      "tendencia": "CB",
+      "resumo": "O Herói Bêbado promove a liberdade, a coragem e a luta pelas causas justas.",
+      "editos": "beba, liberte escravos e auxilie os oprimidos, busque glória e aventura",
+      "anatema": "desperdice álcool, seja malvado ou reservado quando bêbado, possua um escravo",
+      "tendencias_seguidores": [
+        "NB",
+        "CB",
+        "CN"
+      ],
+      "fontes_divinas": [
+        "curar"
+      ],
+      "pericia_divina": [
+        "atletismo"
+      ],
+      "arma_favorecida_id": "rapieira",
+      "arma_favorecida_nome": "Rapieira",
+      "dominios": [
+        "Cidades",
+        "Indulgência",
+        "Liberdade",
+        "Poder"
+      ],
+      "magias_clerigo": {
+        "1": "passos_velozes",
+        "2": "toque_da_idiotice",
+        "5": "alucinacao"
+      }
+    },
+    {
+      "id": "desna",
+      "nome": "Desna",
+      "tendencia": "CB",
+      "resumo": "A gentil Canção das Esferas preside sobre os sonhos, a sorte, as estrelas e os viajantes.",
+      "editos": "auxilie companheiros de viagem, explore lugares novos, expresse-se através da arte e da canção, descubra o que a vida tem a oferecer",
+      "anatema": "cause medo ou desespero, conjure pesadelo ou use uma magia similar para corromper sonhos, engaje em comportamento fanático",
+      "tendencias_seguidores": [
+        "NB",
+        "CB",
+        "CN"
+      ],
+      "fontes_divinas": [
+        "curar"
+      ],
+      "pericia_divina": [
+        "acrobatismo"
+      ],
+      "arma_favorecida_id": "faca_estrela",
+      "arma_favorecida_nome": "Faca-estrela",
+      "dominios": [
+        "Lua",
+        "Sonhos",
+        "Sorte",
+        "Viagem"
+      ],
+      "magias_clerigo": {
+        "1": "sono",
+        "4": "voar",
+        "5": "potencial_onirico"
+      }
+    },
+    {
+      "id": "erastil",
+      "nome": "Erastil",
+      "tendencia": "OB",
+      "resumo": "O Velho Certeiro é o deus da família, das fazendas, da caça e da proteção das comunidades.",
+      "editos": "cuide de sua casa e família, cumpra seus deveres, mantenha a paz, proteja a comunidade",
+      "anatema": "abandone seu lar em um momento de necessidade, escolha a si sobre sua comunidade, manche sua reputação, conte mentiras",
+      "tendencias_seguidores": [
+        "OB",
+        "NB",
+        "ON"
+      ],
+      "fontes_divinas": [
+        "curar"
+      ],
+      "pericia_divina": [
+        "sobrevivencia"
+      ],
+      "arma_favorecida_id": "arco_longo",
+      "arma_favorecida_nome": "Arco longo",
+      "dominios": [
+        "Família",
+        "Natureza",
+        "Riqueza",
+        "Terra"
+      ],
+      "magias_clerigo": {
+        "1": "golpe_certo",
+        "3": "muralha_de_espinhos",
+        "5": "deslocamento_entre_arvores"
+      }
+    },
+    {
+      "id": "gorum",
+      "nome": "Gorum",
+      "tendencia": "CN",
+      "resumo": "Nosso Senhor em Ferro, deus da batalha, da força e das armas, cultuado pelo combate direto.",
+      "editos": "obtenha vitória em combate justo, force seus limites, use armadura em combate",
+      "anatema": "mate prisioneiros ou oponentes rendidos, impeça o conflito através de negociação, vença uma batalha através de táticas desonestas ou magia indireta",
+      "tendencias_seguidores": [
+        "CN",
+        "CM"
+      ],
+      "fontes_divinas": [
+        "curar",
+        "ferir"
+      ],
+      "pericia_divina": [
+        "atletismo"
+      ],
+      "arma_favorecida_id": "montante",
+      "arma_favorecida_nome": "Montante",
+      "dominios": [
+        "Confiança",
+        "Destruição",
+        "Fervor",
+        "Poder"
+      ],
+      "magias_clerigo": {
+        "1": "golpe_certo",
+        "2": "crescer",
+        "4": "tempestade_de_armas"
+      }
+    },
+    {
+      "id": "gozreh",
+      "nome": "Gozreh",
+      "tendencia": "N",
+      "resumo": "Os Ventos e As Ondas, divindade de dois aspectos que governa a natureza, o mar e o clima.",
+      "editos": "celebre, proteja e respeite a natureza em todas as suas formas",
+      "anatema": "leve a civilização a se infiltrar nas regiões selvagens, crie mortos-vivos, despoje áreas de beleza natural",
+      "tendencias_seguidores": [
+        "NB",
+        "ON",
+        "N",
+        "CN",
+        "NM"
+      ],
+      "fontes_divinas": [
+        "curar"
+      ],
+      "pericia_divina": [
+        "sobrevivencia"
+      ],
+      "arma_favorecida_id": "tridente",
+      "arma_favorecida_nome": "Tridente",
+      "dominios": [
+        "Água",
+        "Ar",
+        "Natureza",
+        "Viagem"
+      ],
+      "magias_clerigo": {
+        "1": "lufada_de_vento",
+        "3": "relampago",
+        "5": "controlar_a_agua"
+      }
+    },
+    {
+      "id": "iomedae",
+      "nome": "Iomedae",
+      "tendencia": "OB",
+      "resumo": "A Herdeira é a deusa da honra, da justiça, da regência e da valentia.",
+      "editos": "seja comedido, lute por justiça e honra, tenha valentia em seu coração",
+      "anatema": "abandone um companheiro necessitado, desonre-se, recuse um desafio de um igual",
+      "tendencias_seguidores": [
+        "OB",
+        "NB"
+      ],
+      "fontes_divinas": [
+        "curar"
+      ],
+      "pericia_divina": [
+        "intimidacao"
+      ],
+      "arma_favorecida_id": "espada_longa",
+      "arma_favorecida_nome": "Espada longa",
+      "dominios": [
+        "Confiança",
+        "Fervor",
+        "Poder",
+        "Verdade"
+      ],
+      "magias_clerigo": {
+        "1": "golpe_certo",
+        "2": "crescer",
+        "4": "escudo_de_fogo"
+      }
+    },
+    {
+      "id": "irori",
+      "nome": "Irori",
+      "tendencia": "ON",
+      "resumo": "O Mestre dos Mestres preside sobre a história, o conhecimento e o autoaperfeiçoamento.",
+      "editos": "seja humilde, ajude os outros a se aperfeiçoarem, aprimore seu corpo, mente e espírito até um estado mais perfeito, pratique disciplina",
+      "anatema": "fique viciado em uma substância, destrua um texto histórico importante, falhe em manter o autocontrole repetidamente",
+      "tendencias_seguidores": [
+        "OB",
+        "ON",
+        "OM"
+      ],
+      "fontes_divinas": [
+        "curar",
+        "ferir"
+      ],
+      "pericia_divina": [
+        "atletismo"
+      ],
+      "arma_favorecida_id": "punho",
+      "arma_favorecida_nome": "Punho",
+      "dominios": [
+        "Conhecimento",
+        "Perfeição",
+        "Poder",
+        "Verdade"
+      ],
+      "magias_clerigo": {
+        "1": "salto",
+        "3": "rapidez",
+        "4": "pele_de_pedra"
+      }
+    },
+    {
+      "id": "lamashtu",
+      "nome": "Lamashtu",
+      "tendencia": "CM",
+      "resumo": "A Mãe dos Monstros é a deusa da loucura, dos monstros e dos pesadelos.",
+      "editos": "traga poder aos exilados e desfavorecidos, doutrine crianças nos ensinamentos de Lamashtu, torne o belo monstruoso, revele a corrupção e as falhas em todas as coisas",
+      "anatema": "tente tratar uma doença mental ou deformidade, forneça socorro aos inimigos de Lamashtu",
+      "tendencias_seguidores": [
+        "CM"
+      ],
+      "fontes_divinas": [
+        "curar",
+        "ferir"
+      ],
+      "pericia_divina": [
+        "sobrevivencia"
+      ],
+      "arma_favorecida_id": "bracamante",
+      "arma_favorecida_nome": "Bracamante",
+      "dominios": [
+        "Enganação",
+        "Família",
+        "Pesadelos",
+        "Poder"
+      ],
+      "magias_clerigo": {
+        "1": "presa_magica",
+        "2": "forma_de_animal",
+        "4": "pesadelo"
+      }
+    },
+    {
+      "id": "nethys",
+      "nome": "Nethys",
+      "tendencia": "N",
+      "resumo": "O Olho que Tudo Vê, deus da magia com natureza dualística de destruição e preservação.",
+      "editos": "busque poder mágico e o use",
+      "anatema": "persiga caminhos mundanos no lugar dos mágicos",
+      "tendencias_seguidores": [
+        "NB",
+        "ON",
+        "N",
+        "CN",
+        "NM"
+      ],
+      "fontes_divinas": [
+        "curar",
+        "ferir"
+      ],
+      "pericia_divina": [
+        "arcanismo"
+      ],
+      "arma_favorecida_id": "cajado",
+      "arma_favorecida_nome": "Cajado",
+      "dominios": [
+        "Conhecimento",
+        "Destruição",
+        "Magia",
+        "Proteção"
+      ],
+      "magias_clerigo": {
+        "1": "misseis_magicos",
+        "2": "boca_magica",
+        "3": "levitacao"
+      }
+    },
+    {
+      "id": "norgorber",
+      "nome": "Norgorber",
+      "tendencia": "NM",
+      "resumo": "O deus da ganância, do homicídio, dos venenos e dos segredos ocultos.",
+      "editos": "mantenha sua verdadeira identidade em segredo, sacrifique quem for preciso, aproveite cada vantagem em uma luta, trabalhe das sombras",
+      "anatema": "permita que sua verdadeira identidade seja conectada aos seus negócios escusos, partilhe um segredo livremente, mostre misericórdia",
+      "tendencias_seguidores": [
+        "OM",
+        "NM",
+        "CM",
+        "N"
+      ],
+      "fontes_divinas": [
+        "ferir"
+      ],
+      "pericia_divina": [
+        "furtividade"
+      ],
+      "arma_favorecida_id": "espada_curta",
+      "arma_favorecida_nome": "Espada curta",
+      "dominios": [
+        "Enganação",
+        "Morte",
+        "Riqueza",
+        "Segredos"
+      ],
+      "magias_clerigo": {
+        "1": "disfarce_ilusorio",
+        "2": "invisibilidade",
+        "4": "assassino_fantasmagorico"
+      }
+    },
+    {
+      "id": "pharasma",
+      "nome": "Pharasma",
+      "tendencia": "N",
+      "resumo": "A Senhora das Tumbas preside sobre o nascimento, a morte, o destino e a profecia.",
+      "editos": "lute para compreender antigas profecias, destrua mortos-vivos, prepare os corpos para o descanso",
+      "anatema": "crie mortos-vivos, profane um corpo, pilhe uma tumba",
+      "tendencias_seguidores": [
+        "NB",
+        "ON",
+        "N"
+      ],
+      "fontes_divinas": [
+        "curar"
+      ],
+      "pericia_divina": [
+        "medicina"
+      ],
+      "arma_favorecida_id": "adaga",
+      "arma_favorecida_nome": "Adaga",
+      "dominios": [
+        "Conhecimento",
+        "Cura",
+        "Destino",
+        "Morte"
+      ],
+      "magias_clerigo": {
+        "1": "vinculo_mental",
+        "3": "arma_fantasmagorica",
+        "4": "assassino_fantasmagorico"
+      }
+    },
+    {
+      "id": "rovagug",
+      "nome": "Rovagug",
+      "tendencia": "CM",
+      "resumo": "A Besta Violenta é o deus da destruição, do desastre e da ira primordial.",
+      "editos": "destrua todas as coisas; liberte Rovagug de sua prisão",
+      "anatema": "crie algo novo, deixe laços materiais o restringirem, torture uma vítima ou atrase sua destruição de qualquer forma",
+      "tendencias_seguidores": [
+        "NM",
+        "CM"
+      ],
+      "fontes_divinas": [
+        "ferir"
+      ],
+      "pericia_divina": [
+        "atletismo"
+      ],
+      "arma_favorecida_id": "machado_longo",
+      "arma_favorecida_nome": "Machado longo",
+      "dominios": [
+        "Ar",
+        "Destruição",
+        "Fervor",
+        "Terra"
+      ],
+      "magias_clerigo": {
+        "1": "maos_flamejantes",
+        "2": "crescer",
+        "6": "desintegrar"
+      }
+    },
+    {
+      "id": "sarenrae",
+      "nome": "Sarenrae",
+      "tendencia": "NB",
+      "resumo": "A Flor do Alvorecer é a deusa da cura, da honestidade, da redenção e do sol.",
+      "editos": "destrua as Proles de Rovagug, proteja aliados, forneça auxílio aos doentes e feridos, busque e permita redenção",
+      "anatema": "crie mortos-vivos, minta, negue a oportunidade de redenção a uma criatura arrependida, falhe em acabar com o mal",
+      "tendencias_seguidores": [
+        "OB",
+        "NB",
+        "CB"
+      ],
+      "fontes_divinas": [
+        "curar"
+      ],
+      "pericia_divina": [
+        "medicina"
+      ],
+      "arma_favorecida_id": "cimitarra",
+      "arma_favorecida_nome": "Cimitarra",
+      "dominios": [
+        "Cura",
+        "Fogo",
+        "Sol",
+        "Verdade"
+      ],
+      "magias_clerigo": {
+        "1": "maos_flamejantes",
+        "3": "bola_de_fogo",
+        "4": "muralha_de_fogo"
+      }
+    },
+    {
+      "id": "shelyn",
+      "nome": "Shelyn",
+      "tendencia": "NB",
+      "resumo": "A Rosa Eterna é a deusa da arte, da beleza, do amor e da música.",
+      "editos": "seja pacífico, escolha e aperfeiçoe uma arte, lidere através do exemplo, veja beleza em todas as coisas",
+      "anatema": "destrua arte ou permita que seja destruída (a menos que esteja salvando uma vida ou em busca de uma arte maior), recuse-se a aceitar rendição",
+      "tendencias_seguidores": [
+        "OB",
+        "NB",
+        "CB"
+      ],
+      "fontes_divinas": [
+        "curar"
+      ],
+      "pericia_divina": [
+        "manufatura",
+        "performance"
+      ],
+      "arma_favorecida_id": "glaive",
+      "arma_favorecida_nome": "Glaive",
+      "dominios": [
+        "Criação",
+        "Família",
+        "Paixão",
+        "Proteção"
+      ],
+      "magias_clerigo": {
+        "1": "leque_de_cores",
+        "3": "subjugar",
+        "4": "criacao"
+      }
+    },
+    {
+      "id": "torag",
+      "nome": "Torag",
+      "tendencia": "OB",
+      "resumo": "O Pai da Criação é o deus enânico da forja, da proteção e da estratégia.",
+      "editos": "seja honrado e direto, mantenha sua palavra, respeite a forja, sirva o seu povo",
+      "anatema": "conte mentiras ou traia alguém, crie intencionalmente trabalhos inferiores, mostre misericórdia aos inimigos do seu povo",
+      "tendencias_seguidores": [
+        "OB",
+        "ON"
+      ],
+      "fontes_divinas": [
+        "curar"
+      ],
+      "pericia_divina": [
+        "manufatura"
+      ],
+      "arma_favorecida_id": "martelo_de_guerra",
+      "arma_favorecida_nome": "Martelo de guerra",
+      "dominios": [
+        "Criação",
+        "Família",
+        "Proteção",
+        "Terra"
+      ],
+      "magias_clerigo": {
+        "1": "vinculo_mental",
+        "3": "prender_a_terra",
+        "4": "criacao"
+      }
+    },
+    {
+      "id": "urgathoa",
+      "nome": "Urgathoa",
+      "tendencia": "NM",
+      "resumo": "A Princesa Pálida supervisiona a doença, a gula e a não-morte.",
+      "editos": "torne-se um morto-vivo quando morrer, crie ou proteja os mortos-vivos, sacie seus apetites",
+      "anatema": "negue seus apetites, destrua mortos-vivos, sacrifique sua vida",
+      "tendencias_seguidores": [
+        "OM",
+        "NM",
+        "CM"
+      ],
+      "fontes_divinas": [
+        "ferir"
+      ],
+      "pericia_divina": [
+        "intimidacao"
+      ],
+      "arma_favorecida_id": "segadeira",
+      "arma_favorecida_nome": "Segadeira",
+      "dominios": [
+        "Indulgência",
+        "Magia",
+        "Não-morte",
+        "Poder"
+      ],
+      "magias_clerigo": {
+        "1": "variola_goblin",
+        "2": "vitalidade_falsa",
+        "7": "mascara_do_terror"
+      }
+    },
+    {
+      "id": "zon_kuthon",
+      "nome": "Zon-Kuthon",
+      "tendencia": "OM",
+      "resumo": "O Senhor da Meia-Noite é o deus da escuridão, da inveja, da perda e da dor.",
+      "editos": "traga dor ao mundo, mutile seu corpo",
+      "anatema": "crie fontes de luz permanentes ou duradouras, forneça conforto para os que sofrem",
+      "tendencias_seguidores": [
+        "ON",
+        "OM",
+        "NM"
+      ],
+      "fontes_divinas": [
+        "ferir"
+      ],
+      "pericia_divina": [
+        "intimidacao"
+      ],
+      "arma_favorecida_id": "corrente_com_cravos",
+      "arma_favorecida_nome": "Corrente com cravos",
+      "dominios": [
+        "Ambição",
+        "Destruição",
+        "Dor",
+        "Escuridão"
+      ],
+      "magias_clerigo": {
+        "1": "dor_fantasma",
+        "3": "muralha_de_espinhos",
+        "5": "caminhar_nas_sombras"
+      }
+    }
+  ],
+  "dominios": [
+    {
+      "id": "agua",
+      "nome": "Água",
+      "descricao": "Você controla água e corpos d'água.",
+      "magia_dominio_id": "surto_da_mare",
+      "magia_dominio_avancada_id": "aguaceiro"
+    },
+    {
+      "id": "ambicao",
+      "nome": "Ambição",
+      "descricao": "Você se esforça para acompanhar e superar a competição.",
+      "magia_dominio_id": "ambicao_cega",
+      "magia_dominio_avancada_id": "vantagem_competitiva"
+    },
+    {
+      "id": "ar",
+      "nome": "Ar",
+      "descricao": "Você pode controlar ventos e o clima.",
+      "magia_dominio_id": "lufada_empurrante",
+      "magia_dominio_avancada_id": "dispersar_no_ar"
+    },
+    {
+      "id": "cidades",
+      "nome": "Cidades",
+      "descricao": "Você possui poderes sobre ambientes e habitantes urbanos.",
+      "magia_dominio_id": "rosto_na_multidao",
+      "magia_dominio_avancada_id": "pulso_da_cidade"
+    },
+    {
+      "id": "confianca",
+      "nome": "Confiança",
+      "descricao": "Você supera seu medo e projeta orgulho.",
+      "magia_dominio_id": "veu_de_confianca",
+      "magia_dominio_avancada_id": "soberba_delirante"
+    },
+    {
+      "id": "conhecimento",
+      "nome": "Conhecimento",
+      "descricao": "Você recebe intuições divinas.",
+      "magia_dominio_id": "recordacao_academica",
+      "magia_dominio_avancada_id": "conhecer_o_inimigo"
+    },
+    {
+      "id": "criacao",
+      "nome": "Criação",
+      "descricao": "Você possui habilidades divinas relacionadas a manufatura e artes.",
+      "magia_dominio_id": "salpico_de_arte",
+      "magia_dominio_avancada_id": "floreio_artistico"
+    },
+    {
+      "id": "cura",
+      "nome": "Cura",
+      "descricao": "Você usa cura mágica de forma particularmente potente.",
+      "magia_dominio_id": "bencao_do_curandeiro",
+      "magia_dominio_avancada_id": "censurar_a_morte"
+    },
+    {
+      "id": "destino",
+      "nome": "Destino",
+      "descricao": "Você vê e compreende inevitabilidades ocultas.",
+      "magia_dominio_id": "ler_destino",
+      "magia_dominio_avancada_id": "tentar_a_sorte"
+    },
+    {
+      "id": "destruicao",
+      "nome": "Destruição",
+      "descricao": "Você é um conduíte para a devastação divina.",
+      "magia_dominio_id": "brado_de_destruicao",
+      "magia_dominio_avancada_id": "aura_destrutiva"
+    },
+    {
+      "id": "dor",
+      "nome": "Dor",
+      "descricao": "Você pune aqueles que lhe desagradam com uma ferroada afiada de dor.",
+      "magia_dominio_id": "adocar_a_ferroada",
+      "magia_dominio_avancada_id": "dor_retributiva"
+    },
+    {
+      "id": "enganacao",
+      "nome": "Enganação",
+      "descricao": "Você engana os outros e trama travessuras ou artimanhas.",
+      "magia_dominio_id": "mudanca_subita",
+      "magia_dominio_avancada_id": "gemeo_do_enganador"
+    },
+    {
+      "id": "escuridao",
+      "nome": "Escuridão",
+      "descricao": "Você opera na escuridão e afasta a luz.",
+      "magia_dominio_id": "manto_de_sombras",
+      "magia_dominio_avancada_id": "olhos_enegrecidos"
+    },
+    {
+      "id": "familia",
+      "nome": "Família",
+      "descricao": "Você auxilia e protege sua família e comunidade mais efetivamente.",
+      "magia_dominio_id": "palavras_tranquilizantes",
+      "magia_dominio_avancada_id": "unidade"
+    },
+    {
+      "id": "fervor",
+      "nome": "Fervor",
+      "descricao": "Você tem sua proeza de combate aumentada pelo seu fogo interior.",
+      "magia_dominio_id": "surto_de_arma",
+      "magia_dominio_avancada_id": "entusiasmo_pela_batalha"
+    },
+    {
+      "id": "fogo",
+      "nome": "Fogo",
+      "descricao": "Você controla chamas.",
+      "magia_dominio_id": "raio_de_fogo",
+      "magia_dominio_avancada_id": "barreira_de_chamas"
+    },
+    {
+      "id": "indulgencia",
+      "nome": "Indulgência",
+      "descricao": "Você se refestela pesadamente e evita as consequências dos excessos.",
+      "magia_dominio_id": "empanturrar",
+      "magia_dominio_avancada_id": "seguir_o_rumo"
+    },
+    {
+      "id": "liberdade",
+      "nome": "Liberdade",
+      "descricao": "Você libera a si e aos outros de grilhões e restrições.",
+      "magia_dominio_id": "deslocamento_desimpedido",
+      "magia_dominio_avancada_id": "palavra_de_liberdade"
+    },
+    {
+      "id": "lua",
+      "nome": "Lua",
+      "descricao": "Você comanda poderes associados à lua.",
+      "magia_dominio_id": "feixe_lunar",
+      "magia_dominio_avancada_id": "toque_da_lua"
+    },
+    {
+      "id": "magia",
+      "nome": "Magia",
+      "descricao": "Você realiza o inesperado e o inexplicável.",
+      "magia_dominio_id": "receptaculo_de_magia",
+      "magia_dominio_avancada_id": "farol_mistico"
+    },
+    {
+      "id": "morte",
+      "nome": "Morte",
+      "descricao": "Você tem o poder de encerrar vidas e destruir mortos-vivos.",
+      "magia_dominio_id": "chamado_da_morte",
+      "magia_dominio_avancada_id": "erradicar_a_nao_morte"
+    },
+    {
+      "id": "nao_morte",
+      "nome": "Não-morte",
+      "descricao": "Você controla magia ligada aos mortos-vivos.",
+      "magia_dominio_id": "toque_da_nao_morte",
+      "magia_dominio_avancada_id": "sustento_maligno"
+    },
+    {
+      "id": "natureza",
+      "nome": "Natureza",
+      "descricao": "Você detém poder sobre animais e plantas.",
+      "magia_dominio_id": "espinhos_vibrantes",
+      "magia_dominio_avancada_id": "fartura_da_natureza"
+    },
+    {
+      "id": "paixao",
+      "nome": "Paixão",
+      "descricao": "Você evoca paixão, seja amor ou luxúria.",
+      "magia_dominio_id": "toque_cativante",
+      "magia_dominio_avancada_id": "adoracao_atraente"
+    },
+    {
+      "id": "perfeicao",
+      "nome": "Perfeição",
+      "descricao": "Você se esforça para aperfeiçoar sua mente, corpo e espírito.",
+      "magia_dominio_id": "mente_aperfeicoada",
+      "magia_dominio_avancada_id": "forma_aperfeicoada"
+    },
+    {
+      "id": "pesadelos",
+      "nome": "Pesadelos",
+      "descricao": "Você inunda mentes com horror e pavor.",
+      "magia_dominio_id": "pesadelo_acordado",
+      "magia_dominio_avancada_id": "pesadelo_compartilhado"
+    },
+    {
+      "id": "poder",
+      "nome": "Poder",
+      "descricao": "Você possui poder físico reforçado pelo divino.",
+      "magia_dominio_id": "impeto_atletico",
+      "magia_dominio_avancada_id": "poder_de_tolerancia"
+    },
+    {
+      "id": "protecao",
+      "nome": "Proteção",
+      "descricao": "Você protege a si e aos outros.",
+      "magia_dominio_id": "sacrificio_do_protetor",
+      "magia_dominio_avancada_id": "esfera_do_protetor"
+    },
+    {
+      "id": "riqueza",
+      "nome": "Riqueza",
+      "descricao": "Você detém poder sobre riqueza, comércio e tesouro.",
+      "magia_dominio_id": "aparencia_de_riqueza",
+      "magia_dominio_avancada_id": "metais_preciosos"
+    },
+    {
+      "id": "segredos",
+      "nome": "Segredos",
+      "descricao": "Você protege segredos e os mantém escondidos.",
+      "magia_dominio_id": "quietude_forcada",
+      "magia_dominio_avancada_id": "salvaguardar_segredo"
+    },
+    {
+      "id": "sol",
+      "nome": "Sol",
+      "descricao": "Você canaliza o poder do sol e pune mortos-vivos.",
+      "magia_dominio_id": "clarao_ofuscante",
+      "magia_dominio_avancada_id": "luminancia_positiva"
+    },
+    {
+      "id": "sonhos",
+      "nome": "Sonhos",
+      "descricao": "Você possui o poder de entrar em sonhos e manipulá-los.",
+      "magia_dominio_id": "sonho_agradavel",
+      "magia_dominio_avancada_id": "chamado_do_sonhador"
+    },
+    {
+      "id": "sorte",
+      "nome": "Sorte",
+      "descricao": "Você é sobrenaturalmente sortudo e sempre fica longe do perigo.",
+      "magia_dominio_id": "uma_pitada_de_sorte",
+      "magia_dominio_avancada_id": "golpe_de_sorte"
+    },
+    {
+      "id": "terra",
+      "nome": "Terra",
+      "descricao": "Você controla o solo e pedras.",
+      "magia_dominio_id": "arremessar_pedra",
+      "magia_dominio_avancada_id": "tremor_localizado"
+    },
+    {
+      "id": "tirania",
+      "nome": "Tirania",
+      "descricao": "Você empunha poder para governar e escravizar os outros.",
+      "magia_dominio_id": "toque_de_obediencia",
+      "magia_dominio_avancada_id": "chicotada_de_comando"
+    },
+    {
+      "id": "verdade",
+      "nome": "Verdade",
+      "descricao": "Você vê através de mentiras e descobre a verdade.",
+      "magia_dominio_id": "palavra_da_verdade",
+      "magia_dominio_avancada_id": "vislumbrar_a_verdade"
+    },
+    {
+      "id": "viagem",
+      "nome": "Viagem",
+      "descricao": "Você possui poder sobre movimento e jornadas.",
+      "magia_dominio_id": "pes_ageis",
+      "magia_dominio_avancada_id": "trajeto_do_viajante"
+    }
+  ]
+}
