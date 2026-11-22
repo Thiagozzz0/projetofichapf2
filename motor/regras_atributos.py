@@ -12,7 +12,7 @@ _MODOS_PROCEDURAIS = frozenset({"", "procedural", "auto", "automatico", "automat
 _MODOS_ALEATORIOS = frozenset({"aleatorio", "aleatoria", "random"})
 
 
-def _normalizar_escolha_atributo(valor: Any) -> str:
+def normalizar_escolha_atributo(valor: Any) -> str:
     """Converte entrada de melhoria de atributo em 'procedural', 'aleatorio' ou ID canônico."""
     if valor is None:
         return "procedural"
@@ -26,6 +26,9 @@ def _normalizar_escolha_atributo(valor: Any) -> str:
     if aid:
         return aid
     raise ValueError(f"Atributo ou modo inválido para melhoria: {valor!r}.")
+
+
+_normalizar_escolha_atributo = normalizar_escolha_atributo
 
 
 def _resolver_lista_modos(bruto: Any, quantidade: int) -> list[str]:
@@ -113,7 +116,7 @@ def _aplicar_melhoria(valores: dict[str, int], attr: str, teto: int | None = Non
     return delta
 
 
-def _opcoes_atributo_classe(classe: dict[str, Any], subclasse: dict[str, Any] | None) -> list[str]:
+def opcoes_atributo_classe(classe: dict[str, Any], subclasse: dict[str, Any] | None) -> list[str]:
     """Resolve os IDs de atributos-chave válidos para a classe e subclasse."""
     opcoes_brutas = list(classe["atributo_chave"]["opcoes"])
     ids_validos: list[str] = []
@@ -130,6 +133,9 @@ def _opcoes_atributo_classe(classe: dict[str, Any], subclasse: dict[str, Any] | 
                 ids_validos.append(aid)
 
     return ids_validos
+
+
+_opcoes_atributo_classe = opcoes_atributo_classe
 
 
 def _melhor_por_prioridade(
@@ -273,10 +279,22 @@ def calcular_atributos(
     )
 
     # ------------------------------------------------------------------
-    # Etapa C — Classe (atributo-chave)
+    # Etapa C — Classe (atributo-chave: manual, aleatório ou procedural)
     # ------------------------------------------------------------------
-    opcoes_classe = _opcoes_atributo_classe(classe, subclasse)
-    attr_chave = _melhor_por_prioridade(opcoes_classe, prioridade)
+    opcoes_classe = opcoes_atributo_classe(classe, subclasse)
+    modo_classe = normalizar_escolha_atributo(escolhas.get("classe_chave"))
+    if modo_classe in ATRIBUTOS:
+        if modo_classe not in opcoes_classe:
+            nomes_op = ", ".join(NOME_ATRIBUTO[o] for o in opcoes_classe)
+            raise ValueError(
+                f"Atributo-chave inválido para {classe['nome']}: '{NOME_ATRIBUTO[modo_classe]}'. "
+                f"Opções válidas: {nomes_op}."
+            )
+        attr_chave = modo_classe
+    elif modo_classe == "aleatorio":
+        attr_chave = rng_efetivo.choice(opcoes_classe)
+    else:
+        attr_chave = _melhor_por_prioridade(opcoes_classe, prioridade)
     delta_c = _aplicar_melhoria(valores, attr_chave, teto=teto_n1)
 
     historico_abcd.append(

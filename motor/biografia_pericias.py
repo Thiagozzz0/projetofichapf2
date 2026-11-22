@@ -6,7 +6,8 @@ import random
 from typing import Any
 
 from .dados import BaseDados
-from .util import atributo_id, normalizar
+from .regras_atributos import normalizar_escolha_atributo
+from .util import ATRIBUTOS, atributo_id, normalizar
 
 
 def _saberes_equivalentes(a: str, b: str) -> bool:
@@ -26,16 +27,35 @@ def selecionar_biografia(
     ancestralidade: dict[str, Any],
     biografia_id: str | None = None,
     rng: random.Random | None = None,
+    escolhas_atributos: dict[str, Any] | None = None,
 ) -> tuple[dict[str, Any], bool]:
     """Retorna `(biografia_dict, foi_procedural)`.
 
     No modo procedural, pontua as biografias recomendadas pelo conceito pela
     sinergia de atributos com a prioridade do conceito e afinidade com a
     ancestralidade, escolhendo dentre as melhores candidatas usando `rng`.
+    Caso o jogador tenha escolhido manualmente um atributo para o bônus restrito
+    da biografia, apenas biografias que oferecem esse atributo são consideradas.
     """
+    escolhas = escolhas_atributos or {}
+    modo_bio_res = normalizar_escolha_atributo(escolhas.get("biografia_restrito"))
+    modo_bio_liv = normalizar_escolha_atributo(escolhas.get("biografia_livre"))
+    atr_restrito_manual = modo_bio_res if modo_bio_res in ATRIBUTOS else None
+
+    def _opcoes_bio_ids(bio: dict[str, Any]) -> list[str]:
+        return [
+            aid
+            for o in bio["melhorias_atributo_opcoes"]
+            if (aid := atributo_id(o)) is not None
+        ]
+
     biografia_id_norm = str(biografia_id or "").strip().lower()
     if biografia_id_norm in {"aleatorio", "aleatoria", "random"}:
         todas = list(dados.biografias.values())
+        if atr_restrito_manual:
+            compat = [b for b in todas if atr_restrito_manual in _opcoes_bio_ids(b)]
+            if compat:
+                todas = compat
         escolhida = rng.choice(todas) if rng is not None else todas[0]
         return escolhida, True
 
@@ -50,12 +70,24 @@ def selecionar_biografia(
     tipicas_anc = {normalizar(nome) for nome in ancestralidade.get("biografias_tipicas", [])}
 
     candidatos_ids = list(conceito.get("biografias_recomendadas", [])) or list(dados.biografias.keys())
+    if atr_restrito_manual:
+        filtrados = [
+            bid for bid in candidatos_ids if atr_restrito_manual in _opcoes_bio_ids(dados.biografias[bid])
+        ]
+        if not filtrados:
+            filtrados = [
+                bid
+                for bid, b in dados.biografias.items()
+                if atr_restrito_manual in _opcoes_bio_ids(b)
+            ]
+        candidatos_ids = filtrados
+
     avaliados: list[tuple[int, dict[str, Any]]] = []
 
     for idx, bid in enumerate(candidatos_ids):
         bio = dados.biografias[bid]
         pontos = max(1, 8 - idx * 2)
-        opcoes_atr = [atributo_id(o) for o in bio["melhorias_atributo_opcoes"]]
+        opcoes_atr = _opcoes_bio_ids(bio)
         for atr in opcoes_atr:
             if atr == prioridade[0]:
                 pontos += 20
@@ -63,6 +95,8 @@ def selecionar_biografia(
                 pontos += 12
             elif atr in top3_atr:
                 pontos += 6
+        if modo_bio_liv in ATRIBUTOS and any(atr != modo_bio_liv for atr in opcoes_atr):
+            pontos += 10
         if normalizar(bio["nome"]) in tipicas_anc:
             pontos += 4
         avaliados.append((pontos, bio))

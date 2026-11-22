@@ -12,9 +12,9 @@ from .companheiros import gerar_companheiro_ou_familiar
 from .dados import BaseDados, carregar_dados
 from .equipamentos import calcular_proficiencias_combate, comprar_equipamentos
 from .magias import gerar_conjuracao, preencher_bloco_conjuracao_ficha
-from .regras_atributos import calcular_atributos
+from .regras_atributos import calcular_atributos, normalizar_escolha_atributo, opcoes_atributo_classe
 from .talentos import selecionar_talentos
-from .util import atributo_id, formatar_preco, normalizar
+from .util import ATRIBUTOS, atributo_id, formatar_preco, normalizar
 
 
 class ErroValidacao(ValueError):
@@ -95,12 +95,41 @@ def divindades_compativeis_conceito(
     return list(db.divindades.keys())
 
 
+def _atributo_chave_opcoes(
+    db: BaseDados,
+    classe: dict[str, Any],
+    conceito: dict[str, Any] | None = None,
+) -> list[str]:
+    """Retorna os IDs de atributos-chave válidos para a classe ou para um conceito específico."""
+    subs_todas = {s["id"]: s for s in classe.get("subclasses", {}).get("opcoes", [])}
+    if conceito is not None:
+        candidatas = list(conceito.get("subclasses_oficiais_candidatas") or [])
+        if not candidatas and conceito.get("subclasse_oficial_id"):
+            candidatas = [conceito["subclasse_oficial_id"]]
+        subs_alvos = [subs_todas[sid] for sid in candidatas if sid in subs_todas]
+    else:
+        subs_alvos = list(subs_todas.values())
+
+    opcoes: list[str] = []
+    if subs_alvos:
+        for sub in subs_alvos:
+            for aid in opcoes_atributo_classe(classe, sub):
+                if aid not in opcoes:
+                    opcoes.append(aid)
+    else:
+        for aid in opcoes_atributo_classe(classe, None):
+            if aid not in opcoes:
+                opcoes.append(aid)
+    return opcoes
+
+
 def _selecionar_subclasse_procedural(
     db: BaseDados,
     classe_id: str,
     conceito: dict[str, Any],
     rng: random.Random,
     divindade_explicita: dict[str, Any] | None = None,
+    classe_chave_escolha: Any = None,
 ) -> dict[str, Any] | None:
     """Resolve a subclasse oficial a partir do conceito (exata ou dentre candidatas)."""
     candidatas = list(conceito.get("subclasses_oficiais_candidatas") or [])
@@ -121,6 +150,16 @@ def _selecionar_subclasse_procedural(
                 f"'{tends_req}' (exigida pelo conceito '{conceito['nome']}')."
             )
         validas = compativeis
+    if classe_chave_escolha is not None:
+        try:
+            modo_chave = normalizar_escolha_atributo(classe_chave_escolha)
+        except ValueError:
+            modo_chave = "procedural"
+        if modo_chave in ATRIBUTOS:
+            classe_obj = db.classes[classe_id]
+            compativeis_chave = [s for s in validas if modo_chave in opcoes_atributo_classe(classe_obj, s)]
+            if compativeis_chave:
+                validas = compativeis_chave
     return validas[0] if len(validas) == 1 else rng.choice(validas)
 
 
@@ -352,6 +391,8 @@ def listar_opcoes_criacao(dados: BaseDados | None = None) -> dict[str, Any]:
             "nome": c["nome"],
             "pontos_de_vida_por_nivel": c["pontos_de_vida_por_nivel"],
             "atributo_chave": c["atributo_chave"]["opcoes"],
+            "atributo_chave_ids": _atributo_chave_opcoes(db, c, None),
+            "permite_escolha_atributo_chave": len(_atributo_chave_opcoes(db, c, None)) > 1,
             "divindade_obrigatoria": c["id"] in CLASSES_DIVINDADE_OBRIGATORIA,
             "conceitos": [
                 {
@@ -366,6 +407,8 @@ def listar_opcoes_criacao(dados: BaseDados | None = None) -> dict[str, Any]:
                     "subclasses_oficiais_nomes": con.get(
                         "subclasses_oficiais_nomes", [con["subclasse_oficial_nome"]]
                     ),
+                    "atributo_chave_opcoes": _atributo_chave_opcoes(db, c, con),
+                    "prioridade_atributos": list(con.get("prioridade_atributos", [])),
                     "resumo_proposta": con["resumo_proposta"],
                     "sinergia_mecanica": con.get("sinergia_mecanica", ""),
                     "divindades_compativeis_ids": divindades_compativeis_conceito(db, c["id"], con),
@@ -505,7 +548,12 @@ def gerar_personagem(
         raise ErroValidacao(f"A classe {classe['nome']} exige obrigatoriamente a seleção de uma divindade.")
 
     subclasse = _selecionar_subclasse_procedural(
-        db, classe_id, conceito, rng, divindade_explicita=divindade_explicita
+        db,
+        classe_id,
+        conceito,
+        rng,
+        divindade_explicita=divindade_explicita,
+        classe_chave_escolha=escolhas_atributos.get("classe_chave") if escolhas_atributos else None,
     )
     tese_arcana = _resolver_tese_arcana(classe, conceito.get("tese_arcana_id")) if classe_id == "mago" else None
 
@@ -563,7 +611,12 @@ def gerar_personagem(
     # ------------------------------------------------------------------
     try:
         biografia, biografia_procedural = selecionar_biografia(
-            db, conceito, ancestralidade, biografia_id=biografia_id, rng=rng
+            db,
+            conceito,
+            ancestralidade,
+            biografia_id=biografia_id,
+            rng=rng,
+            escolhas_atributos=escolhas_atributos,
         )
         atributos_res = calcular_atributos(
             ancestralidade,

@@ -240,7 +240,16 @@ def main() -> None:
     html_idx = r_idx.get_data(as_text=True)
     assert "Pathfinder 2" in html_idx
     assert "ficha.css" in html_idx and "app.js" in html_idx
-    for id_dom in ("painel-atributos-abcd", "attr-anc-livre-1", "attr-bio-restrito", "attr-livre-1"):
+    for id_dom in (
+        "subgrupo-atb-ancestralidade",
+        "subgrupo-atb-biografia",
+        "subgrupo-atb-classe",
+        "attr-classe-chave",
+        "painel-atributos-abcd",
+        "attr-anc-livre-1",
+        "attr-bio-restrito",
+        "attr-livre-1",
+    ):
         assert id_dom in html_idx
 
     assert client.get("/static/css/ficha.css").status_code == 200
@@ -267,7 +276,13 @@ def main() -> None:
     assert all(len(b["melhorias_atributo_ids"]) == 2 for b in opcoes_json["biografias"])
     obrigatorias_ui = {c["id"] for c in opcoes_json["classes"] if c["divindade_obrigatoria"]}
     assert obrigatorias_ui == {"clerigo", "campeao"}
+    cls_por_id = {c["id"]: c for c in opcoes_json["classes"]}
+    assert set(cls_por_id["guerreiro"]["atributo_chave_ids"]) == {"for", "des"}
+    assert cls_por_id["guerreiro"]["permite_escolha_atributo_chave"] is True
+    assert cls_por_id["mago"]["permite_escolha_atributo_chave"] is False
     mapa_conceitos_ui = {con["id"]: con for c in opcoes_json["classes"] for con in c["conceitos"]}
+    assert set(mapa_conceitos_ui["ladino_duelista_fanfarrao"]["atributo_chave_opcoes"]) == {"des", "car"}
+    assert "prioridade_atributos" in mapa_conceitos_ui["guerreiro_colosso_demolidor"]
     esperado_div_compat = {
         "campeao_cruzado_vingador": 7,
         "campeao_bastiao_impenetravel": 9,
@@ -389,6 +404,7 @@ def main() -> None:
                 "ancestralidade_livres": ["for", "sab"],
                 "biografia_restrito": "con",
                 "biografia_livre": "for",
+                "classe_chave": "des",
                 "livres_nivel_1": ["for", "con", "sab", "car"],
             },
             "seed": 555,
@@ -400,8 +416,11 @@ def main() -> None:
     assert res_atb_m["meta_geracao"]["escolhas_atributos"]["ancestralidade_livres"] == ["for", "sab"]
     assert res_atb_m["meta_geracao"]["escolhas_atributos"]["biografia_restrito"] == "con"
     assert res_atb_m["meta_geracao"]["escolhas_atributos"]["biografia_livre"] == "for"
+    assert res_atb_m["meta_geracao"]["escolhas_atributos"]["classe_chave"] == "des"
+    assert res_atb_m["meta_geracao"]["atributo_chave"] == "des"
     assert res_atb_m["meta_geracao"]["escolhas_atributos"]["livres_nivel_1"] == ["for", "con", "sab", "car"]
-    assert res_atb_m["ficha"]["atributos"]["for"]["valor"] == 18
+    assert res_atb_m["ficha"]["atributos"]["for"]["valor"] == 16
+    assert res_atb_m["ficha"]["atributos"]["des"]["valor"] == 12
     assert res_atb_m["ficha"]["atributos"]["sab"]["valor"] == 14
     assert res_atb_m["ficha"]["atributos"]["car"]["valor"] == 12
 

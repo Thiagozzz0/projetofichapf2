@@ -10,7 +10,7 @@
   <div class="app-container">
     <header class="topbar nao-imprimir">
       <h1>Gerador Procedural de Personagens — Pathfinder 2ª Edição</h1>
-      <p>Monte fichas completas guiadas por conceito/subclasse com matemática ABCD, equipamentos de 15 po, magias e exportação em DOCX/TXT.</p>
+      <p>Monte fichas completas guiadas por conceito/subclasse com matemática ABCD, equipamentos de 15 po, magias e exportação em PDF (Livro), DOCX e TXT.</p>
     </header>
 
     <section class="painel-controle nao-imprimir">
@@ -18,31 +18,112 @@
       <form id="form-gerador">
         <div class="grid-config">
           <div class="campo-grupo">
-            <label for="ancestralidade">Ancestralidade</label>
+            <label for="ancestralidade">A — Ancestralidade</label>
             <select id="ancestralidade" required></select>
+            <div id="subgrupo-atb-ancestralidade" class="subgrupo-atb-inline oculto">
+              <div class="subgrupo-atb-cabecalho">
+                <span id="info-atb-anc-fixos" class="nota-atb-inline"></span>
+              </div>
+              <div class="subgrupo-atb-campos">
+                <div class="campo-atb-inline">
+                  <label for="attr-anc-livre-1">Bônus Livre da Ancestralidade (+2)</label>
+                  <select id="attr-anc-livre-1" name="attr_anc_livre_1"></select>
+                </div>
+                <div class="campo-atb-inline oculto" id="grupo-attr-anc-livre-2">
+                  <label for="attr-anc-livre-2">2º Bônus Livre (+2 — Humano)</label>
+                  <select id="attr-anc-livre-2" name="attr_anc_livre_2"></select>
+                </div>
+              </div>
+            </div>
           </div>
+
           <div class="campo-grupo">
             <label for="heranca">Herança</label>
             <select id="heranca" required></select>
           </div>
+
           <div class="campo-grupo">
-            <label for="biografia">Biografia / Antecedente</label>
+            <label for="biografia">B — Biografia / Antecedente</label>
             <select id="biografia"></select>
+            <button type="button" id="btn-bio-atb-opcional" class="btn-link-atb oculto">+ Escolher bônus de atributo mesmo com biografia automática</button>
+            <div id="subgrupo-atb-biografia" class="subgrupo-atb-inline oculto">
+              <div class="subgrupo-atb-cabecalho">
+                <span id="info-atb-bio-opcoes" class="nota-atb-inline"></span>
+              </div>
+              <div class="subgrupo-atb-campos">
+                <div class="campo-atb-inline" id="grupo-attr-bio-restrito">
+                  <label for="attr-bio-restrito">1º Bônus (Restrito da Biografia) (+2)</label>
+                  <select id="attr-bio-restrito" name="attr_bio_restrito"></select>
+                </div>
+                <div class="campo-atb-inline" id="grupo-attr-bio-livre">
+                  <label for="attr-bio-livre">2º Bônus Livre da Biografia (+2)</label>
+                  <select id="attr-bio-livre" name="attr_bio_livre"></select>
+                </div>
+              </div>
+            </div>
           </div>
+
           <div class="campo-grupo">
-            <label for="classe">Classe</label>
+            <label for="classe">C — Classe</label>
             <select id="classe" required></select>
+            <div id="subgrupo-atb-classe" class="subgrupo-atb-inline oculto">
+              <div class="subgrupo-atb-cabecalho">
+                <span id="info-atb-classe-opcoes" class="nota-atb-inline"></span>
+              </div>
+              <div class="subgrupo-atb-campos" id="grupo-attr-classe-chave">
+                <div class="campo-atb-inline">
+                  <label for="attr-classe-chave">Atributo-Chave da Classe (+2)</label>
+                  <select id="attr-classe-chave" name="attr_classe_chave"></select>
+                </div>
+              </div>
+            </div>
           </div>
+
           <div class="campo-grupo">
             <label for="conceito">Conceito ("Norte")</label>
             <select id="conceito" required></select>
-            <small class="nota-campo">A subclasse oficial do PF2E é vinculada automaticamente pelo conceito.</small>
+            <small class="nota-campo">Guia perícias, talentos, equipamentos e apenas os atributos deixados em "Procedural"; escolhas manuais nunca são alteradas.</small>
           </div>
+
           <div class="campo-grupo" id="grupo-divindade">
             <label for="divindade" id="label-divindade">Divindade <span id="badge-divindade" class="badge-opcional">Opcional</span></label>
             <select id="divindade"></select>
             <small class="nota-campo" id="nota-divindade">Opcional para esta classe (apenas interpretação; não concede poderes de Clérigo/Campeão).</small>
           </div>
+
+          <div class="campo-grupo campo-span-full subgrupo-atb-etapa-d" id="painel-atributos-abcd">
+            <div class="etapa-d-topo">
+              <div>
+                <label for="attr-livre-1" class="etapa-d-titulo">D — 4 Bônus Livres Finais de 1º Nível (+2 em 4 atributos distintos)</label>
+                <small id="nota-atb-abcd" class="nota-campo">
+                  Os atributos escolhidos manualmente aqui (e nas etapas A, B e C acima) são fixos e nunca serão alterados pelo Conceito. Os deixados em "Procedural" seguem o Conceito.
+                </small>
+              </div>
+              <div class="box-atb-botoes">
+                <button type="button" id="btn-atb-todos-procedural" class="btn btn-sutil">Resetar Todos p/ Procedural</button>
+                <button type="button" id="btn-atb-todos-aleatorio" class="btn btn-sutil">Todos Aleatórios</button>
+              </div>
+            </div>
+            <div class="grid-atributos-livres">
+              <div class="campo-atb-inline">
+                <label for="attr-livre-1">1º Bônus Livre</label>
+                <select id="attr-livre-1" name="attr_livre_1"></select>
+              </div>
+              <div class="campo-atb-inline">
+                <label for="attr-livre-2">2º Bônus Livre</label>
+                <select id="attr-livre-2" name="attr_livre_2"></select>
+              </div>
+              <div class="campo-atb-inline">
+                <label for="attr-livre-3">3º Bônus Livre</label>
+                <select id="attr-livre-3" name="attr_livre_3"></select>
+              </div>
+              <div class="campo-atb-inline">
+                <label for="attr-livre-4">4º Bônus Livre</label>
+                <select id="attr-livre-4" name="attr_livre_4"></select>
+              </div>
+            </div>
+          </div>
+
           <div class="campo-grupo">
             <label for="nivel">Nível</label>
             <select id="nivel" name="nivel">
@@ -70,69 +151,6 @@
           <div id="resumo-biografia" class="card-resumo"></div>
           <div id="resumo-conceito" class="card-resumo"></div>
         </div>
-
-        <details open id="painel-atributos-abcd" class="box-atributos-config">
-          <summary>
-            <span>Personalização dos Bônus de Atributos (Opcional — Sistema ABCD)</span>
-          </summary>
-          <div class="box-atb-topo">
-            <small id="nota-atb-abcd" class="nota-campo">
-              Por padrão segue o melhor caminho do conceito (Procedural). Você também pode escolher manualmente ou usar Aleatório para acelerar.
-            </small>
-            <div class="box-atb-botoes">
-              <button type="button" id="btn-atb-procedural" class="btn btn-sutil">Todos Procedurais</button>
-              <button type="button" id="btn-atb-aleatorio" class="btn btn-sutil">Todos Aleatórios</button>
-            </div>
-          </div>
-
-          <div class="grid-atributos-config">
-            <div class="subbloco-atb">
-              <div class="subbloco-atb-titulo">A — Bônus Livres da Ancestralidade</div>
-              <div class="campo-grupo">
-                <label for="attr-anc-livre-1">Bônus Livre da Raça</label>
-                <select id="attr-anc-livre-1"></select>
-              </div>
-              <div class="campo-grupo" id="grupo-attr-anc-livre-2" hidden>
-                <label for="attr-anc-livre-2">2º Bônus Livre (Humano)</label>
-                <select id="attr-anc-livre-2"></select>
-              </div>
-            </div>
-
-            <div class="subbloco-atb">
-              <div class="subbloco-atb-titulo">B — Bônus da Biografia</div>
-              <div class="campo-grupo">
-                <label for="attr-bio-restrito">Bônus Restrito (2 Opções)</label>
-                <select id="attr-bio-restrito"></select>
-              </div>
-              <div class="campo-grupo">
-                <label for="attr-bio-livre">Bônus Livre da Biografia</label>
-                <select id="attr-bio-livre"></select>
-              </div>
-            </div>
-
-            <div class="subbloco-atb subbloco-atb-wide">
-              <div class="subbloco-atb-titulo">D — 4 Bônus Livres de 1º Nível (4 Atributos Distintos)</div>
-              <div class="grid-atributos-livres">
-                <div class="campo-grupo">
-                  <label for="attr-livre-1">1º Bônus Livre</label>
-                  <select id="attr-livre-1"></select>
-                </div>
-                <div class="campo-grupo">
-                  <label for="attr-livre-2">2º Bônus Livre</label>
-                  <select id="attr-livre-2"></select>
-                </div>
-                <div class="campo-grupo">
-                  <label for="attr-livre-3">3º Bônus Livre</label>
-                  <select id="attr-livre-3"></select>
-                </div>
-                <div class="campo-grupo">
-                  <label for="attr-livre-4">4º Bônus Livre</label>
-                  <select id="attr-livre-4"></select>
-                </div>
-              </div>
-            </div>
-          </div>
-        </details>
 
         <div class="barra-acoes">
           <button type="submit" class="btn btn-primario">Gerar Ficha</button>

@@ -655,16 +655,80 @@ def test_escolhas_atributos_manual_procedural_aleatorio() -> None:
     assert esc_r["biografia_restrito"] != esc_r["biografia_livre"]
     assert len(set(esc_r["livres_nivel_1"])) == 4
 
-    # 4. Validações de erro para combinações ilegais PF2E
+    # 4. Escolha manual de classe_chave e preservação estrita frente ao conceito divergente
+    lad_car = gerar_personagem(
+        "humano", "heranca_versatil", "ladino", "ladino_sabotador_venenoso",
+        escolhas_atributos={"classe_chave": "car"}, seed=10, dados=db,
+    )
+    assert lad_car["meta_geracao"]["atributo_chave"] == "car"
+    assert lad_car["meta_geracao"]["subclasse_oficial_id"] == "malandro"
+
+    # Guerreiro Colosso Demolidor (conceito foca FOR/CON/DES) com todos atributos livres manuais em INT/SAB/CAR/DES
+    guerr_div = gerar_personagem(
+        "humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor",
+        biografia_id="estudioso",
+        escolhas_atributos={
+            "ancestralidade_livres": ["car", "int"],
+            "biografia_restrito": "int",
+            "biografia_livre": "sab",
+            "classe_chave": "des",
+            "livres_nivel_1": ["des", "int", "sab", "car"],
+        },
+        seed=42,
+        dados=db,
+    )
+    atb_div = guerr_div["ficha"]["atributos"]
+    assert atb_div["for"]["valor"] == 10
+    assert atb_div["des"]["valor"] == 14
+    assert atb_div["con"]["valor"] == 10
+    assert atb_div["int"]["valor"] == 16
+    assert atb_div["sab"]["valor"] == 14
+    assert atb_div["car"]["valor"] == 14
+    assert guerr_div["meta_geracao"]["atributo_chave"] == "des"
+    assert guerr_div["meta_geracao"]["subclasse_oficial_id"] == "agressor"
+
+    # Misto: 2 livres manuais divergentes + 2 livres procedurais guiados pelo conceito (sem sobrescrever os manuais)
+    guerr_misto = gerar_personagem(
+        "humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor",
+        biografia_id="estudioso",
+        escolhas_atributos={
+            "ancestralidade_livres": ["car", "procedural"],
+            "biografia_restrito": "int",
+            "biografia_livre": "procedural",
+            "classe_chave": "procedural",
+            "livres_nivel_1": ["car", "sab", "procedural", "procedural"],
+        },
+        seed=42,
+        dados=db,
+    )
+    esc_mix = guerr_misto["meta_geracao"]["escolhas_atributos"]
+    assert esc_mix["ancestralidade_livres"] == ["car", "for"]
+    assert esc_mix["biografia_restrito"] == "int"
+    assert esc_mix["biografia_livre"] == "for"
+    assert esc_mix["classe_chave"] == "for"
+    assert esc_mix["livres_nivel_1"] == ["car", "sab", "for", "con"]
+
+    # Biografia procedural com biografia_restrito manual em atributo não-padrão seleciona biografia compatível
+    mago_car_bio = gerar_personagem(
+        "elfo", "elfo_vidente", "mago", "mago_evocador_artilharia",
+        biografia_id="procedural",
+        escolhas_atributos={"biografia_restrito": "car"},
+        seed=15,
+        dados=db,
+    )
+    assert mago_car_bio["meta_geracao"]["escolhas_atributos"]["biografia_restrito"] == "car"
+
+    # 5. Validações de erro para combinações ilegais PF2E
     for esc_inv in (
         {"ancestralidade_livres": ["for", "for"]},  # Humano duplicado
         {"biografia_restrito": "for"},              # Fora das opções de Estudioso (int/sab)
         {"biografia_restrito": "int", "biografia_livre": "int"},
+        {"classe_chave": "int"},                    # Guerreiro só aceita FOR ou DES
         {"livres_nivel_1": ["for", "des", "con", "for"]},
     ):
         try:
             gerar_personagem(
-                "humano", "heranca_versatil", "mago", "mago_evocador_artilharia",
+                "humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor",
                 biografia_id="estudioso", escolhas_atributos=esc_inv, seed=1, dados=db,
             )
             raise AssertionError(f"Deveria falhar com ErroValidacao para {esc_inv!r}")

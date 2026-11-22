@@ -52,7 +52,7 @@ def _gerar_a_partir_payload(payload: dict[str, Any]) -> dict[str, Any]:
         if not isinstance(bruto_escolhas, dict):
             raise ErroValidacao("Campo 'escolhas_atributos' deve ser um objeto JSON.")
         escolhas_atributos.update(bruto_escolhas)
-    for campo_atb in ("ancestralidade_livres", "biografia_restrito", "biografia_livre", "livres_nivel_1"):
+    for campo_atb in ("ancestralidade_livres", "biografia_restrito", "biografia_livre", "classe_chave", "livres_nivel_1"):
         if campo_atb in payload and campo_atb not in escolhas_atributos:
             escolhas_atributos[campo_atb] = payload[campo_atb]
 
@@ -147,6 +147,12 @@ def api_conceitos_por_classe(classe_id: str):
     classe = dados.classes.get(classe_id)
     if not classe:
         return jsonify({"erro": f"Classe não encontrada: '{classe_id}'."}), 404
+    opcoes_por_id = {
+        c_info["id"]: c_info
+        for cls_info in listar_opcoes_criacao(dados)["classes"]
+        if cls_info["id"] == classe_id
+        for c_info in cls_info["conceitos"]
+    }
     conceitos = [
         {
             "id": c["id"],
@@ -160,6 +166,8 @@ def api_conceitos_por_classe(classe_id: str):
             "subclasses_oficiais_nomes": c.get(
                 "subclasses_oficiais_nomes", [c["subclasse_oficial_nome"]]
             ),
+            "atributo_chave_opcoes": opcoes_por_id.get(c["id"], {}).get("atributo_chave_opcoes", []),
+            "prioridade_atributos": list(c.get("prioridade_atributos", [])),
             "resumo_proposta": c["resumo_proposta"],
             "sinergia_mecanica": c.get("sinergia_mecanica", ""),
             "divindades_compativeis_ids": divindades_compativeis_conceito(dados, classe_id, c),
