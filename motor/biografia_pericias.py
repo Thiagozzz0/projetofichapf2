@@ -33,7 +33,13 @@ def selecionar_biografia(
     sinergia de atributos com a prioridade do conceito e afinidade com a
     ancestralidade, escolhendo dentre as melhores candidatas usando `rng`.
     """
-    if biografia_id and biografia_id != "procedural":
+    biografia_id_norm = str(biografia_id or "").strip().lower()
+    if biografia_id_norm in {"aleatorio", "aleatoria", "random"}:
+        todas = list(dados.biografias.values())
+        escolhida = rng.choice(todas) if rng is not None else todas[0]
+        return escolhida, True
+
+    if biografia_id and biografia_id_norm != "procedural":
         bio = dados.biografias.get(biografia_id)
         if bio is None:
             raise ValueError(f"Biografia inválida: '{biografia_id}'.")

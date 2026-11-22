@@ -351,6 +351,24 @@ def main() -> None:
     assert r_guerr_rand.status_code == 200
     assert r_guerr_rand.get_json()["ficha"]["cabecalho"]["divindade"] != ""
 
+    r_all_rand = client.post(
+        "/api/gerar",
+        json={
+            "ancestralidade_id": "aleatorio",
+            "heranca_id": "aleatorio",
+            "biografia_id": "aleatoria",
+            "classe_id": "aleatorio",
+            "conceito_id": "aleatorio",
+            "divindade_id": "aleatorio",
+            "nivel": "aleatorio",
+            "seed": 2026,
+        },
+    )
+    assert r_all_rand.status_code == 200
+    payload_rand = r_all_rand.get_json()
+    verificar_contrato_e_matematica(payload_rand, dados)
+    assert "+0 CA" in payload_rand["meta_geracao"]["armadura_equipada_resumo"] or "CA" in payload_rand["meta_geracao"]["armadura_equipada_resumo"]
+
     # Erros controlados (400)
     assert client.post("/api/gerar", json={"ancestralidade_id": "humano"}).status_code == 400
     assert client.post(

@@ -10,6 +10,45 @@ from .util import grau_normalizado, normalizar, pc_para_moedas
 
 ORCAMENTO_INICIAL_PC = 1500  # 15 po = 150 pp = 1.500 pc
 
+
+def formatar_armadura_resumo(armadura: dict[str, Any]) -> str:
+    """Formata o nome da armadura seguido do bônus de CA e limitadores."""
+    bonus_ca = int(armadura.get("bonus_ca") or 0)
+    partes = [f"+{bonus_ca} CA"]
+    if armadura.get("limite_destreza") is not None:
+        partes.append(f"Lim DES +{int(armadura['limite_destreza'])}")
+    pen = int(armadura.get("penalidade_testes") or 0)
+    if pen != 0:
+        partes.append(f"Pen {pen}")
+    vel_p = float(armadura.get("penalidade_velocidade_m") or 0.0)
+    if vel_p < 0:
+        vel_txt = f"{int(vel_p)}" if vel_p.is_integer() else str(vel_p).replace(".", ",")
+        partes.append(f"Vel {vel_txt}m")
+    return f"{armadura['nome']} ({', '.join(partes)})"
+
+
+def _formatar_arma_inventario(arma: dict[str, Any], sufixo: str = "") -> str:
+    dano = f"{arma.get('dano_quantidade', 1)}{arma.get('dano_dado', 'd4')} {arma.get('dano_tipo', '')}".strip()
+    partes = [dano]
+    if arma.get("bonus_item"):
+        partes.append(str(arma["bonus_item"]))
+    if sufixo:
+        partes.append(sufixo)
+    return f"{arma['nome']} ({', '.join(partes)})"
+
+
+def _formatar_item_geral_inventario(item: dict[str, Any], quantidade: int = 1) -> str:
+    partes: list[str] = []
+    if item.get("bonus_item"):
+        partes.append(str(item["bonus_item"]))
+    qtd_pac = int(item.get("quantidade_pacote") or 1)
+    qtd_efetiva = max(quantidade, qtd_pac)
+    if qtd_efetiva > 1 and f"({qtd_efetiva})" not in item["nome"]:
+        partes.append(f"Qtd: {qtd_efetiva}")
+    if item.get("conteudo"):
+        partes.append(", ".join(item["conteudo"]))
+    return f"{item['nome']} ({'; '.join(partes)})" if partes else item["nome"]
+
 _FAMILIARIDADE_ARMAS_ANCESTRAL: dict[str, tuple[list[str], str]] = {
     "familiaridade_com_armas_enanicas": (["machado de batalha", "martelo de guerra", "picareta"], "anao"),
     "familiaridade_com_armas_elficas": (
@@ -381,10 +420,11 @@ def comprar_equipamentos(
             item["investido"] = investido
         lista.append(item)
 
+    armadura_resumo = formatar_armadura_resumo(armadura_escolhida)
     if armadura_escolhida["id"] != "nenhuma_armadura":
         registrar_item(
             itens_vestidos,
-            armadura_escolhida["nome"],
+            armadura_resumo,
             1,
             armadura_escolhida["volume"],
             float(armadura_escolhida.get("volume_valor") or 0.0),
@@ -394,7 +434,7 @@ def comprar_equipamentos(
     for w in armas_compradas:
         registrar_item(
             itens_vestidos,
-            w["nome"],
+            _formatar_arma_inventario(w),
             1,
             w["volume"],
             float(w.get("volume_valor") or 0.0),
@@ -406,10 +446,11 @@ def comprar_equipamentos(
             lotes = 2 if (mun["preco_pc"] * 2) <= saldo_pc else (1 if mun["preco_pc"] <= saldo_pc else 0)
             if lotes > 0:
                 saldo_pc -= mun["preco_pc"] * lotes
+                qtd_mun = lotes * mun["quantidade"]
                 registrar_item(
                     itens_vestidos,
-                    f"{mun['nome']} ({lotes * mun['quantidade']})",
-                    lotes * mun["quantidade"],
+                    f"{mun['nome']} (Qtd: {qtd_mun})",
+                    qtd_mun,
                     "L" if lotes == 1 else f"{lotes}L",
                     round(0.1 * lotes, 2),
                     mun["preco_pc"] * lotes,
@@ -418,7 +459,7 @@ def comprar_equipamentos(
     if escudo_escolhido:
         registrar_item(
             itens_vestidos,
-            escudo_escolhido["nome"],
+            f"{escudo_escolhido['nome']} (+{escudo_escolhido['bonus_ca']} CA, Dureza {escudo_escolhido['dureza']}, PV {escudo_escolhido['pv']})",
             1,
             escudo_escolhido["volume"],
             float(escudo_escolhido.get("volume_valor") or 0.0),
@@ -430,14 +471,14 @@ def comprar_equipamentos(
         adaga_cla = dados.armas["adaga_de_cla"]
         if grau_arma(adaga_cla, armas_prof) != "destreinado":
             armas_compradas.append(adaga_cla)
-        registrar_item(itens_vestidos, f"{adaga_cla['nome']} (Ancestral)", 1, adaga_cla["volume"], float(adaga_cla["volume_valor"]), 0)
+        registrar_item(itens_vestidos, _formatar_arma_inventario(adaga_cla, sufixo="Ancestral"), 1, adaga_cla["volume"], float(adaga_cla["volume_valor"]), 0)
 
     if classe["id"] == "mago":
         registrar_item(outros_itens, "Grimório Inicial (Classe)", 1, "L", 0.1, 0)
 
     if classe["id"] == "alquimista":
         reagentes_qtd = max(1, 1 + mod_int)
-        registrar_item(itens_preparados, "Livro de Fórmulas e Reagentes Infundidos", reagentes_qtd, "L", 0.1, 0)
+        registrar_item(itens_preparados, f"Livro de Fórmulas e Reagentes Infundidos (Qtd: {reagentes_qtd} lotes/dia)", reagentes_qtd, "L", 0.1, 0)
 
     # Ferramentas essenciais da classe
     sub_id = subclasse["id"] if subclasse else ""
@@ -447,8 +488,8 @@ def comprar_equipamentos(
             saldo_pc -= fitem.get("preco_pc") or 0
             registrar_item(
                 itens_preparados,
-                fitem["nome"],
-                1,
+                _formatar_item_geral_inventario(fitem, 1),
+                int(fitem.get("quantidade_pacote") or 1),
                 fitem["volume"],
                 float(fitem.get("volume_valor") or 0.0),
                 fitem.get("preco_pc"),
@@ -460,7 +501,7 @@ def comprar_equipamentos(
         saldo_pc -= kit_av["preco_pc"]
         registrar_item(
             outros_itens,
-            kit_av["nome"],
+            _formatar_item_geral_inventario(kit_av, 1),
             1,
             kit_av["volume"],
             float(kit_av.get("volume_valor") or 0.0),
@@ -505,6 +546,7 @@ def comprar_equipamentos(
 
     return {
         "armadura": armadura_escolhida,
+        "armadura_resumo": armadura_resumo,
         "escudo": escudo_escolhido,
         "armas": armas_compradas,
         "itens_vestidos": itens_vestidos,

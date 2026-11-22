@@ -212,6 +212,7 @@ def exportar_ficha_txt(resultado: dict[str, Any]) -> str:
         f"(10 + DES/Lim {formatar_bonus(ca['des_ou_limite'])} + Prof {formatar_bonus(ca['proficiencia'])} "
         f"[{_formatar_grau_curto(ca['grau_proficiencia'])}] + Item {formatar_bonus(ca['item'])})"
     )
+    linhas.append(f"  Armadura       : {meta.get('armadura_equipada_resumo') or meta.get('armadura_equipada', 'Nenhuma armadura')}")
     if obs_comb.get("nota_postura"):
         linhas.append(f"  Postura        : {obs_comb['nota_postura']}")
     esc = ca["escudo"]
@@ -294,7 +295,9 @@ def exportar_ficha_txt(resultado: dict[str, Any]) -> str:
         linhas.append(f"  {titulo_sec}:")
         if itens:
             for item in itens:
-                qtd = f" ×{item['quantidade']}" if (item.get("quantidade") or 1) > 1 else ""
+                qtd_num = item.get("quantidade") or 1
+                ja_tem_qtd = "(Qtd:" in item["nome"] or f"({qtd_num})" in item["nome"]
+                qtd = f" ×{qtd_num}" if qtd_num > 1 and not ja_tem_qtd else ""
                 linhas.append(f"    - {item['nome']}{qtd} (Vol: {item['volume']})")
         else:
             linhas.append("    - (vazio)")
@@ -614,6 +617,7 @@ def _montar_document_xml(resultado: dict[str, Any]) -> str:
         ["Reflexos", f"{formatar_bonus(salv['reflexos']['total'])} [{_formatar_grau_curto(salv['reflexos']['grau_proficiencia'])}]", "Vontade", f"{formatar_bonus(salv['vontade']['total'])} [{_formatar_grau_curto(salv['vontade']['grau_proficiencia'])}]"],
     ]
     partes.append(_xml_tabela(["Estatística", "Valor", "Estatística", "Valor"], linhas_comb, [2300, 2933, 2300, 2933]))
+    partes.append(_xml_p_rotulo("Armadura", meta.get("armadura_equipada_resumo") or meta.get("armadura_equipada", "Nenhuma armadura")))
 
     if obs_comb.get("nota_postura"):
         partes.append(_xml_p_rotulo("Postura de Combate", obs_comb["nota_postura"]))

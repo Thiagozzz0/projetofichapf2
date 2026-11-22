@@ -1,0 +1,6 @@
+Colocar na frente das armaduras os bonus, tanto para 
+descrição na CA como nos equipamentos. Isso para todos os itens que tem bonus
+e quantidade.
+
+Gerar o pdf igual o do livro
+

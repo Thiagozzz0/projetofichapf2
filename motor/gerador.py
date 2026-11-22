@@ -22,6 +22,7 @@ class ErroValidacao(ValueError):
 
 
 CLASSES_DIVINDADE_OBRIGATORIA = frozenset({"clerigo", "campeao"})
+VALORES_ALEATORIOS = frozenset({"aleatorio", "aleatoria", "procedural", "random"})
 
 
 _NOMES_HUMANOS_PADRAO = [
@@ -400,40 +401,14 @@ def gerar_personagem(
     divindade_id: str | None = None,
     nome_personagem: str | None = None,
     nome_jogador: str = "",
-    nivel: int = 1,
+    nivel: int | str = 1,
     seed: int | str | None = None,
     dados: BaseDados | None = None,
 ) -> dict[str, Any]:
     """Gera uma ficha completa e válida de Pathfinder 2E guiada pelo conceito escolhido."""
     db = dados or carregar_dados()
 
-    # ------------------------------------------------------------------
-    # 1. Validação rigorosa das entradas
-    # ------------------------------------------------------------------
-    if nivel != 1:
-        raise ErroValidacao("Esta versão do motor gera personagens de 1º nível (nivel=1).")
-
-    ancestralidade = db.ancestralidades.get(ancestralidade_id)
-    if not ancestralidade:
-        raise ErroValidacao(f"Ancestralidade desconhecida: '{ancestralidade_id}'.")
-
-    heranca = db.heranca(ancestralidade_id, heranca_id)
-    if not heranca:
-        raise ErroValidacao(f"Herança '{heranca_id}' não pertence à ancestralidade '{ancestralidade_id}'.")
-
-    classe = db.classes.get(classe_id)
-    if not classe:
-        raise ErroValidacao(f"Classe desconhecida: '{classe_id}'.")
-
-    conceito = db.conceitos.get(conceito_id)
-    if not conceito:
-        raise ErroValidacao(f"Conceito desconhecido: '{conceito_id}'.")
-    if conceito["classe_id"] != classe_id:
-        raise ErroValidacao(
-            f"O conceito '{conceito_id}' pertence à classe '{conceito['classe_id']}', não a '{classe_id}'."
-        )
-
-    # Seed opcional: se não informada, cria uma seed aleatória rastreável
+    # Seed opcional no início para tornar determinísticos também os sorteios de entrada
     if seed is None or str(seed).strip() == "":
         seed_usada: int | str = random.SystemRandom().randint(1, 999_999_999)
     else:
@@ -441,15 +416,85 @@ def gerar_personagem(
         seed_usada = int(seed_str) if seed_str.isdigit() else seed_str
     rng = random.Random(seed_usada)
 
-    div_req = None if divindade_id is None else str(divindade_id).strip()
-    if classe_id in CLASSES_DIVINDADE_OBRIGATORIA and div_req in ("", "nenhuma"):
-        raise ErroValidacao(f"A classe {classe['nome']} exige obrigatoriamente a seleção de uma divindade.")
+    # ------------------------------------------------------------------
+    # 1. Validação e resolução (manual ou aleatória) das entradas
+    # ------------------------------------------------------------------
+    if str(nivel or "").strip().lower() in VALORES_ALEATORIOS:
+        nivel_int = 1
+    else:
+        try:
+            nivel_int = int(nivel)
+        except (TypeError, ValueError) as exc:
+            raise ErroValidacao(f"Valor inválido para 'nivel': {nivel!r}.") from exc
+    if nivel_int != 1:
+        raise ErroValidacao("Esta versão do motor gera personagens de 1º nível (nivel=1).")
+    nivel = nivel_int
 
+    div_req = None if divindade_id is None else str(divindade_id).strip()
+    div_req_norm = (div_req or "").lower()
     divindade_explicita: dict[str, Any] | None = None
-    if div_req not in (None, "", "nenhuma", "procedural", "aleatoria"):
+    if div_req_norm not in ("", "nenhuma", "procedural", "aleatoria", "aleatorio", "random"):
         divindade_explicita = db.divindades.get(div_req)
         if not divindade_explicita:
             raise ErroValidacao(f"Divindade desconhecida: '{div_req}'.")
+
+    if str(ancestralidade_id or "").strip().lower() in VALORES_ALEATORIOS:
+        ancestralidade = rng.choice(list(db.ancestralidades.values()))
+        ancestralidade_id = ancestralidade["id"]
+    else:
+        ancestralidade = db.ancestralidades.get(ancestralidade_id)
+        if not ancestralidade:
+            raise ErroValidacao(f"Ancestralidade desconhecida: '{ancestralidade_id}'.")
+
+    if str(heranca_id or "").strip().lower() in VALORES_ALEATORIOS:
+        heranca = rng.choice(ancestralidade["herancas"])
+        heranca_id = heranca["id"]
+    else:
+        heranca = db.heranca(ancestralidade_id, heranca_id)
+        if not heranca:
+            raise ErroValidacao(f"Herança '{heranca_id}' não pertence à ancestralidade '{ancestralidade_id}'.")
+
+    def _conceitos_compativeis_divindade(cls_cand_id: str) -> list[dict[str, Any]]:
+        cons = db.conceitos_da_classe(cls_cand_id)
+        if divindade_explicita is None or cls_cand_id not in CLASSES_DIVINDADE_OBRIGATORIA:
+            return cons
+        did_exp = divindade_explicita["id"]
+        return [c for c in cons if did_exp in divindades_compativeis_conceito(db, cls_cand_id, c)]
+
+    if str(classe_id or "").strip().lower() in VALORES_ALEATORIOS:
+        classes_pool = list(db.classes.values())
+        if div_req_norm == "nenhuma":
+            classes_pool = [c for c in classes_pool if c["id"] not in CLASSES_DIVINDADE_OBRIGATORIA]
+        elif divindade_explicita is not None:
+            compat_cls = [c for c in classes_pool if _conceitos_compativeis_divindade(c["id"])]
+            if compat_cls:
+                classes_pool = compat_cls
+        classe = rng.choice(classes_pool)
+        classe_id = classe["id"]
+    else:
+        classe = db.classes.get(classe_id)
+        if not classe:
+            raise ErroValidacao(f"Classe desconhecida: '{classe_id}'.")
+
+    if str(conceito_id or "").strip().lower() in VALORES_ALEATORIOS:
+        cons_pool = _conceitos_compativeis_divindade(classe_id)
+        if not cons_pool:
+            raise ErroValidacao(
+                f"Nenhum conceito da classe '{classe['nome']}' é compatível com a divindade '{divindade_explicita['nome']}'."
+            )
+        conceito = rng.choice(cons_pool)
+        conceito_id = conceito["id"]
+    else:
+        conceito = db.conceitos.get(conceito_id)
+        if not conceito:
+            raise ErroValidacao(f"Conceito desconhecido: '{conceito_id}'.")
+        if conceito["classe_id"] != classe_id:
+            raise ErroValidacao(
+                f"O conceito '{conceito_id}' pertence à classe '{conceito['classe_id']}', não a '{classe_id}'."
+            )
+
+    if classe_id in CLASSES_DIVINDADE_OBRIGATORIA and div_req is not None and div_req_norm in ("", "nenhuma"):
+        raise ErroValidacao(f"A classe {classe['nome']} exige obrigatoriamente a seleção de uma divindade.")
 
     subclasse = _selecionar_subclasse_procedural(
         db, classe_id, conceito, rng, divindade_explicita=divindade_explicita
@@ -479,7 +524,7 @@ def gerar_personagem(
 
     if divindade_explicita is not None:
         divindade = divindade_explicita
-    elif div_req == "aleatoria":
+    elif div_req_norm in ("aleatoria", "aleatorio", "random"):
         if classe_id == "campeao":
             tend_causa = _determinar_tendencia("campeao", subclasse["id"] if subclasse else "")
             compat = [d for d in db.divindades.values() if tend_causa in d["tendencias_seguidores"]]
@@ -738,7 +783,7 @@ def gerar_personagem(
             "tese_arcana_nome": tese_arcana["nome"] if tese_arcana else None,
             "divindade_id": divindade["id"] if divindade else None,
             "divindade_obrigatoria": classe_id in CLASSES_DIVINDADE_OBRIGATORIA,
-            "divindade_procedural": (div_req in (None, "procedural", "aleatoria")) and (divindade is not None),
+            "divindade_procedural": (div_req_norm in ("", "procedural", "aleatoria", "aleatorio", "random")) and (divindade is not None),
             "divindade_detalhes": divindade_detalhes,
             "companheiro_ou_familiar": companheiro_ou_familiar,
             "limite_morrendo": notas_combate["limite_morrendo"],
@@ -751,6 +796,7 @@ def gerar_personagem(
             "gasto_pc": equip_res["gasto_pc"],
             "saldo_pc": equip_res["saldo_pc"],
             "armadura_equipada": equip_res["armadura"]["nome"],
+            "armadura_equipada_resumo": equip_res["armadura_resumo"],
             "observacoes_combate": notas_combate,
         },
         "ficha": ficha,

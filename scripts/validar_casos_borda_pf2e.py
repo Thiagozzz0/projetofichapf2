@@ -511,6 +511,66 @@ def test_revisao_geral_etapa_23() -> None:
         assert "Preparada •" in doc_txt
 
 
+def test_aleatorio_7_campos_e_bonus_equipamentos() -> None:
+    db = carregar_dados()
+
+    # 1. Todos os 7 campos em aleatório e determinismo por seed
+    r1 = gerar_personagem(
+        "aleatorio", "aleatorio", "aleatorio", "aleatorio",
+        biografia_id="aleatoria", divindade_id="aleatoria", nivel="aleatorio", seed=31415, dados=db,
+    )
+    r2 = gerar_personagem(
+        "aleatorio", "aleatorio", "aleatorio", "aleatorio",
+        biografia_id="aleatoria", divindade_id="aleatoria", nivel="aleatorio", seed=31415, dados=db,
+    )
+    assert r1 == r2
+    assert r1["ficha"]["cabecalho"]["nivel"] == 1
+
+    # Variando seeds com classe aleatória + divindade "nenhuma" nunca sorteia Clérigo/Campeão
+    classes_vistas = set()
+    for s in range(1, 25):
+        r_no_div = gerar_personagem(
+            "aleatorio", "aleatorio", "aleatorio", "aleatorio",
+            biografia_id="aleatoria", divindade_id="nenhuma", nivel="aleatorio", seed=s, dados=db,
+        )
+        cls_id = r_no_div["meta_geracao"]["classe_id"]
+        classes_vistas.add(cls_id)
+        assert cls_id not in {"clerigo", "campeao"}
+        assert r_no_div["ficha"]["cabecalho"]["divindade"] == ""
+    assert len(classes_vistas) >= 3
+
+    # Classe/Conceito aleatórios com divindade explícita incompatível para alguns conceitos (ex: Urgathoa) sempre geram válidos
+    for s in range(1, 15):
+        r_urg = gerar_personagem(
+            "aleatorio", "aleatorio", "aleatorio", "aleatorio",
+            biografia_id="aleatoria", divindade_id="urgathoa", nivel="aleatorio", seed=s, dados=db,
+        )
+        assert r_urg["meta_geracao"]["divindade_id"] == "urgathoa"
+
+    # 2. Bônus de armadura na CA e nos itens de equipamentos, além de dano/bônus/quantidades
+    r_guerr = gerar_personagem("humano", "heranca_versatil", "guerreiro", "guerreiro_muralha_aco", seed=9, dados=db)
+    arm_res = r_guerr["meta_geracao"]["armadura_equipada_resumo"]
+    assert "(+" in arm_res and "CA" in arm_res and "Lim DES +" in arm_res
+    vestidos = [it["nome"] for it in r_guerr["ficha"]["inventario"]["itens_vestidos"]]
+    outros = [it["nome"] for it in r_guerr["ficha"]["inventario"]["outros_itens"]]
+    assert arm_res in vestidos
+    assert any("Escudo" in n and "CA" in n and "Dureza" in n for n in vestidos)
+    assert any("(1d" in n for n in vestidos)
+    assert any("Kit de aventureiro" in n and "mochila" in n for n in outros)
+
+    # Munições e Reagentes Alquímicos exibem quantidade clara sem duplicar "×"
+    r_arq = gerar_personagem("elfo", "elfo_vidente", "guerreiro", "guerreiro_atirador_elite", seed=9, dados=db)
+    vest_arq = [it["nome"] for it in r_arq["ficha"]["inventario"]["itens_vestidos"]]
+    assert any("Flechas (Qtd: 20)" in n for n in vest_arq)
+    txt_arq = exportar_ficha_txt(r_arq)
+    assert r_arq["meta_geracao"]["armadura_equipada_resumo"] in txt_arq
+    assert "Flechas (Qtd: 20) ×20" not in txt_arq
+
+    r_alq = gerar_personagem("humano", "heranca_versatil", "alquimista", "alquimista_artilheiro_linha_frente", seed=9, dados=db)
+    prep_alq = [it["nome"] for it in r_alq["ficha"]["inventario"]["itens_preparados"]]
+    assert any("Reagentes Infundidos (Qtd:" in n for n in prep_alq)
+
+
 def main() -> None:
     test_ca_limite_destreza_e_sem_armadura()
     test_penalidade_armadura_barulhenta_flexivel_e_ferro_desimpedido()
@@ -521,6 +581,7 @@ def main() -> None:
     test_divindades_reais_e_companheiros_familiares()
     test_divindade_obrigatoria_vs_opcional_e_compatibilidade()
     test_revisao_geral_etapa_23()
+    test_aleatorio_7_campos_e_bonus_equipamentos()
     print("SUCESSO TOTAL — Todos os testes de casos de borda PF2E passaram!")
 
 

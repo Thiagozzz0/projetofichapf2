@@ -67,12 +67,19 @@
     const anc = OPCOES.ancestralidades.find((a) => a.id === ancId);
     const sel = document.getElementById("heranca");
     sel.innerHTML = "";
+
+    const optRand = document.createElement("option");
+    optRand.value = "aleatorio";
+    optRand.textContent = "Aleatória (sortear herança)";
+    sel.appendChild(optRand);
+
     (anc ? anc.herancas : []).forEach((h) => {
       const opt = document.createElement("option");
       opt.value = h.id;
       opt.textContent = h.nome;
       sel.appendChild(opt);
     });
+    sel.value = anc && anc.herancas.length ? anc.herancas[0].id : "aleatorio";
     atualizarResumoAncestralidade();
   }
 
@@ -82,16 +89,22 @@
     const anc = OPCOES.ancestralidades.find((a) => a.id === ancId);
     const her = anc ? anc.herancas.find((h) => h.id === herId) : null;
     const el = document.getElementById("resumo-ancestralidade");
-    if (!anc) {
-      el.innerHTML = "";
+    if (ancId === "aleatorio" || !anc) {
+      el.innerHTML =
+        `<strong>Ancestralidade: Aleatória</strong>` +
+        `<div>Uma das 6 ancestralidades básicas e uma herança compatível serão sorteadas ao gerar a ficha.</div>`;
       return;
     }
     const def = anc.defeito_atributo ? ` • Defeito: ${anc.defeito_atributo}` : "";
+    const herTxt = her ? ` — ${her.nome}` : " — Herança Aleatória";
+    const herDesc = her
+      ? `<div style="margin-top:4px">${esc(her.descricao)}</div>`
+      : `<div style="margin-top:4px">A herança será sorteada dentre as opções desta ancestralidade.</div>`;
     el.innerHTML =
-      `<strong>${esc(anc.nome)}${her ? " — " + esc(her.nome) : ""}</strong>` +
+      `<strong>${esc(anc.nome)}${esc(herTxt)}</strong>` +
       `<div>PV Base: ${esc(anc.pontos_vida)} • Tamanho: ${esc(anc.tamanho)} • Vel: ${esc(anc.velocidade_m)}m</div>` +
       `<div>Melhorias: ${esc(anc.melhorias_atributo.join(", "))}${esc(def)}</div>` +
-      (her ? `<div style="margin-top:4px">${esc(her.descricao)}</div>` : "");
+      herDesc;
   }
 
   function atualizarResumoBiografia() {
@@ -101,6 +114,12 @@
       el.innerHTML =
         `<strong>Biografia: Modo Procedural</strong>` +
         `<div>Será escolhida automaticamente dentre as biografias mais sinérgicas com o conceito/atributos selecionados.</div>`;
+      return;
+    }
+    if (bioId === "aleatoria") {
+      el.innerHTML =
+        `<strong>Biografia: Aleatória</strong>` +
+        `<div>Será sorteada livremente dentre todas as 35 biografias disponíveis ao gerar a ficha.</div>`;
       return;
     }
     const bio = OPCOES.biografias.find((b) => b.id === bioId);
@@ -119,12 +138,19 @@
     const cls = OPCOES.classes.find((c) => c.id === clsId);
     const sel = document.getElementById("conceito");
     sel.innerHTML = "";
+
+    const optRand = document.createElement("option");
+    optRand.value = "aleatorio";
+    optRand.textContent = "Aleatório (sortear conceito)";
+    sel.appendChild(optRand);
+
     (cls ? cls.conceitos : []).forEach((c) => {
       const opt = document.createElement("option");
       opt.value = c.id;
       opt.textContent = c.nome;
       sel.appendChild(opt);
     });
+    sel.value = cls && cls.conceitos.length ? cls.conceitos[0].id : "aleatorio";
     atualizarResumoConceito();
     atualizarDivindades();
   }
@@ -137,6 +163,7 @@
     const conId = document.getElementById("conceito").value;
     const cls = OPCOES.classes.find((c) => c.id === clsId);
     const con = cls ? cls.conceitos.find((x) => x.id === conId) : null;
+    const classeAleatoria = clsId === "aleatorio";
     const obrigatoria = Boolean(cls && cls.divindade_obrigatoria);
 
     const modoAnterior = selDiv.dataset.modo || "";
@@ -147,7 +174,43 @@
 
     selDiv.innerHTML = "";
 
-    if (obrigatoria) {
+    if (classeAleatoria) {
+      selDiv.required = false;
+      selDiv.dataset.modo = "aleatorio_classe";
+      if (grupoDiv) grupoDiv.classList.remove("divindade-obrigatoria");
+      if (badgeDiv) {
+        badgeDiv.textContent = "Automática / Opcional";
+        badgeDiv.className = "badge-opcional";
+      }
+      if (notaDiv) {
+        notaDiv.textContent = "Com Classe Aleatória, você pode deixar automático ou fixar divindade/nenhuma (aplica filtro na classe sorteada).";
+      }
+
+      const optAuto = document.createElement("option");
+      optAuto.value = "procedural";
+      optAuto.textContent = "Automática (conforme a classe sorteada)";
+      selDiv.appendChild(optAuto);
+
+      const optRand = document.createElement("option");
+      optRand.value = "aleatoria";
+      optRand.textContent = "Aleatória (sortear divindade)";
+      selDiv.appendChild(optRand);
+
+      const optNenhuma = document.createElement("option");
+      optNenhuma.value = "nenhuma";
+      optNenhuma.textContent = "Nenhuma (somente classes opcionais)";
+      selDiv.appendChild(optNenhuma);
+
+      (OPCOES.divindades || []).forEach((d) => {
+        const opt = document.createElement("option");
+        opt.value = d.id;
+        opt.textContent = `${d.nome} (${d.tendencia} • ${d.arma_favorecida_nome})`;
+        selDiv.appendChild(opt);
+      });
+
+      const opcoesValidas = Array.from(selDiv.options).map((o) => o.value);
+      selDiv.value = modoAnterior === "aleatorio_classe" && opcoesValidas.includes(valorAnterior) ? valorAnterior : "procedural";
+    } else if (obrigatoria) {
       selDiv.required = true;
       selDiv.dataset.modo = "obrigatoria";
       if (grupoDiv) grupoDiv.classList.add("divindade-obrigatoria");
@@ -170,7 +233,19 @@
       optProc.textContent = "Procedural (recomendada pelo conceito)";
       selDiv.appendChild(optProc);
 
-      const compativeis = new Set((con && con.divindades_compativeis_ids) || []);
+      const optRand = document.createElement("option");
+      optRand.value = "aleatoria";
+      optRand.textContent = "Aleatória (sortear divindade compatível)";
+      selDiv.appendChild(optRand);
+
+      const compativeis = new Set();
+      if (con && Array.isArray(con.divindades_compativeis_ids)) {
+        con.divindades_compativeis_ids.forEach((id) => compativeis.add(id));
+      } else if (cls && conId === "aleatorio") {
+        cls.conceitos.forEach((cItem) => {
+          (cItem.divindades_compativeis_ids || []).forEach((id) => compativeis.add(id));
+        });
+      }
       const lista = (OPCOES.divindades || []).filter((d) => !compativeis.size || compativeis.has(d.id));
       lista.forEach((d) => {
         const opt = document.createElement("option");
@@ -221,8 +296,17 @@
     const cls = OPCOES.classes.find((c) => c.id === clsId);
     const con = cls ? cls.conceitos.find((x) => x.id === conId) : null;
     const el = document.getElementById("resumo-conceito");
+    if (clsId === "aleatorio" || !cls) {
+      el.innerHTML =
+        `<strong>Classe &amp; Conceito: Aleatórios</strong>` +
+        `<div>Uma das 12 classes básicas e um de seus 56 conceitos/subclasses PF2E serão sorteados ao gerar a ficha.</div>`;
+      return;
+    }
     if (!con) {
-      el.innerHTML = "";
+      el.innerHTML =
+        `<strong>${esc(cls.nome)} — Conceito Aleatório</strong>` +
+        `<div>PV/Nível: ${esc(cls.pontos_de_vida_por_nivel)} • Chave: ${esc(cls.atributo_chave.join(" / "))}</div>` +
+        `<div class="conceito-desc">Um conceito/subclasse desta classe será sorteado ao gerar a ficha.</div>`;
       return;
     }
     const nomesSubs =
@@ -249,18 +333,29 @@
       OPCOES = await resp.json();
 
       const selAnc = document.getElementById("ancestralidade");
+      const optAncRand = document.createElement("option");
+      optAncRand.value = "aleatorio";
+      optAncRand.textContent = "Aleatória (sortear ancestralidade)";
+      selAnc.appendChild(optAncRand);
       OPCOES.ancestralidades.forEach((a) => {
         const opt = document.createElement("option");
         opt.value = a.id;
         opt.textContent = `${a.nome} (PV ${a.pontos_vida})`;
         selAnc.appendChild(opt);
       });
+      if (OPCOES.ancestralidades.length) {
+        selAnc.value = OPCOES.ancestralidades[0].id;
+      }
 
       const selBio = document.getElementById("biografia");
       const optAuto = document.createElement("option");
       optAuto.value = "procedural";
       optAuto.textContent = "Procedural (recomendada pelo conceito)";
       selBio.appendChild(optAuto);
+      const optBioRand = document.createElement("option");
+      optBioRand.value = "aleatoria";
+      optBioRand.textContent = "Aleatória (sortear qualquer biografia)";
+      selBio.appendChild(optBioRand);
       OPCOES.biografias.forEach((b) => {
         const opt = document.createElement("option");
         opt.value = b.id;
@@ -269,12 +364,19 @@
       });
 
       const selCls = document.getElementById("classe");
+      const optClsRand = document.createElement("option");
+      optClsRand.value = "aleatorio";
+      optClsRand.textContent = "Aleatória (sortear classe)";
+      selCls.appendChild(optClsRand);
       OPCOES.classes.forEach((c) => {
         const opt = document.createElement("option");
         opt.value = c.id;
         opt.textContent = c.nome;
         selCls.appendChild(opt);
       });
+      if (OPCOES.classes.length) {
+        selCls.value = OPCOES.classes[0].id;
+      }
 
       selAnc.addEventListener("change", atualizarHerancas);
       document.getElementById("heranca").addEventListener("change", atualizarResumoAncestralidade);
@@ -425,7 +527,7 @@
       `<div class="escudo-ca"><small>CA</small><strong>${esc(ca.total)}</strong></div>` +
       `<div class="formula-ca">` +
       `<div><strong>10</strong> Base + <strong>${fmtMod(ca.des_ou_limite)}</strong> DES${ca.limite_des_armadura !== null ? ` (Lim +${ca.limite_des_armadura})` : ""} + <strong>${fmtMod(ca.proficiencia)}</strong> Prof ${renderTeml(ca.grau_proficiencia)} + <strong>+${esc(ca.item)}</strong> Item${esc(caEscudoTxt)}</div>` +
-      `<div><strong>Armadura:</strong> ${esc(m.armadura_equipada)}</div>` +
+      `<div><strong>Armadura:</strong> ${esc(m.armadura_equipada_resumo || m.armadura_equipada)}</div>` +
       (obsComb.nota_postura ? `<div class="nota-campo">${esc(obsComb.nota_postura)}</div>` : "") +
       `</div>` +
       `</div>` +
@@ -511,7 +613,11 @@
     const renderSecaoInv = (titulo, lista) =>
       `<div style="margin-bottom:8px"><strong>${titulo}:</strong>` +
       (lista.length
-        ? `<ul class="slot-lista">${lista.map((it) => `<li class="slot-item">${esc(it.nome)}${it.quantidade > 1 ? ` ×${esc(it.quantidade)}` : ""} <span class="nota-campo" style="display:inline">(Vol ${esc(it.volume)})</span></li>`).join("")}</ul>`
+        ? `<ul class="slot-lista">${lista.map((it) => {
+            const jaTemQtd = /\(Qtd:/.test(it.nome) || it.nome.includes(`(${it.quantidade})`);
+            const qtdTxt = it.quantidade > 1 && !jaTemQtd ? ` ×${esc(it.quantidade)}` : "";
+            return `<li class="slot-item">${esc(it.nome)}${qtdTxt} <span class="nota-campo" style="display:inline">(Vol ${esc(it.volume)})</span></li>`;
+          }).join("")}</ul>`
         : `<div class="nota-campo">Nenhum item</div>`) +
       `</div>`;
 
@@ -687,6 +793,7 @@
     setStatus("Gerando ficha procedural...");
     const seedInput = document.getElementById("seed");
     const divSelect = document.getElementById("divindade");
+    const nivelVal = document.getElementById("nivel").value;
     const payload = {
       ancestralidade_id: document.getElementById("ancestralidade").value,
       heranca_id: document.getElementById("heranca").value,
@@ -694,7 +801,7 @@
       divindade_id: divSelect ? divSelect.value : "",
       classe_id: document.getElementById("classe").value,
       conceito_id: document.getElementById("conceito").value,
-      nivel: Number(document.getElementById("nivel").value || 1),
+      nivel: nivelVal === "aleatorio" ? "aleatorio" : Number(nivelVal || 1),
       nome_personagem: document.getElementById("nome").value,
       nome_jogador: document.getElementById("jogador").value,
       seed: forcarNovaSeed ? "" : seedInput.value,

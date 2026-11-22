@@ -37,10 +37,13 @@ def _gerar_a_partir_payload(payload: dict[str, Any]) -> dict[str, Any]:
         raise ErroValidacao(f"Campos obrigatórios ausentes: {', '.join(faltantes)}.")
 
     nivel_raw = payload.get("nivel", 1)
-    try:
-        nivel = int(nivel_raw)
-    except (TypeError, ValueError) as exc:
-        raise ErroValidacao(f"Valor inválido para 'nivel': {nivel_raw!r}.") from exc
+    if str(nivel_raw or "").strip().lower() in {"aleatorio", "aleatoria", "procedural", "random"}:
+        nivel: int | str = str(nivel_raw).strip()
+    else:
+        try:
+            nivel = int(nivel_raw)
+        except (TypeError, ValueError) as exc:
+            raise ErroValidacao(f"Valor inválido para 'nivel': {nivel_raw!r}.") from exc
 
     return gerar_personagem(
         ancestralidade_id=str(payload["ancestralidade_id"]).strip(),
