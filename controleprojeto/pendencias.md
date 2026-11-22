@@ -87,6 +87,28 @@ Lista viva de todas as entregas e tarefas que ainda precisam ser realizadas até
 
 ---
 
+## Melhorias e Lacunas do 1º Nível (Preparação antes dos Níveis 2–20)
+
+- [x] **Etapa de Perícias (Manual ou Procedural)** *(Concluído em `22/11/2026`)*
+  - Aba dedicada antes de Talentos, lendo `dados/pericias.json`, com trava automática do limite de vagas (`Classe + Mod. INT + Herança Perita + Sobreposições + Talentos Ancestrais`).
+- [ ] **Escolha Manual de Idiomas Extras**
+  - Permitir escolher manualmente os idiomas adicionais concedidos por Inteligência, Ancestralidade e Herança (`motor/biografia_pericias.py`).
+- [ ] **Etapa de Magias e Truques para Conjuradores (Manual ou Procedural)**
+  - Nova seção na UI (exibida apenas para classes conjuradoras: Bardo, Clérigo, Druida, Feiticeiro e Mago) para escolha manual de truques, repertório ou grimório inicial (`motor/magias.py`).
+- [ ] **Personalização de Companheiro Animal / Familiar e Dados Biográficos (Pág. 3)**
+  - Permitir escolher manualmente o tipo do Companheiro Animal ou habilidades do Familiar (`motor/companheiros.py`), além de tendência (quando não travada por classe/divindade), idade, gênero, aparência, crenças e anátemas.
+- [ ] **Validação de Equipamentos no Back-end e Atalho de Kit de Classe**
+  - Espelhar em `motor/equipamentos.py` a validação de Anátema do Druida (sem metal) e proficiências para requisições diretas via API `/api/gerar`.
+  - Adicionar botão `+ Kit de <Classe>` na loja de equipamentos consumindo `kits_de_classe` de `dados/equipamentos.json`.
+- [ ] **Cruzamento de Pré-requisitos de Perícia nos Talentos da UI**
+  - Fazer a Etapa 3 (Talentos) consultar em tempo real as perícias marcadas na Etapa 2 para liberar/bloquear pré-requisitos de perícia na interface.
+- [ ] **Refatoração Arquitetural Pré-Níveis 2–20**
+  - Modularizar `templates/static/js/app.js` em arquivos menores por responsabilidade (`atributos`, `pericias`, `talentos`, `equipamentos`, `magias`).
+  - Desacoplar contratos fixados em 1º nível no motor (`listar_catalogo_talentos_n1`, `magias_n1`, `espacos_nivel_1`, `caracteristicas_classe_n1`, `ORCAMENTO_INICIAL_PC`).
+  - Atualizar `controleprojeto/finalizado/` e `melhorias.txt` com as últimas entregas (filtragem de equipamentos por classe e etapa de perícias).
+
+---
+
 ## Expansões Futuras (Pós-MVP 1º Nível)
 
 > Detalhamento completo e propostas adicionais estão catalogados em [`controleprojeto/sugestoes/`](sugestoes/README.md).
