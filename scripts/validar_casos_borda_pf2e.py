@@ -605,13 +605,42 @@ def test_exportar_pdf_oficial_4_paginas() -> None:
 def test_escolhas_atributos_manual_procedural_aleatorio() -> None:
     db = carregar_dados()
 
-    # 1. Compensar defeito racial com o bônus livre manual da ancestralidade (Elfo CON 8 -> 10)
-    elfo_con = gerar_personagem(
-        "elfo", "elfo_artico", "mago", "mago_evocador_artilharia",
-        escolhas_atributos={"ancestralidade_livres": ["con"]}, seed=1, dados=db,
+    # 1. Trava da Etapa A (ancestralidade): proíbe repetir atributo já alterado (melhoria fixa ou penalidade)
+    # Ex.: Anão (+2 CON, +2 SAB, -2 CAR) não pode aplicar livre da Etapa A em CON, SAB ou CAR;
+    # a melhoria de CAR pode ser aplicada normalmente nas etapas seguintes (B, C ou D).
+    for attr_bloqueado_a in ("con", "sab", "car"):
+        try:
+            gerar_personagem(
+                "anao", "anao_da_forja", "guerreiro", "guerreiro_colosso_demolidor",
+                escolhas_atributos={"ancestralidade_livres": [attr_bloqueado_a]}, seed=1, dados=db,
+            )
+            raise AssertionError(f"Anão não deveria aceitar '{attr_bloqueado_a}' no bônus livre da Etapa A")
+        except ErroValidacao:
+            pass
+
+    anao_compensado_d = gerar_personagem(
+        "anao", "anao_da_forja", "guerreiro", "guerreiro_colosso_demolidor",
+        biografia_id="estudioso",
+        escolhas_atributos={
+            "ancestralidade_livres": ["for"],
+            "biografia_restrito": "sab",
+            "biografia_livre": "car",
+            "livres_nivel_1": ["for", "con", "des", "car"],
+        },
+        seed=1,
+        dados=db,
     )
-    assert elfo_con["meta_geracao"]["escolhas_atributos"]["ancestralidade_livres"] == ["con"]
-    assert elfo_con["meta_geracao"]["historico_abcd"][0]["deltas"].get("con", 0) == 0
+    assert anao_compensado_d["meta_geracao"]["escolhas_atributos"]["ancestralidade_livres"] == ["for"]
+    # CAR: 10 - 2 (Etapa A) + 2 (Etapa B) + 2 (Etapa D) = 12
+    assert anao_compensado_d["ficha"]["atributos"]["car"]["valor"] == 12
+    assert anao_compensado_d["meta_geracao"]["historico_abcd"][0]["deltas"].get("car", 0) == -2
+
+    # E no modo procedural/aleatório da Etapa A, o defeito também nunca recebe o livre da Etapa A
+    elfo_auto = gerar_personagem(
+        "elfo", "elfo_artico", "mago", "mago_evocador_artilharia",
+        escolhas_atributos={"ancestralidade_livres": ["aleatorio"]}, seed=3, dados=db,
+    )
+    assert elfo_auto["meta_geracao"]["escolhas_atributos"]["ancestralidade_livres"][0] not in {"des", "int", "con"}
 
     # 2. Biografia mista: livre manual em uma das 2 opções restritas + restrito procedural evita colisão automática
     est = db.biografias["estudioso"]  # opcoes: ["int", "sab"]

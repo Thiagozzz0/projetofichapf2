@@ -120,25 +120,25 @@
 
     if (sub) sub.classList.remove("oculto");
     const fixosLista = anc.melhorias_fixas_ids || [];
-    const fixos = new Set(fixosLista);
+    const bloqueadosLista = anc.atributos_bloqueados_livres_ids || [
+      ...fixosLista,
+      ...(anc.defeito_atributo_id ? [anc.defeito_atributo_id] : []),
+    ];
+    const bloqueados = new Set(bloqueadosLista);
     if (info) {
       const fixTxt = fixosLista.length
         ? fixosLista.map((id) => `+2 ${NOMES_ATRIBUTOS[id][0]}`).join(", ")
         : "Sem fixos (2 livres à escolha)";
-      const defTxt = anc.defeito_atributo_id ? ` • Defeito: -2 ${NOMES_ATRIBUTOS[anc.defeito_atributo_id][0]}` : "";
-      info.textContent = `Da raça: ${fixTxt}${defTxt}`;
+      const defTxt = anc.defeito_atributo_id ? ` • Penalidade: -2 ${NOMES_ATRIBUTOS[anc.defeito_atributo_id][0]}` : "";
+      const travaTxt = bloqueadosLista.length ? " (bloqueados nesta etapa)" : "";
+      info.textContent = `Da raça: ${fixTxt}${defTxt}${travaTxt}`;
     }
 
-    const elegiveis = ORDEM_ATRIBUTOS.filter((aid) => !fixos.has(aid));
-    const extras = {};
-    if (anc.defeito_atributo_id && !fixos.has(anc.defeito_atributo_id)) {
-      extras[anc.defeito_atributo_id] = "compensa defeito racial";
-    }
+    const elegiveis = ORDEM_ATRIBUTOS.filter((aid) => !bloqueados.has(aid));
 
     preencherSelectAtributo(sel1, elegiveis, {
       textoProcedural: "Procedural (melhor p/ conceito)",
       textoAleatorio: "Aleatório (sortear livre)",
-      rotuloExtras: extras,
       preservar: true,
     });
 
@@ -148,7 +148,6 @@
       preencherSelectAtributo(sel2, elegiveis, {
         textoProcedural: "Procedural (2º melhor p/ conceito)",
         textoAleatorio: "Aleatório (sortear 2º livre)",
-        rotuloExtras: extras,
         preservar: true,
       });
     } else {
@@ -274,9 +273,15 @@
           .map((outro) => outro.value)
       );
       Array.from(sel.options).forEach((opt) => {
-        if (ORDEM_ATRIBUTOS.includes(opt.value)) {
-          opt.disabled = usadosOutros.has(opt.value);
+        if (!ORDEM_ATRIBUTOS.includes(opt.value)) return;
+        if (!opt.dataset.baseLabel) {
+          opt.dataset.baseLabel = opt.textContent;
         }
+        const ocupado = usadosOutros.has(opt.value);
+        opt.disabled = ocupado;
+        opt.textContent = ocupado
+          ? `${opt.dataset.baseLabel} (já escolhido nesta etapa)`
+          : opt.dataset.baseLabel;
       });
       if (ORDEM_ATRIBUTOS.includes(sel.value) && usadosOutros.has(sel.value)) {
         sel.value = "procedural";

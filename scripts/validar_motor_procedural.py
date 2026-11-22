@@ -272,7 +272,10 @@ def main() -> None:
     assert len(opcoes_json["divindades"]) == 20
     anc_por_id = {a["id"]: a for a in opcoes_json["ancestralidades"]}
     assert anc_por_id["humano"]["qtd_melhorias_livres"] == 2 and anc_por_id["humano"]["melhorias_fixas_ids"] == []
+    assert anc_por_id["humano"]["atributos_bloqueados_livres_ids"] == []
     assert anc_por_id["elfo"]["qtd_melhorias_livres"] == 1 and set(anc_por_id["elfo"]["melhorias_fixas_ids"]) == {"des", "int"}
+    assert set(anc_por_id["elfo"]["atributos_bloqueados_livres_ids"]) == {"des", "int", "con"}
+    assert set(anc_por_id["anao"]["atributos_bloqueados_livres_ids"]) == {"con", "sab", "car"}
     assert all(len(b["melhorias_atributo_ids"]) == 2 for b in opcoes_json["biografias"])
     obrigatorias_ui = {c["id"] for c in opcoes_json["classes"] if c["divindade_obrigatoria"]}
     assert obrigatorias_ui == {"clerigo", "campeao"}
@@ -453,6 +456,17 @@ def main() -> None:
             "classe_id": "mago",
             "conceito_id": "mago_evocador_artilharia",
             "escolhas_atributos": {"ancestralidade_livres": ["des"]},
+        },
+    ).status_code == 400
+    assert client.post(
+        "/api/gerar",
+        json={
+            "ancestralidade_id": "anao",
+            "heranca_id": "anao_da_forja",
+            "biografia_id": "estudioso",
+            "classe_id": "guerreiro",
+            "conceito_id": "guerreiro_colosso_demolidor",
+            "escolhas_atributos": {"ancestralidade_livres": ["car"]},
         },
     ).status_code == 400
     assert client.post(

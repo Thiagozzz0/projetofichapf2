@@ -66,7 +66,7 @@ def _aplicar_slots_livres(
         if fixos_bloqueados and modo in fixos_bloqueados:
             raise ValueError(
                 f"A melhoria livre de {nome_etapa} não pode ser aplicada em "
-                f"{NOME_ATRIBUTO[modo]}, pois esta origem já concede bônus fixo nele."
+                f"{NOME_ATRIBUTO[modo]}, pois este atributo já foi alterado (bônus fixo ou penalidade) nesta etapa."
             )
         if modo in ja_usados:
             raise ValueError(
@@ -199,6 +199,9 @@ def calcular_atributos(
     if defeito_id:
         valores[defeito_id] -= 2
         deltas_a[defeito_id] = deltas_a.get(defeito_id, 0) - 2
+        # Cada atributo só pode ser alterado 1x na Etapa A (melhorias fixas e penalidade travam o livre da raça)
+        melhorados_a.add(defeito_id)
+        fixos_a.add(defeito_id)
 
     modos_a = _resolver_lista_modos(escolhas.get("ancestralidade_livres"), livres_a)
     escolhidos_a_livres = _aplicar_slots_livres(

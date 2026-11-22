@@ -360,10 +360,15 @@ def listar_opcoes_criacao(dados: BaseDados | None = None) -> dict[str, Any]:
             "tamanho": a["tamanho"],
             "velocidade_m": a["velocidade_m"],
             "melhorias_atributo": a["melhorias_atributo"],
-            "melhorias_fixas_ids": [aid for m in a["melhorias_atributo"] if (aid := atributo_id(m)) is not None],
+            "melhorias_fixas_ids": (
+                fixos := [aid for m in a["melhorias_atributo"] if (aid := atributo_id(m)) is not None]
+            ),
             "qtd_melhorias_livres": sum(1 for m in a["melhorias_atributo"] if atributo_id(m) is None),
             "defeito_atributo": a.get("defeito_atributo"),
-            "defeito_atributo_id": atributo_id(a["defeito_atributo"]) if a.get("defeito_atributo") else None,
+            "defeito_atributo_id": (
+                defeito := (atributo_id(a["defeito_atributo"]) if a.get("defeito_atributo") else None)
+            ),
+            "atributos_bloqueados_livres_ids": list(dict.fromkeys([*fixos, *([defeito] if defeito else [])])),
             "herancas": [{"id": h["id"], "nome": h["nome"], "descricao": h["descricao"]} for h in a["herancas"]],
         }
         for a in db.ancestralidades.values()
