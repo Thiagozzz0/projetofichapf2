@@ -822,6 +822,85 @@ def test_compra_manual_e_hibrida_equipamentos() -> None:
             pass
 
 
+def test_curadoria_e_selecao_manual_talentos() -> None:
+    db = carregar_dados()
+
+    # 1. Humano Versátil + Treinamento Geral libera exatamente 2 Talentos Gerais distintos no 1º nível
+    guerr_2g = gerar_personagem(
+        "humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor",
+        escolhas_talentos={
+            "modo": "personalizado",
+            "ancestralidade_id": "treinamento_geral",
+            "classe_ids": ["ataque_poderoso"],
+            "gerais_ids": ["iniciativa_incrivel", "veloz"],
+        },
+        seed=17,
+        dados=db,
+    )
+    esc_t = guerr_2g["meta_geracao"]["escolhas_talentos"]
+    assert esc_t["slots_disponiveis"] == {"ancestralidade": 1, "classe": 1, "pericia": 0, "gerais": 2}
+    assert esc_t["gerais_ids"] == ["iniciativa_incrivel", "veloz"]
+    assert guerr_2g["ficha"]["velocidade"]["metros"] == 9.0  # 7.5m + 1.5m (Veloz)
+    nomes_hab_g = [
+        x["nome"]
+        for cat in guerr_2g["ficha"]["habilidades_e_talentos"].values()
+        for x in cat
+        if x.get("nome") and x["nome"] != "—"
+    ]
+    assert "Treinamento Geral" in nomes_hab_g and "Ataque Poderoso" in nomes_hab_g
+    assert "Iniciativa Incrível" in nomes_hab_g and "Veloz" in nomes_hab_g
+
+    # 2. Vínculo dinâmico: Ambição Natural em Clérigo (sem slot base N1) libera 1 talento de classe N1 manual
+    cler_amb = gerar_personagem(
+        "humano", "heranca_perita", "clerigo", "clerigo_hospitalario_sagrado",
+        divindade_id="sarenrae",
+        escolhas_talentos={
+            "modo": "personalizado",
+            "ancestralidade_id": "ambicao_natural",
+            "classe_ids": ["maos_curandeiras"],
+        },
+        seed=22,
+        dados=db,
+    )
+    assert cler_amb["meta_geracao"]["escolhas_talentos"]["slots_disponiveis"]["classe"] == 1
+    assert cler_amb["meta_geracao"]["escolhas_talentos"]["classe_ids"] == ["maos_curandeiras"]
+    hab_c = cler_amb["ficha"]["habilidades_e_talentos"]
+    nomes_cls_c = [x["nome"] for x in hab_c["classe"] if x.get("nome")]
+    nomes_bon_c = [x["nome"] for x in hab_c["bonus"] if x.get("nome")]
+    assert "Iniciado no Domínio" in nomes_cls_c and "Mãos Curandeiras" in nomes_bon_c
+
+    # 3. Bloqueios estritos de nível/classe/ancestralidade/duplicidade devem levantar ErroValidacao
+    # Clérigo sem Ambição Natural tentando pegar talento de classe no 1º nível
+    try:
+        gerar_personagem(
+            "elfo", "elfo_vidente", "clerigo", "clerigo_hospitalario_sagrado",
+            divindade_id="desna",
+            escolhas_talentos={"modo": "personalizado", "classe_ids": ["maos_curandeiras"]},
+            seed=1,
+            dados=db,
+        )
+        raise AssertionError("Clérigo sem Ambição Natural deveria bloquear talento de classe N1 manual")
+    except ErroValidacao:
+        pass
+
+    # Combinações bloqueadas em Anão Guerreiro e Humano Versátil Guerreiro
+    for esc_inv in (
+        {"modo": "personalizado", "gerais_ids": ["bloqueio_com_escudo"]},  # Guerreiro já possui automático
+        {"modo": "personalizado", "pericia_ids": ["certeza"]},             # Só Ladino libera perícia extra N1
+        {"modo": "personalizado", "ancestralidade_id": "treinamento_geral", "gerais_ids": ["veloz", "veloz"]},
+        {"modo": "personalizado", "ancestralidade_id": "elfo_ligeiro"},    # Talento de Elfo em Humano
+        {"modo": "personalizado", "classe_ids": ["magia_de_alcance"]},     # Talento de outra classe
+    ):
+        try:
+            gerar_personagem(
+                "humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor",
+                escolhas_talentos=esc_inv, seed=1, dados=db,
+            )
+            raise AssertionError(f"Deveria falhar com ErroValidacao para {esc_inv!r}")
+        except ErroValidacao:
+            pass
+
+
 def main() -> None:
     test_ca_limite_destreza_e_sem_armadura()
     test_penalidade_armadura_barulhenta_flexivel_e_ferro_desimpedido()
@@ -836,6 +915,7 @@ def main() -> None:
     test_exportar_pdf_oficial_4_paginas()
     test_escolhas_atributos_manual_procedural_aleatorio()
     test_compra_manual_e_hibrida_equipamentos()
+    test_curadoria_e_selecao_manual_talentos()
     print("SUCESSO TOTAL — Todos os testes de casos de borda PF2E passaram!")
 
 

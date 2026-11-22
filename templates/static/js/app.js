@@ -978,11 +978,13 @@
     }
 
     sincronizarExclusaoTalentos();
+    atualizarResumosEtapasUI();
   }
 
   function atualizarVisibilidadeTalentosUI() {
     const modo = document.getElementById("modo-talentos")?.value || "procedural";
     document.getElementById("painel-talentos-custom")?.classList.toggle("oculto", modo !== "personalizado");
+    atualizarResumosEtapasUI();
   }
 
   function resetarTalentosProcedural() {
@@ -1160,6 +1162,7 @@
     _renderListaEquipamentos("lista-eq-armas-dist", EQ_ESTADO.armas_dist, "dist");
     _renderListaEquipamentos("lista-eq-variados", EQ_ESTADO.variados, "var");
     _sincronizarLimitesCompraUI(Math.max(0, saldoPc));
+    atualizarResumosEtapasUI();
   }
 
   function atualizarVisibilidadeEquipamentosUI() {
@@ -1167,6 +1170,7 @@
     const painel = document.getElementById("painel-equipamentos-custom");
     if (painel) painel.classList.toggle("oculto", modo !== "personalizado");
     atualizarOrcamentoEquipamentosUI();
+    atualizarResumosEtapasUI();
   }
 
   function resetarEquipamentosProcedural() {
@@ -1318,9 +1322,78 @@
     };
   }
 
+  function alternarEtapaAcordeao(chaveEtapa, forcarEstado = null) {
+    const cards = document.querySelectorAll(".etapa-card[data-etapa]");
+    if (!cards.length) return;
+    let abriuCard = null;
+    cards.forEach((card) => {
+      const ehAlvo = card.dataset.etapa === chaveEtapa;
+      const jaAberta = card.classList.contains("aberta");
+      const abrir = ehAlvo ? (forcarEstado !== null ? Boolean(forcarEstado) : !jaAberta) : false;
+      card.classList.toggle("aberta", abrir);
+      const btn = card.querySelector("[data-etapa-toggle]");
+      if (btn) btn.setAttribute("aria-expanded", String(abrir));
+      const corpo = card.querySelector(".etapa-corpo");
+      if (corpo) corpo.classList.toggle("oculto", !abrir);
+      if (abrir) abriuCard = card;
+    });
+    if (abriuCard && forcarEstado === true) {
+      abriuCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  }
+
+  function atualizarResumosEtapasUI() {
+    if (!OPCOES) return;
+    const elCriacao = document.getElementById("resumo-etapa-criacao");
+    if (elCriacao) {
+      const ancId = document.getElementById("ancestralidade")?.value || "aleatorio";
+      const clsId = document.getElementById("classe")?.value || "aleatorio";
+      const conId = document.getElementById("conceito")?.value || "aleatorio";
+      const anc = OPCOES.ancestralidades.find((a) => a.id === ancId);
+      const cls = OPCOES.classes.find((c) => c.id === clsId);
+      const con = cls ? cls.conceitos.find((x) => x.id === conId) : null;
+      if (ancId === "aleatorio" && clsId === "aleatorio") {
+        elCriacao.textContent = "Aleatório (Procedural)";
+      } else {
+        const pAnc = anc ? anc.nome : "Anc. Aleatória";
+        const pCls = cls ? (con ? `${cls.nome} (${con.nome})` : cls.nome) : "Classe Aleatória";
+        elCriacao.textContent = `${pAnc} • ${pCls}`;
+      }
+    }
+
+    const elTal = document.getElementById("resumo-etapa-talentos");
+    if (elTal) {
+      if ((document.getElementById("modo-talentos")?.value || "procedural") !== "personalizado") {
+        elTal.textContent = "Procedural";
+      } else {
+        const manuais = ["tal-ancestralidade", ...IDS_TAL_CLASSE, "tal-pericia-1", ...IDS_TAL_GERAIS].filter((id) => {
+          const el = document.getElementById(id);
+          return el && !el.disabled && !el.closest(".oculto") && el.value !== "procedural";
+        }).length;
+        elTal.textContent = manuais > 0 ? `Personalizado (${manuais} manual${manuais > 1 ? "is" : ""})` : "Personalizado (Procedural)";
+      }
+    }
+
+    const elEq = document.getElementById("resumo-etapa-equipamentos");
+    if (elEq) {
+      if ((document.getElementById("modo-equipamentos")?.value || "procedural") !== "personalizado") {
+        elEq.textContent = "Procedural (15 po)";
+      } else {
+        const orcPc = Number(OPCOES?.catalogo_equipamentos?.orcamento_inicial_pc || 1500);
+        const gastoPc = _gastoManualEquipamentosPc();
+        const saldoPc = orcPc - gastoPc;
+        elEq.textContent = saldoPc >= 0
+          ? `Personalizado • Saldo ${fmtPrecoEq(saldoPc)}`
+          : `Excedido em ${fmtPrecoEq(Math.abs(saldoPc))}`;
+      }
+    }
+  }
+
   async function gerarFichaAtual(forcarNovaSeed = false) {
     const form = document.getElementById("form-gerador");
-    if (form && !form.reportValidity()) {
+    if (form && !form.checkValidity()) {
+      alternarEtapaAcordeao("criacao", true);
+      form.reportValidity();
       setStatus("Selecione uma divindade para esta classe antes de gerar a ficha.", "erro");
       return;
     }
@@ -1447,7 +1520,27 @@
   document.getElementById("modo-talentos")?.addEventListener("change", atualizarVisibilidadeTalentosUI);
   document.getElementById("tal-ancestralidade")?.addEventListener("change", atualizarCatalogoTalentosUI);
   [...IDS_TAL_CLASSE, ...IDS_TAL_GERAIS].forEach((id) => {
-    document.getElementById(id)?.addEventListener("change", sincronizarExclusaoTalentos);
+    document.getElementById(id)?.addEventListener("change", () => {
+      sincronizarExclusaoTalentos();
+      atualizarResumosEtapasUI();
+    });
+  });
+  document.getElementById("tal-pericia-1")?.addEventListener("change", atualizarResumosEtapasUI);
+  document.getElementById("acordeao-etapas")?.addEventListener("click", (e) => {
+    const btnToggle = e.target.closest("[data-etapa-toggle]");
+    if (btnToggle) {
+      alternarEtapaAcordeao(btnToggle.dataset.etapaToggle);
+      return;
+    }
+    const btnIr = e.target.closest("[data-etapa-ir]");
+    if (btnIr) {
+      alternarEtapaAcordeao(btnIr.dataset.etapaIr, true);
+      return;
+    }
+    const btnFechar = e.target.closest('[data-etapa-acao="fechar"]');
+    if (btnFechar) {
+      alternarEtapaAcordeao(null, false);
+    }
   });
   document.getElementById("btn-tal-reset-procedural")?.addEventListener("click", () => {
     resetarTalentosProcedural();

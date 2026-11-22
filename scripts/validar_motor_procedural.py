@@ -241,6 +241,13 @@ def main() -> None:
     assert "Pathfinder 2" in html_idx
     assert "ficha.css" in html_idx and "render_ficha.js" in html_idx and "app.js" in html_idx
     for id_dom in (
+        "acordeao-etapas",
+        "etapa-criacao-inicial",
+        "etapa-talentos",
+        "etapa-equipamentos",
+        "corpo-etapa-criacao",
+        "corpo-etapa-talentos",
+        "corpo-etapa-equipamentos",
         "subgrupo-atb-ancestralidade",
         "subgrupo-atb-biografia",
         "subgrupo-atb-classe",
@@ -249,6 +256,13 @@ def main() -> None:
         "attr-anc-livre-1",
         "attr-bio-restrito",
         "attr-livre-1",
+        "modo-talentos",
+        "painel-talentos-custom",
+        "tal-ancestralidade",
+        "info-tal-biografia",
+        "tal-classe-1",
+        "tal-pericia-1",
+        "tal-geral-1",
         "modo-equipamentos",
         "painel-equipamentos-custom",
         "eq-armadura",
@@ -294,6 +308,15 @@ def main() -> None:
     mapa_conceitos_ui = {con["id"]: con for c in opcoes_json["classes"] for con in c["conceitos"]}
     assert set(mapa_conceitos_ui["ladino_duelista_fanfarrao"]["atributo_chave_opcoes"]) == {"des", "car"}
     assert "prioridade_atributos" in mapa_conceitos_ui["guerreiro_colosso_demolidor"]
+    cat_tal = opcoes_json["catalogo_talentos"]
+    assert cat_tal["nivel"] == 1
+    assert set(cat_tal["ancestralidade_por_id"]) == set(anc_por_id)
+    assert set(cat_tal["mesticos"]) == {"meio_elfo", "meio_orc"}
+    assert cat_tal["classe_por_id"]["guerreiro"]["tem_slot_n1_base"] is True
+    assert cat_tal["classe_por_id"]["bardo"]["tem_slot_n1_base"] is False
+    assert cat_tal["classe_por_id"]["clerigo"]["tem_slot_n1_base"] is False
+    assert cat_tal["classe_por_id"]["ladino"]["tem_slot_n1_base"] is True
+    assert len(cat_tal["pericia_n1"]) >= 30 and len(cat_tal["gerais_n1"]) >= 10
     cat_eq = opcoes_json["catalogo_equipamentos"]
     assert cat_eq["orcamento_inicial_pc"] == 1500
     assert {w["categoria"] for w in cat_eq["armas_corpo_a_corpo"]} == {"Arma Simples", "Arma Marcial", "Arma Avançada"}
@@ -341,6 +364,54 @@ def main() -> None:
     assert r_ok.status_code == 200
     payload_ok = r_ok.get_json()
     verificar_contrato_e_matematica(payload_ok, dados)
+
+    # Talentos manuais válidos via POST /api/gerar e bloqueio 400 para slots inativos no 1º nível
+    r_tal_ok = client.post(
+        "/api/gerar",
+        json={
+            "ancestralidade_id": "humano",
+            "heranca_id": "heranca_versatil",
+            "biografia_id": "acrobata",
+            "classe_id": "ladino",
+            "conceito_id": "ladino_sombra_silenciosa",
+            "escolhas_talentos": {
+                "modo": "personalizado",
+                "ancestralidade_id": "pericia_natural",
+                "classe_ids": ["finta_dupla"],
+                "pericia_ids": ["queda_do_gato"],
+                "gerais_ids": ["veloz"],
+            },
+            "seed": 555,
+        },
+    )
+    assert r_tal_ok.status_code == 200
+    j_tal_ok = r_tal_ok.get_json()
+    verificar_contrato_e_matematica(j_tal_ok, dados)
+    assert j_tal_ok["meta_geracao"]["escolhas_talentos"]["ancestralidade_id"] == "pericia_natural"
+    assert j_tal_ok["meta_geracao"]["escolhas_talentos"]["classe_ids"] == ["finta_dupla"]
+    assert j_tal_ok["meta_geracao"]["escolhas_talentos"]["pericia_ids"] == ["queda_do_gato"]
+    assert j_tal_ok["meta_geracao"]["escolhas_talentos"]["gerais_ids"] == ["veloz"]
+
+    assert client.post(
+        "/api/gerar",
+        json={
+            "ancestralidade_id": "anao",
+            "heranca_id": "anao_das_rochas",
+            "classe_id": "guerreiro",
+            "conceito_id": "guerreiro_colosso_demolidor",
+            "escolhas_talentos": {"modo": "personalizado", "gerais_ids": ["veloz"]},
+        },
+    ).status_code == 400
+    assert client.post(
+        "/api/gerar",
+        json={
+            "ancestralidade_id": "humano",
+            "heranca_id": "heranca_versatil",
+            "classe_id": "guerreiro",
+            "conceito_id": "guerreiro_colosso_demolidor",
+            "escolhas_talentos": {"modo": "personalizado", "pericia_ids": ["certeza"]},
+        },
+    ).status_code == 400
 
     assert client.post(
         "/api/gerar",

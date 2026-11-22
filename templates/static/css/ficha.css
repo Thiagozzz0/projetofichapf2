@@ -1223,6 +1223,138 @@ body {
   line-height: 1;
 }
 
+/* Acordeão em 3 etapas limpas (Criação Inicial, Talentos, Equipamentos) */
+.nota-topo-etapas {
+  margin: 0 0 12px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.acordeao-etapas {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.etapa-card {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.etapa-card.aberta {
+  border-color: var(--gold);
+  box-shadow: 0 4px 14px rgba(72, 46, 22, 0.08);
+}
+
+.etapa-header {
+  width: 100%;
+  background: #fffdf8;
+  border: none;
+  padding: 13px 16px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  cursor: pointer;
+  color: var(--ink);
+  transition: background-color 0.15s ease;
+}
+
+.etapa-header:hover {
+  background: var(--tint);
+}
+
+.etapa-card.aberta > .etapa-header {
+  background: var(--tint);
+}
+
+.etapa-header-esq {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.etapa-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fdf8ef;
+  font-weight: 800;
+  font-size: 0.86rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.etapa-titulo {
+  display: block;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--accent-dark);
+}
+
+.etapa-subtitulo {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.etapa-header-dir {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.etapa-resumo-pill {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--tint-strong);
+  color: var(--ink);
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.etapa-seta {
+  display: inline-block;
+  font-size: 1rem;
+  color: var(--accent);
+  transition: transform 0.2s ease;
+}
+
+.etapa-card.aberta .etapa-seta {
+  transform: rotate(180deg);
+}
+
+.etapa-corpo {
+  padding: 14px 16px 16px;
+  border-top: 1px solid var(--tint-strong);
+  background: #fffcf5;
+}
+
+.etapa-corpo .resumos-selecao {
+  margin-top: 12px;
+  margin-bottom: 0;
+}
+
+.etapa-rodape {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid var(--tint-strong);
+}
+
 @media (max-width: 980px) {
   .grid-atributos-livres,
   .grid-talentos-custom,
