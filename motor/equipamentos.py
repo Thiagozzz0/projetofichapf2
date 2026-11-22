@@ -5,10 +5,134 @@ from __future__ import annotations
 from typing import Any
 
 from .dados import BaseDados
-from .util import grau_normalizado, normalizar, pc_para_moedas
+from .util import formatar_preco, grau_normalizado, normalizar, pc_para_moedas
 
 
 ORCAMENTO_INICIAL_PC = 1500  # 15 po = 150 pp = 1.500 pc
+
+
+def _itens_variados_loja_brutos(dados: BaseDados) -> list[dict[str, Any]]:
+    """Retorna equipamentos de aventura (comuns/incomuns) e munições disponíveis para compra inicial."""
+    av = dados.equipamentos["equipamentos_aventura"]
+    itens: list[dict[str, Any]] = []
+    vistos: set[str] = set()
+
+    for grupo_nome, chave_av in (("Equipamentos de Aventura", "comuns"), ("Equipamentos Incomuns", "incomuns")):
+        for item in av.get(chave_av, []):
+            iid = item["id"]
+            if iid in vistos:
+                continue
+            vistos.add(iid)
+            itens.append(
+                {
+                    "id": iid,
+                    "nome": item["nome"],
+                    "subcategoria": grupo_nome,
+                    "eh_municao": False,
+                    "preco": item.get("preco") or "0 pc",
+                    "preco_pc": int(item.get("preco_pc") or 0),
+                    "volume": item.get("volume", "—"),
+                    "volume_valor": float(item.get("volume_valor") or 0.0),
+                    "quantidade_pacote": int(item.get("quantidade_pacote") or 1),
+                    "bonus_item": item.get("bonus_item"),
+                    "conteudo": list(item.get("conteudo") or []),
+                }
+            )
+
+    for m in dados.municoes:
+        mid = m["id"]
+        if mid in vistos:
+            continue
+        vistos.add(mid)
+        itens.append(
+            {
+                "id": mid,
+                "nome": m["nome"],
+                "subcategoria": "Munições",
+                "eh_municao": True,
+                "preco": m.get("preco") or "0 pc",
+                "preco_pc": int(m.get("preco_pc") or 0),
+                "volume": m.get("volume", "L"),
+                "volume_valor": float(m.get("volume_valor") or 0.1),
+                "quantidade_pacote": int(m.get("quantidade") or 1),
+                "bonus_item": None,
+                "conteudo": [],
+            }
+        )
+    return itens
+
+
+def listar_catalogo_equipamentos_loja(dados: BaseDados) -> dict[str, Any]:
+    """Catálogo inicial de equipamentos para o jogador (sem itens alquímicos, mágicos ou fórmulas)."""
+    armaduras = [
+        {
+            "id": a["id"],
+            "nome": a["nome"],
+            "categoria": a["categoria"],
+            "preco": a.get("preco") or "0 pp",
+            "preco_pc": int(a.get("preco_pc") or 0),
+            "bonus_ca": int(a.get("bonus_ca") or 0),
+            "limite_destreza": a.get("limite_destreza"),
+            "penalidade_testes": int(a.get("penalidade_testes") or 0),
+            "penalidade_velocidade_m": float(a.get("penalidade_velocidade_m") or 0.0),
+            "forca_minima": a.get("forca_minima"),
+            "volume": a.get("volume", "L"),
+            "resumo": formatar_armadura_resumo(a),
+        }
+        for a in dados.armaduras.values()
+        if a["id"] != "nenhuma_armadura"
+    ]
+
+    escudos = [
+        {
+            "id": s["id"],
+            "nome": s["nome"],
+            "preco": s.get("preco") or "0 pp",
+            "preco_pc": int(s.get("preco_pc") or 0),
+            "bonus_ca": int(s.get("bonus_ca") or 0),
+            "dureza": int(s.get("dureza") or 0),
+            "pv": int(s.get("pv") or 0),
+            "limiar_quebra": int(s.get("limiar_quebra") or 0),
+            "volume": s.get("volume", "L"),
+        }
+        for s in dados.escudos.values()
+    ]
+
+    def _serializar_armas(lista: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        res = []
+        for w in lista:
+            if w["id"] == "bomba_alquimica" or w.get("preco_pc") is None:
+                continue
+            res.append(
+                {
+                    "id": w["id"],
+                    "nome": w["nome"],
+                    "categoria": w["categoria"],
+                    "raridade": w.get("raridade", "Comum"),
+                    "preco": w.get("preco") or "0 pc",
+                    "preco_pc": int(w.get("preco_pc") or 0),
+                    "dano": w.get("dano", ""),
+                    "distancia_m": w.get("distancia_m"),
+                    "recarga": w.get("recarga"),
+                    "maos": str(w.get("maos") or "1"),
+                    "municao": w.get("municao"),
+                    "volume": w.get("volume", "—"),
+                    "grupo": w.get("grupo", ""),
+                    "tracos": list(w.get("tracos") or []),
+                }
+            )
+        return res
+
+    armas_json = dados.equipamentos["armas"]
+    return {
+        "orcamento_inicial_pc": ORCAMENTO_INICIAL_PC,
+        "orcamento_inicial_pp": ORCAMENTO_INICIAL_PC // 10,
+        "armaduras": armaduras,
+        "escudos": escudos,
+        "armas_corpo_a_corpo": _serializar_armas(armas_json["corpo_a_corpo"]),
+        "armas_distancia": _serializar_armas(armas_json["distancia"]),
+        "equipamentos_variados": _itens_variados_loja_brutos(dados),
+    }
 
 
 def formatar_armadura_resumo(armadura: dict[str, Any]) -> str:
@@ -242,6 +366,26 @@ def _ferramenta_essencial(classe_id: str, conceito_id: str, subclasse_id: str = 
     return itens
 
 
+def _eh_modo_procedural_eq(valor: Any) -> bool:
+    if valor is None:
+        return True
+    if isinstance(valor, str):
+        return normalizar(valor) in ("", "procedural", "auto", "automatico", "automatica")
+    return False
+
+
+def _somar_volumes(lista_itens: list[dict[str, Any]]) -> tuple[int, int]:
+    """Soma volumes de uma lista de itens respeitando itens Leves (0,1)."""
+    inteiros, leves = 0, 0
+    for item in lista_itens:
+        vv = float(item.get("volume_valor") or 0.0)
+        if vv >= 1.0:
+            inteiros += int(round(vv))
+        elif 0.05 <= vv < 1.0:
+            leves += max(1, int(round(vv * 10)))
+    return inteiros, leves
+
+
 def comprar_equipamentos(
     dados: BaseDados,
     ancestralidade: dict[str, Any],
@@ -253,12 +397,37 @@ def comprar_equipamentos(
     subclasse: dict[str, Any] | None = None,
     efeitos_talentos: dict[str, Any] | None = None,
     divindade: dict[str, Any] | None = None,
+    escolhas_equipamentos: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Executa a compra procedural dentro de 15 po (1.500 pc) e calcula o Volume."""
+    """Executa a compra procedural, manual ou híbrida dentro de 15 po (1.500 pc) e calcula o Volume."""
     saldo_pc = ORCAMENTO_INICIAL_PC
     defesas = profs_combate["defesas"]
     armas_prof = profs_combate["armas"]
     nao_metal = profs_combate["restricao_nao_metal"]
+
+    escolhas = escolhas_equipamentos or {}
+    modo_global = normalizar(str(escolhas.get("modo") or ""))
+    if modo_global in ("procedural", "auto", "automatico") and not any(
+        not _eh_modo_procedural_eq(escolhas.get(k))
+        for k in ("armadura_id", "escudo_id", "armas_corpo_a_corpo_ids", "armas_distancia_ids", "equipamentos_variados")
+    ):
+        armadura_req: Any = "procedural"
+        escudo_req: Any = "procedural"
+        armas_cc_req: Any = "procedural"
+        armas_dist_req: Any = "procedural"
+        variados_req: Any = "procedural"
+    else:
+        armadura_req = escolhas.get("armadura_id", "procedural")
+        escudo_req = escolhas.get("escudo_id", "procedural")
+        armas_cc_req = escolhas.get("armas_corpo_a_corpo_ids", "procedural")
+        armas_dist_req = escolhas.get("armas_distancia_ids", "procedural")
+        variados_req = escolhas.get("equipamentos_variados", "procedural")
+
+    armadura_manual = not _eh_modo_procedural_eq(armadura_req)
+    escudo_manual = not _eh_modo_procedural_eq(escudo_req)
+    armas_cc_manual = not _eh_modo_procedural_eq(armas_cc_req)
+    armas_dist_manual = not _eh_modo_procedural_eq(armas_dist_req)
+    variados_manual = not _eh_modo_procedural_eq(variados_req)
 
     eq_rec = conceito["equipamento_recomendado"]
     estilo = eq_rec["estilo_empunhadura"]
@@ -285,55 +454,146 @@ def comprar_equipamentos(
             elif not usa_escudo_efetivo or str(w_fav.get("maos")) != "2":
                 armas_cc_ids = [wid_fav] + [x for x in armas_cc_ids if x != wid_fav]
 
-    # Reserva mínima para comprar pelo menos o kit de aventureiro (70 pc) e 1 arma viável
-    reserva_kit = 70
-    armas_candidatas_preco = [
-        dados.armas[wid]["preco_pc"]
-        for wid in armas_cc_ids + armas_dist_ids
-        if wid in dados.armas
-        and dados.armas[wid].get("preco_pc") is not None
-        and grau_arma(dados.armas[wid], armas_prof) != "destreinado"
-        and not (usa_escudo_efetivo and dados.armas[wid].get("tipo_ataque") == "corpo_a_corpo" and str(dados.armas[wid].get("maos")) == "2")
-    ]
-    reserva_arma = min(armas_candidatas_preco) if armas_candidatas_preco else 0
-    reserva_escudo = (
-        min(
+    # ------------------------------------------------------------------
+    # 1ª Passada — Compras Manuais (deduzindo diretamente de 1.500 pc)
+    # ------------------------------------------------------------------
+    armadura_escolhida = dados.armaduras["nenhuma_armadura"]
+    if armadura_manual:
+        arm_str = str(armadura_req).strip()
+        if normalizar(arm_str) in ("nenhuma", "nenhum", "nenhuma_armadura", "sem_armadura"):
+            armadura_escolhida = dados.armaduras["nenhuma_armadura"]
+        else:
+            arm_obj = dados.armaduras.get(arm_str)
+            if not arm_obj:
+                raise ValueError(f"Armadura desconhecida: '{arm_str}'.")
+            armadura_escolhida = arm_obj
+            saldo_pc -= int(arm_obj.get("preco_pc") or 0)
+
+    armas_compradas: list[dict[str, Any]] = []
+    armas_cc_manuais_objs: list[dict[str, Any]] = []
+    if armas_cc_manual:
+        lista_cc = [armas_cc_req] if isinstance(armas_cc_req, str) else list(armas_cc_req)
+        for item_w in lista_cc:
+            wid = str(item_w).strip()
+            w = dados.armas.get(wid)
+            if not w or w.get("tipo_ataque") != "corpo_a_corpo" or w["id"] == "bomba_alquimica" or w.get("preco_pc") is None:
+                raise ValueError(f"Arma corporal inválida para compra: '{wid}'.")
+            saldo_pc -= int(w.get("preco_pc") or 0)
+            armas_compradas.append(w)
+            armas_cc_manuais_objs.append(w)
+
+    if armas_dist_manual:
+        lista_dist = [armas_dist_req] if isinstance(armas_dist_req, str) else list(armas_dist_req)
+        for item_w in lista_dist:
+            wid = str(item_w).strip()
+            w = dados.armas.get(wid)
+            if not w or w.get("tipo_ataque") != "distancia" or w["id"] == "bomba_alquimica" or w.get("preco_pc") is None:
+                raise ValueError(f"Arma à distância inválida para compra: '{wid}'.")
+            saldo_pc -= int(w.get("preco_pc") or 0)
+            armas_compradas.append(w)
+
+    escudo_escolhido: dict[str, Any] | None = None
+    if escudo_manual:
+        esc_str = str(escudo_req).strip()
+        if normalizar(esc_str) not in ("nenhum", "nenhuma", "sem_escudo"):
+            esc_obj = dados.escudos.get(esc_str)
+            if not esc_obj:
+                raise ValueError(f"Escudo desconhecido: '{esc_str}'.")
+            escudo_escolhido = esc_obj
+            saldo_pc -= int(esc_obj.get("preco_pc") or 0)
+
+    variados_manuais_reg: list[tuple[dict[str, Any], int]] = []
+    if variados_manual:
+        mapa_variados = {it["id"]: it for it in _itens_variados_loja_brutos(dados)}
+        lista_var = [variados_req] if isinstance(variados_req, (str, dict)) else list(variados_req)
+        for entrada in lista_var:
+            if isinstance(entrada, str):
+                iid, qtd = entrada.strip(), 1
+            elif isinstance(entrada, dict):
+                iid = str(entrada.get("id") or "").strip()
+                try:
+                    qtd = int(entrada.get("quantidade", 1))
+                except (TypeError, ValueError) as exc:
+                    raise ValueError(f"Quantidade inválida para o item '{iid}'.") from exc
+            else:
+                raise ValueError(f"Entrada inválida em equipamentos_variados: {entrada!r}.")
+            if qtd < 1:
+                raise ValueError(f"A quantidade do item '{iid}' deve ser pelo menos 1.")
+            item_loja = mapa_variados.get(iid)
+            if not item_loja:
+                raise ValueError(
+                    f"Equipamento variado inválido ou indisponível na compra inicial: '{iid}'."
+                )
+            saldo_pc -= int(item_loja["preco_pc"]) * qtd
+            variados_manuais_reg.append((item_loja, qtd))
+
+    if saldo_pc < 0:
+        gasto_manual = ORCAMENTO_INICIAL_PC - saldo_pc
+        raise ValueError(
+            f"Orçamento inicial de 15 po (150 pp) excedido pelos equipamentos escolhidos "
+            f"(gasto: {formatar_preco(gasto_manual)})."
+        )
+
+    # ------------------------------------------------------------------
+    # 2ª Passada — Categorias deixadas em Procedural usam o saldo restante
+    # ------------------------------------------------------------------
+    reserva_kit = 0 if variados_manual else 70
+    if armas_cc_manual and armas_dist_manual:
+        reserva_arma = 0
+    else:
+        pool_reserva: list[str] = []
+        if not armas_cc_manual:
+            pool_reserva.extend(armas_cc_ids)
+        if not armas_dist_manual:
+            pool_reserva.extend(armas_dist_ids)
+        escudo_planejado = bool(escudo_escolhido) if escudo_manual else usa_escudo_efetivo
+        armas_candidatas_preco = [
+            dados.armas[wid]["preco_pc"]
+            for wid in pool_reserva
+            if wid in dados.armas
+            and dados.armas[wid].get("preco_pc") is not None
+            and grau_arma(dados.armas[wid], armas_prof) != "destreinado"
+            and not (escudo_planejado and dados.armas[wid].get("tipo_ataque") == "corpo_a_corpo" and str(dados.armas[wid].get("maos")) == "2")
+        ]
+        reserva_arma = min(armas_candidatas_preco) if armas_candidatas_preco else 0
+
+    if escudo_manual or not usa_escudo_efetivo:
+        reserva_escudo = 0
+    else:
+        reserva_escudo = min(
             (dados.escudos[sid]["preco_pc"] for sid in eq_rec["escudos_ids"] if sid in dados.escudos),
             default=0,
         )
-        if usa_escudo_efetivo
-        else 0
-    )
 
-    # 1. Armadura
-    armadura_escolhida = dados.armaduras["nenhuma_armadura"]
-    for aid in eq_rec["armaduras_ids"]:
-        arm = dados.armaduras.get(aid)
-        if not arm:
-            continue
-        cat_key = _chave_categoria_armadura(arm["categoria"])
-        if defesas.get(cat_key, "destreinado") == "destreinado":
-            continue
-        if nao_metal and normalizar(arm.get("material")) == "metal":
-            continue
-        preco = arm.get("preco_pc") or 0
-        if saldo_pc - preco >= (reserva_arma + reserva_escudo + reserva_kit):
-            armadura_escolhida = arm
-            saldo_pc -= preco
-            break
-
-    # Se não couber nenhuma com reserva de kit, ainda assim garante armadura acessível
-    if armadura_escolhida["id"] == "nenhuma_armadura" and defesas["leve"] != "destreinado":
-        for fallback_id in ("roupa_de_explorador", "couro", "armadura_acolchoada"):
-            arm = dados.armaduras[fallback_id]
+    # 1. Armadura procedural (se não escolhida manualmente)
+    if not armadura_manual:
+        for aid in eq_rec["armaduras_ids"]:
+            arm = dados.armaduras.get(aid)
+            if not arm:
+                continue
+            cat_key = _chave_categoria_armadura(arm["categoria"])
+            if defesas.get(cat_key, "destreinado") == "destreinado":
+                continue
+            if nao_metal and normalizar(arm.get("material")) == "metal":
+                continue
             preco = arm.get("preco_pc") or 0
-            if preco <= saldo_pc:
+            if saldo_pc - preco >= (reserva_arma + reserva_escudo + reserva_kit):
                 armadura_escolhida = arm
                 saldo_pc -= preco
                 break
 
-    # 2. Armas
-    armas_compradas: list[dict[str, Any]] = []
+        # Se não couber nenhuma com reserva de kit, ainda assim garante armadura acessível
+        if armadura_escolhida["id"] == "nenhuma_armadura" and defesas["leve"] != "destreinado":
+            for fallback_id in ("roupa_de_explorador", "couro", "armadura_acolchoada"):
+                arm = dados.armaduras[fallback_id]
+                preco = arm.get("preco_pc") or 0
+                if preco <= saldo_pc:
+                    armadura_escolhida = arm
+                    saldo_pc -= preco
+                    break
+
+    # 2. Armas procedurais (para categorias deixadas em Procedural)
+    usa_escudo_para_armas = bool(escudo_escolhido) if escudo_manual else usa_escudo_efetivo
 
     def tentar_comprar_arma(wid: str) -> bool:
         nonlocal saldo_pc
@@ -342,7 +602,7 @@ def comprar_equipamentos(
             return False
         if w["id"] == "bomba_alquimica":
             return False  # Alquimista produz bombas com Reagentes Infundidos diários
-        if usa_escudo_efetivo and w.get("tipo_ataque") == "corpo_a_corpo" and str(w.get("maos")) == "2":
+        if usa_escudo_para_armas and w.get("tipo_ataque") == "corpo_a_corpo" and str(w.get("maos")) == "2":
             return False  # Não equipa arma corpo a corpo de 2 mãos junto de escudo
         if grau_arma(w, armas_prof) == "destreinado":
             return False
@@ -353,44 +613,56 @@ def comprar_equipamentos(
         saldo_pc -= preco
         return True
 
-    if estilo == "distancia":
-        for wid in armas_dist_ids:
-            if tentar_comprar_arma(wid):
-                break
-        for wid in armas_cc_ids:
-            if tentar_comprar_arma(wid):
-                break
-    elif estilo == "duas_armas":
-        for wid in armas_cc_ids:
-            if len(armas_compradas) >= 2:
-                break
-            tentar_comprar_arma(wid)
-        if len(armas_compradas) < 2 and armas_cc_ids:
-            # Caso só tenha 1 arma viável no saldo, permite par da arma barata se houver saldo
-            tentar_comprar_arma("adaga")
-        for wid in armas_dist_ids:
-            if tentar_comprar_arma(wid):
-                break
-    else:
-        for wid in armas_cc_ids:
-            if tentar_comprar_arma(wid):
-                break
-        for wid in armas_dist_ids:
-            if tentar_comprar_arma(wid):
-                break
+    if not armas_cc_manual or not armas_dist_manual:
+        if estilo == "distancia":
+            if not armas_dist_manual:
+                for wid in armas_dist_ids:
+                    if tentar_comprar_arma(wid):
+                        break
+            if not armas_cc_manual:
+                for wid in armas_cc_ids:
+                    if tentar_comprar_arma(wid):
+                        break
+        elif estilo == "duas_armas":
+            if not armas_cc_manual:
+                compradas_cc_proc = 0
+                for wid in armas_cc_ids:
+                    if compradas_cc_proc >= 2:
+                        break
+                    if tentar_comprar_arma(wid):
+                        compradas_cc_proc += 1
+                if compradas_cc_proc < 2 and armas_cc_ids:
+                    tentar_comprar_arma("adaga")
+            if not armas_dist_manual:
+                for wid in armas_dist_ids:
+                    if tentar_comprar_arma(wid):
+                        break
+        else:
+            if not armas_cc_manual:
+                for wid in armas_cc_ids:
+                    if tentar_comprar_arma(wid):
+                        break
+            if not armas_dist_manual:
+                for wid in armas_dist_ids:
+                    if tentar_comprar_arma(wid):
+                        break
 
-    # Se não conseguiu nenhuma arma (ex: classe conjuradora sem saldo), cajado/funda custam 0 pc
-    if not armas_compradas:
-        for gratuita in ("cajado", "clava", "funda"):
-            if tentar_comprar_arma(gratuita):
-                break
+        # Se nenhuma arma foi comprada e há categoria procedural, garante opção gratuita (cajado/clava/funda)
+        if not armas_compradas:
+            candidatas_gratuitas: list[str] = []
+            if not armas_cc_manual:
+                candidatas_gratuitas.extend(("cajado", "clava"))
+            if not armas_dist_manual:
+                candidatas_gratuitas.append("funda")
+            for gratuita in candidatas_gratuitas:
+                if tentar_comprar_arma(gratuita):
+                    break
 
-    # 3. Escudo (apenas se não houver arma corpo a corpo de 2 mãos equipada)
-    escudo_escolhido: dict[str, Any] | None = None
+    # 3. Escudo procedural (apenas se não houver arma corpo a corpo de 2 mãos equipada)
     empunha_cc_2m = any(
         w.get("tipo_ataque") == "corpo_a_corpo" and str(w.get("maos")) == "2" for w in armas_compradas
     )
-    if usa_escudo_efetivo and not empunha_cc_2m:
+    if not escudo_manual and usa_escudo_efetivo and not empunha_cc_2m:
         for sid in eq_rec["escudos_ids"]:
             esc = dados.escudos.get(sid)
             if not esc:
@@ -407,6 +679,7 @@ def comprar_equipamentos(
     itens_vestidos: list[dict[str, Any]] = []
     itens_preparados: list[dict[str, Any]] = []
     outros_itens: list[dict[str, Any]] = []
+    variados_aplicados: list[dict[str, Any]] = []
 
     def registrar_item(lista: list[dict], nome: str, quantidade: int, volume: str, volume_valor: float, preco_pc: int | None = None, investido: bool = False) -> None:
         item = {
@@ -440,21 +713,25 @@ def comprar_equipamentos(
             float(w.get("volume_valor") or 0.0),
             w.get("preco_pc"),
         )
-        mun = _municao_para_arma(dados, w)
-        if mun:
-            # 2 lotes (20 munições) quando houver saldo, senão 1 lote
-            lotes = 2 if (mun["preco_pc"] * 2) <= saldo_pc else (1 if mun["preco_pc"] <= saldo_pc else 0)
-            if lotes > 0:
-                saldo_pc -= mun["preco_pc"] * lotes
-                qtd_mun = lotes * mun["quantidade"]
-                registrar_item(
-                    itens_vestidos,
-                    f"{mun['nome']} (Qtd: {qtd_mun})",
-                    qtd_mun,
-                    "L" if lotes == 1 else f"{lotes}L",
-                    round(0.1 * lotes, 2),
-                    mun["preco_pc"] * lotes,
-                )
+        if not variados_manual:
+            mun = _municao_para_arma(dados, w)
+            if mun:
+                # 2 lotes (20 munições) quando houver saldo, senão 1 lote
+                lotes = 2 if (mun["preco_pc"] * 2) <= saldo_pc else (1 if mun["preco_pc"] <= saldo_pc else 0)
+                if lotes > 0:
+                    saldo_pc -= mun["preco_pc"] * lotes
+                    qtd_mun = lotes * mun["quantidade"]
+                    registrar_item(
+                        itens_vestidos,
+                        f"{mun['nome']} (Qtd: {qtd_mun})",
+                        qtd_mun,
+                        "L" if lotes == 1 else f"{lotes}L",
+                        round(0.1 * lotes, 2),
+                        mun["preco_pc"] * lotes,
+                    )
+                    variados_aplicados.append(
+                        {"id": mun["id"], "nome": mun["nome"], "quantidade": lotes, "preco_pc": mun["preco_pc"] * lotes}
+                    )
 
     if escudo_escolhido:
         registrar_item(
@@ -466,7 +743,7 @@ def comprar_equipamentos(
             escudo_escolhido.get("preco_pc"),
         )
 
-    # Anão recebe Adaga de Clã gratuita no 1º nível; Mago recebe Grimório gratuito
+    # Anão recebe Adaga de Clã gratuita no 1º nível; Mago e Alquimista recebem itens gratuitos de classe
     if ancestralidade["id"] == "anao":
         adaga_cla = dados.armas["adaga_de_cla"]
         if grau_arma(adaga_cla, armas_prof) != "destreinado":
@@ -480,44 +757,83 @@ def comprar_equipamentos(
         reagentes_qtd = max(1, 1 + mod_int)
         registrar_item(itens_preparados, f"Livro de Fórmulas e Reagentes Infundidos (Qtd: {reagentes_qtd} lotes/dia)", reagentes_qtd, "L", 0.1, 0)
 
-    # Ferramentas essenciais da classe
-    sub_id = subclasse["id"] if subclasse else ""
-    for fid in _ferramenta_essencial(classe["id"], conceito["id"], sub_id):
-        fitem = dados.itens_gerais.get(fid)
-        if fitem and (fitem.get("preco_pc") or 0) <= saldo_pc:
-            saldo_pc -= fitem.get("preco_pc") or 0
-            registrar_item(
-                itens_preparados,
-                _formatar_item_geral_inventario(fitem, 1),
-                int(fitem.get("quantidade_pacote") or 1),
-                fitem["volume"],
-                float(fitem.get("volume_valor") or 0.0),
-                fitem.get("preco_pc"),
+    if variados_manual:
+        for item_loja, qtd in variados_manuais_reg:
+            vol_unit = float(item_loja["volume_valor"])
+            vol_total_it = round(vol_unit * qtd, 2)
+            if qtd == 1:
+                vol_str = str(item_loja["volume"])
+            elif 0.05 <= vol_unit < 1.0:
+                vol_str = f"{qtd}L"
+            elif vol_total_it == 0:
+                vol_str = "—"
+            else:
+                vol_str = str(int(round(vol_total_it)))
+            preco_total_it = int(item_loja["preco_pc"]) * qtd
+            if item_loja["eh_municao"]:
+                qtd_mun = qtd * int(item_loja["quantidade_pacote"] or 1)
+                registrar_item(
+                    itens_vestidos,
+                    f"{item_loja['nome']} (Qtd: {qtd_mun})",
+                    qtd_mun,
+                    vol_str,
+                    vol_total_it,
+                    preco_total_it,
+                )
+            else:
+                qtd_efetiva = qtd * int(item_loja["quantidade_pacote"] or 1)
+                registrar_item(
+                    outros_itens,
+                    _formatar_item_geral_inventario(item_loja, qtd_efetiva),
+                    qtd_efetiva,
+                    vol_str,
+                    vol_total_it,
+                    preco_total_it,
+                )
+            variados_aplicados.append(
+                {
+                    "id": item_loja["id"],
+                    "nome": item_loja["nome"],
+                    "quantidade": qtd,
+                    "preco_pc": preco_total_it,
+                }
             )
+    else:
+        # Ferramentas essenciais da classe (procedural)
+        sub_id = subclasse["id"] if subclasse else ""
+        for fid in _ferramenta_essencial(classe["id"], conceito["id"], sub_id):
+            fitem = dados.itens_gerais.get(fid)
+            if fitem and (fitem.get("preco_pc") or 0) <= saldo_pc:
+                preco_f = int(fitem.get("preco_pc") or 0)
+                saldo_pc -= preco_f
+                registrar_item(
+                    itens_preparados,
+                    _formatar_item_geral_inventario(fitem, 1),
+                    int(fitem.get("quantidade_pacote") or 1),
+                    fitem["volume"],
+                    float(fitem.get("volume_valor") or 0.0),
+                    preco_f,
+                )
+                variados_aplicados.append(
+                    {"id": fid, "nome": fitem["nome"], "quantidade": 1, "preco_pc": preco_f}
+                )
 
-    # Kit de aventureiro (mochila + bens básicos)
-    kit_av = dados.itens_gerais.get("kit_de_aventureiro")
-    if kit_av and kit_av["preco_pc"] <= saldo_pc:
-        saldo_pc -= kit_av["preco_pc"]
-        registrar_item(
-            outros_itens,
-            _formatar_item_geral_inventario(kit_av, 1),
-            1,
-            kit_av["volume"],
-            float(kit_av.get("volume_valor") or 0.0),
-            kit_av["preco_pc"],
-        )
-
-    # Cálculo exato de Volume PF2E: inteiros + floor(qtd_leves / 10) + isenção da mochila (2 Vol)
-    def _somar_volumes(lista_itens: list[dict[str, Any]]) -> tuple[int, int]:
-        inteiros, leves = 0, 0
-        for item in lista_itens:
-            vv = float(item.get("volume_valor") or 0.0)
-            if vv >= 1.0:
-                inteiros += int(round(vv))
-            elif 0.05 <= vv < 1.0:
-                leves += max(1, int(round(vv * 10)))
-        return inteiros, leves
+        # Kit de aventureiro (mochila + bens básicos)
+        kit_av = dados.itens_gerais.get("kit_de_aventureiro")
+        if kit_av and kit_av["preco_pc"] <= saldo_pc:
+            preco_k = int(kit_av["preco_pc"])
+            saldo_pc -= preco_k
+            registrar_item(
+                outros_itens,
+                _formatar_item_geral_inventario(kit_av, 1),
+                1,
+                kit_av["volume"],
+                float(kit_av.get("volume_valor") or 0.0),
+                preco_k,
+            )
+            variados_aplicados.append(
+                {"id": "kit_de_aventureiro", "nome": kit_av["nome"], "quantidade": 1, "preco_pc": preco_k}
+            )
 
     int_vest, lev_vest = _somar_volumes(itens_vestidos + itens_preparados)
     int_outros, lev_outros = _somar_volumes(outros_itens)
@@ -560,4 +876,18 @@ def comprar_equipamentos(
         "gasto_pc": ORCAMENTO_INICIAL_PC - saldo_pc,
         "saldo_pc": saldo_pc,
         "riqueza": pc_para_moedas(saldo_pc),
+        "escolhas_equipamentos": {
+            "armadura_id": "nenhuma" if armadura_escolhida["id"] == "nenhuma_armadura" else armadura_escolhida["id"],
+            "escudo_id": escudo_escolhido["id"] if escudo_escolhido else None,
+            "armas_corpo_a_corpo_ids": [w["id"] for w in armas_compradas if w.get("tipo_ataque") == "corpo_a_corpo"],
+            "armas_distancia_ids": [w["id"] for w in armas_compradas if w.get("tipo_ataque") == "distancia"],
+            "equipamentos_variados": variados_aplicados,
+            "categorias_manuais": {
+                "armadura": armadura_manual,
+                "escudo": escudo_manual,
+                "armas_corpo_a_corpo": armas_cc_manual,
+                "armas_distancia": armas_dist_manual,
+                "equipamentos_variados": variados_manual,
+            },
+        },
     }

@@ -22,6 +22,8 @@ from motor import (
 
 app = Flask(__name__, static_folder="templates/static", static_url_path="/static")
 app.json.ensure_ascii = False
+app.config["TEMPLATES_AUTO_RELOAD"] = True
+app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
 
 
 def _extrair_payload() -> dict[str, Any] | None:
@@ -56,6 +58,20 @@ def _gerar_a_partir_payload(payload: dict[str, Any]) -> dict[str, Any]:
         if campo_atb in payload and campo_atb not in escolhas_atributos:
             escolhas_atributos[campo_atb] = payload[campo_atb]
 
+    escolhas_talentos: dict[str, Any] | None = None
+    bruto_tal = payload.get("escolhas_talentos")
+    if bruto_tal is not None:
+        if not isinstance(bruto_tal, dict):
+            raise ErroValidacao("Campo 'escolhas_talentos' deve ser um objeto JSON.")
+        escolhas_talentos = bruto_tal
+
+    escolhas_equipamentos: dict[str, Any] | None = None
+    bruto_eq = payload.get("escolhas_equipamentos")
+    if bruto_eq is not None:
+        if not isinstance(bruto_eq, dict):
+            raise ErroValidacao("Campo 'escolhas_equipamentos' deve ser um objeto JSON.")
+        escolhas_equipamentos = bruto_eq
+
     return gerar_personagem(
         ancestralidade_id=str(payload["ancestralidade_id"]).strip(),
         heranca_id=str(payload["heranca_id"]).strip(),
@@ -68,6 +84,8 @@ def _gerar_a_partir_payload(payload: dict[str, Any]) -> dict[str, Any]:
         nivel=nivel,
         seed=payload.get("seed"),
         escolhas_atributos=escolhas_atributos or None,
+        escolhas_talentos=escolhas_talentos,
+        escolhas_equipamentos=escolhas_equipamentos,
     )
 
 
@@ -166,6 +184,11 @@ def api_conceitos_por_classe(classe_id: str):
             "subclasses_oficiais_nomes": c.get(
                 "subclasses_oficiais_nomes", [c["subclasse_oficial_nome"]]
             ),
+            "tese_arcana_id": c.get("tese_arcana_id"),
+            "mago_universalista": opcoes_por_id.get(c["id"], {}).get("mago_universalista", False),
+            "desbloqueia_talento_classe_n1_extra": opcoes_por_id.get(c["id"], {}).get(
+                "desbloqueia_talento_classe_n1_extra", False
+            ),
             "atributo_chave_opcoes": opcoes_por_id.get(c["id"], {}).get("atributo_chave_opcoes", []),
             "prioridade_atributos": list(c.get("prioridade_atributos", [])),
             "resumo_proposta": c["resumo_proposta"],
@@ -253,4 +276,4 @@ def api_exportar_pdf():
 
 if __name__ == "__main__":
     debug_ativo = os.environ.get("FLASK_DEBUG", "0").strip().lower() in {"1", "true", "yes"}
-    app.run(debug=debug_ativo, host="127.0.0.1", port=5000)
+    app.run(debug=debug_ativo, use_reloader=True, host="127.0.0.1", port=5000)

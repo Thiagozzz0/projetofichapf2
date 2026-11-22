@@ -41,3 +41,4 @@ Este arquivo funciona como índice mestre de tudo que já foi finalizado no proj
 | **29** | `22/11/2026 — 11:25` | Modularização de `motor/exportacao.py` no subpacote `motor/exportacao/` (`comum.py`, `exportar_txt.py`, `exportar_docx.py` e `exportar_pdf.py`) | [29.md](finalizado/29.md) |
 | **30** | `22/11/2026 — 11:30` | Extração das regras de Divindades, Fontes Divinas e Tendências de `motor/gerador.py` para `motor/divindades.py` | [30.md](finalizado/30.md) |
 | **31** | `22/11/2026 — 11:35` | Separação do Front-End JS em `templates/static/js/render_ficha.js` (`455` linhas) e `templates/static/js/app.js` (`788` linhas) | [31.md](finalizado/31.md) |
+| **32** | `22/11/2026 — 13:00` | Compra manual e híbrida de **Equipamentos Iniciais** (5 categorias com dedução em tempo real das `15 po / 150 pp`) + cache-busting `?v=32` | [32.md](finalizado/32.md) |

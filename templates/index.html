@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gerador Procedural PF2E — Ficha Oficial</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}?v=33">
 </head>
 <body>
   <div class="app-container">
@@ -143,6 +143,172 @@
           <div class="campo-grupo">
             <label for="seed">Seed (Reprodutibilidade)</label>
             <input id="seed" type="text" placeholder="Aleatória se vazia">
+          </div>
+
+          <div class="campo-grupo campo-span-full subgrupo-atb-etapa-d" id="grupo-talentos">
+            <div class="etapa-d-topo">
+              <div>
+                <label for="modo-talentos" class="etapa-d-titulo">E — Talentos Iniciais (1º Nível)</label>
+                <small class="nota-campo">Escolha automática procedural pelo conceito ou personalize manualmente nos slots realmente liberados por sua ancestralidade, herança e classe.</small>
+              </div>
+            </div>
+            <select id="modo-talentos" name="modo_talentos">
+              <option value="procedural" selected>Procedural (talentos escolhidos automaticamente pelo conceito)</option>
+              <option value="personalizado">Personalizar Talentos (escolher manualmente nos slots liberados)</option>
+            </select>
+
+            <div id="painel-talentos-custom" class="painel-talentos-custom oculto">
+              <div class="barra-orcamento-eq">
+                <div class="orc-metricas">
+                  <span id="tal-resumo-curadoria">Curadoria PF2E (1º Nível): apenas slots liberados pela sua combinação ficam ativos.</span>
+                </div>
+                <button type="button" id="btn-tal-reset-procedural" class="btn btn-sutil">Voltar Tudo p/ Procedural</button>
+              </div>
+              <small class="nota-campo">Ordem dos talentos: Ancestralidade → Biografia (automático) → Classe → Demais Tipos (Perícia &amp; Gerais). Campos em "Procedural" seguem o conceito.</small>
+
+              <div class="grid-talentos-custom">
+                <div class="card-tal-cat" id="card-tal-ancestralidade">
+                  <div class="card-tal-topo">
+                    <label for="tal-ancestralidade">1. Talento de Ancestralidade (1º Nível)</label>
+                    <span id="badge-tal-ancestralidade" class="badge-tal-liberado">1 Slot Liberado</span>
+                  </div>
+                  <select id="tal-ancestralidade" name="tal_ancestralidade"></select>
+                  <small id="nota-tal-ancestralidade" class="nota-campo"></small>
+                </div>
+
+                <div class="card-tal-cat" id="card-tal-biografia">
+                  <div class="card-tal-topo">
+                    <span>2. Talento de Biografia</span>
+                    <span class="badge-tal-auto">Automático</span>
+                  </div>
+                  <div id="info-tal-biografia" class="box-tal-auto"></div>
+                  <small class="nota-campo">Concedido automaticamente pela Biografia escolhida (não consome escolha).</small>
+                </div>
+
+                <div class="card-tal-cat card-tal-wide" id="card-tal-classe">
+                  <div class="card-tal-topo">
+                    <label for="tal-classe-1">3. Talentos de Classe (1º Nível)</label>
+                    <span id="badge-tal-classe" class="badge-tal-bloqueado">Verificar Classe</span>
+                  </div>
+                  <div class="grid-tal-slots">
+                    <div id="grupo-tal-classe-1" class="campo-atb-inline">
+                      <label id="lbl-tal-classe-1" for="tal-classe-1">Talento de Classe (1º Nível)</label>
+                      <select id="tal-classe-1" name="tal_classe_1"></select>
+                    </div>
+                    <div id="grupo-tal-classe-2" class="campo-atb-inline oculto">
+                      <label id="lbl-tal-classe-2" for="tal-classe-2">2º Talento de Classe (Extra)</label>
+                      <select id="tal-classe-2" name="tal_classe_2"></select>
+                    </div>
+                    <div id="grupo-tal-classe-3" class="campo-atb-inline oculto">
+                      <label id="lbl-tal-classe-3" for="tal-classe-3">3º Talento de Classe (Extra)</label>
+                      <select id="tal-classe-3" name="tal_classe_3"></select>
+                    </div>
+                  </div>
+                  <small id="nota-tal-classe" class="nota-campo"></small>
+                </div>
+
+                <div class="card-tal-cat card-tal-wide" id="card-tal-demais">
+                  <div class="card-tal-topo">
+                    <span>4. Demais Talentos — Perícia Adicional &amp; Gerais (1º Nível)</span>
+                    <span class="badge-tal-auto">Curadoria de Nível &amp; Classe</span>
+                  </div>
+                  <div class="grid-tal-demais">
+                    <div class="subcard-tal-demais" id="subcard-tal-pericia">
+                      <div class="card-tal-topo">
+                        <label for="tal-pericia-1">Talento de Perícia Extra (1º Nível)</label>
+                        <span id="badge-tal-pericia" class="badge-tal-bloqueado">Bloqueado (Só Ladino N1)</span>
+                      </div>
+                      <select id="tal-pericia-1" name="tal_pericia_1"></select>
+                      <small id="nota-tal-pericia" class="nota-campo"></small>
+                    </div>
+
+                    <div class="subcard-tal-demais" id="subcard-tal-geral">
+                      <div class="card-tal-topo">
+                        <label for="tal-geral-1">Talentos Gerais (1º Nível)</label>
+                        <span id="badge-tal-geral" class="badge-tal-bloqueado">Bloqueado (3º Nível)</span>
+                      </div>
+                      <div class="stack-tal-slots">
+                        <div id="grupo-tal-geral-1" class="campo-atb-inline">
+                          <label id="lbl-tal-geral-1" for="tal-geral-1">1º Talento Geral (1º Nível)</label>
+                          <select id="tal-geral-1" name="tal_geral_1"></select>
+                        </div>
+                        <div id="grupo-tal-geral-2" class="campo-atb-inline oculto">
+                          <label id="lbl-tal-geral-2" for="tal-geral-2">2º Talento Geral (Treinamento Geral)</label>
+                          <select id="tal-geral-2" name="tal_geral_2"></select>
+                        </div>
+                      </div>
+                      <small id="nota-tal-geral" class="nota-campo"></small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="campo-grupo campo-span-full subgrupo-atb-etapa-d" id="grupo-equipamentos">
+            <div class="etapa-d-topo">
+              <div>
+                <label for="modo-equipamentos" class="etapa-d-titulo">F — Equipamentos Iniciais (Orçamento: 15 po / 150 pp)</label>
+                <small class="nota-campo">Escolha entre compra automática procedural (pelo conceito) ou selecionar seus itens manualmente descontando direto das 150 pp da ficha.</small>
+              </div>
+            </div>
+            <select id="modo-equipamentos" name="modo_equipamentos">
+              <option value="procedural" selected>Procedural (compra automática guiada pelo conceito)</option>
+              <option value="personalizado">Personalizar / Comprar Equipamentos (deduzir de 15 po / 150 pp)</option>
+            </select>
+
+            <div id="painel-equipamentos-custom" class="painel-equipamentos-custom oculto">
+              <div id="barra-orcamento-eq" class="barra-orcamento-eq">
+                <div class="orc-metricas">
+                  <span>Orçamento Inicial: <strong>150 pp (15 po)</strong></span>
+                  <span>Gasto: <strong id="eq-resumo-gasto">0 pp</strong></span>
+                  <span>Saldo Restante na Ficha: <strong id="eq-resumo-saldo" class="saldo-ok">150 pp (15 po)</strong></span>
+                </div>
+                <button type="button" id="btn-eq-reset-procedural" class="btn btn-sutil">Voltar Tudo p/ Procedural</button>
+              </div>
+              <small id="eq-nota-hibrida" class="nota-campo">Categorias deixadas em "Procedural" usarão automaticamente o saldo restante ao gerar a ficha.</small>
+
+              <div class="grid-equipamentos-custom">
+                <div class="card-eq-cat">
+                  <label for="eq-armadura">1. Armaduras</label>
+                  <select id="eq-armadura" name="eq_armadura"></select>
+                </div>
+
+                <div class="card-eq-cat">
+                  <label for="eq-escudo">2. Escudos</label>
+                  <select id="eq-escudo" name="eq_escudo"></select>
+                </div>
+
+                <div class="card-eq-cat card-eq-wide">
+                  <label for="eq-arma-cc-select">3. Armas Corporais (Simples, Marciais e Avançadas)</label>
+                  <div class="linha-compra-eq">
+                    <select id="eq-arma-cc-select" name="eq_arma_cc"></select>
+                    <button type="button" id="btn-add-arma-cc" class="btn btn-secundario btn-compacto">+ Adicionar Outra</button>
+                  </div>
+                  <ul id="lista-eq-armas-cc" class="lista-eq-selecionados"></ul>
+                </div>
+
+                <div class="card-eq-cat card-eq-wide">
+                  <label for="eq-arma-dist-select">4. Armas à Distância (Simples, Marciais e Avançadas)</label>
+                  <div class="linha-compra-eq">
+                    <select id="eq-arma-dist-select" name="eq_arma_dist"></select>
+                    <button type="button" id="btn-add-arma-dist" class="btn btn-secundario btn-compacto">+ Adicionar Outra</button>
+                  </div>
+                  <ul id="lista-eq-armas-dist" class="lista-eq-selecionados"></ul>
+                </div>
+
+                <div class="card-eq-cat card-eq-wide">
+                  <label for="eq-variado-select">5. Equipamentos Variados (Aventura &amp; Munições)</label>
+                  <div class="linha-compra-eq linha-compra-qtd">
+                    <select id="eq-variado-select" name="eq_variado"></select>
+                    <input id="eq-variado-qtd" type="number" min="1" max="99" value="1" aria-label="Quantidade">
+                    <button type="button" id="btn-add-variado" class="btn btn-secundario btn-compacto">+ Adicionar Outro</button>
+                    <button type="button" id="btn-add-kit-av" class="btn btn-sutil btn-compacto">+ Kit Aventureiro (7 pp)</button>
+                  </div>
+                  <ul id="lista-eq-variados" class="lista-eq-selecionados"></ul>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -343,7 +509,7 @@
     </section>
   </div>
 
-  <script src="{{ url_for('static', filename='js/render_ficha.js') }}" defer></script>
-  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/render_ficha.js') }}?v=33" defer></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}?v=33" defer></script>
 </body>
 </html>

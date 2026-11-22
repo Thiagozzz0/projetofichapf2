@@ -765,6 +765,63 @@ def test_escolhas_atributos_manual_procedural_aleatorio() -> None:
             pass
 
 
+def test_compra_manual_e_hibrida_equipamentos() -> None:
+    db = carregar_dados()
+
+    # 1. Compra manual completa: armadura + armas + escudo + variados com cálculo exato de PP/PO/PC e Volume
+    pat_loja = gerar_personagem(
+        "elfo", "elfo_vidente", "patrulheiro", "patrulheiro_atirador_precisao",
+        escolhas_equipamentos={
+            "armadura_id": "couro_batido",                # 300 pc (Vol 1)
+            "escudo_id": "nenhum",                        # 0 pc
+            "armas_corpo_a_corpo_ids": ["espada_curta"],  # 90 pc (Vol L)
+            "armas_distancia_ids": ["arco_curto"],        # 300 pc (Vol 1)
+            "equipamentos_variados": [
+                {"id": "kit_de_aventureiro", "quantidade": 1},  # 70 pc (Vol 1 -> isento 2 Vol)
+                {"id": "flechas", "quantidade": 2},             # 20 pc (20 flechas, Vol 2L)
+            ],
+        },
+        seed=12,
+        dados=db,
+    )
+    assert pat_loja["meta_geracao"]["gasto_pc"] == 780
+    assert pat_loja["meta_geracao"]["saldo_pc"] == 720
+    assert pat_loja["ficha"]["inventario"]["riqueza"] == {"pc": 0, "pp": 2, "po": 7, "pl": 0}
+    assert any("Flechas (Qtd: 20)" in it["nome"] for it in pat_loja["ficha"]["inventario"]["itens_vestidos"])
+    assert pat_loja["ficha"]["golpes_a_distancia"][0]["arma"] == "Arco curto"
+
+    # 2. Compra híbrida: escolhe manualmente Armadura e Arma 2M, deixando Variados em Procedural
+    guerr_hib = gerar_personagem(
+        "humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor",
+        escolhas_equipamentos={
+            "armadura_id": "cota_de_malha",          # 600 pc
+            "armas_corpo_a_corpo_ids": ["montante"], # 200 pc
+        },
+        seed=8,
+        dados=db,
+    )
+    # Montante manual é 2M -> escudo procedural não é comprado; distância/variados procedurais compram Azagaia (10 pc) + Kit de Aventureiro (70 pc)
+    assert guerr_hib["meta_geracao"]["gasto_pc"] == 880
+    assert guerr_hib["meta_geracao"]["saldo_pc"] == 620
+    assert guerr_hib["ficha"]["classe_armadura"]["escudo"]["nome"] == ""
+    assert any("Kit de aventureiro" in it["nome"] for it in guerr_hib["ficha"]["inventario"]["outros_itens"])
+
+    # 3. Orçamento excedido ou item alquímico bloqueado levantam ErroValidacao
+    for esc_inv in (
+        {"armadura_id": "armadura_completa"},
+        {"equipamentos_variados": [{"id": "kit_de_aventureiro", "quantidade": 30}]},
+        {"equipamentos_variados": ["elixir_da_vida_menor"]},
+    ):
+        try:
+            gerar_personagem(
+                "humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor",
+                escolhas_equipamentos=esc_inv, seed=1, dados=db,
+            )
+            raise AssertionError(f"Deveria falhar com ErroValidacao para {esc_inv!r}")
+        except ErroValidacao:
+            pass
+
+
 def main() -> None:
     test_ca_limite_destreza_e_sem_armadura()
     test_penalidade_armadura_barulhenta_flexivel_e_ferro_desimpedido()
@@ -778,6 +835,7 @@ def main() -> None:
     test_aleatorio_7_campos_e_bonus_equipamentos()
     test_exportar_pdf_oficial_4_paginas()
     test_escolhas_atributos_manual_procedural_aleatorio()
+    test_compra_manual_e_hibrida_equipamentos()
     print("SUCESSO TOTAL — Todos os testes de casos de borda PF2E passaram!")
 
 

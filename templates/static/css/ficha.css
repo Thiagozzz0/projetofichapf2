@@ -996,8 +996,240 @@ body {
   gap: 10px;
 }
 
+.painel-talentos-custom,
+.painel-equipamentos-custom {
+  margin-top: 10px;
+  background: var(--paper);
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.grid-talentos-custom {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.card-tal-cat {
+  background: #fffdf8;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.card-tal-wide {
+  grid-column: 1 / -1;
+}
+
+.card-tal-topo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent-dark);
+}
+
+.card-tal-topo label {
+  margin-bottom: 0;
+}
+
+.grid-tal-slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.grid-tal-demais {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.subcard-tal-demais {
+  background: var(--tint);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 9px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stack-tal-slots {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card-tal-bloqueado {
+  opacity: 0.72;
+  background: #f6f1e6;
+}
+
+.card-tal-bloqueado select {
+  cursor: not-allowed;
+}
+
+.box-tal-auto {
+  padding: 7px 10px;
+  border: 1px dashed var(--border-dark);
+  border-radius: 5px;
+  background: var(--tint);
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.box-tal-auto.ativo {
+  color: var(--ink);
+  font-weight: 600;
+  background: #fdf9ef;
+}
+
+.badge-tal-auto,
+.badge-tal-liberado,
+.badge-tal-bloqueado {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.badge-tal-auto {
+  background: var(--tint-strong);
+  color: var(--ink);
+}
+
+.badge-tal-liberado {
+  background: var(--ok-bg);
+  color: var(--ok-fg);
+}
+
+.badge-tal-bloqueado {
+  background: #f1dfdc;
+  color: #842029;
+}
+
+.painel-equipamentos-custom {
+  margin-top: 10px;
+  background: var(--paper);
+  padding: 12px;
+}
+
+.barra-orcamento-eq {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  background: var(--tint);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 6px;
+}
+
+.orc-metricas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 0.85rem;
+}
+
+.saldo-ok {
+  color: var(--ok-fg);
+}
+
+.saldo-alerta {
+  color: #a61c1c;
+}
+
+.grid-equipamentos-custom {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.card-eq-cat {
+  background: #fffdf8;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.card-eq-wide {
+  grid-column: 1 / -1;
+}
+
+.ctrl-eq-compra {
+  margin-top: 8px;
+}
+
+.linha-compra-eq {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.linha-compra-eq.linha-compra-qtd {
+  grid-template-columns: 1fr 72px auto auto;
+}
+
+.btn-compacto {
+  padding: 7px 11px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.lista-eq-selecionados {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.item-eq-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--tint);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px 9px;
+  font-size: 0.78rem;
+}
+
+.btn-rem-eq {
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  font-weight: 800;
+  cursor: pointer;
+  padding: 0 3px;
+  font-size: 0.92rem;
+  line-height: 1;
+}
+
 @media (max-width: 980px) {
-  .grid-atributos-livres {
+  .grid-atributos-livres,
+  .grid-talentos-custom,
+  .grid-tal-demais,
+  .grid-equipamentos-custom,
+  .linha-compra-eq,
+  .linha-compra-eq.linha-compra-qtd {
     grid-template-columns: 1fr;
   }
   .p1-layout,

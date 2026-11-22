@@ -19,10 +19,14 @@ from .divindades import (
     resolver_divindade_e_fonte,
     selecionar_divindade as _selecionar_divindade,
 )
-from .equipamentos import calcular_proficiencias_combate, comprar_equipamentos
+from .equipamentos import (
+    calcular_proficiencias_combate,
+    comprar_equipamentos,
+    listar_catalogo_equipamentos_loja,
+)
 from .magias import gerar_conjuracao, preencher_bloco_conjuracao_ficha
 from .regras_atributos import calcular_atributos, normalizar_escolha_atributo, opcoes_atributo_classe
-from .talentos import selecionar_talentos
+from .talentos import listar_catalogo_talentos_n1, selecionar_talentos
 from .util import ATRIBUTOS, atributo_id, formatar_preco, normalizar
 
 
@@ -305,6 +309,14 @@ def listar_opcoes_criacao(dados: BaseDados | None = None) -> dict[str, Any]:
                     "subclasses_oficiais_nomes": con.get(
                         "subclasses_oficiais_nomes", [con["subclasse_oficial_nome"]]
                     ),
+                    "tese_arcana_id": con.get("tese_arcana_id"),
+                    "mago_universalista": (
+                        c["id"] == "mago" and con.get("subclasse_oficial_id") == "universalista"
+                    ),
+                    "desbloqueia_talento_classe_n1_extra": (
+                        con.get("subclasse_oficial_id") == "instinto_do_furor"
+                        or con.get("tese_arcana_id") == "experimentacao_metamagica"
+                    ),
                     "atributo_chave_opcoes": _atributo_chave_opcoes(db, c, con),
                     "prioridade_atributos": list(con.get("prioridade_atributos", [])),
                     "resumo_proposta": con["resumo_proposta"],
@@ -336,6 +348,8 @@ def listar_opcoes_criacao(dados: BaseDados | None = None) -> dict[str, Any]:
         "biografias": biografias,
         "classes": classes,
         "divindades": divindades,
+        "catalogo_talentos": listar_catalogo_talentos_n1(db),
+        "catalogo_equipamentos": listar_catalogo_equipamentos_loja(db),
         "total_conceitos": len(db.conceitos),
     }
 
@@ -352,6 +366,8 @@ def gerar_personagem(
     nivel: int | str = 1,
     seed: int | str | None = None,
     escolhas_atributos: dict[str, Any] | None = None,
+    escolhas_talentos: dict[str, Any] | None = None,
+    escolhas_equipamentos: dict[str, Any] | None = None,
     dados: BaseDados | None = None,
 ) -> dict[str, Any]:
     """Gera uma ficha completa e válida de Pathfinder 2E guiada pelo conceito escolhido."""
@@ -509,22 +525,27 @@ def gerar_personagem(
         classe_id, subclasse["id"] if subclasse else "", conceito=conceito, divindade=divindade
     )
 
-    talentos_res = selecionar_talentos(
-        db,
-        ancestralidade,
-        heranca,
-        biografia,
-        classe,
-        subclasse,
-        conceito,
-        graus_pericias=pericias_base["graus"],
-        pericia_bio_id=pericias_base["pericia_biografia_id"],
-        tendencia=tendencia,
-        fonte_divina=fonte_divina,
-        tese_arcana_id=tese_arcana["id"] if tese_arcana else None,
-        divindade=divindade,
-        rng=rng,
-    )
+    try:
+        talentos_res = selecionar_talentos(
+            db,
+            ancestralidade,
+            heranca,
+            biografia,
+            classe,
+            subclasse,
+            conceito,
+            graus_pericias=pericias_base["graus"],
+            pericia_bio_id=pericias_base["pericia_biografia_id"],
+            tendencia=tendencia,
+            fonte_divina=fonte_divina,
+            tese_arcana_id=tese_arcana["id"] if tese_arcana else None,
+            divindade=divindade,
+            atributos=atributos_res["valores"],
+            escolhas_talentos=escolhas_talentos,
+            rng=rng,
+        )
+    except ValueError as exc:
+        raise ErroValidacao(str(exc)) from exc
 
     extras_per = talentos_res["efeitos"]["extras_pericias"]
     pericias_anc_fixas = talentos_res["efeitos"].get("pericias_ancestrais_fixas") or []
@@ -561,18 +582,22 @@ def gerar_personagem(
         divindade=divindade,
         efeitos_talentos=talentos_res["efeitos"],
     )
-    equip_res = comprar_equipamentos(
-        db,
-        ancestralidade,
-        classe,
-        conceito,
-        mod_for,
-        profs_combate,
-        mod_int=mod_int,
-        subclasse=subclasse,
-        efeitos_talentos=talentos_res["efeitos"],
-        divindade=divindade,
-    )
+    try:
+        equip_res = comprar_equipamentos(
+            db,
+            ancestralidade,
+            classe,
+            conceito,
+            mod_for,
+            profs_combate,
+            mod_int=mod_int,
+            subclasse=subclasse,
+            efeitos_talentos=talentos_res["efeitos"],
+            divindade=divindade,
+            escolhas_equipamentos=escolhas_equipamentos,
+        )
+    except ValueError as exc:
+        raise ErroValidacao(str(exc)) from exc
     magias_res = gerar_conjuracao(
         db,
         heranca,
@@ -698,7 +723,9 @@ def gerar_personagem(
             "atributo_chave": atributos_res["atributo_chave"],
             "escolhas_atributos": atributos_res["escolhas_aplicadas"],
             "historico_abcd": atributos_res["historico_abcd"],
+            "escolhas_talentos": talentos_res["escolhas_talentos"],
             "orcamento_inicial": "15 po",
+            "escolhas_equipamentos": equip_res["escolhas_equipamentos"],
             "gasto_equipamentos": formatar_preco(equip_res["gasto_pc"]),
             "saldo_restante": formatar_preco(equip_res["saldo_pc"]),
             "gasto_pc": equip_res["gasto_pc"],

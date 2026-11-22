@@ -2,5 +2,10 @@
 
 [Concluído - Etapa 25] Gerar o pdf igual o do livro (ref/Sheet Update.pdf + dados/estrutura_ficha.json).
 
-[Concluído - Etapa 26] Colocar a opção de escolher o bonus livre da raça após escolher ela, e também para biografia, e os 4 livres. A ideia é ter essa opção mas também a procedural/aleatória para antecipar ou acelerar caso o player queira.
+[Concluído - Etapa 26/27/28] Colocar a opção de escolher o bonus livre da raça após escolher ela, e também para biografia, classe e os 4 livres, com seletores inline e travas por etapa ABCD.
 
+- Ir aos poucos transformando o gerador procedural em um gerador
+de fichas também, podendo o jogador escolher tanto fazer a ficha do
+zero como o gerador gerar para ele.
+
+[Concluído - Etapa 32] Opção do jogador escolher os equipamentos (Armaduras, Escudos, Armas Corporais, Armas à Distância — separando Simples, Marciais e Avançadas — e Equipamentos Variados) no final após Divindades, deduzindo automaticamente do orçamento inicial de 15 po (150 pp) ou mantendo o modo procedural.

@@ -249,6 +249,13 @@ def main() -> None:
         "attr-anc-livre-1",
         "attr-bio-restrito",
         "attr-livre-1",
+        "modo-equipamentos",
+        "painel-equipamentos-custom",
+        "eq-armadura",
+        "eq-escudo",
+        "eq-arma-cc-select",
+        "eq-arma-dist-select",
+        "eq-variado-select",
     ):
         assert id_dom in html_idx
 
@@ -287,6 +294,13 @@ def main() -> None:
     mapa_conceitos_ui = {con["id"]: con for c in opcoes_json["classes"] for con in c["conceitos"]}
     assert set(mapa_conceitos_ui["ladino_duelista_fanfarrao"]["atributo_chave_opcoes"]) == {"des", "car"}
     assert "prioridade_atributos" in mapa_conceitos_ui["guerreiro_colosso_demolidor"]
+    cat_eq = opcoes_json["catalogo_equipamentos"]
+    assert cat_eq["orcamento_inicial_pc"] == 1500
+    assert {w["categoria"] for w in cat_eq["armas_corpo_a_corpo"]} == {"Arma Simples", "Arma Marcial", "Arma Avançada"}
+    assert {w["categoria"] for w in cat_eq["armas_distancia"]} == {"Arma Simples", "Arma Marcial"}
+    ids_var_cat = {it["id"] for it in cat_eq["equipamentos_variados"]}
+    assert "kit_de_aventureiro" in ids_var_cat and "flechas" in ids_var_cat
+    assert "fogo_alquimico" not in ids_var_cat and "bomba_alquimica" not in {w["id"] for w in cat_eq["armas_distancia"]}
     esperado_div_compat = {
         "campeao_cruzado_vingador": 7,
         "campeao_bastiao_impenetravel": 9,
@@ -479,6 +493,61 @@ def main() -> None:
             "classe_id": "mago",
             "conceito_id": "mago_evocador_artilharia",
             "escolhas_atributos": {"livres_nivel_1": ["int", "int", "des", "con"]},
+        },
+    ).status_code == 400
+
+    # Compra manual/híbrida de equipamentos pela API deduzindo de 15 po (1.500 pc)
+    r_eq_manual = client.post(
+        "/api/gerar",
+        json={
+            "ancestralidade_id": "humano",
+            "heranca_id": "heranca_versatil",
+            "classe_id": "guerreiro",
+            "conceito_id": "guerreiro_colosso_demolidor",
+            "escolhas_equipamentos": {
+                "modo": "personalizado",
+                "armadura_id": "cota_de_escamas",          # 400 pc
+                "escudo_id": "escudo_de_aco",               # 200 pc
+                "armas_corpo_a_corpo_ids": ["espada_longa"],  # 100 pc
+                "armas_distancia_ids": [],
+                "equipamentos_variados": [{"id": "kit_de_aventureiro", "quantidade": 1}, {"id": "corda", "quantidade": 2}],  # 70 + 100 pc
+            },
+            "seed": 111,
+        },
+    )
+    assert r_eq_manual.status_code == 200
+    res_eq = r_eq_manual.get_json()
+    verificar_contrato_e_matematica(res_eq, dados)
+    assert res_eq["meta_geracao"]["gasto_pc"] == 870
+    assert res_eq["meta_geracao"]["saldo_pc"] == 630
+    assert res_eq["ficha"]["inventario"]["riqueza"] == {"pc": 0, "pp": 3, "po": 6, "pl": 0}
+    assert res_eq["meta_geracao"]["armadura_equipada"] == "Cota de escamas"
+    assert res_eq["ficha"]["golpes_corpo_a_corpo"][0]["arma"] == "Espada longa"
+    assert res_eq["ficha"]["golpes_a_distancia"][0]["arma"] == ""
+
+    # Estourou orçamento (> 1.500 pc) ou item alquímico bloqueado -> 400
+    assert client.post(
+        "/api/gerar",
+        json={
+            "ancestralidade_id": "humano",
+            "heranca_id": "heranca_versatil",
+            "classe_id": "guerreiro",
+            "conceito_id": "guerreiro_colosso_demolidor",
+            "escolhas_equipamentos": {
+                "armadura_id": "meia_armadura",  # 1800 pc > 1500 pc
+            },
+        },
+    ).status_code == 400
+    assert client.post(
+        "/api/gerar",
+        json={
+            "ancestralidade_id": "humano",
+            "heranca_id": "heranca_versatil",
+            "classe_id": "guerreiro",
+            "conceito_id": "guerreiro_colosso_demolidor",
+            "escolhas_equipamentos": {
+                "equipamentos_variados": ["fogo_alquimico"],
+            },
         },
     ).status_code == 400
 
