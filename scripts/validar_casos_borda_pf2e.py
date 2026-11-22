@@ -602,6 +602,76 @@ def test_exportar_pdf_oficial_4_paginas() -> None:
     assert cl["ficha"]["conjuracao"]["magias"][0]["nome"] in txt_p4
 
 
+def test_escolhas_atributos_manual_procedural_aleatorio() -> None:
+    db = carregar_dados()
+
+    # 1. Compensar defeito racial com o bônus livre manual da ancestralidade (Elfo CON 8 -> 10)
+    elfo_con = gerar_personagem(
+        "elfo", "elfo_artico", "mago", "mago_evocador_artilharia",
+        escolhas_atributos={"ancestralidade_livres": ["con"]}, seed=1, dados=db,
+    )
+    assert elfo_con["meta_geracao"]["escolhas_atributos"]["ancestralidade_livres"] == ["con"]
+    assert elfo_con["meta_geracao"]["historico_abcd"][0]["deltas"].get("con", 0) == 0
+
+    # 2. Biografia mista: livre manual em uma das 2 opções restritas + restrito procedural evita colisão automática
+    est = db.biografias["estudioso"]  # opcoes: ["int", "sab"]
+    r_bio_mix = gerar_personagem(
+        "humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor",
+        biografia_id="estudioso",
+        escolhas_atributos={"biografia_restrito": "procedural", "biografia_livre": "int"},
+        seed=4,
+        dados=db,
+    )
+    esc_m = r_bio_mix["meta_geracao"]["escolhas_atributos"]
+    assert esc_m["biografia_livre"] == "int"
+    assert esc_m["biografia_restrito"] == "sab"
+
+    # 3. 4 bônus livres aleatórios preservam 4 atributos distintos e são determinísticos por seed
+    r_rnd1 = gerar_personagem(
+        "humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor",
+        escolhas_atributos={
+            "ancestralidade_livres": ["aleatorio", "aleatorio"],
+            "biografia_restrito": "aleatorio",
+            "biografia_livre": "aleatorio",
+            "livres_nivel_1": ["aleatorio", "aleatorio", "aleatorio", "aleatorio"],
+        },
+        seed=909,
+        dados=db,
+    )
+    r_rnd2 = gerar_personagem(
+        "humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor",
+        escolhas_atributos={
+            "ancestralidade_livres": ["aleatorio", "aleatorio"],
+            "biografia_restrito": "aleatorio",
+            "biografia_livre": "aleatorio",
+            "livres_nivel_1": ["aleatorio", "aleatorio", "aleatorio", "aleatorio"],
+        },
+        seed=909,
+        dados=db,
+    )
+    assert r_rnd1 == r_rnd2
+    esc_r = r_rnd1["meta_geracao"]["escolhas_atributos"]
+    assert len(set(esc_r["ancestralidade_livres"])) == 2
+    assert esc_r["biografia_restrito"] != esc_r["biografia_livre"]
+    assert len(set(esc_r["livres_nivel_1"])) == 4
+
+    # 4. Validações de erro para combinações ilegais PF2E
+    for esc_inv in (
+        {"ancestralidade_livres": ["for", "for"]},  # Humano duplicado
+        {"biografia_restrito": "for"},              # Fora das opções de Estudioso (int/sab)
+        {"biografia_restrito": "int", "biografia_livre": "int"},
+        {"livres_nivel_1": ["for", "des", "con", "for"]},
+    ):
+        try:
+            gerar_personagem(
+                "humano", "heranca_versatil", "mago", "mago_evocador_artilharia",
+                biografia_id="estudioso", escolhas_atributos=esc_inv, seed=1, dados=db,
+            )
+            raise AssertionError(f"Deveria falhar com ErroValidacao para {esc_inv!r}")
+        except ErroValidacao:
+            pass
+
+
 def main() -> None:
     test_ca_limite_destreza_e_sem_armadura()
     test_penalidade_armadura_barulhenta_flexivel_e_ferro_desimpedido()
@@ -614,6 +684,7 @@ def main() -> None:
     test_revisao_geral_etapa_23()
     test_aleatorio_7_campos_e_bonus_equipamentos()
     test_exportar_pdf_oficial_4_paginas()
+    test_escolhas_atributos_manual_procedural_aleatorio()
     print("SUCESSO TOTAL — Todos os testes de casos de borda PF2E passaram!")
 
 

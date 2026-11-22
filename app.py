@@ -46,6 +46,16 @@ def _gerar_a_partir_payload(payload: dict[str, Any]) -> dict[str, Any]:
         except (TypeError, ValueError) as exc:
             raise ErroValidacao(f"Valor inválido para 'nivel': {nivel_raw!r}.") from exc
 
+    escolhas_atributos: dict[str, Any] = {}
+    bruto_escolhas = payload.get("escolhas_atributos")
+    if bruto_escolhas is not None:
+        if not isinstance(bruto_escolhas, dict):
+            raise ErroValidacao("Campo 'escolhas_atributos' deve ser um objeto JSON.")
+        escolhas_atributos.update(bruto_escolhas)
+    for campo_atb in ("ancestralidade_livres", "biografia_restrito", "biografia_livre", "livres_nivel_1"):
+        if campo_atb in payload and campo_atb not in escolhas_atributos:
+            escolhas_atributos[campo_atb] = payload[campo_atb]
+
     return gerar_personagem(
         ancestralidade_id=str(payload["ancestralidade_id"]).strip(),
         heranca_id=str(payload["heranca_id"]).strip(),
@@ -57,6 +67,7 @@ def _gerar_a_partir_payload(payload: dict[str, Any]) -> dict[str, Any]:
         nome_jogador=str(payload.get("nome_jogador") or ""),
         nivel=nivel,
         seed=payload.get("seed"),
+        escolhas_atributos=escolhas_atributos or None,
     )
 
 

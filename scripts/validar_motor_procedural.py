@@ -240,6 +240,8 @@ def main() -> None:
     html_idx = r_idx.get_data(as_text=True)
     assert "Pathfinder 2" in html_idx
     assert "ficha.css" in html_idx and "app.js" in html_idx
+    for id_dom in ("painel-atributos-abcd", "attr-anc-livre-1", "attr-bio-restrito", "attr-livre-1"):
+        assert id_dom in html_idx
 
     assert client.get("/static/css/ficha.css").status_code == 200
     assert client.get("/static/js/app.js").status_code == 200
@@ -259,6 +261,10 @@ def main() -> None:
     opcoes_json = r_opcoes.get_json()
     assert len(opcoes_json["classes"]) == 12
     assert len(opcoes_json["divindades"]) == 20
+    anc_por_id = {a["id"]: a for a in opcoes_json["ancestralidades"]}
+    assert anc_por_id["humano"]["qtd_melhorias_livres"] == 2 and anc_por_id["humano"]["melhorias_fixas_ids"] == []
+    assert anc_por_id["elfo"]["qtd_melhorias_livres"] == 1 and set(anc_por_id["elfo"]["melhorias_fixas_ids"]) == {"des", "int"}
+    assert all(len(b["melhorias_atributo_ids"]) == 2 for b in opcoes_json["biografias"])
     obrigatorias_ui = {c["id"] for c in opcoes_json["classes"] if c["divindade_obrigatoria"]}
     assert obrigatorias_ui == {"clerigo", "campeao"}
     mapa_conceitos_ui = {con["id"]: con for c in opcoes_json["classes"] for con in c["conceitos"]}
@@ -369,6 +375,78 @@ def main() -> None:
     payload_rand = r_all_rand.get_json()
     verificar_contrato_e_matematica(payload_rand, dados)
     assert "+0 CA" in payload_rand["meta_geracao"]["armadura_equipada_resumo"] or "CA" in payload_rand["meta_geracao"]["armadura_equipada_resumo"]
+
+    # Escolhas manuais e aleatórias de atributos ABCD via API
+    r_atb_manual = client.post(
+        "/api/gerar",
+        json={
+            "ancestralidade_id": "humano",
+            "heranca_id": "heranca_versatil",
+            "biografia_id": "operario",
+            "classe_id": "guerreiro",
+            "conceito_id": "guerreiro_colosso_demolidor",
+            "escolhas_atributos": {
+                "ancestralidade_livres": ["for", "sab"],
+                "biografia_restrito": "con",
+                "biografia_livre": "for",
+                "livres_nivel_1": ["for", "con", "sab", "car"],
+            },
+            "seed": 555,
+        },
+    )
+    assert r_atb_manual.status_code == 200
+    res_atb_m = r_atb_manual.get_json()
+    verificar_contrato_e_matematica(res_atb_m, dados)
+    assert res_atb_m["meta_geracao"]["escolhas_atributos"]["ancestralidade_livres"] == ["for", "sab"]
+    assert res_atb_m["meta_geracao"]["escolhas_atributos"]["biografia_restrito"] == "con"
+    assert res_atb_m["meta_geracao"]["escolhas_atributos"]["biografia_livre"] == "for"
+    assert res_atb_m["meta_geracao"]["escolhas_atributos"]["livres_nivel_1"] == ["for", "con", "sab", "car"]
+    assert res_atb_m["ficha"]["atributos"]["for"]["valor"] == 18
+    assert res_atb_m["ficha"]["atributos"]["sab"]["valor"] == 14
+    assert res_atb_m["ficha"]["atributos"]["car"]["valor"] == 12
+
+    r_atb_rand = client.post(
+        "/api/gerar",
+        json={
+            "ancestralidade_id": "elfo",
+            "heranca_id": "elfo_vidente",
+            "biografia_id": "estudioso",
+            "classe_id": "mago",
+            "conceito_id": "mago_evocador_artilharia",
+            "escolhas_atributos": {
+                "ancestralidade_livres": ["aleatorio"],
+                "biografia_restrito": "aleatorio",
+                "biografia_livre": "aleatorio",
+                "livres_nivel_1": ["aleatorio", "aleatorio", "aleatorio", "aleatorio"],
+            },
+            "seed": 777,
+        },
+    )
+    assert r_atb_rand.status_code == 200
+    verificar_contrato_e_matematica(r_atb_rand.get_json(), dados)
+
+    assert client.post(
+        "/api/gerar",
+        json={
+            "ancestralidade_id": "elfo",
+            "heranca_id": "elfo_vidente",
+            "biografia_id": "estudioso",
+            "classe_id": "mago",
+            "conceito_id": "mago_evocador_artilharia",
+            "escolhas_atributos": {"ancestralidade_livres": ["des"]},
+        },
+    ).status_code == 400
+    assert client.post(
+        "/api/gerar",
+        json={
+            "ancestralidade_id": "humano",
+            "heranca_id": "heranca_versatil",
+            "biografia_id": "estudioso",
+            "classe_id": "mago",
+            "conceito_id": "mago_evocador_artilharia",
+            "escolhas_atributos": {"livres_nivel_1": ["int", "int", "des", "con"]},
+        },
+    ).status_code == 400
 
     # Erros controlados (400)
     assert client.post("/api/gerar", json={"ancestralidade_id": "humano"}).status_code == 400

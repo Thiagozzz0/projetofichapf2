@@ -2,9 +2,103 @@
 
 from __future__ import annotations
 
+import random
 from typing import Any
 
-from .util import ATRIBUTOS, NOME_ATRIBUTO, atributo_id, modificador
+from .util import ATRIBUTOS, NOME_ATRIBUTO, atributo_id, modificador, normalizar
+
+
+_MODOS_PROCEDURAIS = frozenset({"", "procedural", "auto", "automatico", "automatica", "conceito"})
+_MODOS_ALEATORIOS = frozenset({"aleatorio", "aleatoria", "random"})
+
+
+def _normalizar_escolha_atributo(valor: Any) -> str:
+    """Converte entrada de melhoria de atributo em 'procedural', 'aleatorio' ou ID canônico."""
+    if valor is None:
+        return "procedural"
+    bruto = str(valor).strip()
+    norm = normalizar(bruto)
+    if norm in _MODOS_PROCEDURAIS:
+        return "procedural"
+    if norm in _MODOS_ALEATORIOS:
+        return "aleatorio"
+    aid = atributo_id(bruto)
+    if aid:
+        return aid
+    raise ValueError(f"Atributo ou modo inválido para melhoria: {valor!r}.")
+
+
+def _resolver_lista_modos(bruto: Any, quantidade: int) -> list[str]:
+    """Normaliza uma lista (ou valor único) de escolhas de melhoria para tamanho fixo."""
+    if quantidade <= 0:
+        return []
+    if bruto is None:
+        return ["procedural"] * quantidade
+    itens = [bruto] if isinstance(bruto, str) else list(bruto)
+    modos = [_normalizar_escolha_atributo(x) for x in itens[:quantidade]]
+    while len(modos) < quantidade:
+        modos.append("procedural")
+    return modos
+
+
+def _aplicar_slots_livres(
+    modos: list[str],
+    valores: dict[str, int],
+    ja_usados: set[str],
+    deltas: dict[str, int],
+    prioridade: list[str],
+    rng_efetivo: random.Random,
+    teto: int | None,
+    nome_etapa: str,
+    *,
+    fixos_bloqueados: set[str] | None = None,
+) -> list[str]:
+    """Aplica slots livres em duas passadas: manuais primeiro, depois procedurais/aleatórios."""
+    escolhidos = [""] * len(modos)
+
+    # 1ª passada: escolhas manuais fixadas pelo jogador
+    for idx, modo in enumerate(modos):
+        if modo not in ATRIBUTOS:
+            continue
+        if fixos_bloqueados and modo in fixos_bloqueados:
+            raise ValueError(
+                f"A melhoria livre de {nome_etapa} não pode ser aplicada em "
+                f"{NOME_ATRIBUTO[modo]}, pois esta origem já concede bônus fixo nele."
+            )
+        if modo in ja_usados:
+            raise ValueError(
+                f"As melhorias de {nome_etapa} devem ser aplicadas em atributos distintos "
+                f"(repetido: {NOME_ATRIBUTO[modo]})."
+            )
+        delta = _aplicar_melhoria(valores, modo, teto=teto)
+        ja_usados.add(modo)
+        deltas[modo] = deltas.get(modo, 0) + delta
+        escolhidos[idx] = modo
+
+    # 2ª passada: procedurais (prioridade do conceito) e depois aleatórios
+    for modo_alvo in ("procedural", "aleatorio"):
+        for idx, modo in enumerate(modos):
+            if modo != modo_alvo or escolhidos[idx]:
+                continue
+            if modo_alvo == "procedural":
+                candidatos = [
+                    a for a in prioridade if a not in ja_usados and (teto is None or valores[a] < teto)
+                ]
+                escolhido = _melhor_por_prioridade(candidatos or prioridade, prioridade, excluir=ja_usados)
+            else:
+                candidatos = [
+                    a for a in ATRIBUTOS if a not in ja_usados and (teto is None or valores[a] < teto)
+                ]
+                if not candidatos:
+                    candidatos = [a for a in ATRIBUTOS if a not in ja_usados]
+                escolhido = rng_efetivo.choice(candidatos)
+
+            delta = _aplicar_melhoria(valores, escolhido, teto=teto)
+            ja_usados.add(escolhido)
+            deltas[escolhido] = deltas.get(escolhido, 0) + delta
+            escolhidos[idx] = escolhido
+
+    return escolhidos
 
 
 def _aplicar_melhoria(valores: dict[str, int], attr: str, teto: int | None = None) -> int:
@@ -59,18 +153,25 @@ def calcular_atributos(
     subclasse: dict[str, Any] | None,
     conceito: dict[str, Any],
     nivel: int = 1,
+    *,
+    escolhas_atributos: dict[str, Any] | None = None,
+    rng: random.Random | None = None,
 ) -> dict[str, Any]:
-    """Executa o fluxo ABCD do 1º nível guiado pela prioridade de atributos do conceito.
+    """Executa o fluxo ABCD do 1º nível guiado pelo conceito ou escolhas do jogador.
 
-    Estrutura preparada para futura extensão de melhorias a cada 5 níveis.
+    Permite escolher manualmente, deixar no modo procedural (recomendado pelo conceito)
+    ou sortear aleatoriamente as melhorias livres da Ancestralidade, da Biografia e as
+    4 melhorias livres de 1º nível. Estrutura preparada para melhorias a cada 5 níveis.
     """
+    escolhas = escolhas_atributos or {}
+    rng_efetivo = rng or random.Random()
     prioridade = list(conceito["prioridade_atributos"])
     teto_n1 = 18 if nivel == 1 else None
     valores: dict[str, int] = {attr: 10 for attr in ATRIBUTOS}
     historico_abcd: list[dict[str, Any]] = []
 
     # ------------------------------------------------------------------
-    # Etapa A — Ancestralidade (melhorias fixas, defeito, melhoria livre)
+    # Etapa A — Ancestralidade (melhorias fixas, defeito, melhorias livres)
     # ------------------------------------------------------------------
     melhorados_a: set[str] = set()
     deltas_a: dict[str, int] = {}
@@ -85,17 +186,26 @@ def calcular_atributos(
             melhorados_a.add(aid)
             deltas_a[aid] = deltas_a.get(aid, 0) + delta
 
+    fixos_a = set(melhorados_a)
+
     defeito_nome = ancestralidade.get("defeito_atributo")
     defeito_id = atributo_id(defeito_nome) if defeito_nome else None
     if defeito_id:
         valores[defeito_id] -= 2
         deltas_a[defeito_id] = deltas_a.get(defeito_id, 0) - 2
 
-    for _ in range(livres_a):
-        escolhido = _melhor_por_prioridade(prioridade, prioridade, excluir=melhorados_a)
-        delta = _aplicar_melhoria(valores, escolhido, teto=teto_n1)
-        melhorados_a.add(escolhido)
-        deltas_a[escolhido] = deltas_a.get(escolhido, 0) + delta
+    modos_a = _resolver_lista_modos(escolhas.get("ancestralidade_livres"), livres_a)
+    escolhidos_a_livres = _aplicar_slots_livres(
+        modos_a,
+        valores,
+        melhorados_a,
+        deltas_a,
+        prioridade,
+        rng_efetivo,
+        teto_n1,
+        f"Ancestralidade ({ancestralidade['nome']})",
+        fixos_bloqueados=fixos_a,
+    )
 
     historico_abcd.append(
         {
@@ -116,17 +226,43 @@ def calcular_atributos(
         for opt in biografia["melhorias_atributo_opcoes"]
         if (aid := atributo_id(opt)) is not None
     ]
-    escolhido_b_restrito = _melhor_por_prioridade(opcoes_bio, prioridade)
+    modo_b_restrito = _normalizar_escolha_atributo(escolhas.get("biografia_restrito"))
+    modo_b_livre = _normalizar_escolha_atributo(escolhas.get("biografia_livre"))
+
+    if modo_b_restrito in ATRIBUTOS:
+        if modo_b_restrito not in opcoes_bio:
+            nomes_op = ", ".join(NOME_ATRIBUTO[o] for o in opcoes_bio)
+            raise ValueError(
+                f"A biografia '{biografia['nome']}' permite no bônus restrito apenas: {nomes_op}."
+            )
+        if biografia.get("melhoria_livre", True) and modo_b_livre == modo_b_restrito:
+            raise ValueError(
+                f"O bônus livre da biografia não pode ser aplicado no mesmo atributo do bônus restrito "
+                f"({NOME_ATRIBUTO[modo_b_restrito]})."
+            )
+        escolhido_b_restrito = modo_b_restrito
+    elif modo_b_restrito == "aleatorio":
+        candidatos_res = [o for o in opcoes_bio if o != modo_b_livre] or list(opcoes_bio)
+        escolhido_b_restrito = rng_efetivo.choice(candidatos_res)
+    else:
+        candidatos_res = [o for o in opcoes_bio if o != modo_b_livre] or list(opcoes_bio)
+        escolhido_b_restrito = _melhor_por_prioridade(candidatos_res, prioridade)
+
     deltas_b[escolhido_b_restrito] = _aplicar_melhoria(valores, escolhido_b_restrito, teto=teto_n1)
     melhorados_b.add(escolhido_b_restrito)
 
+    escolhido_b_livre: str | None = None
     if biografia.get("melhoria_livre", True):
-        candidatos_livres_b = [
-            a for a in prioridade if a not in melhorados_b and (teto_n1 is None or valores[a] < teto_n1)
-        ]
-        escolhido_b_livre = _melhor_por_prioridade(candidatos_livres_b or prioridade, prioridade, excluir=melhorados_b)
-        deltas_b[escolhido_b_livre] = _aplicar_melhoria(valores, escolhido_b_livre, teto=teto_n1)
-        melhorados_b.add(escolhido_b_livre)
+        escolhido_b_livre = _aplicar_slots_livres(
+            [modo_b_livre],
+            valores,
+            melhorados_b,
+            deltas_b,
+            prioridade,
+            rng_efetivo,
+            teto_n1,
+            f"Biografia ({biografia['nome']})",
+        )[0]
 
     historico_abcd.append(
         {
@@ -156,18 +292,17 @@ def calcular_atributos(
     # ------------------------------------------------------------------
     melhorados_d: set[str] = set()
     deltas_d: dict[str, int] = {}
-
-    for _ in range(4):
-        candidatos_d = [
-            a
-            for a in prioridade
-            if a not in melhorados_d and (teto_n1 is None or valores[a] < teto_n1)
-        ]
-        if not candidatos_d:
-            candidatos_d = [a for a in prioridade if a not in melhorados_d]
-        escolhido_d = candidatos_d[0]
-        deltas_d[escolhido_d] = _aplicar_melhoria(valores, escolhido_d, teto=teto_n1)
-        melhorados_d.add(escolhido_d)
+    modos_d = _resolver_lista_modos(escolhas.get("livres_nivel_1"), 4)
+    escolhidos_d = _aplicar_slots_livres(
+        modos_d,
+        valores,
+        melhorados_d,
+        deltas_d,
+        prioridade,
+        rng_efetivo,
+        teto_n1,
+        "4 Melhorias Livres (1º Nível)",
+    )
 
     historico_abcd.append(
         {
@@ -183,4 +318,11 @@ def calcular_atributos(
         "modificadores": modificadores,
         "atributo_chave": attr_chave,
         "historico_abcd": historico_abcd,
+        "escolhas_aplicadas": {
+            "ancestralidade_livres": escolhidos_a_livres,
+            "biografia_restrito": escolhido_b_restrito,
+            "biografia_livre": escolhido_b_livre,
+            "classe_chave": attr_chave,
+            "livres_nivel_1": escolhidos_d,
+        },
     }

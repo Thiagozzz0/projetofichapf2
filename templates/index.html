@@ -71,6 +71,69 @@
           <div id="resumo-conceito" class="card-resumo"></div>
         </div>
 
+        <details open id="painel-atributos-abcd" class="box-atributos-config">
+          <summary>
+            <span>Personalização dos Bônus de Atributos (Opcional — Sistema ABCD)</span>
+          </summary>
+          <div class="box-atb-topo">
+            <small id="nota-atb-abcd" class="nota-campo">
+              Por padrão segue o melhor caminho do conceito (Procedural). Você também pode escolher manualmente ou usar Aleatório para acelerar.
+            </small>
+            <div class="box-atb-botoes">
+              <button type="button" id="btn-atb-procedural" class="btn btn-sutil">Todos Procedurais</button>
+              <button type="button" id="btn-atb-aleatorio" class="btn btn-sutil">Todos Aleatórios</button>
+            </div>
+          </div>
+
+          <div class="grid-atributos-config">
+            <div class="subbloco-atb">
+              <div class="subbloco-atb-titulo">A — Bônus Livres da Ancestralidade</div>
+              <div class="campo-grupo">
+                <label for="attr-anc-livre-1">Bônus Livre da Raça</label>
+                <select id="attr-anc-livre-1"></select>
+              </div>
+              <div class="campo-grupo" id="grupo-attr-anc-livre-2" hidden>
+                <label for="attr-anc-livre-2">2º Bônus Livre (Humano)</label>
+                <select id="attr-anc-livre-2"></select>
+              </div>
+            </div>
+
+            <div class="subbloco-atb">
+              <div class="subbloco-atb-titulo">B — Bônus da Biografia</div>
+              <div class="campo-grupo">
+                <label for="attr-bio-restrito">Bônus Restrito (2 Opções)</label>
+                <select id="attr-bio-restrito"></select>
+              </div>
+              <div class="campo-grupo">
+                <label for="attr-bio-livre">Bônus Livre da Biografia</label>
+                <select id="attr-bio-livre"></select>
+              </div>
+            </div>
+
+            <div class="subbloco-atb subbloco-atb-wide">
+              <div class="subbloco-atb-titulo">D — 4 Bônus Livres de 1º Nível (4 Atributos Distintos)</div>
+              <div class="grid-atributos-livres">
+                <div class="campo-grupo">
+                  <label for="attr-livre-1">1º Bônus Livre</label>
+                  <select id="attr-livre-1"></select>
+                </div>
+                <div class="campo-grupo">
+                  <label for="attr-livre-2">2º Bônus Livre</label>
+                  <select id="attr-livre-2"></select>
+                </div>
+                <div class="campo-grupo">
+                  <label for="attr-livre-3">3º Bônus Livre</label>
+                  <select id="attr-livre-3"></select>
+                </div>
+                <div class="campo-grupo">
+                  <label for="attr-livre-4">4º Bônus Livre</label>
+                  <select id="attr-livre-4"></select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
         <div class="barra-acoes">
           <button type="submit" class="btn btn-primario">Gerar Ficha</button>
           <button type="button" id="btn-sortear" class="btn btn-secundario">Sortear Variação</button>

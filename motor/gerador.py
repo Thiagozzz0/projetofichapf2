@@ -14,7 +14,7 @@ from .equipamentos import calcular_proficiencias_combate, comprar_equipamentos
 from .magias import gerar_conjuracao, preencher_bloco_conjuracao_ficha
 from .regras_atributos import calcular_atributos
 from .talentos import selecionar_talentos
-from .util import formatar_preco, normalizar
+from .util import atributo_id, formatar_preco, normalizar
 
 
 class ErroValidacao(ValueError):
@@ -321,7 +321,10 @@ def listar_opcoes_criacao(dados: BaseDados | None = None) -> dict[str, Any]:
             "tamanho": a["tamanho"],
             "velocidade_m": a["velocidade_m"],
             "melhorias_atributo": a["melhorias_atributo"],
+            "melhorias_fixas_ids": [aid for m in a["melhorias_atributo"] if (aid := atributo_id(m)) is not None],
+            "qtd_melhorias_livres": sum(1 for m in a["melhorias_atributo"] if atributo_id(m) is None),
             "defeito_atributo": a.get("defeito_atributo"),
+            "defeito_atributo_id": atributo_id(a["defeito_atributo"]) if a.get("defeito_atributo") else None,
             "herancas": [{"id": h["id"], "nome": h["nome"], "descricao": h["descricao"]} for h in a["herancas"]],
         }
         for a in db.ancestralidades.values()
@@ -332,6 +335,10 @@ def listar_opcoes_criacao(dados: BaseDados | None = None) -> dict[str, Any]:
             "id": b["id"],
             "nome": b["nome"],
             "melhorias_atributo_opcoes": b["melhorias_atributo_opcoes"],
+            "melhorias_atributo_ids": [
+                aid for opt in b["melhorias_atributo_opcoes"] if (aid := atributo_id(opt)) is not None
+            ],
+            "melhoria_livre": b.get("melhoria_livre", True),
             "pericia_treinada_opcoes": b["pericia_treinada_opcoes"],
             "saber_treinado": b["saber_treinado"],
             "talento_pericia": b["talento_pericia"],
@@ -403,6 +410,7 @@ def gerar_personagem(
     nome_jogador: str = "",
     nivel: int | str = 1,
     seed: int | str | None = None,
+    escolhas_atributos: dict[str, Any] | None = None,
     dados: BaseDados | None = None,
 ) -> dict[str, Any]:
     """Gera uma ficha completa e válida de Pathfinder 2E guiada pelo conceito escolhido."""
@@ -557,10 +565,18 @@ def gerar_personagem(
         biografia, biografia_procedural = selecionar_biografia(
             db, conceito, ancestralidade, biografia_id=biografia_id, rng=rng
         )
+        atributos_res = calcular_atributos(
+            ancestralidade,
+            biografia,
+            classe,
+            subclasse,
+            conceito,
+            nivel=nivel,
+            escolhas_atributos=escolhas_atributos,
+            rng=rng,
+        )
     except ValueError as exc:
         raise ErroValidacao(str(exc)) from exc
-
-    atributos_res = calcular_atributos(ancestralidade, biografia, classe, subclasse, conceito, nivel=nivel)
     mod_int = atributos_res["modificadores"]["int"]
     mod_for = atributos_res["modificadores"]["for"]
 
@@ -789,6 +805,7 @@ def gerar_personagem(
             "limite_morrendo": notas_combate["limite_morrendo"],
             "cd_recuperacao_base": notas_combate["cd_recuperacao_base"],
             "atributo_chave": atributos_res["atributo_chave"],
+            "escolhas_atributos": atributos_res["escolhas_aplicadas"],
             "historico_abcd": atributos_res["historico_abcd"],
             "orcamento_inicial": "15 po",
             "gasto_equipamentos": formatar_preco(equip_res["gasto_pc"]),

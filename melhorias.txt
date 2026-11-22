@@ -1,3 +1,5 @@
 [Concluído - Etapa 24] Colocar na frente das armaduras os bonus, tanto para descrição na CA como nos equipamentos. Isso para todos os itens que tem bonus e quantidade.
 
 [Concluído - Etapa 25] Gerar o pdf igual o do livro (ref/Sheet Update.pdf + dados/estrutura_ficha.json).
+
+[Concluído - Etapa 26] Colocar a opção de escolher o bonus livre da raça após escolher ela, e também para biografia, e os 4 livres. A ideia é ter essa opção mas também a procedural/aleatória para antecipar ou acelerar caso o player queira.

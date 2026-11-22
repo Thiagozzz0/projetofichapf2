@@ -62,6 +62,165 @@
     el.className = `mensagem-status ${tipo}`.trim();
   }
 
+  const ORDEM_ATRIBUTOS = ["for", "des", "con", "int", "sab", "car"];
+  const IDS_LIVRES_N1 = ["attr-livre-1", "attr-livre-2", "attr-livre-3", "attr-livre-4"];
+
+  function preencherSelectAtributo(sel, listaIds, { textoProcedural, textoAleatorio, rotuloExtras = {}, preservar = true } = {}) {
+    if (!sel) return;
+    const anterior = preservar ? sel.value : "procedural";
+    sel.innerHTML = "";
+
+    const optProc = document.createElement("option");
+    optProc.value = "procedural";
+    optProc.textContent = textoProcedural || "Procedural (melhor p/ conceito)";
+    sel.appendChild(optProc);
+
+    const optRand = document.createElement("option");
+    optRand.value = "aleatorio";
+    optRand.textContent = textoAleatorio || "Aleatório (sortear)";
+    sel.appendChild(optRand);
+
+    listaIds.forEach((aid) => {
+      const info = NOMES_ATRIBUTOS[aid];
+      if (!info) return;
+      const opt = document.createElement("option");
+      opt.value = aid;
+      const extra = rotuloExtras[aid] ? ` (${rotuloExtras[aid]})` : "";
+      opt.textContent = `${info[1]} (${info[0]})${extra}`;
+      sel.appendChild(opt);
+    });
+
+    const validos = Array.from(sel.options).map((o) => o.value);
+    sel.value = validos.includes(anterior) ? anterior : "procedural";
+  }
+
+  function atualizarSeletoresAtributosAncestralidade() {
+    if (!OPCOES) return;
+    const ancId = document.getElementById("ancestralidade").value;
+    const anc = OPCOES.ancestralidades.find((a) => a.id === ancId);
+    const sel1 = document.getElementById("attr-anc-livre-1");
+    const sel2 = document.getElementById("attr-anc-livre-2");
+    const grp2 = document.getElementById("grupo-attr-anc-livre-2");
+
+    if (!anc) {
+      preencherSelectAtributo(sel1, [], {
+        textoProcedural: "Procedural (conforme ancestralidade sorteada)",
+        textoAleatorio: "Aleatório (entre opções válidas da raça)",
+        preservar: true,
+      });
+      if (grp2) grp2.hidden = true;
+      preencherSelectAtributo(sel2, [], { preservar: false });
+      return;
+    }
+
+    const fixos = new Set(anc.melhorias_fixas_ids || []);
+    const elegiveis = ORDEM_ATRIBUTOS.filter((aid) => !fixos.has(aid));
+    const extras = {};
+    if (anc.defeito_atributo_id && !fixos.has(anc.defeito_atributo_id)) {
+      extras[anc.defeito_atributo_id] = "compensa defeito racial";
+    }
+
+    preencherSelectAtributo(sel1, elegiveis, {
+      textoProcedural: "Procedural (melhor p/ conceito)",
+      textoAleatorio: "Aleatório (sortear livre)",
+      rotuloExtras: extras,
+      preservar: true,
+    });
+
+    const temDois = Number(anc.qtd_melhorias_livres || 1) >= 2;
+    if (grp2) grp2.hidden = !temDois;
+    if (temDois) {
+      preencherSelectAtributo(sel2, elegiveis, {
+        textoProcedural: "Procedural (2º melhor p/ conceito)",
+        textoAleatorio: "Aleatório (sortear 2º livre)",
+        rotuloExtras: extras,
+        preservar: true,
+      });
+    } else {
+      preencherSelectAtributo(sel2, [], { preservar: false });
+    }
+    sincronizarExclusaoAtributos();
+  }
+
+  function atualizarSeletoresAtributosBiografia() {
+    if (!OPCOES) return;
+    const bioId = document.getElementById("biografia").value;
+    const bio = OPCOES.biografias.find((b) => b.id === bioId);
+    const selRes = document.getElementById("attr-bio-restrito");
+    const selLiv = document.getElementById("attr-bio-livre");
+
+    if (!bio) {
+      preencherSelectAtributo(selRes, [], {
+        textoProcedural: "Procedural (melhor da biografia sorteada)",
+        textoAleatorio: "Aleatório (dentre as 2 opções da biografia)",
+        preservar: true,
+      });
+      preencherSelectAtributo(selLiv, ORDEM_ATRIBUTOS, {
+        textoProcedural: "Procedural (melhor p/ conceito)",
+        textoAleatorio: "Aleatório (sortear livre)",
+        preservar: true,
+      });
+    } else {
+      const idsBio = bio.melhorias_atributo_ids || [];
+      preencherSelectAtributo(selRes, idsBio, {
+        textoProcedural: "Procedural (melhor entre as 2 opções)",
+        textoAleatorio: "Aleatório (sortear entre as 2 opções)",
+        preservar: true,
+      });
+      preencherSelectAtributo(selLiv, ORDEM_ATRIBUTOS, {
+        textoProcedural: "Procedural (melhor p/ conceito)",
+        textoAleatorio: "Aleatório (sortear livre)",
+        preservar: true,
+      });
+    }
+    sincronizarExclusaoAtributos();
+  }
+
+  function _sincronizarGrupoSelects(selects) {
+    selects.forEach((sel, idx) => {
+      if (!sel) return;
+      const usadosOutros = new Set(
+        selects
+          .filter((outro, oIdx) => outro && oIdx !== idx && ORDEM_ATRIBUTOS.includes(outro.value))
+          .map((outro) => outro.value)
+      );
+      Array.from(sel.options).forEach((opt) => {
+        if (ORDEM_ATRIBUTOS.includes(opt.value)) {
+          opt.disabled = usadosOutros.has(opt.value);
+        }
+      });
+      if (ORDEM_ATRIBUTOS.includes(sel.value) && usadosOutros.has(sel.value)) {
+        sel.value = "procedural";
+      }
+    });
+  }
+
+  function sincronizarExclusaoAtributos() {
+    const grp2 = document.getElementById("grupo-attr-anc-livre-2");
+    if (grp2 && !grp2.hidden) {
+      _sincronizarGrupoSelects([
+        document.getElementById("attr-anc-livre-1"),
+        document.getElementById("attr-anc-livre-2"),
+      ]);
+    }
+    _sincronizarGrupoSelects([
+      document.getElementById("attr-bio-restrito"),
+      document.getElementById("attr-bio-livre"),
+    ]);
+    _sincronizarGrupoSelects(IDS_LIVRES_N1.map((id) => document.getElementById(id)));
+  }
+
+  function definirModoTodosAtributos(modo) {
+    const ids = ["attr-anc-livre-1", "attr-anc-livre-2", "attr-bio-restrito", "attr-bio-livre", ...IDS_LIVRES_N1];
+    ids.forEach((id) => {
+      const sel = document.getElementById(id);
+      if (!sel) return;
+      const validos = Array.from(sel.options).map((o) => o.value);
+      sel.value = validos.includes(modo) ? modo : "procedural";
+    });
+    sincronizarExclusaoAtributos();
+  }
+
   function atualizarHerancas() {
     const ancId = document.getElementById("ancestralidade").value;
     const anc = OPCOES.ancestralidades.find((a) => a.id === ancId);
@@ -81,6 +240,7 @@
     });
     sel.value = anc && anc.herancas.length ? anc.herancas[0].id : "aleatorio";
     atualizarResumoAncestralidade();
+    atualizarSeletoresAtributosAncestralidade();
   }
 
   function atualizarResumoAncestralidade() {
@@ -380,15 +540,33 @@
 
       selAnc.addEventListener("change", atualizarHerancas);
       document.getElementById("heranca").addEventListener("change", atualizarResumoAncestralidade);
-      selBio.addEventListener("change", atualizarResumoBiografia);
+      selBio.addEventListener("change", () => {
+        atualizarResumoBiografia();
+        atualizarSeletoresAtributosBiografia();
+      });
       selCls.addEventListener("change", atualizarConceitos);
       document.getElementById("conceito").addEventListener("change", () => {
         atualizarResumoConceito();
         atualizarDivindades();
       });
 
+      IDS_LIVRES_N1.forEach((id) => {
+        preencherSelectAtributo(document.getElementById(id), ORDEM_ATRIBUTOS, {
+          textoProcedural: "Procedural (melhor p/ conceito)",
+          textoAleatorio: "Aleatório (sortear distinto)",
+          preservar: false,
+        });
+      });
+      ["attr-anc-livre-1", "attr-anc-livre-2", "attr-bio-restrito", "attr-bio-livre", ...IDS_LIVRES_N1].forEach(
+        (id) => {
+          const el = document.getElementById(id);
+          if (el) el.addEventListener("change", sincronizarExclusaoAtributos);
+        }
+      );
+
       atualizarHerancas();
       atualizarResumoBiografia();
+      atualizarSeletoresAtributosBiografia();
       atualizarConceitos();
     } catch (err) {
       setStatus(`Erro ao carregar opções: ${err.message}`, "erro");
@@ -795,8 +973,15 @@
     const seedInput = document.getElementById("seed");
     const divSelect = document.getElementById("divindade");
     const nivelVal = document.getElementById("nivel").value;
+    const ancId = document.getElementById("ancestralidade").value;
+    const ancObj = OPCOES ? OPCOES.ancestralidades.find((a) => a.id === ancId) : null;
+    const ancLivres = [document.getElementById("attr-anc-livre-1")?.value || "procedural"];
+    if (ancObj && Number(ancObj.qtd_melhorias_livres || 1) >= 2) {
+      ancLivres.push(document.getElementById("attr-anc-livre-2")?.value || "procedural");
+    }
+
     const payload = {
-      ancestralidade_id: document.getElementById("ancestralidade").value,
+      ancestralidade_id: ancId,
       heranca_id: document.getElementById("heranca").value,
       biografia_id: document.getElementById("biografia").value,
       divindade_id: divSelect ? divSelect.value : "",
@@ -806,6 +991,12 @@
       nome_personagem: document.getElementById("nome").value,
       nome_jogador: document.getElementById("jogador").value,
       seed: forcarNovaSeed ? "" : seedInput.value,
+      escolhas_atributos: {
+        ancestralidade_livres: ancLivres,
+        biografia_restrito: document.getElementById("attr-bio-restrito")?.value || "procedural",
+        biografia_livre: document.getElementById("attr-bio-livre")?.value || "procedural",
+        livres_nivel_1: IDS_LIVRES_N1.map((id) => document.getElementById(id)?.value || "procedural"),
+      },
     };
 
     try {
@@ -880,11 +1071,22 @@
     document.getElementById("biografia").value = "procedural";
     document.getElementById("nome").value = "";
     document.getElementById("seed").value = "";
+    definirModoTodosAtributos("procedural");
     atualizarResumoAncestralidade();
+    atualizarSeletoresAtributosAncestralidade();
     atualizarResumoBiografia();
+    atualizarSeletoresAtributosBiografia();
     atualizarResumoConceito();
     gerarFichaAtual(true);
   }
+
+  document.getElementById("btn-atb-procedural").addEventListener("click", () => {
+    definirModoTodosAtributos("procedural");
+  });
+
+  document.getElementById("btn-atb-aleatorio").addEventListener("click", () => {
+    definirModoTodosAtributos("aleatorio");
+  });
 
   document.getElementById("form-gerador").addEventListener("submit", (e) => {
     e.preventDefault();

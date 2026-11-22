@@ -14,8 +14,8 @@ O sistema combina escolhas principais do jogador com automação procedural guia
    - O jogador pode escolher manualmente uma biografia ou deixar o sistema gerar uma opção condizente com a classe e o conceito do personagem.
 3. **Classe e Subclasse / Conceito ("Norte")** *(Escolha do usuário)*
    - O jogador escolhe uma das 12 classes básicas e um conceito de build/atuação (ex.: *Guerreiro → Combatente de 2 Espadas*, *Guerreiro → Arqueiro*, *Guerreiro → Escudeiro*, etc.).
-4. **Atributos e Melhorias Livres (ABCD)** *(Cálculo Procedural)*
-   - Aplica base 10 + Ancestralidade (**A**) + Biografia (**B**) + Classe (**C**) + 4 melhorias livres (**D**), alocando as melhorias livres de forma crível e otimizada para o conceito escolhido.
+4. **Atributos e Melhorias Livres (ABCD)** *(Manual, Aleatório ou Procedural)*
+   - Aplica base 10 + Ancestralidade (**A**) + Biografia (**B**) + Classe (**C**) + 4 melhorias livres (**D**), permitindo escolher manualmente cada bônus livre (Ancestralidade, Biografia e os 4 de 1º nível), sorteá-los aleatoriamente ou deixá-los no modo procedural guiado pelo conceito.
 5. **Perícias e Talentos** *(Geração Procedural)*
    - Seleciona perícias treinadas e talentos (**Ancestralidade, Classe, Perícia e Gerais**) respeitando pré-requisitos e em sinergia com o conceito.
 6. **Equipamentos e Magias** *(Geração Procedural)*
