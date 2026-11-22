@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gerador Procedural PF2E — Ficha Oficial</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}?v=35">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}?v=37">
 </head>
 <body>
   <div class="app-container">
@@ -171,6 +171,89 @@
 
               <div class="etapa-rodape">
                 <button type="button" class="btn btn-sutil" data-etapa-acao="fechar">Recolher Criação Inicial</button>
+                <button type="button" class="btn btn-secundario" data-etapa-ir="pericias">Avançar para Perícias →</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="etapa-card" id="etapa-pericias" data-etapa="pericias">
+            <button type="button" class="etapa-header" data-etapa-toggle="pericias" aria-expanded="false" aria-controls="corpo-etapa-pericias">
+              <span class="etapa-header-esq">
+                <span class="etapa-num">2</span>
+                <span>
+                  <span class="etapa-titulo">Perícias</span>
+                  <span class="etapa-subtitulo">Treinamentos de Biografia, Classe, Subclasse, Herança e Inteligência</span>
+                </span>
+              </span>
+              <span class="etapa-header-dir">
+                <span id="resumo-etapa-pericias" class="etapa-resumo-pill">Procedural</span>
+                <span class="etapa-seta" aria-hidden="true">▾</span>
+              </span>
+            </button>
+            <div id="corpo-etapa-pericias" class="etapa-corpo oculto">
+              <div class="campo-grupo subgrupo-atb-etapa-d" id="grupo-pericias">
+                <div class="etapa-d-topo">
+                  <div>
+                    <label for="modo-pericias" class="etapa-d-titulo">E — Perícias Treinadas (1º Nível)</label>
+                    <small class="nota-campo">Deixe em Procedural (guiado pelo conceito) ou escolha manualmente suas perícias treinadas respeitando o limite exato de vagas da sua classe, raça, biografia e Inteligência.</small>
+                  </div>
+                </div>
+                <select id="modo-pericias" name="modo_pericias">
+                  <option value="procedural" selected>Procedural (perícias escolhidas automaticamente pelo conceito)</option>
+                  <option value="personalizado">Personalizar Perícias (escolher manualmente dentro do limite de vagas)</option>
+                </select>
+
+                <div id="painel-pericias-custom" class="painel-pericias-custom oculto">
+                  <div class="barra-orcamento-eq">
+                    <div class="orc-metricas">
+                      <span>Vagas Livres: <strong id="per-resumo-vagas" class="saldo-ok">0 / 0 selecionadas</strong></span>
+                      <span id="per-detalhe-formula" class="per-formula-txt"></span>
+                    </div>
+                    <button type="button" id="btn-per-reset-procedural" class="btn btn-sutil">Voltar Tudo p/ Procedural</button>
+                  </div>
+                  <small id="per-nota-geral" class="nota-campo">Perícias já concedidas por Classe, Subclasse, Biografia ou Divindade ficam travadas como automáticas. Sobreposições geram +1 vaga livre automaticamente (regra oficial PF2E). Vagas não marcadas serão completadas pelo modo procedural.</small>
+
+                  <div id="grid-pericias-opcoes" class="grid-pericias-opcoes">
+                    <div class="card-tal-cat oculto" id="card-per-bio-opcao">
+                      <div class="card-tal-topo">
+                        <label for="per-bio-opcao">Escolha da Biografia</label>
+                        <span class="badge-tal-liberado">Obrigatória</span>
+                      </div>
+                      <select id="per-bio-opcao" name="per_bio_opcao"></select>
+                    </div>
+
+                    <div class="card-tal-cat oculto" id="card-per-cls-opcao">
+                      <div class="card-tal-topo">
+                        <label for="per-cls-opcao">Escolha Inicial da Classe</label>
+                        <span class="badge-tal-liberado">Obrigatória</span>
+                      </div>
+                      <select id="per-cls-opcao" name="per_cls_opcao"></select>
+                    </div>
+
+                    <div class="card-tal-cat oculto" id="card-per-div-opcao">
+                      <div class="card-tal-topo">
+                        <label for="per-div-opcao">Perícia da Divindade</label>
+                        <span class="badge-tal-liberado">Obrigatória</span>
+                      </div>
+                      <select id="per-div-opcao" name="per_div_opcao"></select>
+                    </div>
+
+                    <div class="card-tal-cat" id="card-per-saber">
+                      <div class="card-tal-topo">
+                        <span>Saber Automático (Biografia)</span>
+                        <span class="badge-tal-auto">Automático</span>
+                      </div>
+                      <div id="info-per-saber" class="box-tal-auto"></div>
+                    </div>
+                  </div>
+
+                  <div id="grid-pericias-checkboxes" class="grid-pericias-checkboxes"></div>
+                </div>
+              </div>
+
+              <div class="etapa-rodape">
+                <button type="button" class="btn btn-sutil" data-etapa-ir="criacao">← Voltar p/ Criação Inicial</button>
+                <button type="button" class="btn btn-sutil" data-etapa-acao="fechar">Recolher</button>
                 <button type="button" class="btn btn-secundario" data-etapa-ir="talentos">Avançar para Talentos →</button>
               </div>
             </div>
@@ -179,7 +262,7 @@
           <div class="etapa-card" id="etapa-talentos" data-etapa="talentos">
             <button type="button" class="etapa-header" data-etapa-toggle="talentos" aria-expanded="false" aria-controls="corpo-etapa-talentos">
               <span class="etapa-header-esq">
-                <span class="etapa-num">2</span>
+                <span class="etapa-num">3</span>
                 <span>
                   <span class="etapa-titulo">Talentos</span>
                   <span class="etapa-subtitulo">Ancestralidade, Biografia (automático), Classe, Perícia e Gerais — 1º Nível</span>
@@ -194,7 +277,7 @@
               <div class="campo-grupo subgrupo-atb-etapa-d" id="grupo-talentos">
                 <div class="etapa-d-topo">
                   <div>
-                    <label for="modo-talentos" class="etapa-d-titulo">E — Talentos Iniciais (1º Nível)</label>
+                    <label for="modo-talentos" class="etapa-d-titulo">F — Talentos Iniciais (1º Nível)</label>
                     <small class="nota-campo">Escolha automática procedural pelo conceito ou personalize manualmente nos slots realmente liberados por sua ancestralidade, herança e classe.</small>
                   </div>
                 </div>
@@ -292,7 +375,7 @@
               </div>
 
               <div class="etapa-rodape">
-                <button type="button" class="btn btn-sutil" data-etapa-ir="criacao">← Voltar p/ Criação Inicial</button>
+                <button type="button" class="btn btn-sutil" data-etapa-ir="pericias">← Voltar p/ Perícias</button>
                 <button type="button" class="btn btn-sutil" data-etapa-acao="fechar">Recolher</button>
                 <button type="button" class="btn btn-secundario" data-etapa-ir="equipamentos">Avançar para Equipamentos →</button>
               </div>
@@ -302,7 +385,7 @@
           <div class="etapa-card" id="etapa-equipamentos" data-etapa="equipamentos">
             <button type="button" class="etapa-header" data-etapa-toggle="equipamentos" aria-expanded="false" aria-controls="corpo-etapa-equipamentos">
               <span class="etapa-header-esq">
-                <span class="etapa-num">3</span>
+                <span class="etapa-num">4</span>
                 <span>
                   <span class="etapa-titulo">Equipamentos</span>
                   <span class="etapa-subtitulo">Compra procedural ou manual com orçamento inicial de 15 po (150 pp)</span>
@@ -317,7 +400,7 @@
               <div class="campo-grupo subgrupo-atb-etapa-d" id="grupo-equipamentos">
                 <div class="etapa-d-topo">
                   <div>
-                    <label for="modo-equipamentos" class="etapa-d-titulo">F — Equipamentos Iniciais (Orçamento: 15 po / 150 pp)</label>
+                    <label for="modo-equipamentos" class="etapa-d-titulo">G — Equipamentos Iniciais (Orçamento: 15 po / 150 pp)</label>
                     <small class="nota-campo">Escolha entre compra automática procedural (pelo conceito) ou selecionar seus itens manualmente descontando direto das 150 pp da ficha.</small>
                   </div>
                 </div>
@@ -584,7 +667,7 @@
     </section>
   </div>
 
-  <script src="{{ url_for('static', filename='js/render_ficha.js') }}?v=36" defer></script>
-  <script src="{{ url_for('static', filename='js/app.js') }}?v=36" defer></script>
+  <script src="{{ url_for('static', filename='js/render_ficha.js') }}?v=37" defer></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}?v=37" defer></script>
 </body>
 </html>

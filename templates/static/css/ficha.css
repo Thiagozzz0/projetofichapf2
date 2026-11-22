@@ -1355,8 +1355,117 @@ body {
   border-top: 1px solid var(--tint-strong);
 }
 
+/* Etapa Perícias (Manual / Procedural) */
+.painel-pericias-custom {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.per-formula-txt {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.grid-pericias-opcoes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 10px;
+}
+
+.grid-pericias-checkboxes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+  gap: 8px;
+}
+
+.pericia-check-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fffdf9;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease, opacity 0.15s ease;
+  user-select: none;
+}
+
+.pericia-check-card:hover:not(.bloqueada):not(.fixa) {
+  border-color: var(--accent);
+  background: var(--tint);
+}
+
+.pericia-check-card input[type="checkbox"] {
+  margin-top: 2px;
+  accent-color: var(--accent);
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
+.pericia-check-card.selecionada {
+  border-color: var(--accent);
+  background: #fbf3e4;
+}
+
+.pericia-check-card.fixa {
+  border-color: var(--gold);
+  background: #f8f2e4;
+  cursor: default;
+}
+
+.pericia-check-card.bloqueada {
+  opacity: 0.52;
+  cursor: not-allowed;
+  background: #f5f1e8;
+}
+
+.pericia-check-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.pericia-check-titulo {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.pericia-check-atb {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--muted);
+  margin-left: 4px;
+}
+
+.pericia-check-badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 999px;
+  width: fit-content;
+}
+
+.pericia-check-badge.fixa {
+  background: #e9d9b5;
+  color: #5b3b09;
+}
+
+.pericia-check-badge.manual {
+  background: #d9edd9;
+  color: #1f5c23;
+}
+
 @media (max-width: 980px) {
   .grid-atributos-livres,
+  .grid-pericias-opcoes,
+  .grid-pericias-checkboxes,
   .grid-talentos-custom,
   .grid-tal-demais,
   .grid-equipamentos-custom,

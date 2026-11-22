@@ -58,6 +58,13 @@ def _gerar_a_partir_payload(payload: dict[str, Any]) -> dict[str, Any]:
         if campo_atb in payload and campo_atb not in escolhas_atributos:
             escolhas_atributos[campo_atb] = payload[campo_atb]
 
+    escolhas_pericias: dict[str, Any] | None = None
+    bruto_per = payload.get("escolhas_pericias")
+    if bruto_per is not None:
+        if not isinstance(bruto_per, dict):
+            raise ErroValidacao("Campo 'escolhas_pericias' deve ser um objeto JSON.")
+        escolhas_pericias = bruto_per
+
     escolhas_talentos: dict[str, Any] | None = None
     bruto_tal = payload.get("escolhas_talentos")
     if bruto_tal is not None:
@@ -84,6 +91,7 @@ def _gerar_a_partir_payload(payload: dict[str, Any]) -> dict[str, Any]:
         nivel=nivel,
         seed=payload.get("seed"),
         escolhas_atributos=escolhas_atributos or None,
+        escolhas_pericias=escolhas_pericias,
         escolhas_talentos=escolhas_talentos,
         escolhas_equipamentos=escolhas_equipamentos,
     )

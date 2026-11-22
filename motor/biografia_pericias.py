@@ -113,6 +113,56 @@ def selecionar_biografia(
     return escolhida, True
 
 
+def listar_catalogo_pericias(dados: BaseDados) -> list[dict[str, Any]]:
+    """Retorna as 16 perícias treináveis (excluindo Saber) a partir de dados/pericias.json."""
+    return [
+        {
+            "id": p["id"],
+            "nome": p["nome"],
+            "atributo_chave": p.get("atributo_chave", ""),
+            "atributo_sigla": p.get("atributo_sigla", ""),
+            "sofre_penalidade_armadura": bool(p.get("sofre_penalidade_armadura", False)),
+            "descricao": p.get("descricao", ""),
+        }
+        for p in dados.pericias.values()
+        if p["id"] != "saber"
+    ]
+
+
+def resumo_pericias_classe(dados: BaseDados, classe: dict[str, Any]) -> dict[str, Any]:
+    """Extrai de dados/classes*.json as regras de perícias iniciais da classe e suas subclasses."""
+    prof = classe["proficiencias_iniciais"]["pericias"]
+    fixas = [dados.pericia_id(p) or p for p in prof.get("fixas", [])]
+    fixas = [p for p in fixas if p in dados.pericias and p != "saber"]
+    opcoes_fixas = [dados.pericia_id(p) or p for p in prof.get("opcoes_fixas", [])]
+    opcoes_fixas = [p for p in opcoes_fixas if p in dados.pericias and p != "saber"]
+
+    subclasses_pericias: dict[str, list[str]] = {}
+    for sub in classe.get("subclasses", {}).get("opcoes", []):
+        lista: list[str] = []
+        pt = sub.get("pericia_treinada")
+        if pt:
+            for item in (pt if isinstance(pt, list) else [pt]):
+                pid = dados.pericia_id(item)
+                if pid and pid != "saber" and pid not in lista:
+                    lista.append(pid)
+        for item in sub.get("pericias_linhagem") or []:
+            pid = dados.pericia_id(item)
+            if pid and pid != "saber" and pid not in lista:
+                lista.append(pid)
+        if lista:
+            subclasses_pericias[sub["id"]] = lista
+
+    return {
+        "fixas": fixas,
+        "opcoes_fixas": opcoes_fixas,
+        "adicionais_base": int(prof.get("adicionais_base", 0) or 0),
+        "soma_modificador_inteligencia": bool(prof.get("soma_modificador_inteligencia", True)),
+        "usa_pericia_divindade": "pericia_determinada_pela_divindade" in (prof.get("condicionais") or []),
+        "subclasses_pericias": subclasses_pericias,
+    }
+
+
 def calcular_pericias(
     dados: BaseDados,
     ancestralidade: dict[str, Any],
@@ -126,12 +176,25 @@ def calcular_pericias(
     divindade: dict[str, Any] | None = None,
     pericias_ancestrais_fixas: list[str] | None = None,
     saber_ancestral: tuple[str, str] | None = None,
+    escolhas_pericias: dict[str, Any] | None = None,
+    validar_limite: bool = True,
     rng: random.Random | None = None,
 ) -> dict[str, Any]:
-    """Determina todas as perícias treinadas e os 2 slots de Saber do personagem."""
+    """Determina todas as perícias treinadas (procedural, manual ou híbrido) e os 2 slots de Saber."""
     treinadas: dict[str, str] = {}
     origens: dict[str, str] = {}
     escolhas_livres = 0
+    sobreposicoes: list[str] = []
+
+    esc = escolhas_pericias or {}
+    modo_esc = normalizar(str(esc.get("modo") or "procedural"))
+    modo_manual = modo_esc in ("personalizado", "manual") or any(
+        esc.get(k) not in (None, "", "procedural", [])
+        for k in ("pericia_biografia_id", "pericia_classe_fixa_id", "pericia_divindade_id", "pericias_livres")
+    )
+
+    def _eh_proc_per(val: Any) -> bool:
+        return val is None or (isinstance(val, str) and normalizar(val) in ("", "procedural", "auto", "automatico", "aleatorio"))
 
     def conceder(pid: str | None, origem: str) -> None:
         nonlocal escolhas_livres
@@ -140,6 +203,7 @@ def calcular_pericias(
         if pid in treinadas:
             # Regra PF2E: se receber treinamento em perícia já treinada, ganha 1 escolha livre
             escolhas_livres += 1
+            sobreposicoes.append(pid)
         else:
             treinadas[pid] = "treinado"
             origens[pid] = origem
@@ -155,7 +219,17 @@ def calcular_pericias(
     # 1. Biografia (se biografia tiver mais de 1 opção, ex: Discípulo Marcial -> Acrobatismo ou Atletismo)
     opcoes_bio = [dados.pericia_id(nome) for nome in biografia.get("pericia_treinada_opcoes", [])]
     opcoes_bio = [p for p in opcoes_bio if p]
-    pericia_bio = escolher_melhor_opcao(opcoes_bio)
+    bio_req = esc.get("pericia_biografia_id") if modo_manual else None
+    if not _eh_proc_per(bio_req):
+        bio_req_id = dados.pericia_id(str(bio_req)) or str(bio_req).strip()
+        if opcoes_bio and bio_req_id not in opcoes_bio:
+            raise ValueError(
+                f"Perícia de biografia '{bio_req}' inválida para '{biografia['nome']}' "
+                f"(opções: {', '.join(opcoes_bio)})."
+            )
+        pericia_bio = bio_req_id
+    else:
+        pericia_bio = escolher_melhor_opcao(opcoes_bio)
     conceder(pericia_bio, f"Biografia ({biografia['nome']})")
 
     # 2. Classe — perícias fixas e escolhas fixas (ex: Guerreiro: Acrobatismo ou Atletismo)
@@ -165,7 +239,17 @@ def calcular_pericias(
 
     opcoes_fixas = [dados.pericia_id(p) or p for p in prof_pericias.get("opcoes_fixas", [])]
     if opcoes_fixas:
-        escolhida_fixa = escolher_melhor_opcao(opcoes_fixas)
+        cls_req = esc.get("pericia_classe_fixa_id") if modo_manual else None
+        if not _eh_proc_per(cls_req):
+            cls_req_id = dados.pericia_id(str(cls_req)) or str(cls_req).strip()
+            if cls_req_id not in opcoes_fixas:
+                raise ValueError(
+                    f"Perícia inicial '{cls_req}' inválida para {classe['nome']} "
+                    f"(opções: {', '.join(opcoes_fixas)})."
+                )
+            escolhida_fixa = cls_req_id
+        else:
+            escolhida_fixa = escolher_melhor_opcao(opcoes_fixas)
         conceder(escolhida_fixa, f"Classe ({classe['nome']})")
 
     # 3. Condicionais de Subclasse / Ordem / Linhagem / Esquema / Divindade
@@ -183,7 +267,17 @@ def calcular_pericias(
     if "pericia_determinada_pela_divindade" in condicionais:
         if divindade and divindade.get("pericia_divina"):
             opcoes_div = [p for p in divindade["pericia_divina"] if p in dados.pericias]
-            div_p = escolher_melhor_opcao(opcoes_div)
+            div_req = esc.get("pericia_divindade_id") if modo_manual else None
+            if not _eh_proc_per(div_req) and len(opcoes_div) > 1:
+                div_req_id = dados.pericia_id(str(div_req)) or str(div_req).strip()
+                if div_req_id not in opcoes_div:
+                    raise ValueError(
+                        f"Perícia divina '{div_req}' inválida para {divindade['nome']} "
+                        f"(opções: {', '.join(opcoes_div)})."
+                    )
+                div_p = div_req_id
+            else:
+                div_p = escolher_melhor_opcao(opcoes_div)
             conceder(div_p, f"Divindade ({divindade['nome']})")
         else:
             candidatos_div = [p for p in prioridades if p not in treinadas and p != "religiao"]
@@ -204,7 +298,37 @@ def calcular_pericias(
         adicionais_classe = max(0, adicionais_classe + mod_int)
     escolhas_livres += adicionais_classe
 
-    # Alocar escolhas livres: garantir topo das prioridades do conceito e variar secundárias com rng
+    vagas_livres_total = escolhas_livres
+    manuais_aplicadas: list[str] = []
+
+    # 6. Aplicar escolhas livres manuais (se fornecidas) respeitando o teto exato de vagas
+    if modo_manual and esc.get("pericias_livres") is not None and not _eh_proc_per(esc.get("pericias_livres")):
+        raw_livres = esc.get("pericias_livres")
+        if not isinstance(raw_livres, list):
+            raise ValueError("Campo 'pericias_livres' deve ser uma lista de IDs de perícias.")
+        vistos_man: set[str] = set()
+        livres_req: list[str] = []
+        for item in raw_livres:
+            pid = dados.pericia_id(str(item)) or str(item).strip()
+            if pid not in dados.pericias or pid == "saber":
+                raise ValueError(f"Perícia livre desconhecida ou inválida: '{item}'.")
+            if pid in vistos_man:
+                raise ValueError(f"Perícia duplicada na seleção manual: '{dados.pericias[pid]['nome']}'.")
+            vistos_man.add(pid)
+            livres_req.append(pid)
+
+        novas_manuais = [pid for pid in livres_req if pid not in treinadas]
+        if validar_limite and len(novas_manuais) > escolhas_livres:
+            raise ValueError(
+                f"Você selecionou {len(novas_manuais)} perícias livres, mas o personagem possui apenas "
+                f"{escolhas_livres} vaga(s) disponível(is)."
+            )
+        for pid in novas_manuais[: max(0, escolhas_livres)]:
+            conceder(pid, "Escolha Manual (Jogador)")
+            escolhas_livres -= 1
+            manuais_aplicadas.append(pid)
+
+    # 7. Alocar vagas livres restantes de forma procedural: prioridades do conceito + restantes
     for p in prioridades:
         if escolhas_livres <= 0:
             break
@@ -260,6 +384,13 @@ def calcular_pericias(
         "origens": origens,
         "saberes": saberes,
         "pericia_biografia_id": pericia_bio,
+        "escolhas_pericias": {
+            "modo": "personalizado" if modo_manual else "procedural",
+            "vagas_livres_total": vagas_livres_total,
+            "sobreposicoes": sobreposicoes,
+            "manuais_aplicadas": manuais_aplicadas,
+            "pericia_biografia_id": pericia_bio,
+        },
     }
 
 

@@ -6,7 +6,13 @@ import random
 from copy import deepcopy
 from typing import Any
 
-from .biografia_pericias import calcular_idiomas, calcular_pericias, selecionar_biografia
+from .biografia_pericias import (
+    calcular_idiomas,
+    calcular_pericias,
+    listar_catalogo_pericias,
+    resumo_pericias_classe,
+    selecionar_biografia,
+)
 from .combate_matematica import calcular_matematica_final
 from .companheiros import gerar_companheiro_ou_familiar
 from .dados import BaseDados, carregar_dados
@@ -282,6 +288,7 @@ def listar_opcoes_criacao(dados: BaseDados | None = None) -> dict[str, Any]:
             ],
             "melhoria_livre": b.get("melhoria_livre", True),
             "pericia_treinada_opcoes": b["pericia_treinada_opcoes"],
+            "pericia_treinada_ids": [pid for n in b["pericia_treinada_opcoes"] if (pid := db.pericia_id(n))],
             "saber_treinado": b["saber_treinado"],
             "talento_pericia": b["talento_pericia"],
         }
@@ -298,6 +305,7 @@ def listar_opcoes_criacao(dados: BaseDados | None = None) -> dict[str, Any]:
             "permite_escolha_atributo_chave": len(_atributo_chave_opcoes(db, c, None)) > 1,
             "divindade_obrigatoria": c["id"] in CLASSES_DIVINDADE_OBRIGATORIA,
             "proficiencias_equipamento": resumo_proficiencias_equipamento_classe(c),
+            "pericias_classe": resumo_pericias_classe(db, c),
             "conceitos": [
                 {
                     "id": con["id"],
@@ -351,6 +359,7 @@ def listar_opcoes_criacao(dados: BaseDados | None = None) -> dict[str, Any]:
         "biografias": biografias,
         "classes": classes,
         "divindades": divindades,
+        "catalogo_pericias": listar_catalogo_pericias(db),
         "catalogo_talentos": listar_catalogo_talentos_n1(db),
         "catalogo_equipamentos": listar_catalogo_equipamentos_loja(db),
         "total_conceitos": len(db.conceitos),
@@ -369,6 +378,7 @@ def gerar_personagem(
     nivel: int | str = 1,
     seed: int | str | None = None,
     escolhas_atributos: dict[str, Any] | None = None,
+    escolhas_pericias: dict[str, Any] | None = None,
     escolhas_talentos: dict[str, Any] | None = None,
     escolhas_equipamentos: dict[str, Any] | None = None,
     dados: BaseDados | None = None,
@@ -511,19 +521,24 @@ def gerar_personagem(
     # ------------------------------------------------------------------
     # 3. Perícias base -> Talentos -> Perícias extras (ex.: Perícia Natural)
     # ------------------------------------------------------------------
-    pericias_base = calcular_pericias(
-        db,
-        ancestralidade,
-        heranca,
-        biografia,
-        classe,
-        subclasse,
-        conceito,
-        mod_int,
-        extras_pericias=0,
-        divindade=divindade,
-        rng=rng,
-    )
+    try:
+        pericias_base = calcular_pericias(
+            db,
+            ancestralidade,
+            heranca,
+            biografia,
+            classe,
+            subclasse,
+            conceito,
+            mod_int,
+            extras_pericias=0,
+            divindade=divindade,
+            escolhas_pericias=escolhas_pericias,
+            validar_limite=False,
+            rng=rng,
+        )
+    except ValueError as exc:
+        raise ErroValidacao(str(exc)) from exc
     tendencia = _determinar_tendencia(
         classe_id, subclasse["id"] if subclasse else "", conceito=conceito, divindade=divindade
     )
@@ -553,23 +568,28 @@ def gerar_personagem(
     extras_per = talentos_res["efeitos"]["extras_pericias"]
     pericias_anc_fixas = talentos_res["efeitos"].get("pericias_ancestrais_fixas") or []
     saber_anc = talentos_res["efeitos"].get("saber_ancestral")
-    if extras_per > 0 or pericias_anc_fixas or saber_anc:
-        # Recalcula com determinismo preservado a partir da mesma derivação de RNG
-        pericias_res = calcular_pericias(
-            db,
-            ancestralidade,
-            heranca,
-            biografia,
-            classe,
-            subclasse,
-            conceito,
-            mod_int,
-            extras_pericias=extras_per,
-            divindade=divindade,
-            pericias_ancestrais_fixas=pericias_anc_fixas,
-            saber_ancestral=saber_anc,
-            rng=random.Random(f"{seed_usada}:pericias"),
-        )
+    if extras_per > 0 or pericias_anc_fixas or saber_anc or escolhas_pericias:
+        # Recalcula com determinismo preservado e validação estrita de teto de vagas
+        try:
+            pericias_res = calcular_pericias(
+                db,
+                ancestralidade,
+                heranca,
+                biografia,
+                classe,
+                subclasse,
+                conceito,
+                mod_int,
+                extras_pericias=extras_per,
+                divindade=divindade,
+                pericias_ancestrais_fixas=pericias_anc_fixas,
+                saber_ancestral=saber_anc,
+                escolhas_pericias=escolhas_pericias,
+                validar_limite=True,
+                rng=random.Random(f"{seed_usada}:pericias"),
+            )
+        except ValueError as exc:
+            raise ErroValidacao(str(exc)) from exc
     else:
         pericias_res = pericias_base
 
@@ -726,6 +746,7 @@ def gerar_personagem(
             "atributo_chave": atributos_res["atributo_chave"],
             "escolhas_atributos": atributos_res["escolhas_aplicadas"],
             "historico_abcd": atributos_res["historico_abcd"],
+            "escolhas_pericias": pericias_res["escolhas_pericias"],
             "escolhas_talentos": talentos_res["escolhas_talentos"],
             "orcamento_inicial": "15 po",
             "escolhas_equipamentos": equip_res["escolhas_equipamentos"],

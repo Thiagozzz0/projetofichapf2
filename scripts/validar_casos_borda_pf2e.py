@@ -901,6 +901,113 @@ def test_curadoria_e_selecao_manual_talentos() -> None:
             pass
 
 
+def test_selecao_manual_e_regras_pericias() -> None:
+    db = carregar_dados()
+
+    # 1. Guerreiro Estudioso (INT 12 = +1) com escolha manual da perícia da Biografia, Classe e Livres
+    # Vagas livres: Guerreiro (3) + INT (+1) = 4
+    g_per = gerar_personagem(
+        "humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor",
+        biografia_id="estudioso",
+        escolhas_atributos={
+            "ancestralidade_livres": ["for", "int"],
+            "biografia_restrito": "sab",
+            "biografia_livre": "con",
+            "classe_chave": "for",
+            "livres_nivel_1": ["for", "des", "con", "sab"],
+        },
+        escolhas_pericias={
+            "modo": "personalizado",
+            "pericia_biografia_id": "ocultismo",
+            "pericia_classe_fixa_id": "acrobatismo",
+            "pericias_livres": ["atletismo", "intimidacao", "medicina", "sobrevivencia"],
+        },
+        seed=31,
+        dados=db,
+    )
+    esc_p = g_per["meta_geracao"]["escolhas_pericias"]
+    assert esc_p["vagas_livres_total"] == 4
+    assert esc_p["manuais_aplicadas"] == ["atletismo", "intimidacao", "medicina", "sobrevivencia"]
+    treinadas_g = {p["id"] for p in g_per["ficha"]["pericias"] if p["grau_proficiencia"] == "treinado"}
+    assert {"ocultismo", "acrobatismo", "atletismo", "intimidacao", "medicina", "sobrevivencia"}.issubset(treinadas_g)
+
+    # 2. Sobreposição PF2E (Acólito dá Religião + Clérigo dá Religião => +1 vaga livre) + Shelyn (opção Performance)
+    # Vagas livres: Clérigo (2) + INT (0) + Sobreposição (+1) = 3
+    c_sob = gerar_personagem(
+        "elfo", "elfo_vidente", "clerigo", "clerigo_hospitalario_sagrado",
+        biografia_id="acolito",
+        divindade_id="shelyn",
+        escolhas_atributos={
+            "ancestralidade_livres": ["sab"],
+            "biografia_restrito": "sab",
+            "biografia_livre": "car",
+            "livres_nivel_1": ["des", "con", "sab", "car"],
+        },
+        escolhas_talentos={
+            "modo": "personalizado",
+            "ancestralidade_id": "elfo_ligeiro",
+        },
+        escolhas_pericias={
+            "modo": "personalizado",
+            "pericia_divindade_id": "performance",
+            "pericias_livres": ["diplomacia", "medicina", "natureza", "sociedade"],
+        },
+        seed=5,
+        dados=db,
+    )
+    # Elfo tem INT fixa +2 => mod_int = +1 => Clérigo (2) + INT (+1) + Sobreposição Religião (+1) = 4 vagas livres!
+    assert "religiao" in c_sob["meta_geracao"]["escolhas_pericias"]["sobreposicoes"]
+    assert c_sob["meta_geracao"]["escolhas_pericias"]["vagas_livres_total"] == 4
+
+    # 3. Humano Herança Perita (+1) + Perícia Natural (+2) libera +3 vagas extras sem falso bloqueio
+    # Bárbaro (3) + INT (0) + Herança Perita (+1) + Perícia Natural (+2) = 6 vagas livres
+    b_ext = gerar_personagem(
+        "humano", "heranca_perita", "barbaro", "barbaro_guerreiro_draconico",
+        biografia_id="gladiador",
+        escolhas_atributos={
+            "ancestralidade_livres": ["for", "con"],
+            "biografia_restrito": "for",
+            "biografia_livre": "des",
+            "livres_nivel_1": ["for", "des", "con", "sab"],
+        },
+        escolhas_talentos={"modo": "personalizado", "ancestralidade_id": "pericia_natural"},
+        escolhas_pericias={
+            "modo": "personalizado",
+            "pericias_livres": ["acrobatismo", "diplomacia", "furtividade", "intimidacao", "medicina", "sobrevivencia"],
+        },
+        seed=9,
+        dados=db,
+    )
+    assert b_ext["meta_geracao"]["escolhas_pericias"]["vagas_livres_total"] == 6
+    assert len(b_ext["meta_geracao"]["escolhas_pericias"]["manuais_aplicadas"]) == 6
+
+    # 4. Bloqueios estritos: exceder limite de vagas, duplicar perícia ou escolher opção inválida da classe/biografia
+    for esc_inv in (
+        {"modo": "personalizado", "pericias_livres": ["diplomacia", "intimidacao", "medicina", "sobrevivencia", "natureza"]},
+        {"modo": "personalizado", "pericias_livres": ["diplomacia", "diplomacia"]},
+        {"modo": "personalizado", "pericia_classe_fixa_id": "furtividade"},
+        {"modo": "personalizado", "pericia_biografia_id": "atletismo"},
+    ):
+        try:
+            gerar_personagem(
+                "humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor",
+                biografia_id="estudioso",
+                escolhas_atributos={
+                    "ancestralidade_livres": ["for", "int"],
+                    "biografia_restrito": "sab",
+                    "biografia_livre": "con",
+                    "classe_chave": "for",
+                    "livres_nivel_1": ["for", "des", "con", "sab"],
+                },
+                escolhas_pericias=esc_inv,
+                seed=1,
+                dados=db,
+            )
+            raise AssertionError(f"Deveria falhar com ErroValidacao para {esc_inv!r}")
+        except ErroValidacao:
+            pass
+
+
 def main() -> None:
     test_ca_limite_destreza_e_sem_armadura()
     test_penalidade_armadura_barulhenta_flexivel_e_ferro_desimpedido()
@@ -916,6 +1023,7 @@ def main() -> None:
     test_escolhas_atributos_manual_procedural_aleatorio()
     test_compra_manual_e_hibrida_equipamentos()
     test_curadoria_e_selecao_manual_talentos()
+    test_selecao_manual_e_regras_pericias()
     print("SUCESSO TOTAL — Todos os testes de casos de borda PF2E passaram!")
 
 
