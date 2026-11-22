@@ -266,6 +266,16 @@ def calcular_matematica_final(
     if classe_id == "clerigo" and sub_id == "capelao_da_guerra":
         graus_salv["fortitude"] = "especialista"
 
+    grau_perc = grau_normalizado(classe["proficiencias_iniciais"]["percepcao"])
+    if efeitos.get("perspicacia_astuta"):
+        if grau_perc == "treinado":
+            grau_perc = "especialista"
+        else:
+            for sid_cand in ("vontade", "fortitude", "reflexos"):
+                if graus_salv[sid_cand] == "treinado":
+                    graus_salv[sid_cand] = "especialista"
+                    break
+
     mapa_atr_salv = {"fortitude": "con", "reflexos": "des", "vontade": "sab"}
     for sid, atr in mapa_atr_salv.items():
         g = graus_salv[sid]
@@ -282,16 +292,19 @@ def calcular_matematica_final(
     if heranca.get("habilidade_acao"):
         ficha["jogadas_salvamento"]["anotacoes"] = heranca["habilidade_acao"]["nome"]
 
-    grau_perc = grau_normalizado(classe["proficiencias_iniciais"]["percepcao"])
     prof_perc = bonus_proficiencia(grau_perc, nivel)
     bonus_iniciativa = 2 if efeitos.get("iniciativa_incrivel") else 0
+    sentidos = _sentidos_personagem(ancestralidade, heranca)
+    if efeitos.get("visao_orquica") and "Visão no Escuro" not in sentidos:
+        sentidos = [s for s in sentidos if "penumbra" not in normalizar(s)]
+        sentidos.append("Visão no Escuro")
     ficha["percepcao"] = {
         "total": mods["sab"] + prof_perc,
         "mod_sab": mods["sab"],
         "proficiencia": prof_perc,
         "grau_proficiencia": grau_perc,
         "item": 0,
-        "sentidos": _sentidos_personagem(ancestralidade, heranca),
+        "sentidos": sentidos,
     }
     if bonus_iniciativa:
         ficha["percepcao"]["sentidos"].append("Iniciativa Incrível (+2 circ. iniciativa)")

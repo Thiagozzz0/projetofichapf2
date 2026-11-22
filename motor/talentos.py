@@ -12,6 +12,13 @@ from .util import GRAUS, normalizar, slugify
 
 _CLASSES_CONJURADORAS_PLENAS = {"bardo", "clerigo", "druida", "feiticeiro", "mago"}
 
+_SABERES_ANCESTRAIS: dict[str, tuple[list[str], str]] = {
+    "saber_enanico": (["manufatura", "religiao"], "Saber Enânico"),
+    "saber_elfico": (["arcanismo", "natureza"], "Saber Élfico"),
+    "saber_goblin": (["furtividade", "natureza"], "Saber Goblin"),
+    "saber_halfling": (["acrobatismo", "furtividade"], "Saber Halfling"),
+}
+
 
 def atende_prerequisitos(texto_prereq: str | None, ctx: dict[str, Any]) -> bool:
     """Avalia expressões comuns de pré-requisitos de talentos de 1º nível do PF2E."""
@@ -73,7 +80,11 @@ def _avaliar_clausula(
         return classe_id == "bardo" and subclasse_id == musa_req
 
     if c == "reserva de foco":
-        return classe_id in {"bardo", "campeao", "druida", "feiticeiro", "mago"}
+        return (
+            classe_id in {"bardo", "campeao", "druida", "feiticeiro", "mago"}
+            or (classe_id == "clerigo" and subclasse_id == "sacerdote_enclausurado")
+            or bool(ctx.get("possui_reserva_foco"))
+        )
 
     if c.startswith("causa de "):
         causa_req = slugify(c.replace("causa de ", ""))
@@ -266,6 +277,8 @@ def selecionar_talentos(
         if t and tid not in escolhidos_classe_ids:
             escolhidos_classe_ids.add(tid)
             talentos_classe_selecionados.append(dict(t, origem=origem))
+            if tid in {"iniciado_no_dominio", "golpe_de_ki", "disparada_de_ki"}:
+                ctx["possui_reserva_foco"] = True
 
     # Concedidos automaticamente pela subclasse no 1º nível
     if subclasse and "talento_concedido" in subclasse:
@@ -406,6 +419,22 @@ def selecionar_talentos(
         talentos_gerais_ativos.add("bloqueio_com_escudo")
         ids_gerais_pericia_usados.add("bloqueio_com_escudo")
 
+    if talento_ancestral["id"] == "cavaleiro_brusco" and "cavalgar" not in ids_gerais_pericia_usados:
+        tal_cav = dados.talentos_gerais_pericia.get("cavalgar")
+        if tal_cav:
+            ids_gerais_pericia_usados.add("cavalgar")
+            talentos_gerais_ativos.add("cavalgar")
+            talentos_bonus_slots.append(
+                {
+                    "nome": tal_cav["nome"],
+                    "categoria": "geral",
+                    "origem_regra": "Talento Ancestral (Cavaleiro Brusco)",
+                    "pagina": None,
+                    "resumo": tal_cav.get("resumo_beneficio") or tal_cav.get("descricao", ""),
+                    "dados_completos": tal_cav,
+                }
+            )
+
     extras_gerais = 0
     origens_extras_gerais: list[str] = []
     if heranca["id"] == "heranca_versatil":
@@ -460,20 +489,48 @@ def selecionar_talentos(
     duro_de_matar = "duro_de_matar" in talentos_gerais_ativos
     vitalidade_ativo = "vitalidade" in talentos_gerais_ativos
 
+    wid_fav_div = divindade.get("arma_favorecida_id") if divindade else None
+    arma_fav_obj = dados.armas.get(wid_fav_div) if wid_fav_div else None
+    arma_deificada_ativa = classe["id"] == "campeao" and (
+        wid_fav_div == "punho"
+        or (arma_fav_obj is not None and arma_fav_obj.get("categoria") == "Arma Simples")
+    )
+
+    pericias_anc_fixas, nome_saber_anc = _SABERES_ANCESTRAIS.get(talento_ancestral["id"], ([], None))
+    saber_anc: tuple[str, str] | None = (
+        (nome_saber_anc, f"Talento Ancestral ({talento_ancestral['nome']})")
+        if nome_saber_anc
+        else None
+    )
+    if talento_ancestral["id"] == "obsessao_gnomica":
+        saber_anc = (
+            conceito.get("saber_sugerido") or "Saber Gnômico",
+            "Talento Ancestral (Obsessão Gnômica)",
+        )
+
     efeitos = {
-        "extras_pericias": 2 if talento_ancestral["id"] == "pericia_natural" else 0,
+        "extras_pericias": (2 if talento_ancestral["id"] == "pericia_natural" else 0)
+        + (1 if talento_ancestral["id"] == "longevidade_ancestral" else 0),
+        "pericias_ancestrais_fixas": pericias_anc_fixas,
+        "saber_ancestral": saber_anc,
         "vitalidade": vitalidade_ativo,
         "veloz": "veloz" in talentos_gerais_ativos,
         "iniciativa_incrivel": "iniciativa_incrivel" in talentos_gerais_ativos,
         "bloqueio_com_escudo": "bloqueio_com_escudo" in talentos_gerais_ativos,
         "carregador_robusto": "carregador_robusto" in ids_gerais_pericia_usados,
         "duro_de_matar": duro_de_matar,
-        "simplicidade_mortal": "simplicidade_mortal" in escolhidos_classe_ids,
+        "perspicacia_astuta": "perspicacia_astuta" in talentos_gerais_ativos,
+        "proficiencia_com_armaduras": "proficiencia_com_armaduras" in talentos_gerais_ativos,
+        "proficiencia_com_armas": "proficiencia_com_armas" in talentos_gerais_ativos,
+        "simplicidade_mortal": ("simplicidade_mortal" in escolhidos_classe_ids) or arma_deificada_ativa,
+        "arma_deificada": arma_deificada_ativa,
         "limite_morrendo": 5 if duro_de_matar else limite_morr_padrao,
         "cd_recuperacao_base": 9 if vitalidade_ativo else int(regras_morr.get("cd_recuperacao_base_padrao", 10)),
         "elfo_ligeiro": talento_ancestral["id"] == "elfo_ligeiro",
         "ferro_desimpedido": talento_ancestral["id"] == "ferro_desimpedido",
+        "visao_orquica": talento_ancestral["id"] == "visao_orquica",
         "dentes_de_navalha": heranca["id"] == "goblin_dentes_de_navalha",
+        "talento_ancestral_id": talento_ancestral["id"],
     }
 
     return {

@@ -205,7 +205,12 @@ class BaseDados:
 
     @cached_property
     def regras_especificas(self) -> dict[str, Any]:
-        return self.json("regras_específicas.json")
+        nome = (
+            "regras_especificas.json"
+            if (self.diretorio / "regras_especificas.json").exists()
+            else "regras_específicas.json"
+        )
+        return self.json(nome)
 
     @cached_property
     def companheiros_familiares(self) -> dict[str, Any]:

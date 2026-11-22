@@ -141,30 +141,11 @@ def _selecionar_divindade(
     subclasse: dict[str, Any] | None,
     conceito: dict[str, Any],
     fonte_divina: str,
-    divindade_id: str | None,
+    _unused: str | None,
     rng: random.Random,
 ) -> dict[str, Any] | None:
-    """Resolve a divindade real do personagem (manual ou procedural para Clérigo e Campeão)."""
-    if divindade_id and divindade_id != "procedural":
-        div = db.divindades.get(divindade_id)
-        if not div:
-            raise ErroValidacao(f"Divindade desconhecida: '{divindade_id}'.")
-        if classe_id == "campeao":
-            tend_causa = _determinar_tendencia("campeao", subclasse["id"] if subclasse else "")
-            if tend_causa not in div["tendencias_seguidores"]:
-                raise ErroValidacao(
-                    f"A divindade '{div['nome']}' não aceita seguidores de tendência '{tend_causa}' "
-                    f"(exigida pela Causa '{subclasse['nome'] if subclasse else ''}')."
-                )
-        elif classe_id == "clerigo":
-            fonte_chave = "ferir" if fonte_divina == "ferimento" else "curar"
-            if fonte_chave not in div["fontes_divinas"]:
-                raise ErroValidacao(
-                    f"A divindade '{div['nome']}' não concede Fonte Divina '{fonte_chave}'."
-                )
-        return div
-
-    if classe_id not in ("campeao", "clerigo"):
+    """Seleciona proceduralmente a divindade mais afinada para Clérigo e Campeão."""
+    if classe_id not in CLASSES_DIVINDADE_OBRIGATORIA:
         return None
 
     candidatos = list(db.divindades.values())
@@ -581,7 +562,9 @@ def gerar_personagem(
     )
 
     extras_per = talentos_res["efeitos"]["extras_pericias"]
-    if extras_per > 0:
+    pericias_anc_fixas = talentos_res["efeitos"].get("pericias_ancestrais_fixas") or []
+    saber_anc = talentos_res["efeitos"].get("saber_ancestral")
+    if extras_per > 0 or pericias_anc_fixas or saber_anc:
         # Recalcula com determinismo preservado a partir da mesma derivação de RNG
         pericias_res = calcular_pericias(
             db,
@@ -594,6 +577,8 @@ def gerar_personagem(
             mod_int,
             extras_pericias=extras_per,
             divindade=divindade,
+            pericias_ancestrais_fixas=pericias_anc_fixas,
+            saber_ancestral=saber_anc,
             rng=random.Random(f"{seed_usada}:pericias"),
         )
     else:
@@ -609,6 +594,7 @@ def gerar_personagem(
         subclasse,
         talentos_classe_ids=talentos_res["talentos_classe_ids"],
         divindade=divindade,
+        efeitos_talentos=talentos_res["efeitos"],
     )
     equip_res = comprar_equipamentos(
         db,
@@ -633,6 +619,7 @@ def gerar_personagem(
         nivel=nivel,
         fonte_divina=fonte_divina,
         divindade=divindade,
+        talento_ancestral_id=talentos_res["efeitos"].get("talento_ancestral_id"),
         rng=rng,
     )
 
@@ -720,6 +707,7 @@ def gerar_personagem(
         ficha_mestre=ficha,
         modificadores_mestre=atributos_res["modificadores"],
         tese_arcana_id=tese_arcana["id"] if tese_arcana else None,
+        talento_ancestral_id=talentos_res["efeitos"].get("talento_ancestral_id"),
         nivel=nivel,
         rng=rng,
     )

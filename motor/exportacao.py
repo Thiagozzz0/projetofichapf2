@@ -50,6 +50,19 @@ def _formatar_grau_curto(grau: str | None) -> str:
     return SIGLA_GRAU.get(grau, grau[:1].upper())
 
 
+def _formatar_custo_acao(acoes: Any) -> str:
+    ac = str(acoes or "1").strip()
+    if ac == "1":
+        return "1 ação"
+    if ac in ("2", "3", "1 a 2", "1 a 3", "1 ou mais"):
+        return f"{ac} ações"
+    if ac.lower() in ("livre", "ação livre", "acao livre"):
+        return "ação livre"
+    if ac.lower() in ("reacao", "reação"):
+        return "reação"
+    return ac
+
+
 def _formatar_linha_golpe(golpe: dict[str, Any]) -> tuple[str, str, str, str]:
     arma = golpe.get("arma", "")
     atk = formatar_bonus(int(golpe["ataque"]["total"]))
@@ -148,6 +161,9 @@ def exportar_ficha_txt(resultado: dict[str, Any]) -> str:
     bio_modo = "Procedural" if meta.get("biografia_procedural", True) else "Manual"
     linhas.append(f"Biografia  : {cab['biografia']} ({bio_modo})")
     linhas.append(f"Classe     : {cab['classe']}")
+    if meta.get("subclasse_oficial_nome"):
+        tese_txt = f" | Tese Arcana: {meta['tese_arcana_nome']}" if meta.get("tese_arcana_nome") else ""
+        linhas.append(f"Subclasse  : {meta['subclasse_oficial_nome']}{tese_txt}")
     linhas.append(
         f"Tamanho    : {cab['tamanho']} | Tendência: {cab['tendencia']} | "
         f"Pontos de Heroísmo: {cab['pontos_heroismo']}"
@@ -338,7 +354,7 @@ def exportar_ficha_txt(resultado: dict[str, Any]) -> str:
         sub("AÇÕES E ATIVIDADES")
         for a in acoes_at:
             tr = ", ".join(a.get("tracos") or [])
-            linhas.append(f"  - [{a.get('acoes', '1')} ação] {a['nome']} ({tr})")
+            linhas.append(f"  - [{_formatar_custo_acao(a.get('acoes', '1'))}] {a['nome']} ({tr})")
             if a.get("descricao"):
                 linhas.append(f"    {a['descricao']}")
 
@@ -550,13 +566,16 @@ def _montar_document_xml(resultado: dict[str, Any]) -> str:
         )
     )
     bio_modo = "Procedural" if meta.get("biografia_procedural", True) else "Manual"
+    sub_doc_txt = meta.get("subclasse_oficial_nome") or "—"
+    if meta.get("tese_arcana_nome"):
+        sub_doc_txt = f"{sub_doc_txt} • Tese: {meta['tese_arcana_nome']}"
     info_geral = [
         ["Biografia", f"{cab['biografia']} ({bio_modo})", "Tamanho / Tendência", f"{cab['tamanho']} / {cab['tendencia']}"],
-        ["Jogador", cab.get("nome_jogador") or "—", "Pontos de Heroísmo", f"{cab['pontos_heroismo']} / 3"],
+        ["Subclasse PF2E", sub_doc_txt, "Pontos de Heroísmo", f"{cab['pontos_heroismo']} / 3"],
         ["Divindade", cab.get("divindade") or "—", "Seed / Saldo", f"{meta.get('seed', '—')} / {meta.get('saldo_restante', '—')}"],
+        ["Jogador", cab.get("nome_jogador") or "—", "Traços", ", ".join(cab.get("tracos") or []) or "—"],
     ]
     partes.append(_xml_tabela(["Campo", "Valor", "Campo", "Valor"], info_geral, [1700, 3533, 1900, 3333]))
-    partes.append(_xml_p_rotulo("Traços", ", ".join(cab.get("tracos") or [])))
 
     # Página 1 — Atributos e Combate
     partes.append(_xml_p("Página 1 (p. 580) — Atributos, Combate e Perícias", estilo="SecaoTitulo"))
@@ -719,7 +738,7 @@ def _montar_document_xml(resultado: dict[str, Any]) -> str:
     linhas_acoes = []
     for a in ficha["acoes_e_atividades"]:
         if a.get("nome"):
-            linhas_acoes.append([f"{a.get('acoes', '1')} ação", a["nome"], ", ".join(a.get("tracos") or []) or "—", a.get("descricao", "")])
+            linhas_acoes.append([_formatar_custo_acao(a.get("acoes", "1")), a["nome"], ", ".join(a.get("tracos") or []) or "—", a.get("descricao", "")])
     for a in ficha["acoes_livres_e_reacoes"]:
         if a.get("nome"):
             desc_full = (f"Acionamento: {a['acionamento']} " if a.get("acionamento") else "") + a.get("descricao", "")
@@ -750,7 +769,11 @@ def _montar_document_xml(resultado: dict[str, Any]) -> str:
         ):
             for m in lst:
                 if m.get("nome"):
-                    extra = "Preparada" if (mostrar_prep and m.get("preparada")) else (m.get("frequencia") or m.get("anotacoes") or "—")
+                    notas_base = m.get("frequencia") or m.get("anotacoes") or ""
+                    if mostrar_prep and m.get("preparada"):
+                        extra = f"Preparada • {notas_base}" if notas_base else "Preparada"
+                    else:
+                        extra = notas_base or "—"
                     linhas_mag.append([grp, m["nome"], m.get("acoes") or "—", ",".join(m.get("componentes") or []) or "—", extra])
         if linhas_mag:
             partes.append(_xml_tabela(["Categoria", "Magia", "Ações", "Comp.", "Observações"], linhas_mag, [1400, 2800, 1000, 1200, 4066]))

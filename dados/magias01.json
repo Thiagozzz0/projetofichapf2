@@ -968,7 +968,7 @@
             "raridade": "comum",
             "elevavel": true,
             "sobrescrito_original": "E",
-            "resumo": "Causa dano e em-purra uma criatura com uma rajada de água.",
+            "resumo": "Causa dano e empurra uma criatura com uma rajada de água.",
             "pagina_lista": 307,
             "disponivel_em_magias01": true
           },
@@ -1932,7 +1932,7 @@
             "raridade": "comum",
             "elevavel": true,
             "sobrescrito_original": "E",
-            "resumo": "Transforma os pés de uma criatura em barbatanas, tornando-a ca-paz de nadar, mas desacelerando-a em terra.",
+            "resumo": "Transforma os pés de uma criatura em barbatanas, tornando-a capaz de nadar, mas desacelerando-a em terra.",
             "pagina_lista": 308,
             "disponivel_em_magias01": false
           },
@@ -2886,7 +2886,7 @@
             "raridade": "comum",
             "elevavel": true,
             "sobrescrito_original": "E",
-            "resumo": "Telepor-ta até duas criaturas para novas posições próximas a você.",
+            "resumo": "Teleporta até duas criaturas para novas posições próximas a você.",
             "pagina_lista": 309,
             "disponivel_em_magias01": false
           },
@@ -2936,7 +2936,7 @@
             "raridade": "comum",
             "elevavel": true,
             "sobrescrito_original": "E",
-            "resumo": "Determine uma magia para acionar depois sob cir-cunstâncias à sua escolha.",
+            "resumo": "Determine uma magia para acionar depois sob circunstâncias à sua escolha.",
             "pagina_lista": 309,
             "disponivel_em_magias01": true
           },
@@ -3032,7 +3032,7 @@
             "raridade": "comum",
             "elevavel": true,
             "sobrescrito_original": "E",
-            "resumo": "A aparên-cia ilusória temível de uma cria-tura assusta observadores.",
+            "resumo": "A aparência ilusória temível de uma criatura assusta observadores.",
             "pagina_lista": 309,
             "disponivel_em_magias01": true
           },
@@ -3056,7 +3056,7 @@
             "raridade": "comum",
             "elevavel": true,
             "sobrescrito_original": "E",
-            "resumo": "Cria uma ilu-são de si mesmo que pode ser usada para conjurar magias.",
+            "resumo": "Cria uma ilusão de si mesmo que pode ser usada para conjurar magias.",
             "pagina_lista": 309,
             "disponivel_em_magias01": false
           },
@@ -3068,7 +3068,7 @@
             "raridade": "comum",
             "elevavel": false,
             "sobrescrito_original": null,
-            "resumo": "Dispara raios arco-íris que possuem vários efei-tos em criaturas em um cone.",
+            "resumo": "Dispara raios arco-íris que possuem vários efeitos em criaturas em um cone.",
             "pagina_lista": 309,
             "disponivel_em_magias01": false
           },
@@ -3104,7 +3104,7 @@
             "raridade": "incomum",
             "elevavel": false,
             "sobrescrito_original": "I",
-            "resumo": "Impede te-leportação e viagens planares.",
+            "resumo": "Impede teleportação e viagens planares.",
             "pagina_lista": 309,
             "disponivel_em_magias01": false
           }
@@ -3154,7 +3154,7 @@
             "raridade": "comum",
             "elevavel": false,
             "sobrescrito_original": null,
-            "resumo": "Torna uma criatura invisível, silenciosa e inde-tectável por qualquer sentido.",
+            "resumo": "Torna uma criatura invisível, silenciosa e indetectável por qualquer sentido.",
             "pagina_lista": 309,
             "disponivel_em_magias01": true
           },
@@ -3166,7 +3166,7 @@
             "raridade": "incomum",
             "elevavel": false,
             "sobrescrito_original": "I",
-            "resumo": "Descobre a locali-zação exata do alvo com distância ilimitada.",
+            "resumo": "Descobre a localização exata do alvo com distância ilimitada.",
             "pagina_lista": 309,
             "disponivel_em_magias01": true
           },
@@ -3312,7 +3312,7 @@
             "raridade": "incomum",
             "elevavel": false,
             "sobrescrito_original": "I",
-            "resumo": "Desativa ou des-trói um item mágico.",
+            "resumo": "Desativa ou destrói um item mágico.",
             "pagina_lista": 309,
             "disponivel_em_magias01": true
           },
@@ -3546,7 +3546,7 @@
             "raridade": "comum",
             "elevavel": true,
             "sobrescrito_original": "E",
-            "resumo": "Encon-tra o norte verdadeiro.",
+            "resumo": "Encontra o norte verdadeiro.",
             "pagina_lista": 309,
             "disponivel_em_magias01": true
           },
@@ -3558,7 +3558,7 @@
             "raridade": "comum",
             "elevavel": true,
             "sobrescrito_original": "E",
-            "resumo": "Arremessa ener-gia divina que causa dano baseado na tendência de sua divindade.",
+            "resumo": "Arremessa energia divina que causa dano baseado na tendência de sua divindade.",
             "pagina_lista": 309,
             "disponivel_em_magias01": true
           },
@@ -3606,7 +3606,7 @@
             "raridade": "comum",
             "elevavel": false,
             "sobrescrito_original": null,
-            "resumo": "Orientação divi-na aprimora uma rolagem.",
+            "resumo": "Orientação divina aprimora uma rolagem.",
             "pagina_lista": 309,
             "disponivel_em_magias01": false
           },
@@ -3630,7 +3630,7 @@
             "raridade": "comum",
             "elevavel": false,
             "sobrescrito_original": null,
-            "resumo": "Executa efei-tos mágicos menores.",
+            "resumo": "Executa efeitos mágicos menores.",
             "pagina_lista": 309,
             "disponivel_em_magias01": false
           },
@@ -3920,7 +3920,7 @@
             "raridade": "comum",
             "elevavel": true,
             "sobrescrito_original": "E",
-            "resumo": "Transfere continu-amente sua saúde para outra pessoa.",
+            "resumo": "Transfere continuamente sua saúde para outra pessoa.",
             "pagina_lista": 310,
             "disponivel_em_magias01": false
           }
@@ -4138,7 +4138,7 @@
             "raridade": "comum",
             "elevavel": true,
             "sobrescrito_original": "E",
-            "resumo": "Um corpo não se de-compõe e não pode se tornar um morto-vivo.",
+            "resumo": "Um corpo não se decompõe e não pode se tornar um morto-vivo.",
             "pagina_lista": 310,
             "disponivel_em_magias01": false
           },
@@ -4696,7 +4696,7 @@
             "raridade": "comum",
             "elevavel": false,
             "sobrescrito_original": null,
-            "resumo": "Envia uma mensa-gem mental para uma criatura em qualquer ponto do planeta e recebe uma resposta.",
+            "resumo": "Envia uma mensagem mental para uma criatura em qualquer ponto do planeta e recebe uma resposta.",
             "pagina_lista": 310,
             "disponivel_em_magias01": true
           },
@@ -7192,7 +7192,7 @@
             "raridade": "incomum",
             "elevavel": false,
             "sobrescrito_original": "I",
-            "resumo": "Descobre conhecimen-tos e memórias na mente da criatura.",
+            "resumo": "Descobre conhecimentos e memórias na mente da criatura.",
             "pagina_lista": 313,
             "disponivel_em_magias01": false
           },
@@ -8264,7 +8264,7 @@
             "raridade": "comum",
             "elevavel": true,
             "sobrescrito_original": "E",
-            "resumo": "Causa dano e em-purra uma criatura com uma rajada de água.",
+            "resumo": "Causa dano e empurra uma criatura com uma rajada de água.",
             "pagina_lista": 314,
             "disponivel_em_magias01": true
           },
@@ -8384,7 +8384,7 @@
             "raridade": "comum",
             "elevavel": false,
             "sobrescrito_original": null,
-            "resumo": "Torna tempora-riamente mágico os ataques de-sarmados de uma criatura.",
+            "resumo": "Torna temporariamente mágico os ataques desarmados de uma criatura.",
             "pagina_lista": 314,
             "disponivel_em_magias01": false
           },
@@ -8650,7 +8650,7 @@
             "raridade": "comum",
             "elevavel": false,
             "sobrescrito_original": null,
-            "resumo": "Comu-nica-se com animais.",
+            "resumo": "Comunica-se com animais.",
             "pagina_lista": 314,
             "disponivel_em_magias01": true
           },
@@ -8806,7 +8806,7 @@
             "raridade": "comum",
             "elevavel": true,
             "sobrescrito_original": "E",
-            "resumo": "Um cor-po não se decompõe e não pode se tornar um morto-vivo.",
+            "resumo": "Um corpo não se decompõe e não pode se tornar um morto-vivo.",
             "pagina_lista": 314,
             "disponivel_em_magias01": false
           },
@@ -9888,7 +9888,7 @@
             "raridade": "comum",
             "elevavel": false,
             "sobrescrito_original": null,
-            "resumo": "Volta animais, plantas e o clima con-tra criaturas à sua escolha.",
+            "resumo": "Volta animais, plantas e o clima contra criaturas à sua escolha.",
             "pagina_lista": 315,
             "disponivel_em_magias01": true
           },
@@ -10024,7 +10024,7 @@
       "tradicoes": [
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -10068,7 +10068,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -10152,7 +10152,7 @@
       "tradicoes": [
         "ocultista"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -10191,7 +10191,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -10243,7 +10243,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[one-action] verbal",
+      "execucao": "[1 ação] verbal",
       "acoes": "1",
       "componentes": [
         "verbal"
@@ -10279,7 +10279,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -10322,7 +10322,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -10363,7 +10363,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -10406,7 +10406,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -10447,7 +10447,7 @@
       "tradicoes": [
         "divina"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -10490,7 +10490,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -10531,7 +10531,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -10568,7 +10568,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -10604,7 +10604,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -10657,7 +10657,7 @@
       "tradicoes": [
         "divina"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -10702,7 +10702,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -10741,7 +10741,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -10783,7 +10783,7 @@
       "tradicoes": [
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -10823,7 +10823,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -10906,7 +10906,7 @@
       "tradicoes": [
         "divina"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -10985,7 +10985,7 @@
       "tradicoes": [
         "divina"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -11000,7 +11000,7 @@
       "salvamento": null,
       "duracao": "1 minuto",
       "resumo_lista": "Se transforma em uma forma de batalha determinada por sua divindade.",
-      "descricao": "Você se transforma em um avatar de sua divindade, assumindo uma forma de batalha Enorme. Você deve ter espaço suficiente para se expandir ou a magia é perdida. Você possui mãos nesta forma de batalha e pode usar ações de manuseio. Você pode Dispensar esta magia.\n\n• Você recebe as estatísticas e habilidades a seguir independentemente de qual forma de batalha assumir:\n• CA = 25 + seu nível. Ignore a penalidade em testes e redução de Velocidade de sua armadura.\n• 30 Pontos de Vida temporários.\n• Visão no escuro.\n• Um ou mais ataques específicos para a forma de batalha de sua divindade, que são os únicos ataques que pode usar. Você é treinado com esses ataques. Seu modificador de ataque é +33 e utiliza o dano listado. Ataques corpo a corpo são baseados em Força (para o propósito da condição enfraquecido, por exemplo) a menos que tenham o traço acuidade, e todos os ataques à distância são baseados em Destreza. Ataques que causem dano positivo ou dano negativo não curam criaturas.\n• +35 de modificador de Atletismo, exceto se o seu próprio modificador for maior.\n\nVocê também recebe habilidades específicas listadas para sua divindade:\n\n• Abadar Velocidade 15 metros, Velocidade de escavação 9 metros, imune a imobilizado; Distância [one-action] besta (incremento de distância de 36 metros, recarga 1), Dano 6d10+3 perfurante.\n• Asmodeus Velocidade 21 metros, caminhar no ar; Corpo a Corpo [one-action] maça (alcance 4,5 metros), Dano 6d10+6 contundente; Distância [one-action] fogo infernal (distância 36 metros), Dano 6d6+3 de fogo.\n• Calístria Velocidade 9 metros, Velocidade de voo 21 metros; Corpo a Corpo [one-action] chicote (acuidade, desarmar, não-letal, alcance 6 metros), Dano 6d4+6 cortante; Distância [one-action] doce ferroada (alcance 18 metros), Dano 6d6+3 de veneno.\n• Cayden Cailean Velocidade 21 metros, caminhar no ar, ignora terreno difícil e terreno difícil maior; Corpo a Corpo [one-action] rapieira (mortal d8, alcance 4,5 metros), Dano 6d6+6 perfurante; Distância [one-action] respingo de cerveja (alcance 36 metros), Dano 6d6+3 de veneno.\n• Desna Velocidade 9 metros, Velocidade de voo 21 metros; Corpo a Corpo [one-action] faca-estrela (acuidade, ágil, arremesso 18 metros, mortal d6, prata, alcance 4,5 metros); Dano 6d4+6 perfurante; Distância [one-action] feixe lunar (prata, distância 36 metros), Dano 6d6+3 de fogo.\n• Erastil Velocidade 21 metros, caminhar no ar, ignora terreno difícil e terreno difícil maior; Distância [one-action] arco longo (incremento de distância de 50 metros, mortal d8), Dano 6d8+3 perfurante.\n• Gorum Velocidade 21 metros, imune a imobilizado; Corpo a Corpo [one-action] montante (versátil Pf, alcance 4,5 metros), Dano 6d12+6 cortante.\n• Gozreh nenhuma Velocidade em terra, Velocidade de voo 21 metros, Velocidade de natação 21 metros, ignora terreno difícil e terreno difícil maior; Corpo a Corpo [one-action] ondas (arremesso 6 metros, empurrar, alcance 4,5 metros), Dano 6d8+6 contundente; Distância [one-action] vento (distância 36 metros, versátil eletricidade), Dano 6d6+3 contundente.\n• Iomedae Velocidade 21 metros, caminhar no ar; escudo (Dureza 15, não pode ser danificado); Corpo a Corpo [one-action] espada longa (versátil Pf, alcance 4,5 metros), Dano 6d8+6 cortante.\n• Irori Velocidade 24 metros, caminhar no ar; Corpo a Corpo [one-action] golpe liberto (acuidade, ágil, versátil Ct ou Pf, alcance 4,5 metros); Dano 6d8+6 contundente; Distância [one-action] golpe de vento (distância 36 metros), Dano 6d4+6 contundente.\n• Lamashtu Velocidade 9 metros, Velocidade de voo 21 metros; Corpo a Corpo [one-action] bracamante (enérgico, alcance 4,5 metros); Dano 6d10+6 cortante; Distância [one-action] águas de Lamashtu (distância 36 metros), Dano 6d6+3 de veneno.\n• Nethys Velocidade 21 metros, caminhar no ar; Distância [one-action] magia bruta (versátil eletricidade, fogo ou frio; distância 36 metros), Dano 6d6 força.\n• Norgorber Velocidade 21 metros, caminhar no ar, ignora terreno difícil e terreno difícil maior; Corpo a Corpo [one-action] espada curta (acuidade, ágil, versátil Ct, alcance 4,5 metros); Dano 6d6+6 perfurante; Distância [one-action] arremesso do Dedos Negros (distância 36 metros), Dano 6d6+3 de veneno.\n• Pharasma Velocidade 21 metros, caminhar no ar; Corpo a Corpo [one-action] adaga (acuidade, ágil, arremesso 12 metros, alcance 4,5 metros); Dano 6d6+6 cortante; Distância [one-action] rajada espiral (fere somente mortos-vivos, distância 36 metros), Dano 6d8+3 positivo.\n• Rovagug Velocidade 15 metros, Velocidade de escavação 9 metros, imune a imobilizado; Corpo a Corpo [one-action] mandíbulas (alcance 4,5 metros); Dano 6d12+6 perfurante; Corpo a Corpo [one-action] perna (ágil, versátil Pf, alcance 4,5 metros), Dano 6d8+6 contundente.\n• Sarenrae Velocidade 9 metros, Velocidade de voo 21 metros; Corpo a Corpo [one-action] cimitarra (enérgica, não-letal, alcance 4,5 metros); Dano 6d6+6 cortante; Distância [one-action] chama eterna (não-letal, distância 36 metros), Dano 6d6+3 de fogo.\n• Shelyn Velocidade 21 metros, caminhar no ar, ignora terreno difícil e terreno difícil maior; Corpo a Corpo [one-action] glaive (mortal d8, não-letal, alcance 6 metros); Dano 6d8+6 cortante; Distância [one-action] melodia da beleza interior (não-letal, distância 36 metros), Dano 6d6+3 sônico.\n• Torag Velocidade 15 metros, Velocidade de escavação 9 metros, imune a imobilizado; Corpo a Corpo [one-action] martelo de guerra (empurrar, alcance 4,5 metros); Dano 6d8+6 contundente.\n• Urgathoa Velocidade 21 metros, caminhar no ar; Corpo a Corpo [one-action] segadeira (derrubar, mortal d10, alcance 4,5 metros); Dano 6d10+6 cortante; Distância [one-action] praga pálida (distância 36 metros), Dano 6d6+3 negativo.\n• Zon-Kuthon Velocidade 21 metros, caminhar no ar, ignora terreno difícil e terreno difícil maior; Corpo a Corpo [one-action] corrente com cravos (derrubar, desarmar, alcance 4,5 metros); Dano 6d8+6 cortante; Distância [one-action] dor da meia-noite (mental, não-letal, distância 36 metros), Dano 6d6+3 mental.",
+      "descricao": "Você se transforma em um avatar de sua divindade, assumindo uma forma de batalha Enorme. Você deve ter espaço suficiente para se expandir ou a magia é perdida. Você possui mãos nesta forma de batalha e pode usar ações de manuseio. Você pode Dispensar esta magia.\n\n• Você recebe as estatísticas e habilidades a seguir independentemente de qual forma de batalha assumir:\n• CA = 25 + seu nível. Ignore a penalidade em testes e redução de Velocidade de sua armadura.\n• 30 Pontos de Vida temporários.\n• Visão no escuro.\n• Um ou mais ataques específicos para a forma de batalha de sua divindade, que são os únicos ataques que pode usar. Você é treinado com esses ataques. Seu modificador de ataque é +33 e utiliza o dano listado. Ataques corpo a corpo são baseados em Força (para o propósito da condição enfraquecido, por exemplo) a menos que tenham o traço acuidade, e todos os ataques à distância são baseados em Destreza. Ataques que causem dano positivo ou dano negativo não curam criaturas.\n• +35 de modificador de Atletismo, exceto se o seu próprio modificador for maior.\n\nVocê também recebe habilidades específicas listadas para sua divindade:\n\n• Abadar Velocidade 15 metros, Velocidade de escavação 9 metros, imune a imobilizado; Distância [1 ação] besta (incremento de distância de 36 metros, recarga 1), Dano 6d10+3 perfurante.\n• Asmodeus Velocidade 21 metros, caminhar no ar; Corpo a Corpo [1 ação] maça (alcance 4,5 metros), Dano 6d10+6 contundente; Distância [1 ação] fogo infernal (distância 36 metros), Dano 6d6+3 de fogo.\n• Calístria Velocidade 9 metros, Velocidade de voo 21 metros; Corpo a Corpo [1 ação] chicote (acuidade, desarmar, não-letal, alcance 6 metros), Dano 6d4+6 cortante; Distância [1 ação] doce ferroada (alcance 18 metros), Dano 6d6+3 de veneno.\n• Cayden Cailean Velocidade 21 metros, caminhar no ar, ignora terreno difícil e terreno difícil maior; Corpo a Corpo [1 ação] rapieira (mortal d8, alcance 4,5 metros), Dano 6d6+6 perfurante; Distância [1 ação] respingo de cerveja (alcance 36 metros), Dano 6d6+3 de veneno.\n• Desna Velocidade 9 metros, Velocidade de voo 21 metros; Corpo a Corpo [1 ação] faca-estrela (acuidade, ágil, arremesso 18 metros, mortal d6, prata, alcance 4,5 metros); Dano 6d4+6 perfurante; Distância [1 ação] feixe lunar (prata, distância 36 metros), Dano 6d6+3 de fogo.\n• Erastil Velocidade 21 metros, caminhar no ar, ignora terreno difícil e terreno difícil maior; Distância [1 ação] arco longo (incremento de distância de 50 metros, mortal d8), Dano 6d8+3 perfurante.\n• Gorum Velocidade 21 metros, imune a imobilizado; Corpo a Corpo [1 ação] montante (versátil Pf, alcance 4,5 metros), Dano 6d12+6 cortante.\n• Gozreh nenhuma Velocidade em terra, Velocidade de voo 21 metros, Velocidade de natação 21 metros, ignora terreno difícil e terreno difícil maior; Corpo a Corpo [1 ação] ondas (arremesso 6 metros, empurrar, alcance 4,5 metros), Dano 6d8+6 contundente; Distância [1 ação] vento (distância 36 metros, versátil eletricidade), Dano 6d6+3 contundente.\n• Iomedae Velocidade 21 metros, caminhar no ar; escudo (Dureza 15, não pode ser danificado); Corpo a Corpo [1 ação] espada longa (versátil Pf, alcance 4,5 metros), Dano 6d8+6 cortante.\n• Irori Velocidade 24 metros, caminhar no ar; Corpo a Corpo [1 ação] golpe liberto (acuidade, ágil, versátil Ct ou Pf, alcance 4,5 metros); Dano 6d8+6 contundente; Distância [1 ação] golpe de vento (distância 36 metros), Dano 6d4+6 contundente.\n• Lamashtu Velocidade 9 metros, Velocidade de voo 21 metros; Corpo a Corpo [1 ação] bracamante (enérgico, alcance 4,5 metros); Dano 6d10+6 cortante; Distância [1 ação] águas de Lamashtu (distância 36 metros), Dano 6d6+3 de veneno.\n• Nethys Velocidade 21 metros, caminhar no ar; Distância [1 ação] magia bruta (versátil eletricidade, fogo ou frio; distância 36 metros), Dano 6d6 força.\n• Norgorber Velocidade 21 metros, caminhar no ar, ignora terreno difícil e terreno difícil maior; Corpo a Corpo [1 ação] espada curta (acuidade, ágil, versátil Ct, alcance 4,5 metros); Dano 6d6+6 perfurante; Distância [1 ação] arremesso do Dedos Negros (distância 36 metros), Dano 6d6+3 de veneno.\n• Pharasma Velocidade 21 metros, caminhar no ar; Corpo a Corpo [1 ação] adaga (acuidade, ágil, arremesso 12 metros, alcance 4,5 metros); Dano 6d6+6 cortante; Distância [1 ação] rajada espiral (fere somente mortos-vivos, distância 36 metros), Dano 6d8+3 positivo.\n• Rovagug Velocidade 15 metros, Velocidade de escavação 9 metros, imune a imobilizado; Corpo a Corpo [1 ação] mandíbulas (alcance 4,5 metros); Dano 6d12+6 perfurante; Corpo a Corpo [1 ação] perna (ágil, versátil Pf, alcance 4,5 metros), Dano 6d8+6 contundente.\n• Sarenrae Velocidade 9 metros, Velocidade de voo 21 metros; Corpo a Corpo [1 ação] cimitarra (enérgica, não-letal, alcance 4,5 metros); Dano 6d6+6 cortante; Distância [1 ação] chama eterna (não-letal, distância 36 metros), Dano 6d6+3 de fogo.\n• Shelyn Velocidade 21 metros, caminhar no ar, ignora terreno difícil e terreno difícil maior; Corpo a Corpo [1 ação] glaive (mortal d8, não-letal, alcance 6 metros); Dano 6d8+6 cortante; Distância [1 ação] melodia da beleza interior (não-letal, distância 36 metros), Dano 6d6+3 sônico.\n• Torag Velocidade 15 metros, Velocidade de escavação 9 metros, imune a imobilizado; Corpo a Corpo [1 ação] martelo de guerra (empurrar, alcance 4,5 metros); Dano 6d8+6 contundente.\n• Urgathoa Velocidade 21 metros, caminhar no ar; Corpo a Corpo [1 ação] segadeira (derrubar, mortal d10, alcance 4,5 metros); Dano 6d10+6 cortante; Distância [1 ação] praga pálida (distância 36 metros), Dano 6d6+3 negativo.\n• Zon-Kuthon Velocidade 21 metros, caminhar no ar, ignora terreno difícil e terreno difícil maior; Corpo a Corpo [1 ação] corrente com cravos (derrubar, desarmar, alcance 4,5 metros); Dano 6d8+6 cortante; Distância [1 ação] dor da meia-noite (mental, não-letal, distância 36 metros), Dano 6d6+3 mental.",
       "resultados": null,
       "elevada": null,
       "tabela": null,
@@ -11024,7 +11024,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -11070,7 +11070,7 @@
       "tradicoes": [
         "divina"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -11112,7 +11112,7 @@
       "tradicoes": [
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -11149,7 +11149,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -11187,7 +11187,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -11224,7 +11224,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -11267,7 +11267,7 @@
         "divina",
         "primal"
       ],
-      "execucao": "[reaction] verbal",
+      "execucao": "[reação] verbal",
       "acoes": "reacao",
       "componentes": [
         "verbal"
@@ -11303,7 +11303,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -11340,7 +11340,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -11421,7 +11421,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -11463,7 +11463,7 @@
         "divina",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -11505,7 +11505,7 @@
         "divina",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -11620,7 +11620,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -11659,7 +11659,7 @@
         "divina",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -11704,7 +11704,7 @@
       "tradicoes": [
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -11749,7 +11749,7 @@
       "tradicoes": [
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -11811,7 +11811,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -11847,7 +11847,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -11883,7 +11883,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -11926,7 +11926,7 @@
       "tradicoes": [
         "divina"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -11974,7 +11974,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -12014,7 +12014,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -12067,7 +12067,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -12158,7 +12158,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -12200,7 +12200,7 @@
       "tradicoes": [
         "divina"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -12242,7 +12242,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -12284,7 +12284,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -12406,7 +12406,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -12452,7 +12452,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -12489,7 +12489,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -12536,7 +12536,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -12578,7 +12578,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -12621,7 +12621,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -12719,7 +12719,7 @@
       "alvos": null,
       "salvamento": null,
       "duracao": "24 horas",
-      "resumo_lista": "Determine uma magia para acionar depois sob cir-cunstâncias à sua escolha.",
+      "resumo_lista": "Determine uma magia para acionar depois sob circunstâncias à sua escolha.",
       "descricao": "Você prepara uma magia que será acionada posteriormente. Enquanto conjurar contingência, você também conjura outra magia de 4º nível ou inferior com tempo de execução de no máximo 3 ações. Esta magia acompanhante deve ser capaz de afetá-lo. Você deve fazer quaisquer decisões para a magia quando conjurar contingência, tal como escolher um tipo de dano para resistir a energia. Durante a conjuração, escolha um acionamento sob o qual a magia será conjurada, utilizando as mesmas restrições para o acionamento de uma ação de Preparar. Após contingência ser conjurada, você pode fazer a magia que a acompanha surtir efeito como uma reação a esse acionamento. Ela afeta somente você, mesmo que normalmente afetaria mais criaturas. Se você definir condições complicadas, conforme determinado pelo MJ, o acionamento pode falhar. Se você conjurar contingência novamente, a nova conjuração substitui a antiga.",
       "resultados": null,
       "elevada": [
@@ -12756,7 +12756,7 @@
         "divina",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -12793,7 +12793,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -12829,7 +12829,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -12870,7 +12870,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -12943,7 +12943,7 @@
       "tradicoes": [
         "divina"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -12984,7 +12984,7 @@
       "tradicoes": [
         "arcana"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -13025,7 +13025,7 @@
       "tradicoes": [
         "arcana"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -13067,7 +13067,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -13108,7 +13108,7 @@
       "tradicoes": [
         "ocultista"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -13150,7 +13150,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -13191,7 +13191,7 @@
       "tradicoes": [
         "primal"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -13232,7 +13232,7 @@
       "tradicoes": [
         "divina"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -13273,7 +13273,7 @@
       "tradicoes": [
         "primal"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -13317,7 +13317,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -13359,7 +13359,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -13401,7 +13401,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -13490,7 +13490,7 @@
         "divina",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -13578,7 +13578,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -13621,7 +13621,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -13662,7 +13662,7 @@
       "tradicoes": [
         "divina"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -13710,7 +13710,7 @@
       "tradicoes": [
         "divina"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -13753,7 +13753,7 @@
         "divina",
         "primal"
       ],
-      "execucao": "[one-action] a [three-actions]",
+      "execucao": "[1 ação] a [3 ações]",
       "acoes": "1 a 3",
       "componentes": [],
       "custo": null,
@@ -13765,7 +13765,7 @@
       "salvamento": null,
       "duracao": null,
       "resumo_lista": "Energia positiva cura os vivos ou fere os mortos-vivos, seja uma única criatura ou todas em uma explosão.",
-      "descricao": "Você canaliza energia positiva para curar os vivos ou ferir os mortos-vivos. Se o alvo for uma criatura viva voluntária, você restaura 1d8 dos Pontos de Vida dele. Se o alvo for uma criatura morta-viva, você causa essa quantidade de dano positivo a ele, que deve tentar um salvamento básico de Fortitude. A quantidade de ações que você gasta para Conjurar esta Magia determina seus alvos, distância, área e outros parâmetros.\n\n• [one-action] (somático) A magia possui uma distância de toque.\n• [two-actions] (somático, verbal) A magia possui uma distância de 9 metros. Se você estiver curando uma criatura viva, aumente os Pontos de Vida restaurados em 8.\n• [three-actions] (material, somático, verbal) Você dispersa energia positiva em uma emanação de 9 metros. Isto afeta todas as criaturas vivas e mortas-vivas na área.",
+      "descricao": "Você canaliza energia positiva para curar os vivos ou ferir os mortos-vivos. Se o alvo for uma criatura viva voluntária, você restaura 1d8 dos Pontos de Vida dele. Se o alvo for uma criatura morta-viva, você causa essa quantidade de dano positivo a ele, que deve tentar um salvamento básico de Fortitude. A quantidade de ações que você gasta para Conjurar esta Magia determina seus alvos, distância, área e outros parâmetros.\n\n• [1 ação] (somático) A magia possui uma distância de toque.\n• [2 ações] (somático, verbal) A magia possui uma distância de 9 metros. Se você estiver curando uma criatura viva, aumente os Pontos de Vida restaurados em 8.\n• [3 ações] (material, somático, verbal) Você dispersa energia positiva em uma emanação de 9 metros. Isto afeta todas as criaturas vivas e mortas-vivas na área.",
       "resultados": null,
       "elevada": [
         {
@@ -13793,7 +13793,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -13833,7 +13833,7 @@
       "tradicoes": [
         "divina"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -13880,7 +13880,7 @@
         "divina",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -13921,7 +13921,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -13935,7 +13935,7 @@
       "alvos": "1 criatura",
       "salvamento": null,
       "duracao": "10 minutos",
-      "resumo_lista": "Torna uma criatura invisível, silenciosa e inde-tectável por qualquer sentido.",
+      "resumo_lista": "Torna uma criatura invisível, silenciosa e indetectável por qualquer sentido.",
       "descricao": "Você protege uma criatura contra os sentidos dos outros. O alvo fica indetectado, não somente para visão, mas para todos os sentidos, e é considerado invisível, não importa quais sentidos precisos e imprecisos um observador possua. Uma criatura ainda pode encontrar o alvo ao Buscar procurando por poeira mexida, ouvindo lacunas no espectro do som ou encontrando alguma outra forma de descobrir a presença de uma criatura que seria indetectável.",
       "resultados": null,
       "elevada": null,
@@ -13956,7 +13956,7 @@
       "tradicoes": [
         "arcana"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -13995,7 +13995,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -14041,7 +14041,7 @@
       "tradicoes": [
         "arcana"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -14170,7 +14170,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -14210,7 +14210,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -14257,7 +14257,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -14300,7 +14300,7 @@
         "divina",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -14343,7 +14343,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -14402,7 +14402,7 @@
       "alvos": "1 criatura ou objeto",
       "salvamento": null,
       "duracao": null,
-      "resumo_lista": "Descobre a locali-zação exata do alvo com distância ilimitada.",
+      "resumo_lista": "Descobre a localização exata do alvo com distância ilimitada.",
       "descricao": "Você descobre o nome da localização e plano exatos do alvo (incluindo o prédio, comunidade e país) e em qual plano de existência ele está.\n\nVocê pode mirar uma criatura somente se a tiver visto pessoalmente, se possuir um dos pertences significativos dela ou uma parte de seu corpo. Para um objeto, você deve tê-lo tocado ou ter um fragmento dele. Discernir localização automaticamente supera proteções contra adivinhação ou detecção de nível inferior ao desta magia, mesmo que normalmente tivessem uma chance de bloqueá-la.",
       "resultados": null,
       "elevada": null,
@@ -14428,7 +14428,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -14465,7 +14465,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -14502,7 +14502,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -14548,7 +14548,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -14562,7 +14562,7 @@
       "alvos": "1 item mágico",
       "salvamento": null,
       "duracao": null,
-      "resumo_lista": "Desativa ou des-trói um item mágico.",
+      "resumo_lista": "Desativa ou destrói um item mágico.",
       "descricao": "Energia crepitante disjunta o alvo. Você tenta neutralizá-lo (página 459). Se você obtiver sucesso, ele é desativado por 1 semana. Em um sucesso crítico, ele é destruído. Se o alvo for um artefato ou item similar, você falha automaticamente.",
       "resultados": null,
       "elevada": null,
@@ -14586,7 +14586,7 @@
         "divina",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -14629,7 +14629,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -14668,7 +14668,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -14712,7 +14712,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -14759,7 +14759,7 @@
       "tradicoes": [
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -14805,7 +14805,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -14936,7 +14936,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -14985,7 +14985,7 @@
       "tradicoes": [
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -15070,7 +15070,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -15084,7 +15084,7 @@
       "alvos": "1 criatura ou objeto",
       "salvamento": null,
       "duracao": null,
-      "resumo_lista": "Causa dano e em-purra uma criatura com uma rajada de água.",
+      "resumo_lista": "Causa dano e empurra uma criatura com uma rajada de água.",
       "descricao": "Você invoca uma rajada poderosa de água pressurizada que machuca o alvo e o empurra para trás. Faça uma rolagem de ataque de magia à distância.",
       "resultados": {
         "sucesso_critico": "O alvo sofre 6d6 de dano contundente e é empurrado 3 metros para trás.",
@@ -15114,7 +15114,7 @@
       "tradicoes": [
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -15129,7 +15129,7 @@
       "salvamento": null,
       "duracao": "1 minuto",
       "resumo_lista": "Se transforma em um imenso avatar da natureza.",
-      "descricao": "O poder primal do mundo flui através de você. Você se transforma em uma encarnação da natureza, como um homem verde ou um kaiju. Sua forma de batalha é Média para um homem verde ou Imensa (9 metros de lado) para um kaiju. Você deve ter espaço suficiente para se expandir ou a magia é perdida. Enquanto estiver nesta forma, você adquire o traço planta (para um homem verde) ou o traço besta (para um kaiju). Você pode Dispensar esta magia.\n\nVocê recebe as estatísticas e habilidades a seguir independentemente de qual forma de batalha assumir:\n\n• CA = 25 + seu nível. Ignore a penalidade em testes e redução de Velocidade de sua armadura.\n• 30 Pontos de Vida temporários.\n• Visão no escuro.\n• Um ou mais ataques específicos para a forma de batalha escolhida, que são os únicos ataques que pode usar. Você é treinado com eles. Seu modificador de ataque é +34 e utiliza o dano listado. Ataques corpo a corpo são baseados em Força (para o propósito da condição enfraquecido, por exemplo). Se seu modificador de ataque para ataques desarmados baseados for maior, você pode utilizá-lo em vez do modificador concedido pela magia.\n• +36 de modificador de Atletismo, exceto se o seu próprio modificador for maior.\n\nVocê também recebe habilidades específicas baseadas na forma escolhida:\n\n• Homem Verde Velocidade 12 metros, Velocidade de escalada 12 metros; Corpo a Corpo [one-action] vinhas (versátil Pf, alcance 9 metros), Dano 6d8+12 contundente; Distância [one-action] espinhos (distância 30 metros), Dano 6d6+6 perfurante; Afago Verde (aura, primal, transmutação) 18 metros. Inimigos que não sejam plantas devem obter sucesso em um salvamento de Fortitude contra sua CD de magia ou ficam desajeitados 1 por 1 rodada (desajeitado 2 em uma falha crítica).\n• Kaiju Velocidade 15 metros, resistência 5 a dano físico; Corpo a Corpo [one-action] mandíbulas (alcance 9 metros), Dano 6d10+10 perfurante; Corpo a Corpo [one-action] garras (ágil, alcance 4,5 metros), Dano 6d8+8 cortante; Corpo a Corpo [one-action] pata (ágil, alcance 4,5 metros), Dano 6d6+10 contundente; Imparável Você é imune a ficar imobilizado e ignora terreno difícil e terreno difícil maior; Atropelar [three-actions] Você se move até o dobro de sua Velocidade e se move através de espaços de criaturas Enormes ou menores, atropelando cada criatura cujo espaço você adentrar. Uma criatura atropelada sofre dano de sua pata com um salvamento básico de Reflexos contra sua CD de magia.",
+      "descricao": "O poder primal do mundo flui através de você. Você se transforma em uma encarnação da natureza, como um homem verde ou um kaiju. Sua forma de batalha é Média para um homem verde ou Imensa (9 metros de lado) para um kaiju. Você deve ter espaço suficiente para se expandir ou a magia é perdida. Enquanto estiver nesta forma, você adquire o traço planta (para um homem verde) ou o traço besta (para um kaiju). Você pode Dispensar esta magia.\n\nVocê recebe as estatísticas e habilidades a seguir independentemente de qual forma de batalha assumir:\n\n• CA = 25 + seu nível. Ignore a penalidade em testes e redução de Velocidade de sua armadura.\n• 30 Pontos de Vida temporários.\n• Visão no escuro.\n• Um ou mais ataques específicos para a forma de batalha escolhida, que são os únicos ataques que pode usar. Você é treinado com eles. Seu modificador de ataque é +34 e utiliza o dano listado. Ataques corpo a corpo são baseados em Força (para o propósito da condição enfraquecido, por exemplo). Se seu modificador de ataque para ataques desarmados baseados for maior, você pode utilizá-lo em vez do modificador concedido pela magia.\n• +36 de modificador de Atletismo, exceto se o seu próprio modificador for maior.\n\nVocê também recebe habilidades específicas baseadas na forma escolhida:\n\n• Homem Verde Velocidade 12 metros, Velocidade de escalada 12 metros; Corpo a Corpo [1 ação] vinhas (versátil Pf, alcance 9 metros), Dano 6d8+12 contundente; Distância [1 ação] espinhos (distância 30 metros), Dano 6d6+6 perfurante; Afago Verde (aura, primal, transmutação) 18 metros. Inimigos que não sejam plantas devem obter sucesso em um salvamento de Fortitude contra sua CD de magia ou ficam desajeitados 1 por 1 rodada (desajeitado 2 em uma falha crítica).\n• Kaiju Velocidade 15 metros, resistência 5 a dano físico; Corpo a Corpo [1 ação] mandíbulas (alcance 9 metros), Dano 6d10+10 perfurante; Corpo a Corpo [1 ação] garras (ágil, alcance 4,5 metros), Dano 6d8+8 cortante; Corpo a Corpo [1 ação] pata (ágil, alcance 4,5 metros), Dano 6d6+10 contundente; Imparável Você é imune a ficar imobilizado e ignora terreno difícil e terreno difícil maior; Atropelar [3 ações] Você se move até o dobro de sua Velocidade e se move através de espaços de criaturas Enormes ou menores, atropelando cada criatura cujo espaço você adentrar. Uma criatura atropelada sofre dano de sua pata com um salvamento básico de Reflexos contra sua CD de magia.",
       "resultados": null,
       "elevada": null,
       "tabela": null,
@@ -15151,7 +15151,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -15231,7 +15231,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -15274,7 +15274,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -15289,7 +15289,7 @@
       "alvos": "1 criatura à qual você esteja familiarizado",
       "salvamento": null,
       "duracao": null,
-      "resumo_lista": "Envia uma mensa-gem mental para uma criatura em qualquer ponto do planeta e recebe uma resposta.",
+      "resumo_lista": "Envia uma mensagem mental para uma criatura em qualquer ponto do planeta e recebe uma resposta.",
       "descricao": "Você envia uma mensagem mental de até 25 palavras à criatura e ela pode responder imediatamente com a própria mensagem de até 25 palavras.",
       "resultados": null,
       "elevada": null,
@@ -15312,7 +15312,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -15353,7 +15353,7 @@
       "tradicoes": [
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -15399,7 +15399,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -15441,7 +15441,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -15485,7 +15485,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[one-action] verbal",
+      "execucao": "[1 ação] verbal",
       "acoes": "1",
       "componentes": [
         "verbal"
@@ -15540,7 +15540,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -15585,7 +15585,7 @@
       "tradicoes": [
         "divina"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -15629,7 +15629,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -15671,7 +15671,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -15713,7 +15713,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -15750,7 +15750,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -15793,7 +15793,7 @@
         "divina",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -15830,7 +15830,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -15875,7 +15875,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -15916,7 +15916,7 @@
         "divina",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -15963,7 +15963,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -16007,7 +16007,7 @@
         "divina",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -16054,7 +16054,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -16103,7 +16103,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -16143,7 +16143,7 @@
       "tradicoes": [
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -16157,7 +16157,7 @@
       "alvos": null,
       "salvamento": null,
       "duracao": "10 minutos",
-      "resumo_lista": "Comu-nica-se com animais.",
+      "resumo_lista": "Comunica-se com animais.",
       "descricao": "Você pode fazer perguntas e receber respostas de animais, assim como usar a perícia Diplomacia com eles. A magia não os torna mais amigáveis que o normal. Animais astutos são provavelmente sucintos e evasivos, enquanto os menos inteligentes frequentemente fazem comentários fúteis.",
       "resultados": null,
       "elevada": null,
@@ -16179,7 +16179,7 @@
       "tradicoes": [
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -16262,7 +16262,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -16302,7 +16302,7 @@
       "tradicoes": [
         "primal"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -16339,7 +16339,7 @@
       "tradicoes": [
         "divina"
       ],
-      "execucao": "[one-action] a [three-actions]",
+      "execucao": "[1 ação] a [3 ações]",
       "acoes": "1 a 3",
       "componentes": [],
       "custo": null,
@@ -16351,7 +16351,7 @@
       "salvamento": null,
       "duracao": null,
       "resumo_lista": "Energia negativa fere os vivos ou cura os mortos-vivos, seja uma única criatura ou todas em uma explosão.",
-      "descricao": "Você canaliza energia negativa para ferir os vivos ou curar os mortos-vivos. Se o alvo for uma criatura viva, você causa 1d8 de dano negativo a ele, que deve tentar um salvamento básico de Fortitude. Se o alvo for uma criatura morta-viva voluntária, você restaura essa quantidade aos Pontos de Vida dele. A quantidade de ações que você gasta para Conjurar esta Magia determina seus alvos, distância, área e outros parâmetros.\n\n• [one-action] (somático) A magia possui uma distância de toque.\n• [two-actions] (somático, verbal) A magia possui uma distância de 9 metros. Se você estiver curando uma criatura morta-viva, aumente os Pontos de Vida restaurados em 8.\n• [three-actions] (material, somático, verbal) Você dispersa energia negativa em uma emanação de 9 metros. Isto afeta todas as criaturas vivas e mortas-vivas na área.",
+      "descricao": "Você canaliza energia negativa para ferir os vivos ou curar os mortos-vivos. Se o alvo for uma criatura viva, você causa 1d8 de dano negativo a ele, que deve tentar um salvamento básico de Fortitude. Se o alvo for uma criatura morta-viva voluntária, você restaura essa quantidade aos Pontos de Vida dele. A quantidade de ações que você gasta para Conjurar esta Magia determina seus alvos, distância, área e outros parâmetros.\n\n• [1 ação] (somático) A magia possui uma distância de toque.\n• [2 ações] (somático, verbal) A magia possui uma distância de 9 metros. Se você estiver curando uma criatura morta-viva, aumente os Pontos de Vida restaurados em 8.\n• [3 ações] (material, somático, verbal) Você dispersa energia negativa em uma emanação de 9 metros. Isto afeta todas as criaturas vivas e mortas-vivas na área.",
       "resultados": null,
       "elevada": [
         {
@@ -16378,7 +16378,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -16420,7 +16420,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -16463,7 +16463,7 @@
         "arcana",
         "divina"
       ],
-      "execucao": "[reaction] somático",
+      "execucao": "[reação] somático",
       "acoes": "reacao",
       "componentes": [
         "somático"
@@ -16505,7 +16505,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -16548,7 +16548,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -16585,7 +16585,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -16600,7 +16600,7 @@
       "salvamento": null,
       "duracao": "1 minuto",
       "resumo_lista": "Se transforma em um combatente voador.",
-      "descricao": "Você usa sua maestria das forças primais para remoldar seu corpo na forma de batalha de um animal voador Médio. Quando conjurar esta magia, escolha morcego, pássaro, pterossauro ou vespa. Você pode decidir o tipo específico de animal (como uma águia ou coruja para pássaro), mas isto não tem efeito no tamanho ou nas estatísticas da forma. Enquanto estiver nesta forma, você adquire o traço animal. Você pode Dispensar esta magia.\n\nVocê recebe as estatísticas e habilidades a seguir independentemente de qual forma de batalha escolher:\n\n• CA = 18 + seu nível. Ignore a penalidade em testes e redução de Velocidade de sua armadura.\n• 5 Pontos de Vida temporários.\n• Visão na penumbra.\n• Um ou mais ataques desarmados corpo a corpo específicos para a forma de batalha escolhida, que são os únicos ataques que pode usar. Você é treinado com eles. Seu modificador de ataque é +16 e seu bônus de dano é +5. Estes ataques são baseados em Destreza (para o propósito da condição desajeitado, por exemplo). Se seu modificador de ataque para ataques desarmados baseados em Destreza for maior, você pode utilizá-lo em vez do modificador concedido pela magia.\n• +16 de modificador de Acrobatismo, exceto se o seu próprio modificador for maior.\n\nVocê também recebe habilidades específicas baseadas na forma escolhida:\n\n• Morcego Velocidade 6 metros, Velocidade de voo 9 metros; ecolocalização precisa 12 metros; Corpo a Corpo [one-action] presas, Dano 2d8 perfurante; Corpo a Corpo [one-action] asa (ágil), Dano 2d6 contundente.\n• Pássaro Velocidade 3 metros, Velocidade de voo 15 metros; Corpo a Corpo [one-action] bico, Dano 2d8 perfurante; Corpo a Corpo [one-action] unha (ágil), Dano 1d10 cortante.\n• Pterossauro Velocidade 3 metros, Velocidade de voo 9 metros; faro impreciso 9 metros; Corpo a Corpo [one-action] bico, Dano 3d6 perfurante.\n• Vespa Velocidade 6 metros, Velocidade de voo 12 metros; Corpo a Corpo [one-action] ferrão, Dano 1d8 perfurante mais 1d6 persistente de veneno.",
+      "descricao": "Você usa sua maestria das forças primais para remoldar seu corpo na forma de batalha de um animal voador Médio. Quando conjurar esta magia, escolha morcego, pássaro, pterossauro ou vespa. Você pode decidir o tipo específico de animal (como uma águia ou coruja para pássaro), mas isto não tem efeito no tamanho ou nas estatísticas da forma. Enquanto estiver nesta forma, você adquire o traço animal. Você pode Dispensar esta magia.\n\nVocê recebe as estatísticas e habilidades a seguir independentemente de qual forma de batalha escolher:\n\n• CA = 18 + seu nível. Ignore a penalidade em testes e redução de Velocidade de sua armadura.\n• 5 Pontos de Vida temporários.\n• Visão na penumbra.\n• Um ou mais ataques desarmados corpo a corpo específicos para a forma de batalha escolhida, que são os únicos ataques que pode usar. Você é treinado com eles. Seu modificador de ataque é +16 e seu bônus de dano é +5. Estes ataques são baseados em Destreza (para o propósito da condição desajeitado, por exemplo). Se seu modificador de ataque para ataques desarmados baseados em Destreza for maior, você pode utilizá-lo em vez do modificador concedido pela magia.\n• +16 de modificador de Acrobatismo, exceto se o seu próprio modificador for maior.\n\nVocê também recebe habilidades específicas baseadas na forma escolhida:\n\n• Morcego Velocidade 6 metros, Velocidade de voo 9 metros; ecolocalização precisa 12 metros; Corpo a Corpo [1 ação] presas, Dano 2d8 perfurante; Corpo a Corpo [1 ação] asa (ágil), Dano 2d6 contundente.\n• Pássaro Velocidade 3 metros, Velocidade de voo 15 metros; Corpo a Corpo [1 ação] bico, Dano 2d8 perfurante; Corpo a Corpo [1 ação] unha (ágil), Dano 1d10 cortante.\n• Pterossauro Velocidade 3 metros, Velocidade de voo 9 metros; faro impreciso 9 metros; Corpo a Corpo [1 ação] bico, Dano 3d6 perfurante.\n• Vespa Velocidade 6 metros, Velocidade de voo 12 metros; Corpo a Corpo [1 ação] ferrão, Dano 1d8 perfurante mais 1d6 persistente de veneno.",
       "resultados": null,
       "elevada": [
         {
@@ -16630,7 +16630,7 @@
       "tradicoes": [
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -16645,7 +16645,7 @@
       "salvamento": null,
       "duracao": "1 minuto",
       "resumo_lista": "Se transforma em um animal perigoso.",
-      "descricao": "Você recorre à energia primal para se transformar na forma de batalha de um animal Médio. Quando conjurar esta magia, escolha canídeo, felino, macaco, sapo, serpente, touro, tubarão, urso ou veado. Você pode decidir o tipo específico de animal (como leão ou leopardo da neve para felino), mas isto não tem efeito no tamanho ou nas estatísticas da forma. Enquanto estiver nesta forma, você adquire o traço animal. Você pode Dispensar esta magia.\n\nVocê recebe as estatísticas e habilidades a seguir independentemente de qual forma de batalha escolher:\n\n• CA = 16 + seu nível. Ignore a penalidade em testes e redução de Velocidade de sua armadura.\n• 5 Pontos de Vida temporários.\n• Visão na penumbra e faro impreciso de 9 metros.\n• Um ou mais ataques desarmados corpo a corpo específicos para a forma de batalha escolhida, que são os únicos ataques que pode usar. Você é treinado com eles. Seu modificador de ataque é +9 e seu bônus de dano é +1. Estes ataques são baseados em Força (para o propósito da condição enfraquecido, por exemplo). Se seu modificador de ataque para ataques desarmados baseados for maior, você pode utilizá-lo em vez do modificador concedido pela magia.\n• +9 de modificador de Atletismo, exceto se o seu próprio modificador for maior.\n\nVocê também recebe habilidades específicas baseadas na forma escolhida:\n\n• Canídeo Velocidade 12 metros; Corpo a Corpo [one-action] mandíbulas, Dano 2d8 perfurante.\n• Felino Velocidade 12 metros; Corpo a Corpo [one-action] mandíbulas, Dano 2d6 perfurante; Corpo a Corpo [one-action] garra (ágil), Dano 1d10 cortante.\n• Macaco Velocidade 7,5 metros, Velocidade de escalada 6 metros; Corpo a Corpo [one-action] punho, Dano 2d6 contundente.\n• Sapo Velocidade 7,5 metros, Velocidade de natação 7,5 metros; Corpo a Corpo [one-action] mandíbulas, Dano 2d6 contundente; Corpo a Corpo [one-action] língua (alcance 4,5 metros), Dano 2d4 contundente.\n• Serpente Velocidade 6 metros, Velocidade de escalada 6 metros, Velocidade de natação 6 metros; Corpo a Corpo [one-action] presas, Dano 2d4 perfurante mais 1d6 de veneno.\n• Touro Velocidade 9 metros; Corpo a Corpo [one-action] chifre, Dano 2d8 perfurante.\n• Tubarão Velocidade de natação 10,5 metros; Corpo a Corpo [one-action] mandíbulas, Dano 2d8 perfurante; respira embaixo d’água, mas não no ar.\n• Urso Velocidade 9 metros; Corpo a Corpo [one-action] mandíbulas, Dano 2d8 perfurante; Corpo a Corpo [one-action] garra (ágil), Dano 1d8 cortante.\n• Veado Velocidade 15 metros; Corpo a Corpo [one-action] galhada, Dano 2d6 perfurante.",
+      "descricao": "Você recorre à energia primal para se transformar na forma de batalha de um animal Médio. Quando conjurar esta magia, escolha canídeo, felino, macaco, sapo, serpente, touro, tubarão, urso ou veado. Você pode decidir o tipo específico de animal (como leão ou leopardo da neve para felino), mas isto não tem efeito no tamanho ou nas estatísticas da forma. Enquanto estiver nesta forma, você adquire o traço animal. Você pode Dispensar esta magia.\n\nVocê recebe as estatísticas e habilidades a seguir independentemente de qual forma de batalha escolher:\n\n• CA = 16 + seu nível. Ignore a penalidade em testes e redução de Velocidade de sua armadura.\n• 5 Pontos de Vida temporários.\n• Visão na penumbra e faro impreciso de 9 metros.\n• Um ou mais ataques desarmados corpo a corpo específicos para a forma de batalha escolhida, que são os únicos ataques que pode usar. Você é treinado com eles. Seu modificador de ataque é +9 e seu bônus de dano é +1. Estes ataques são baseados em Força (para o propósito da condição enfraquecido, por exemplo). Se seu modificador de ataque para ataques desarmados baseados for maior, você pode utilizá-lo em vez do modificador concedido pela magia.\n• +9 de modificador de Atletismo, exceto se o seu próprio modificador for maior.\n\nVocê também recebe habilidades específicas baseadas na forma escolhida:\n\n• Canídeo Velocidade 12 metros; Corpo a Corpo [1 ação] mandíbulas, Dano 2d8 perfurante.\n• Felino Velocidade 12 metros; Corpo a Corpo [1 ação] mandíbulas, Dano 2d6 perfurante; Corpo a Corpo [1 ação] garra (ágil), Dano 1d10 cortante.\n• Macaco Velocidade 7,5 metros, Velocidade de escalada 6 metros; Corpo a Corpo [1 ação] punho, Dano 2d6 contundente.\n• Sapo Velocidade 7,5 metros, Velocidade de natação 7,5 metros; Corpo a Corpo [1 ação] mandíbulas, Dano 2d6 contundente; Corpo a Corpo [1 ação] língua (alcance 4,5 metros), Dano 2d4 contundente.\n• Serpente Velocidade 6 metros, Velocidade de escalada 6 metros, Velocidade de natação 6 metros; Corpo a Corpo [1 ação] presas, Dano 2d4 perfurante mais 1d6 de veneno.\n• Touro Velocidade 9 metros; Corpo a Corpo [1 ação] chifre, Dano 2d8 perfurante.\n• Tubarão Velocidade de natação 10,5 metros; Corpo a Corpo [1 ação] mandíbulas, Dano 2d8 perfurante; respira embaixo d’água, mas não no ar.\n• Urso Velocidade 9 metros; Corpo a Corpo [1 ação] mandíbulas, Dano 2d8 perfurante; Corpo a Corpo [1 ação] garra (ágil), Dano 1d8 cortante.\n• Veado Velocidade 15 metros; Corpo a Corpo [1 ação] galhada, Dano 2d6 perfurante.",
       "resultados": null,
       "elevada": [
         {
@@ -16679,7 +16679,7 @@
       "tradicoes": [
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -16694,7 +16694,7 @@
       "salvamento": null,
       "duracao": "1 minuto",
       "resumo_lista": "Se transforma em um dinossauro.",
-      "descricao": "Você canaliza as formas primais da natureza para se transformar na forma de batalha de um animal Grande, especificamente a de um poderoso e aterrorizante dinossauro. Você deve ter espaço suficiente para se expandir ou a magia é perdida. Quando conjurar esta magia, escolha anquilossauro, brontossauro, deinonico, estegossauro, tricerátops ou tiranossauro. Você pode decidir o tipo específico de animal, mas isto não tem efeito no tamanho ou nas estatísticas da forma. Enquanto estiver nesta forma, você adquire os traços animal e dinossauro. Você pode Dispensar esta magia.\n\nVocê recebe as estatísticas e habilidades a seguir independentemente de qual forma de batalha escolher:\n\n• CA = 18 + seu nível. Ignore a penalidade em testes e redução de Velocidade de sua armadura.\n• 15 Pontos de Vida temporários.\n• Visão na penumbra e faro impreciso de 9 metros.\n• Um ou mais ataques desarmados corpo a corpo específicos para a forma de batalha escolhida, que são os únicos ataques que pode usar. Você é treinado com eles. Seu modificador de ataque é +16 e seu bônus de dano é +9. Estes ataques são baseados em Força (para o propósito da condição enfraquecido, por exemplo). Se seu modificador de ataque para ataques desarmados for maior, você pode utilizá-lo em vez do modificador concedido pela magia.\n• +18 de modificador de Atletismo, exceto se o seu próprio modificador for maior.\n\nVocê também recebe habilidades específicas baseadas na forma escolhida:\n\n• Anquilossauro Velocidade 7,5 metros; Corpo a Corpo [one-action] cauda (oscilante, alcance 3 metros), Dano 2d6 contundente; Corpo a Corpo [one-action] pata, Dano 2d6 contundente.\n• Brontossauro Velocidade 7,5 metros; Corpo a Corpo [one-action] cauda (alcance 4,5 metros), Dano 2d6 contundente; Corpo a Corpo [one-action] pata, Dano 2d8 contundente.\n• Deinonico Velocidade 12 metros; Corpo a Corpo [one-action] unha (ágil), Dano 2d4 perfurante mais 1 de sangramento persistente; Corpo a Corpo [one-action] mandíbulas, Dano 1d10 perfurante.\n• Estegossauro Velocidade 9 metros; Corpo a Corpo [one-action] cauda (alcance 3 metros), Dano 2d8 perfurante.\n• Tricerátops Velocidade 9 metros; Corpo a Corpo [one-action] chifre, Dano 2d8 perfurante mais 1d6 de sangramento persistente em um acerto crítico; Corpo a Corpo [one-action] pata, Dano 2d6 contundente.\n• Tiranossauro Velocidade 9 metros; Corpo a Corpo [one-action] mandíbulas (mortal d12, alcance 3 metros), Dano 1d12 perfurante; Corpo a Corpo [one-action] cauda (alcance 3 metros), Dano 1d10 contundente.",
+      "descricao": "Você canaliza as formas primais da natureza para se transformar na forma de batalha de um animal Grande, especificamente a de um poderoso e aterrorizante dinossauro. Você deve ter espaço suficiente para se expandir ou a magia é perdida. Quando conjurar esta magia, escolha anquilossauro, brontossauro, deinonico, estegossauro, tricerátops ou tiranossauro. Você pode decidir o tipo específico de animal, mas isto não tem efeito no tamanho ou nas estatísticas da forma. Enquanto estiver nesta forma, você adquire os traços animal e dinossauro. Você pode Dispensar esta magia.\n\nVocê recebe as estatísticas e habilidades a seguir independentemente de qual forma de batalha escolher:\n\n• CA = 18 + seu nível. Ignore a penalidade em testes e redução de Velocidade de sua armadura.\n• 15 Pontos de Vida temporários.\n• Visão na penumbra e faro impreciso de 9 metros.\n• Um ou mais ataques desarmados corpo a corpo específicos para a forma de batalha escolhida, que são os únicos ataques que pode usar. Você é treinado com eles. Seu modificador de ataque é +16 e seu bônus de dano é +9. Estes ataques são baseados em Força (para o propósito da condição enfraquecido, por exemplo). Se seu modificador de ataque para ataques desarmados for maior, você pode utilizá-lo em vez do modificador concedido pela magia.\n• +18 de modificador de Atletismo, exceto se o seu próprio modificador for maior.\n\nVocê também recebe habilidades específicas baseadas na forma escolhida:\n\n• Anquilossauro Velocidade 7,5 metros; Corpo a Corpo [1 ação] cauda (oscilante, alcance 3 metros), Dano 2d6 contundente; Corpo a Corpo [1 ação] pata, Dano 2d6 contundente.\n• Brontossauro Velocidade 7,5 metros; Corpo a Corpo [1 ação] cauda (alcance 4,5 metros), Dano 2d6 contundente; Corpo a Corpo [1 ação] pata, Dano 2d8 contundente.\n• Deinonico Velocidade 12 metros; Corpo a Corpo [1 ação] unha (ágil), Dano 2d4 perfurante mais 1 de sangramento persistente; Corpo a Corpo [1 ação] mandíbulas, Dano 1d10 perfurante.\n• Estegossauro Velocidade 9 metros; Corpo a Corpo [1 ação] cauda (alcance 3 metros), Dano 2d8 perfurante.\n• Tricerátops Velocidade 9 metros; Corpo a Corpo [1 ação] chifre, Dano 2d8 perfurante mais 1d6 de sangramento persistente em um acerto crítico; Corpo a Corpo [1 ação] pata, Dano 2d6 contundente.\n• Tiranossauro Velocidade 9 metros; Corpo a Corpo [1 ação] mandíbulas (mortal d12, alcance 3 metros), Dano 1d12 perfurante; Corpo a Corpo [1 ação] cauda (alcance 3 metros), Dano 1d10 contundente.",
       "resultados": null,
       "elevada": [
         {
@@ -16725,7 +16725,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -16740,7 +16740,7 @@
       "salvamento": null,
       "duracao": "1 minuto",
       "resumo_lista": "Se transforma em um dragão.",
-      "descricao": "Recorrendo a magia transformativa poderosa, você adquire uma forma de batalha de um dragão Grande. Você deve ter espaço suficiente para se expandir ou a magia é perdida. Quando conjurar esta magia, escolha um tipo de dragão cromático ou metálico. Enquanto estiver nesta forma, você adquire o traço dragão. Você pode Dispensar esta magia.\n\nVocê recebe as estatísticas e habilidades a seguir independentemente de qual forma de batalha escolher:\n\n• CA = 18 + seu nível. Ignore a penalidade em testes e redução de Velocidade de sua armadura.\n• 10 Pontos de Vida temporários.\n• Velocidade 12 metros, Velocidade de voo 30 metros.\n• Resistência 10 contra o tipo de dano de seu sopro (veja abaixo).\n• Visão no escuro e faro impreciso de 18 metros.\n• Um ou mais ataques desarmados corpo a corpo específicos para a forma de batalha escolhida, que são os únicos ataques que pode usar. Você é treinado com eles. Seu modificador de ataque é +22 e seu bônus de dano é +6. Estes ataques são baseados em Força (para o propósito da condição enfraquecido, por exemplo). Se seu modificador de ataque para ataques desarmados for maior, você pode utilizá-lo em vez do modificador concedido pela magia.\n• +23 de modificador de Atletismo, exceto se o seu próprio modificador for maior.\n• Sopro [two-actions] (arcana, evocação) O formato, dano e tipo de dano de seu sopro depende de sua forma de dragão específica (veja abaixo). Uma criatura na área do sopro tenta um salvamento básico contra sua CD de magia. Este salvamento é Reflexos exceto se especificado o contrário na descrição da habilidade especial para sua forma de dragão específica. Uma vez ativado, seu sopro não pode ser usado novamente por 1d4 rodadas. Seu sopro possui o traço correspondente ao tipo de dano que ele causa.\n\nVocê também recebe habilidades específicas baseadas na forma escolhida:\n\n• Azul Velocidade de escavação 6 metros; Corpo a Corpo [one-action] mandíbulas, Dano 2d10 perfurante mais 1d12 de eletricidade; Corpo a Corpo [one-action] garra (ágil), Dano 3d10 cortante; Corpo a Corpo [one-action] cauda (alcance 3 metros), Dano 3d10 contundente; Corpo a Corpo [one-action] chifres (alcance 3 metros), Dano 3d8 perfurante; sopro em linha de 24 metros, 6d12 de eletricidade.\n• Branco Velocidade de escalada 7,5 metros somente no gelo; Corpo a Corpo [one-action] mandíbulas, Dano 3d6 perfurante mais 2d6 de frio; Corpo a Corpo [one-action] garra (ágil), Dano 3d10 cortante; Corpo a Corpo [one-action] cauda (alcance 3 metros), Dano 3d10 contundente; sopro em cone de 9 metros, 10d6 de frio.\n• Negro Velocidade de natação 18 metros; Corpo a Corpo [one-action] mandíbulas, Dano 2d12 perfurante mais 2d6 de ácido; Corpo a Corpo [one-action] garra (ágil), Dano 3d10 cortante; Corpo a Corpo [one-action] cauda (alcance 3 metros), Dano 3d10 contundente; Corpo a Corpo [one-action] chifres (alcance 3 metros), Dano 3d8 perfurante; sopro em linha de 18 metros, 11d6 de ácido.\n• Verde Velocidade de natação 12 metros; ignora terreno difícil de folhagem não-mágica; Corpo a Corpo [one-action] mandíbulas, Dano 2d12 perfurante mais 2d6 de veneno; Corpo a Corpo [one-action] garra (ágil), Dano 3d10 cortante; Corpo a Corpo [one-action] cauda (alcance 3 metros), Dano 3d10 contundente; Corpo a Corpo [one-action] chifres (alcance 3 metros), Dano 3d8 perfurante; sopro em cone de 9 metros, 10d6 de veneno (salvamento de Fortitude em vez de Reflexos).\n• Vermelho ignora ocultação por fumaça; Corpo a Corpo [one-action] mandíbulas, Dano 2d12 perfurante mais 2d6 de fogo; Corpo a Corpo [one-action] garra (ágil), Dano 4d6 cortante; Corpo a Corpo [one-action] cauda (alcance 3 metros), Dano 3d10 contundente; Corpo a Corpo [one-action] asa (alcance 3 metros), Dano 3d8 contundente; sopro em cone de 9 metros, 10d6 de fogo.\n• Bronze Velocidade de natação 12 metros; Corpo a Corpo [one-action] mandíbulas, Dano 2d10 perfurante mais 1d12 de eletricidade; Corpo a Corpo [one-action] garra (ágil), Dano 3d10 cortante; Corpo a Corpo [one-action] cauda (alcance 3 metros), Dano 3d10 contundente; Corpo a Corpo [one-action] asa (alcance 3 metros), Dano 3d8 cortante; sopro em linha de 24 metros, 6d12 de eletricidade.\n• Cobre Velocidade de escalada 7,5 metros somente em pedra; Corpo a Corpo [one-action] mandíbulas, Dano 2d12 perfurante mais 2d6 de ácido; Corpo a Corpo [one-action] garra (ágil), Dano 3d10 cortante; Corpo a Corpo [one-action] cauda (alcance 3 metros), Dano 3d10 contundente; Corpo a Corpo [one-action] asa (alcance 3 metros), Dano 3d8 contundente; sopro em linha de 18 metros, 10d6 de ácido.\n• Latão Velocidade de escavação 6 metros; Corpo a Corpo [one-action] mandíbulas, Dano 3d8 perfurante mais 2d4 de fogo; Corpo a Corpo [one-action] garra (ágil), Dano 3d10 cortante; Corpo a Corpo [one-action] cauda (alcance 3 metros), Dano 3d10 contundente; Corpo a Corpo [one-action] espinhos (alcance 3 metros), Dano 3d8 perfurante; sopro em linha de 18 metros, 15d4 de fogo.\n• Ouro Velocidade de natação 12 metros; Corpo a Corpo [one-action] mandíbulas, Dano 2d12 perfurante mais 2d6 de fogo; Corpo a Corpo [one-action] garra (ágil), Dano 4d6 cortante; Corpo a Corpo [one-action] cauda (alcance 3 metros), Dano 3d10 contundente; Corpo a Corpo [one-action] chifres (alcance 3 metros), Dano 3d8 perfurante; sopro em cone de 9 metros, 6d10 de fogo.\n• Prata andar nas nuvens; Corpo a Corpo [one-action] mandíbulas, Dano 2d12 perfurante mais 2d6 de frio; Corpo a Corpo [one-action] garra (ágil), Dano 3d10 cortante; Corpo a Corpo [one-action] cauda (alcance 3 metros), Dano 3d10 contundente; sopro em cone de 9 metros, 8d8 de frio.",
+      "descricao": "Recorrendo a magia transformativa poderosa, você adquire uma forma de batalha de um dragão Grande. Você deve ter espaço suficiente para se expandir ou a magia é perdida. Quando conjurar esta magia, escolha um tipo de dragão cromático ou metálico. Enquanto estiver nesta forma, você adquire o traço dragão. Você pode Dispensar esta magia.\n\nVocê recebe as estatísticas e habilidades a seguir independentemente de qual forma de batalha escolher:\n\n• CA = 18 + seu nível. Ignore a penalidade em testes e redução de Velocidade de sua armadura.\n• 10 Pontos de Vida temporários.\n• Velocidade 12 metros, Velocidade de voo 30 metros.\n• Resistência 10 contra o tipo de dano de seu sopro (veja abaixo).\n• Visão no escuro e faro impreciso de 18 metros.\n• Um ou mais ataques desarmados corpo a corpo específicos para a forma de batalha escolhida, que são os únicos ataques que pode usar. Você é treinado com eles. Seu modificador de ataque é +22 e seu bônus de dano é +6. Estes ataques são baseados em Força (para o propósito da condição enfraquecido, por exemplo). Se seu modificador de ataque para ataques desarmados for maior, você pode utilizá-lo em vez do modificador concedido pela magia.\n• +23 de modificador de Atletismo, exceto se o seu próprio modificador for maior.\n• Sopro [2 ações] (arcana, evocação) O formato, dano e tipo de dano de seu sopro depende de sua forma de dragão específica (veja abaixo). Uma criatura na área do sopro tenta um salvamento básico contra sua CD de magia. Este salvamento é Reflexos exceto se especificado o contrário na descrição da habilidade especial para sua forma de dragão específica. Uma vez ativado, seu sopro não pode ser usado novamente por 1d4 rodadas. Seu sopro possui o traço correspondente ao tipo de dano que ele causa.\n\nVocê também recebe habilidades específicas baseadas na forma escolhida:\n\n• Azul Velocidade de escavação 6 metros; Corpo a Corpo [1 ação] mandíbulas, Dano 2d10 perfurante mais 1d12 de eletricidade; Corpo a Corpo [1 ação] garra (ágil), Dano 3d10 cortante; Corpo a Corpo [1 ação] cauda (alcance 3 metros), Dano 3d10 contundente; Corpo a Corpo [1 ação] chifres (alcance 3 metros), Dano 3d8 perfurante; sopro em linha de 24 metros, 6d12 de eletricidade.\n• Branco Velocidade de escalada 7,5 metros somente no gelo; Corpo a Corpo [1 ação] mandíbulas, Dano 3d6 perfurante mais 2d6 de frio; Corpo a Corpo [1 ação] garra (ágil), Dano 3d10 cortante; Corpo a Corpo [1 ação] cauda (alcance 3 metros), Dano 3d10 contundente; sopro em cone de 9 metros, 10d6 de frio.\n• Negro Velocidade de natação 18 metros; Corpo a Corpo [1 ação] mandíbulas, Dano 2d12 perfurante mais 2d6 de ácido; Corpo a Corpo [1 ação] garra (ágil), Dano 3d10 cortante; Corpo a Corpo [1 ação] cauda (alcance 3 metros), Dano 3d10 contundente; Corpo a Corpo [1 ação] chifres (alcance 3 metros), Dano 3d8 perfurante; sopro em linha de 18 metros, 11d6 de ácido.\n• Verde Velocidade de natação 12 metros; ignora terreno difícil de folhagem não-mágica; Corpo a Corpo [1 ação] mandíbulas, Dano 2d12 perfurante mais 2d6 de veneno; Corpo a Corpo [1 ação] garra (ágil), Dano 3d10 cortante; Corpo a Corpo [1 ação] cauda (alcance 3 metros), Dano 3d10 contundente; Corpo a Corpo [1 ação] chifres (alcance 3 metros), Dano 3d8 perfurante; sopro em cone de 9 metros, 10d6 de veneno (salvamento de Fortitude em vez de Reflexos).\n• Vermelho ignora ocultação por fumaça; Corpo a Corpo [1 ação] mandíbulas, Dano 2d12 perfurante mais 2d6 de fogo; Corpo a Corpo [1 ação] garra (ágil), Dano 4d6 cortante; Corpo a Corpo [1 ação] cauda (alcance 3 metros), Dano 3d10 contundente; Corpo a Corpo [1 ação] asa (alcance 3 metros), Dano 3d8 contundente; sopro em cone de 9 metros, 10d6 de fogo.\n• Bronze Velocidade de natação 12 metros; Corpo a Corpo [1 ação] mandíbulas, Dano 2d10 perfurante mais 1d12 de eletricidade; Corpo a Corpo [1 ação] garra (ágil), Dano 3d10 cortante; Corpo a Corpo [1 ação] cauda (alcance 3 metros), Dano 3d10 contundente; Corpo a Corpo [1 ação] asa (alcance 3 metros), Dano 3d8 cortante; sopro em linha de 24 metros, 6d12 de eletricidade.\n• Cobre Velocidade de escalada 7,5 metros somente em pedra; Corpo a Corpo [1 ação] mandíbulas, Dano 2d12 perfurante mais 2d6 de ácido; Corpo a Corpo [1 ação] garra (ágil), Dano 3d10 cortante; Corpo a Corpo [1 ação] cauda (alcance 3 metros), Dano 3d10 contundente; Corpo a Corpo [1 ação] asa (alcance 3 metros), Dano 3d8 contundente; sopro em linha de 18 metros, 10d6 de ácido.\n• Latão Velocidade de escavação 6 metros; Corpo a Corpo [1 ação] mandíbulas, Dano 3d8 perfurante mais 2d4 de fogo; Corpo a Corpo [1 ação] garra (ágil), Dano 3d10 cortante; Corpo a Corpo [1 ação] cauda (alcance 3 metros), Dano 3d10 contundente; Corpo a Corpo [1 ação] espinhos (alcance 3 metros), Dano 3d8 perfurante; sopro em linha de 18 metros, 15d4 de fogo.\n• Ouro Velocidade de natação 12 metros; Corpo a Corpo [1 ação] mandíbulas, Dano 2d12 perfurante mais 2d6 de fogo; Corpo a Corpo [1 ação] garra (ágil), Dano 4d6 cortante; Corpo a Corpo [1 ação] cauda (alcance 3 metros), Dano 3d10 contundente; Corpo a Corpo [1 ação] chifres (alcance 3 metros), Dano 3d8 perfurante; sopro em cone de 9 metros, 6d10 de fogo.\n• Prata andar nas nuvens; Corpo a Corpo [1 ação] mandíbulas, Dano 2d12 perfurante mais 2d6 de frio; Corpo a Corpo [1 ação] garra (ágil), Dano 3d10 cortante; Corpo a Corpo [1 ação] cauda (alcance 3 metros), Dano 3d10 contundente; sopro em cone de 9 metros, 8d8 de frio.",
       "resultados": null,
       "elevada": [
         {
@@ -16767,7 +16767,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -16782,7 +16782,7 @@
       "salvamento": null,
       "duracao": "1 minuto",
       "resumo_lista": "Se transforma em um elemental.",
-      "descricao": "Você invoca o poder dos planos para se transformar na forma de batalha de um elemental Médio. Quando conjurar esta magia, escolha água, ar, fogo ou terra. Enquanto estiver nesta forma, você adquire o traço correspondente à energia escolhida e o traço elemental. Você possui mãos nesta forma de batalha e pode usar ações de manuseio. Você pode Dispensar esta magia.\n\nVocê recebe as estatísticas e habilidades a seguir independentemente de qual forma de batalha escolher:\n\n• CA = 19 + seu nível. Ignore a penalidade em testes e redução de Velocidade de sua armadura.\n• 10 Pontos de Vida temporários.\n• Visão no escuro.\n• Um ou mais ataques desarmados corpo a corpo específicos para a forma de batalha escolhida, que são os únicos ataques que pode usar. Você é treinado com eles. Seu modificador de ataque é +18 e seu bônus de dano é +9. Estes ataques são baseados em Destreza (ar ou fogo) ou Força (água ou terra). Se seu modificador de ataque para ataques desarmados for maior, você pode utilizá-lo em vez do modificador concedido pela magia.\n• +20 de modificador de Acrobatismo (ar ou fogo) ou Atletismo (água ou terra), exceto se o seu próprio modificador for maior. Você também recebe habilidades específicas baseadas na forma escolhida:\n• Água Velocidade 6 metros, Velocidade de natação 18 metros, resistência a fogo 5; Corpo a Corpo [one-action] onda, Dano 1d12 contundente e você pode gastar uma ação imediatamente após um acerto para empurrar o alvo 1,5 metros com os efeitos da ação Empurrar bem-sucedida.\n• Ar Velocidade de voo 24 metros, movimento não aciona reações; Corpo a Corpo [one-action] lufada, Dano 1d4 contundente.\n• Fogo Velocidade 15 metros, resistência a fogo 10, fraqueza a frio 5 e água 5; Corpo a Corpo [one-action] gavinha, Dano 1d8 de fogo mais 1d4 de dano persistente de fogo.\n• Terra Velocidade 6 metros, Velocidade de escavação 6 metros; Corpo a Corpo [one-action] punho, Dano 2d10 contundente.",
+      "descricao": "Você invoca o poder dos planos para se transformar na forma de batalha de um elemental Médio. Quando conjurar esta magia, escolha água, ar, fogo ou terra. Enquanto estiver nesta forma, você adquire o traço correspondente à energia escolhida e o traço elemental. Você possui mãos nesta forma de batalha e pode usar ações de manuseio. Você pode Dispensar esta magia.\n\nVocê recebe as estatísticas e habilidades a seguir independentemente de qual forma de batalha escolher:\n\n• CA = 19 + seu nível. Ignore a penalidade em testes e redução de Velocidade de sua armadura.\n• 10 Pontos de Vida temporários.\n• Visão no escuro.\n• Um ou mais ataques desarmados corpo a corpo específicos para a forma de batalha escolhida, que são os únicos ataques que pode usar. Você é treinado com eles. Seu modificador de ataque é +18 e seu bônus de dano é +9. Estes ataques são baseados em Destreza (ar ou fogo) ou Força (água ou terra). Se seu modificador de ataque para ataques desarmados for maior, você pode utilizá-lo em vez do modificador concedido pela magia.\n• +20 de modificador de Acrobatismo (ar ou fogo) ou Atletismo (água ou terra), exceto se o seu próprio modificador for maior. Você também recebe habilidades específicas baseadas na forma escolhida:\n• Água Velocidade 6 metros, Velocidade de natação 18 metros, resistência a fogo 5; Corpo a Corpo [1 ação] onda, Dano 1d12 contundente e você pode gastar uma ação imediatamente após um acerto para empurrar o alvo 1,5 metros com os efeitos da ação Empurrar bem-sucedida.\n• Ar Velocidade de voo 24 metros, movimento não aciona reações; Corpo a Corpo [1 ação] lufada, Dano 1d4 contundente.\n• Fogo Velocidade 15 metros, resistência a fogo 10, fraqueza a frio 5 e água 5; Corpo a Corpo [1 ação] gavinha, Dano 1d8 de fogo mais 1d4 de dano persistente de fogo.\n• Terra Velocidade 6 metros, Velocidade de escavação 6 metros; Corpo a Corpo [1 ação] punho, Dano 2d10 contundente.",
       "resultados": null,
       "elevada": [
         {
@@ -16814,7 +16814,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -16859,7 +16859,7 @@
       "tradicoes": [
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -16874,7 +16874,7 @@
       "salvamento": null,
       "duracao": "1 minuto",
       "resumo_lista": "Se transforma em um inseto gigante perigoso.",
-      "descricao": "Você visualiza um inseto simples e se transforma na forma de batalha de um animal Médio. Quando conjurar esta magia, escolha aranha, besouro, centopeia, escorpião, formiga ou louva-a-deus. Você pode decidir o tipo específico de animal (como joaninha ou escaravelho para besouro), mas isto não tem efeito no tamanho ou nas estatísticas da forma. Enquanto estiver nesta forma, você adquire o traço animal. Você pode Dispensar esta magia.\n\nVocê recebe as estatísticas e habilidades a seguir independentemente de qual forma de batalha escolher:\n\n• CA = 18 + seu nível. Ignore a penalidade em testes e redução de Velocidade de sua armadura.\n• 10 Pontos de Vida temporários.\n• Visão na penumbra.\n• Um ou mais ataques desarmados corpo a corpo específicos para a forma de batalha escolhida, que são os únicos ataques que pode usar. Você é treinado com eles. Seu modificador de ataque é +13 e seu bônus de dano é +2. Estes ataques são baseados em Força (para o propósito da condição enfraquecido, por exemplo). Se seu modificador de ataque para ataques desarmados baseados for maior, você pode utilizá-lo em vez do modificador concedido pela magia.\n• +13 de modificador de Atletismo, exceto se o seu próprio modificador for maior.\n\nVocê também recebe habilidades específicas baseadas na forma escolhida:\n\n• Aranha Velocidade 7,5 metros, Velocidade de escalada 7,5 metros, visão no escuro; Corpo a Corpo [one-action] presas, Dano 1d6 perfurante mais 1d4 persistente de veneno; Distância [one-action] teia (incremento de distância 6 metros), Dano emaranha o alvo por 1 rodada.\n• Besouro Velocidade 7,5 metros; Corpo a Corpo [one-action] mandíbulas, Dano 2d10 contundente.\n• Centopeia Velocidade 7,5 metros, Velocidade de escalada 7,5 metros, visão no escuro; Corpo a Corpo [one-action] mandíbulas, Dano 1d8 perfurante mais 1d4 persistente de veneno.\n• Escorpião Velocidade 12 metros, sentido sísmico impreciso 18 metros, visão no escuro; Corpo a Corpo [one-action] ferrão, Dano 1d8 perfurante mais 1d4 persistente de veneno; Corpo a Corpo [one-action] pinça (ágil), Dano 1d6 contundente.\n• Formiga Velocidade 9 metros, Velocidade de escalada 9 metros; Corpo a Corpo [one-action] mandíbulas, Dano 2d6 contundente.\n• Louva-a-deus Velocidade 12 metros, faro impreciso 9 metros; Corpo a Corpo [one-action] perna dianteira, Dano 2d8 contundente.",
+      "descricao": "Você visualiza um inseto simples e se transforma na forma de batalha de um animal Médio. Quando conjurar esta magia, escolha aranha, besouro, centopeia, escorpião, formiga ou louva-a-deus. Você pode decidir o tipo específico de animal (como joaninha ou escaravelho para besouro), mas isto não tem efeito no tamanho ou nas estatísticas da forma. Enquanto estiver nesta forma, você adquire o traço animal. Você pode Dispensar esta magia.\n\nVocê recebe as estatísticas e habilidades a seguir independentemente de qual forma de batalha escolher:\n\n• CA = 18 + seu nível. Ignore a penalidade em testes e redução de Velocidade de sua armadura.\n• 10 Pontos de Vida temporários.\n• Visão na penumbra.\n• Um ou mais ataques desarmados corpo a corpo específicos para a forma de batalha escolhida, que são os únicos ataques que pode usar. Você é treinado com eles. Seu modificador de ataque é +13 e seu bônus de dano é +2. Estes ataques são baseados em Força (para o propósito da condição enfraquecido, por exemplo). Se seu modificador de ataque para ataques desarmados baseados for maior, você pode utilizá-lo em vez do modificador concedido pela magia.\n• +13 de modificador de Atletismo, exceto se o seu próprio modificador for maior.\n\nVocê também recebe habilidades específicas baseadas na forma escolhida:\n\n• Aranha Velocidade 7,5 metros, Velocidade de escalada 7,5 metros, visão no escuro; Corpo a Corpo [1 ação] presas, Dano 1d6 perfurante mais 1d4 persistente de veneno; Distância [1 ação] teia (incremento de distância 6 metros), Dano emaranha o alvo por 1 rodada.\n• Besouro Velocidade 7,5 metros; Corpo a Corpo [1 ação] mandíbulas, Dano 2d10 contundente.\n• Centopeia Velocidade 7,5 metros, Velocidade de escalada 7,5 metros, visão no escuro; Corpo a Corpo [1 ação] mandíbulas, Dano 1d8 perfurante mais 1d4 persistente de veneno.\n• Escorpião Velocidade 12 metros, sentido sísmico impreciso 18 metros, visão no escuro; Corpo a Corpo [1 ação] ferrão, Dano 1d8 perfurante mais 1d4 persistente de veneno; Corpo a Corpo [1 ação] pinça (ágil), Dano 1d6 contundente.\n• Formiga Velocidade 9 metros, Velocidade de escalada 9 metros; Corpo a Corpo [1 ação] mandíbulas, Dano 2d6 contundente.\n• Louva-a-deus Velocidade 12 metros, faro impreciso 9 metros; Corpo a Corpo [1 ação] perna dianteira, Dano 2d8 contundente.",
       "resultados": null,
       "elevada": [
         {
@@ -16905,7 +16905,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -16920,7 +16920,7 @@
       "salvamento": null,
       "duracao": "1 minuto",
       "resumo_lista": "Se transforma em um mostro poderoso.",
-      "descricao": "Você se transforma no aspecto de um monstro lendário, assumindo a forma de batalha de um animal Enorme. Você deve ter espaço suficiente para se expandir ou a magia é perdida. Quando conjurar esta magia, escolha fênix, serpente marinha ou vorme púrpura. Enquanto estiver nesta forma, você adquire o traço besta (para fênix) ou animal (para serpente marinha ou vorme púrpura). Você pode Dispensar esta magia.\n\nVocê recebe as estatísticas e habilidades a seguir independentemente de qual forma de batalha escolher:\n\n• CA = 20 + seu nível. Ignore a penalidade em testes e redução de Velocidade de sua armadura.\n• 20 Pontos de Vida temporários.\n• Visão no escuro.\n• Um ou mais ataques desarmados corpo a corpo específicos para a forma de batalha escolhida, que são os únicos ataques que pode usar. Você é treinado com eles. Seu modificador de ataque é +28 e você causa o dano listado. Estes ataques são baseados em Força (para o propósito da condição enfraquecido, por exemplo). Se seu modificador de ataque para ataques desarmados for maior, você pode utilizá-lo em vez do modificador concedido pela magia.\n• +30 de modificador de Atletismo, exceto se o seu próprio modificador for maior.\n\nVocê também recebe habilidades específicas baseadas na forma escolhida:\n\n• Fênix Velocidade 9 metros, Velocidade de voo 27 metros; Corpo a Corpo [one-action] bico (alcance 4,5 metros), Dano 2d6+12 mais 2d4 de fogo e 2d4 persistente de fogo; Corpo a Corpo [one-action] unha (ágil, alcance de 4,5 metros), Dano 2d8+12 cortante; Manto de Chamas (aura, evocação, fogo, primal) 6 metros. Você adquire uma aura de fogo que se estende a partir de você. Uma criatura que entrar ou encerrar o turno dela dentro da aura sofre 2d6 de dano de fogo. Uma criatura pode sofrer este dano somente uma vez por turno. Você pode usar uma ação única que possui o traço concentração para ativar ou desativar esta aura.\n• Serpente Marinha Velocidade 6 metros, Velocidade de natação 27 metros; Corpo a Corpo [one-action] mandíbulas (alcance 4,5 metros), Dano 2d12+20 perfurante; Corpo a Corpo [one-action] cauda (alcance 7,5 metros), Dano 2d8+20 contundente; Rasgar com Espinhos [two-actions] (movimento) Você estende seus espinhos e Anda ou Nada. Cada criatura que estiver adjacente a você a qualquer momento durante o seu movimento sofre 4d8+10 de dano cortante (salvamento básico de Reflexos contra sua CD de magia).\n• Vorme Púrpura Velocidade 12 metros, Velocidade de escavação 9 metros, Velocidade de natação 6 metros; Corpo a Corpo [one-action] mandíbulas (alcance 3 metros), Dano 2d12+20 perfurante; Corpo a Corpo [one-action] ferrão (ágil, alcance de 3 metros), Dano 2d8+15 perfurante mais 2d6 persistente de veneno; Corpo a Corpo [one-action] corpo (alcance de 3 metros), Dano 2d8+20 contundente; Inexorável Você automaticamente se recupera das condições atordoado, lento e paralisado ao final de cada um dos seus turnos. Você também fica imune a ser imobilizado e ignora terreno difícil e terreno difícil maior.",
+      "descricao": "Você se transforma no aspecto de um monstro lendário, assumindo a forma de batalha de um animal Enorme. Você deve ter espaço suficiente para se expandir ou a magia é perdida. Quando conjurar esta magia, escolha fênix, serpente marinha ou vorme púrpura. Enquanto estiver nesta forma, você adquire o traço besta (para fênix) ou animal (para serpente marinha ou vorme púrpura). Você pode Dispensar esta magia.\n\nVocê recebe as estatísticas e habilidades a seguir independentemente de qual forma de batalha escolher:\n\n• CA = 20 + seu nível. Ignore a penalidade em testes e redução de Velocidade de sua armadura.\n• 20 Pontos de Vida temporários.\n• Visão no escuro.\n• Um ou mais ataques desarmados corpo a corpo específicos para a forma de batalha escolhida, que são os únicos ataques que pode usar. Você é treinado com eles. Seu modificador de ataque é +28 e você causa o dano listado. Estes ataques são baseados em Força (para o propósito da condição enfraquecido, por exemplo). Se seu modificador de ataque para ataques desarmados for maior, você pode utilizá-lo em vez do modificador concedido pela magia.\n• +30 de modificador de Atletismo, exceto se o seu próprio modificador for maior.\n\nVocê também recebe habilidades específicas baseadas na forma escolhida:\n\n• Fênix Velocidade 9 metros, Velocidade de voo 27 metros; Corpo a Corpo [1 ação] bico (alcance 4,5 metros), Dano 2d6+12 mais 2d4 de fogo e 2d4 persistente de fogo; Corpo a Corpo [1 ação] unha (ágil, alcance de 4,5 metros), Dano 2d8+12 cortante; Manto de Chamas (aura, evocação, fogo, primal) 6 metros. Você adquire uma aura de fogo que se estende a partir de você. Uma criatura que entrar ou encerrar o turno dela dentro da aura sofre 2d6 de dano de fogo. Uma criatura pode sofrer este dano somente uma vez por turno. Você pode usar uma ação única que possui o traço concentração para ativar ou desativar esta aura.\n• Serpente Marinha Velocidade 6 metros, Velocidade de natação 27 metros; Corpo a Corpo [1 ação] mandíbulas (alcance 4,5 metros), Dano 2d12+20 perfurante; Corpo a Corpo [1 ação] cauda (alcance 7,5 metros), Dano 2d8+20 contundente; Rasgar com Espinhos [2 ações] (movimento) Você estende seus espinhos e Anda ou Nada. Cada criatura que estiver adjacente a você a qualquer momento durante o seu movimento sofre 4d8+10 de dano cortante (salvamento básico de Reflexos contra sua CD de magia).\n• Vorme Púrpura Velocidade 12 metros, Velocidade de escavação 9 metros, Velocidade de natação 6 metros; Corpo a Corpo [1 ação] mandíbulas (alcance 3 metros), Dano 2d12+20 perfurante; Corpo a Corpo [1 ação] ferrão (ágil, alcance de 3 metros), Dano 2d8+15 perfurante mais 2d6 persistente de veneno; Corpo a Corpo [1 ação] corpo (alcance de 3 metros), Dano 2d8+20 contundente; Inexorável Você automaticamente se recupera das condições atordoado, lento e paralisado ao final de cada um dos seus turnos. Você também fica imune a ser imobilizado e ignora terreno difícil e terreno difícil maior.",
       "resultados": null,
       "elevada": [
         {
@@ -16947,7 +16947,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -16989,7 +16989,7 @@
       "tradicoes": [
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -17004,7 +17004,7 @@
       "salvamento": null,
       "duracao": "1 minuto",
       "resumo_lista": "Se transforma em uma criatura vegetal perigosa.",
-      "descricao": "Inspirando-se em criaturas verdejantes, você se transforma na forma de batalha de uma planta Grande. Você deve ter espaço suficiente para se expandir ou a magia é perdida. Quando conjurar esta magia, escolha abocanhadora, arbórea ou dioneia. Você pode escolher um tipo específico de planta para se transformar (como uma planta-jarro em vez de uma dioneia), mas isto não tem efeito no tamanho ou nas estatísticas da forma. Enquanto estiver nesta forma, você adquire o traço planta. Você pode Dispensar esta magia.\n\nVocê recebe as estatísticas e habilidades a seguir independentemente de qual forma de batalha escolher:\n\n• CA = 19 + seu nível. Ignore a penalidade em testes e redução de Velocidade de sua armadura.\n• 12 Pontos de Vida temporários.\n• Resistência 10 a veneno.\n• Visão na penumbra.\n• Um ou mais ataques desarmados corpo a corpo específicos para a forma de batalha escolhida, que são os únicos ataques que pode usar. Você é treinado com eles. Seu modificador de ataque é +17 e seu bônus de dano é +11. Estes ataques são baseados em Força (para o propósito da condição enfraquecido, por exemplo). Se seu modificador de ataque para ataques desarmados for maior, você pode utilizá-lo em vez do modificador concedido pela magia.\n• +19 de modificador de Atletismo, exceto se o seu próprio modificador for maior.\n\nVocê também recebe habilidades específicas baseadas na forma escolhida:\n\n• Abocanhadora Velocidade 6 metros, Velocidade de natação 6 metros, resistência 10 a eletricidade; Corpo a Corpo [one-action] vinha (alcance 4,5 metros), Dano 2d8 cortante.\n• Arbórea Velocidade 9 metros; Corpo a Corpo [one-action] galho (alcance 4,5 metros), Dano 2d10 contundente; Corpo a Corpo [one-action] raiz, Dano 2d8 contundente; você pode falar nesta forma, mas ainda não pode Conjurar uma Magia ou suprir componentes verbais. Dioneia Velocidade 4,5 metros, resistência 10 a ácido; Corpo a Corpo [one-action] folha (alcance 3 metros), Dano 2d8 perfurante e você pode gastar uma ação após acertar para Atracar o alvo.",
+      "descricao": "Inspirando-se em criaturas verdejantes, você se transforma na forma de batalha de uma planta Grande. Você deve ter espaço suficiente para se expandir ou a magia é perdida. Quando conjurar esta magia, escolha abocanhadora, arbórea ou dioneia. Você pode escolher um tipo específico de planta para se transformar (como uma planta-jarro em vez de uma dioneia), mas isto não tem efeito no tamanho ou nas estatísticas da forma. Enquanto estiver nesta forma, você adquire o traço planta. Você pode Dispensar esta magia.\n\nVocê recebe as estatísticas e habilidades a seguir independentemente de qual forma de batalha escolher:\n\n• CA = 19 + seu nível. Ignore a penalidade em testes e redução de Velocidade de sua armadura.\n• 12 Pontos de Vida temporários.\n• Resistência 10 a veneno.\n• Visão na penumbra.\n• Um ou mais ataques desarmados corpo a corpo específicos para a forma de batalha escolhida, que são os únicos ataques que pode usar. Você é treinado com eles. Seu modificador de ataque é +17 e seu bônus de dano é +11. Estes ataques são baseados em Força (para o propósito da condição enfraquecido, por exemplo). Se seu modificador de ataque para ataques desarmados for maior, você pode utilizá-lo em vez do modificador concedido pela magia.\n• +19 de modificador de Atletismo, exceto se o seu próprio modificador for maior.\n\nVocê também recebe habilidades específicas baseadas na forma escolhida:\n\n• Abocanhadora Velocidade 6 metros, Velocidade de natação 6 metros, resistência 10 a eletricidade; Corpo a Corpo [1 ação] vinha (alcance 4,5 metros), Dano 2d8 cortante.\n• Arbórea Velocidade 9 metros; Corpo a Corpo [1 ação] galho (alcance 4,5 metros), Dano 2d10 contundente; Corpo a Corpo [1 ação] raiz, Dano 2d8 contundente; você pode falar nesta forma, mas ainda não pode Conjurar uma Magia ou suprir componentes verbais. Dioneia Velocidade 4,5 metros, resistência 10 a ácido; Corpo a Corpo [1 ação] folha (alcance 3 metros), Dano 2d8 perfurante e você pode gastar uma ação após acertar para Atracar o alvo.",
       "resultados": null,
       "elevada": [
         {
@@ -17032,7 +17032,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -17068,7 +17068,7 @@
       "tradicoes": [
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -17114,7 +17114,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -17201,7 +17201,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -17238,7 +17238,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[one-action] verbal",
+      "execucao": "[1 ação] verbal",
       "acoes": "1",
       "componentes": [
         "verbal"
@@ -17274,7 +17274,7 @@
       "tradicoes": [
         "divina"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -17316,7 +17316,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -17360,7 +17360,7 @@
       "tradicoes": [
         "ocultista"
       ],
-      "execucao": "[one-action] verbal",
+      "execucao": "[1 ação] verbal",
       "acoes": "1",
       "componentes": [
         "verbal"
@@ -17397,7 +17397,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -17439,7 +17439,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -17475,7 +17475,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -17517,7 +17517,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -17591,7 +17591,7 @@
       "tradicoes": [
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -17605,7 +17605,7 @@
       "alvos": "até 5 criaturas",
       "salvamento": null,
       "duracao": "10 minutos",
-      "resumo_lista": "Volta animais, plantas e o clima con-tra criaturas à sua escolha.",
+      "resumo_lista": "Volta animais, plantas e o clima contra criaturas à sua escolha.",
       "descricao": "Animais e plantas na área se viram contra os alvos. Cada alvo sofre os efeitos a seguir enquanto permanecer na área.\n\n• Vegetação brota em todas as superfícies, impondo –3 metros de penalidade de circunstância na Velocidade de cada alvo a qualquer momento em que ele estiver adjacente às plantas.\n• Animais agressivos atacam imprevisivelmente. No início do turno de cada alvo, ele rola um teste simples CD 8. Em uma falha, ele é atacado por um enxame de criaturas que causam 2d10 de dano cortante. O alvo tenta um salvamento básico de Reflexos e fica desprevenido por 1 rodada em qualquer resultado diferente de um sucesso crítico.\n• O alvo perde qualquer conexão com a natureza ou criaturas naturais. O alvo deve obter sucesso em um teste simples CD 5 ao conjurar qualquer magia primal ou perde a magia. Além disso, criaturas animais ou plantas se tornam hostis ao alvo mesmo que possuam fortes elos com ele (como um companheiro animal).\n\nO MJ pode decidir que você não pode afetar algumas criaturas, como um emissário de uma divindade da natureza ou a ira dela.",
       "resultados": null,
       "elevada": null,
@@ -17627,7 +17627,7 @@
       "tradicoes": [
         "divina"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -17666,7 +17666,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -17680,7 +17680,7 @@
       "alvos": null,
       "salvamento": null,
       "duracao": null,
-      "resumo_lista": "Encon-tra o norte verdadeiro.",
+      "resumo_lista": "Encontra o norte verdadeiro.",
       "descricao": "No olho de sua mente, você vê um caminho para o norte. Você imediatamente sabe em qual direção está o norte (se ele existir em sua localização atual).",
       "resultados": null,
       "elevada": [
@@ -17708,7 +17708,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -17745,7 +17745,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -17785,7 +17785,7 @@
       "tradicoes": [
         "divina"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -17832,7 +17832,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -17880,7 +17880,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -17935,7 +17935,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -17979,7 +17979,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -18021,7 +18021,7 @@
       "tradicoes": [
         "divina"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -18035,7 +18035,7 @@
       "alvos": "1 criatura",
       "salvamento": null,
       "duracao": null,
-      "resumo_lista": "Arremessa ener-gia divina que causa dano baseado na tendência de sua divindade.",
+      "resumo_lista": "Arremessa energia divina que causa dano baseado na tendência de sua divindade.",
       "descricao": "Você lança um feixe de energia divina. Escolha uma tendência que sua divindade possua (bem, caos, mal ou ordem). Você não pode conjurar esta magia se não tiver uma divindade ou se sua divindade for neutra verdadeira. Esta magia recebe o traço da tendência escolhida. Faça uma rolagem de ataque de magia contra a CA do alvo. Em um acerto, o alvo sofre dano do tipo de tendência escolhido igual a 1d4 + o modificador de seu atributo de conjuração (dobro do dano em um acerto crítico).",
       "resultados": null,
       "elevada": [
@@ -18063,7 +18063,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -18111,7 +18111,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -18156,7 +18156,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -18204,7 +18204,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -18284,7 +18284,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -18321,7 +18321,7 @@
         "divina",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -18358,7 +18358,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -18440,7 +18440,7 @@
       "tradicoes": [
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -18476,7 +18476,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -18513,7 +18513,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -18558,7 +18558,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -18603,7 +18603,7 @@
         "divina",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -18650,7 +18650,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -18690,7 +18690,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -18733,7 +18733,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -18774,7 +18774,7 @@
       "tradicoes": [
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -18789,7 +18789,7 @@
       "salvamento": null,
       "duracao": "1 minuto",
       "resumo_lista": "Transforma criaturas voluntárias em mamutes.",
-      "descricao": "Convocando o poder do mundo natural, você transforma os alvos em uma manada de mamutes, e cada um deles assume uma forma de batalha Enorme. Cada alvo deve ter espaço suficiente para se expandir ou a magia é perdida para esse alvo. Enquanto estiver nesta forma, cada alvo adquire o traço animal. Cada alvo pode Dispensar a magia em si.\n\nCada alvo recebe as estatísticas e habilidades a seguir:\n\n• CA = 22 + seu nível. Ignore a penalidade em testes e redução de Velocidade de sua armadura.\n• 20 Pontos de Vida temporários.\n• Velocidade 12 metros.\n• Visão na penumbra.\n• Os ataques desarmados a seguir, que são os únicos ataques que o alvo pode usar. Ele é treinado com eles. Quando atacar com estes ataques, o alvo utiliza o modificador de ataque dele com a proficiência e bônus de item do Golpe de sua arma ou ataque desarmado mais favorável, assim como o dano listado para esses ataques. Estes ataques são baseados em Força (para o propósito da condição enfraquecido, por exemplo). Se o modificador do ataque desarmado do alvo for maior, ele pode usar o melhor modificador. Corpo a Corpo [one-action] presa comprida (alcance 4,5 metros), Dano 4d8+19 perfurante; Corpo a Corpo [one-action] tromba (ágil, alcance 4,5 metros), Dano 4d6+16 contundente; Corpo a Corpo [one-action] pata (ágil, alcance 4,5 metros), Dano 4d6+13 contundente.\n• +30 de modificador de Atletismo, exceto se o próprio modificador do alvo for maior.\n• Atropelar [three-actions] Você se move até o dobro de sua Velocidade e se move através de espaços de criaturas Grandes ou menores, atropelando cada criatura cujo espaço você adentrar. Uma criatura atropelada sofre dano da pata do alvo com um salvamento básico de Reflexos (CD 19 + o nível do alvo).",
+      "descricao": "Convocando o poder do mundo natural, você transforma os alvos em uma manada de mamutes, e cada um deles assume uma forma de batalha Enorme. Cada alvo deve ter espaço suficiente para se expandir ou a magia é perdida para esse alvo. Enquanto estiver nesta forma, cada alvo adquire o traço animal. Cada alvo pode Dispensar a magia em si.\n\nCada alvo recebe as estatísticas e habilidades a seguir:\n\n• CA = 22 + seu nível. Ignore a penalidade em testes e redução de Velocidade de sua armadura.\n• 20 Pontos de Vida temporários.\n• Velocidade 12 metros.\n• Visão na penumbra.\n• Os ataques desarmados a seguir, que são os únicos ataques que o alvo pode usar. Ele é treinado com eles. Quando atacar com estes ataques, o alvo utiliza o modificador de ataque dele com a proficiência e bônus de item do Golpe de sua arma ou ataque desarmado mais favorável, assim como o dano listado para esses ataques. Estes ataques são baseados em Força (para o propósito da condição enfraquecido, por exemplo). Se o modificador do ataque desarmado do alvo for maior, ele pode usar o melhor modificador. Corpo a Corpo [1 ação] presa comprida (alcance 4,5 metros), Dano 4d8+19 perfurante; Corpo a Corpo [1 ação] tromba (ágil, alcance 4,5 metros), Dano 4d6+16 contundente; Corpo a Corpo [1 ação] pata (ágil, alcance 4,5 metros), Dano 4d6+13 contundente.\n• +30 de modificador de Atletismo, exceto se o próprio modificador do alvo for maior.\n• Atropelar [3 ações] Você se move até o dobro de sua Velocidade e se move através de espaços de criaturas Grandes ou menores, atropelando cada criatura cujo espaço você adentrar. Uma criatura atropelada sofre dano da pata do alvo com um salvamento básico de Reflexos (CD 19 + o nível do alvo).",
       "resultados": null,
       "elevada": null,
       "tabela": null,
@@ -18812,7 +18812,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -18925,7 +18925,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -18965,7 +18965,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -19002,7 +19002,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -19052,7 +19052,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -19098,7 +19098,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -19112,7 +19112,7 @@
       "alvos": "1 criatura",
       "salvamento": null,
       "duracao": "1 minuto",
-      "resumo_lista": "A aparên-cia ilusória temível de uma cria-tura assusta observadores.",
+      "resumo_lista": "A aparência ilusória temível de uma criatura assusta observadores.",
       "descricao": "O alvo parece ser uma criatura terrível e pavorosa. O efeito é único para cada observador, portanto, um humano observando o alvo poderia ver um demônio com presas sangrentas, enquanto um demônio olhando o alvo poderia ver um rosto angelical brilhante.\n\nQualquer criatura que realizar uma ação hostil contra o alvo deve tentar um salvamento de Vontade. Ela fica temporariamente imune até o final do turno dela.",
       "resultados": {
         "sucesso": "A criatura não é afetada.",
@@ -19146,7 +19146,7 @@
         "divina",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -19191,7 +19191,7 @@
       "tradicoes": [
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -19237,7 +19237,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",

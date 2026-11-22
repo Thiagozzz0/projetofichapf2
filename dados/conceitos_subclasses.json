@@ -1782,9 +1782,9 @@
           "escudo_de_madeira"
         ],
         "armas_corpo_a_corpo_ids": [
-          "lanca_de_cavalaria",
           "espada_longa",
-          "martelo_de_guerra"
+          "martelo_de_guerra",
+          "lanca"
         ],
         "armas_distancia_ids": [
           "azagaia"
@@ -2677,9 +2677,9 @@
           "escudo_de_madeira"
         ],
         "armas_corpo_a_corpo_ids": [
-          "lanca_longa",
           "lanca",
-          "foice"
+          "foice",
+          "clava"
         ],
         "armas_distancia_ids": [
           "funda",

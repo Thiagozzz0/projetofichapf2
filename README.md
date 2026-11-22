@@ -53,12 +53,13 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 │   ├── magias01.json             # Capítulo 7 (Parte 1: Regras, Listas Completas e Descrições A–M)
 │   ├── magias02.json             # Capítulo 7 (Parte 2: Descrições M–Z, Magias de Foco e Rituais)
 │   ├── pericias.json             # Capítulo 4 completo (Perícias, Ações Gerais e Tabelas 4–1 a 4–4)
-│   ├── regras_específicas.json   # Regras específicas, exceções estruturais, PV (N1–20), morrendo e acúmulo de bônus
+│   ├── regras_especificas.json   # Regras específicas, exceções estruturais, PV (N1–20), morrendo e acúmulo de bônus
 │   └── talentos.json             # Capítulo 5 completo (17 Talentos Gerais e 100 Talentos de Perícia)
 ├── motor/                        # Pacote Python do motor procedural de regras PF2E
 │   ├── __init__.py
 │   ├── biografia_pericias.py
 │   ├── combate_matematica.py
+│   ├── companheiros.py
 │   ├── dados.py
 │   ├── equipamentos.py
 │   ├── exportacao.py
@@ -77,6 +78,7 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 │   ├── gerar_classes_03_json.py
 │   ├── gerar_companheiros_familiares_json.py
 │   ├── gerar_conceitos_subclasses_json.py
+│   ├── gerar_divindades_json.py
 │   ├── gerar_equipamentos_json.py
 │   ├── gerar_estrutura_ficha_json.py
 │   ├── gerar_magias_01_json.py
@@ -84,6 +86,7 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 │   ├── gerar_pericias_json.py
 │   ├── gerar_regras_especificas_json.py
 │   ├── gerar_talentos_json.py
+│   ├── validar_casos_borda_pf2e.py
 │   └── validar_motor_procedural.py
 └── templates/                    # Front-End HTML/CSS/JS renderizado pelo Flask
     ├── index.html                # Tela de criação e visualização completa das 4 páginas da ficha
@@ -135,7 +138,7 @@ Os PDFs de referência estão sendo convertidos **um por vez** para garantir fid
 | *Etapa 2 (Conceitos)* | `dados/conceitos_subclasses.json` | `56` conceitos ("nortes") para todas as `12` classes com mapeamento procedural de subclasses PF2E, atributos, biografias, perícias, talentos, equipamentos (`15 po`) e magias | Concluído (`13.md` / `20.md`) |
 | *Etapa 2B (Divindades)* | `dados/divindades.json` | `20` divindades do Livro Básico, `37` domínios, tendências aceitas, armas prediletas, perícias divinas, fontes e magias de clérigo | Concluído (`22.md`) |
 | *Etapa 3B (Companheiros)* | `motor/companheiros.py` | Geração matemática de Companheiro Animal Jovem (Druida/Patrulheiro) e Familiar Aprimorado/Padrão (Mago/Druida/Talentos) | Concluído (`22.md`) |
-| *Etapa 5 (Casos de Borda)* | `scripts/validar_casos_borda_pf2e.py` | Suíte unitária de casos de borda PF2E (CA/Limite DES, `Barulhenta`/`Flexível`/`Ferro Desimpedido`, `Propulsiva`, idiomas, `Duro de Matar`, mochila/carga, divindades e companheiros) | Concluído (`21.md`) |
+| *Etapa 5 (Casos de Borda)* | `scripts/validar_casos_borda_pf2e.py` | Suíte unitária de casos de borda PF2E (CA/Limite DES, `Barulhenta`/`Flexível`/`Ferro Desimpedido`, `Propulsiva`, idiomas, `Duro de Matar`, mochila/carga, divindades obrigatórias/opcionais, efeitos de talentos ancestrais/gerais e companheiros) | Concluído (`21.md` / `23.md`) |
 | *Etapa 3 (Motor & Flask)* | `motor/`, `app.py`, `templates/index.html` | Motor procedural PF2E (1º nível, `seed` opcional), API REST Flask e tela simples de teste | Concluído (`14.md`) |
 | *Etapa 4 (Front-End & Export)* | `templates/`, `templates/static/`, `motor/exportacao.py`, `requirements.txt` | Interface completa em 4 páginas inspirada na ficha oficial (`pp. 580–583`), impressão e download `.docx`/`.txt` | Concluído (`16.md` / `17.md`) |
 

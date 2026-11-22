@@ -118,7 +118,6 @@ PRESERVAR_HIFEN_DIR = {
     "los",
     "las",
     "no",
-    "na",
     "nos",
     "nas",
     "lhe",
@@ -154,9 +153,11 @@ PRESERVAR_HIFEN_DIR = {
     "action",
     "actions",
     "círculo",
+    "íris",
 }
 
 PRESERVAR_HIFEN_ESQ = {
+    "arco",
     "bem",
     "mal",
     "não",
@@ -173,6 +174,10 @@ PRESERVAR_HIFEN_ESQ = {
     "semi",
     "anti",
     "extra",
+    "vice",
+    "povo",
+    "planta",
+    "faca",
     "one",
     "two",
     "three",
@@ -286,7 +291,7 @@ def concatenar_segmentos_linha(segmentos: list[str]) -> str:
 
 
 def dehifenizar_texto_corrido(texto: str) -> str:
-    """Aplica de-hifenização em texto previamente unido com espaços após hífen."""
+    """Aplica de-hifenização em texto previamente unido com ou sem espaços após hífen."""
     texto = limpar_texto(texto)
 
     def _substituir(m: re.Match[str]) -> str:
@@ -295,7 +300,22 @@ def dehifenizar_texto_corrido(texto: str) -> str:
             return f"{esq}-{dir_}" if esp else m.group(0)
         return f"{esq}{dir_}"
 
-    return re.sub(r"\b([A-Za-zÀ-ÿ]+)-(\s+)([a-zà-ÿ]+)", _substituir, texto)
+    return re.sub(r"\b([A-Za-zÀ-ÿ]+)-(\s*)([a-zà-ÿ]+)", _substituir, texto)
+
+
+def traduzir_tokens_acao_pt(texto: str | None) -> str | None:
+    """Converte marcadores de ícone do PDF em inglês para português canônico."""
+    if not texto:
+        return texto
+    for en, pt in (
+        ("[one-action]", "[1 ação]"),
+        ("[two-actions]", "[2 ações]"),
+        ("[three-actions]", "[3 ações]"),
+        ("[free-action]", "[ação livre]"),
+        ("[reaction]", "[reação]"),
+    ):
+        texto = texto.replace(en, pt)
+    return texto
 
 
 # ==============================================================================
@@ -1621,7 +1641,7 @@ def extrair_magias_regulares(
                 "tracos": tracos_formatados,
                 "escola": escola_canonica,
                 "tradicoes": meta_p["tradicoes"],
-                "execucao": meta_p["execucao"],
+                "execucao": traduzir_tokens_acao_pt(meta_p["execucao"]),
                 "acoes": meta_p["acoes"],
                 "componentes": meta_p["componentes"],
                 "custo": meta_p["custo"],
@@ -1632,8 +1652,8 @@ def extrair_magias_regulares(
                 "alvos": meta_p["alvos"],
                 "salvamento": meta_p["salvamento"],
                 "duracao": meta_p["duracao"],
-                "resumo_lista": resumo_lista,
-                "descricao": descricao,
+                "resumo_lista": dehifenizar_texto_corrido(resumo_lista),
+                "descricao": traduzir_tokens_acao_pt(descricao),
                 "resultados": resultados,
                 "elevada": elevada,
                 "tabela": tabela_rajada if sid == "rajada_prismatica" else None,
@@ -1782,7 +1802,7 @@ def extrair_magias_de_foco(leitor: LeitorPDFPuro) -> dict[str, Any]:
                 "raridade": raridade,
                 "tracos": tracos_formatados,
                 "escola": escola_canonica,
-                "execucao": meta_p["execucao"],
+                "execucao": traduzir_tokens_acao_pt(meta_p["execucao"]),
                 "acoes": meta_p["acoes"],
                 "componentes": meta_p["componentes"],
                 "custo": meta_p["custo"],
@@ -1793,7 +1813,7 @@ def extrair_magias_de_foco(leitor: LeitorPDFPuro) -> dict[str, Any]:
                 "alvos": meta_p["alvos"],
                 "salvamento": meta_p["salvamento"],
                 "duracao": meta_p["duracao"],
-                "descricao": descricao,
+                "descricao": traduzir_tokens_acao_pt(descricao),
                 "resultados": resultados,
                 "elevada": elevada,
                 "tabela": tabelas_foco.get(sid),

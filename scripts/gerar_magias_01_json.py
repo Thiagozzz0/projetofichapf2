@@ -82,7 +82,6 @@ PRESERVAR_HIFEN_DIR = {
     "los",
     "las",
     "no",
-    "na",
     "nos",
     "nas",
     "lhe",
@@ -114,9 +113,11 @@ PRESERVAR_HIFEN_DIR = {
     "armadas",
     "action",
     "actions",
+    "íris",
 }
 
 PRESERVAR_HIFEN_ESQ = {
+    "arco",
     "bem",
     "mal",
     "não",
@@ -130,6 +131,10 @@ PRESERVAR_HIFEN_ESQ = {
     "pré",
     "pós",
     "sub",
+    "vice",
+    "povo",
+    "planta",
+    "faca",
     "one",
     "two",
     "three",
@@ -207,7 +212,7 @@ def concatenar_segmentos_linha(segmentos: list[str]) -> str:
 
 
 def dehifenizar_texto_corrido(texto: str) -> str:
-    """Aplica de-hifenização em texto previamente unido com espaços após hífen."""
+    """Aplica de-hifenização em texto previamente unido com ou sem espaços após hífen."""
     texto = limpar_texto(texto)
 
     def _substituir(m: re.Match[str]) -> str:
@@ -216,7 +221,22 @@ def dehifenizar_texto_corrido(texto: str) -> str:
             return f"{esq}-{dir_}" if esp else m.group(0)
         return f"{esq}{dir_}"
 
-    return re.sub(r"\b([A-Za-zÀ-ÿ]+)-(\s+)([a-zà-ÿ]+)", _substituir, texto)
+    return re.sub(r"\b([A-Za-zÀ-ÿ]+)-(\s*)([a-zà-ÿ]+)", _substituir, texto)
+
+
+def traduzir_tokens_acao_pt(texto: str | None) -> str | None:
+    """Converte marcadores de ícone do PDF em inglês para português canônico."""
+    if not texto:
+        return texto
+    for en, pt in (
+        ("[one-action]", "[1 ação]"),
+        ("[two-actions]", "[2 ações]"),
+        ("[three-actions]", "[3 ações]"),
+        ("[free-action]", "[ação livre]"),
+        ("[reaction]", "[reação]"),
+    ):
+        texto = texto.replace(en, pt)
+    return texto
 
 
 def coluna_x0_base(pagina_livro: int, col: int) -> float:
@@ -1905,7 +1925,7 @@ def extrair_magias_descricoes(
                 "tracos": tracos_formatados,
                 "escola": escola_canonica,
                 "tradicoes": meta_parseado["tradicoes"],
-                "execucao": meta_parseado["execucao"],
+                "execucao": traduzir_tokens_acao_pt(meta_parseado["execucao"]),
                 "acoes": meta_parseado["acoes"],
                 "componentes": meta_parseado["componentes"],
                 "custo": meta_parseado["custo"],
@@ -1917,7 +1937,7 @@ def extrair_magias_descricoes(
                 "salvamento": meta_parseado["salvamento"],
                 "duracao": meta_parseado["duracao"],
                 "resumo_lista": resumo_lista,
-                "descricao": descricao,
+                "descricao": traduzir_tokens_acao_pt(descricao),
                 "resultados": resultados,
                 "elevada": elevada,
                 "tabela": tabela_cancao if sid == "cancao_incomensuravel" else None,

@@ -222,6 +222,7 @@ def gerar_companheiro_ou_familiar(
     ficha_mestre: dict[str, Any],
     modificadores_mestre: dict[str, int],
     tese_arcana_id: str | None = None,
+    talento_ancestral_id: str | None = None,
     nivel: int = 1,
     rng: random.Random | None = None,
 ) -> dict[str, Any] | None:
@@ -232,7 +233,7 @@ def gerar_companheiro_ou_familiar(
     if "companheiro_animal" in talentos_classe_ids:
         return _gerar_companheiro_animal(cf, classe_id, conceito, nivel, rng)
 
-    if any(tid in _DADOS_FAMILIAR_TALENTOS for tid in talentos_classe_ids):
+    if any(tid in _DADOS_FAMILIAR_TALENTOS for tid in talentos_classe_ids) or talento_ancestral_id == "cumplice_animal":
         return _gerar_familiar(
             cf,
             classe_id,

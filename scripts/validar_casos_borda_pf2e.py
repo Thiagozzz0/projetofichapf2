@@ -2,17 +2,25 @@
 
 from __future__ import annotations
 
+import io
+import json
+import re
 import sys
+import xml.etree.ElementTree as ET
+import zipfile
 from pathlib import Path
 
 RAIZ_PROJETO = Path(__file__).resolve().parent.parent
 if str(RAIZ_PROJETO) not in sys.path:
     sys.path.insert(0, str(RAIZ_PROJETO))
 
-from motor import ErroValidacao, carregar_dados, gerar_personagem
-from motor.biografia_pericias import calcular_idiomas
+from motor import ErroValidacao, carregar_dados, divindades_compativeis_conceito, gerar_personagem
+from motor.biografia_pericias import calcular_idiomas, calcular_pericias
 from motor.combate_matematica import calcular_matematica_final
-from motor.equipamentos import calcular_proficiencias_combate, comprar_equipamentos
+from motor.companheiros import gerar_companheiro_ou_familiar
+from motor.equipamentos import calcular_proficiencias_combate, comprar_equipamentos, grau_arma
+from motor.exportacao import exportar_ficha_docx, exportar_ficha_txt
+from motor.magias import gerar_conjuracao
 from motor.regras_atributos import calcular_atributos
 from motor.talentos import selecionar_talentos
 from motor.util import normalizar
@@ -386,6 +394,123 @@ def test_divindade_obrigatoria_vs_opcional_e_compatibilidade() -> None:
         pass
 
 
+def test_revisao_geral_etapa_23() -> None:
+    db = carregar_dados()
+
+    # 1. Zero conflitos de Arma de 2 mãos + Escudo (Druida Senhor da Matilha, Campeão Montado e Capelão c/ 20 divindades)
+    for anc_id, her_id, cls_id, con_id, div_id in (
+        ("humano", "heranca_versatil", "druida", "druida_senhor_matilha", None),
+        ("humano", "heranca_versatil", "campeao", "campeao_cavaleiro_montado", "iomedae"),
+        ("humano", "heranca_versatil", "clerigo", "clerigo_arauto_guerra", "gorum"),
+        ("humano", "heranca_versatil", "clerigo", "clerigo_arauto_guerra", "urgathoa"),
+        ("humano", "heranca_versatil", "clerigo", "clerigo_arauto_guerra", "shelyn"),
+    ):
+        r = gerar_personagem(anc_id, her_id, cls_id, con_id, divindade_id=div_id, seed=7, dados=db)
+        if r["ficha"]["classe_armadura"]["escudo"]["nome"]:
+            for g in r["ficha"]["golpes_corpo_a_corpo"]:
+                if g["arma"]:
+                    w_obj = next((w for w in db.armas.values() if w["nome"] == g["arma"]), None)
+                    assert not (w_obj and str(w_obj.get("maos")) == "2"), f"2M+Escudo em {con_id}/{div_id}: {g['arma']}"
+
+    # Gorum / Urgathoa equipam Montante / Segadeira sem escudo
+    r_gor = gerar_personagem("humano", "heranca_versatil", "clerigo", "clerigo_arauto_guerra", divindade_id="gorum", seed=7, dados=db)
+    assert any(g["arma"] == "Montante" for g in r_gor["ficha"]["golpes_corpo_a_corpo"])
+    assert r_gor["ficha"]["classe_armadura"]["escudo"]["nome"] == ""
+
+    # 2. Campeão com Arma Deificada (Pharasma Adaga 1d4->1d6; Abadar Besta leve 1d8->1d10)
+    camp_ph = gerar_personagem("humano", "heranca_versatil", "campeao", "campeao_bastiao_impenetravel", divindade_id="pharasma", seed=7, dados=db)
+    adaga_c = next(g for g in camp_ph["ficha"]["golpes_corpo_a_corpo"] if g["arma"] == "Adaga")
+    assert adaga_c["dano"]["dados"] == "1d6"
+    camp_ab = gerar_personagem("humano", "heranca_versatil", "campeao", "campeao_cruzado_vingador", divindade_id="abadar", seed=7, dados=db)
+    besta_c = next(g for g in camp_ab["ficha"]["golpes_a_distancia"] if g["arma"] == "Besta leve")
+    assert besta_c["dano"]["dados"] == "1d10"
+
+    # 3. Perspicácia Astuta eleva Percepção (ou salvamento) para especialista
+    r_pa = gerar_personagem("humano", "heranca_versatil", "mago", "mago_arquimago_enciclopedico", seed=42, dados=db)
+    assert r_pa["ficha"]["percepcao"]["grau_proficiencia"] == "especialista"
+
+    # 4. Saber Ancestral concede 2 perícias + Saber 2 treinado
+    per_res = calcular_pericias(
+        db,
+        db.ancestralidades["elfo"],
+        db.heranca("elfo", "elfo_vidente"),
+        db.biografias["estudioso"],
+        db.classes["guerreiro"],
+        None,
+        db.conceitos["guerreiro_colosso_demolidor"],
+        mod_int=0,
+        pericias_ancestrais_fixas=["arcanismo", "natureza"],
+        saber_ancestral=("Saber Élfico", "Talento Ancestral (Saber Élfico)"),
+    )
+    assert per_res["graus"]["arcanismo"] == "treinado" and per_res["graus"]["natureza"] == "treinado"
+    assert per_res["saberes"]["saber_2"]["especializacao"] == "Saber Élfico"
+    assert per_res["saberes"]["saber_2"]["grau"] == "treinado"
+
+    # 5. Familiaridade com Armas Ancestrais e Armamento Não Convencional
+    profs_elf_mago = calcular_proficiencias_combate(
+        db.classes["mago"], db.subclasse("mago", "evocacao"), efeitos_talentos={"talento_ancestral_id": "familiaridade_com_armas_elficas"}
+    )
+    assert grau_arma(db.armas["arco_longo"], profs_elf_mago["armas"]) == "treinado"
+    profs_elf_bardo = calcular_proficiencias_combate(
+        db.classes["bardo"], None, efeitos_talentos={"talento_ancestral_id": "familiaridade_com_armas_elficas"}
+    )
+    assert grau_arma(db.armas["lamina_curva_elfica"], profs_elf_bardo["armas"]) == "treinado"
+    profs_unc = calcular_proficiencias_combate(
+        db.classes["guerreiro"], None, efeitos_talentos={"talento_ancestral_id": "armamento_nao_convencional"}
+    )
+    assert grau_arma(db.armas["katana"], profs_unc["armas"]) == "especialista"
+
+    # 6. Magia Extraterrena, Truque Mágico Adaptado, Cúmplice Animal e Visão Órquica
+    conj_ext = gerar_conjuracao(
+        db, db.heranca("elfo", "elfo_das_florestas"), db.classes["guerreiro"], None,
+        db.conceitos["guerreiro_colosso_demolidor"], {"for": 4, "des": 2, "con": 2, "int": 0, "sab": 1, "car": 0},
+        [], talento_ancestral_id="magia_extraterrena",
+    )
+    assert len(conj_ext["magias_inatas"]) == 1 and conj_ext["tradicao"] == "arcana"
+
+    conj_adap = gerar_conjuracao(
+        db, db.heranca("humano", "heranca_versatil"), db.classes["mago"], db.subclasse("mago", "evocacao"),
+        db.conceitos["mago_evocador_artilharia"], {"for": 0, "des": 2, "con": 1, "int": 4, "sab": 1, "car": 0},
+        [], talento_ancestral_id="truque_magico_adaptado",
+    )
+    assert "arcana" not in conj_adap["truques"][-1].get("tradicoes", [])
+
+    r_base = gerar_personagem(
+        "gnomo", db.ancestralidades["gnomo"]["herancas"][0]["id"], "guerreiro", "guerreiro_colosso_demolidor", seed=1, dados=db
+    )
+    mods_base = {k: v["modificador"] for k, v in r_base["ficha"]["atributos"].items()}
+    fam_cump = gerar_companheiro_ou_familiar(
+        db, db.classes["guerreiro"], None, db.conceitos["guerreiro_colosso_demolidor"],
+        [], r_base["ficha"], mods_base, talento_ancestral_id="cumplice_animal",
+    )
+    assert fam_cump is not None and fam_cump["categoria"] == "Familiar"
+
+    # 7. Arquivo regras_especificas.json em ASCII + magias01/02 sem hífens quebrados nem tokens em inglês
+    assert (RAIZ_PROJETO / "dados" / "regras_especificas.json").exists()
+    assert not (RAIZ_PROJETO / "dados" / "regras_específicas.json").exists()
+    for fn in ("magias01.json", "magias02.json"):
+        dados_mg = json.loads((RAIZ_PROJETO / "dados" / fn).read_text(encoding="utf-8"))
+        for grupo in (dados_mg["magias"], (dados_mg.get("magias_de_foco") or {}).get("lista", [])):
+            txt_grp = json.dumps(grupo, ensure_ascii=False)
+            assert "[one-action]" not in txt_grp and "[two-actions]" not in txt_grp and "[three-actions]" not in txt_grp and "[free-action]" not in txt_grp
+        for m in dados_mg["magias"]:
+            rl = m.get("resumo_lista") or ""
+            for bad in ("divi-na", "ener-gia", "cir-cunstâncias", "efei-tos", "em-purra", "inde-tectável", "tempora-riamente", "de-sarmados"):
+                assert bad not in rl, f"{bad!r} residual em {fn}:{m['id']}"
+
+    # 8. Exportadores .txt e .docx: Subclasse no cabeçalho, pluralização e Preparada + anotações
+    r_barb = gerar_personagem("humano", "heranca_versatil", "barbaro", "barbaro_guerreiro_draconico", seed=1, dados=db)
+    txt_b = exportar_ficha_txt(r_barb)
+    assert "Subclasse  :" in txt_b
+
+    r_cl = gerar_personagem("humano", "heranca_versatil", "clerigo", "clerigo_arauto_guerra", divindade_id="iomedae", seed=2026, dados=db)
+    docx_bytes = exportar_ficha_docx(r_cl)
+    with zipfile.ZipFile(io.BytesIO(docx_bytes), "r") as zf:
+        doc_txt = "".join(ET.fromstring(zf.read("word/document.xml")).itertext())
+        assert "Subclasse PF2E" in doc_txt
+        assert "Preparada •" in doc_txt
+
+
 def main() -> None:
     test_ca_limite_destreza_e_sem_armadura()
     test_penalidade_armadura_barulhenta_flexivel_e_ferro_desimpedido()
@@ -395,6 +520,7 @@ def main() -> None:
     test_acoes_classe_pagina3_e_zero_descarte_talentos()
     test_divindades_reais_e_companheiros_familiares()
     test_divindade_obrigatoria_vs_opcional_e_compatibilidade()
+    test_revisao_geral_etapa_23()
     print("SUCESSO TOTAL — Todos os testes de casos de borda PF2E passaram!")
 
 

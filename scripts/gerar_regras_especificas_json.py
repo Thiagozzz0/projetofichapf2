@@ -1,4 +1,4 @@
-"""Gerador e validador de dados/regras_específicas.json (exceções e regras transversais PF2E)."""
+"""Gerador e validador de dados/regras_especificas.json (exceções e regras transversais PF2E)."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from typing import Any
 
 RAIZ_PROJETO = Path(__file__).resolve().parent.parent
 DIR_DADOS = RAIZ_PROJETO / "dados"
-CAMINHO_SAIDA = DIR_DADOS / "regras_específicas.json"
+CAMINHO_SAIDA = DIR_DADOS / "regras_especificas.json"
 
 
 def construir_dados() -> dict[str, Any]:

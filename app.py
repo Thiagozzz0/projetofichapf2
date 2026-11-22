@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from typing import Any
 
 from flask import Flask, Response, jsonify, render_template, request
@@ -212,4 +213,5 @@ def api_exportar_docx():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host="127.0.0.1", port=5000)
+    debug_ativo = os.environ.get("FLASK_DEBUG", "0").strip().lower() in {"1", "true", "yes"}
+    app.run(debug=debug_ativo, host="127.0.0.1", port=5000)

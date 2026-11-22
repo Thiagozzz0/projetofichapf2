@@ -742,7 +742,7 @@ def construir_conceitos() -> list[dict[str, Any]]:
             armaduras_ids=["placa_peitoral", "cota_de_malha", "cota_de_escamas"],
             usa_escudo=True,
             escudos_ids=["escudo_de_aco", "escudo_de_madeira"],
-            armas_corpo_a_corpo_ids=["lanca_de_cavalaria", "espada_longa", "martelo_de_guerra"],
+            armas_corpo_a_corpo_ids=["espada_longa", "martelo_de_guerra", "lanca"],
             armas_distancia_ids=["azagaia"],
             estilo_empunhadura="uma_mao_e_escudo",
             aliado_divino_sugerido="montaria",
@@ -1060,7 +1060,7 @@ def construir_conceitos() -> list[dict[str, Any]]:
             armaduras_ids=["gibao_de_peles", "couro_batido", "couro"],
             usa_escudo=True,
             escudos_ids=["escudo_de_madeira"],
-            armas_corpo_a_corpo_ids=["lanca_longa", "lanca", "foice"],
+            armas_corpo_a_corpo_ids=["lanca", "foice", "clava"],
             armas_distancia_ids=["funda", "dardo"],
             estilo_empunhadura="uma_mao_e_escudo",
             conjuracao_recomendada=_conjuracao(

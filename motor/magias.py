@@ -174,6 +174,7 @@ def gerar_conjuracao(
     nivel: int = 1,
     fonte_divina: str = "cura",
     divindade: dict[str, Any] | None = None,
+    talento_ancestral_id: str | None = None,
     rng: random.Random | None = None,
 ) -> dict[str, Any]:
     """Calcula ataque/CD de magia, espaços por dia, truques, magias N1, foco e inatas."""
@@ -206,6 +207,26 @@ def gerar_conjuracao(
         if escolhido:
             inatas.append(dict(escolhido, frequencia="À vontade (Herança)"))
             tradicao_inata = trad_pref
+
+    inatas_ids = {m["id"] for m in inatas}
+    if talento_ancestral_id == "magia_extraterrena":
+        pool_ext = [
+            m for m in dados.magias.values()
+            if "arcana" in m.get("tradicoes", []) and "Truque Mágico" in m.get("tracos", []) and m["id"] not in inatas_ids
+        ]
+        escolhido_ext = rng.choice(pool_ext[:8]) if (rng and pool_ext) else (pool_ext[0] if pool_ext else None)
+        if escolhido_ext:
+            inatas.append(dict(escolhido_ext, frequencia="À vontade (Talento Ancestral)"))
+            tradicao_inata = tradicao_inata or "arcana"
+    elif talento_ancestral_id == "magia_do_primeiro_mundo":
+        pool_pm = [
+            m for m in dados.magias.values()
+            if "primal" in m.get("tradicoes", []) and "Truque Mágico" in m.get("tracos", []) and m["id"] not in inatas_ids
+        ]
+        escolhido_pm = rng.choice(pool_pm[:8]) if (rng and pool_pm) else (pool_pm[0] if pool_pm else None)
+        if escolhido_pm:
+            inatas.append(dict(escolhido_pm, frequencia="À vontade (Talento Ancestral)"))
+            tradicao_inata = tradicao_inata or "primal"
 
     # ------------------------------------------------------------------
     # 2. Conjurador Pleno vs Foco Marcial vs Não-conjurador
@@ -308,6 +329,17 @@ def gerar_conjuracao(
         truques_selecionados = _selecionar_magias_por_nivel(
             dados, tradicao, None, True, qtd_truques, truques_pri, tracos_pri, escolas_pri, ids_truques_usados, rng
         )
+        if talento_ancestral_id == "truque_magico_adaptado" and truques_selecionados:
+            pool_adapt = [
+                m for m in dados.magias.values()
+                if "Truque Mágico" in m.get("tracos", [])
+                and tradicao not in m.get("tradicoes", [])
+                and m["id"] not in ids_truques_usados
+            ]
+            if pool_adapt:
+                adaptado = rng.choice(pool_adapt[:8]) if rng else pool_adapt[0]
+                truques_selecionados[-1] = adaptado
+                ids_truques_usados.add(adaptado["id"])
 
         # Quantidade de magias conhecidas/no grimório N1
         if classe_id == "mago":

@@ -198,7 +198,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[one-action] verbal",
+      "execucao": "[1 ação] verbal",
       "acoes": "1",
       "componentes": [
         "verbal"
@@ -282,7 +282,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -319,7 +319,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -354,7 +354,7 @@
       "tradicoes": [
         "divina"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -392,7 +392,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[one-action] a [three-actions] (somático, verbal)",
+      "execucao": "[1 ação] a [3 ações] (somático, verbal)",
       "acoes": "1 a 3",
       "componentes": [
         "somático",
@@ -434,7 +434,7 @@
       "tradicoes": [
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -479,7 +479,7 @@
       "tradicoes": [
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -516,7 +516,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -557,7 +557,7 @@
         "divina",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -643,7 +643,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -685,7 +685,7 @@
       "tradicoes": [
         "primal"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -728,7 +728,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -771,7 +771,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -815,7 +815,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -858,7 +858,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -901,7 +901,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -939,7 +939,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -982,7 +982,7 @@
         "divina",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -1019,7 +1019,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -1057,7 +1057,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -1100,7 +1100,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -1143,7 +1143,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -1189,7 +1189,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -1270,7 +1270,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[one-action] verbal",
+      "execucao": "[1 ação] verbal",
       "acoes": "1",
       "componentes": [
         "verbal"
@@ -1283,7 +1283,7 @@
       "alvos": "1 criatura",
       "salvamento": null,
       "duracao": "até o início do seu próximo turno",
-      "resumo_lista": "Orientação divi-na aprimora uma rolagem.",
+      "resumo_lista": "Orientação divina aprimora uma rolagem.",
       "descricao": "Você pede por orientação divina, concedendo ao alvo +1 de bônus de estado a uma jogada de salvamento, rolagem de ataque, teste de Percepção ou teste de perícia realizado antes da duração acabar. O alvo escolhe em qual rolagem usar o bônus antes de rolar o dado. Se o alvo usar o bônus, a magia acaba. De qualquer forma, o alvo fica temporariamente imune por 1 hora.",
       "resultados": null,
       "elevada": null,
@@ -1344,7 +1344,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -1385,7 +1385,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -1427,7 +1427,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] material, somático",
+      "execucao": "[2 ações] material, somático",
       "acoes": "2",
       "componentes": [
         "material",
@@ -1507,7 +1507,7 @@
       "tradicoes": [
         "arcana"
       ],
-      "execucao": "[one-action] verbal",
+      "execucao": "[1 ação] verbal",
       "acoes": "1",
       "componentes": [
         "verbal"
@@ -1549,7 +1549,7 @@
       "tradicoes": [
         "arcana"
       ],
-      "execucao": "[one-action] verbal",
+      "execucao": "[1 ação] verbal",
       "acoes": "1",
       "componentes": [
         "verbal"
@@ -1592,7 +1592,7 @@
       "tradicoes": [
         "arcana"
       ],
-      "execucao": "[one-action] verbal",
+      "execucao": "[1 ação] verbal",
       "acoes": "1",
       "componentes": [
         "verbal"
@@ -1634,7 +1634,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -1680,7 +1680,7 @@
       "tradicoes": [
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -1726,7 +1726,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -1767,7 +1767,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -1810,7 +1810,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -1851,7 +1851,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -1891,7 +1891,7 @@
       "tradicoes": [
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -1936,7 +1936,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -1973,7 +1973,7 @@
         "divina",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -2009,7 +2009,7 @@
       "tradicoes": [
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -2051,7 +2051,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -2101,7 +2101,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -2115,7 +2115,7 @@
       "alvos": "1 criatura voluntária",
       "salvamento": null,
       "duracao": "10 minutos",
-      "resumo_lista": "Transforma os pés de uma criatura em barbatanas, tornando-a ca-paz de nadar, mas desacelerando-a em terra.",
+      "resumo_lista": "Transforma os pés de uma criatura em barbatanas, tornando-a capaz de nadar, mas desacelerando-a em terra.",
       "descricao": "Os pés do alvo se transformam em barbatanas, aprimorando mobilidade na água, mas reduzindo-a em terra. O alvo adquire uma Velocidade de natação igual à Velocidade em terra normal dele, mas essa Velocidade em terra se torna 1,5 metros.",
       "resultados": null,
       "elevada": [
@@ -2186,7 +2186,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -2227,7 +2227,7 @@
       "tradicoes": [
         "divina"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -2268,7 +2268,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -2311,7 +2311,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -2353,7 +2353,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -2397,7 +2397,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -2436,7 +2436,7 @@
       "tradicoes": [
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -2522,7 +2522,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -2563,7 +2563,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -2606,7 +2606,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -2641,7 +2641,7 @@
       "tradicoes": [
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -2655,7 +2655,7 @@
       "alvos": "1 criatura voluntária",
       "salvamento": null,
       "duracao": "1 minuto",
-      "resumo_lista": "Torna tempora-riamente mágico os ataques de-sarmados de uma criatura.",
+      "resumo_lista": "Torna temporariamente mágico os ataques desarmados de uma criatura.",
       "descricao": "Escolha um dos ataques desarmados do alvo que cause apenas um dado de dano. Você pode fazer esse ataque desarmado brilhar com energia primal. O ataque desarmado se torna um ataque desarmado +1 impactante, recebendo +1 de bônus de item em rolagens de ataque e aumentando a quantidade de dados de dano para dois dados (se ele só causava um dado de dano).",
       "resultados": null,
       "elevada": null,
@@ -2680,7 +2680,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -2695,7 +2695,7 @@
       "salvamento": null,
       "duracao": "1 hora",
       "resumo_lista": "Sente quando uma criatura está em perigo e Reage para protegê-la com boa sorte.",
-      "descricao": "Você adquire um sexto sentido que o alerta de perigos que ameaçam o alvo da magia. Se escolher uma outra criatura como alvo, você cria um vínculo psíquico pelo qual pode informá-la do perigo. Este vínculo é um efeito mental. Devido à quantidade de informação que esta magia exige que processe, você não pode ter mais de uma magia de presciência em efeito ao mesmo tempo. Conjurar presciência novamente encerra qualquer presciência anterior. Enquanto presciência estiver em efeito, o alvo recebe +2 de bônus de estado em rolagens de iniciativa e não fica desprevenido contra criaturas indetectadas ou quando estiver flanqueado. Além disso, você ganha a reação a seguir.\n\nPresciência [reaction] Acionamento O alvo de presciência se defende contra uma criatura hostil ou outro perigo. Efeito Se a criatura hostil ou perigo forçar o alvo a rolar dados (uma jogada de salvamento, por exemplo), o alvo rola duas vezes e usa o maior resultado e esta magia adquire o traço fortuna. Mas se a criatura hostil ou perigo estiver rolando contra o alvo (uma rolagem de ataque ou teste de perícia, por exemplo), essa criatura hostil ou perigo rola duas vezes e usa o menor resultado e esta magia adquire o traço infortúnio.",
+      "descricao": "Você adquire um sexto sentido que o alerta de perigos que ameaçam o alvo da magia. Se escolher uma outra criatura como alvo, você cria um vínculo psíquico pelo qual pode informá-la do perigo. Este vínculo é um efeito mental. Devido à quantidade de informação que esta magia exige que processe, você não pode ter mais de uma magia de presciência em efeito ao mesmo tempo. Conjurar presciência novamente encerra qualquer presciência anterior. Enquanto presciência estiver em efeito, o alvo recebe +2 de bônus de estado em rolagens de iniciativa e não fica desprevenido contra criaturas indetectadas ou quando estiver flanqueado. Além disso, você ganha a reação a seguir.\n\nPresciência [reação] Acionamento O alvo de presciência se defende contra uma criatura hostil ou outro perigo. Efeito Se a criatura hostil ou perigo forçar o alvo a rolar dados (uma jogada de salvamento, por exemplo), o alvo rola duas vezes e usa o maior resultado e esta magia adquire o traço fortuna. Mas se a criatura hostil ou perigo estiver rolando contra o alvo (uma rolagem de ataque ou teste de perícia, por exemplo), essa criatura hostil ou perigo rola duas vezes e usa o menor resultado e esta magia adquire o traço infortúnio.",
       "resultados": null,
       "elevada": null,
       "tabela": null,
@@ -2720,7 +2720,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -2764,7 +2764,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -2778,7 +2778,7 @@
       "alvos": "1 objeto (somente para cozinhar, cuidar ou erguer)",
       "salvamento": null,
       "duracao": "sustentada",
-      "resumo_lista": "Executa efei-tos mágicos menores.",
+      "resumo_lista": "Executa efeitos mágicos menores.",
       "descricao": "Uma magia simples atende aos seus desejos. Você pode executar efeitos mágicos simples enquanto Sustentar a Magia. Cada vez que Sustentar a Magia, escolha uma dessas quatro opções.\n\n• Cozinhar Esfriar, esquentar ou temperar meio quilo de matéria não-viva.\n• Criar Cria um objeto temporário de Volume insignificante, feito de substância mágica solidificada. O objeto parece imperfeito e artificial, e é extremamente frágil — ele não pode ser utilizado como uma arma, componente de magia ou ferramenta.\n• Cuidar Colorir, limpar ou sujar um objeto de Volume leve ou menor. Você pode afetar um objeto de Volume 1 com 10 rodadas de concentração, e um objeto maior com 1 minuto por Volume.\n• Erguer Lentamente erguer um objeto desapossado de Volume leve ou menor a até 30 centímetros do chão.\n\nPrestidigitação não pode causar dano ou condições adversas. Qualquer mudança real em um objeto (além do notado acima) persiste somente enquanto você Sustentar a Magia.",
       "resultados": null,
       "elevada": null,
@@ -2803,7 +2803,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -2845,7 +2845,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -2859,7 +2859,7 @@
       "alvos": null,
       "salvamento": null,
       "duracao": "sustentada por até 1 minuto",
-      "resumo_lista": "Cria uma ilu-são de si mesmo que pode ser usada para conjurar magias.",
+      "resumo_lista": "Cria uma ilusão de si mesmo que pode ser usada para conjurar magias.",
       "descricao": "Você projeta uma imagem ilusória sua. Você deve permanecer na distância da imagem e, se a qualquer momento não puder ver a imagem, a magia acaba. Sempre que Conjurar uma Magia que não possua uma área de emanação, você pode fazer o efeito da magia originar de si mesmo ou da imagem. Como a imagem é uma ilusão, ela não pode se beneficiar de magias, embora manifestações visuais ainda apareçam. A imagem possui a mesma CA e salvamentos que você. Se ela for atingida por um ataque ou falhar em um salvamento, a magia é encerrada.",
       "resultados": null,
       "elevada": [
@@ -2888,7 +2888,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -2933,7 +2933,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -2948,7 +2948,7 @@
       "salvamento": null,
       "duracao": "1 minuto",
       "resumo_lista": "Protege uma criatura contra aqueles da tendência escolhida.",
-      "descricao": "Você protege uma criatura contra uma tendência específica. Escolha bem, caos, mal ou ordem quando conjurar esta magia. O alvo recebe +1 de bônus de estado na CA e em jogadas de salvamento contra criaturas e efeitos da tendência escolhida. Este bônus aumenta para +3 contra efeitos dessas criaturas que controlariam o alvo diretamente e contra ataques feitos por criaturas convocadas da tendência escolhida.\n\nEsta magia adquire o traço oposto à tendência escolhida — se escolher caos, esta magia adquire o traço ordeiro, e viceversa; se escolher mal, esta magia adquire o traço bem, e vice-versa.",
+      "descricao": "Você protege uma criatura contra uma tendência específica. Escolha bem, caos, mal ou ordem quando conjurar esta magia. O alvo recebe +1 de bônus de estado na CA e em jogadas de salvamento contra criaturas e efeitos da tendência escolhida. Este bônus aumenta para +3 contra efeitos dessas criaturas que controlariam o alvo diretamente e contra ataques feitos por criaturas convocadas da tendência escolhida.\n\nEsta magia adquire o traço oposto à tendência escolhida — se escolher caos, esta magia adquire o traço ordeiro, e vice-versa; se escolher mal, esta magia adquire o traço bem, e vice-versa.",
       "resultados": null,
       "elevada": null,
       "tabela": null,
@@ -2970,7 +2970,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -3007,7 +3007,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -3047,7 +3047,7 @@
       "tradicoes": [
         "divina"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -3084,7 +3084,7 @@
       "tradicoes": [
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -3125,7 +3125,7 @@
         "divina",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -3161,7 +3161,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[reaction] verbal",
+      "execucao": "[reação] verbal",
       "acoes": "reacao",
       "componentes": [
         "verbal"
@@ -3198,7 +3198,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -3242,7 +3242,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -3287,7 +3287,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -3329,7 +3329,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -3371,7 +3371,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -3385,7 +3385,7 @@
       "alvos": null,
       "salvamento": null,
       "duracao": null,
-      "resumo_lista": "Dispara raios arco-íris que possuem vários efei-tos em criaturas em um cone.",
+      "resumo_lista": "Dispara raios arco-íris que possuem vários efeitos em criaturas em um cone.",
       "descricao": "Uma rajada de luz arco-íris cascateia de sua mão aberta. Cada criatura na área deve rolar 1d8 na tabela abaixo para determinar qual feixe a acerta, e então tentar uma jogada de salvamento contra o tipo indicado. A tabela destaca quaisquer traços adicionais aplicados a cada tipo de raio. Se uma criatura for atingida por vários raios, ela usa o mesmo resultado do d20 para todas suas jogadas de salvamento. Para todos os raios, uma jogada de salvamento bem-sucedida anula o efeito para essa criatura.",
       "resultados": null,
       "elevada": null,
@@ -3457,7 +3457,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -3498,7 +3498,7 @@
       "tradicoes": [
         "divina"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -3579,7 +3579,7 @@
       "tradicoes": [
         "arcana"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -3617,7 +3617,7 @@
         "divina",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -3659,7 +3659,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -3777,7 +3777,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -3820,7 +3820,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -3863,7 +3863,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -3877,7 +3877,7 @@
       "alvos": "1 cadáver",
       "salvamento": null,
       "duracao": "até a próxima vez que você fizer suas preparações diárias",
-      "resumo_lista": "Um cor-po não se decompõe e não pode se tornar um morto-vivo.",
+      "resumo_lista": "Um corpo não se decompõe e não pode se tornar um morto-vivo.",
       "descricao": "O cadáver alvo não apodrece nem pode ser transformado em um morto-vivo. Se o cadáver for sujeitado a uma magia que requeira um cadáver que tenha morrido a uma determinada quantidade de tempo (por exemplo, reviver os mortos), não conte a duração de repouso tranquilo para esse tempo. Esta magia também impede insetos e pestes ordinárias (como larvas) de consumirem o corpo.",
       "resultados": null,
       "elevada": [
@@ -3904,7 +3904,7 @@
       "tradicoes": [
         "divina"
       ],
-      "execucao": "[reaction] somático, verbal",
+      "execucao": "[reação] somático, verbal",
       "acoes": "reacao",
       "componentes": [
         "somático",
@@ -3948,7 +3948,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -3990,7 +3990,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -4082,7 +4082,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -4172,7 +4172,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -4259,7 +4259,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -4356,7 +4356,7 @@
         "divina",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -4394,7 +4394,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -4436,7 +4436,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -4473,7 +4473,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[one-action] somático",
+      "execucao": "[1 ação] somático",
       "acoes": "1",
       "componentes": [
         "somático"
@@ -4555,7 +4555,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -4635,7 +4635,7 @@
       "tradicoes": [
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -4680,7 +4680,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -4718,7 +4718,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[reaction] verbal",
+      "execucao": "[reação] verbal",
       "acoes": "reacao",
       "componentes": [
         "verbal"
@@ -4756,7 +4756,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -4805,7 +4805,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] material, somático",
+      "execucao": "[2 ações] material, somático",
       "acoes": "2",
       "componentes": [
         "material",
@@ -4846,7 +4846,7 @@
       "tradicoes": [
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -4931,7 +4931,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -4994,7 +4994,7 @@
       "alvos": "1 criatura",
       "salvamento": "Vontade",
       "duracao": "sustentada por até 1 minuto",
-      "resumo_lista": "Descobre conhecimen-tos e memórias na mente da criatura.",
+      "resumo_lista": "Descobre conhecimentos e memórias na mente da criatura.",
       "descricao": "Você estende seus pensamentos através da mente de uma criatura, sugando informações. Você acessa as memórias e conhecimento do alvo a menos que ele lhe expulse com um salvamento de Vontade.",
       "resultados": {
         "sucesso": "O alvo não é afetado.",
@@ -5023,7 +5023,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -5070,7 +5070,7 @@
       "tradicoes": [
         "divina"
       ],
-      "execucao": "[reaction] verbal",
+      "execucao": "[reação] verbal",
       "acoes": "reacao",
       "componentes": [
         "verbal"
@@ -5107,7 +5107,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -5151,7 +5151,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -5200,7 +5200,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -5294,7 +5294,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -5335,7 +5335,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[three-actions] somático, verbal",
+      "execucao": "[3 ações] somático, verbal",
       "acoes": "3",
       "componentes": [
         "somático",
@@ -5383,7 +5383,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -5481,7 +5481,7 @@
       "tradicoes": [
         "primal"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -5523,7 +5523,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -5607,7 +5607,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -5645,7 +5645,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -5737,7 +5737,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -5779,7 +5779,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -5822,7 +5822,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -5866,7 +5866,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -5907,7 +5907,7 @@
       "tradicoes": [
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -5950,7 +5950,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -5964,7 +5964,7 @@
       "alvos": null,
       "salvamento": null,
       "duracao": "1 dia",
-      "resumo_lista": "Impede te-leportação e viagens planares.",
+      "resumo_lista": "Impede teleportação e viagens planares.",
       "descricao": "Você cria uma barreira cintilante que tenta neutralizar efeitos de teleportação e viagem planar para dentro ou para fora da área, incluindo itens que permitem acesso a espaços extradimensionais (como uma mochila de carga). Tranca dimensional tenta neutralizar qualquer tentativa de convocar uma criatura na área, mas não impede a criatura de partir ao término da magia de convocação.",
       "resultados": null,
       "elevada": null,
@@ -5987,7 +5987,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -6029,7 +6029,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -6043,7 +6043,7 @@
       "alvos": "até 2 criaturas",
       "salvamento": null,
       "duracao": null,
-      "resumo_lista": "Telepor-ta até duas criaturas para novas posições próximas a você.",
+      "resumo_lista": "Teleporta até duas criaturas para novas posições próximas a você.",
       "descricao": "Você teleporta os alvos para novas posições dentro da área. Cada uma das criaturas deve ser capaz de caber em seu novo espaço, e suas posições devem estar desocupadas, inteiramente dentro da área e em sua linha de visão. Criaturas involuntárias podem tentar um salvamento de Vontade.",
       "resultados": {
         "sucesso_critico": "O alvo pode teleportar se quiser, mas escolhe o destino dentro da área.",
@@ -6074,7 +6074,7 @@
       "tradicoes": [
         "primal"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -6151,7 +6151,7 @@
         "arcana",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -6192,7 +6192,7 @@
       "tradicoes": [
         "primal"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -6232,7 +6232,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -6275,7 +6275,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -6317,7 +6317,7 @@
       "tradicoes": [
         "ocultista"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -6360,7 +6360,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -6450,7 +6450,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -6464,7 +6464,7 @@
       "alvos": "1 criatura voluntária",
       "salvamento": null,
       "duracao": "10 minutos",
-      "resumo_lista": "Transfere continu-amente sua saúde para outra pessoa.",
+      "resumo_lista": "Transfere continuamente sua saúde para outra pessoa.",
       "descricao": "Você forma um vínculo espiritual com outra criatura, que lhe permite sofrer a dor dele. Quando você Conjurar esta Magia e no início de cada um de seus turnos, se o alvo estiver abaixo dos Pontos de Vida máximos dele, ele recupera 2 Pontos de Vida (ou a diferença entre os Pontos de Vida máximos e atuais, se for menor). Você perde a mesma quantidade de Pontos de Vida que o alvo recuperou.\n\nIsto é uma transferência espiritual, portanto, não se aplicam efeitos que aumentariam os Pontos de Vida recuperados pelo alvo ou que reduziriam os Pontos de Vida perdidos por você. Esta transferência também ignora quaisquer Pontos de Vida temporários que você ou o alvo tiverem. Como este efeito não envolve energia positiva ou energia negativa, vínculo espiritual funciona mesmo se você ou o alvo for um morto-vivo. Enquanto a duração persistir, você não recebe benefícios de regeneração ou cura acelerada. Você pode Dispensar esta magia e, se em algum momento você chegar a 0 Pontos de Vida, vínculo espiritual é encerrada automaticamente.",
       "resultados": null,
       "elevada": [
@@ -6491,7 +6491,7 @@
       "tradicoes": [
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -6604,7 +6604,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -6652,7 +6652,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -6689,7 +6689,7 @@
       "tradicoes": [
         "ocultista"
       ],
-      "execucao": "[three-actions] material, somático, verbal",
+      "execucao": "[3 ações] material, somático, verbal",
       "acoes": "3",
       "componentes": [
         "material",
@@ -6731,7 +6731,7 @@
         "arcana",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -6773,7 +6773,7 @@
         "ocultista",
         "primal"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -6816,7 +6816,7 @@
         "divina",
         "ocultista"
       ],
-      "execucao": "[two-actions] somático, verbal",
+      "execucao": "[2 ações] somático, verbal",
       "acoes": "2",
       "componentes": [
         "somático",
@@ -6921,7 +6921,7 @@
           "Truque Mágico"
         ],
         "escola": "Encantamento",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -6961,7 +6961,7 @@
           "Morte"
         ],
         "escola": "Encantamento",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -7001,7 +7001,7 @@
           "Mental"
         ],
         "escola": "Encantamento",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -7046,7 +7046,7 @@
           "Visual"
         ],
         "escola": "Ilusão",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -7082,7 +7082,7 @@
           "Encantamento"
         ],
         "escola": "Encantamento",
-        "execucao": "[free-action] verbal",
+        "execucao": "[ação livre] verbal",
         "acoes": "livre",
         "componentes": [
           "verbal"
@@ -7125,7 +7125,7 @@
           "Mental"
         ],
         "escola": "Encantamento",
-        "execucao": "[reaction] somático ou verbal",
+        "execucao": "[reação] somático ou verbal",
         "acoes": "reacao",
         "componentes": [
           "somático",
@@ -7163,7 +7163,7 @@
           "Fortuna"
         ],
         "escola": "Adivinhação",
-        "execucao": "[free-action] somático",
+        "execucao": "[ação livre] somático",
         "acoes": "livre",
         "componentes": [
           "somático"
@@ -7203,7 +7203,7 @@
           "Truque Mágico"
         ],
         "escola": "Encantamento",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -7243,7 +7243,7 @@
           "Truque Mágico"
         ],
         "escola": "Encantamento",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -7283,7 +7283,7 @@
           "Truque Mágico"
         ],
         "escola": "Encantamento",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -7319,7 +7319,7 @@
           "Encantamento"
         ],
         "escola": "Encantamento",
-        "execucao": "[free-action] verbal",
+        "execucao": "[ação livre] verbal",
         "acoes": "livre",
         "componentes": [
           "verbal"
@@ -7364,7 +7364,7 @@
           "Truque Mágico"
         ],
         "escola": "Encantamento",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -7404,7 +7404,7 @@
           "Truque Mágico"
         ],
         "escola": "Encantamento",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -7442,7 +7442,7 @@
           "Positivo"
         ],
         "escola": "Necromancia",
-        "execucao": "[free-action] verbal",
+        "execucao": "[ação livre] verbal",
         "acoes": "livre",
         "componentes": [
           "verbal"
@@ -7480,7 +7480,7 @@
           "Positivo"
         ],
         "escola": "Necromancia",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -7523,7 +7523,7 @@
           "Litania"
         ],
         "escola": "Evocação",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -7571,7 +7571,7 @@
           "Litania"
         ],
         "escola": "Evocação",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -7614,7 +7614,7 @@
           "Litania"
         ],
         "escola": "Evocação",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -7655,7 +7655,7 @@
           "Campeão"
         ],
         "escola": "Abjuração",
-        "execucao": "[reaction] somático",
+        "execucao": "[reação] somático",
         "acoes": "reacao",
         "componentes": [
           "somático"
@@ -7693,7 +7693,7 @@
           "Não-Letal"
         ],
         "escola": "Encantamento",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -7742,7 +7742,7 @@
           "Visual"
         ],
         "escola": "Encantamento",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -7790,7 +7790,7 @@
           "Evocação"
         ],
         "escola": "Evocação",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -7834,7 +7834,7 @@
           "Mental"
         ],
         "escola": "Encantamento",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -7876,7 +7876,7 @@
           "Ilusão"
         ],
         "escola": "Ilusão",
-        "execucao": "[two-actions] material, verbal",
+        "execucao": "[2 ações] material, verbal",
         "acoes": "2",
         "componentes": [
           "material",
@@ -7919,7 +7919,7 @@
           "Terra"
         ],
         "escola": "Evocação",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -7963,7 +7963,7 @@
           "Evocação"
         ],
         "escola": "Evocação",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -8005,7 +8005,7 @@
           "Clérigo"
         ],
         "escola": "Abjuração",
-        "execucao": "[reaction] verbal",
+        "execucao": "[reação] verbal",
         "acoes": "reacao",
         "componentes": [
           "verbal"
@@ -8046,7 +8046,7 @@
           "Necromancia"
         ],
         "escola": "Necromancia",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -8088,7 +8088,7 @@
           "Sônico"
         ],
         "escola": "Evocação",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -8132,7 +8132,7 @@
           "Positivo"
         ],
         "escola": "Necromancia",
-        "execucao": "[one-action] a [three-actions] (somático)",
+        "execucao": "[1 ação] a [3 ações] (somático)",
         "acoes": "1 a 3",
         "componentes": [
           "somático"
@@ -8173,7 +8173,7 @@
           "Necromancia"
         ],
         "escola": "Necromancia",
-        "execucao": "[reaction] verbal",
+        "execucao": "[reação] verbal",
         "acoes": "reacao",
         "componentes": [
           "verbal"
@@ -8211,7 +8211,7 @@
           "Mental"
         ],
         "escola": "Encantamento",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -8255,7 +8255,7 @@
           "Mental"
         ],
         "escola": "Encantamento",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -8293,7 +8293,7 @@
           "Visual"
         ],
         "escola": "Evocação",
-        "execucao": "[two-actions] material, verbal",
+        "execucao": "[2 ações] material, verbal",
         "acoes": "2",
         "componentes": [
           "material",
@@ -8341,7 +8341,7 @@
           "Fortuna"
         ],
         "escola": "Adivinhação",
-        "execucao": "[reaction] somático",
+        "execucao": "[reação] somático",
         "acoes": "reacao",
         "componentes": [
           "somático"
@@ -8377,7 +8377,7 @@
           "Transmutação"
         ],
         "escola": "Transmutação",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -8415,7 +8415,7 @@
           "Transmutação"
         ],
         "escola": "Transmutação",
-        "execucao": "[reaction] somático",
+        "execucao": "[reação] somático",
         "acoes": "reacao",
         "componentes": [
           "somático"
@@ -8453,7 +8453,7 @@
           "Não-Letal"
         ],
         "escola": "Abjuração",
-        "execucao": "[reaction] somático",
+        "execucao": "[reação] somático",
         "acoes": "reacao",
         "componentes": [
           "somático"
@@ -8489,7 +8489,7 @@
           "Transmutação"
         ],
         "escola": "Transmutação",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -8534,7 +8534,7 @@
           "Mental"
         ],
         "escola": "Encantamento",
-        "execucao": "[reaction] verbal",
+        "execucao": "[reação] verbal",
         "acoes": "reacao",
         "componentes": [
           "verbal"
@@ -8571,7 +8571,7 @@
           "Positivo"
         ],
         "escola": "Necromancia",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -8613,7 +8613,7 @@
           "Clérigo"
         ],
         "escola": "Abjuração",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -8657,7 +8657,7 @@
           "Transmutação"
         ],
         "escola": "Transmutação",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -8698,7 +8698,7 @@
           "Evocação"
         ],
         "escola": "Evocação",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -8736,7 +8736,7 @@
           "Positivo"
         ],
         "escola": "Conjuração",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -8780,7 +8780,7 @@
           "Luz"
         ],
         "escola": "Evocação",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -8825,7 +8825,7 @@
           "Transmutação"
         ],
         "escola": "Transmutação",
-        "execucao": "[two-actions] material, somático",
+        "execucao": "[2 ações] material, somático",
         "acoes": "2",
         "componentes": [
           "material",
@@ -8872,7 +8872,7 @@
           "Fortuna"
         ],
         "escola": "Abjuração",
-        "execucao": "[reaction] somático",
+        "execucao": "[reação] somático",
         "acoes": "reacao",
         "componentes": [
           "somático"
@@ -8909,7 +8909,7 @@
           "Visual"
         ],
         "escola": "Ilusão",
-        "execucao": "[two-actions] material, verbal",
+        "execucao": "[2 ações] material, verbal",
         "acoes": "2",
         "componentes": [
           "material",
@@ -8952,7 +8952,7 @@
           "Fortuna"
         ],
         "escola": "Adivinhação",
-        "execucao": "[reaction] verbal",
+        "execucao": "[reação] verbal",
         "acoes": "reacao",
         "componentes": [
           "verbal"
@@ -8988,7 +8988,7 @@
           "Transmutação"
         ],
         "escola": "Transmutação",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -9064,7 +9064,7 @@
           "Conjuração"
         ],
         "escola": "Conjuração",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -9108,7 +9108,7 @@
           "Positivo"
         ],
         "escola": "Necromancia",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -9151,7 +9151,7 @@
           "Sombra"
         ],
         "escola": "Evocação",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -9187,7 +9187,7 @@
           "Clérigo"
         ],
         "escola": "Abjuração",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -9224,7 +9224,7 @@
           "Fortuna"
         ],
         "escola": "Abjuração",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -9266,7 +9266,7 @@
           "Ilusão"
         ],
         "escola": "Abjuração",
-        "execucao": "[reaction] somático",
+        "execucao": "[reação] somático",
         "acoes": "reacao",
         "componentes": [
           "somático"
@@ -9303,7 +9303,7 @@
           "Transmutação"
         ],
         "escola": "Transmutação",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -9346,7 +9346,7 @@
           "Mental"
         ],
         "escola": "Encantamento",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -9382,7 +9382,7 @@
           "Clérigo"
         ],
         "escola": "Adivinhação",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -9420,7 +9420,7 @@
           "Mental"
         ],
         "escola": "Encantamento",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -9461,7 +9461,7 @@
           "Transmutação"
         ],
         "escola": "Transmutação",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -9500,7 +9500,7 @@
           "Mental"
         ],
         "escola": "Encantamento",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -9545,7 +9545,7 @@
           "Mental"
         ],
         "escola": "Encantamento",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -9587,7 +9587,7 @@
           "Clérigo"
         ],
         "escola": "Abjuração",
-        "execucao": "[reaction] somático",
+        "execucao": "[reação] somático",
         "acoes": "reacao",
         "componentes": [
           "somático"
@@ -9629,7 +9629,7 @@
           "Vidência"
         ],
         "escola": "Adivinhação",
-        "execucao": "[three-actions] material, somático, verbal",
+        "execucao": "[3 ações] material, somático, verbal",
         "acoes": "3",
         "componentes": [
           "material",
@@ -9672,7 +9672,7 @@
           "Clérigo"
         ],
         "escola": "Abjuração",
-        "execucao": "[two-actions] material, somático",
+        "execucao": "[2 ações] material, somático",
         "acoes": "2",
         "componentes": [
           "material",
@@ -9716,7 +9716,7 @@
           "Fogo"
         ],
         "escola": "Evocação",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -9761,7 +9761,7 @@
           "Encantamento"
         ],
         "escola": "Encantamento",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -9798,7 +9798,7 @@
           "Fortuna"
         ],
         "escola": "Adivinhação",
-        "execucao": "[reaction] verbal",
+        "execucao": "[reação] verbal",
         "acoes": "reacao",
         "componentes": [
           "verbal"
@@ -9835,7 +9835,7 @@
           "Visual"
         ],
         "escola": "Ilusão",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -9876,7 +9876,7 @@
           "Clérigo"
         ],
         "escola": "Abjuração",
-        "execucao": "[reaction] somático",
+        "execucao": "[reação] somático",
         "acoes": "reacao",
         "componentes": [
           "somático"
@@ -9918,7 +9918,7 @@
           "Visual"
         ],
         "escola": "Ilusão",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -10018,7 +10018,7 @@
           "Necromancia"
         ],
         "escola": "Necromancia",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -10062,7 +10062,7 @@
           "Mental"
         ],
         "escola": "Encantamento",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -10107,7 +10107,7 @@
           "Sono"
         ],
         "escola": "Encantamento",
-        "execucao": "[three-actions] material, somático, verbal",
+        "execucao": "[3 ações] material, somático, verbal",
         "acoes": "3",
         "componentes": [
           "material",
@@ -10145,7 +10145,7 @@
           "Evocação"
         ],
         "escola": "Evocação",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -10182,7 +10182,7 @@
           "Evocação"
         ],
         "escola": "Evocação",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -10222,7 +10222,7 @@
           "Negativo"
         ],
         "escola": "Necromancia",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -10265,7 +10265,7 @@
           "Fortuna"
         ],
         "escola": "Adivinhação",
-        "execucao": "[reaction] somático",
+        "execucao": "[reação] somático",
         "acoes": "reacao",
         "componentes": [
           "somático"
@@ -10307,7 +10307,7 @@
           "Transmutação"
         ],
         "escola": "Transmutação",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -10357,7 +10357,7 @@
           "Mental"
         ],
         "escola": "Encantamento",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -10404,7 +10404,7 @@
           "Luz"
         ],
         "escola": "Encantamento",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -10441,7 +10441,7 @@
           "Negativo"
         ],
         "escola": "Necromancia",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -10488,7 +10488,7 @@
           "Mental"
         ],
         "escola": "Encantamento",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -10529,7 +10529,7 @@
           "Evocação"
         ],
         "escola": "Evocação",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -10572,7 +10572,7 @@
           "Fortuna"
         ],
         "escola": "Adivinhação",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -10610,7 +10610,7 @@
           "Fortuna"
         ],
         "escola": "Abjuração",
-        "execucao": "[reaction] verbal",
+        "execucao": "[reação] verbal",
         "acoes": "reacao",
         "componentes": [
           "verbal"
@@ -10648,7 +10648,7 @@
           "Mental"
         ],
         "escola": "Encantamento",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -10690,7 +10690,7 @@
           "Mental"
         ],
         "escola": "Encantamento",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -10727,7 +10727,7 @@
           "Revelação"
         ],
         "escola": "Adivinhação",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -10769,7 +10769,7 @@
           "Transmutação"
         ],
         "escola": "Transmutação",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -10812,7 +10812,7 @@
           "Necromancia"
         ],
         "escola": "Necromancia",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -10856,7 +10856,7 @@
           "Positivo"
         ],
         "escola": "Necromancia",
-        "execucao": "[one-action] a [two-actions] somático",
+        "execucao": "[1 ação] a [2 ações] somático",
         "acoes": "1 a 2",
         "componentes": [
           "somático"
@@ -10869,7 +10869,7 @@
         "alvos": "1 criatura animal viva voluntária",
         "salvamento": null,
         "duracao": null,
-        "descricao": "Você cura os ferimentos de um animal, restaurando 1d8 Pontos de Vida ao alvo. A quantidade de ações gastas Conjurando esta Magia determina o efeito dela.\n\n• [one-action] somático A magia possui uma distância de toque.\n• [two-actions] somático, verbal A magia possui uma distância de 9 metros e restaura 8 Pontos de Vida adicionais ao alvo.",
+        "descricao": "Você cura os ferimentos de um animal, restaurando 1d8 Pontos de Vida ao alvo. A quantidade de ações gastas Conjurando esta Magia determina o efeito dela.\n\n• [1 ação] somático A magia possui uma distância de toque.\n• [2 ações] somático, verbal A magia possui uma distância de 9 metros e restaura 8 Pontos de Vida adicionais ao alvo.",
         "resultados": null,
         "elevada": [
           {
@@ -10897,7 +10897,7 @@
           "Druida"
         ],
         "escola": "Conjuração",
-        "execucao": "[free-action] verbal",
+        "execucao": "[ação livre] verbal",
         "acoes": "livre",
         "componentes": [
           "verbal"
@@ -10934,7 +10934,7 @@
           "Transmutação"
         ],
         "escola": "Transmutação",
-        "execucao": "[one-action] a [two-actions] somático, verbal",
+        "execucao": "[1 ação] a [2 ações] somático, verbal",
         "acoes": "1 a 2",
         "componentes": [
           "somático",
@@ -10948,7 +10948,7 @@
         "alvos": null,
         "salvamento": null,
         "duracao": "1 minuto",
-        "descricao": "Você morfa seu corpo baseado em seu treinamento, escolhendo um dos efeitos a seguir baseado em seus talentos de ordem selvagem.\n\n• Se possuir Aspecto Selvagem, você pode morfar suas mãos em garras selvagens. Suas mãos se transformam em garras incrivelmente afiadas. Estas garras são um ataque desarmado no qual você é treinado e que causa 1d6 de dano cortante (acuidade, ágil) cada. Você ainda pode segurar e usar itens com suas mãos enquanto elas estiverem transformadas por esta magia, mas não pode segurar um item enquanto atacar. Se possuir Aspecto de Inseto, você pode transformar sua boca em mandíbulas selvagens, um ataque desarmado no qual você é treinado e que causa 1d8 de dano perfurante.\n• Se possuir Aspecto de Elemental, você pode morfar seu corpo para ser parcialmente composto por matéria elemental, concedendo-lhe resistência 5 a acertos críticos e dano de precisão.\n• Se possuir Aspecto de Planta, você pode morfar seus braços em vinhas longas, aumentando seu alcance para 3 metros (ou 4,5 metros com uma arma de alcance).\n• Se possuir Aspecto Altaneiro, você pode conjurar a magia como uma atividade de duas ações ([two-actions] somático, verbal) para crescer asas em suas costas. Estas asas lhe permitem voar com uma Velocidade de voo de 9 metros.",
+        "descricao": "Você morfa seu corpo baseado em seu treinamento, escolhendo um dos efeitos a seguir baseado em seus talentos de ordem selvagem.\n\n• Se possuir Aspecto Selvagem, você pode morfar suas mãos em garras selvagens. Suas mãos se transformam em garras incrivelmente afiadas. Estas garras são um ataque desarmado no qual você é treinado e que causa 1d6 de dano cortante (acuidade, ágil) cada. Você ainda pode segurar e usar itens com suas mãos enquanto elas estiverem transformadas por esta magia, mas não pode segurar um item enquanto atacar. Se possuir Aspecto de Inseto, você pode transformar sua boca em mandíbulas selvagens, um ataque desarmado no qual você é treinado e que causa 1d8 de dano perfurante.\n• Se possuir Aspecto de Elemental, você pode morfar seu corpo para ser parcialmente composto por matéria elemental, concedendo-lhe resistência 5 a acertos críticos e dano de precisão.\n• Se possuir Aspecto de Planta, você pode morfar seus braços em vinhas longas, aumentando seu alcance para 3 metros (ou 4,5 metros com uma arma de alcance).\n• Se possuir Aspecto Altaneiro, você pode conjurar a magia como uma atividade de duas ações ([2 ações] somático, verbal) para crescer asas em suas costas. Estas asas lhe permitem voar com uma Velocidade de voo de 9 metros.",
         "resultados": null,
         "elevada": [
           {
@@ -10982,7 +10982,7 @@
           "Evocação"
         ],
         "escola": "Evocação",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -11020,7 +11020,7 @@
           "Planta"
         ],
         "escola": "Conjuração",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -11059,7 +11059,7 @@
           "Evocação"
         ],
         "escola": "Evocação",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -11102,7 +11102,7 @@
           "Transmutação"
         ],
         "escola": "Transmutação",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -11146,7 +11146,7 @@
           "Transmutação"
         ],
         "escola": "Transmutação",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -11188,7 +11188,7 @@
           "Transmutação"
         ],
         "escola": "Transmutação",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -11230,7 +11230,7 @@
           "Feiticeiro"
         ],
         "escola": "Evocação",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -11272,7 +11272,7 @@
           "Luz"
         ],
         "escola": "Evocação",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -11315,7 +11315,7 @@
           "Transmutação"
         ],
         "escola": "Transmutação",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -11358,7 +11358,7 @@
           "Feiticeiro"
         ],
         "escola": "Abjuração",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -11400,7 +11400,7 @@
           "Negativo"
         ],
         "escola": "Necromancia",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -11446,7 +11446,7 @@
           "Necromancia"
         ],
         "escola": "Necromancia",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -11486,7 +11486,7 @@
           "Feiticeiro"
         ],
         "escola": "Abjuração",
-        "execucao": "[reaction] somático",
+        "execucao": "[reação] somático",
         "acoes": "reacao",
         "componentes": [
           "somático"
@@ -11522,7 +11522,7 @@
           "Feiticeiro"
         ],
         "escola": "Encantamento",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -11564,7 +11564,7 @@
           "Negativo"
         ],
         "escola": "Necromancia",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -11605,7 +11605,7 @@
           "Feiticeiro"
         ],
         "escola": "Encantamento",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -11643,7 +11643,7 @@
           "Mal"
         ],
         "escola": "Evocação",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -11689,7 +11689,7 @@
           "Visual"
         ],
         "escola": "Ilusão",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -11736,7 +11736,7 @@
           "Transmutação"
         ],
         "escola": "Transmutação",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -11781,7 +11781,7 @@
           "Feiticeiro"
         ],
         "escola": "Ilusão",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -11818,7 +11818,7 @@
           "Feiticeiro"
         ],
         "escola": "Evocação",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -11886,7 +11886,7 @@
           "Necromancia"
         ],
         "escola": "Necromancia",
-        "execucao": "[one-action] somático, verbal",
+        "execucao": "[1 ação] somático, verbal",
         "acoes": "1",
         "componentes": [
           "somático",
@@ -11929,7 +11929,7 @@
           "Necromancia"
         ],
         "escola": "Necromancia",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -11971,7 +11971,7 @@
           "Transmutação"
         ],
         "escola": "Transmutação",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -12012,7 +12012,7 @@
           "Feiticeiro"
         ],
         "escola": "Adivinhação",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -12053,7 +12053,7 @@
           "Feiticeiro"
         ],
         "escola": "Evocação",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -12099,7 +12099,7 @@
           "Feiticeiro"
         ],
         "escola": "Conjuração",
-        "execucao": "[one-action] a [three-actions] somático, verbal",
+        "execucao": "[1 ação] a [3 ações] somático, verbal",
         "acoes": "1 a 3",
         "componentes": [
           "somático",
@@ -12142,7 +12142,7 @@
           "Mental"
         ],
         "escola": "Encantamento",
-        "execucao": "[one-action] ou mais (somático, verbal)",
+        "execucao": "[1 ação] ou mais (somático, verbal)",
         "acoes": "1 ou mais",
         "componentes": [
           "somático",
@@ -12189,7 +12189,7 @@
           "Metamágico"
         ],
         "escola": "Adivinhação",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -12225,7 +12225,7 @@
           "Feiticeiro"
         ],
         "escola": "Evocação",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -12267,7 +12267,7 @@
           "Feiticeiro"
         ],
         "escola": "Evocação",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -12342,7 +12342,7 @@
           "Mental"
         ],
         "escola": "Encantamento",
-        "execucao": "[one-action] a [three-actions] verbal",
+        "execucao": "[1 ação] a [3 ações] verbal",
         "acoes": "1 a 3",
         "componentes": [
           "verbal"
@@ -12387,7 +12387,7 @@
           "Necromancia"
         ],
         "escola": "Necromancia",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -12437,7 +12437,7 @@
           "Mental"
         ],
         "escola": "Encantamento",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -12484,7 +12484,7 @@
           "Mago"
         ],
         "escola": "Abjuração",
-        "execucao": "[reaction] verbal",
+        "execucao": "[reação] verbal",
         "acoes": "reacao",
         "componentes": [
           "verbal"
@@ -12528,7 +12528,7 @@
           "Mental"
         ],
         "escola": "Encantamento",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -12567,7 +12567,7 @@
           "Necromancia"
         ],
         "escola": "Necromancia",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -12608,7 +12608,7 @@
           "Mago"
         ],
         "escola": "Conjuração",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -12645,7 +12645,7 @@
           "Mago"
         ],
         "escola": "Evocação",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -12687,7 +12687,7 @@
           "Transmutação"
         ],
         "escola": "Transmutação",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -12723,7 +12723,7 @@
           "Mago"
         ],
         "escola": "Abjuração",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -12759,7 +12759,7 @@
           "Mago"
         ],
         "escola": "Ilusão",
-        "execucao": "[two-actions] somático",
+        "execucao": "[2 ações] somático",
         "acoes": "2",
         "componentes": [
           "somático"
@@ -12806,7 +12806,7 @@
           "Mago"
         ],
         "escola": "Evocação",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -12842,7 +12842,7 @@
           "Mago"
         ],
         "escola": "Adivinhação",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -12882,7 +12882,7 @@
           "Mental"
         ],
         "escola": "Encantamento",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -12924,7 +12924,7 @@
           "Teleportação"
         ],
         "escola": "Conjuração",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -12966,7 +12966,7 @@
           "Necromancia"
         ],
         "escola": "Necromancia",
-        "execucao": "[reaction] verbal",
+        "execucao": "[reação] verbal",
         "acoes": "reacao",
         "componentes": [
           "verbal"
@@ -13003,7 +13003,7 @@
           "Metamágico"
         ],
         "escola": "Evocação",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -13040,7 +13040,7 @@
           "Visual"
         ],
         "escola": "Ilusão",
-        "execucao": "[one-action] a [three-actions] somático, verbal",
+        "execucao": "[1 ação] a [3 ações] somático, verbal",
         "acoes": "1 a 3",
         "componentes": [
           "somático",
@@ -13082,7 +13082,7 @@
           "Transmutação"
         ],
         "escola": "Transmutação",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -13120,7 +13120,7 @@
           "Mago"
         ],
         "escola": "Adivinhação",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -13157,7 +13157,7 @@
           "Teleportação"
         ],
         "escola": "Conjuração",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -13194,7 +13194,7 @@
           "Transmutação"
         ],
         "escola": "Transmutação",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -13230,7 +13230,7 @@
           "Transmutação"
         ],
         "escola": "Transmutação",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -13273,7 +13273,7 @@
           "Positivo"
         ],
         "escola": "Necromancia",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"
@@ -13315,7 +13315,7 @@
           "Necromancia"
         ],
         "escola": "Necromancia",
-        "execucao": "[two-actions] somático, verbal",
+        "execucao": "[2 ações] somático, verbal",
         "acoes": "2",
         "componentes": [
           "somático",
@@ -13363,7 +13363,7 @@
           "Teleportação"
         ],
         "escola": "Conjuração",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -13401,7 +13401,7 @@
           "Postura"
         ],
         "escola": "Evocação",
-        "execucao": "[one-action] somático",
+        "execucao": "[1 ação] somático",
         "acoes": "1",
         "componentes": [
           "somático"
@@ -13438,7 +13438,7 @@
           "Monge"
         ],
         "escola": "Evocação",
-        "execucao": "[one-action] a [three-actions] somático, verbal",
+        "execucao": "[1 ação] a [3 ações] somático, verbal",
         "acoes": "1 a 3",
         "componentes": [
           "somático",
@@ -13486,7 +13486,7 @@
           "Transmutação"
         ],
         "escola": "Transmutação",
-        "execucao": "[one-action] verbal",
+        "execucao": "[1 ação] verbal",
         "acoes": "1",
         "componentes": [
           "verbal"

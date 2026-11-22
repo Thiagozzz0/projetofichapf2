@@ -84,6 +84,8 @@ def calcular_pericias(
     mod_int: int,
     extras_pericias: int = 0,
     divindade: dict[str, Any] | None = None,
+    pericias_ancestrais_fixas: list[str] | None = None,
+    saber_ancestral: tuple[str, str] | None = None,
     rng: random.Random | None = None,
 ) -> dict[str, Any]:
     """Determina todas as perícias treinadas e os 2 slots de Saber do personagem."""
@@ -148,6 +150,9 @@ def calcular_pericias(
             div_p = candidatos_div[0] if candidatos_div else "diplomacia"
             conceder(div_p, "Divindade (Conceito)")
 
+    for pid_anc in pericias_ancestrais_fixas or ():
+        conceder(pid_anc, "Talento Ancestral")
+
     # 4. Herança Perita (+1 perícia) e talentos extras (ex: Perícia Natural humano = +2)
     if heranca.get("id") == "heranca_perita":
         escolhas_livres += 1
@@ -183,17 +188,31 @@ def calcular_pericias(
     saber_conceito = conceito.get("saber_sugerido", "")
     saber_2 = saber_conceito if saber_conceito and not _saberes_equivalentes(saber_conceito, saber_bio) else ""
 
+    if saber_ancestral:
+        nome_sab_anc = (
+            saber_ancestral[0]
+            if not _saberes_equivalentes(saber_ancestral[0], saber_bio)
+            else "Saber Ancestral"
+        )
+        saber_2_dict = {
+            "especializacao": nome_sab_anc,
+            "grau": "treinado",
+            "origem": saber_ancestral[1],
+        }
+    else:
+        saber_2_dict = {
+            "especializacao": saber_2,
+            "grau": "destreinado",
+            "origem": "Sugestão do Conceito" if saber_2 else "",
+        }
+
     saberes = {
         "saber_1": {
             "especializacao": saber_bio,
             "grau": "treinado",
             "origem": f"Biografia ({biografia['nome']})",
         },
-        "saber_2": {
-            "especializacao": saber_2,
-            "grau": "destreinado",
-            "origem": "Sugestão do Conceito" if saber_2 else "",
-        },
+        "saber_2": saber_2_dict,
     }
 
     return {

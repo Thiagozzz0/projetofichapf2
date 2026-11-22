@@ -10,14 +10,28 @@ from .util import grau_normalizado, normalizar, pc_para_moedas
 
 ORCAMENTO_INICIAL_PC = 1500  # 15 po = 150 pp = 1.500 pc
 
+_FAMILIARIDADE_ARMAS_ANCESTRAL: dict[str, tuple[list[str], str]] = {
+    "familiaridade_com_armas_enanicas": (["machado de batalha", "martelo de guerra", "picareta"], "anao"),
+    "familiaridade_com_armas_elficas": (
+        ["arco curto", "arco curto composto", "arco longo", "arco longo composto", "espada longa", "rapieira"],
+        "elfo",
+    ),
+    "familiaridade_com_armas_gnomicas": (["glaive", "kukri"], "gnomo"),
+    "familiaridade_com_armas_goblinoides": (["cortacao", "fatia-cavalo"], "goblin"),
+    "familiaridade_com_armas_halflings": (["cajado-funda halfling", "espada curta", "funda"], "halfling"),
+    "familiaridade_com_armas_orquicas": (["bracamante", "machado longo"], "orc"),
+}
+
 
 def calcular_proficiencias_combate(
     classe: dict[str, Any],
     subclasse: dict[str, Any] | None,
     talentos_classe_ids: list[str] | None = None,
     divindade: dict[str, Any] | None = None,
+    efeitos_talentos: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Resolve as proficiências de armaduras e armas considerando classe, subclasse, talentos e divindade."""
+    efeitos = efeitos_talentos or {}
     defesas_brutas = classe["proficiencias_iniciais"]["defesas"]
     defesas = {
         "sem_armadura": grau_normalizado(defesas_brutas.get("defesa_sem_armadura")),
@@ -33,6 +47,12 @@ def calcular_proficiencias_combate(
     elif classe["id"] == "ladino" and sub_id == "rufiao":
         defesas["media"] = "treinado"
 
+    if efeitos.get("proficiencia_com_armaduras"):
+        for cat_p in ("leve", "media", "pesada"):
+            if defesas[cat_p] == "destreinado":
+                defesas[cat_p] = "treinado"
+                break
+
     ataques_brutos = classe["proficiencias_iniciais"]["ataques"]
     especificas = ataques_brutos.get("armas_especificas")
     if isinstance(especificas, dict):
@@ -46,28 +66,44 @@ def calcular_proficiencias_combate(
         grau_esp = "destreinado"
 
     desarmado_grau = grau_normalizado(ataques_brutos.get("ataques_desarmados"))
-    if classe["id"] == "clerigo" and divindade:
+    if classe["id"] in ("clerigo", "campeao") and divindade:
         wid_fav = divindade.get("arma_favorecida_id")
         nome_fav = normalizar(divindade.get("arma_favorecida_nome"))
         if wid_fav == "punho":
             if desarmado_grau == "destreinado":
                 desarmado_grau = "treinado"
-        elif nome_fav and nome_fav not in lista_esp:
+        elif classe["id"] == "clerigo" and nome_fav and nome_fav not in lista_esp:
             lista_esp.append(nome_fav)
             if grau_esp == "destreinado":
                 grau_esp = "treinado"
 
     armas_monge_treinadas = classe["id"] == "monge" and "arsenal_monastico" in (talentos_classe_ids or [])
+    simples_g = grau_normalizado(ataques_brutos.get("armas_simples"))
+    marcial_g = grau_normalizado(ataques_brutos.get("armas_marciais"))
+    avancada_g = grau_normalizado(ataques_brutos.get("armas_avancadas"))
+    if efeitos.get("proficiencia_com_armas"):
+        if simples_g == "destreinado":
+            simples_g = "treinado"
+        elif marcial_g == "destreinado":
+            marcial_g = "treinado"
+        elif avancada_g == "destreinado":
+            avancada_g = "treinado"
+
+    tal_anc_id = efeitos.get("talento_ancestral_id") or ""
+    armas_anc_lista, traco_anc_armas = _FAMILIARIDADE_ARMAS_ANCESTRAL.get(tal_anc_id, ([], None))
 
     armas = {
-        "simples": grau_normalizado(ataques_brutos.get("armas_simples")),
-        "marcial": grau_normalizado(ataques_brutos.get("armas_marciais")),
-        "avancada": grau_normalizado(ataques_brutos.get("armas_avancadas")),
+        "simples": simples_g,
+        "marcial": marcial_g,
+        "avancada": avancada_g,
         "desarmado": desarmado_grau,
         "bombas_alquimicas": grau_normalizado(ataques_brutos.get("bombas_alquimicas")),
         "armas_traco_monge": "treinado" if armas_monge_treinadas else "destreinado",
         "especificas_lista": lista_esp,
         "especificas_grau": grau_esp,
+        "armas_ancestrais_lista": list(armas_anc_lista),
+        "traco_ancestral_armas": traco_anc_armas,
+        "armamento_nao_convencional": tal_anc_id == "armamento_nao_convencional",
     }
 
     return {
@@ -95,13 +131,34 @@ def grau_arma(arma: dict[str, Any], profs_armas: dict[str, Any]) -> str:
         return profs_armas["armas_traco_monge"]
     if nome_norm in profs_armas["especificas_lista"]:
         return profs_armas["especificas_grau"]
-    if "simples" in cat:
-        return profs_armas["simples"]
-    if "marcial" in cat:
-        return profs_armas["marcial"]
-    if "avancada" in cat:
-        return profs_armas["avancada"]
-    return "destreinado"
+
+    traco_anc = profs_armas.get("traco_ancestral_armas")
+    if traco_anc and traco_anc in tracos_norm:
+        if "marcial" in cat:
+            grau = profs_armas["simples"]
+        elif "avancada" in cat:
+            grau = profs_armas["marcial"]
+        else:
+            grau = profs_armas["simples"]
+    elif profs_armas.get("armamento_nao_convencional") and normalizar(arma.get("raridade")) == "incomum":
+        if "simples" in cat or "marcial" in cat:
+            grau = profs_armas["marcial"] if profs_armas["marcial"] != "destreinado" else profs_armas["simples"]
+        elif "avancada" in cat and profs_armas["marcial"] != "destreinado":
+            grau = profs_armas["marcial"]
+        else:
+            grau = profs_armas["avancada"]
+    elif "simples" in cat:
+        grau = profs_armas["simples"]
+    elif "marcial" in cat:
+        grau = profs_armas["marcial"]
+    elif "avancada" in cat:
+        grau = profs_armas["avancada"]
+    else:
+        grau = "destreinado"
+
+    if grau == "destreinado" and nome_norm in profs_armas.get("armas_ancestrais_lista", []):
+        return "treinado"
+    return grau
 
 
 def _chave_categoria_armadura(categoria_texto: str) -> str:
@@ -169,12 +226,24 @@ def comprar_equipamentos(
 
     armas_cc_ids = list(eq_rec["armas_corpo_a_corpo_ids"])
     armas_dist_ids = list(eq_rec["armas_distancia_ids"])
+    usa_escudo_efetivo = bool(eq_rec["usa_escudo"])
     if classe["id"] == "clerigo" and subclasse and subclasse.get("id") == "capelao_da_guerra" and divindade:
         wid_fav = divindade.get("arma_favorecida_id")
-        if wid_fav and wid_fav in dados.armas:
-            if dados.armas[wid_fav].get("tipo_ataque") == "distancia":
+        w_fav = dados.armas.get(wid_fav) if wid_fav else None
+        if w_fav:
+            if w_fav.get("tipo_ataque") == "distancia":
                 armas_dist_ids = [wid_fav] + [x for x in armas_dist_ids if x != wid_fav]
             else:
+                armas_cc_ids = [wid_fav] + [x for x in armas_cc_ids if x != wid_fav]
+                if str(w_fav.get("maos")) == "2":
+                    usa_escudo_efetivo = False
+    elif classe["id"] == "campeao" and divindade:
+        wid_fav = divindade.get("arma_favorecida_id")
+        w_fav = dados.armas.get(wid_fav) if wid_fav else None
+        if w_fav:
+            if w_fav.get("tipo_ataque") == "distancia":
+                armas_dist_ids = [wid_fav] + [x for x in armas_dist_ids if x != wid_fav]
+            elif not usa_escudo_efetivo or str(w_fav.get("maos")) != "2":
                 armas_cc_ids = [wid_fav] + [x for x in armas_cc_ids if x != wid_fav]
 
     # Reserva mínima para comprar pelo menos o kit de aventureiro (70 pc) e 1 arma viável
@@ -182,8 +251,10 @@ def comprar_equipamentos(
     armas_candidatas_preco = [
         dados.armas[wid]["preco_pc"]
         for wid in armas_cc_ids + armas_dist_ids
-        if wid in dados.armas and dados.armas[wid].get("preco_pc") is not None
+        if wid in dados.armas
+        and dados.armas[wid].get("preco_pc") is not None
         and grau_arma(dados.armas[wid], armas_prof) != "destreinado"
+        and not (usa_escudo_efetivo and dados.armas[wid].get("tipo_ataque") == "corpo_a_corpo" and str(dados.armas[wid].get("maos")) == "2")
     ]
     reserva_arma = min(armas_candidatas_preco) if armas_candidatas_preco else 0
     reserva_escudo = (
@@ -191,7 +262,7 @@ def comprar_equipamentos(
             (dados.escudos[sid]["preco_pc"] for sid in eq_rec["escudos_ids"] if sid in dados.escudos),
             default=0,
         )
-        if eq_rec["usa_escudo"]
+        if usa_escudo_efetivo
         else 0
     )
 
@@ -232,6 +303,8 @@ def comprar_equipamentos(
             return False
         if w["id"] == "bomba_alquimica":
             return False  # Alquimista produz bombas com Reagentes Infundidos diários
+        if usa_escudo_efetivo and w.get("tipo_ataque") == "corpo_a_corpo" and str(w.get("maos")) == "2":
+            return False  # Não equipa arma corpo a corpo de 2 mãos junto de escudo
         if grau_arma(w, armas_prof) == "destreinado":
             return False
         preco = w.get("preco_pc") or 0
@@ -273,9 +346,12 @@ def comprar_equipamentos(
             if tentar_comprar_arma(gratuita):
                 break
 
-    # 3. Escudo
+    # 3. Escudo (apenas se não houver arma corpo a corpo de 2 mãos equipada)
     escudo_escolhido: dict[str, Any] | None = None
-    if eq_rec["usa_escudo"]:
+    empunha_cc_2m = any(
+        w.get("tipo_ataque") == "corpo_a_corpo" and str(w.get("maos")) == "2" for w in armas_compradas
+    )
+    if usa_escudo_efetivo and not empunha_cc_2m:
         for sid in eq_rec["escudos_ids"]:
             esc = dados.escudos.get(sid)
             if not esc:
