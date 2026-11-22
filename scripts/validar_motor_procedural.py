@@ -239,7 +239,7 @@ def main() -> None:
     assert r_idx.status_code == 200
     html_idx = r_idx.get_data(as_text=True)
     assert "Pathfinder 2" in html_idx
-    assert "ficha.css" in html_idx and "app.js" in html_idx
+    assert "ficha.css" in html_idx and "render_ficha.js" in html_idx and "app.js" in html_idx
     for id_dom in (
         "subgrupo-atb-ancestralidade",
         "subgrupo-atb-biografia",
@@ -253,6 +253,7 @@ def main() -> None:
         assert id_dom in html_idx
 
     assert client.get("/static/css/ficha.css").status_code == 200
+    assert client.get("/static/js/render_ficha.js").status_code == 200
     assert client.get("/static/js/app.js").status_code == 200
 
     req_txt = RAIZ_PROJETO / "requirements.txt"

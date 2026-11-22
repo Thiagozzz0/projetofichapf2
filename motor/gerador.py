@@ -10,6 +10,15 @@ from .biografia_pericias import calcular_idiomas, calcular_pericias, selecionar_
 from .combate_matematica import calcular_matematica_final
 from .companheiros import gerar_companheiro_ou_familiar
 from .dados import BaseDados, carregar_dados
+from .divindades import (
+    CLASSES_DIVINDADE_OBRIGATORIA,
+    determinar_tendencia as _determinar_tendencia,
+    divindades_compativeis_conceito,
+    fontes_divinas_aceitas_conceito,
+    montar_resumo_divindade_ficha,
+    resolver_divindade_e_fonte,
+    selecionar_divindade as _selecionar_divindade,
+)
 from .equipamentos import calcular_proficiencias_combate, comprar_equipamentos
 from .magias import gerar_conjuracao, preencher_bloco_conjuracao_ficha
 from .regras_atributos import calcular_atributos, normalizar_escolha_atributo, opcoes_atributo_classe
@@ -21,7 +30,6 @@ class ErroValidacao(ValueError):
     """Erro levantado quando parâmetros de entrada da geração são inválidos."""
 
 
-CLASSES_DIVINDADE_OBRIGATORIA = frozenset({"clerigo", "campeao"})
 VALORES_ALEATORIOS = frozenset({"aleatorio", "aleatoria", "procedural", "random"})
 
 
@@ -39,60 +47,6 @@ def _sortear_nome_personagem(ancestralidade: dict[str, Any], rng: random.Random)
     ]
     pool = exemplos or _NOMES_HUMANOS_PADRAO
     return rng.choice(pool)
-
-
-def _determinar_tendencia(
-    classe_id: str,
-    subclasse_id: str,
-    conceito: dict[str, Any] | None = None,
-) -> str:
-    if conceito and conceito.get("tendencia_preferida"):
-        return str(conceito["tendencia_preferida"])
-    if classe_id == "campeao":
-        return {"paladino": "OB", "redentor": "NB", "libertador": "CB"}.get(subclasse_id, "NB")
-    if classe_id == "druida":
-        return "N"
-    return "NB"
-
-
-def fontes_divinas_aceitas_conceito(conceito: dict[str, Any]) -> list[str]:
-    """Retorna as fontes divinas aceitas pelo conceito de Clérigo."""
-    explicitas = conceito.get("fontes_divinas_aceitas")
-    if explicitas:
-        return list(explicitas)
-    fonte_pref = conceito.get("fonte_divina_preferida") or (
-        "ferimento" if ("ceifador" in conceito["id"] or "exaurir" in conceito["id"]) else "cura"
-    )
-    return [fonte_pref]
-
-
-def divindades_compativeis_conceito(
-    db: BaseDados,
-    classe_id: str,
-    conceito: dict[str, Any],
-) -> list[str]:
-    """Lista os IDs de divindades compatíveis com a classe e o conceito."""
-    if classe_id == "campeao":
-        candidatas = list(
-            conceito.get("subclasses_oficiais_candidatas") or [conceito["subclasse_oficial_id"]]
-        )
-        tends_aceitas = {_determinar_tendencia("campeao", sid) for sid in candidatas}
-        return [
-            d["id"]
-            for d in db.divindades.values()
-            if any(t in d["tendencias_seguidores"] for t in tends_aceitas)
-        ]
-    if classe_id == "clerigo":
-        chaves_fonte = {
-            "ferir" if f == "ferimento" else "curar"
-            for f in fontes_divinas_aceitas_conceito(conceito)
-        }
-        return [
-            d["id"]
-            for d in db.divindades.values()
-            if any(cf in d["fontes_divinas"] for cf in chaves_fonte)
-        ]
-    return list(db.divindades.keys())
 
 
 def _atributo_chave_opcoes(
@@ -173,67 +127,6 @@ def _resolver_tese_arcana(classe: dict[str, Any], tese_id: str | None) -> dict[s
                 if op.get("id") == tese_id:
                     return op
     return None
-
-
-def _selecionar_divindade(
-    db: BaseDados,
-    classe_id: str,
-    subclasse: dict[str, Any] | None,
-    conceito: dict[str, Any],
-    fonte_divina: str,
-    _unused: str | None,
-    rng: random.Random,
-) -> dict[str, Any] | None:
-    """Seleciona proceduralmente a divindade mais afinada para Clérigo e Campeão."""
-    if classe_id not in CLASSES_DIVINDADE_OBRIGATORIA:
-        return None
-
-    candidatos = list(db.divindades.values())
-    if classe_id == "campeao":
-        tend_causa = _determinar_tendencia("campeao", subclasse["id"] if subclasse else "")
-        candidatos = [d for d in candidatos if tend_causa in d["tendencias_seguidores"]]
-    else:
-        fonte_chave = "ferir" if fonte_divina == "ferimento" else "curar"
-        candidatos = [d for d in candidatos if fonte_chave in d["fontes_divinas"]]
-        tend_pref = conceito.get("tendencia_preferida")
-        if tend_pref:
-            compativeis_tend = [d for d in candidatos if tend_pref in d["tendencias_seguidores"]]
-            if compativeis_tend:
-                candidatos = compativeis_tend
-
-    if not candidatos:
-        return None
-
-    armas_conceito = set(
-        conceito["equipamento_recomendado"]["armas_corpo_a_corpo_ids"]
-        + conceito["equipamento_recomendado"]["armas_distancia_ids"]
-    )
-    per_pri = set(conceito.get("pericias_prioritarias", [])[:3])
-    keywords = [normalizar(k) for k in conceito["talentos_recomendados"].get("tracos_ancestralidade_afinidade", [])]
-    conj_rec = conceito.get("conjuracao_recomendada") or {}
-    keywords.extend(normalizar(k) for k in conj_rec.get("tracos_prioritarios", []))
-
-    avaliados: list[tuple[int, dict[str, Any]]] = []
-    for d in candidatos:
-        pts = 0
-        if d["arma_favorecida_id"] in armas_conceito:
-            pts += 16
-        if any(p in per_pri for p in d["pericia_divina"]):
-            pts += 12
-        tend_pref = conceito.get("tendencia_preferida")
-        if tend_pref and tend_pref in d["tendencias_seguidores"]:
-            pts += 8
-        texto_div = normalizar(f"{d['resumo']} {' '.join(d['dominios'])}")
-        pts += sum(4 for kw in keywords if kw and kw in texto_div)
-        if classe_id == "clerigo" and subclasse and subclasse["id"] == "capelao_da_guerra":
-            if d["arma_favorecida_id"] in {"espada_longa", "martelo_de_guerra", "montante", "cimitarra", "maca"}:
-                pts += 6
-        avaliados.append((pts, d))
-
-    avaliados.sort(key=lambda x: x[0], reverse=True)
-    topo = avaliados[0][0]
-    elegiveis = [d for pts, d in avaliados if pts >= topo - 4]
-    return rng.choice(elegiveis) if len(elegiveis) > 1 else elegiveis[0]
 
 
 def _preencher_pagina_talentos(
@@ -562,54 +455,12 @@ def gerar_personagem(
     )
     tese_arcana = _resolver_tese_arcana(classe, conceito.get("tese_arcana_id")) if classe_id == "mago" else None
 
-    fontes_aceitas = fontes_divinas_aceitas_conceito(conceito)
-    fonte_divina = conceito.get("fonte_divina_preferida") or fontes_aceitas[0]
-
-    if classe_id == "clerigo" and divindade_explicita is not None:
-        chave_pref = "ferir" if fonte_divina == "ferimento" else "curar"
-        if chave_pref not in divindade_explicita["fontes_divinas"]:
-            alternativa = next(
-                (
-                    f
-                    for f in fontes_aceitas
-                    if ("ferir" if f == "ferimento" else "curar") in divindade_explicita["fontes_divinas"]
-                ),
-                None,
-            )
-            if alternativa is None:
-                raise ErroValidacao(
-                    f"A divindade '{divindade_explicita['nome']}' não concede Fonte Divina "
-                    f"compatível com o conceito '{conceito['nome']}'."
-                )
-            fonte_divina = alternativa
-
-    if divindade_explicita is not None:
-        divindade = divindade_explicita
-    elif div_req_norm in ("aleatoria", "aleatorio", "random"):
-        if classe_id == "campeao":
-            tend_causa = _determinar_tendencia("campeao", subclasse["id"] if subclasse else "")
-            compat = [d for d in db.divindades.values() if tend_causa in d["tendencias_seguidores"]]
-            divindade = rng.choice(compat) if compat else None
-        elif classe_id == "clerigo":
-            chaves_ok = {"ferir" if f == "ferimento" else "curar" for f in fontes_aceitas}
-            compat = [
-                d for d in db.divindades.values() if any(cf in d["fontes_divinas"] for cf in chaves_ok)
-            ]
-            divindade = rng.choice(compat) if compat else None
-            if divindade:
-                chave_pref = "ferir" if fonte_divina == "ferimento" else "curar"
-                if chave_pref not in divindade["fontes_divinas"]:
-                    fonte_divina = next(
-                        f
-                        for f in fontes_aceitas
-                        if ("ferir" if f == "ferimento" else "curar") in divindade["fontes_divinas"]
-                    )
-        else:
-            divindade = rng.choice(list(db.divindades.values()))
-    elif classe_id in CLASSES_DIVINDADE_OBRIGATORIA:
-        divindade = _selecionar_divindade(db, classe_id, subclasse, conceito, fonte_divina, None, rng)
-    else:
-        divindade = None
+    try:
+        divindade, fonte_divina = resolver_divindade_e_fonte(
+            db, classe, subclasse, conceito, div_req_norm, divindade_explicita, rng
+        )
+    except ValueError as exc:
+        raise ErroValidacao(str(exc)) from exc
 
     # ------------------------------------------------------------------
     # 2. Seleção de Biografia (Manual ou Procedural) + Atributos (ABCD)
@@ -654,14 +505,9 @@ def gerar_personagem(
         divindade=divindade,
         rng=rng,
     )
-    tendencia = _determinar_tendencia(classe_id, subclasse["id"] if subclasse else "", conceito=conceito)
-    if classe_id == "clerigo" and divindade and tendencia not in divindade["tendencias_seguidores"]:
-        if "NB" in divindade["tendencias_seguidores"]:
-            tendencia = "NB"
-        elif divindade["tendencia"] in divindade["tendencias_seguidores"]:
-            tendencia = divindade["tendencia"]
-        else:
-            tendencia = divindade["tendencias_seguidores"][0]
+    tendencia = _determinar_tendencia(
+        classe_id, subclasse["id"] if subclasse else "", conceito=conceito, divindade=divindade
+    )
 
     talentos_res = selecionar_talentos(
         db,
@@ -757,22 +603,9 @@ def gerar_personagem(
         if t and normalizar(t) not in {normalizar(x) for x in tracos}:
             tracos.append(t)
 
-    divindade_texto = ""
-    divindade_detalhes = None
-    if divindade:
-        divindade_texto = f"{divindade['nome']} ({divindade['tendencia']})"
-        divindade_detalhes = {
-            "id": divindade["id"],
-            "nome": divindade["nome"],
-            "tendencia": divindade["tendencia"],
-            "arma_favorecida_id": divindade["arma_favorecida_id"],
-            "arma_favorecida_nome": divindade["arma_favorecida_nome"],
-            "pericia_divina": list(divindade["pericia_divina"]),
-            "dominios": list(divindade["dominios"]),
-            "editos": divindade["editos"],
-            "anatema": divindade["anatema"],
-            "fonte_divina": fonte_divina if classe_id == "clerigo" else None,
-        }
+    divindade_texto, divindade_detalhes = montar_resumo_divindade_ficha(
+        divindade, classe_id, fonte_divina
+    )
 
     ficha["cabecalho"] = {
         "nome_personagem": nome_final,

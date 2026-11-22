@@ -61,8 +61,14 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 │   ├── combate_matematica.py
 │   ├── companheiros.py
 │   ├── dados.py
+│   ├── divindades.py
 │   ├── equipamentos.py
-│   ├── exportacao.py
+│   ├── exportacao/                   # Exportadores modulares (.txt, .docx e .pdf oficial)
+│   │   ├── __init__.py
+│   │   ├── comum.py
+│   │   ├── exportar_docx.py
+│   │   ├── exportar_pdf.py
+│   │   └── exportar_txt.py
 │   ├── gerador.py
 │   ├── magias.py
 │   ├── regras_atributos.py
@@ -94,7 +100,8 @@ O sistema combina escolhas principais do jogador com automação procedural guia
         ├── css/
         │   └── ficha.css         # Estilização oficial de pergaminho PF2E e @media print
         └── js/
-            └── app.js            # Lógica interativa, abas de páginas e downloads DOCX/TXT
+            ├── app.js            # Formulário de criação, travas ABCD e API/exportações
+            └── render_ficha.js   # Renderização visual das 4 páginas da ficha e abas
 ```
 
 ---
