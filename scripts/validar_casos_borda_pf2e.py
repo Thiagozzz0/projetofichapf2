@@ -19,7 +19,7 @@ from motor.biografia_pericias import calcular_idiomas, calcular_pericias
 from motor.combate_matematica import calcular_matematica_final
 from motor.companheiros import gerar_companheiro_ou_familiar
 from motor.equipamentos import calcular_proficiencias_combate, comprar_equipamentos, grau_arma
-from motor.exportacao import exportar_ficha_docx, exportar_ficha_txt
+from motor.exportacao import exportar_ficha_docx, exportar_ficha_pdf, exportar_ficha_txt
 from motor.magias import gerar_conjuracao
 from motor.regras_atributos import calcular_atributos
 from motor.talentos import selecionar_talentos
@@ -571,6 +571,37 @@ def test_aleatorio_7_campos_e_bonus_equipamentos() -> None:
     assert any("Reagentes Infundidos (Qtd:" in n for n in prep_alq)
 
 
+def test_exportar_pdf_oficial_4_paginas() -> None:
+    import pymupdf
+
+    db = carregar_dados()
+    # Clérigo com Arma Deificada, Armadura com bônus na CA, Ações e Magias em todas as 4 páginas
+    cl = gerar_personagem(
+        "humano", "heranca_versatil", "clerigo", "clerigo_arauto_guerra",
+        divindade_id="iomedae", seed=17, nome_personagem="Valeros Teste PDF", dados=db,
+    )
+    pdf_bytes = exportar_ficha_pdf(cl)
+    assert pdf_bytes.startswith(b"%PDF-")
+
+    with pymupdf.open(stream=pdf_bytes, filetype="pdf") as doc:
+        assert len(doc) == 4
+        txt_p1 = doc[0].get_text()
+        txt_p2 = doc[1].get_text()
+        txt_p3 = doc[2].get_text()
+        txt_p4 = doc[3].get_text()
+
+    assert "Valeros Teste PDF" in txt_p1
+    assert "Iomedae" in txt_p1
+    assert "CA)" in txt_p1 or cl["meta_geracao"]["armadura_equipada"] in txt_p1
+    assert "Idiomas" in txt_p1
+    assert cl["ficha"]["idiomas"][0] in txt_p1
+    assert cl["ficha"]["habilidades_e_talentos"]["classe"][0]["nome"] in txt_p2
+    assert "Divindade: Iomedae" in txt_p3
+    assert cl["ficha"]["conjuracao"]["tradicoes_marcadas"]["divina"] is True
+    assert cl["ficha"]["conjuracao"]["truques_magicos"][0]["nome"] in txt_p4
+    assert cl["ficha"]["conjuracao"]["magias"][0]["nome"] in txt_p4
+
+
 def main() -> None:
     test_ca_limite_destreza_e_sem_armadura()
     test_penalidade_armadura_barulhenta_flexivel_e_ferro_desimpedido()
@@ -582,6 +613,7 @@ def main() -> None:
     test_divindade_obrigatoria_vs_opcional_e_compatibilidade()
     test_revisao_geral_etapa_23()
     test_aleatorio_7_campos_e_bonus_equipamentos()
+    test_exportar_pdf_oficial_4_paginas()
     print("SUCESSO TOTAL — Todos os testes de casos de borda PF2E passaram!")
 
 

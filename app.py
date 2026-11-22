@@ -13,6 +13,7 @@ from motor import (
     carregar_dados,
     divindades_compativeis_conceito,
     exportar_ficha_docx,
+    exportar_ficha_pdf,
     exportar_ficha_txt,
     gerar_personagem,
     listar_opcoes_criacao,
@@ -213,6 +214,22 @@ def api_exportar_docx():
         "docx",
         resultado,
     )
+
+
+@app.post("/api/exportar/pdf")
+def api_exportar_pdf():
+    """Exporta a ficha (já gerada ou gerada sob demanda) em PDF oficial idêntico ao livro (4 páginas)."""
+    payload = _extrair_payload()
+    if payload is None:
+        return jsonify({"erro": "Corpo da requisição inválido; esperado objeto JSON."}), 400
+
+    try:
+        resultado = _resolver_resultado_para_exportacao(payload)
+        conteudo_pdf = exportar_ficha_pdf(resultado)
+    except (ErroValidacao, FileNotFoundError, KeyError, TypeError) as exc:
+        return jsonify({"erro": str(exc)}), 400
+
+    return _resposta_download(conteudo_pdf, "application/pdf", "pdf", resultado)
 
 
 if __name__ == "__main__":

@@ -246,7 +246,8 @@ def main() -> None:
 
     req_txt = RAIZ_PROJETO / "requirements.txt"
     assert req_txt.exists(), "requirements.txt ausente na raiz do projeto"
-    assert "Flask" in req_txt.read_text(encoding="utf-8")
+    req_txt_body = req_txt.read_text(encoding="utf-8")
+    assert "Flask" in req_txt_body and "PyMuPDF" in req_txt_body
 
     r_saude = client.get("/api/saude")
     assert r_saude.status_code == 200
@@ -470,14 +471,83 @@ def main() -> None:
             for trecho in trechos_esperados:
                 assert trecho in doc_txt, f"Trecho {trecho!r} ausente do word/document.xml"
 
+    # Exportação PDF oficial (idêntico à ficha de 4 páginas do livro via ref/Sheet Update.pdf)
+    import pymupdf
+
+    for caso_res, checks_por_pagina in (
+        (
+            mago_elem,
+            {
+                0: [mago_elem["ficha"]["cabecalho"]["nome_personagem"], "Mago", "ARCANISMO"],
+                1: ["Elfo", "Kit de aventureiro", "PO"],
+                2: ["Evocador de Artilharia"],
+                3: ["Mãos Flamejantes", "Produzir Chama"],
+            },
+        ),
+        (
+            guer_2m,
+            {
+                0: [guer_2m["ficha"]["cabecalho"]["nome_personagem"], "Montante", "ATLETISMO"],
+                1: ["Ataque Poderoso", "Montante"],
+                2: ["Agressor"],
+            },
+        ),
+        (
+            cl_iomedae,
+            {
+                0: [cl_iomedae["ficha"]["cabecalho"]["nome_personagem"], "Iomedae"],
+                2: ["Iomedae", "Arma"],
+                3: ["Truques Mágicos", "Divina"[:0]],
+            },
+        ),
+        (
+            dr_matilha,
+            {
+                0: [dr_matilha["ficha"]["cabecalho"]["nome_personagem"], "Druida"],
+                2: ["Companheiro Animal"],
+                3: ["Truques Mágicos"],
+            },
+        ),
+    ):
+        r_pdf = client.post("/api/exportar/pdf", json={"resultado": caso_res})
+        assert r_pdf.status_code == 200
+        assert r_pdf.mimetype == "application/pdf"
+        disp_pdf = r_pdf.headers.get("Content-Disposition", "")
+        assert "attachment;" in disp_pdf and disp_pdf.endswith('.pdf"')
+        raw_pdf = r_pdf.get_data()
+        assert raw_pdf.startswith(b"%PDF-")
+
+        with pymupdf.open(stream=raw_pdf, filetype="pdf") as pdf_doc:
+            assert len(pdf_doc) == 4
+            for pg_idx, page in enumerate(pdf_doc):
+                assert abs(page.rect.width - 603.0) < 0.5 and abs(page.rect.height - 783.0) < 0.5
+                if pg_idx in checks_por_pagina:
+                    pg_txt = page.get_text()
+                    for trecho in checks_por_pagina[pg_idx]:
+                        if trecho:
+                            assert trecho in pg_txt, f"Trecho {trecho!r} ausente na página {pg_idx + 1} do PDF"
+
+    r_pdf_params = client.post(
+        "/api/exportar/pdf",
+        json={
+            "ancestralidade_id": "humano",
+            "heranca_id": "heranca_versatil",
+            "classe_id": "guerreiro",
+            "conceito_id": "guerreiro_colosso_demolidor",
+            "seed": 88,
+        },
+    )
+    assert r_pdf_params.status_code == 200 and r_pdf_params.get_data().startswith(b"%PDF-")
+
     # Erros 400 nos endpoints de exportação
     assert client.post("/api/exportar/txt", json={}).status_code == 400
     assert client.post("/api/exportar/docx", json={"ficha": {}}).status_code == 400
+    assert client.post("/api/exportar/pdf", json={"ficha": {}}).status_code == 400
 
     print("SUCESSO TOTAL — Validação da Etapa 3 + Etapa 4 concluída!")
     print(f"Conceitos validados: {len(todos_conceitos)}/56 | Heranças validadas: {len(todas_herancas)}/29")
-    print(f"Casos especiais validados: {len(casos_especiais)} | Rotas Flask validadas: 8 endpoints + static (200/400/404)")
-    print("Exportadores validados: .txt (UTF-8) e .docx (ZIP/OOXML/XML íntegros)")
+    print(f"Casos especiais validados: {len(casos_especiais)} | Rotas Flask validadas: 9 endpoints + static (200/400/404)")
+    print("Exportadores validados: .txt (UTF-8), .docx (OOXML/XML) e .pdf (4 páginas oficiais do livro)")
 
 
 if __name__ == "__main__":

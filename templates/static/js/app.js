@@ -443,6 +443,7 @@
     const m = res.meta_geracao;
 
     document.getElementById("area-ficha").hidden = false;
+    document.getElementById("btn-pdf").disabled = false;
     document.getElementById("btn-docx").disabled = false;
     document.getElementById("btn-txt").disabled = false;
     document.getElementById("btn-imprimir").disabled = false;
@@ -895,6 +896,7 @@
     gerarFichaAtual(true);
   });
 
+  document.getElementById("btn-pdf").addEventListener("click", () => baixarExportacao("pdf"));
   document.getElementById("btn-docx").addEventListener("click", () => baixarExportacao("docx"));
   document.getElementById("btn-txt").addEventListener("click", () => baixarExportacao("txt"));
   document.getElementById("btn-imprimir").addEventListener("click", () => window.print());

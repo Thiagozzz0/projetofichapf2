@@ -32,7 +32,7 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 ├── app.py                        # Aplicação principal Flask (rotas e interface Web)
 ├── Prompt.md                     # Contexto e direcionamento inicial do projeto
 ├── README.md                     # Documentação geral do projeto e governança
-├── requirements.txt              # Dependências Python (Flask>=3.0,<4.0)
+├── requirements.txt              # Dependências Python (Flask>=3.0,<4.0 e PyMuPDF>=1.24)
 ├── controleprojeto/              # Gestão e rastreabilidade das entregas
 │   ├── escopo.md                 # Escopo completo do início ao fim (norte do projeto)
 │   ├── pendencias.md             # Lista de tarefas e conversões ainda pendentes
@@ -140,7 +140,7 @@ Os PDFs de referência estão sendo convertidos **um por vez** para garantir fid
 | *Etapa 3B (Companheiros)* | `motor/companheiros.py` | Geração matemática de Companheiro Animal Jovem (Druida/Patrulheiro) e Familiar Aprimorado/Padrão (Mago/Druida/Talentos) | Concluído (`22.md`) |
 | *Etapa 5 (Casos de Borda)* | `scripts/validar_casos_borda_pf2e.py` | Suíte unitária de casos de borda PF2E (CA/Limite DES, `Barulhenta`/`Flexível`/`Ferro Desimpedido`, `Propulsiva`, idiomas, `Duro de Matar`, mochila/carga, divindades obrigatórias/opcionais, efeitos de talentos ancestrais/gerais e companheiros) | Concluído (`21.md` / `23.md`) |
 | *Etapa 3 (Motor & Flask)* | `motor/`, `app.py`, `templates/index.html` | Motor procedural PF2E (1º nível, `seed` opcional), API REST Flask e tela simples de teste | Concluído (`14.md`) |
-| *Etapa 4 (Front-End & Export)* | `templates/`, `templates/static/`, `motor/exportacao.py`, `requirements.txt` | Interface completa em 4 páginas inspirada na ficha oficial (`pp. 580–583`), impressão e download `.docx`/`.txt` | Concluído (`16.md` / `17.md`) |
+| *Etapa 4 (Front-End & Export)* | `templates/`, `templates/static/`, `motor/exportacao.py`, `requirements.txt` | Interface completa em 4 páginas inspirada na ficha oficial (`pp. 580–583`), impressão e download `.pdf` oficial do livro (`ref/Sheet Update.pdf`), `.docx` e `.txt` | Concluído (`16.md` / `25.md`) |
 
 ---
 

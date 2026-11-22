@@ -1,6 +1,3 @@
-Colocar na frente das armaduras os bonus, tanto para 
-descrição na CA como nos equipamentos. Isso para todos os itens que tem bonus
-e quantidade.
+[Concluído - Etapa 24] Colocar na frente das armaduras os bonus, tanto para descrição na CA como nos equipamentos. Isso para todos os itens que tem bonus e quantidade.
 
-Gerar o pdf igual o do livro
-
+[Concluído - Etapa 25] Gerar o pdf igual o do livro (ref/Sheet Update.pdf + dados/estrutura_ficha.json).
