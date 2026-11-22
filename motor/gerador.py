@@ -23,6 +23,7 @@ from .equipamentos import (
     calcular_proficiencias_combate,
     comprar_equipamentos,
     listar_catalogo_equipamentos_loja,
+    resumo_proficiencias_equipamento_classe,
 )
 from .magias import gerar_conjuracao, preencher_bloco_conjuracao_ficha
 from .regras_atributos import calcular_atributos, normalizar_escolha_atributo, opcoes_atributo_classe
@@ -296,6 +297,7 @@ def listar_opcoes_criacao(dados: BaseDados | None = None) -> dict[str, Any]:
             "atributo_chave_ids": _atributo_chave_opcoes(db, c, None),
             "permite_escolha_atributo_chave": len(_atributo_chave_opcoes(db, c, None)) > 1,
             "divindade_obrigatoria": c["id"] in CLASSES_DIVINDADE_OBRIGATORIA,
+            "proficiencias_equipamento": resumo_proficiencias_equipamento_classe(c),
             "conceitos": [
                 {
                     "id": con["id"],
@@ -336,6 +338,7 @@ def listar_opcoes_criacao(dados: BaseDados | None = None) -> dict[str, Any]:
             "tendencia": d["tendencia"],
             "tendencias_seguidores": d["tendencias_seguidores"],
             "fontes_divinas": d["fontes_divinas"],
+            "arma_favorecida_id": d.get("arma_favorecida_id"),
             "arma_favorecida_nome": d["arma_favorecida_nome"],
             "pericia_divina": d["pericia_divina"],
             "dominios": d["dominios"],

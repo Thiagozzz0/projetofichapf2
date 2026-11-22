@@ -617,6 +617,9 @@
         atualizarSeletoresAtributosClasse();
         atualizarCatalogoTalentosUI();
       });
+      document.getElementById("divindade")?.addEventListener("change", () => {
+        atualizarCatalogoEquipamentosUI();
+      });
 
       IDS_LIVRES_N1.forEach((id) => {
         preencherSelectAtributo(document.getElementById(id), ORDEM_ATRIBUTOS, {
@@ -733,20 +736,18 @@
     const clsObj = OPCOES.classes.find((c) => c.id === clsId);
     const conObj = clsObj ? clsObj.conceitos.find((x) => x.id === conId) : null;
 
-    // 1. Talento de Ancestralidade (1º Nível)
+    // 1. Talento de Ancestralidade (1º Nível) — oculto se Ancestralidade estiver Aleatória
     const selAnc = document.getElementById("tal-ancestralidade");
     const badgeAnc = document.getElementById("badge-tal-ancestralidade");
     const notaAnc = document.getElementById("nota-tal-ancestralidade");
     const cardAnc = document.getElementById("card-tal-ancestralidade");
+    let slotsVisiveisTotal = 0;
     if (!ancObj || ancId === "aleatorio") {
       _preencherSelectTalento(selAnc, [], { disabledTexto: "Procedural (conforme ancestralidade sorteada)", preservar: false });
-      if (cardAnc) cardAnc.classList.add("card-tal-bloqueado");
-      if (badgeAnc) {
-        badgeAnc.className = "badge-tal-bloqueado";
-        badgeAnc.textContent = "Aguardando Ancestralidade";
-      }
-      if (notaAnc) notaAnc.textContent = "Selecione uma Ancestralidade fixa acima para escolher seu talento ancestral de 1º nível.";
+      cardAnc?.classList.add("oculto");
     } else {
+      cardAnc?.classList.remove("oculto");
+      slotsVisiveisTotal += 1;
       const poolMap = new Map();
       (cat.ancestralidade_por_id[ancId] || []).forEach((t) => poolMap.set(t.id, t));
       if (herId === "meio_elfo") {
@@ -765,7 +766,6 @@
           return null;
         },
       });
-      if (cardAnc) cardAnc.classList.remove("card-tal-bloqueado");
       if (badgeAnc) {
         badgeAnc.className = "badge-tal-liberado";
         badgeAnc.textContent = "1 Slot Liberado";
@@ -786,7 +786,7 @@
     const ambicaoAtiva = talAncVal === "ambicao_natural";
     const treinamentoGeralAtivo = talAncVal === "treinamento_geral";
 
-    // 2. Talento de Biografia (Automático)
+    // 2. Talento de Biografia (Automático — sempre visível)
     const infoBio = document.getElementById("info-tal-biografia");
     if (infoBio) {
       if (bioObj) {
@@ -798,7 +798,7 @@
       }
     }
 
-    // 3. Talentos de Classe (1º Nível)
+    // 3. Talentos de Classe (1º Nível) — exibido apenas se houver ao menos 1 slot selecionável
     const cardCls = document.getElementById("card-tal-classe");
     const badgeCls = document.getElementById("badge-tal-classe");
     const notaCls = document.getElementById("nota-tal-classe");
@@ -806,20 +806,8 @@
     const autoClasseIds = new Set();
     const autoClasseNomes = [];
 
-    if (!clsObj || clsId === "aleatorio" || !clsCat) {
-      IDS_TAL_CLASSE.forEach((id, i) => {
-        document.getElementById(`grupo-tal-classe-${i + 1}`)?.classList.toggle("oculto", i > 0);
-        _preencherSelectTalento(document.getElementById(id), [], {
-          disabledTexto: "Procedural (conforme classe sorteada)",
-          preservar: false,
-        });
-      });
-      cardCls?.classList.add("card-tal-bloqueado");
-      if (badgeCls) { badgeCls.className = "badge-tal-bloqueado"; badgeCls.textContent = "Aguardando Classe"; }
-      if (notaCls) {
-        notaCls.textContent = "Selecione uma Classe fixa acima para visualizar/escolher os talentos de classe liberados no 1º nível.";
-      }
-    } else {
+    let temClasseSelecionavel = false;
+    if (clsObj && clsId !== "aleatorio" && clsCat) {
       const subId = conObj?.subclasse_oficial_id || "";
       const conjCandidatas = conObj?.subclasses_oficiais_candidatas || (subId ? [subId] : []);
       if (conjCandidatas.length === 1 && clsCat.subclasses_concedido?.[subId]) {
@@ -851,23 +839,10 @@
         slotsCls.push({ rotulo: "Ambição Natural (Humano)", apenasMeta: false });
       }
 
-      if (!slotsCls.length) {
-        IDS_TAL_CLASSE.forEach((id, i) => {
-          document.getElementById(`grupo-tal-classe-${i + 1}`)?.classList.toggle("oculto", i > 0);
-          _preencherSelectTalento(document.getElementById(id), [], {
-            disabledTexto: "Bloqueado no 1º nível para esta classe/conceito",
-            preservar: false,
-          });
-        });
-        cardCls?.classList.add("card-tal-bloqueado");
-        if (badgeCls) { badgeCls.className = "badge-tal-bloqueado"; badgeCls.textContent = "Bloqueado no 1º Nível"; }
-        const dicaAuto = autoClasseNomes.length ? ` Automático pela subclasse/tese: ${autoClasseNomes.join(", ")}.` : "";
-        const dicaUniv = clsId === "mago" ? " (Mago só libera slot base com o conceito Universalista)" : "";
-        if (notaCls) {
-          notaCls.textContent = `${clsObj.nome} não escolhe talento de classe no 1º nível${dicaUniv}. Escolha Humano + Ambição Natural para liberar 1 slot.${dicaAuto}`;
-        }
-      } else {
-        cardCls?.classList.remove("card-tal-bloqueado");
+      if (slotsCls.length > 0) {
+        temClasseSelecionavel = true;
+        slotsVisiveisTotal += slotsCls.length;
+        cardCls?.classList.remove("oculto");
         if (badgeCls) {
           badgeCls.className = "badge-tal-liberado";
           badgeCls.textContent = `${slotsCls.length} Slot${slotsCls.length > 1 ? "s" : ""} Liberado${slotsCls.length > 1 ? "s" : ""}`;
@@ -890,44 +865,41 @@
         });
         if (notaCls) {
           const origTxt = slotsCls.map((s) => s.rotulo).join(" + ");
-          const autoTxt = autoClasseNomes.length ? ` • Automático: ${autoClasseNomes.join(", ")}.` : "";
+          const autoTxt = autoClasseNomes.length ? ` • Automático pela subclasse/tese: ${autoClasseNomes.join(", ")}.` : "";
           notaCls.textContent = `Liberado por: ${origTxt}.${autoTxt}`;
         }
       }
     }
+    if (!temClasseSelecionavel) {
+      cardCls?.classList.add("oculto");
+      IDS_TAL_CLASSE.forEach((id, i) => {
+        document.getElementById(`grupo-tal-classe-${i + 1}`)?.classList.toggle("oculto", i > 0);
+        _preencherSelectTalento(document.getElementById(id), [], { disabledTexto: "Slot inativo", preservar: false });
+      });
+    }
 
-    // 4A. Talento de Perícia Extra (1º Nível — somente Ladino)
+    // 4A. Talento de Perícia Extra (1º Nível) — exibido apenas para Ladino
     const subPer = document.getElementById("subcard-tal-pericia");
     const badgePer = document.getElementById("badge-tal-pericia");
     const notaPer = document.getElementById("nota-tal-pericia");
     const selPer = document.getElementById("tal-pericia-1");
-    if (clsId === "ladino") {
+    const temPericiaSelecionavel = clsId === "ladino";
+    if (temPericiaSelecionavel) {
+      slotsVisiveisTotal += 1;
+      subPer?.classList.remove("oculto");
       const bioTalNorm = bioObj && !bioObj.talento_pericia.includes(" ou ")
         ? _normTxt(bioObj.talento_pericia.split(" para ")[0])
         : "";
       const poolPer = (cat.pericia_n1 || []).filter((t) => !bioTalNorm || _normTxt(t.nome) !== bioTalNorm);
       _preencherSelectTalento(selPer, poolPer, { textoProcedural: "Procedural (melhor p/ conceito)" });
-      subPer?.classList.remove("card-tal-bloqueado");
       if (badgePer) { badgePer.className = "badge-tal-liberado"; badgePer.textContent = "1 Slot Liberado (Ladino)"; }
       if (notaPer) notaPer.textContent = "Ladino recebe +1 talento de perícia adicional no 1º nível além do da Biografia.";
     } else {
-      _preencherSelectTalento(selPer, [], {
-        disabledTexto: clsId === "aleatorio" ? "Aguardando Classe (só Ladino)" : "Bloqueado no 1º nível (exclusivo de Ladino)",
-        preservar: false,
-      });
-      subPer?.classList.add("card-tal-bloqueado");
-      if (badgePer) {
-        badgePer.className = "badge-tal-bloqueado";
-        badgePer.textContent = clsId === "aleatorio" ? "Aguardando Classe" : "Bloqueado (Só Ladino N1)";
-      }
-      if (notaPer) {
-        notaPer.textContent = clsId === "aleatorio"
-          ? "Com Classe Aleatória, este slot só é liberado se a classe sorteada for Ladino."
-          : "No 1º nível, apenas o Ladino recebe um talento de perícia adicional além da Biografia.";
-      }
+      subPer?.classList.add("oculto");
+      _preencherSelectTalento(selPer, [], { disabledTexto: "Slot inativo", preservar: false });
     }
 
-    // 4B. Talentos Gerais (1º Nível — bloqueado no N1 exceto Herança Versátil / Treinamento Geral)
+    // 4B. Talentos Gerais (1º Nível) — exibido apenas quando Herança Versátil / Treinamento Geral estiver ativo
     const subGer = document.getElementById("subcard-tal-geral");
     const badgeGer = document.getElementById("badge-tal-geral");
     const notaGer = document.getElementById("nota-tal-geral");
@@ -939,24 +911,13 @@
       new Set(["guerreiro", "campeao", "druida"]).has(clsId) ||
       (clsId === "clerigo" && conObj?.subclasse_oficial_id === "capelao_da_guerra");
 
-    if (!origensGerais.length) {
-      IDS_TAL_GERAIS.forEach((id, i) => {
-        document.getElementById(`grupo-tal-geral-${i + 1}`)?.classList.toggle("oculto", i > 0);
-        _preencherSelectTalento(document.getElementById(id), [], {
-          disabledTexto: "Bloqueado no 1º nível (libera no 3º Nível)",
-          preservar: false,
-        });
-      });
-      subGer?.classList.add("card-tal-bloqueado");
-      if (badgeGer) { badgeGer.className = "badge-tal-bloqueado"; badgeGer.textContent = "Bloqueado (3º Nível)"; }
-      if (notaGer) {
-        notaGer.textContent = "Talentos Gerais só liberam no 3º nível (ou no 1º nível via Herança Versátil / Treinamento Geral de Humano).";
-      }
-    } else {
+    const temGeralSelecionavel = origensGerais.length > 0;
+    if (temGeralSelecionavel) {
+      slotsVisiveisTotal += origensGerais.length;
+      subGer?.classList.remove("oculto");
       const poolGer = (cat.gerais_n1 || []).filter(
         (t) => !(bloqueioEscudoAuto && t.id === "bloqueio_com_escudo") && !(talAncVal === "cavaleiro_brusco" && t.id === "cavalgar")
       );
-      subGer?.classList.remove("card-tal-bloqueado");
       if (badgeGer) {
         badgeGer.className = "badge-tal-liberado";
         badgeGer.textContent = `${origensGerais.length} Slot${origensGerais.length > 1 ? "s" : ""} Liberado${origensGerais.length > 1 ? "s" : ""}`;
@@ -975,15 +936,33 @@
         }
       });
       if (notaGer) notaGer.textContent = `Liberado por: ${origensGerais.join(" + ")}.`;
+    } else {
+      subGer?.classList.add("oculto");
+      IDS_TAL_GERAIS.forEach((id, i) => {
+        document.getElementById(`grupo-tal-geral-${i + 1}`)?.classList.toggle("oculto", i > 0);
+        _preencherSelectTalento(document.getElementById(id), [], { disabledTexto: "Slot inativo", preservar: false });
+      });
+    }
+
+    // Oculta o container "4. Demais Talentos" inteiro se nem Perícia nem Geral estiverem disponíveis
+    document.getElementById("card-tal-demais")?.classList.toggle("oculto", !temPericiaSelecionavel && !temGeralSelecionavel);
+
+    const elCur = document.getElementById("tal-resumo-curadoria");
+    if (elCur) {
+      elCur.textContent = slotsVisiveisTotal > 0
+        ? `Curadoria PF2E (1º Nível): ${slotsVisiveisTotal} slot${slotsVisiveisTotal > 1 ? "s" : ""} selecionável${slotsVisiveisTotal > 1 ? "is" : ""} disponível${slotsVisiveisTotal > 1 ? "is" : ""} para esta ficha.`
+        : "Escolha uma Ancestralidade ou Classe fixa em Criação Inicial para liberar seletores manuais de talentos.";
     }
 
     sincronizarExclusaoTalentos();
+    atualizarCatalogoEquipamentosUI();
     atualizarResumosEtapasUI();
   }
 
   function atualizarVisibilidadeTalentosUI() {
     const modo = document.getElementById("modo-talentos")?.value || "procedural";
     document.getElementById("painel-talentos-custom")?.classList.toggle("oculto", modo !== "personalizado");
+    atualizarCatalogoEquipamentosUI();
     atualizarResumosEtapasUI();
   }
 
@@ -1191,94 +1170,379 @@
     atualizarVisibilidadeEquipamentosUI();
   }
 
-  function inicializarCatalogoEquipamentosUI() {
+  function _calcularProficienciasEquipamentosUI() {
+    const cat = OPCOES?.catalogo_equipamentos;
+    const clsId = document.getElementById("classe")?.value || "aleatorio";
+    const conId = document.getElementById("conceito")?.value || "aleatorio";
+    const divId = document.getElementById("divindade")?.value || "";
+    const clsObj = OPCOES?.classes?.find((c) => c.id === clsId) || null;
+    const conObj = clsObj ? clsObj.conceitos.find((x) => x.id === conId) : null;
+    const divObj = (OPCOES?.divindades || []).find((d) => d.id === divId) || null;
+
+    if (!clsObj || clsId === "aleatorio" || !clsObj.proficiencias_equipamento) {
+      return { filtrando: false, clsId, clsNome: null };
+    }
+
+    const base = clsObj.proficiencias_equipamento;
+    const armaduras = {
+      sem_armadura: Boolean(base.armaduras?.sem_armadura),
+      leve: Boolean(base.armaduras?.leve),
+      media: Boolean(base.armaduras?.media),
+      pesada: Boolean(base.armaduras?.pesada),
+    };
+    const armas = {
+      simples: Boolean(base.armas?.simples),
+      marcial: Boolean(base.armas?.marcial),
+      avancada: Boolean(base.armas?.avancada),
+      especificas: new Set(base.armas?.especificas_norm || []),
+      especificasIds: new Set(),
+      especificasNomes: [...(base.armas?.especificas_nomes || [])],
+      armasAncestrais: new Set(),
+      tracoAncestral: null,
+      armamentoNaoConvencional: false,
+      armasTracoMonge: false,
+    };
+
+    const subId = conObj?.subclasse_oficial_id || "";
+    let notaArmaduraExtra = "";
+    if (clsId === "clerigo") {
+      if (subId === "capelao_da_guerra") {
+        armaduras.leve = true;
+        armaduras.media = true;
+      } else if (conId === "aleatorio") {
+        armaduras.leve = true;
+        armaduras.media = true;
+        notaArmaduraExtra = "Armaduras leves/médias liberadas caso sorteie Capelão da Guerra.";
+      }
+      if (divObj && divObj.arma_favorecida_id && divObj.arma_favorecida_id !== "punho") {
+        armas.especificas.add(_normTxt(divObj.arma_favorecida_nome));
+        armas.especificasIds.add(divObj.arma_favorecida_id);
+        if (!armas.especificasNomes.includes(divObj.arma_favorecida_nome)) {
+          armas.especificasNomes.push(`${divObj.arma_favorecida_nome} (${divObj.nome})`);
+        }
+      }
+    } else if (clsId === "ladino" && (subId === "rufiao" || conId === "aleatorio")) {
+      armaduras.media = true;
+      if (conId === "aleatorio") {
+        notaArmaduraExtra = "Armaduras médias liberadas caso sorteie o esquema Rufião.";
+      }
+    }
+
+    if ((document.getElementById("modo-talentos")?.value || "procedural") === "personalizado") {
+      const selAtivoVal = (id) => {
+        const el = document.getElementById(id);
+        return el && !el.disabled && !el.closest(".oculto") ? el.value : "procedural";
+      };
+      const talAnc = selAtivoVal("tal-ancestralidade");
+      const famMap = cat?.familiaridade_armas_ancestral || {};
+      if (famMap[talAnc]) {
+        (famMap[talAnc].armas || []).forEach((w) => armas.armasAncestrais.add(_normTxt(w)));
+        armas.tracoAncestral = famMap[talAnc].traco || null;
+      }
+      if (talAnc === "armamento_nao_convencional") {
+        armas.armamentoNaoConvencional = true;
+      }
+
+      const talsCls = IDS_TAL_CLASSE.map(selAtivoVal);
+      if (clsId === "monge" && talsCls.includes("arsenal_monastico")) {
+        armas.armasTracoMonge = true;
+      }
+
+      const talsGer = IDS_TAL_GERAIS.map(selAtivoVal);
+      if (talsGer.includes("proficiencia_com_armaduras")) {
+        if (!armaduras.leve) armaduras.leve = true;
+        else if (!armaduras.media) armaduras.media = true;
+        else if (!armaduras.pesada) armaduras.pesada = true;
+      }
+      if (talsGer.includes("proficiencia_com_armas")) {
+        if (!armas.simples) armas.simples = true;
+        else if (!armas.marcial) armas.marcial = true;
+        else if (!armas.avancada) armas.avancada = true;
+      }
+    }
+
+    return {
+      filtrando: true,
+      clsId,
+      clsNome: clsObj.nome,
+      divObj,
+      armaduras,
+      armas,
+      restricaoNaoMetal: Boolean(base.restricao_nao_metal),
+      ferramentasRecomendadas: new Set(base.ferramentas_recomendadas || []),
+      notaArmaduraExtra,
+    };
+  }
+
+  function _armaPermitidaParaBuild(w, profs) {
+    if (!profs.filtrando) return true;
+    const catNorm = _normTxt(w.categoria);
+    const nomeNorm = _normTxt(w.nome);
+    const tracosNorm = (w.tracos || []).map(_normTxt);
+    const a = profs.armas;
+
+    if (a.armasTracoMonge && tracosNorm.includes("monge") && (catNorm.includes("simples") || catNorm.includes("marcial"))) {
+      return true;
+    }
+    if (a.especificas.has(nomeNorm) || a.especificasIds.has(w.id)) {
+      return true;
+    }
+    if (a.tracoAncestral && tracosNorm.includes(a.tracoAncestral)) {
+      if (catNorm.includes("marcial")) return a.simples;
+      if (catNorm.includes("avancada")) return a.marcial;
+      return a.simples;
+    }
+    if (a.armamentoNaoConvencional && _normTxt(w.raridade) === "incomum") {
+      if (catNorm.includes("simples") || catNorm.includes("marcial")) return a.marcial || a.simples;
+      if (catNorm.includes("avancada")) return a.marcial || a.avancada;
+    }
+    if (catNorm.includes("simples") && a.simples) return true;
+    if (catNorm.includes("marcial") && a.marcial) return true;
+    if (catNorm.includes("avancada") && a.avancada) return true;
+    if (a.armasAncestrais.has(nomeNorm)) return true;
+    return false;
+  }
+
+  function _itemVariadoPermitidoParaBuild(it, profs) {
+    if (!profs.filtrando) return true;
+    if (it.id === "azevinho_e_visco") return profs.clsId === "druida";
+    if (it.id === "ferramentas_de_alquimista") return profs.clsId === "alquimista";
+    if (it.id === "bolsa_de_componentes_materiais") return CLASSES_CONJURADORAS_UI.has(profs.clsId);
+    if (it.id === "simbolo_religioso_madeira" || it.id === "simbolo_religioso_prata") {
+      return profs.clsId === "clerigo" || profs.clsId === "campeao" || Boolean(profs.divObj);
+    }
+    return true;
+  }
+
+  function atualizarCatalogoEquipamentosUI() {
     const cat = OPCOES?.catalogo_equipamentos;
     if (!cat) return;
 
+    const profs = _calcularProficienciasEquipamentosUI();
+    MAPA_EQ.armaduras = {};
+    MAPA_EQ.escudos = {};
+    MAPA_EQ.armas_cc = {};
+    MAPA_EQ.armas_dist = {};
+    MAPA_EQ.variados = {};
+
+    // 1. Armaduras — oculta o card inteiro se a classe não usa armaduras (ex.: Mago, Feiticeiro, Monge)
+    const cardArm = document.getElementById("card-eq-armadura");
     const selArm = document.getElementById("eq-armadura");
-    if (selArm) {
-      selArm.innerHTML = `<option value="procedural">Procedural (recomendada pelo conceito)</option><option value="nenhuma">Nenhuma armadura (0 pp)</option>`;
-      ["Sem Armadura", "Armadura Leve", "Armadura Média", "Armadura Pesada"].forEach((grupo) => {
-        const lista = (cat.armaduras || []).filter((a) => a.categoria === grupo);
-        if (!lista.length) return;
-        const og = _criarOptgroup(selArm, grupo);
-        lista.forEach((a) => {
-          MAPA_EQ.armaduras[a.id] = a;
-          const opt = document.createElement("option");
-          opt.value = a.id;
-          const lim = a.limite_destreza !== null ? `Lim DES +${a.limite_destreza}` : "Sem Lim DES";
-          opt.textContent = `${a.nome} (+${a.bonus_ca} CA, ${lim}) — ${fmtPrecoEq(a.preco_pc)}`;
-          og.appendChild(opt);
+    const notaArm = document.getElementById("nota-eq-armadura");
+    const usaAlgumaArmadura =
+      !profs.filtrando || profs.armaduras.leve || profs.armaduras.media || profs.armaduras.pesada;
+
+    if (!usaAlgumaArmadura) {
+      cardArm?.classList.add("oculto");
+      if (selArm) {
+        selArm.innerHTML = `<option value="procedural">Sem armadura</option>`;
+        selArm.value = "procedural";
+      }
+      if (notaArm) notaArm.textContent = "";
+    } else {
+      cardArm?.classList.remove("oculto");
+      if (selArm) {
+        const antArm = selArm.value || "procedural";
+        selArm.innerHTML = `<option value="procedural">Procedural (recomendada pelo conceito)</option><option value="nenhuma">Nenhuma armadura (0 pp)</option>`;
+        const gruposArm = [
+          ["Sem Armadura", true],
+          ["Armadura Leve", !profs.filtrando || profs.armaduras.leve],
+          ["Armadura Média", !profs.filtrando || profs.armaduras.media],
+          ["Armadura Pesada", !profs.filtrando || profs.armaduras.pesada],
+        ];
+        gruposArm.forEach(([grupo, permitido]) => {
+          if (!permitido) return;
+          const lista = (cat.armaduras || []).filter((a) => {
+            if (a.categoria !== grupo) return false;
+            if (profs.restricaoNaoMetal && _normTxt(a.material) === "metal") return false;
+            return true;
+          });
+          if (!lista.length) return;
+          const og = _criarOptgroup(selArm, grupo);
+          lista.forEach((a) => {
+            MAPA_EQ.armaduras[a.id] = a;
+            const opt = document.createElement("option");
+            opt.value = a.id;
+            const lim = a.limite_destreza !== null ? `Lim DES +${a.limite_destreza}` : "Sem Lim DES";
+            opt.textContent = `${a.nome} (+${a.bonus_ca} CA, ${lim}) — ${fmtPrecoEq(a.preco_pc)}`;
+            og.appendChild(opt);
+          });
         });
-      });
+        selArm.value = antArm === "procedural" || antArm === "nenhuma" || MAPA_EQ.armaduras[antArm] ? antArm : "procedural";
+      }
+      if (notaArm) {
+        const partes = [];
+        if (profs.restricaoNaoMetal) partes.push("Anátema de Druida: armaduras de metal ocultadas.");
+        if (profs.notaArmaduraExtra) partes.push(profs.notaArmaduraExtra);
+        notaArm.textContent = partes.join(" ");
+      }
     }
 
+    // 2. Escudos (Druida não usa escudos de metal)
     const selEsc = document.getElementById("eq-escudo");
+    const notaEsc = document.getElementById("nota-eq-escudo");
     if (selEsc) {
+      const antEsc = selEsc.value || "procedural";
       selEsc.innerHTML = `<option value="procedural">Procedural (conforme conceito)</option><option value="nenhum">Nenhum escudo (0 pp)</option>`;
-      (cat.escudos || []).forEach((s) => {
-        MAPA_EQ.escudos[s.id] = s;
-        const opt = document.createElement("option");
-        opt.value = s.id;
-        opt.textContent = `${s.nome} (+${s.bonus_ca} CA, Dureza ${s.dureza}, PV ${s.pv}) — ${fmtPrecoEq(s.preco_pc)}`;
-        selEsc.appendChild(opt);
-      });
+      (cat.escudos || [])
+        .filter((s) => !(profs.restricaoNaoMetal && s.eh_metal))
+        .forEach((s) => {
+          MAPA_EQ.escudos[s.id] = s;
+          const opt = document.createElement("option");
+          opt.value = s.id;
+          opt.textContent = `${s.nome} (+${s.bonus_ca} CA, Dureza ${s.dureza}, PV ${s.pv}) — ${fmtPrecoEq(s.preco_pc)}`;
+          selEsc.appendChild(opt);
+        });
+      selEsc.value = antEsc === "procedural" || antEsc === "nenhum" || MAPA_EQ.escudos[antEsc] ? antEsc : "procedural";
+    }
+    if (notaEsc) {
+      notaEsc.textContent = profs.restricaoNaoMetal ? "Anátema de Druida: apenas escudos sem metal." : "";
     }
 
-    const popularArmas = (selId, lista, mapaDestino, labelTipo) => {
+    // 3 e 4. Armas Corporais e à Distância filtradas pelas proficiências da build
+    const popularArmasFiltradas = (cardId, selId, notaId, listaBruta, mapaDestino, estadoChave, labelTipo) => {
+      const card = document.getElementById(cardId);
       const sel = document.getElementById(selId);
-      if (!sel) return;
-      sel.innerHTML =
-        `<option value="procedural">Procedural (escolhidas pelo conceito)</option>` +
-        `<option value="nenhuma">Nenhuma ${labelTipo} (ou usar lista abaixo)</option>`;
-      [
-        ["Arma Simples", "Armas Simples"],
-        ["Arma Marcial", "Armas Marciais"],
-        ["Arma Avançada", "Armas Avançadas"],
-      ].forEach(([catNome, rotulo]) => {
-        const itens = (lista || []).filter((w) => w.categoria === catNome);
-        const og = _criarOptgroup(sel, rotulo);
-        if (!itens.length) {
-          const optV = document.createElement("option");
-          optV.disabled = true;
-          optV.textContent = "(Nenhuma disponível no Livro Básico)";
-          og.appendChild(optV);
-          return;
+      const nota = document.getElementById(notaId);
+      const permitidas = (listaBruta || []).filter((w) => _armaPermitidaParaBuild(w, profs));
+
+      // Remove da lista de compradas qualquer arma que deixou de ser permitida ao trocar de classe
+      const idsPermitidos = new Set(permitidas.map((w) => w.id));
+      EQ_ESTADO[estadoChave] = EQ_ESTADO[estadoChave].filter((w) => idsPermitidos.has(w.id));
+
+      if (!permitidas.length) {
+        card?.classList.add("oculto");
+        if (sel) {
+          sel.innerHTML = `<option value="procedural">Nenhuma disponível</option>`;
+          sel.value = "procedural";
         }
-        itens.forEach((w) => {
-          mapaDestino[w.id] = w;
-          const opt = document.createElement("option");
-          opt.value = w.id;
-          const alc = w.distancia_m ? ` • Alc ${w.distancia_m}m` : "";
-          opt.textContent = `${w.nome} (${w.dano}, ${w.maos}M${alc}) — ${fmtPrecoEq(w.preco_pc)}`;
-          og.appendChild(opt);
+        if (nota) nota.textContent = "";
+        return 0;
+      }
+
+      card?.classList.remove("oculto");
+      if (sel) {
+        const antVal = sel.value || "procedural";
+        sel.innerHTML =
+          `<option value="procedural">Procedural (escolhidas pelo conceito)</option>` +
+          `<option value="nenhuma">Nenhuma ${labelTipo} (ou usar lista abaixo)</option>`;
+        [
+          ["Arma Simples", "Armas Simples"],
+          ["Arma Marcial", "Armas Marciais"],
+          ["Arma Avançada", "Armas Avançadas"],
+        ].forEach(([catNome, rotulo]) => {
+          const itens = permitidas.filter((w) => w.categoria === catNome);
+          if (!itens.length) return;
+          const og = _criarOptgroup(sel, rotulo);
+          itens.forEach((w) => {
+            mapaDestino[w.id] = w;
+            const opt = document.createElement("option");
+            opt.value = w.id;
+            const alc = w.distancia_m ? ` • Alc ${w.distancia_m}m` : "";
+            opt.textContent = `${w.nome} (${w.dano}, ${w.maos}M${alc}) — ${fmtPrecoEq(w.preco_pc)}`;
+            og.appendChild(opt);
+          });
         });
-      });
+        sel.value = antVal === "procedural" || antVal === "nenhuma" || mapaDestino[antVal] ? antVal : "procedural";
+      }
+      if (nota) {
+        nota.textContent = profs.filtrando
+          ? `${permitidas.length} opç${permitidas.length === 1 ? "ão" : "ões"} compatíve${permitidas.length === 1 ? "l" : "is"} com ${profs.clsNome}.`
+          : "";
+      }
+      return permitidas.length;
     };
 
-    popularArmas("eq-arma-cc-select", cat.armas_corpo_a_corpo, MAPA_EQ.armas_cc, "arma corporal");
-    popularArmas("eq-arma-dist-select", cat.armas_distancia, MAPA_EQ.armas_dist, "arma à distância");
+    popularArmasFiltradas(
+      "card-eq-arma-cc",
+      "eq-arma-cc-select",
+      "nota-eq-arma-cc",
+      cat.armas_corpo_a_corpo,
+      MAPA_EQ.armas_cc,
+      "armas_cc",
+      "arma corporal"
+    );
+    popularArmasFiltradas(
+      "card-eq-arma-dist",
+      "eq-arma-dist-select",
+      "nota-eq-arma-dist",
+      cat.armas_distancia,
+      MAPA_EQ.armas_dist,
+      "armas_dist",
+      "arma à distância"
+    );
 
+    // 5. Equipamentos Variados (destaca ferramentas essenciais da classe e oculta focos exclusivos de outras classes)
     const selVar = document.getElementById("eq-variado-select");
+    const variadosPermitidos = (cat.equipamentos_variados || []).filter((it) => _itemVariadoPermitidoParaBuild(it, profs));
+    const idsVarPerm = new Set(variadosPermitidos.map((it) => it.id));
+    EQ_ESTADO.variados = EQ_ESTADO.variados.filter((it) => idsVarPerm.has(it.id));
+
     if (selVar) {
+      const antVar = selVar.value || "procedural";
       selVar.innerHTML =
         `<option value="procedural">Procedural (Kit de Aventureiro + ferramentas da classe)</option>` +
         `<option value="nenhum">Nenhum item variado (ou usar lista abaixo)</option>`;
+
+      const addItemOpt = (og, it) => {
+        MAPA_EQ.variados[it.id] = it;
+        const opt = document.createElement("option");
+        opt.value = it.id;
+        const pac = it.quantidade_pacote > 1 && !it.nome.includes(`(${it.quantidade_pacote})`) ? ` (${it.quantidade_pacote} un.)` : "";
+        opt.textContent = `${it.nome}${pac} — ${fmtPrecoEq(it.preco_pc)}`;
+        og.appendChild(opt);
+      };
+
+      const usadosRec = new Set();
+      if (profs.filtrando && profs.ferramentasRecomendadas.size > 0) {
+        const recItens = variadosPermitidos.filter((it) => profs.ferramentasRecomendadas.has(it.id));
+        if (recItens.length) {
+          const ogRec = _criarOptgroup(selVar, `Essenciais de ${profs.clsNome}`);
+          recItens.forEach((it) => {
+            usadosRec.add(it.id);
+            addItemOpt(ogRec, it);
+          });
+        }
+      }
+
       ["Equipamentos de Aventura", "Equipamentos Incomuns", "Munições"].forEach((subcat) => {
-        const itens = (cat.equipamentos_variados || []).filter((it) => it.subcategoria === subcat);
+        const itens = variadosPermitidos.filter((it) => it.subcategoria === subcat && !usadosRec.has(it.id));
         if (!itens.length) return;
         const og = _criarOptgroup(selVar, subcat);
-        itens.forEach((it) => {
-          MAPA_EQ.variados[it.id] = it;
-          const opt = document.createElement("option");
-          opt.value = it.id;
-          const pac = it.quantidade_pacote > 1 && !it.nome.includes(`(${it.quantidade_pacote})`) ? ` (${it.quantidade_pacote} un.)` : "";
-          opt.textContent = `${it.nome}${pac} — ${fmtPrecoEq(it.preco_pc)}`;
-          og.appendChild(opt);
-        });
+        itens.forEach((it) => addItemOpt(og, it));
       });
+      selVar.value = antVar === "procedural" || antVar === "nenhum" || MAPA_EQ.variados[antVar] ? antVar : "procedural";
     }
 
+    // Banner de curadoria de equipamentos por classe
+    const elCurEq = document.getElementById("eq-nota-curadoria");
+    if (elCurEq) {
+      if (!profs.filtrando) {
+        elCurEq.textContent = "Classe Aleatória: exibindo catálogo completo. Selecione uma classe fixa em Criação Inicial para filtrar automaticamente por proficiência.";
+      } else {
+        const catsArm = [];
+        if (profs.armaduras.leve) catsArm.push("Leves");
+        if (profs.armaduras.media) catsArm.push("Médias");
+        if (profs.armaduras.pesada) catsArm.push("Pesadas");
+        const txtArm = catsArm.length
+          ? `Armaduras: ${catsArm.join(", ")}${profs.restricaoNaoMetal ? " (sem metal)" : ""}`
+          : "Armaduras: Nenhuma (campo oculto)";
+
+        const catsArma = [];
+        if (profs.armas.simples) catsArma.push("Simples");
+        if (profs.armas.marcial) catsArma.push("Marciais");
+        if (profs.armas.avancada) catsArma.push("Avançadas");
+        if (profs.armas.especificasNomes.length) catsArma.push(`Específicas (${profs.armas.especificasNomes.join(", ")})`);
+        const txtArma = `Armas: ${catsArma.join(" + ") || "Nenhuma"}`;
+        elCurEq.textContent = `Filtro da Classe (${profs.clsNome}): ${txtArm} • ${txtArma}.`;
+      }
+    }
+
+    atualizarOrcamentoEquipamentosUI();
+  }
+
+  function inicializarCatalogoEquipamentosUI() {
+    atualizarCatalogoEquipamentosUI();
     atualizarVisibilidadeEquipamentosUI();
   }
 
@@ -1286,6 +1550,7 @@
     if (document.getElementById("modo-equipamentos")?.value !== "personalizado") {
       return { modo: "procedural" };
     }
+    const cardArmOculto = document.getElementById("card-eq-armadura")?.classList.contains("oculto");
     const ccVal = document.getElementById("eq-arma-cc-select")?.value || "procedural";
     let armasCcPayload = "procedural";
     if (EQ_ESTADO.armas_cc.length || ccVal !== "procedural") {
@@ -1314,7 +1579,7 @@
 
     return {
       modo: "personalizado",
-      armadura_id: document.getElementById("eq-armadura")?.value || "procedural",
+      armadura_id: cardArmOculto ? "procedural" : document.getElementById("eq-armadura")?.value || "procedural",
       escudo_id: document.getElementById("eq-escudo")?.value || "procedural",
       armas_corpo_a_corpo_ids: armasCcPayload,
       armas_distancia_ids: armasDistPayload,
@@ -1522,6 +1787,7 @@
   [...IDS_TAL_CLASSE, ...IDS_TAL_GERAIS].forEach((id) => {
     document.getElementById(id)?.addEventListener("change", () => {
       sincronizarExclusaoTalentos();
+      atualizarCatalogoEquipamentosUI();
       atualizarResumosEtapasUI();
     });
   });

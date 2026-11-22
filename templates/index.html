@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gerador Procedural PF2E — Ficha Oficial</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}?v=34">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}?v=35">
 </head>
 <body>
   <div class="app-container">
@@ -336,37 +336,42 @@
                     <button type="button" id="btn-eq-reset-procedural" class="btn btn-sutil">Voltar Tudo p/ Procedural</button>
                   </div>
                   <small id="eq-nota-hibrida" class="nota-campo">Categorias deixadas em "Procedural" usarão automaticamente o saldo restante ao gerar a ficha.</small>
+                  <small id="eq-nota-curadoria" class="nota-campo"></small>
 
                   <div class="grid-equipamentos-custom">
-                    <div class="card-eq-cat">
+                    <div class="card-eq-cat" id="card-eq-armadura">
                       <label for="eq-armadura">1. Armaduras</label>
                       <select id="eq-armadura" name="eq_armadura"></select>
+                      <small id="nota-eq-armadura" class="nota-campo"></small>
                     </div>
 
-                    <div class="card-eq-cat">
+                    <div class="card-eq-cat" id="card-eq-escudo">
                       <label for="eq-escudo">2. Escudos</label>
                       <select id="eq-escudo" name="eq_escudo"></select>
+                      <small id="nota-eq-escudo" class="nota-campo"></small>
                     </div>
 
-                    <div class="card-eq-cat card-eq-wide">
-                      <label for="eq-arma-cc-select">3. Armas Corporais (Simples, Marciais e Avançadas)</label>
+                    <div class="card-eq-cat card-eq-wide" id="card-eq-arma-cc">
+                      <label for="eq-arma-cc-select">3. Armas Corporais (Proficiências da Classe)</label>
                       <div class="linha-compra-eq">
                         <select id="eq-arma-cc-select" name="eq_arma_cc"></select>
                         <button type="button" id="btn-add-arma-cc" class="btn btn-secundario btn-compacto">+ Adicionar Outra</button>
                       </div>
+                      <small id="nota-eq-arma-cc" class="nota-campo"></small>
                       <ul id="lista-eq-armas-cc" class="lista-eq-selecionados"></ul>
                     </div>
 
-                    <div class="card-eq-cat card-eq-wide">
-                      <label for="eq-arma-dist-select">4. Armas à Distância (Simples, Marciais e Avançadas)</label>
+                    <div class="card-eq-cat card-eq-wide" id="card-eq-arma-dist">
+                      <label for="eq-arma-dist-select">4. Armas à Distância (Proficiências da Classe)</label>
                       <div class="linha-compra-eq">
                         <select id="eq-arma-dist-select" name="eq_arma_dist"></select>
                         <button type="button" id="btn-add-arma-dist" class="btn btn-secundario btn-compacto">+ Adicionar Outra</button>
                       </div>
+                      <small id="nota-eq-arma-dist" class="nota-campo"></small>
                       <ul id="lista-eq-armas-dist" class="lista-eq-selecionados"></ul>
                     </div>
 
-                    <div class="card-eq-cat card-eq-wide">
+                    <div class="card-eq-cat card-eq-wide" id="card-eq-variados">
                       <label for="eq-variado-select">5. Equipamentos Variados (Aventura &amp; Munições)</label>
                       <div class="linha-compra-eq linha-compra-qtd">
                         <select id="eq-variado-select" name="eq_variado"></select>
@@ -579,7 +584,7 @@
     </section>
   </div>
 
-  <script src="{{ url_for('static', filename='js/render_ficha.js') }}?v=34" defer></script>
-  <script src="{{ url_for('static', filename='js/app.js') }}?v=34" defer></script>
+  <script src="{{ url_for('static', filename='js/render_ficha.js') }}?v=36" defer></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}?v=36" defer></script>
 </body>
 </html>

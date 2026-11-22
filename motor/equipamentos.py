@@ -62,6 +62,41 @@ def _itens_variados_loja_brutos(dados: BaseDados) -> list[dict[str, Any]]:
     return itens
 
 
+def resumo_proficiencias_equipamento_classe(classe: dict[str, Any]) -> dict[str, Any]:
+    """Extrai do JSON oficial da classe as proficiências iniciais de armaduras, escudos e armas."""
+    defesas_raw = classe["proficiencias_iniciais"]["defesas"]
+    ataques_raw = classe["proficiencias_iniciais"]["ataques"]
+    especificas_raw = ataques_raw.get("armas_especificas")
+    if isinstance(especificas_raw, dict):
+        armas_esp_norm = [normalizar(w) for w in especificas_raw.get("armas", [])]
+        armas_esp_nomes = list(especificas_raw.get("armas", []))
+    elif isinstance(especificas_raw, list):
+        armas_esp_norm = [normalizar(w) for w in especificas_raw]
+        armas_esp_nomes = list(especificas_raw)
+    else:
+        armas_esp_norm = []
+        armas_esp_nomes = []
+
+    return {
+        "armaduras": {
+            "sem_armadura": grau_normalizado(defesas_raw.get("defesa_sem_armadura")) != "destreinado",
+            "leve": grau_normalizado(defesas_raw.get("armaduras_leves")) != "destreinado",
+            "media": grau_normalizado(defesas_raw.get("armaduras_medias")) != "destreinado",
+            "pesada": grau_normalizado(defesas_raw.get("armaduras_pesadas")) != "destreinado",
+        },
+        "armas": {
+            "simples": grau_normalizado(ataques_raw.get("armas_simples")) != "destreinado",
+            "marcial": grau_normalizado(ataques_raw.get("armas_marciais")) != "destreinado",
+            "avancada": grau_normalizado(ataques_raw.get("armas_avancadas")) != "destreinado",
+            "especificas_norm": armas_esp_norm,
+            "especificas_nomes": armas_esp_nomes,
+            "arma_favorita_divindade": bool(ataques_raw.get("arma_favorita_divindade")),
+        },
+        "restricao_nao_metal": classe["id"] == "druida",
+        "ferramentas_recomendadas": _ferramenta_essencial(classe["id"], ""),
+    }
+
+
 def listar_catalogo_equipamentos_loja(dados: BaseDados) -> dict[str, Any]:
     """Catálogo inicial de equipamentos para o jogador (sem itens alquímicos, mágicos ou fórmulas)."""
     armaduras = [
@@ -69,6 +104,7 @@ def listar_catalogo_equipamentos_loja(dados: BaseDados) -> dict[str, Any]:
             "id": a["id"],
             "nome": a["nome"],
             "categoria": a["categoria"],
+            "material": a.get("material"),
             "preco": a.get("preco") or "0 pp",
             "preco_pc": int(a.get("preco_pc") or 0),
             "bonus_ca": int(a.get("bonus_ca") or 0),
@@ -87,6 +123,7 @@ def listar_catalogo_equipamentos_loja(dados: BaseDados) -> dict[str, Any]:
         {
             "id": s["id"],
             "nome": s["nome"],
+            "eh_metal": s["id"] in ("broquel", "escudo_de_aco", "escudo_de_corpo"),
             "preco": s.get("preco") or "0 pp",
             "preco_pc": int(s.get("preco_pc") or 0),
             "bonus_ca": int(s.get("bonus_ca") or 0),
@@ -132,6 +169,10 @@ def listar_catalogo_equipamentos_loja(dados: BaseDados) -> dict[str, Any]:
         "armas_corpo_a_corpo": _serializar_armas(armas_json["corpo_a_corpo"]),
         "armas_distancia": _serializar_armas(armas_json["distancia"]),
         "equipamentos_variados": _itens_variados_loja_brutos(dados),
+        "familiaridade_armas_ancestral": {
+            tid: {"armas": list(armas_lista), "traco": traco}
+            for tid, (armas_lista, traco) in _FAMILIARIDADE_ARMAS_ANCESTRAL.items()
+        },
     }
 
 
@@ -667,7 +708,7 @@ def comprar_equipamentos(
             esc = dados.escudos.get(sid)
             if not esc:
                 continue
-            if nao_metal and "aco" in sid:
+            if nao_metal and sid in ("broquel", "escudo_de_aco", "escudo_de_corpo"):
                 continue
             preco = esc.get("preco_pc") or 0
             if preco <= saldo_pc:
