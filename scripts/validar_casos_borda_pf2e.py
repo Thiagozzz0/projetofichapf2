@@ -1033,6 +1033,72 @@ def test_selecao_manual_e_regras_pericias() -> None:
             pass
 
 
+def test_selecao_manual_e_aleatoria_magias() -> None:
+    db = carregar_dados()
+
+    # 1. Mago Especialista (Evocação): escolha manual de 5 truques + 6 magias N1 arcanas
+    mg_man = gerar_personagem(
+        "elfo", "elfo_vidente", "mago", "mago_evocador_artilharia",
+        escolhas_magias={
+            "modo": "personalizado",
+            "truques_ids": ["detectar_magia", "escudo_mistico", "luz", "mao_mistica", "raio_de_gelo"],
+            "magias_n1_ids": ["armadura_mistica", "misseis_magicos", "maos_flamejantes", "queda_suave", "salto", "alarme"],
+        },
+        seed=14,
+        dados=db,
+    )
+    esc_m = mg_man["meta_geracao"]["escolhas_magias"]
+    assert esc_m["modo"] == "personalizado"
+    assert esc_m["tradicao"] == "arcana"
+    assert len(esc_m["truques_manuais"]) == 5
+    assert len(esc_m["magias_n1_manuais"]) == 6
+    nomes_m1 = {m["nome"] for m in mg_man["ficha"]["conjuracao"]["magias"] if m.get("nome")}
+    assert {"Armadura Mística", "Mísseis Mágicos", "Mãos Flamejantes", "Queda Suave", "Salto", "Alarme"}.issubset(nomes_m1)
+
+    # 2. Feiticeiro Imperial: 1 truque fixo (Detectar Magia) + 4 livres, 1 N1 fixa (Mísseis Mágicos) + 2 livres
+    ft_man = gerar_personagem(
+        "humano", "heranca_versatil", "feiticeiro", "feiticeiro_arquimago_versatil",
+        escolhas_magias={
+            "modo": "personalizado",
+            "truques_ids": ["escudo_mistico", "luz", "produzir_chama", "raio_de_gelo"],
+            "magias_n1_ids": ["armadura_mistica", "maos_flamejantes"],
+        },
+        seed=7,
+        dados=db,
+    )
+    nomes_ft_t = [t["nome"] for t in ft_man["ficha"]["conjuracao"]["truques_magicos"] if t.get("nome")]
+    nomes_ft_1 = [m["nome"] for m in ft_man["ficha"]["conjuracao"]["magias"] if m.get("nome")]
+    assert len(nomes_ft_t) == 5 and "Detectar Magia" in nomes_ft_t
+    assert len(nomes_ft_1) == 3 and "Mísseis Mágicos" in nomes_ft_1
+
+    # 3. Modo Aleatório respeita tradição e quantidade exata de truques/magias
+    cl_rnd = gerar_personagem(
+        "humano", "heranca_perita", "clerigo", "clerigo_hospitalario_sagrado",
+        divindade_id="sarenrae",
+        escolhas_magias={"modo": "aleatorio"},
+        seed=33,
+        dados=db,
+    )
+    assert cl_rnd["meta_geracao"]["escolhas_magias"]["modo"] == "aleatorio"
+    assert len([t for t in cl_rnd["ficha"]["conjuracao"]["truques_magicos"] if t.get("nome")]) == 5
+
+    # 4. Bloqueios estritos: tradição errada, nível errado, duplicata ou exceder vagas livres
+    for esc_inv in (
+        {"modo": "personalizado", "magias_n1_ids": ["curar"]},  # Curar não é arcana
+        {"modo": "personalizado", "magias_n1_ids": ["bola_de_fogo"]},  # Bola de Fogo é 3º círculo
+        {"modo": "personalizado", "truques_ids": ["luz", "luz"]},  # Duplicata
+        {"modo": "personalizado", "truques_ids": ["detectar_magia", "escudo_mistico", "luz", "mao_mistica", "raio_de_gelo", "produzir_chama"]},  # 6 > 5
+    ):
+        try:
+            gerar_personagem(
+                "elfo", "elfo_vidente", "mago", "mago_evocador_artilharia",
+                escolhas_magias=esc_inv, seed=1, dados=db,
+            )
+            raise AssertionError(f"Deveria falhar com ErroValidacao para {esc_inv!r}")
+        except ErroValidacao:
+            pass
+
+
 def main() -> None:
     test_ca_limite_destreza_e_sem_armadura()
     test_penalidade_armadura_barulhenta_flexivel_e_ferro_desimpedido()
@@ -1049,6 +1115,7 @@ def main() -> None:
     test_compra_manual_e_hibrida_equipamentos()
     test_curadoria_e_selecao_manual_talentos()
     test_selecao_manual_e_regras_pericias()
+    test_selecao_manual_e_aleatoria_magias()
     print("SUCESSO TOTAL — Todos os testes de casos de borda PF2E passaram!")
 
 

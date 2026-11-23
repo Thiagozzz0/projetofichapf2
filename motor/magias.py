@@ -12,6 +12,110 @@ from .util import atributo_id, bonus_proficiencia, normalizar, slugify
 
 _CLASSES_FOCO_CAR = {"campeao"}
 _CLASSES_FOCO_SAB = {"monge"}
+CLASSES_CONJURACAO_PLENA = frozenset({"bardo", "clerigo", "druida", "feiticeiro", "mago"})
+TRADICOES_OFICIAIS = ("arcana", "divina", "ocultista", "primal")
+
+
+def listar_catalogo_magias_n1(dados: BaseDados) -> dict[str, Any]:
+    """Retorna catálogo de Truques Mágicos (N0) e Magias de 1º Círculo a partir de magias01/02.json."""
+    por_id: dict[str, dict[str, Any]] = {}
+    por_tradicao: dict[str, dict[str, list[str]]] = {
+        t: {"truques": [], "nivel_1": []} for t in TRADICOES_OFICIAIS
+    }
+
+    for m in dados.magias.values():
+        tracos = m.get("tracos") or []
+        eh_truque = "Truque Mágico" in tracos
+        nivel_m = m.get("nivel")
+        if not eh_truque and nivel_m != 1:
+            continue
+        mid = m["id"]
+        trads = [t for t in (m.get("tradicoes") or []) if t in TRADICOES_OFICIAIS]
+        por_id[mid] = {
+            "id": mid,
+            "nome": m["nome"],
+            "nivel": 0 if eh_truque else 1,
+            "eh_truque": eh_truque,
+            "tradicoes": trads,
+            "escola": m.get("escola") or "",
+            "acoes": _formatar_acoes(m.get("acoes")),
+            "raridade": m.get("raridade") or "Comum",
+            "resumo": m.get("resumo_lista") or (m.get("descricao") or "")[:160],
+        }
+        chave_lista = "truques" if eh_truque else "nivel_1"
+        for t in trads:
+            por_tradicao[t][chave_lista].append(mid)
+
+    for t in TRADICOES_OFICIAIS:
+        por_tradicao[t]["truques"].sort(key=lambda mid: normalizar(por_id[mid]["nome"]))
+        por_tradicao[t]["nivel_1"].sort(key=lambda mid: normalizar(por_id[mid]["nome"]))
+
+    return {"por_id": por_id, "por_tradicao": por_tradicao}
+
+
+def resumo_conjuracao_classe(dados: BaseDados, classe: dict[str, Any]) -> dict[str, Any] | None:
+    """Extrai de dados/classes*.json as regras de conjuração de 1º nível da classe e subclasses."""
+    cid = classe["id"]
+    if cid not in CLASSES_CONJURACAO_PLENA:
+        return None
+    prof = classe["proficiencias_iniciais"].get("magias") or {}
+    tabela = _tabela_magias_classe(classe) or {"truques_magicos": 5, "espacos_por_circulo": {"1": 2}}
+    qtd_truques = int(tabela.get("truques_magicos", 5))
+    espacos_base = int(tabela.get("espacos_por_circulo", {}).get("1", 2))
+    trad_raw = prof.get("tradicao")
+    trad_fixa = trad_raw if trad_raw in TRADICOES_OFICIAIS else None
+
+    subclasses_info: dict[str, dict[str, Any]] = {}
+    for sub in classe.get("subclasses", {}).get("opcoes", []):
+        sid = sub["id"]
+        trad_sub = sub.get("tradicao_magica") if sub.get("tradicao_magica") in TRADICOES_OFICIAIS else trad_fixa
+        truque_fixo_id = None
+        magia_n1_fixa_id = None
+
+        if "magia_adicionada_repertorio" in sub:
+            m_rep = dados.resolver_magia(sub["magia_adicionada_repertorio"])
+            if m_rep:
+                magia_n1_fixa_id = m_rep["id"]
+        if "magias_concedidas" in sub:
+            mc = sub["magias_concedidas"]
+            m_t = dados.resolver_magia(mc.get("truque_magico"))
+            m_1 = dados.resolver_magia(mc.get("1"))
+            if m_t:
+                truque_fixo_id = m_t["id"]
+            if m_1:
+                magia_n1_fixa_id = m_1["id"]
+
+        esp_sub = espacos_base
+        if cid == "mago":
+            if sid != "universalista":
+                esp_sub = espacos_base + 1
+                qtd_n1_sub = 6
+            else:
+                qtd_n1_sub = 5
+        elif cid == "bardo":
+            qtd_n1_sub = 3 if magia_n1_fixa_id else 2
+        elif cid == "feiticeiro":
+            qtd_n1_sub = 3
+        else:
+            qtd_n1_sub = esp_sub
+
+        subclasses_info[sid] = {
+            "tradicao": trad_sub,
+            "truque_fixo_id": truque_fixo_id,
+            "magia_n1_fixa_id": magia_n1_fixa_id,
+            "espacos_n1": esp_sub,
+            "qtd_magias_n1": qtd_n1_sub,
+            "eh_universalista": cid == "mago" and sid == "universalista",
+        }
+
+    return {
+        "tradicao_fixa": trad_fixa,
+        "estilo": prof.get("tipo_conjuracao", "preparada"),
+        "atributo_conjuracao": atributo_id(prof.get("atributo_conjuracao")) or "int",
+        "qtd_truques": qtd_truques,
+        "espacos_n1_base": espacos_base,
+        "subclasses": subclasses_info,
+    }
 
 
 def _formatar_acoes(acoes: str | None) -> str:
@@ -175,6 +279,7 @@ def gerar_conjuracao(
     fonte_divina: str = "cura",
     divindade: dict[str, Any] | None = None,
     talento_ancestral_id: str | None = None,
+    escolhas_magias: dict[str, Any] | None = None,
     rng: random.Random | None = None,
 ) -> dict[str, Any]:
     """Calcula ataque/CD de magia, espaços por dia, truques, magias N1, foco e inatas."""
@@ -285,11 +390,31 @@ def gerar_conjuracao(
     magias_selecionadas: list[dict[str, Any]] = []
     espacos_n1 = 0
     fonte_divina_info: dict[str, Any] | None = None
+    esc_m = escolhas_magias or {}
+    modo_mag_raw = normalizar(str(esc_m.get("modo") or "procedural"))
+    modo_mag = (
+        "aleatorio"
+        if modo_mag_raw in ("aleatorio", "aleatoria", "random")
+        else (
+            "personalizado"
+            if modo_mag_raw in ("personalizado", "manual")
+            or any(
+                esc_m.get(k) not in (None, "", "procedural", "aleatorio", [])
+                for k in ("truques_ids", "magias_n1_ids")
+            )
+            else "procedural"
+        )
+    )
+    truques_manuais_aplicados: list[str] = []
+    magias_n1_manuais_aplicadas: list[str] = []
+    qtd_truques_total = 0
+    qtd_magias_n1_total = 0
 
     if conjuracao_plena and tradicao:
         conj_rec = conj_por_trad.get(tradicao) or conj_rec
         tabela = _tabela_magias_classe(classe) or {"truques_magicos": 5, "espacos_por_circulo": {"1": 2}}
         qtd_truques = int(tabela.get("truques_magicos", 5))
+        qtd_truques_total = qtd_truques
         espacos_n1 = int(tabela.get("espacos_por_circulo", {}).get("1", 2))
         if classe_id == "mago" and sub_id != "universalista":
             espacos_n1 += 1  # +1 espaço de escola arcana por nível
@@ -301,35 +426,128 @@ def gerar_conjuracao(
                 "circulo": 1,
             }
 
-        tracos_pri = list(conj_rec.get("tracos_prioritarios", []))
-        escolas_pri = list(conj_rec.get("escolas_prioritarias", []))
-        truques_pri = list(conj_rec.get("truques_prioritarios", []))
-        magias_n1_pri = list(conj_rec.get("magias_nivel_1_prioritarias", []))
+        tracos_pri = [] if modo_mag == "aleatorio" else list(conj_rec.get("tracos_prioritarios", []))
+        escolas_pri = [] if modo_mag == "aleatorio" else list(conj_rec.get("escolas_prioritarias", []))
+        truques_pri = [] if modo_mag == "aleatorio" else list(conj_rec.get("truques_prioritarios", []))
+        magias_n1_pri = [] if modo_mag == "aleatorio" else list(conj_rec.get("magias_nivel_1_prioritarias", []))
 
-        # Concedidas pela subclasse (Bardo, Feiticeiro, Mago)
+        # Magias fixas concedidas pela subclasse (Bardo Musa, Feiticeiro Linhagem)
+        truques_fixos_sub: list[str] = []
+        magias_n1_fixas_sub: list[str] = []
+        extras_truques_sub: set[str] = set()
+        extras_magias_sub: set[str] = set()
+
         if subclasse:
             if "magia_adicionada_repertorio" in subclasse:
                 m_rep = dados.resolver_magia(subclasse["magia_adicionada_repertorio"])
                 if m_rep:
-                    magias_n1_pri.insert(0, m_rep["id"])
+                    magias_n1_fixas_sub.append(m_rep["id"])
+                    extras_magias_sub.add(m_rep["id"])
             if "magias_concedidas" in subclasse:
                 mc = subclasse["magias_concedidas"]
                 m_t = dados.resolver_magia(mc.get("truque_magico"))
                 m_1 = dados.resolver_magia(mc.get("1"))
                 if m_t:
-                    truques_pri.insert(0, m_t["id"])
+                    truques_fixos_sub.append(m_t["id"])
+                    extras_truques_sub.add(m_t["id"])
                 if m_1:
-                    magias_n1_pri.insert(0, m_1["id"])
-            if "magia_1_nivel_exemplo" in subclasse:
+                    magias_n1_fixas_sub.append(m_1["id"])
+                    extras_magias_sub.add(m_1["id"])
+            if "magia_1_nivel_exemplo" in subclasse and modo_mag == "procedural":
                 m_ex = dados.resolver_magia(subclasse["magia_1_nivel_exemplo"])
                 if m_ex:
                     magias_n1_pri.insert(0, m_ex["id"])
 
+        # Quantidade de magias conhecidas/no grimório N1
+        if classe_id == "mago":
+            qtd_magias_n1 = 6 if (subclasse and sub_id != "universalista") else 5
+        elif classe_id == "bardo":
+            qtd_magias_n1 = 3 if subclasse and subclasse.get("magia_adicionada_repertorio") else 2
+        elif classe_id == "feiticeiro":
+            qtd_magias_n1 = 3
+        else:
+            qtd_magias_n1 = espacos_n1
+        qtd_magias_n1_total = qtd_magias_n1
+
+        extras_divinas: set[str] = set()
+        if classe_id == "clerigo" and divindade:
+            mag_div_1 = (divindade.get("magias_clerigo") or {}).get("1")
+            if mag_div_1 and mag_div_1 in dados.magias:
+                extras_divinas.add(mag_div_1)
+                if modo_mag == "procedural" and mag_div_1 not in magias_n1_pri:
+                    magias_n1_pri.append(mag_div_1)
+
+        def _validar_lista_manual_magia(
+            raw_ids: Any,
+            eh_truque_alvo: bool,
+            limite_total: int,
+            fixas_ids: list[str],
+            extras_perm: set[str],
+            rotulo: str,
+        ) -> list[str]:
+            if raw_ids is None or (isinstance(raw_ids, str) and normalizar(raw_ids) in ("", "procedural", "aleatorio", "auto")):
+                return []
+            if not isinstance(raw_ids, list):
+                raise ValueError(f"Campo '{rotulo}' deve ser uma lista de IDs de magias.")
+            vistos_m: set[str] = set()
+            validas_novas: list[str] = []
+            fixas_set = set(fixas_ids)
+            for item in raw_ids:
+                mid = str(item).strip()
+                m_obj = dados.magias.get(mid)
+                if not m_obj:
+                    raise ValueError(f"Magia desconhecida em '{rotulo}': '{mid}'.")
+                eh_t = "Truque Mágico" in (m_obj.get("tracos") or [])
+                if eh_truque_alvo and not eh_t:
+                    raise ValueError(f"'{m_obj['nome']}' não é um Truque Mágico.")
+                if not eh_truque_alvo and (eh_t or m_obj.get("nivel") != 1):
+                    raise ValueError(f"'{m_obj['nome']}' não é uma magia de 1º círculo.")
+                if tradicao not in (m_obj.get("tradicoes") or []) and mid not in extras_perm:
+                    raise ValueError(
+                        f"'{m_obj['nome']}' não pertence à tradição '{tradicao}' de {classe['nome']}."
+                    )
+                if mid in vistos_m:
+                    raise ValueError(f"Magia duplicada em '{rotulo}': '{m_obj['nome']}'.")
+                vistos_m.add(mid)
+                if mid not in fixas_set:
+                    validas_novas.append(mid)
+            vagas_livres = max(0, limite_total - len(fixas_set))
+            if len(validas_novas) > vagas_livres:
+                raise ValueError(
+                    f"Você selecionou {len(validas_novas)} opções em '{rotulo}', mas há apenas "
+                    f"{vagas_livres} vaga(s) livre(s) além das fixas da subclasse."
+                )
+            return validas_novas
+
+        if modo_mag == "personalizado":
+            truques_manuais_aplicados = _validar_lista_manual_magia(
+                esc_m.get("truques_ids"), True, qtd_truques, truques_fixos_sub, extras_truques_sub, "truques_ids"
+            )
+            magias_n1_manuais_aplicadas = _validar_lista_manual_magia(
+                esc_m.get("magias_n1_ids"),
+                False,
+                qtd_magias_n1,
+                magias_n1_fixas_sub,
+                extras_magias_sub | extras_divinas,
+                "magias_n1_ids",
+            )
+
         ids_truques_usados: set[str] = set()
+        truques_ordem = [*truques_fixos_sub, *truques_manuais_aplicados, *truques_pri]
         truques_selecionados = _selecionar_magias_por_nivel(
-            dados, tradicao, None, True, qtd_truques, truques_pri, tracos_pri, escolas_pri, ids_truques_usados, rng
+            dados,
+            tradicao,
+            None,
+            True,
+            qtd_truques,
+            truques_ordem,
+            tracos_pri,
+            escolas_pri,
+            ids_truques_usados,
+            rng,
+            extras_permitidas_ids=extras_truques_sub,
         )
-        if talento_ancestral_id == "truque_magico_adaptado" and truques_selecionados:
+        if talento_ancestral_id == "truque_magico_adaptado" and truques_selecionados and modo_mag != "personalizado":
             pool_adapt = [
                 m for m in dados.magias.values()
                 if "Truque Mágico" in m.get("tracos", [])
@@ -341,39 +559,20 @@ def gerar_conjuracao(
                 truques_selecionados[-1] = adaptado
                 ids_truques_usados.add(adaptado["id"])
 
-        # Quantidade de magias conhecidas/no grimório N1
-        if classe_id == "mago":
-            # Grimório inicial: 5 comuns N1 (+ 1 da Escola Arcana se especialista)
-            qtd_magias_n1 = 6 if (subclasse and sub_id != "universalista") else 5
-        elif classe_id == "bardo":
-            qtd_magias_n1 = 3 if subclasse and subclasse.get("magia_adicionada_repertorio") else 2
-        elif classe_id == "feiticeiro":
-            qtd_magias_n1 = 3
-        else:
-            # Clérigo e Druida conhecem toda a lista comum; preparam `espacos_n1`
-            qtd_magias_n1 = espacos_n1
-
-        extras_divinas: set[str] = set()
-        if classe_id == "clerigo" and divindade:
-            mag_div_1 = (divindade.get("magias_clerigo") or {}).get("1")
-            if mag_div_1 and mag_div_1 in dados.magias:
-                extras_divinas.add(mag_div_1)
-                if mag_div_1 not in magias_n1_pri:
-                    magias_n1_pri.append(mag_div_1)
-
         ids_magias_usados: set[str] = set()
+        magias_ordem = [*magias_n1_fixas_sub, *magias_n1_manuais_aplicadas, *magias_n1_pri]
         magias_selecionadas = _selecionar_magias_por_nivel(
             dados,
             tradicao,
             1,
             False,
             qtd_magias_n1,
-            magias_n1_pri,
+            magias_ordem,
             tracos_pri,
             escolas_pri,
             ids_magias_usados,
             rng,
-            extras_permitidas_ids=extras_divinas,
+            extras_permitidas_ids=extras_magias_sub | extras_divinas,
         )
 
         # Marca quais ficam preparadas na ficha oficial
@@ -445,6 +644,14 @@ def gerar_conjuracao(
         "pontos_foco": pontos_foco,
         "magias_foco": foco_selecionadas,
         "magias_inatas": inatas,
+        "escolhas_magias": {
+            "modo": modo_mag,
+            "tradicao": tradicao,
+            "qtd_truques_total": qtd_truques_total,
+            "qtd_magias_n1_total": qtd_magias_n1_total,
+            "truques_manuais": truques_manuais_aplicados,
+            "magias_n1_manuais": magias_n1_manuais_aplicadas,
+        },
     }
 
 

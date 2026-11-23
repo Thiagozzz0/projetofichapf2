@@ -31,7 +31,12 @@ from .equipamentos import (
     listar_catalogo_equipamentos_loja,
     resumo_proficiencias_equipamento_classe,
 )
-from .magias import gerar_conjuracao, preencher_bloco_conjuracao_ficha
+from .magias import (
+    gerar_conjuracao,
+    listar_catalogo_magias_n1,
+    preencher_bloco_conjuracao_ficha,
+    resumo_conjuracao_classe,
+)
 from .regras_atributos import calcular_atributos, normalizar_escolha_atributo, opcoes_atributo_classe
 from .talentos import listar_catalogo_talentos_n1, selecionar_talentos
 from .util import ATRIBUTOS, atributo_id, formatar_preco, normalizar
@@ -306,6 +311,7 @@ def listar_opcoes_criacao(dados: BaseDados | None = None) -> dict[str, Any]:
             "divindade_obrigatoria": c["id"] in CLASSES_DIVINDADE_OBRIGATORIA,
             "proficiencias_equipamento": resumo_proficiencias_equipamento_classe(c),
             "pericias_classe": resumo_pericias_classe(db, c),
+            "conjuracao_classe": resumo_conjuracao_classe(db, c),
             "conceitos": [
                 {
                     "id": con["id"],
@@ -349,6 +355,7 @@ def listar_opcoes_criacao(dados: BaseDados | None = None) -> dict[str, Any]:
             "arma_favorecida_id": d.get("arma_favorecida_id"),
             "arma_favorecida_nome": d["arma_favorecida_nome"],
             "pericia_divina": d["pericia_divina"],
+            "magia_clerigo_n1_id": (d.get("magias_clerigo") or {}).get("1"),
             "dominios": d["dominios"],
         }
         for d in db.divindades.values()
@@ -361,6 +368,7 @@ def listar_opcoes_criacao(dados: BaseDados | None = None) -> dict[str, Any]:
         "divindades": divindades,
         "catalogo_pericias": listar_catalogo_pericias(db),
         "catalogo_talentos": listar_catalogo_talentos_n1(db),
+        "catalogo_magias": listar_catalogo_magias_n1(db),
         "catalogo_equipamentos": listar_catalogo_equipamentos_loja(db),
         "total_conceitos": len(db.conceitos),
     }
@@ -380,6 +388,7 @@ def gerar_personagem(
     escolhas_atributos: dict[str, Any] | None = None,
     escolhas_pericias: dict[str, Any] | None = None,
     escolhas_talentos: dict[str, Any] | None = None,
+    escolhas_magias: dict[str, Any] | None = None,
     escolhas_equipamentos: dict[str, Any] | None = None,
     dados: BaseDados | None = None,
 ) -> dict[str, Any]:
@@ -621,20 +630,24 @@ def gerar_personagem(
         )
     except ValueError as exc:
         raise ErroValidacao(str(exc)) from exc
-    magias_res = gerar_conjuracao(
-        db,
-        heranca,
-        classe,
-        subclasse,
-        conceito,
-        atributos_res["modificadores"],
-        talentos_res["talentos_classe_ids"],
-        nivel=nivel,
-        fonte_divina=fonte_divina,
-        divindade=divindade,
-        talento_ancestral_id=talentos_res["efeitos"].get("talento_ancestral_id"),
-        rng=rng,
-    )
+    try:
+        magias_res = gerar_conjuracao(
+            db,
+            heranca,
+            classe,
+            subclasse,
+            conceito,
+            atributos_res["modificadores"],
+            talentos_res["talentos_classe_ids"],
+            nivel=nivel,
+            fonte_divina=fonte_divina,
+            divindade=divindade,
+            talento_ancestral_id=talentos_res["efeitos"].get("talento_ancestral_id"),
+            escolhas_magias=escolhas_magias,
+            rng=rng,
+        )
+    except ValueError as exc:
+        raise ErroValidacao(str(exc)) from exc
 
     # ------------------------------------------------------------------
     # 5. Montagem fiel ao contrato `modelo_ficha_vazia`
@@ -748,6 +761,7 @@ def gerar_personagem(
             "historico_abcd": atributos_res["historico_abcd"],
             "escolhas_pericias": pericias_res["escolhas_pericias"],
             "escolhas_talentos": talentos_res["escolhas_talentos"],
+            "escolhas_magias": magias_res.get("escolhas_magias"),
             "orcamento_inicial": "15 po",
             "escolhas_equipamentos": equip_res["escolhas_equipamentos"],
             "gasto_equipamentos": formatar_preco(equip_res["gasto_pc"]),

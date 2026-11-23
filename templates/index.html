@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gerador Procedural PF2E — Ficha Oficial</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}?v=37">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}?v=40">
 </head>
 <body>
   <div class="app-container">
@@ -377,6 +377,68 @@
               <div class="etapa-rodape">
                 <button type="button" class="btn btn-sutil" data-etapa-ir="pericias">← Voltar p/ Perícias</button>
                 <button type="button" class="btn btn-sutil" data-etapa-acao="fechar">Recolher</button>
+                <button type="button" id="btn-tal-avancar" class="btn btn-secundario" data-etapa-ir="equipamentos">Avançar para Equipamentos →</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="etapa-card oculto" id="etapa-magias" data-etapa="magias">
+            <button type="button" class="etapa-header" data-etapa-toggle="magias" aria-expanded="false" aria-controls="corpo-etapa-magias">
+              <span class="etapa-header-esq">
+                <span class="etapa-num">4</span>
+                <span>
+                  <span class="etapa-titulo">Magias</span>
+                  <span class="etapa-subtitulo">Truques Mágicos e Magias de 1º Círculo conforme tradição e espaços da classe</span>
+                </span>
+              </span>
+              <span class="etapa-header-dir">
+                <span id="resumo-etapa-magias" class="etapa-resumo-pill">Procedural</span>
+                <span class="etapa-seta" aria-hidden="true">▾</span>
+              </span>
+            </button>
+            <div id="corpo-etapa-magias" class="etapa-corpo oculto">
+              <div class="campo-grupo subgrupo-atb-etapa-d" id="grupo-magias">
+                <div class="etapa-d-topo">
+                  <div>
+                    <label for="modo-magias" class="etapa-d-titulo">G — Conjuração e Magias (1º Nível)</label>
+                    <small class="nota-campo">Escolha entre seleção procedural (sinérgica com o conceito), sorteio aleatório na tradição ou seleção manual respeitando tradição, espaços e magias fixas de subclasse.</small>
+                  </div>
+                </div>
+                <select id="modo-magias" name="modo_magias">
+                  <option value="procedural" selected>Procedural (truques e magias recomendados pelo conceito)</option>
+                  <option value="aleatorio">Aleatório (sortear truques e magias válidos da tradição)</option>
+                  <option value="personalizado">Personalizar / Manual (escolher truques e magias de 1º círculo)</option>
+                </select>
+
+                <div id="painel-magias-custom" class="painel-pericias-custom oculto">
+                  <div class="barra-orcamento-eq">
+                    <div class="orc-metricas">
+                      <span id="mag-resumo-tradicao">Tradição: —</span>
+                      <span><strong id="mag-resumo-vagas" class="saldo-ok">Truques: 0/0 • 1º Círculo: 0/0</strong></span>
+                    </div>
+                    <button type="button" id="btn-mag-reset-procedural" class="btn btn-sutil">Voltar Tudo p/ Procedural</button>
+                  </div>
+                  <small id="mag-info-extra" class="nota-campo"></small>
+
+                  <div class="mag-busca-wrap">
+                    <input type="search" id="mag-filtro-busca" placeholder="Filtrar magias por nome ou escola (ex.: Curar, Evocação, Escudo)..." aria-label="Filtrar magias">
+                  </div>
+
+                  <div class="mag-bloco-lista">
+                    <div id="lbl-mag-truques" class="mag-subgrupo-titulo">1. Truques Mágicos — Nível 0</div>
+                    <div id="grid-magias-truques" class="grid-pericias-checkboxes"></div>
+                  </div>
+
+                  <div class="mag-bloco-lista">
+                    <div id="lbl-mag-n1" class="mag-subgrupo-titulo">2. Magias de 1º Círculo</div>
+                    <div id="grid-magias-n1" class="grid-pericias-checkboxes"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="etapa-rodape">
+                <button type="button" class="btn btn-sutil" data-etapa-ir="talentos">← Voltar p/ Talentos</button>
+                <button type="button" class="btn btn-sutil" data-etapa-acao="fechar">Recolher</button>
                 <button type="button" class="btn btn-secundario" data-etapa-ir="equipamentos">Avançar para Equipamentos →</button>
               </div>
             </div>
@@ -385,7 +447,7 @@
           <div class="etapa-card" id="etapa-equipamentos" data-etapa="equipamentos">
             <button type="button" class="etapa-header" data-etapa-toggle="equipamentos" aria-expanded="false" aria-controls="corpo-etapa-equipamentos">
               <span class="etapa-header-esq">
-                <span class="etapa-num">4</span>
+                <span class="etapa-num" id="etapa-num-equipamentos">4</span>
                 <span>
                   <span class="etapa-titulo">Equipamentos</span>
                   <span class="etapa-subtitulo">Compra procedural ou manual com orçamento inicial de 15 po (150 pp)</span>
@@ -400,7 +462,7 @@
               <div class="campo-grupo subgrupo-atb-etapa-d" id="grupo-equipamentos">
                 <div class="etapa-d-topo">
                   <div>
-                    <label for="modo-equipamentos" class="etapa-d-titulo">G — Equipamentos Iniciais (Orçamento: 15 po / 150 pp)</label>
+                    <label for="modo-equipamentos" class="etapa-d-titulo">H — Equipamentos Iniciais (Orçamento: 15 po / 150 pp)</label>
                     <small class="nota-campo">Escolha entre compra automática procedural (pelo conceito) ou selecionar seus itens manualmente descontando direto das 150 pp da ficha.</small>
                   </div>
                 </div>
@@ -469,7 +531,7 @@
               </div>
 
               <div class="etapa-rodape">
-                <button type="button" class="btn btn-sutil" data-etapa-ir="talentos">← Voltar p/ Talentos</button>
+                <button type="button" id="btn-eq-voltar" class="btn btn-sutil" data-etapa-ir="talentos">← Voltar p/ Talentos</button>
                 <button type="button" class="btn btn-secundario" data-etapa-acao="fechar">Concluir e Recolher ✓</button>
               </div>
             </div>
@@ -667,12 +729,13 @@
     </section>
   </div>
 
-  <script src="{{ url_for('static', filename='js/render_ficha.js') }}?v=39" defer></script>
-  <script src="{{ url_for('static', filename='js/estado.js') }}?v=39" defer></script>
-  <script src="{{ url_for('static', filename='js/atributos.js') }}?v=39" defer></script>
-  <script src="{{ url_for('static', filename='js/pericias.js') }}?v=39" defer></script>
-  <script src="{{ url_for('static', filename='js/talentos.js') }}?v=39" defer></script>
-  <script src="{{ url_for('static', filename='js/equipamentos.js') }}?v=39" defer></script>
-  <script src="{{ url_for('static', filename='js/app.js') }}?v=39" defer></script>
+  <script src="{{ url_for('static', filename='js/render_ficha.js') }}?v=40" defer></script>
+  <script src="{{ url_for('static', filename='js/estado.js') }}?v=40" defer></script>
+  <script src="{{ url_for('static', filename='js/atributos.js') }}?v=40" defer></script>
+  <script src="{{ url_for('static', filename='js/pericias.js') }}?v=40" defer></script>
+  <script src="{{ url_for('static', filename='js/talentos.js') }}?v=40" defer></script>
+  <script src="{{ url_for('static', filename='js/magias.js') }}?v=40" defer></script>
+  <script src="{{ url_for('static', filename='js/equipamentos.js') }}?v=40" defer></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}?v=40" defer></script>
 </body>
 </html>

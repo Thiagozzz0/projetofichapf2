@@ -43,6 +43,7 @@
     ultimaFicha: null,
     bioManualExpAutomatica: false,
     perEstado: { selecionadas: [] },
+    magEstado: { truques: [], magias_n1: [] },
     eqEstado: { armas_cc: [], armas_dist: [], variados: [] },
     mapaEq: { armaduras: {}, escudos: {}, armas_cc: {}, armas_dist: {}, variados: {} },
 

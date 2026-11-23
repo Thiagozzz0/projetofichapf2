@@ -93,8 +93,8 @@ Lista viva de todas as entregas e tarefas que ainda precisam ser realizadas até
   - Aba dedicada antes de Talentos, lendo `dados/pericias.json`, com trava automática do limite de vagas (`Classe + Mod. INT + Herança Perita + Sobreposições + Talentos Ancestrais`).
 - [ ] **Escolha Manual de Idiomas Extras**
   - Permitir escolher manualmente os idiomas adicionais concedidos por Inteligência, Ancestralidade e Herança (`motor/biografia_pericias.py`).
-- [ ] **Etapa de Magias e Truques para Conjuradores (Manual ou Procedural)**
-  - Nova seção na UI (exibida apenas para classes conjuradoras: Bardo, Clérigo, Druida, Feiticeiro e Mago) para escolha manual de truques, repertório ou grimório inicial (`motor/magias.py`).
+- [x] **Etapa de Magias e Truques para Conjuradores (Procedural, Aleatório ou Manual)** *(Concluído em `22/11/2026`)*
+  - Nova seção na UI entre Talentos e Equipamentos (exibida apenas para classes conjuradoras: Bardo, Clérigo, Druida, Feiticeiro e Mago) consumindo `dados/magias01.json` e `dados/magias02.json` para truques e magias de 1º círculo, com trava de tradição, espaços e magias fixas de subclasse (`motor/magias.py` + `templates/static/js/magias.js`).
 - [ ] **Personalização de Companheiro Animal / Familiar e Dados Biográficos (Pág. 3)**
   - Permitir escolher manualmente o tipo do Companheiro Animal ou habilidades do Familiar (`motor/companheiros.py`), além de tendência (quando não travada por classe/divindade), idade, gênero, aparência, crenças e anátemas.
 - [ ] **Validação de Equipamentos no Back-end e Atalho de Kit de Classe**

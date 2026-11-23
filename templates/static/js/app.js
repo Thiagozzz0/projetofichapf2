@@ -69,6 +69,21 @@
       }
     }
 
+    const elMag = document.getElementById("resumo-etapa-magias");
+    if (elMag) {
+      const modoMag = document.getElementById("modo-magias")?.value || "procedural";
+      if (modoMag === "procedural") {
+        elMag.textContent = "Procedural";
+      } else if (modoMag === "aleatorio") {
+        elMag.textContent = "Aleatório";
+      } else {
+        const stMag = app.calcularEstadoMagiasUI?.();
+        elMag.textContent = !stMag || !stMag.disponivel
+          ? "Manual (aguardando linhagem)"
+          : `Manual (T:${app.magEstado.truques.length}/${stMag.vagasLivresTruques} • N1:${app.magEstado.magias_n1.length}/${stMag.vagasLivresN1})`;
+      }
+    }
+
     const elEq = document.getElementById("resumo-etapa-equipamentos");
     if (elEq) {
       if ((document.getElementById("modo-equipamentos")?.value || "procedural") !== "personalizado") {
@@ -157,6 +172,7 @@
       });
       document.getElementById("divindade")?.addEventListener("change", () => {
         app.atualizarCatalogoPericiasUI();
+        app.atualizarCatalogoMagiasUI();
         app.atualizarCatalogoEquipamentosUI();
       });
 
@@ -185,6 +201,8 @@
       app.atualizarVisibilidadeTalentosUI();
       app.atualizarCatalogoPericiasUI();
       app.atualizarVisibilidadePericiasUI();
+      app.atualizarCatalogoMagiasUI();
+      app.atualizarVisibilidadeMagiasUI();
     } catch (err) {
       setStatus(`Erro ao carregar opções: ${err.message}`, "erro");
     }
@@ -229,6 +247,7 @@
       },
       escolhas_pericias: app.montarPayloadPericiasUI(),
       escolhas_talentos: app.montarPayloadTalentosUI(),
+      escolhas_magias: app.montarPayloadMagiasUI(),
       escolhas_equipamentos: app.montarPayloadEquipamentosUI(),
     };
 
@@ -309,6 +328,7 @@
     app.definirModoTodosAtributos("procedural");
     app.resetarPericiasProcedural();
     app.resetarTalentosProcedural();
+    app.resetarMagiasProcedural();
     app.resetarEquipamentosProcedural();
     app.atualizarResumoAncestralidade();
     app.atualizarSeletoresAtributosAncestralidade();
@@ -330,6 +350,7 @@
 
   app.registrarEventosPericias();
   app.registrarEventosTalentos();
+  app.registrarEventosMagias();
   app.registrarEventosEquipamentos();
 
   document.getElementById("acordeao-etapas")?.addEventListener("click", (e) => {

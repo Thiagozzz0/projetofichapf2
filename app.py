@@ -72,6 +72,13 @@ def _gerar_a_partir_payload(payload: dict[str, Any]) -> dict[str, Any]:
             raise ErroValidacao("Campo 'escolhas_talentos' deve ser um objeto JSON.")
         escolhas_talentos = bruto_tal
 
+    escolhas_magias: dict[str, Any] | None = None
+    bruto_mag = payload.get("escolhas_magias")
+    if bruto_mag is not None:
+        if not isinstance(bruto_mag, dict):
+            raise ErroValidacao("Campo 'escolhas_magias' deve ser um objeto JSON.")
+        escolhas_magias = bruto_mag
+
     escolhas_equipamentos: dict[str, Any] | None = None
     bruto_eq = payload.get("escolhas_equipamentos")
     if bruto_eq is not None:
@@ -93,6 +100,7 @@ def _gerar_a_partir_payload(payload: dict[str, Any]) -> dict[str, Any]:
         escolhas_atributos=escolhas_atributos or None,
         escolhas_pericias=escolhas_pericias,
         escolhas_talentos=escolhas_talentos,
+        escolhas_magias=escolhas_magias,
         escolhas_equipamentos=escolhas_equipamentos,
     )
 

@@ -349,6 +349,7 @@
 
     sincronizarExclusaoTalentos();
     app.atualizarCatalogoPericiasUI?.();
+    app.atualizarCatalogoMagiasUI?.();
     app.atualizarCatalogoEquipamentosUI?.();
     app.atualizarResumosEtapasUI?.();
   }
