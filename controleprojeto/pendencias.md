@@ -1,4 +1,4 @@
-# Pendências do Projeto
+  # Pendências do Projeto
 
 Lista viva de todas as entregas e tarefas que ainda precisam ser realizadas até a finalização do gerador procedural.
 
@@ -103,9 +103,9 @@ Lista viva de todas as entregas e tarefas que ainda precisam ser realizadas até
 - [ ] **Cruzamento de Pré-requisitos de Perícia nos Talentos da UI**
   - Fazer a Etapa 3 (Talentos) consultar em tempo real as perícias marcadas na Etapa 2 para liberar/bloquear pré-requisitos de perícia na interface.
 - [ ] **Refatoração Arquitetural Pré-Níveis 2–20**
-  - Modularizar `templates/static/js/app.js` em arquivos menores por responsabilidade (`atributos`, `pericias`, `talentos`, `equipamentos`, `magias`).
-  - Desacoplar contratos fixados em 1º nível no motor (`listar_catalogo_talentos_n1`, `magias_n1`, `espacos_nivel_1`, `caracteristicas_classe_n1`, `ORCAMENTO_INICIAL_PC`).
-  - Atualizar `controleprojeto/finalizado/` e `melhorias.txt` com as últimas entregas (filtragem de equipamentos por classe e etapa de perícias).
+  - [x] Modularizar `templates/static/js/app.js` em arquivos menores por responsabilidade (`estado.js`, `atributos.js`, `pericias.js`, `talentos.js`, `equipamentos.js`, `app.js`). *(Concluído em `22/11/2026`)*
+  - [ ] Desacoplar contratos fixados em 1º nível no motor (`listar_catalogo_talentos_n1`, `magias_n1`, `espacos_nivel_1`, `caracteristicas_classe_n1`, `ORCAMENTO_INICIAL_PC`).
+  - [ ] Atualizar `controleprojeto/finalizado/` e `melhorias.txt` com as últimas entregas (filtragem de equipamentos por classe, etapa de perícias e modularização do front-end).
 
 ---
 
