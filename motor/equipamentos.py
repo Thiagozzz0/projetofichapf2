@@ -9,6 +9,8 @@ from .util import formatar_preco, grau_normalizado, normalizar, pc_para_moedas
 
 
 ORCAMENTO_INICIAL_PC = 1500  # 15 po = 150 pp = 1.500 pc
+RESERVA_MOEDAS_MIN_PC = 150  # 10% (1 po e 5 pp) reservados em moedas no modo procedural
+TETO_GASTO_PROCEDURAL_PC = ORCAMENTO_INICIAL_PC - RESERVA_MOEDAS_MIN_PC  # 1.350 pc (90%)
 
 
 def _itens_variados_loja_brutos(dados: BaseDados) -> list[dict[str, Any]]:
@@ -390,7 +392,12 @@ def _municao_para_arma(dados: BaseDados, arma: dict[str, Any]) -> dict[str, Any]
     return None
 
 
-def _ferramenta_essencial(classe_id: str, conceito_id: str, subclasse_id: str = "") -> list[str]:
+def _ferramenta_essencial(
+    classe_id: str,
+    conceito_id: str,
+    subclasse_id: str = "",
+    biografia_id: str = "",
+) -> list[str]:
     mapa = {
         "alquimista": ["ferramentas_de_alquimista", "livro_basico_de_manufatura"],
         "bardo": ["instrumento_musical_portatil"],
@@ -400,10 +407,30 @@ def _ferramenta_essencial(classe_id: str, conceito_id: str, subclasse_id: str = 
         "mago": ["bolsa_de_componentes_materiais", "conjunto_de_escrita"],
     }
     itens = list(mapa.get(classe_id, []))
-    if subclasse_id == "cirurgiao" or any(
-        termo in conceito_id for termo in ("cirurgiao", "curandeiro", "medico", "hospitalario")
-    ):
+    if (
+        subclasse_id == "cirurgiao"
+        or any(termo in conceito_id for termo in ("cirurgiao", "curandeiro", "medico", "hospitalario"))
+    ) and "ferramentas_de_curandeiro" not in itens:
         itens.append("ferramentas_de_curandeiro")
+
+    mapa_biografia = {
+        "medico_de_campo": ["ferramentas_de_curandeiro"],
+        "herbalista": ["ferramentas_de_curandeiro"],
+        "artesao": ["ferramentas_de_artesao"],
+        "funileiro": ["ferramentas_de_artesao"],
+        "artista": ["instrumento_musical_portatil"],
+        "animador": ["instrumento_musical_portatil"],
+        "charlatao": ["kit_de_disfarce"],
+        "criminoso": ["ferramentas_de_ladrao"],
+        "crianca_de_rua": ["ferramentas_de_ladrao"],
+        "estudioso": ["conjunto_de_escrita"],
+        "advogado": ["conjunto_de_escrita"],
+        "batedor": ["kit_de_escalada"],
+        "mineiro": ["kit_de_escalada"],
+    }
+    for fid in mapa_biografia.get(biografia_id, []):
+        if fid not in itens:
+            itens.append(fid)
     return itens
 
 
@@ -427,6 +454,109 @@ def _somar_volumes(lista_itens: list[dict[str, Any]]) -> tuple[int, int]:
     return inteiros, leves
 
 
+def _calcular_volume_efetivo(
+    itens_vestidos: list[dict[str, Any]],
+    itens_preparados: list[dict[str, Any]],
+    outros_itens: list[dict[str, Any]],
+) -> tuple[int, int]:
+    """Calcula `(volume_total, volume_leves_soltos)` aplicando a isenção de 2 Volumes da mochila."""
+    int_vest, lev_vest = _somar_volumes(itens_vestidos + itens_preparados)
+    int_outros, lev_outros = _somar_volumes(outros_itens)
+    tem_mochila = any(
+        "kit de aventureiro" in normalizar(it["nome"]) or "mochila" in normalizar(it["nome"])
+        for it in outros_itens
+    )
+    if tem_mochila:
+        if int_outros >= 2:
+            int_outros_efetivo = int_outros - 2
+            lev_outros_efetivo = lev_outros
+        else:
+            folga_leves = (2 - int_outros) * 10
+            int_outros_efetivo = 0
+            lev_outros_efetivo = max(0, lev_outros - folga_leves)
+    else:
+        int_outros_efetivo, lev_outros_efetivo = int_outros, lev_outros
+
+    soma_inteiros = int_vest + int_outros_efetivo
+    soma_leves = lev_vest + lev_outros_efetivo
+    return soma_inteiros + (soma_leves // 10), soma_leves % 10
+
+
+def _pool_equipamentos_viagem(
+    classe_id: str,
+    conceito: dict[str, Any],
+    biografia_id: str,
+    usa_escudo: bool,
+) -> list[tuple[str, int]]:
+    """Retorna fila priorizada de equipamentos de viagem/acampamento e utilidades temáticas."""
+    fila: list[tuple[str, int]] = [
+        ("tenda_individual", 1),
+        ("roupas_de_inverno", 1),
+        ("lanterna_coberta", 1),
+        ("oleo_meio_litro", 2),
+        ("bandoleira", 1),
+        ("bussola", 1),
+        ("racoes_1_semana", 1),
+        ("apito_de_advertencia", 1),
+    ]
+
+    per_pri = {normalizar(p) for p in (conceito.get("pericias_prioritarias") or [])[:4]}
+    cid_con = conceito["id"]
+
+    if usa_escudo or classe_id in ("guerreiro", "campeao", "barbaro") or biografia_id == "artesao":
+        fila.append(("kit_de_reparo", 1))
+
+    if classe_id in ("bardo", "clerigo", "druida", "feiticeiro", "mago") or biografia_id in ("estudioso", "advogado"):
+        fila.extend([("porta_pergaminho", 1), ("conjunto_de_escrita", 1), ("espelho", 1), ("ampulheta", 1)])
+
+    if classe_id in ("clerigo", "campeao") or biografia_id == "acolito":
+        fila.extend([("texto_religioso", 1), ("simbolo_religioso_prata", 1)])
+
+    if (
+        classe_id in ("ladino", "patrulheiro")
+        or "furtividade" in per_pri
+        or "ladroagem" in per_pri
+        or biografia_id in ("batedor", "criminoso", "crianca_de_rua")
+    ):
+        fila.extend([("pe_de_cabra", 1), ("arpeu", 1), ("estrepes", 1), ("kit_de_escalada", 1), ("espelho", 1)])
+
+    if classe_id == "bardo" or biografia_id in ("nobre", "artista", "animador", "emissario", "charlatao"):
+        fila.extend([("roupas_finas", 1), ("espelho", 1)])
+
+    if biografia_id in ("guarda", "cacador_de_recompensas", "soldado") or "cacador" in cid_con:
+        fila.extend([("algemas_simples", 1), ("algemas_ruins", 1)])
+
+    if classe_id in ("patrulheiro", "druida") or biografia_id in ("cacador", "marinheiro", "eremita"):
+        fila.extend([("kit_de_pesca", 1), ("arpeu", 1)])
+
+    # Utilidades gerais de viagem e acampamento para completar até ~90% sem sobrecarga
+    fila.extend(
+        [
+            ("ferramentas_de_curandeiro", 1),
+            ("kit_de_reparo", 1),
+            ("roupas_finas", 1),
+            ("fechadura_simples", 1),
+            ("espelho", 1),
+            ("utensilios_de_cozinha", 1),
+            ("pe_de_cabra", 1),
+            ("kit_de_escalada", 1),
+            ("corda", 1),
+            ("algemas_ruins", 1),
+            ("arpeu", 1),
+            ("saco", 1),
+            ("cantil", 1),
+        ]
+    )
+
+    dedup: list[tuple[str, int]] = []
+    vistos: set[str] = set()
+    for iid, qtd in fila:
+        if iid not in vistos:
+            vistos.add(iid)
+            dedup.append((iid, qtd))
+    return dedup
+
+
 def comprar_equipamentos(
     dados: BaseDados,
     ancestralidade: dict[str, Any],
@@ -438,6 +568,7 @@ def comprar_equipamentos(
     subclasse: dict[str, Any] | None = None,
     efeitos_talentos: dict[str, Any] | None = None,
     divindade: dict[str, Any] | None = None,
+    biografia: dict[str, Any] | None = None,
     escolhas_equipamentos: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Executa a compra procedural, manual ou híbrida dentro de 15 po (1.500 pc) e calcula o Volume."""
@@ -494,6 +625,40 @@ def comprar_equipamentos(
                 armas_dist_ids = [wid_fav] + [x for x in armas_dist_ids if x != wid_fav]
             elif not usa_escudo_efetivo or str(w_fav.get("maos")) != "2":
                 armas_cc_ids = [wid_fav] + [x for x in armas_cc_ids if x != wid_fav]
+
+    # Armas de Familiaridade Ancestral (priorizadas quando o talento ancestral concede proficiência)
+    tal_anc_id = (efeitos_talentos or {}).get("talento_ancestral_id") or ""
+    if tal_anc_id in _FAMILIARIDADE_ARMAS_ANCESTRAL:
+        armas_anc_nomes, traco_anc = _FAMILIARIDADE_ARMAS_ANCESTRAL[tal_anc_id]
+        nomes_anc_norm = {normalizar(n) for n in armas_anc_nomes}
+        anc_cc: list[tuple[int, str]] = []
+        anc_dist: list[tuple[int, str]] = []
+        for w in dados.armas.values():
+            if w["id"] in ("adaga_de_cla", "bomba_alquimica") or w.get("preco_pc") is None:
+                continue
+            if grau_arma(w, armas_prof) == "destreinado":
+                continue
+            tracos_w = [normalizar(t) for t in w.get("tracos", [])]
+            eh_traco_anc = traco_anc in tracos_w
+            eh_nome_anc = normalizar(w.get("nome")) in nomes_anc_norm
+            if not (eh_traco_anc or eh_nome_anc):
+                continue
+            if w.get("tipo_ataque") == "distancia":
+                anc_dist.append((0 if eh_traco_anc else 1, w["id"]))
+            elif w.get("tipo_ataque") == "corpo_a_corpo":
+                maos_w = str(w.get("maos") or "1")
+                if (usa_escudo_efetivo or estilo == "duas_armas") and maos_w == "2":
+                    continue
+                prior_agil = 0 if (estilo == "duas_armas" and "agil" in tracos_w) else 1
+                anc_cc.append((0 if eh_traco_anc else 1, prior_agil, w["id"]))
+        if anc_dist:
+            anc_dist.sort(key=lambda x: x[0])
+            ids_dist_anc = [wid for _, wid in anc_dist]
+            armas_dist_ids = ids_dist_anc + [x for x in armas_dist_ids if x not in ids_dist_anc]
+        if anc_cc:
+            anc_cc.sort(key=lambda x: (x[0], x[1]))
+            ids_cc_anc = [wid for _, _, wid in anc_cc]
+            armas_cc_ids = ids_cc_anc + [x for x in armas_cc_ids if x not in ids_cc_anc]
 
     # ------------------------------------------------------------------
     # 1ª Passada — Compras Manuais (deduzindo diretamente de 1.500 pc)
@@ -584,8 +749,48 @@ def comprar_equipamentos(
         )
 
     # ------------------------------------------------------------------
-    # 2ª Passada — Categorias deixadas em Procedural usam o saldo restante
+    # 2ª Passada — Categorias deixadas em Procedural usam até 90% (reservando >= 150 pc)
+    # e mantêm o personagem dentro do limite leve (<= sobrecarregado_lim)
     # ------------------------------------------------------------------
+    bonus_carga = 2 if (efeitos_talentos or {}).get("carregador_robusto") else 0
+    sobrecarregado_lim = 5 + mod_for + bonus_carga
+    maximo_lim = 10 + mod_for + bonus_carga
+
+    def _saldo_procedural_disp() -> int:
+        return max(0, saldo_pc - RESERVA_MOEDAS_MIN_PC)
+
+    def _itens_fixos_gratuitos() -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
+        vest_f: list[dict[str, Any]] = []
+        prep_f: list[dict[str, Any]] = []
+        out_f: list[dict[str, Any]] = []
+        if ancestralidade["id"] == "anao":
+            adaga_cla = dados.armas["adaga_de_cla"]
+            vest_f.append({"nome": adaga_cla["nome"], "volume_valor": float(adaga_cla.get("volume_valor") or 0.0)})
+        if classe["id"] == "mago":
+            out_f.append({"nome": "Grimório Inicial (Classe)", "volume_valor": 0.1})
+        if classe["id"] == "alquimista":
+            prep_f.append({"nome": "Livro de Fórmulas e Reagentes Infundidos", "volume_valor": 0.1})
+        for item_loja, qtd_m in variados_manuais_reg:
+            vol_tot = round(float(item_loja["volume_valor"]) * qtd_m, 2)
+            alvo = vest_f if item_loja["eh_municao"] else out_f
+            alvo.append({"nome": item_loja["nome"], "volume_valor": vol_tot})
+        return vest_f, prep_f, out_f
+
+    def _vol_simulando(
+        arm_cand: dict[str, Any],
+        armas_cand: list[dict[str, Any]],
+        esc_cand: dict[str, Any] | None,
+    ) -> int:
+        vest_s, prep_s, out_s = _itens_fixos_gratuitos()
+        if arm_cand["id"] != "nenhuma_armadura":
+            vest_s.append({"nome": arm_cand["nome"], "volume_valor": float(arm_cand.get("volume_valor") or 0.0)})
+        for w_c in armas_cand:
+            vest_s.append({"nome": w_c["nome"], "volume_valor": float(w_c.get("volume_valor") or 0.0)})
+        if esc_cand:
+            vest_s.append({"nome": esc_cand["nome"], "volume_valor": float(esc_cand.get("volume_valor") or 0.0)})
+        vol_tot, _ = _calcular_volume_efetivo(vest_s, prep_s, out_s)
+        return vol_tot
+
     reserva_kit = 0 if variados_manual else 70
     if armas_cc_manual and armas_dist_manual:
         reserva_arma = 0
@@ -616,6 +821,7 @@ def comprar_equipamentos(
 
     # 1. Armadura procedural (se não escolhida manualmente)
     if not armadura_manual:
+        ja_sobrecarregado_manual = _vol_simulando(armadura_escolhida, armas_compradas, escudo_escolhido) > sobrecarregado_lim
         for aid in eq_rec["armaduras_ids"]:
             arm = dados.armaduras.get(aid)
             if not arm:
@@ -626,17 +832,23 @@ def comprar_equipamentos(
             if nao_metal and normalizar(arm.get("material")) == "metal":
                 continue
             preco = arm.get("preco_pc") or 0
-            if saldo_pc - preco >= (reserva_arma + reserva_escudo + reserva_kit):
-                armadura_escolhida = arm
-                saldo_pc -= preco
-                break
+            if _saldo_procedural_disp() - preco < (reserva_arma + reserva_escudo + reserva_kit):
+                continue
+            if not ja_sobrecarregado_manual and _vol_simulando(arm, armas_compradas, escudo_escolhido) > sobrecarregado_lim:
+                continue
+            armadura_escolhida = arm
+            saldo_pc -= preco
+            break
 
-        # Se não couber nenhuma com reserva de kit, ainda assim garante armadura acessível
+        # Se não couber nenhuma com reserva de kit/peso, tenta armadura leve acessível
         if armadura_escolhida["id"] == "nenhuma_armadura" and defesas["leve"] != "destreinado":
             for fallback_id in ("roupa_de_explorador", "couro", "armadura_acolchoada"):
                 arm = dados.armaduras[fallback_id]
                 preco = arm.get("preco_pc") or 0
-                if preco <= saldo_pc:
+                if preco <= _saldo_procedural_disp() and (
+                    ja_sobrecarregado_manual
+                    or _vol_simulando(arm, armas_compradas, escudo_escolhido) <= sobrecarregado_lim
+                ):
                     armadura_escolhida = arm
                     saldo_pc -= preco
                     break
@@ -656,7 +868,10 @@ def comprar_equipamentos(
         if grau_arma(w, armas_prof) == "destreinado":
             return False
         preco = w.get("preco_pc") or 0
-        if preco > saldo_pc:
+        if preco > 0 and preco > _saldo_procedural_disp():
+            return False
+        ja_sobre = _vol_simulando(armadura_escolhida, armas_compradas, escudo_escolhido) > sobrecarregado_lim
+        if not ja_sobre and _vol_simulando(armadura_escolhida, [*armas_compradas, w], escudo_escolhido) > sobrecarregado_lim:
             return False
         armas_compradas.append(w)
         saldo_pc -= preco
@@ -700,7 +915,7 @@ def comprar_equipamentos(
         if not armas_compradas:
             candidatas_gratuitas: list[str] = []
             if not armas_cc_manual:
-                candidatas_gratuitas.extend(("cajado", "clava"))
+                candidatas_gratuitas.extend(("clava", "cajado"))
             if not armas_dist_manual:
                 candidatas_gratuitas.append("funda")
             for gratuita in candidatas_gratuitas:
@@ -712,6 +927,7 @@ def comprar_equipamentos(
         w.get("tipo_ataque") == "corpo_a_corpo" and str(w.get("maos")) == "2" for w in armas_compradas
     )
     if not escudo_manual and usa_escudo_efetivo and not empunha_cc_2m:
+        ja_sobre_esc = _vol_simulando(armadura_escolhida, armas_compradas, None) > sobrecarregado_lim
         for sid in eq_rec["escudos_ids"]:
             esc = dados.escudos.get(sid)
             if not esc:
@@ -719,10 +935,13 @@ def comprar_equipamentos(
             if nao_metal and sid in ("broquel", "escudo_de_aco", "escudo_de_corpo"):
                 continue
             preco = esc.get("preco_pc") or 0
-            if preco <= saldo_pc:
-                escudo_escolhido = esc
-                saldo_pc -= preco
-                break
+            if preco > _saldo_procedural_disp():
+                continue
+            if not ja_sobre_esc and _vol_simulando(armadura_escolhida, armas_compradas, esc) > sobrecarregado_lim:
+                continue
+            escudo_escolhido = esc
+            saldo_pc -= preco
+            break
 
     # 4. Itens Vestidos, Preparados e Outros Itens
     itens_vestidos: list[dict[str, Any]] = []
@@ -765,8 +984,18 @@ def comprar_equipamentos(
         if not variados_manual:
             mun = _municao_para_arma(dados, w)
             if mun:
-                # 2 lotes (20 munições) quando houver saldo, senão 1 lote
-                lotes = 2 if (mun["preco_pc"] * 2) <= saldo_pc else (1 if mun["preco_pc"] <= saldo_pc else 0)
+                # 2 lotes (20 munições) quando houver saldo dentro dos 90% e peso leve, senão 1 lote
+                disp_m = _saldo_procedural_disp()
+                vol_atual_m = _calcular_volume_efetivo(itens_vestidos, itens_preparados, outros_itens)[0]
+                lotes = 0
+                for cand_lotes in (2, 1):
+                    if mun["preco_pc"] * cand_lotes > disp_m:
+                        continue
+                    sim_m = {"nome": mun["nome"], "volume_valor": round(0.1 * cand_lotes, 2)}
+                    vol_c = _calcular_volume_efetivo([*itens_vestidos, sim_m], itens_preparados, outros_itens)[0]
+                    if vol_atual_m > sobrecarregado_lim or vol_c <= sobrecarregado_lim:
+                        lotes = cand_lotes
+                        break
                 if lotes > 0:
                     saldo_pc -= mun["preco_pc"] * lotes
                     qtd_mun = lotes * mun["quantidade"]
@@ -848,66 +1077,85 @@ def comprar_equipamentos(
                 }
             )
     else:
-        # Ferramentas essenciais da classe (procedural)
-        sub_id = subclasse["id"] if subclasse else ""
-        for fid in _ferramenta_essencial(classe["id"], conceito["id"], sub_id):
-            fitem = dados.itens_gerais.get(fid)
-            if fitem and (fitem.get("preco_pc") or 0) <= saldo_pc:
-                preco_f = int(fitem.get("preco_pc") or 0)
-                saldo_pc -= preco_f
-                registrar_item(
-                    itens_preparados,
-                    _formatar_item_geral_inventario(fitem, 1),
-                    int(fitem.get("quantidade_pacote") or 1),
-                    fitem["volume"],
-                    float(fitem.get("volume_valor") or 0.0),
-                    preco_f,
-                )
-                variados_aplicados.append(
-                    {"id": fid, "nome": fitem["nome"], "quantidade": 1, "preco_pc": preco_f}
-                )
+        ids_variados_comprados: set[str] = set()
+        ja_sobre_var = _calcular_volume_efetivo(itens_vestidos, itens_preparados, outros_itens)[0] > sobrecarregado_lim
 
-        # Kit de aventureiro (mochila + bens básicos)
-        kit_av = dados.itens_gerais.get("kit_de_aventureiro")
-        if kit_av and kit_av["preco_pc"] <= saldo_pc:
-            preco_k = int(kit_av["preco_pc"])
-            saldo_pc -= preco_k
+        def _tentar_comprar_variado_proc(
+            iid: str,
+            qtd: int = 1,
+            *,
+            destino: list[dict[str, Any]] | None = None,
+        ) -> bool:
+            nonlocal saldo_pc
+            if iid in ids_variados_comprados:
+                return False
+            gitem = dados.itens_gerais.get(iid)
+            if not gitem:
+                return False
+            preco_unit = int(gitem.get("preco_pc") or 0)
+            preco_tot = preco_unit * qtd
+            if preco_tot > _saldo_procedural_disp():
+                return False
+
+            vol_unit = float(gitem.get("volume_valor") or 0.0)
+            vol_tot = round(vol_unit * qtd, 2)
+            lista_alvo = outros_itens if destino is None else destino
+            sim_item = {"nome": gitem["nome"], "volume_valor": vol_tot}
+            if not ja_sobre_var:
+                vol_sim = _calcular_volume_efetivo(
+                    itens_vestidos,
+                    [*itens_preparados, sim_item] if lista_alvo is itens_preparados else itens_preparados,
+                    [*outros_itens, sim_item] if lista_alvo is outros_itens else outros_itens,
+                )[0]
+                if vol_sim > sobrecarregado_lim:
+                    return False
+
+            if qtd == 1:
+                vol_str = str(gitem["volume"])
+            elif 0.05 <= vol_unit < 1.0:
+                vol_str = f"{qtd}L"
+            elif vol_tot == 0:
+                vol_str = "—"
+            else:
+                vol_str = str(int(round(vol_tot)))
+
+            saldo_pc -= preco_tot
+            qtd_ef = qtd * int(gitem.get("quantidade_pacote") or 1)
             registrar_item(
-                outros_itens,
-                _formatar_item_geral_inventario(kit_av, 1),
-                1,
-                kit_av["volume"],
-                float(kit_av.get("volume_valor") or 0.0),
-                preco_k,
+                lista_alvo,
+                _formatar_item_geral_inventario(gitem, qtd_ef),
+                qtd_ef,
+                vol_str,
+                vol_tot,
+                preco_tot,
             )
             variados_aplicados.append(
-                {"id": "kit_de_aventureiro", "nome": kit_av["nome"], "quantidade": 1, "preco_pc": preco_k}
+                {"id": iid, "nome": gitem["nome"], "quantidade": qtd, "preco_pc": preco_tot}
             )
+            ids_variados_comprados.add(iid)
+            return True
 
-    int_vest, lev_vest = _somar_volumes(itens_vestidos + itens_preparados)
-    int_outros, lev_outros = _somar_volumes(outros_itens)
-    tem_mochila = any(
-        "kit de aventureiro" in normalizar(it["nome"]) or "mochila" in normalizar(it["nome"])
-        for it in outros_itens
+        # 4.1 Kit de aventureiro primeiro (libera a isenção de 2 Volumes da mochila)
+        if not _tentar_comprar_variado_proc("kit_de_aventureiro", 1, destino=outros_itens):
+            for fallback_viagem in ("mochila", "cantil", "racoes_1_semana", "pederneira_e_isqueiro"):
+                _tentar_comprar_variado_proc(fallback_viagem, 1, destino=outros_itens)
+
+        # 4.2 Ferramentas essenciais da classe/conceito/biografia
+        sub_id = subclasse["id"] if subclasse else ""
+        bio_id = biografia["id"] if biografia else ""
+        for fid in _ferramenta_essencial(classe["id"], conceito["id"], sub_id, bio_id):
+            _tentar_comprar_variado_proc(fid, 1, destino=itens_preparados)
+
+        # 4.3 Equipamentos de viagem e utilidades temáticas até ~90% do orçamento (sem sobrecarga)
+        for iid_v, qtd_v in _pool_equipamentos_viagem(classe["id"], conceito, bio_id, bool(escudo_escolhido)):
+            if _saldo_procedural_disp() <= 0:
+                break
+            dest_v = itens_preparados if iid_v in ("bandoleira", "ferramentas_de_curandeiro") else outros_itens
+            _tentar_comprar_variado_proc(iid_v, qtd_v, destino=dest_v)
+
+    volume_total, volume_leves_soltos = _calcular_volume_efetivo(
+        itens_vestidos, itens_preparados, outros_itens
     )
-    if tem_mochila:
-        if int_outros >= 2:
-            int_outros_efetivo = int_outros - 2
-            lev_outros_efetivo = lev_outros
-        else:
-            folga_leves = (2 - int_outros) * 10
-            int_outros_efetivo = 0
-            lev_outros_efetivo = max(0, lev_outros - folga_leves)
-    else:
-        int_outros_efetivo, lev_outros_efetivo = int_outros, lev_outros
-
-    soma_inteiros = int_vest + int_outros_efetivo
-    soma_leves = lev_vest + lev_outros_efetivo
-    volume_total = soma_inteiros + (soma_leves // 10)
-
-    bonus_carga = 2 if (efeitos_talentos or {}).get("carregador_robusto") else 0
-    sobrecarregado_lim = 5 + mod_for + bonus_carga
-    maximo_lim = 10 + mod_for + bonus_carga
 
     return {
         "armadura": armadura_escolhida,
@@ -918,7 +1166,7 @@ def comprar_equipamentos(
         "itens_preparados": itens_preparados,
         "outros_itens": outros_itens,
         "volume_total": float(volume_total),
-        "volume_leves_soltos": soma_leves % 10,
+        "volume_leves_soltos": volume_leves_soltos,
         "volume_sobrecarregado": sobrecarregado_lim,
         "volume_maximo": maximo_lim,
         "esta_sobrecarregado": volume_total > sobrecarregado_lim,

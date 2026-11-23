@@ -135,6 +135,11 @@ def main() -> None:
             dados=dados,
         )
         verificar_contrato_e_matematica(res, dados)
+        assert res["meta_geracao"]["saldo_pc"] >= 150, f"Reserva de 10% violada em {con['id']}: {res['meta_geracao']['saldo_pc']}"
+        assert res["meta_geracao"]["gasto_pc"] <= 1350
+        assert res["meta_geracao"]["observacoes_combate"]["esta_sobrecarregado"] is False, (
+            f"Sobrecarga procedural em {con['id']}: {res['ficha']['inventario']['volume_total']}"
+        )
 
     # ------------------------------------------------------------------
     # 3. Casos especiais de ancestralidade/herança e biografia manual
@@ -154,6 +159,11 @@ def main() -> None:
     for idx, (aid, hid, cid, conid, bid) in enumerate(casos_especiais):
         res = gerar_personagem(aid, hid, cid, conid, biografia_id=bid, seed=500 + idx, dados=dados)
         verificar_contrato_e_matematica(res, dados)
+        assert res["meta_geracao"]["saldo_pc"] >= 150, f"Reserva de 10% violada em {con['id']}: {res['meta_geracao']['saldo_pc']}"
+        assert res["meta_geracao"]["gasto_pc"] <= 1350
+        assert res["meta_geracao"]["observacoes_combate"]["esta_sobrecarregado"] is False, (
+            f"Sobrecarga procedural em {con['id']}: {res['ficha']['inventario']['volume_total']}"
+        )
         if bid:
             assert not res["meta_geracao"]["biografia_procedural"]
             assert res["meta_geracao"]["biografia_id"] == bid

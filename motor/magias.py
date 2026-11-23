@@ -149,6 +149,46 @@ def _pontuar_magia(
     return score
 
 
+def _escolher_truque_por_conceito(
+    pool: list[dict[str, Any]],
+    conceito: dict[str, Any],
+    tradicao_alvo: str,
+    rng: random.Random | None,
+) -> dict[str, Any] | None:
+    """Seleciona um truque do pool pontuando pela afinidade temática com o conceito."""
+    if not pool:
+        return None
+    conj_rec = (
+        (conceito.get("conjuracao_por_tradicao") or {}).get(tradicao_alvo)
+        or conceito.get("conjuracao_recomendada")
+        or {}
+    )
+    truques_pri = set(conj_rec.get("truques_prioritarios", []))
+    tracos_pri = list(conj_rec.get("tracos_prioritarios", []))
+    escolas_pri = list(conj_rec.get("escolas_prioritarias", []))
+    keywords_anc = list(
+        (conceito.get("talentos_recomendados") or {}).get("tracos_ancestralidade_afinidade", [])
+    )
+
+    avaliados: list[tuple[int, dict[str, Any]]] = []
+    for m in pool:
+        pts = 10 if m["id"] in truques_pri else 0
+        pts += _pontuar_magia(m, tracos_pri, escolas_pri)
+        texto_m = normalizar(
+            f"{m['nome']} {m.get('resumo_lista', '')} {m.get('descricao', '')} {' '.join(m.get('tracos', []))}"
+        )
+        for kw in keywords_anc:
+            kw_norm = normalizar(kw)
+            if kw_norm and kw_norm in texto_m:
+                pts += 2
+        avaliados.append((pts, m))
+
+    avaliados.sort(key=lambda par: par[0], reverse=True)
+    topo = avaliados[0][0]
+    elegiveis = [m for pts, m in avaliados if pts >= topo - 2][:4]
+    return rng.choice(elegiveis) if (rng and len(elegiveis) > 1) else elegiveis[0]
+
+
 def _selecionar_magias_por_nivel(
     dados: BaseDados,
     tradicao: str,
@@ -301,14 +341,14 @@ def gerar_conjuracao(
             tradicao_inata = "arcana"
     elif heranca["id"] == "gnomo_tocado_pelas_fadas":
         pool = [m for m in dados.magias.values() if "primal" in m.get("tradicoes", []) and "Truque Mágico" in m.get("tracos", [])]
-        escolhido = rng.choice(pool[:6]) if (rng and pool) else (pool[0] if pool else None)
+        escolhido = _escolher_truque_por_conceito(pool, conceito, "primal", rng)
         if escolhido:
             inatas.append(dict(escolhido, frequencia="À vontade (Fada)"))
             tradicao_inata = "primal"
     elif heranca["id"] == "gnomo_manancial":
         trad_pref = conj_rec.get("tradicao") if conj_rec.get("tradicao") in {"arcana", "divina", "ocultista"} else "arcana"
         pool = [m for m in dados.magias.values() if trad_pref in m.get("tradicoes", []) and "Truque Mágico" in m.get("tracos", [])]
-        escolhido = rng.choice(pool[:6]) if (rng and pool) else (pool[0] if pool else None)
+        escolhido = _escolher_truque_por_conceito(pool, conceito, trad_pref, rng)
         if escolhido:
             inatas.append(dict(escolhido, frequencia="À vontade (Herança)"))
             tradicao_inata = trad_pref
@@ -319,7 +359,7 @@ def gerar_conjuracao(
             m for m in dados.magias.values()
             if "arcana" in m.get("tradicoes", []) and "Truque Mágico" in m.get("tracos", []) and m["id"] not in inatas_ids
         ]
-        escolhido_ext = rng.choice(pool_ext[:8]) if (rng and pool_ext) else (pool_ext[0] if pool_ext else None)
+        escolhido_ext = _escolher_truque_por_conceito(pool_ext, conceito, "arcana", rng)
         if escolhido_ext:
             inatas.append(dict(escolhido_ext, frequencia="À vontade (Talento Ancestral)"))
             tradicao_inata = tradicao_inata or "arcana"
@@ -328,7 +368,7 @@ def gerar_conjuracao(
             m for m in dados.magias.values()
             if "primal" in m.get("tradicoes", []) and "Truque Mágico" in m.get("tracos", []) and m["id"] not in inatas_ids
         ]
-        escolhido_pm = rng.choice(pool_pm[:8]) if (rng and pool_pm) else (pool_pm[0] if pool_pm else None)
+        escolhido_pm = _escolher_truque_por_conceito(pool_pm, conceito, "primal", rng)
         if escolhido_pm:
             inatas.append(dict(escolhido_pm, frequencia="À vontade (Talento Ancestral)"))
             tradicao_inata = tradicao_inata or "primal"
@@ -555,9 +595,10 @@ def gerar_conjuracao(
                 and m["id"] not in ids_truques_usados
             ]
             if pool_adapt:
-                adaptado = rng.choice(pool_adapt[:8]) if rng else pool_adapt[0]
-                truques_selecionados[-1] = adaptado
-                ids_truques_usados.add(adaptado["id"])
+                adaptado = _escolher_truque_por_conceito(pool_adapt, conceito, tradicao, rng)
+                if adaptado:
+                    truques_selecionados[-1] = adaptado
+                    ids_truques_usados.add(adaptado["id"])
 
         ids_magias_usados: set[str] = set()
         magias_ordem = [*magias_n1_fixas_sub, *magias_n1_manuais_aplicadas, *magias_n1_pri]

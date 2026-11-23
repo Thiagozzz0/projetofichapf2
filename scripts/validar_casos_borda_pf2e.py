@@ -800,9 +800,10 @@ def test_compra_manual_e_hibrida_equipamentos() -> None:
         seed=8,
         dados=db,
     )
-    # Montante manual é 2M -> escudo procedural não é comprado; distância/variados procedurais compram Azagaia (10 pc) + Kit de Aventureiro (70 pc)
-    assert guerr_hib["meta_geracao"]["gasto_pc"] == 880
-    assert guerr_hib["meta_geracao"]["saldo_pc"] == 620
+    # Montante manual é 2M -> escudo procedural não é comprado; distância/variados procedurais compram Azagaia + Kit de Aventureiro + itens de viagem dentro dos 90% (saldo >= 150 pc)
+    assert 880 <= guerr_hib["meta_geracao"]["gasto_pc"] <= 1350
+    assert guerr_hib["meta_geracao"]["saldo_pc"] >= 150
+    assert guerr_hib["meta_geracao"]["observacoes_combate"]["esta_sobrecarregado"] is False
     assert guerr_hib["ficha"]["classe_armadura"]["escudo"]["nome"] == ""
     assert any("Kit de aventureiro" in it["nome"] for it in guerr_hib["ficha"]["inventario"]["outros_itens"])
 
@@ -1099,6 +1100,149 @@ def test_selecao_manual_e_aleatoria_magias() -> None:
             pass
 
 
+def test_aderencia_procedural_nortes() -> None:
+    db = carregar_dados()
+
+    # 1. Magia inata de Herança (Gnomo Tocado pelas Fadas) e Truque Mágico Adaptado guiados pelo Conceito
+    gn_fada = gerar_personagem(
+        "gnomo", "gnomo_tocado_pelas_fadas", "druida", "druida_furia_elementos",
+        seed=11,
+        dados=db,
+    )
+    inatas_gn = gn_fada["ficha"]["conjuracao"]["magias_inatas"]
+    assert inatas_gn and inatas_gn[0]["nome"] in {
+        "Arco Elétrico", "Produzir Chama", "Raio de Gelo", "Emaranhapé", "Detectar Magia"
+    }
+
+    hum_adap = gerar_personagem(
+        "humano", "heranca_versatil", "mago", "mago_evocador_artilharia",
+        escolhas_talentos={"modo": "personalizado", "ancestralidade_id": "truque_magico_adaptado"},
+        seed=11,
+        dados=db,
+    )
+    truques_hum = [t["nome"] for t in hum_adap["ficha"]["conjuracao"]["truques_magicos"] if t.get("nome")]
+    assert len(truques_hum) == 5
+
+    # 2. Ferramentas temáticas da Biografia no modo procedural sem estourar 15 po
+    p_med = gerar_personagem(
+        "humano", "heranca_versatil", "monge", "monge_artista_posturas",
+        biografia_id="medico_de_campo",
+        seed=4,
+        dados=db,
+    )
+    assert p_med["meta_geracao"]["saldo_pc"] >= 0
+    assert any(
+        "Ferramentas de curandeiro" in it["nome"]
+        for it in p_med["ficha"]["inventario"]["itens_preparados"]
+    )
+
+    m_art = gerar_personagem(
+        "humano", "heranca_versatil", "monge", "monge_artista_posturas",
+        biografia_id="artesao",
+        seed=4,
+        dados=db,
+    )
+    assert 150 <= m_art["meta_geracao"]["saldo_pc"]
+    assert any(
+        "Ferramentas de artesão" in it["nome"]
+        for it in m_art["ficha"]["inventario"]["itens_preparados"]
+    )
+
+    # 3. Arma de Familiaridade Ancestral priorizada quando compatível e proficiente
+    an_arm = gerar_personagem(
+        "anao", "anao_da_forja", "guerreiro", "guerreiro_colosso_demolidor",
+        escolhas_talentos={"modo": "personalizado", "ancestralidade_id": "familiaridade_com_armas_enanicas"},
+        seed=6,
+        dados=db,
+    )
+    armas_an = [g["arma"] for g in an_arm["ficha"]["golpes_corpo_a_corpo"]]
+    assert "Machado de guerra enânico" in armas_an
+    assert an_arm["meta_geracao"]["saldo_pc"] >= 0
+
+    el_arm = gerar_personagem(
+        "elfo", "elfo_vidente", "guerreiro", "guerreiro_tempestade_laminas",
+        escolhas_talentos={"modo": "personalizado", "ancestralidade_id": "familiaridade_com_armas_elficas"},
+        seed=6,
+        dados=db,
+    )
+    armas_el = [g["arma"] for g in el_arm["ficha"]["golpes_corpo_a_corpo"]]
+    assert any(n in armas_el for n in ("Lâmina curva élfica", "Espada longa", "Rapieira"))
+
+    # 4. Companheiro Animal e Familiar coerentes com Conceito, Ancestralidade e Biografia
+    comp_an = gerar_personagem(
+        "anao", "anao_das_rochas", "patrulheiro", "patrulheiro_mestre_feras",
+        biografia_id="mineiro",
+        escolhas_talentos={"modo": "personalizado", "classe_ids": ["companheiro_animal"]},
+        seed=3,
+        dados=db,
+    )
+    comp = comp_an["meta_geracao"]["companheiro_ou_familiar"]
+    assert comp is not None and comp["id"] in {"texugo", "urso", "lobo"}
+
+    fam_mar = gerar_personagem(
+        "elfo", "elfo_vidente", "mago", "mago_ilusionista_enganador",
+        biografia_id="marinheiro",
+        seed=3,
+        dados=db,
+    )
+    fam = fam_mar["meta_geracao"]["companheiro_ou_familiar"]
+    assert fam is not None and fam["habilidades_diarias_max"] == 3
+    fam_hids = {h["id"] for h in fam["habilidades_selecionadas"]}
+    assert "fala" in fam_hids or "voador" in fam_hids or "anfibio" in fam_hids
+
+
+def test_orcamento_90_peso_leve_e_viagem_procedural() -> None:
+    db = carregar_dados()
+
+    # 1. Procedural: reserva >= 10% em moedas (150 pc), gasta ~90% (<= 1350 pc), sem sobrecarga e com itens de viagem
+    arquetipos = [
+        ("gnomo", "gnomo_tocado_pelas_fadas", "mago", "mago_evocador_artilharia"),  # FOR baixa (mod -1 -> limite 4)
+        ("humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor"),
+        ("goblin", "goblin_inquebravel", "ladino", "ladino_sombra_silenciosa"),
+        ("elfo", "elfo_vidente", "patrulheiro", "patrulheiro_atirador_precisao"),
+        ("anao", "anao_da_forja", "clerigo", "clerigo_arauto_guerra"),
+    ]
+    for aid, hid, cid, conid in arquetipos:
+        r = gerar_personagem(aid, hid, cid, conid, seed=77, dados=db)
+        m = r["meta_geracao"]
+        inv = r["ficha"]["inventario"]
+        assert 1050 <= m["gasto_pc"] <= 1350, f"Gasto fora da faixa ~90% em {conid}: {m['gasto_pc']}"
+        assert m["saldo_pc"] >= 150, f"Saldo abaixo de 10% em {conid}: {m['saldo_pc']}"
+        assert m["observacoes_combate"]["esta_sobrecarregado"] is False
+        assert inv["volume_total"] <= inv["volume_sobrecarregado"]
+
+        nomes_inv = " | ".join(
+            it["nome"] for it in (inv["itens_vestidos"] + inv["itens_preparados"] + inv["outros_itens"])
+        )
+        assert "Kit de aventureiro" in nomes_inv
+        assert any(
+            termo in nomes_inv
+            for termo in ("Tenda individual", "Roupas de inverno", "Lanterna coberta", "Bússola", "Rações")
+        )
+
+    # 2. Manual: jogador pode gastar > 90% do orçamento e ficar sobrecarregado se desejar
+    r_man = gerar_personagem(
+        "gnomo", "gnomo_tocado_pelas_fadas", "mago", "mago_evocador_artilharia",
+        escolhas_equipamentos={
+            "modo": "personalizado",
+            "armadura_id": "couro_batido",   # 300 pc (Vol 1)
+            "escudo_id": "escudo_de_aco",    # 200 pc (Vol 1)
+            "armas_corpo_a_corpo_ids": ["cajado"],  # 0 pc (Vol 1)
+            "armas_distancia_ids": [],
+            "equipamentos_variados": [
+                {"id": "utensilios_de_cozinha", "quantidade": 3},   # 300 pc (Vol 6)
+                {"id": "ferramentas_de_artesao", "quantidade": 1},  # 400 pc (Vol 2)
+                {"id": "corda", "quantidade": 5},                   # 250 pc (Vol 5L)
+            ],
+        },
+        seed=1,
+        dados=db,
+    )
+    assert r_man["meta_geracao"]["gasto_pc"] == 1450
+    assert r_man["meta_geracao"]["saldo_pc"] == 50
+    assert r_man["meta_geracao"]["observacoes_combate"]["esta_sobrecarregado"] is True
+
+
 def main() -> None:
     test_ca_limite_destreza_e_sem_armadura()
     test_penalidade_armadura_barulhenta_flexivel_e_ferro_desimpedido()
@@ -1116,6 +1260,8 @@ def main() -> None:
     test_curadoria_e_selecao_manual_talentos()
     test_selecao_manual_e_regras_pericias()
     test_selecao_manual_e_aleatoria_magias()
+    test_aderencia_procedural_nortes()
+    test_orcamento_90_peso_leve_e_viagem_procedural()
     print("SUCESSO TOTAL — Todos os testes de casos de borda PF2E passaram!")
 
 

@@ -28,26 +28,91 @@ def _mod_chave_familiar(classe_id: str, modificadores_mestre: dict[str, int]) ->
     return int(modificadores_mestre.get(chave, 0))
 
 
+def _pontuar_companheiro(
+    tipo: dict[str, Any],
+    classe_id: str,
+    conceito: dict[str, Any],
+    ancestralidade: dict[str, Any] | None,
+    biografia: dict[str, Any] | None,
+) -> int:
+    tid = tipo["id"]
+    cid = conceito["id"]
+    pts = 0
+
+    if "montado" in cid or "cavaleiro" in cid:
+        if tid == "cavalo":
+            pts += 30
+    elif classe_id == "patrulheiro" and tid in {"lobo", "passaro", "felino", "urso"}:
+        pts += 4
+
+    pericias_pri = list(conceito.get("pericias_prioritarias") or [])
+    per_comp = normalizar(tipo.get("pericia", ""))
+    if per_comp and per_comp in {normalizar(p) for p in pericias_pri[:4]}:
+        pts += 10
+
+    eq_rec = conceito.get("equipamento_recomendado") or {}
+    estilo = eq_rec.get("estilo_empunhadura", "")
+    if estilo == "distancia" and tid in {"passaro", "lobo", "felino"}:
+        pts += 6
+    if (estilo == "duas_armas" or "furtividade" in pericias_pri[:3]) and tid in {"felino", "serpente", "dromaeossauro"}:
+        pts += 6
+    if (eq_rec.get("usa_escudo") or "intimidacao" in pericias_pri[:3]) and tid in {"urso", "texugo", "lobo"}:
+        pts += 6
+
+    keywords = [
+        normalizar(k)
+        for k in (conceito.get("talentos_recomendados") or {}).get("tracos_ancestralidade_afinidade", [])
+    ]
+    texto_comp = normalizar(
+        f"{tipo['nome']} {tipo.get('descricao', '')} {tipo.get('pericia', '')} {tipo.get('beneficio_de_suporte', '')}"
+    )
+    pts += sum(3 for kw in keywords if kw and kw in texto_comp)
+
+    anc_id = ancestralidade["id"] if ancestralidade else ""
+    afinidade_anc = {
+        "anao": {"texugo": 4, "urso": 4},
+        "elfo": {"passaro": 4, "felino": 4, "lobo": 4},
+        "gnomo": {"texugo": 4, "passaro": 4, "serpente": 4},
+        "goblin": {"lobo": 4, "serpente": 4, "dromaeossauro": 4},
+        "halfling": {"lobo": 4, "felino": 4, "passaro": 4},
+        "humano": {"cavalo": 2, "lobo": 2, "urso": 2},
+    }
+    pts += afinidade_anc.get(anc_id, {}).get(tid, 0)
+
+    bio_id = biografia["id"] if biografia else ""
+    afinidade_bio = {
+        "encantador_de_animais": {"lobo": 4, "passaro": 4, "felino": 4},
+        "cacador": {"lobo": 4, "passaro": 4, "felino": 4},
+        "batedor": {"lobo": 4, "passaro": 4, "felino": 4},
+        "nobre": {"cavalo": 4},
+        "soldado": {"cavalo": 4},
+        "mineiro": {"texugo": 4, "urso": 4},
+        "eremita": {"texugo": 4, "urso": 4},
+    }
+    pts += afinidade_bio.get(bio_id, {}).get(tid, 0)
+    return pts
+
+
 def _gerar_companheiro_animal(
     cf: dict[str, Any],
     classe_id: str,
     conceito: dict[str, Any],
     nivel: int,
     rng: random.Random | None,
+    ancestralidade: dict[str, Any] | None = None,
+    biografia: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     comp_root = cf["companheiros_animais"]
     estagio_jovem = comp_root["estagios_evolucao"][0]
     tipos = comp_root["tipos_de_companheiro"]
-    cid = conceito["id"]
 
-    if "montado" in cid or "cavaleiro" in cid:
-        preferidos = ["cavalo"]
-    elif classe_id == "patrulheiro":
-        preferidos = ["lobo", "passaro", "felino", "urso"]
-    else:
-        preferidos = ["lobo", "urso", "felino", "passaro", "texugo", "dromaeossauro", "serpente"]
-
-    candidatos = [t for t in tipos if t["id"] in preferidos] or tipos
+    avaliados = [
+        (_pontuar_companheiro(t, classe_id, conceito, ancestralidade, biografia), t)
+        for t in tipos
+    ]
+    avaliados.sort(key=lambda par: par[0], reverse=True)
+    topo = avaliados[0][0]
+    candidatos = [t for pts, t in avaliados if pts >= topo - 3][:3] or tipos
     escolhido = rng.choice(candidatos) if (rng and len(candidatos) > 1) else candidatos[0]
 
     mods = escolhido["modificadores_atributo"]
@@ -123,6 +188,9 @@ def _gerar_familiar(
     modificadores_mestre: dict[str, int],
     tese_arcana_id: str | None,
     nivel: int,
+    conceito: dict[str, Any] | None = None,
+    ancestralidade: dict[str, Any] | None = None,
+    biografia: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     fam_root = cf["familiares"]
     est = fam_root["estatisticas_base"]
@@ -145,6 +213,36 @@ def _gerar_familiar(
     else:
         especie = "Familiar Místico"
         preferidas = ["fala", "vinculo_vital", "visao_no_escuro"]
+
+    # Complementa prioridades de habilidades conforme Conceito, Ancestralidade e Biografia
+    extras_afinidade: list[str] = []
+    if conceito:
+        per_pri = {normalizar(p) for p in (conceito.get("pericias_prioritarias") or [])[:4]}
+        cid_con = conceito["id"]
+        if "furtividade" in per_pri or "ladroagem" in per_pri or "batedor" in cid_con or "sabotador" in cid_con:
+            extras_afinidade.extend(["visao_no_escuro", "faro", "voador", "escalador"])
+        if any(p in per_pri for p in ("diplomacia", "enganacao", "performance", "intimidacao")) or "ilusionista" in cid_con:
+            extras_afinidade.extend(["fala", "destreza_manual"])
+        if any(k in cid_con for k in ("artilharia", "evocador", "duelista")):
+            extras_afinidade.extend(["foco_de_familiar", "conexao_de_truque_magico", "voador"])
+    if ancestralidade:
+        anc_id = ancestralidade["id"]
+        if anc_id in ("anao", "gnomo"):
+            extras_afinidade.extend(["escavador", "visao_no_escuro"])
+        elif anc_id == "elfo":
+            extras_afinidade.extend(["voador", "movimento_rapido"])
+    if biografia:
+        bio_id = biografia["id"]
+        if bio_id == "marinheiro":
+            extras_afinidade.append("anfibio")
+        elif bio_id == "mineiro":
+            extras_afinidade.append("escavador")
+        elif bio_id in ("batedor", "detetive"):
+            extras_afinidade.append("faro")
+
+    for hid_ext in extras_afinidade:
+        if hid_ext not in preferidas:
+            preferidas.append(hid_ext)
 
     # Valida pré-requisitos conhecidos de habilidades diárias
     possui_foco = int(ficha_mestre["conjuracao"]["magias_foco"]["pontos_foco"]["maximo"] or 0) > 0
@@ -223,6 +321,8 @@ def gerar_companheiro_ou_familiar(
     modificadores_mestre: dict[str, int],
     tese_arcana_id: str | None = None,
     talento_ancestral_id: str | None = None,
+    ancestralidade: dict[str, Any] | None = None,
+    biografia: dict[str, Any] | None = None,
     nivel: int = 1,
     rng: random.Random | None = None,
 ) -> dict[str, Any] | None:
@@ -231,7 +331,15 @@ def gerar_companheiro_ou_familiar(
     classe_id = classe["id"]
 
     if "companheiro_animal" in talentos_classe_ids:
-        return _gerar_companheiro_animal(cf, classe_id, conceito, nivel, rng)
+        return _gerar_companheiro_animal(
+            cf,
+            classe_id,
+            conceito,
+            nivel,
+            rng,
+            ancestralidade=ancestralidade,
+            biografia=biografia,
+        )
 
     if any(tid in _DADOS_FAMILIAR_TALENTOS for tid in talentos_classe_ids) or talento_ancestral_id == "cumplice_animal":
         return _gerar_familiar(
@@ -242,6 +350,9 @@ def gerar_companheiro_ou_familiar(
             modificadores_mestre,
             tese_arcana_id,
             nivel,
+            conceito=conceito,
+            ancestralidade=ancestralidade,
+            biografia=biografia,
         )
 
     return None

@@ -626,6 +626,7 @@ def gerar_personagem(
             subclasse=subclasse,
             efeitos_talentos=talentos_res["efeitos"],
             divindade=divindade,
+            biografia=biografia,
             escolhas_equipamentos=escolhas_equipamentos,
         )
     except ValueError as exc:
@@ -721,6 +722,8 @@ def gerar_personagem(
         modificadores_mestre=atributos_res["modificadores"],
         tese_arcana_id=tese_arcana["id"] if tese_arcana else None,
         talento_ancestral_id=talentos_res["efeitos"].get("talento_ancestral_id"),
+        ancestralidade=ancestralidade,
+        biografia=biografia,
         nivel=nivel,
         rng=rng,
     )
