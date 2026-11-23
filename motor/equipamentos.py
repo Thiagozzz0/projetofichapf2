@@ -36,8 +36,10 @@ def _itens_variados_loja_brutos(dados: BaseDados) -> list[dict[str, Any]]:
                     "volume": item.get("volume", "—"),
                     "volume_valor": float(item.get("volume_valor") or 0.0),
                     "quantidade_pacote": int(item.get("quantidade_pacote") or 1),
+                    "maos": item.get("maos"),
                     "bonus_item": item.get("bonus_item"),
                     "conteudo": list(item.get("conteudo") or []),
+                    "descricao": item.get("descricao") or "",
                 }
             )
 
@@ -46,6 +48,7 @@ def _itens_variados_loja_brutos(dados: BaseDados) -> list[dict[str, Any]]:
         if mid in vistos:
             continue
         vistos.add(mid)
+        comp = list(m.get("armas_compativeis") or [])
         itens.append(
             {
                 "id": mid,
@@ -57,8 +60,10 @@ def _itens_variados_loja_brutos(dados: BaseDados) -> list[dict[str, Any]]:
                 "volume": m.get("volume", "L"),
                 "volume_valor": float(m.get("volume_valor") or 0.1),
                 "quantidade_pacote": int(m.get("quantidade") or 1),
+                "maos": None,
                 "bonus_item": None,
                 "conteudo": [],
+                "descricao": m.get("descricao") or (f"Munição compatível com: {', '.join(comp)}." if comp else ""),
             }
         )
     return itens
@@ -115,6 +120,9 @@ def listar_catalogo_equipamentos_loja(dados: BaseDados) -> dict[str, Any]:
             "penalidade_velocidade_m": float(a.get("penalidade_velocidade_m") or 0.0),
             "forca_minima": a.get("forca_minima"),
             "volume": a.get("volume", "L"),
+            "grupo": a.get("grupo"),
+            "tracos": list(a.get("tracos") or []),
+            "descricao": a.get("descricao") or "",
             "resumo": formatar_armadura_resumo(a),
         }
         for a in dados.armaduras.values()
@@ -129,10 +137,14 @@ def listar_catalogo_equipamentos_loja(dados: BaseDados) -> dict[str, Any]:
             "preco": s.get("preco") or "0 pp",
             "preco_pc": int(s.get("preco_pc") or 0),
             "bonus_ca": int(s.get("bonus_ca") or 0),
+            "bonus_ca_cobertura": s.get("bonus_ca_cobertura"),
+            "penalidade_velocidade_m": float(s.get("penalidade_velocidade_m") or 0.0),
+            "permite_mao_livre": bool(s.get("permite_mao_livre", False)),
             "dureza": int(s.get("dureza") or 0),
             "pv": int(s.get("pv") or 0),
             "limiar_quebra": int(s.get("limiar_quebra") or 0),
             "volume": s.get("volume", "L"),
+            "descricao": s.get("descricao") or "",
         }
         for s in dados.escudos.values()
     ]
@@ -158,6 +170,7 @@ def listar_catalogo_equipamentos_loja(dados: BaseDados) -> dict[str, Any]:
                     "volume": w.get("volume", "—"),
                     "grupo": w.get("grupo", ""),
                     "tracos": list(w.get("tracos") or []),
+                    "descricao": w.get("descricao") or "",
                 }
             )
         return res

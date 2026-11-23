@@ -1541,6 +1541,115 @@ body {
   background: #fffcf5;
 }
 
+/* Caixas de pré-visualização de descrição (Equipamentos e Magias) */
+.desc-preview-box {
+  margin-top: 8px;
+  padding: 9px 11px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 5px;
+  background: #fdf9f0;
+  font-size: 0.8rem;
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.desc-preview-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.desc-preview-titulo {
+  font-size: 0.84rem;
+  font-weight: 800;
+  color: var(--accent-dark);
+}
+
+.desc-preview-fechar {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 2px 6px;
+}
+
+.desc-preview-fechar:hover {
+  background: var(--tint);
+  color: var(--ink);
+}
+
+.desc-preview-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.desc-preview-pill {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--tint-strong);
+  color: var(--ink);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.desc-preview-texto {
+  line-height: 1.4;
+  color: #3a3026;
+}
+
+.desc-preview-conteudo {
+  font-size: 0.75rem;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.mag-card-linha-topo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 6px;
+  width: 100%;
+}
+
+.mag-card-resumo {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 0.72rem;
+  line-height: 1.3;
+  color: var(--muted);
+}
+
+.btn-mag-info {
+  flex-shrink: 0;
+  background: var(--tint);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--accent-dark);
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 1.1;
+  padding: 1px 6px;
+}
+
+.btn-mag-info:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
 @media (max-width: 980px) {
   .grid-atributos-livres,
   .grid-pericias-opcoes,

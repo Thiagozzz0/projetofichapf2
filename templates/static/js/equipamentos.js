@@ -104,6 +104,111 @@
     if (btnKit) btnKit.disabled = saldoPc < 70;
   }
 
+  function _renderPreviewItemEq(elId, titulo, pills, texto, conteudo = []) {
+    const box = document.getElementById(elId);
+    if (!box) return;
+    if (!titulo) {
+      box.innerHTML = "";
+      box.classList.add("oculto");
+      return;
+    }
+    const pillsHtml = pills
+      .filter(Boolean)
+      .map((p) => `<span class="desc-preview-pill">${esc(p)}</span>`)
+      .join("");
+    const conteudoHtml = conteudo.length
+      ? `<div class="desc-preview-conteudo"><strong>Conteúdo:</strong> ${esc(conteudo.join(", "))}</div>`
+      : "";
+    const textoHtml = texto ? `<div class="desc-preview-texto">${esc(texto)}</div>` : "";
+
+    box.innerHTML =
+      `<div class="desc-preview-topo"><span class="desc-preview-titulo">${esc(titulo)}</span></div>` +
+      (pillsHtml ? `<div class="desc-preview-pills">${pillsHtml}</div>` : "") +
+      conteudoHtml +
+      textoHtml;
+    box.classList.remove("oculto");
+  }
+
+  function atualizarDescricoesEquipamentosUI() {
+    // 1. Armadura
+    const armId = document.getElementById("eq-armadura")?.value || "procedural";
+    const arm = app.mapaEq.armaduras[armId];
+    if (arm && !document.getElementById("card-eq-armadura")?.classList.contains("oculto")) {
+      const pillsArm = [
+        arm.categoria,
+        `+${arm.bonus_ca} CA`,
+        arm.limite_destreza !== null ? `Lim DES +${arm.limite_destreza}` : "Sem Limite DES",
+        arm.penalidade_testes ? `Pen. Testes ${arm.penalidade_testes}` : null,
+        arm.penalidade_velocidade_m < 0 ? `Vel. ${String(arm.penalidade_velocidade_m).replace(".", ",")}m` : null,
+        arm.forca_minima ? `FOR mín. ${arm.forca_minima}` : null,
+        `Vol. ${arm.volume}`,
+        arm.material ? `Material: ${arm.material}` : null,
+        ...(arm.tracos || []),
+      ];
+      _renderPreviewItemEq("desc-eq-armadura", arm.nome, pillsArm, arm.descricao);
+    } else {
+      _renderPreviewItemEq("desc-eq-armadura", null, [], "");
+    }
+
+    // 2. Escudo
+    const escId = document.getElementById("eq-escudo")?.value || "procedural";
+    const escudo = app.mapaEq.escudos[escId];
+    if (escudo) {
+      const pillsEsc = [
+        `+${escudo.bonus_ca} CA (erguido)`,
+        escudo.bonus_ca_cobertura ? `Cobertura +${escudo.bonus_ca_cobertura} CA` : null,
+        `Dureza ${escudo.dureza}`,
+        `PV ${escudo.pv} (LQ ${escudo.limiar_quebra})`,
+        escudo.penalidade_velocidade_m < 0 ? `Vel. ${String(escudo.penalidade_velocidade_m).replace(".", ",")}m` : null,
+        `Vol. ${escudo.volume}`,
+        escudo.permite_mao_livre ? "Permite mão livre" : null,
+      ];
+      _renderPreviewItemEq("desc-eq-escudo", escudo.nome, pillsEsc, escudo.descricao);
+    } else {
+      _renderPreviewItemEq("desc-eq-escudo", null, [], "");
+    }
+
+    // 3 e 4. Armas (Corporais e à Distância)
+    const renderArmaPreview = (selId, boxId, mapa) => {
+      const wid = document.getElementById(selId)?.value || "procedural";
+      const w = mapa[wid];
+      if (!w) {
+        _renderPreviewItemEq(boxId, null, [], "");
+        return;
+      }
+      const pillsW = [
+        w.categoria,
+        w.grupo ? `Grupo: ${w.grupo}` : null,
+        `Dano ${w.dano}`,
+        `${w.maos} Mão(s)`,
+        w.distancia_m ? `Alcance ${w.distancia_m}m` : null,
+        w.recarga ? `Recarga ${w.recarga}` : null,
+        w.municao ? `Munição: ${w.municao}` : null,
+        `Vol. ${w.volume}`,
+        ...(w.tracos || []),
+      ];
+      _renderPreviewItemEq(boxId, w.nome, pillsW, w.descricao);
+    };
+    renderArmaPreview("eq-arma-cc-select", "desc-eq-arma-cc", app.mapaEq.armas_cc);
+    renderArmaPreview("eq-arma-dist-select", "desc-eq-arma-dist", app.mapaEq.armas_dist);
+
+    // 5. Equipamento Variado
+    const varId = document.getElementById("eq-variado-select")?.value || "procedural";
+    const itemVar = app.mapaEq.variados[varId];
+    if (itemVar) {
+      const pillsV = [
+        itemVar.subcategoria,
+        fmtPrecoEq(itemVar.preco_pc),
+        `Vol. ${itemVar.volume}`,
+        itemVar.maos ? `${itemVar.maos} Mão(s)` : null,
+        itemVar.bonus_item ? `Bônus: ${itemVar.bonus_item}` : null,
+      ];
+      _renderPreviewItemEq("desc-eq-variado", itemVar.nome, pillsV, itemVar.descricao, itemVar.conteudo || []);
+    } else {
+      _renderPreviewItemEq("desc-eq-variado", null, [], "");
+    }
+  }
+
   function atualizarOrcamentoEquipamentosUI() {
     const cat = app.opcoes?.catalogo_equipamentos;
     if (!cat) return;
@@ -123,6 +228,7 @@
     _renderListaEquipamentos("lista-eq-armas-dist", app.eqEstado.armas_dist, "dist");
     _renderListaEquipamentos("lista-eq-variados", app.eqEstado.variados, "var");
     _sincronizarLimitesCompraUI(Math.max(0, saldoPc));
+    atualizarDescricoesEquipamentosUI();
     app.atualizarResumosEtapasUI?.();
   }
 

@@ -13,8 +13,6 @@ Lista viva e priorizada das entregas, melhorias e expansões que ainda precisam 
 
 ## 2. Melhorias de Interface e Experiência do Usuário (1º Nível)
 
-- [ ] **Descrição de Equipamentos e Magias na Seleção**
-  - Exibir descrição/propriedades abaixo dos seletores de equipamentos e magias na interface Web para que o jogador tenha noção imediata do que cada item ou magia faz antes de selecionar.
 - [ ] **Atalho de Kit de Classe na Loja de Equipamentos**
   - Adicionar botão `+ Kit de <Classe>` na loja de equipamentos consumindo `kits_de_classe` de `dados/equipamentos.json`.
 - [ ] **Histórico Local e Exportação/Importação `.json` da Ficha** *(sugestão de melhoria)*

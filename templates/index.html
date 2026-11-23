@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gerador Procedural PF2E — Ficha Oficial</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}?v=41">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}?v=42">
 </head>
 <body>
   <div class="app-container">
@@ -451,6 +451,7 @@
                       </div>
                     </div>
                   </div>
+                  <div id="desc-magia-detalhe" class="desc-preview-box oculto" aria-live="polite"></div>
                 </div>
               </div>
 
@@ -506,12 +507,14 @@
                       <label for="eq-armadura">1. Armaduras</label>
                       <select id="eq-armadura" name="eq_armadura"></select>
                       <small id="nota-eq-armadura" class="nota-campo"></small>
+                      <div id="desc-eq-armadura" class="desc-preview-box oculto"></div>
                     </div>
 
                     <div class="card-eq-cat" id="card-eq-escudo">
                       <label for="eq-escudo">2. Escudos</label>
                       <select id="eq-escudo" name="eq_escudo"></select>
                       <small id="nota-eq-escudo" class="nota-campo"></small>
+                      <div id="desc-eq-escudo" class="desc-preview-box oculto"></div>
                     </div>
 
                     <div class="card-eq-cat card-eq-wide" id="card-eq-arma-cc">
@@ -521,6 +524,7 @@
                         <button type="button" id="btn-add-arma-cc" class="btn btn-secundario btn-compacto">+ Adicionar Outra</button>
                       </div>
                       <small id="nota-eq-arma-cc" class="nota-campo"></small>
+                      <div id="desc-eq-arma-cc" class="desc-preview-box oculto"></div>
                       <ul id="lista-eq-armas-cc" class="lista-eq-selecionados"></ul>
                     </div>
 
@@ -531,6 +535,7 @@
                         <button type="button" id="btn-add-arma-dist" class="btn btn-secundario btn-compacto">+ Adicionar Outra</button>
                       </div>
                       <small id="nota-eq-arma-dist" class="nota-campo"></small>
+                      <div id="desc-eq-arma-dist" class="desc-preview-box oculto"></div>
                       <ul id="lista-eq-armas-dist" class="lista-eq-selecionados"></ul>
                     </div>
 
@@ -542,6 +547,7 @@
                         <button type="button" id="btn-add-variado" class="btn btn-secundario btn-compacto">+ Adicionar Outro</button>
                         <button type="button" id="btn-add-kit-av" class="btn btn-sutil btn-compacto">+ Kit Aventureiro (7 pp)</button>
                       </div>
+                      <div id="desc-eq-variado" class="desc-preview-box oculto"></div>
                       <ul id="lista-eq-variados" class="lista-eq-selecionados"></ul>
                     </div>
                   </div>
@@ -752,8 +758,8 @@
   <script src="{{ url_for('static', filename='js/atributos.js') }}?v=40" defer></script>
   <script src="{{ url_for('static', filename='js/pericias.js') }}?v=40" defer></script>
   <script src="{{ url_for('static', filename='js/talentos.js') }}?v=40" defer></script>
-  <script src="{{ url_for('static', filename='js/magias.js') }}?v=41" defer></script>
-  <script src="{{ url_for('static', filename='js/equipamentos.js') }}?v=40" defer></script>
+  <script src="{{ url_for('static', filename='js/magias.js') }}?v=42" defer></script>
+  <script src="{{ url_for('static', filename='js/equipamentos.js') }}?v=42" defer></script>
   <script src="{{ url_for('static', filename='js/app.js') }}?v=40" defer></script>
 </body>
 </html>

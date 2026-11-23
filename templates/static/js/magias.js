@@ -128,6 +128,46 @@
     }
   }
 
+  function mostrarDetalheMagiaUI(mid) {
+    const box = document.getElementById("desc-magia-detalhe");
+    if (!box) return;
+    const m = mid ? app.opcoes?.catalogo_magias?.por_id?.[mid] : null;
+    if (!m) {
+      box.innerHTML = "";
+      box.classList.add("oculto");
+      return;
+    }
+    const acaoIco = _iconeAcao(m.acoes);
+    const nivelRot = m.eh_truque ? "Truque Mágico" : `${m.nivel}º Círculo`;
+    const tradTxt = (m.tradicoes || []).map((t) => NOMES_TRADICAO[t] || t).join(", ");
+    const compTxt = (m.componentes || []).join(", ");
+    const pills = [
+      nivelRot,
+      m.escola || null,
+      acaoIco ? `Ações: ${acaoIco}` : null,
+      compTxt ? `Comp: ${compTxt}` : null,
+      tradTxt ? `Tradição: ${tradTxt}` : null,
+      m.distancia ? `Alcance: ${m.distancia}` : null,
+      m.alvos ? `Alvos: ${m.alvos}` : null,
+      m.area ? `Área: ${m.area}` : null,
+      m.duracao ? `Duração: ${m.duracao}` : null,
+      m.salvamento ? `Salvamento: ${m.salvamento}` : null,
+      m.raridade && m.raridade !== "Comum" ? m.raridade : null,
+    ]
+      .filter(Boolean)
+      .map((p) => `<span class="desc-preview-pill">${esc(p)}</span>`)
+      .join("");
+
+    box.innerHTML =
+      `<div class="desc-preview-topo">` +
+      `<span class="desc-preview-titulo">${esc(m.nome)}</span>` +
+      `<button type="button" id="btn-fechar-desc-magia" class="desc-preview-fechar" title="Fechar descrição">×</button>` +
+      `</div>` +
+      (pills ? `<div class="desc-preview-pills">${pills}</div>` : "") +
+      `<div class="desc-preview-texto">${esc(m.descricao || m.resumo)}</div>`;
+    box.classList.remove("oculto");
+  }
+
   function _renderGradeMagias(gridId, listaIds, fixasMap, selecionadas, vagasLivres, tipoAttr, st, termoBusca) {
     const grid = document.getElementById(gridId);
     if (!grid) return;
@@ -136,7 +176,7 @@
       if (!termoBusca) return true;
       const m = st.porId[mid];
       if (!m) return false;
-      return normTxt(`${m.nome} ${m.escola}`).includes(termoBusca);
+      return normTxt(`${m.nome} ${m.escola} ${m.resumo}`).includes(termoBusca);
     });
 
     if (!filtrados.length) {
@@ -150,14 +190,19 @@
         if (!m) return "";
         const acaoIco = _iconeAcao(m.acoes);
         const origFixa = fixasMap.get(mid);
+        const btnInfo = `<button type="button" class="btn-mag-info" data-magia-detalhe="${esc(mid)}" title="Ver descrição completa">ℹ</button>`;
+        const resumoHtml = m.resumo ? `<span class="mag-card-resumo">${esc(m.resumo)}</span>` : "";
+
         if (origFixa) {
           return (
             `<label class="pericia-check-card fixa" title="${esc(m.resumo)}">` +
             `<input type="checkbox" checked disabled>` +
-            `<span class="pericia-check-info">` +
+            `<span class="pericia-check-info" style="width:100%">` +
+            `<span class="mag-card-linha-topo">` +
             `<span class="pericia-check-titulo">${esc(m.nome)} <span class="pericia-check-atb">${esc(acaoIco)} • ${esc(m.escola)}</span></span>` +
+            `${btnInfo}</span>` +
             `<span class="pericia-check-badge fixa">Fixa: ${esc(origFixa)}</span>` +
-            `</span></label>`
+            `${resumoHtml}</span></label>`
           );
         }
         const marcada = selecionadas.includes(mid);
@@ -170,10 +215,12 @@
         return (
           `<label class="${clsCard}" title="${esc(m.resumo)}">` +
           `<input type="checkbox" data-magia-tipo="${tipoAttr}" data-magia-id="${esc(mid)}" ${marcada ? "checked" : ""} ${bloqueada ? "disabled" : ""}>` +
-          `<span class="pericia-check-info">` +
+          `<span class="pericia-check-info" style="width:100%">` +
+          `<span class="mag-card-linha-topo">` +
           `<span class="pericia-check-titulo">${esc(m.nome)} <span class="pericia-check-atb">${esc(acaoIco)} • ${esc(m.escola)}</span></span>` +
+          `${btnInfo}</span>` +
           (marcada ? `<span class="pericia-check-badge manual">Escolhida</span>` : badgeDiv) +
-          `</span></label>`
+          `${resumoHtml}</span></label>`
         );
       })
       .join("");
@@ -186,6 +233,7 @@
     if (!st.ehConjurador) {
       app.magEstado.truques = [];
       app.magEstado.magias_n1 = [];
+      mostrarDetalheMagiaUI(null);
       app.atualizarResumosEtapasUI?.();
       return;
     }
@@ -303,6 +351,7 @@
     if (buscaEl) buscaEl.value = "";
     app.magEstado.truques = [];
     app.magEstado.magias_n1 = [];
+    mostrarDetalheMagiaUI(null);
     atualizarVisibilidadeMagiasUI();
   }
 
@@ -352,6 +401,19 @@
       }
       atualizarCatalogoMagiasUI();
     });
+    document.getElementById("painel-magias-custom")?.addEventListener("click", (e) => {
+      const btnInfo = e.target.closest("[data-magia-detalhe]");
+      if (btnInfo) {
+        e.preventDefault();
+        e.stopPropagation();
+        mostrarDetalheMagiaUI(btnInfo.dataset.magiaDetalhe);
+        document.getElementById("desc-magia-detalhe")?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        return;
+      }
+      if (e.target.closest("#btn-fechar-desc-magia")) {
+        mostrarDetalheMagiaUI(null);
+      }
+    });
     document.getElementById("painel-magias-custom")?.addEventListener("change", (e) => {
       const chk = e.target.closest('input[type="checkbox"][data-magia-id]');
       if (!chk) return;
@@ -366,6 +428,7 @@
 
       if (chk.checked) {
         if (!lista.includes(mid) && lista.length < limite) lista.push(mid);
+        mostrarDetalheMagiaUI(mid);
       } else {
         const idx = lista.indexOf(mid);
         if (idx >= 0) lista.splice(idx, 1);

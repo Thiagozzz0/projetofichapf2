@@ -39,8 +39,16 @@ def listar_catalogo_magias_n1(dados: BaseDados) -> dict[str, Any]:
             "tradicoes": trads,
             "escola": m.get("escola") or "",
             "acoes": _formatar_acoes(m.get("acoes")),
+            "componentes": _formatar_componentes(m.get("componentes")),
+            "distancia": m.get("distancia") or "",
+            "alvos": m.get("alvos") or "",
+            "area": m.get("area") or "",
+            "duracao": m.get("duracao") or "",
+            "salvamento": m.get("salvamento") or "",
+            "tracos": list(tracos),
             "raridade": m.get("raridade") or "Comum",
             "resumo": m.get("resumo_lista") or (m.get("descricao") or "")[:160],
+            "descricao": m.get("descricao") or m.get("resumo_lista") or "",
         }
         chave_lista = "truques" if eh_truque else "nivel_1"
         for t in trads:
