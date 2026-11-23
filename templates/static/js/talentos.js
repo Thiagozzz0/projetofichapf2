@@ -62,6 +62,52 @@
     });
   }
 
+  function _verificarReqPericiaTalento(t) {
+    if ((document.getElementById("modo-pericias")?.value || "procedural") !== "personalizado") {
+      return null;
+    }
+    const stPer = app.calcularEstadoPericiasUI?.();
+    if (!stPer || !stPer.disponivel) return null;
+    const reqNorm = normTxt(t.pre_requisitos || "");
+    if (!reqNorm || reqNorm.includes("pelo menos uma pericia") || reqNorm.includes("recordar conhecimento") || reqNorm.includes("saber")) {
+      return null;
+    }
+    const catPer = app.opcoes?.catalogo_pericias || [];
+    const citadas = catPer.filter((p) => reqNorm.includes(normTxt(p.nome)));
+    if (!citadas.length) return null;
+
+    const treinadas = new Set([...stPer.fixasMap.keys(), ...(app.perEstado?.selecionadas || [])]);
+    const atende = citadas.some((p) => treinadas.has(p.id));
+    if (atende) return null;
+    return `requer ${citadas.map((p) => p.nome).join(" ou ")} em Perícias`;
+  }
+
+  function atualizarPreRequisitosTalentosPericiaUI() {
+    const selPer = document.getElementById("tal-pericia-1");
+    const cat = app.opcoes?.catalogo_talentos;
+    if (!selPer || selPer.disabled || !cat) return;
+    const mapaT = Object.fromEntries((cat.pericia_n1 || []).map((t) => [t.id, t]));
+    Array.from(selPer.options).forEach((opt) => {
+      if (opt.value === "procedural") return;
+      const t = mapaT[opt.value];
+      if (!t) return;
+      if (!opt.dataset.baseLabel) opt.dataset.baseLabel = opt.textContent;
+      const motivo = _verificarReqPericiaTalento(t);
+      if (motivo) {
+        opt.disabled = true;
+        opt.dataset.reqBloqueado = "1";
+        opt.textContent = `${opt.dataset.baseLabel} (${motivo})`;
+      } else {
+        opt.disabled = false;
+        delete opt.dataset.reqBloqueado;
+        opt.textContent = opt.dataset.baseLabel;
+      }
+    });
+    if (selPer.selectedOptions[0]?.disabled) {
+      selPer.value = "procedural";
+    }
+  }
+
   function sincronizarExclusaoTalentos() {
     _sincronizarExclusaoGrupoTalentos(IDS_TAL_CLASSE);
     _sincronizarExclusaoGrupoTalentos(IDS_TAL_GERAIS);
@@ -236,7 +282,10 @@
         ? normTxt(bioObj.talento_pericia.split(" para ")[0])
         : "";
       const poolPer = (cat.pericia_n1 || []).filter((t) => !bioTalNorm || normTxt(t.nome) !== bioTalNorm);
-      _preencherSelectTalento(selPer, poolPer, { textoProcedural: "Procedural (melhor p/ conceito)" });
+      _preencherSelectTalento(selPer, poolPer, {
+        textoProcedural: "Procedural (melhor p/ conceito)",
+        verificarOpcao: _verificarReqPericiaTalento,
+      });
       if (badgePer) { badgePer.className = "badge-tal-liberado"; badgePer.textContent = "1 Slot Liberado (Ladino)"; }
       if (notaPer) notaPer.textContent = "Ladino recebe +1 talento de perícia adicional no 1º nível além do da Biografia.";
     } else {
@@ -368,6 +417,7 @@
 
   Object.assign(app, {
     sincronizarExclusaoTalentos,
+    atualizarPreRequisitosTalentosPericiaUI,
     atualizarCatalogoTalentosUI,
     atualizarVisibilidadeTalentosUI,
     resetarTalentosProcedural,

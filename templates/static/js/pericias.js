@@ -325,6 +325,7 @@
         .join("");
     }
 
+    app.atualizarPreRequisitosTalentosPericiaUI?.();
     app.atualizarResumosEtapasUI?.();
   }
 
@@ -332,6 +333,7 @@
     const modo = document.getElementById("modo-pericias")?.value || "procedural";
     document.getElementById("painel-pericias-custom")?.classList.toggle("oculto", modo !== "personalizado");
     atualizarCatalogoPericiasUI();
+    app.atualizarPreRequisitosTalentosPericiaUI?.();
     app.atualizarResumosEtapasUI?.();
   }
 

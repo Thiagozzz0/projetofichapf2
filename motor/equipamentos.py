@@ -507,6 +507,10 @@ def comprar_equipamentos(
             arm_obj = dados.armaduras.get(arm_str)
             if not arm_obj:
                 raise ValueError(f"Armadura desconhecida: '{arm_str}'.")
+            if nao_metal and normalizar(arm_obj.get("material")) == "metal":
+                raise ValueError(
+                    f"Anátema de Druida: não é permitido equipar armadura de metal ('{arm_obj['nome']}')."
+                )
             armadura_escolhida = arm_obj
             saldo_pc -= int(arm_obj.get("preco_pc") or 0)
 
@@ -540,6 +544,10 @@ def comprar_equipamentos(
             esc_obj = dados.escudos.get(esc_str)
             if not esc_obj:
                 raise ValueError(f"Escudo desconhecido: '{esc_str}'.")
+            if nao_metal and esc_obj["id"] in ("broquel", "escudo_de_aco", "escudo_de_corpo"):
+                raise ValueError(
+                    f"Anátema de Druida: não é permitido usar escudo de metal ('{esc_obj['nome']}')."
+                )
             escudo_escolhido = esc_obj
             saldo_pc -= int(esc_obj.get("preco_pc") or 0)
 

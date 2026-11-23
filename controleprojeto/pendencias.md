@@ -98,10 +98,10 @@ Lista viva de todas as entregas e tarefas que ainda precisam ser realizadas até
 - [ ] **Personalização de Companheiro Animal / Familiar e Dados Biográficos (Pág. 3)**
   - Permitir escolher manualmente o tipo do Companheiro Animal ou habilidades do Familiar (`motor/companheiros.py`), além de tendência (quando não travada por classe/divindade), idade, gênero, aparência, crenças e anátemas.
 - [ ] **Validação de Equipamentos no Back-end e Atalho de Kit de Classe**
-  - Espelhar em `motor/equipamentos.py` a validação de Anátema do Druida (sem metal) e proficiências para requisições diretas via API `/api/gerar`.
-  - Adicionar botão `+ Kit de <Classe>` na loja de equipamentos consumindo `kits_de_classe` de `dados/equipamentos.json`.
-- [ ] **Cruzamento de Pré-requisitos de Perícia nos Talentos da UI**
-  - Fazer a Etapa 3 (Talentos) consultar em tempo real as perícias marcadas na Etapa 2 para liberar/bloquear pré-requisitos de perícia na interface.
+  - [x] Espelhar em `motor/equipamentos.py` a validação de Anátema do Druida (sem armaduras ou escudos de metal) para requisições diretas via API `/api/gerar`. *(Concluído em `22/11/2026`)*
+  - [ ] Adicionar botão `+ Kit de <Classe>` na loja de equipamentos consumindo `kits_de_classe` de `dados/equipamentos.json`.
+- [x] **Cruzamento de Pré-requisitos de Perícia nos Talentos da UI** *(Concluído em `22/11/2026`)*
+  - Etapa 3 (Talentos) consulta em tempo real as perícias marcadas na Etapa 2 (`pericias.js`) para liberar/bloquear pré-requisitos de perícia em `#tal-pericia-1`.
 - [ ] **Refatoração Arquitetural Pré-Níveis 2–20**
   - [x] Modularizar `templates/static/js/app.js` em arquivos menores por responsabilidade (`estado.js`, `atributos.js`, `pericias.js`, `talentos.js`, `equipamentos.js`, `app.js`). *(Concluído em `22/11/2026`)*
   - [ ] Desacoplar contratos fixados em 1º nível no motor (`listar_catalogo_talentos_n1`, `magias_n1`, `espacos_nivel_1`, `caracteristicas_classe_n1`, `ORCAMENTO_INICIAL_PC`).

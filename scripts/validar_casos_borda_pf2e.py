@@ -821,6 +821,31 @@ def test_compra_manual_e_hibrida_equipamentos() -> None:
         except ErroValidacao:
             pass
 
+    # 4. Anátema de Druida no back-end: bloqueia armadura/escudo de metal manual e aceita não-metal
+    for esc_dru_inv in (
+        {"armadura_id": "camisao_de_malha"},
+        {"armadura_id": "cota_de_malha"},
+        {"escudo_id": "escudo_de_aco"},
+        {"escudo_id": "broquel"},
+    ):
+        try:
+            gerar_personagem(
+                "elfo", "elfo_das_florestas", "druida", "druida_furia_elementos",
+                escolhas_equipamentos=esc_dru_inv, seed=2, dados=db,
+            )
+            raise AssertionError(f"Druida deveria rejeitar item de metal {esc_dru_inv!r}")
+        except ErroValidacao:
+            pass
+
+    dru_ok = gerar_personagem(
+        "elfo", "elfo_das_florestas", "druida", "druida_furia_elementos",
+        escolhas_equipamentos={"armadura_id": "gibao_de_peles", "escudo_id": "escudo_de_madeira"},
+        seed=2,
+        dados=db,
+    )
+    assert dru_ok["meta_geracao"]["armadura_equipada"] == "Gibão de peles"
+    assert dru_ok["ficha"]["classe_armadura"]["escudo"]["nome"] == "Escudo de madeira"
+
 
 def test_curadoria_e_selecao_manual_talentos() -> None:
     db = carregar_dados()
