@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gerador Procedural PF2E — Ficha Oficial</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}?v=40">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}?v=41">
 </head>
 <body>
   <div class="app-container">
@@ -424,14 +424,32 @@
                     <input type="search" id="mag-filtro-busca" placeholder="Filtrar magias por nome ou escola (ex.: Curar, Evocação, Escudo)..." aria-label="Filtrar magias">
                   </div>
 
-                  <div class="mag-bloco-lista">
-                    <div id="lbl-mag-truques" class="mag-subgrupo-titulo">1. Truques Mágicos — Nível 0</div>
-                    <div id="grid-magias-truques" class="grid-pericias-checkboxes"></div>
-                  </div>
+                  <div class="acordeao-magias" id="acordeao-magias">
+                    <div class="mag-circulo-card" data-mag-circulo="truques">
+                      <button type="button" class="mag-circulo-header" data-mag-toggle="truques" aria-expanded="false" aria-controls="corpo-mag-truques">
+                        <span id="lbl-mag-truques" class="mag-circulo-titulo">Truques Mágicos (Nível 0)</span>
+                        <span class="mag-circulo-dir">
+                          <span id="pill-mag-truques" class="etapa-resumo-pill">0 / 5</span>
+                          <span class="etapa-seta" aria-hidden="true">▾</span>
+                        </span>
+                      </button>
+                      <div id="corpo-mag-truques" class="mag-circulo-corpo oculto">
+                        <div id="grid-magias-truques" class="grid-pericias-checkboxes"></div>
+                      </div>
+                    </div>
 
-                  <div class="mag-bloco-lista">
-                    <div id="lbl-mag-n1" class="mag-subgrupo-titulo">2. Magias de 1º Círculo</div>
-                    <div id="grid-magias-n1" class="grid-pericias-checkboxes"></div>
+                    <div class="mag-circulo-card" data-mag-circulo="n1">
+                      <button type="button" class="mag-circulo-header" data-mag-toggle="n1" aria-expanded="false" aria-controls="corpo-mag-n1">
+                        <span id="lbl-mag-n1" class="mag-circulo-titulo">Magias de 1º Círculo</span>
+                        <span class="mag-circulo-dir">
+                          <span id="pill-mag-n1" class="etapa-resumo-pill">0 / 2</span>
+                          <span class="etapa-seta" aria-hidden="true">▾</span>
+                        </span>
+                      </button>
+                      <div id="corpo-mag-n1" class="mag-circulo-corpo oculto">
+                        <div id="grid-magias-n1" class="grid-pericias-checkboxes"></div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -734,7 +752,7 @@
   <script src="{{ url_for('static', filename='js/atributos.js') }}?v=40" defer></script>
   <script src="{{ url_for('static', filename='js/pericias.js') }}?v=40" defer></script>
   <script src="{{ url_for('static', filename='js/talentos.js') }}?v=40" defer></script>
-  <script src="{{ url_for('static', filename='js/magias.js') }}?v=40" defer></script>
+  <script src="{{ url_for('static', filename='js/magias.js') }}?v=41" defer></script>
   <script src="{{ url_for('static', filename='js/equipamentos.js') }}?v=40" defer></script>
   <script src="{{ url_for('static', filename='js/app.js') }}?v=40" defer></script>
 </body>

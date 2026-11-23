@@ -1486,6 +1486,61 @@ body {
   border-top: 1px solid var(--tint-strong);
 }
 
+.acordeao-magias {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mag-circulo-card {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fffdf9;
+  overflow: hidden;
+}
+
+.mag-circulo-header {
+  width: 100%;
+  background: #fffdf8;
+  border: none;
+  padding: 10px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: var(--ink);
+  text-align: left;
+  transition: background-color 0.15s ease;
+}
+
+.mag-circulo-header:hover,
+.mag-circulo-card.aberta > .mag-circulo-header {
+  background: var(--tint);
+}
+
+.mag-circulo-titulo {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--accent-dark);
+}
+
+.mag-circulo-dir {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mag-circulo-card.aberta .etapa-seta {
+  transform: rotate(180deg);
+}
+
+.mag-circulo-corpo {
+  padding: 10px 12px 12px;
+  border-top: 1px solid var(--tint-strong);
+  background: #fffcf5;
+}
+
 @media (max-width: 980px) {
   .grid-atributos-livres,
   .grid-pericias-opcoes,

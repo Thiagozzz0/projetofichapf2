@@ -195,6 +195,8 @@
     const elExtra = document.getElementById("mag-info-extra");
     const lblTruq = document.getElementById("lbl-mag-truques");
     const lblN1 = document.getElementById("lbl-mag-n1");
+    const pillTruq = document.getElementById("pill-mag-truques");
+    const pillN1 = document.getElementById("pill-mag-n1");
 
     if (!st.disponivel) {
       app.magEstado.truques = [];
@@ -229,12 +231,18 @@
     }
     if (lblTruq) {
       const fixT = st.truquesFixos.size ? ` (+${st.truquesFixos.size} fixa da Linhagem)` : "";
-      lblTruq.textContent = `1. Truques Mágicos — Nível 0 (${app.magEstado.truques.length}/${st.vagasLivresTruques} livres${fixT})`;
+      lblTruq.textContent = `Truques Mágicos — Nível 0${fixT}`;
+    }
+    if (pillTruq) {
+      pillTruq.textContent = `${app.magEstado.truques.length} / ${st.vagasLivresTruques} livres`;
     }
     if (lblN1) {
       const fix1 = st.magiasN1Fixas.size ? ` (+${st.magiasN1Fixas.size} fixa da Subclasse)` : "";
       const rotN1 = st.clsId === "mago" ? "Grimório" : st.estilo === "espontanea" ? "Repertório" : "Preparadas";
-      lblN1.textContent = `2. Magias de 1º Círculo — ${rotN1} (${app.magEstado.magias_n1.length}/${st.vagasLivresN1} livres${fix1})`;
+      lblN1.textContent = `Magias de 1º Círculo — ${rotN1}${fix1}`;
+    }
+    if (pillN1) {
+      pillN1.textContent = `${app.magEstado.magias_n1.length} / ${st.vagasLivresN1} livres`;
     }
 
     if (elExtra) {
@@ -312,9 +320,38 @@
     };
   }
 
+  function alternarCirculoMagia(chave, forcarEstado = null) {
+    const cards = document.querySelectorAll(".mag-circulo-card[data-mag-circulo]");
+    cards.forEach((card) => {
+      const ehAlvo = card.dataset.magCirculo === chave;
+      const jaAberta = card.classList.contains("aberta");
+      const abrir = ehAlvo ? (forcarEstado !== null ? Boolean(forcarEstado) : !jaAberta) : false;
+      card.classList.toggle("aberta", abrir);
+      const btn = card.querySelector("[data-mag-toggle]");
+      if (btn) btn.setAttribute("aria-expanded", String(abrir));
+      const corpo = card.querySelector(".mag-circulo-corpo");
+      if (corpo) corpo.classList.toggle("oculto", !abrir);
+    });
+  }
+
   function registrarEventosMagias() {
     document.getElementById("modo-magias")?.addEventListener("change", atualizarVisibilidadeMagiasUI);
-    document.getElementById("mag-filtro-busca")?.addEventListener("input", atualizarCatalogoMagiasUI);
+    document.getElementById("acordeao-magias")?.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-mag-toggle]");
+      if (!btn) return;
+      alternarCirculoMagia(btn.dataset.magToggle);
+    });
+    document.getElementById("mag-filtro-busca")?.addEventListener("input", (e) => {
+      const temTexto = Boolean((e.target.value || "").trim());
+      if (temTexto) {
+        document.querySelectorAll(".mag-circulo-card[data-mag-circulo]").forEach((card) => {
+          card.classList.add("aberta");
+          card.querySelector("[data-mag-toggle]")?.setAttribute("aria-expanded", "true");
+          card.querySelector(".mag-circulo-corpo")?.classList.remove("oculto");
+        });
+      }
+      atualizarCatalogoMagiasUI();
+    });
     document.getElementById("painel-magias-custom")?.addEventListener("change", (e) => {
       const chk = e.target.closest('input[type="checkbox"][data-magia-id]');
       if (!chk) return;
