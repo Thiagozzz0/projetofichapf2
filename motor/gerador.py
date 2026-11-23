@@ -14,7 +14,7 @@ from .biografia_pericias import (
     selecionar_biografia,
 )
 from .combate_matematica import calcular_matematica_final
-from .companheiros import gerar_companheiro_ou_familiar
+from .companheiros import gerar_companheiro_ou_familiar, listar_catalogo_companheiros_familiares
 from .dados import BaseDados, carregar_dados
 from .divindades import (
     CLASSES_DIVINDADE_OBRIGATORIA,
@@ -329,6 +329,22 @@ def listar_opcoes_criacao(dados: BaseDados | None = None) -> dict[str, Any]:
                     "mago_universalista": (
                         c["id"] == "mago" and con.get("subclasse_oficial_id") == "universalista"
                     ),
+                    "companheiro_padrao_conceito": (
+                        "companheiro_animal"
+                        if (
+                            (c["id"] == "druida" and con.get("subclasse_oficial_id") == "animais")
+                            or ((con.get("talentos_recomendados", {}).get("classe_nivel_1") or [None])[0] == "companheiro_animal")
+                        )
+                        else (
+                            "familiar"
+                            if (
+                                (c["id"] == "druida" and con.get("subclasse_oficial_id") == "folha")
+                                or con.get("tese_arcana_id") == "sintonizacao_com_familiar_aprimorada"
+                                or ((con.get("talentos_recomendados", {}).get("classe_nivel_1") or [None])[0] in ("familiar", "familiar_alquimico", "familiar_leshy"))
+                            )
+                            else None
+                        )
+                    ),
                     "desbloqueia_talento_classe_n1_extra": (
                         con.get("subclasse_oficial_id") == "instinto_do_furor"
                         or con.get("tese_arcana_id") == "experimentacao_metamagica"
@@ -370,6 +386,7 @@ def listar_opcoes_criacao(dados: BaseDados | None = None) -> dict[str, Any]:
         "catalogo_talentos": listar_catalogo_talentos_n1(db),
         "catalogo_magias": listar_catalogo_magias_n1(db),
         "catalogo_equipamentos": listar_catalogo_equipamentos_loja(db),
+        "catalogo_companheiros": listar_catalogo_companheiros_familiares(db),
         "total_conceitos": len(db.conceitos),
     }
 
@@ -390,6 +407,8 @@ def gerar_personagem(
     escolhas_talentos: dict[str, Any] | None = None,
     escolhas_magias: dict[str, Any] | None = None,
     escolhas_equipamentos: dict[str, Any] | None = None,
+    escolhas_perfil: dict[str, Any] | None = None,
+    escolhas_companheiro: dict[str, Any] | None = None,
     dados: BaseDados | None = None,
 ) -> dict[str, Any]:
     """Gera uma ficha completa e válida de Pathfinder 2E guiada pelo conceito escolhido."""
@@ -548,9 +567,17 @@ def gerar_personagem(
         )
     except ValueError as exc:
         raise ErroValidacao(str(exc)) from exc
-    tendencia = _determinar_tendencia(
-        classe_id, subclasse["id"] if subclasse else "", conceito=conceito, divindade=divindade
-    )
+    perfil_req = escolhas_perfil or {}
+    try:
+        tendencia = _determinar_tendencia(
+            classe_id,
+            subclasse["id"] if subclasse else "",
+            conceito=conceito,
+            divindade=divindade,
+            tendencia_manual=perfil_req.get("tendencia"),
+        )
+    except ValueError as exc:
+        raise ErroValidacao(str(exc)) from exc
 
     try:
         talentos_res = selecionar_talentos(
@@ -712,31 +739,58 @@ def gerar_personagem(
         divindade=divindade,
     )
 
-    companheiro_ou_familiar = gerar_companheiro_ou_familiar(
-        dados=db,
-        classe=classe,
-        subclasse=subclasse,
-        conceito=conceito,
-        talentos_classe_ids=talentos_res["talentos_classe_ids"],
-        ficha_mestre=ficha,
-        modificadores_mestre=atributos_res["modificadores"],
-        tese_arcana_id=tese_arcana["id"] if tese_arcana else None,
-        talento_ancestral_id=talentos_res["efeitos"].get("talento_ancestral_id"),
-        ancestralidade=ancestralidade,
-        biografia=biografia,
-        nivel=nivel,
-        rng=rng,
-    )
+    try:
+        companheiro_ou_familiar = gerar_companheiro_ou_familiar(
+            dados=db,
+            classe=classe,
+            subclasse=subclasse,
+            conceito=conceito,
+            talentos_classe_ids=talentos_res["talentos_classe_ids"],
+            ficha_mestre=ficha,
+            modificadores_mestre=atributos_res["modificadores"],
+            tese_arcana_id=tese_arcana["id"] if tese_arcana else None,
+            talento_ancestral_id=talentos_res["efeitos"].get("talento_ancestral_id"),
+            ancestralidade=ancestralidade,
+            biografia=biografia,
+            nivel=nivel,
+            escolhas_companheiro=escolhas_companheiro,
+            rng=rng,
+        )
+    except ValueError as exc:
+        raise ErroValidacao(str(exc)) from exc
 
     sub_nome_final = subclasse["nome"] if subclasse else conceito["subclasse_oficial_nome"]
     tese_nota = f" | Tese: {tese_arcana['nome']}" if tese_arcana else ""
-    ficha["perfil_e_campanha"]["dados_biograficos"]["idade"] = str(ancestralidade.get("maturidade_anos", 20))
+
+    dados_bio_ficha = ficha["perfil_e_campanha"]["dados_biograficos"]
+    idade_req = str(perfil_req.get("idade") or "").strip()
+    dados_bio_ficha["idade"] = idade_req or str(ancestralidade.get("maturidade_anos", 20))
+    for campo_bio in ("etnia", "nacionalidade", "local_nascimento", "genero_pronomes", "altura", "peso", "aparencia"):
+        val_b = str(perfil_req.get(campo_bio) or "").strip()
+        if val_b:
+            dados_bio_ficha[campo_bio] = val_b
+
+    pers_ficha = ficha["perfil_e_campanha"]["personalidade"]
+    for campo_p in ("atitude", "crencas", "gostos", "aversoes", "bordoes"):
+        val_p = str(perfil_req.get(campo_p) or "").strip()
+        if val_p:
+            pers_ficha[campo_p] = val_p
+
     ficha["perfil_e_campanha"]["anotacoes_campanha"]["anotacoes"] = (
         f"Conceito: {conceito['titulo_completo']} (Subclasse PF2E: {sub_nome_final}{tese_nota}). "
         f"{conceito['resumo_proposta']} "
         f"Sinergia: {conceito.get('sinergia_mecanica', '')} "
         f"Biografia: {biografia['descricao']}"
     ).strip()
+
+    escolhas_perfil_aplicadas = {
+        "tendencia": tendencia,
+        "idade": dados_bio_ficha["idade"],
+        "genero_pronomes": dados_bio_ficha["genero_pronomes"],
+        "aparencia": dados_bio_ficha["aparencia"],
+        "crencas": pers_ficha["crencas"],
+        "aversoes": pers_ficha["aversoes"],
+    }
 
     return {
         "meta_geracao": {
@@ -765,6 +819,7 @@ def gerar_personagem(
             "escolhas_pericias": pericias_res["escolhas_pericias"],
             "escolhas_talentos": talentos_res["escolhas_talentos"],
             "escolhas_magias": magias_res.get("escolhas_magias"),
+            "escolhas_perfil": escolhas_perfil_aplicadas,
             "orcamento_inicial": "15 po",
             "escolhas_equipamentos": equip_res["escolhas_equipamentos"],
             "gasto_equipamentos": formatar_preco(equip_res["gasto_pc"]),

@@ -1243,6 +1243,78 @@ def test_orcamento_90_peso_leve_e_viagem_procedural() -> None:
     assert r_man["meta_geracao"]["observacoes_combate"]["esta_sobrecarregado"] is True
 
 
+def test_personalizacao_companheiro_familiar_e_perfil() -> None:
+    db = carregar_dados()
+
+    # 1. Companheiro Animal manual (tipo + nome) e Dados Biográficos (Pág. 3) em Druida Ordem dos Animais
+    dru_comp = gerar_personagem(
+        "humano", "heranca_versatil", "druida", "druida_senhor_matilha",
+        escolhas_companheiro={"tipo_id": "urso", "nome": "Balgor"},
+        escolhas_perfil={
+            "tendencia": "ON",
+            "idade": "28 anos",
+            "genero_pronomes": "Ela/Dela",
+            "aparencia": "Cicatriz no olho esquerdo e manto de peles.",
+            "crencas": "Equilíbrio da floresta acima de tudo.",
+            "aversoes": "Desmatamento e armaduras metálicas.",
+        },
+        seed=5,
+        dados=db,
+    )
+    comp = dru_comp["meta_geracao"]["companheiro_ou_familiar"]
+    assert comp is not None and comp["categoria"] == "Companheiro Animal"
+    assert comp["id"] == "urso" and comp["nome"] == "Balgor (Urso)"
+    assert dru_comp["ficha"]["cabecalho"]["tendencia"] == "ON"
+    bio_f = dru_comp["ficha"]["perfil_e_campanha"]["dados_biograficos"]
+    pers_f = dru_comp["ficha"]["perfil_e_campanha"]["personalidade"]
+    assert bio_f["idade"] == "28 anos" and bio_f["genero_pronomes"] == "Ela/Dela"
+    assert "Cicatriz" in bio_f["aparencia"]
+    assert "Equilíbrio" in pers_f["crencas"] and "metálicas" in pers_f["aversoes"]
+
+    # 2. Familiar manual em Mago Sintonização Aprimorada (3 habilidades válidas) + nome personalizado
+    mg_fam = gerar_personagem(
+        "elfo", "elfo_vidente", "mago", "mago_ilusionista_enganador",
+        escolhas_companheiro={
+            "nome": "Pip",
+            "habilidades_ids": ["fala", "visao_no_escuro", "foco_de_familiar"],
+        },
+        escolhas_perfil={"tendencia": "CN"},
+        seed=9,
+        dados=db,
+    )
+    fam = mg_fam["meta_geracao"]["companheiro_ou_familiar"]
+    assert fam is not None and fam["categoria"] == "Familiar"
+    assert fam["nome"].startswith("Pip (")
+    assert [h["id"] for h in fam["habilidades_selecionadas"]] == ["fala", "visao_no_escuro", "foco_de_familiar"]
+    assert mg_fam["ficha"]["cabecalho"]["tendencia"] == "CN"
+
+    # 3. Bloqueios estritos de tendência incompatível e pré-requisitos de habilidades de Familiar
+    for kw_inv in (
+        {"escolhas_perfil": {"tendencia": "CM"}},  # Druida exige neutro
+    ):
+        try:
+            gerar_personagem("humano", "heranca_versatil", "druida", "druida_senhor_matilha", seed=1, dados=db, **kw_inv)
+            raise AssertionError(f"Druida deveria rejeitar {kw_inv!r}")
+        except ErroValidacao:
+            pass
+
+    for habs_inv in (
+        ["bateria_de_magia"],  # Requer magias de 4º círculo (indisponível no N1)
+        ["reagentes_extras"],  # Exclusiva de Alquimista
+        ["assistente_de_laboratorio"],  # Sem Destreza Manual
+    ):
+        try:
+            gerar_personagem(
+                "elfo", "elfo_vidente", "mago", "mago_ilusionista_enganador",
+                escolhas_companheiro={"habilidades_ids": habs_inv},
+                seed=1,
+                dados=db,
+            )
+            raise AssertionError(f"Mago deveria rejeitar habilidades {habs_inv!r}")
+        except ErroValidacao:
+            pass
+
+
 def main() -> None:
     test_ca_limite_destreza_e_sem_armadura()
     test_penalidade_armadura_barulhenta_flexivel_e_ferro_desimpedido()
@@ -1262,6 +1334,7 @@ def main() -> None:
     test_selecao_manual_e_aleatoria_magias()
     test_aderencia_procedural_nortes()
     test_orcamento_90_peso_leve_e_viagem_procedural()
+    test_personalizacao_companheiro_familiar_e_perfil()
     print("SUCESSO TOTAL — Todos os testes de casos de borda PF2E passaram!")
 
 

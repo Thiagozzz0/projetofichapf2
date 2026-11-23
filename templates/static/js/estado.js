@@ -45,6 +45,7 @@
     perEstado: { selecionadas: [] },
     magEstado: { truques: [], magias_n1: [] },
     eqEstado: { armas_cc: [], armas_dist: [], variados: [] },
+    perfilEstado: { familiarHabs: [] },
     mapaEq: { armaduras: {}, escudos: {}, armas_cc: {}, armas_dist: {}, variados: {} },
 
     ORDEM_ATRIBUTOS: ["for", "des", "con", "int", "sab", "car"],

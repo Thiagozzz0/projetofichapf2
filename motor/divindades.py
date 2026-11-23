@@ -10,6 +10,24 @@ from .util import normalizar
 
 
 CLASSES_DIVINDADE_OBRIGATORIA = frozenset({"clerigo", "campeao"})
+TENDENCIAS_OFICIAIS = ("OB", "NB", "CB", "ON", "N", "CN", "OM", "NM", "CM")
+_TENDENCIAS_DRUIDA = ("NB", "ON", "N", "CN", "NM")
+
+
+def tendencias_permitidas(
+    classe_id: str,
+    subclasse_id: str = "",
+    divindade: dict[str, Any] | None = None,
+) -> list[str]:
+    """Retorna as tendências permitidas conforme classe, causa de Campeão e divindade de Clérigo."""
+    if classe_id == "campeao":
+        causa_tend = {"paladino": "OB", "redentor": "NB", "libertador": "CB"}.get(subclasse_id)
+        return [causa_tend] if causa_tend else ["OB", "NB", "CB"]
+    if classe_id == "druida":
+        return list(_TENDENCIAS_DRUIDA)
+    if classe_id == "clerigo" and divindade and divindade.get("tendencias_seguidores"):
+        return list(divindade["tendencias_seguidores"])
+    return list(TENDENCIAS_OFICIAIS)
 
 
 def determinar_tendencia(
@@ -17,8 +35,24 @@ def determinar_tendencia(
     subclasse_id: str,
     conceito: dict[str, Any] | None = None,
     divindade: dict[str, Any] | None = None,
+    tendencia_manual: str | None = None,
 ) -> str:
-    """Determina a tendência inicial considerando classe, causa/subclasse, conceito e divindade."""
+    """Determina a tendência inicial considerando escolha manual, classe, causa, conceito e divindade."""
+    req_raw = str(tendencia_manual or "").strip()
+    req_norm = normalizar(req_raw)
+    if req_raw and req_norm not in {"procedural", "auto", "automatico", "aleatorio"}:
+        sigla = req_raw.upper()
+        if sigla not in TENDENCIAS_OFICIAIS:
+            raise ValueError(
+                f"Tendência desconhecida: '{req_raw}'. Use uma sigla oficial ({', '.join(TENDENCIAS_OFICIAIS)})."
+            )
+        permitidas = tendencias_permitidas(classe_id, subclasse_id, divindade)
+        if sigla not in permitidas:
+            raise ValueError(
+                f"A tendência '{sigla}' não é permitida para esta combinação (permitidas: {', '.join(permitidas)})."
+            )
+        return sigla
+
     if conceito and conceito.get("tendencia_preferida"):
         tendencia = str(conceito["tendencia_preferida"])
     elif classe_id == "campeao":

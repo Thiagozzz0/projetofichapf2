@@ -1657,7 +1657,32 @@ body {
   align-items: center;
 }
 
+.grid-perfil-bio {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.grid-perfil-bio .span-perfil-wide {
+  grid-column: span 2;
+}
+
+.grid-perfil-bio input[type="text"] {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: #fffdf9;
+  font-size: 0.84rem;
+}
+
 @media (max-width: 980px) {
+  .grid-perfil-bio {
+    grid-template-columns: 1fr;
+  }
+  .grid-perfil-bio .span-perfil-wide {
+    grid-column: span 1;
+  }
   .grid-atributos-livres,
   .grid-pericias-opcoes,
   .grid-pericias-checkboxes,

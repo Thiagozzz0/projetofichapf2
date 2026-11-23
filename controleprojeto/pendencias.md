@@ -26,8 +26,6 @@ Lista viva e priorizada das entregas, melhorias e expansões que ainda precisam 
 
 - [ ] **Escolha Manual de Idiomas Extras**
   - Permitir escolher manualmente os idiomas adicionais concedidos por Inteligência, Ancestralidade e Herança (`motor/biografia_pericias.py` + API/UI).
-- [ ] **Personalização de Companheiro Animal / Familiar e Dados Biográficos (Pág. 3)**
-  - Permitir escolher manualmente o tipo do Companheiro Animal ou habilidades do Familiar (`motor/companheiros.py`), além de tendência (quando não travada por classe/divindade), idade, gênero, aparência, crenças e anátemas.
 - [ ] **Customização de Conceitos pelo Usuário** *(sugestão de melhoria)*
   - Permitir criar e salvar conceitos/nortes próprios (ex.: `dados/conceitos_customizados.json` ou via UI) além dos `56` conceitos padrão.
 

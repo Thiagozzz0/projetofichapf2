@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gerador Procedural PF2E — Ficha Oficial</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}?v=43">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}?v=44">
 </head>
 <body>
   <div class="app-container">
@@ -559,6 +559,126 @@
 
               <div class="etapa-rodape">
                 <button type="button" id="btn-eq-voltar" class="btn btn-sutil" data-etapa-ir="talentos">← Voltar p/ Talentos</button>
+                <button type="button" class="btn btn-sutil" data-etapa-acao="fechar">Recolher</button>
+                <button type="button" id="btn-eq-avancar" class="btn btn-secundario" data-etapa-ir="perfil">Avançar para Perfil &amp; Companheiro →</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="etapa-card" id="etapa-perfil" data-etapa="perfil">
+            <button type="button" class="etapa-header" data-etapa-toggle="perfil" aria-expanded="false" aria-controls="corpo-etapa-perfil">
+              <span class="etapa-header-esq">
+                <span class="etapa-num" id="etapa-num-perfil">5</span>
+                <span>
+                  <span class="etapa-titulo">Perfil, Tendência &amp; Companheiro</span>
+                  <span class="etapa-subtitulo">Tendência, dados biográficos (Pág. 3) e Companheiro Animal / Familiar (opcional)</span>
+                </span>
+              </span>
+              <span class="etapa-header-dir">
+                <span id="resumo-etapa-perfil" class="etapa-resumo-pill">Opcional / Padrão</span>
+                <span class="etapa-seta" aria-hidden="true">▾</span>
+              </span>
+            </button>
+            <div id="corpo-etapa-perfil" class="etapa-corpo oculto">
+              <div class="campo-grupo subgrupo-atb-etapa-d" id="grupo-perfil">
+                <div class="etapa-d-topo">
+                  <div>
+                    <span class="etapa-d-titulo">I — Tendência, Biografia Visual e Companheiro (Página 3)</span>
+                    <small class="nota-campo">Campos em branco usam os padrões da ancestralidade/conceito. Quando sua classe ou talentos concederem Companheiro Animal ou Familiar, a seção de personalização aparecerá abaixo.</small>
+                  </div>
+                </div>
+
+                <div class="grid-talentos-custom">
+                  <div class="card-tal-cat card-tal-wide">
+                    <div class="card-tal-topo">
+                      <label for="perfil-tendencia">1. Tendência e Dados Biográficos (Pág. 3)</label>
+                      <span class="badge-tal-auto">Opcional</span>
+                    </div>
+                    <div class="campo-atb-inline" style="margin-bottom:8px">
+                      <label for="perfil-tendencia">Tendência</label>
+                      <select id="perfil-tendencia" name="perfil_tendencia"></select>
+                    </div>
+                    <small id="nota-perfil-tendencia" class="nota-campo" style="margin-bottom:8px; display:block"></small>
+
+                    <div class="grid-perfil-bio">
+                      <div class="campo-atb-inline">
+                        <label for="perfil-idade">Idade</label>
+                        <input id="perfil-idade" name="perfil_idade" type="text" placeholder="Ex.: 22 anos">
+                      </div>
+                      <div class="campo-atb-inline">
+                        <label for="perfil-genero">Gênero / Pronomes</label>
+                        <input id="perfil-genero" name="perfil_genero" type="text" placeholder="Ex.: Ele/Dele, Ela/Dela">
+                      </div>
+                      <div class="campo-atb-inline">
+                        <label for="perfil-etnia">Etnia</label>
+                        <input id="perfil-etnia" name="perfil_etnia" type="text" placeholder="Opcional">
+                      </div>
+                      <div class="campo-atb-inline">
+                        <label for="perfil-nacionalidade">Nacionalidade</label>
+                        <input id="perfil-nacionalidade" name="perfil_nacionalidade" type="text" placeholder="Opcional">
+                      </div>
+                      <div class="campo-atb-inline">
+                        <label for="perfil-altura">Altura</label>
+                        <input id="perfil-altura" name="perfil_altura" type="text" placeholder="Ex.: 1,75 m">
+                      </div>
+                      <div class="campo-atb-inline">
+                        <label for="perfil-peso">Peso</label>
+                        <input id="perfil-peso" name="perfil_peso" type="text" placeholder="Ex.: 72 kg">
+                      </div>
+                      <div class="campo-atb-inline span-perfil-wide">
+                        <label for="perfil-aparencia">Aparência</label>
+                        <input id="perfil-aparencia" name="perfil_aparencia" type="text" placeholder="Cabelos, olhos, cicatrizes, vestimenta...">
+                      </div>
+                      <div class="campo-atb-inline">
+                        <label for="perfil-crencas">Crenças / Código</label>
+                        <input id="perfil-crencas" name="perfil_crencas" type="text" placeholder="Princípios, valores pessoais...">
+                      </div>
+                      <div class="campo-atb-inline">
+                        <label for="perfil-aversoes">Aversões / Anátemas</label>
+                        <input id="perfil-aversoes" name="perfil_aversoes" type="text" placeholder="O que rejeita ou evita">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card-tal-cat card-tal-wide oculto" id="card-perfil-companheiro">
+                    <div class="card-tal-topo">
+                      <span id="titulo-perfil-companheiro">2. Companheiro Animal / Familiar</span>
+                      <span id="badge-perfil-companheiro" class="badge-tal-liberado">Ativo</span>
+                    </div>
+
+                    <div id="bloco-perfil-comp-animal" class="oculto">
+                      <div class="grid-perfil-bio">
+                        <div class="campo-atb-inline">
+                          <label for="perfil-comp-nome">Nome do Companheiro</label>
+                          <input id="perfil-comp-nome" name="perfil_comp_nome" type="text" placeholder="Ex.: Presa Branca (opcional)">
+                        </div>
+                        <div class="campo-atb-inline span-perfil-wide">
+                          <label for="perfil-comp-tipo">Tipo de Companheiro Animal</label>
+                          <select id="perfil-comp-tipo" name="perfil_comp_tipo"></select>
+                        </div>
+                      </div>
+                      <div id="desc-perfil-comp" class="desc-preview-box oculto"></div>
+                    </div>
+
+                    <div id="bloco-perfil-familiar" class="oculto">
+                      <div class="grid-perfil-bio" style="margin-bottom:8px">
+                        <div class="campo-atb-inline">
+                          <label for="perfil-fam-nome">Nome do Familiar</label>
+                          <input id="perfil-fam-nome" name="perfil_fam_nome" type="text" placeholder="Ex.: Sombra, Pip (opcional)">
+                        </div>
+                        <div class="campo-atb-inline span-perfil-wide">
+                          <label>Habilidades Diárias do Familiar / Mestre</label>
+                          <div id="perfil-fam-vagas" class="box-tal-auto">0 / 2 selecionada(s)</div>
+                        </div>
+                      </div>
+                      <div id="grid-perfil-familiar-habs" class="grid-pericias-checkboxes"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="etapa-rodape">
+                <button type="button" id="btn-perfil-voltar" class="btn btn-sutil" data-etapa-ir="equipamentos">← Voltar p/ Equipamentos</button>
                 <button type="button" class="btn btn-secundario" data-etapa-acao="fechar">Concluir e Recolher ✓</button>
               </div>
             </div>
@@ -756,13 +876,14 @@
     </section>
   </div>
 
-  <script src="{{ url_for('static', filename='js/render_ficha.js') }}?v=40" defer></script>
-  <script src="{{ url_for('static', filename='js/estado.js') }}?v=40" defer></script>
-  <script src="{{ url_for('static', filename='js/atributos.js') }}?v=40" defer></script>
-  <script src="{{ url_for('static', filename='js/pericias.js') }}?v=40" defer></script>
-  <script src="{{ url_for('static', filename='js/talentos.js') }}?v=40" defer></script>
-  <script src="{{ url_for('static', filename='js/magias.js') }}?v=42" defer></script>
-  <script src="{{ url_for('static', filename='js/equipamentos.js') }}?v=43" defer></script>
-  <script src="{{ url_for('static', filename='js/app.js') }}?v=40" defer></script>
+  <script src="{{ url_for('static', filename='js/render_ficha.js') }}?v=44" defer></script>
+  <script src="{{ url_for('static', filename='js/estado.js') }}?v=44" defer></script>
+  <script src="{{ url_for('static', filename='js/atributos.js') }}?v=44" defer></script>
+  <script src="{{ url_for('static', filename='js/pericias.js') }}?v=44" defer></script>
+  <script src="{{ url_for('static', filename='js/talentos.js') }}?v=44" defer></script>
+  <script src="{{ url_for('static', filename='js/magias.js') }}?v=44" defer></script>
+  <script src="{{ url_for('static', filename='js/equipamentos.js') }}?v=44" defer></script>
+  <script src="{{ url_for('static', filename='js/perfil.js') }}?v=44" defer></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}?v=44" defer></script>
 </body>
 </html>

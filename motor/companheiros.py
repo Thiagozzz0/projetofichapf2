@@ -12,6 +12,47 @@ from .util import formatar_bonus, normalizar
 _DADOS_FAMILIAR_TALENTOS = {"familiar", "familiar_alquimico", "familiar_leshy"}
 
 
+def listar_catalogo_companheiros_familiares(dados: BaseDados) -> dict[str, Any]:
+    """Retorna os 8 tipos de Companheiro Animal e as habilidades de Familiar/Mestre."""
+    cf = dados.companheiros_familiares
+    companheiros = [
+        {
+            "id": t["id"],
+            "nome": t["nome"],
+            "tamanho": t["tamanho"],
+            "pericia": t.get("pericia", ""),
+            "velocidades_texto": t.get("velocidades_texto", ""),
+            "sentidos": t.get("sentidos", ""),
+            "beneficio_de_suporte": t.get("beneficio_de_suporte", ""),
+            "descricao": t.get("descricao", ""),
+        }
+        for t in cf["companheiros_animais"]["tipos_de_companheiro"]
+    ]
+    habs_fam = [
+        {
+            "id": h["id"],
+            "nome": h["nome"],
+            "tipo": "familiar",
+            "descricao": h.get("descricao", ""),
+        }
+        for h in cf["familiares"]["habilidades_de_familiar"]
+    ]
+    habs_mestre = [
+        {
+            "id": h["id"],
+            "nome": h["nome"],
+            "tipo": "mestre",
+            "descricao": h.get("descricao", ""),
+        }
+        for h in cf["familiares"]["habilidades_de_mestre"]
+    ]
+    return {
+        "companheiros_animais": companheiros,
+        "habilidades_familiar": habs_fam,
+        "habilidades_mestre": habs_mestre,
+    }
+
+
 def _mod_chave_familiar(classe_id: str, modificadores_mestre: dict[str, int]) -> int:
     mapa = {
         "alquimista": "int",
@@ -101,19 +142,29 @@ def _gerar_companheiro_animal(
     rng: random.Random | None,
     ancestralidade: dict[str, Any] | None = None,
     biografia: dict[str, Any] | None = None,
+    tipo_manual_id: str | None = None,
+    nome_personalizado: str | None = None,
 ) -> dict[str, Any]:
     comp_root = cf["companheiros_animais"]
     estagio_jovem = comp_root["estagios_evolucao"][0]
     tipos = comp_root["tipos_de_companheiro"]
 
-    avaliados = [
-        (_pontuar_companheiro(t, classe_id, conceito, ancestralidade, biografia), t)
-        for t in tipos
-    ]
-    avaliados.sort(key=lambda par: par[0], reverse=True)
-    topo = avaliados[0][0]
-    candidatos = [t for pts, t in avaliados if pts >= topo - 3][:3] or tipos
-    escolhido = rng.choice(candidatos) if (rng and len(candidatos) > 1) else candidatos[0]
+    tipo_req = normalizar(tipo_manual_id) if tipo_manual_id else ""
+    if tipo_req and tipo_req not in {"procedural", "aleatorio", "auto", "automatico"}:
+        escolhido = next((t for t in tipos if t["id"] == str(tipo_manual_id).strip()), None)
+        if escolhido is None:
+            raise ValueError(f"Tipo de companheiro animal desconhecido: '{tipo_manual_id}'.")
+    elif tipo_req == "aleatorio" and rng:
+        escolhido = rng.choice(tipos)
+    else:
+        avaliados = [
+            (_pontuar_companheiro(t, classe_id, conceito, ancestralidade, biografia), t)
+            for t in tipos
+        ]
+        avaliados.sort(key=lambda par: par[0], reverse=True)
+        topo = avaliados[0][0]
+        candidatos = [t for pts, t in avaliados if pts >= topo - 3][:3] or tipos
+        escolhido = rng.choice(candidatos) if (rng and len(candidatos) > 1) else candidatos[0]
 
     mods = escolhido["modificadores_atributo"]
     prof_treinado = 2 + nivel
@@ -157,10 +208,14 @@ def _gerar_companheiro_animal(
             }
         )
 
+    nome_limpo = (nome_personalizado or "").strip()
+    nome_final = f"{nome_limpo} ({escolhido['nome']})" if nome_limpo else escolhido["nome"]
+
     return {
         "categoria": "Companheiro Animal",
         "id": escolhido["id"],
-        "nome": escolhido["nome"],
+        "nome": nome_final,
+        "tipo_nome": escolhido["nome"],
         "estagio": estagio_jovem["nome"],
         "tamanho": escolhido["tamanho"],
         "descricao": escolhido["descricao"],
@@ -191,6 +246,8 @@ def _gerar_familiar(
     conceito: dict[str, Any] | None = None,
     ancestralidade: dict[str, Any] | None = None,
     biografia: dict[str, Any] | None = None,
+    habilidades_manuais_ids: list[str] | None = None,
+    nome_personalizado: str | None = None,
 ) -> dict[str, Any]:
     fam_root = cf["familiares"]
     est = fam_root["estatisticas_base"]
@@ -250,9 +307,48 @@ def _gerar_familiar(
 
     escolhidas: list[dict[str, str]] = []
     usadas: set[str] = set()
+
+    if habilidades_manuais_ids is not None:
+        if not isinstance(habilidades_manuais_ids, list):
+            raise ValueError("Campo 'habilidades_ids' do familiar deve ser uma lista.")
+        man_set = {str(h).strip() for h in habilidades_manuais_ids}
+        if len(habilidades_manuais_ids) > qtd_habilidades:
+            raise ValueError(
+                f"O familiar suporta no máximo {qtd_habilidades} habilidade(s) diária(s) neste nível."
+            )
+        for raw_hid in habilidades_manuais_ids:
+            hid = str(raw_hid).strip()
+            if hid in usadas:
+                raise ValueError(f"Habilidade de familiar duplicada: '{hid}'.")
+            item = hab_fam.get(hid) or hab_mestre.get(hid)
+            if not item:
+                raise ValueError(f"Habilidade de familiar desconhecida: '{hid}'.")
+            if hid == "bateria_de_magia":
+                raise ValueError("Bateria de Magia requer conjurar magias de 4º círculo (indisponível no 1º nível).")
+            if hid == "reagentes_extras" and classe_id != "alquimista":
+                raise ValueError("Reagentes Extras requer habilidade Infundir Reagentes (exclusiva de Alquimista).")
+            if hid == "foco_de_familiar" and not possui_foco:
+                raise ValueError("Foco de Familiar requer que o mestre possua Reserva de Foco.")
+            if hid in ("conexao_de_truque_magico", "transmitir_magia") and not possui_conjuracao:
+                raise ValueError(f"'{item['nome']}' requer que o mestre possua tradição mágica.")
+            if hid == "assistente_de_laboratorio" and "destreza_manual" not in man_set:
+                raise ValueError("Assistente de Laboratório requer a habilidade Destreza Manual selecionada.")
+            tipo_h = "Habilidade de Familiar" if hid in hab_fam else "Habilidade de Mestre"
+            escolhidas.append(
+                {
+                    "id": item["id"],
+                    "nome": item["nome"],
+                    "tipo": tipo_h,
+                    "descricao": item["descricao"],
+                }
+            )
+            usadas.add(hid)
+
     for hid in preferidas:
         if len(escolhidas) >= qtd_habilidades:
             break
+        if hid in usadas:
+            continue
         if hid == "foco_de_familiar" and not possui_foco:
             continue
         if hid in ("conexao_de_truque_magico", "transmitir_magia") and not possui_conjuracao:
@@ -291,9 +387,11 @@ def _gerar_familiar(
 
     mod_chave = _mod_chave_familiar(classe_id, modificadores_mestre)
     salv = ficha_mestre["jogadas_salvamento"]
+    nome_limpo = (nome_personalizado or "").strip()
+    nome_fam = f"{nome_limpo} ({especie})" if nome_limpo else especie
     return {
         "categoria": "Familiar",
-        "nome": especie,
+        "nome": nome_fam,
         "tamanho": est["tamanho"],
         "pv_max": int(est["pontos_de_vida_por_nivel"]) * nivel,
         "ca": int(ficha_mestre["classe_armadura"]["total"]),
@@ -324,11 +422,14 @@ def gerar_companheiro_ou_familiar(
     ancestralidade: dict[str, Any] | None = None,
     biografia: dict[str, Any] | None = None,
     nivel: int = 1,
+    escolhas_companheiro: dict[str, Any] | None = None,
     rng: random.Random | None = None,
 ) -> dict[str, Any] | None:
     """Retorna o bloco pronto de Companheiro Animal ou Familiar quando aplicável."""
     cf = dados.companheiros_familiares
     classe_id = classe["id"]
+    esc = escolhas_companheiro or {}
+    nome_custom = esc.get("nome")
 
     if "companheiro_animal" in talentos_classe_ids:
         return _gerar_companheiro_animal(
@@ -339,9 +440,14 @@ def gerar_companheiro_ou_familiar(
             rng,
             ancestralidade=ancestralidade,
             biografia=biografia,
+            tipo_manual_id=esc.get("tipo_id"),
+            nome_personalizado=nome_custom,
         )
 
     if any(tid in _DADOS_FAMILIAR_TALENTOS for tid in talentos_classe_ids) or talento_ancestral_id == "cumplice_animal":
+        habs_req = esc.get("habilidades_ids")
+        if isinstance(habs_req, str) and normalizar(habs_req) in {"", "procedural", "auto", "automatico"}:
+            habs_req = None
         return _gerar_familiar(
             cf,
             classe_id,
@@ -353,6 +459,8 @@ def gerar_companheiro_ou_familiar(
             conceito=conceito,
             ancestralidade=ancestralidade,
             biografia=biografia,
+            habilidades_manuais_ids=habs_req,
+            nome_personalizado=nome_custom,
         )
 
     return None

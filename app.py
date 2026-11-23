@@ -86,6 +86,20 @@ def _gerar_a_partir_payload(payload: dict[str, Any]) -> dict[str, Any]:
             raise ErroValidacao("Campo 'escolhas_equipamentos' deve ser um objeto JSON.")
         escolhas_equipamentos = bruto_eq
 
+    escolhas_perfil: dict[str, Any] | None = None
+    bruto_perf = payload.get("escolhas_perfil")
+    if bruto_perf is not None:
+        if not isinstance(bruto_perf, dict):
+            raise ErroValidacao("Campo 'escolhas_perfil' deve ser um objeto JSON.")
+        escolhas_perfil = bruto_perf
+
+    escolhas_companheiro: dict[str, Any] | None = None
+    bruto_comp = payload.get("escolhas_companheiro")
+    if bruto_comp is not None:
+        if not isinstance(bruto_comp, dict):
+            raise ErroValidacao("Campo 'escolhas_companheiro' deve ser um objeto JSON.")
+        escolhas_companheiro = bruto_comp
+
     return gerar_personagem(
         ancestralidade_id=str(payload["ancestralidade_id"]).strip(),
         heranca_id=str(payload["heranca_id"]).strip(),
@@ -102,6 +116,8 @@ def _gerar_a_partir_payload(payload: dict[str, Any]) -> dict[str, Any]:
         escolhas_talentos=escolhas_talentos,
         escolhas_magias=escolhas_magias,
         escolhas_equipamentos=escolhas_equipamentos,
+        escolhas_perfil=escolhas_perfil,
+        escolhas_companheiro=escolhas_companheiro,
     )
 
 

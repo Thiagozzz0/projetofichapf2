@@ -351,6 +351,7 @@
     app.atualizarCatalogoPericiasUI?.();
     app.atualizarCatalogoMagiasUI?.();
     app.atualizarCatalogoEquipamentosUI?.();
+    app.atualizarPerfilUI?.();
     app.atualizarResumosEtapasUI?.();
   }
 
@@ -359,6 +360,7 @@
     document.getElementById("painel-talentos-custom")?.classList.toggle("oculto", modo !== "personalizado");
     app.atualizarCatalogoPericiasUI?.();
     app.atualizarCatalogoEquipamentosUI?.();
+    app.atualizarPerfilUI?.();
     app.atualizarResumosEtapasUI?.();
   }
 
@@ -404,6 +406,7 @@
       document.getElementById(id)?.addEventListener("change", () => {
         sincronizarExclusaoTalentos();
         app.atualizarCatalogoEquipamentosUI?.();
+        app.atualizarPerfilUI?.();
         app.atualizarResumosEtapasUI?.();
       });
     });
