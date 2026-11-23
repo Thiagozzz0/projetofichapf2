@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gerador Procedural PF2E — Ficha Oficial</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}?v=42">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}?v=43">
 </head>
 <body>
   <div class="app-container">
@@ -497,7 +497,10 @@
                       <span>Gasto: <strong id="eq-resumo-gasto">0 pp</strong></span>
                       <span>Saldo Restante na Ficha: <strong id="eq-resumo-saldo" class="saldo-ok">150 pp (15 po)</strong></span>
                     </div>
-                    <button type="button" id="btn-eq-reset-procedural" class="btn btn-sutil">Voltar Tudo p/ Procedural</button>
+                    <div class="barra-eq-acoes">
+                      <button type="button" id="btn-eq-kit-classe" class="btn btn-secundario btn-compacto oculto">+ Kit de Classe</button>
+                      <button type="button" id="btn-eq-reset-procedural" class="btn btn-sutil">Voltar Tudo p/ Procedural</button>
+                    </div>
                   </div>
                   <small id="eq-nota-hibrida" class="nota-campo">Categorias deixadas em "Procedural" usarão automaticamente o saldo restante ao gerar a ficha.</small>
                   <small id="eq-nota-curadoria" class="nota-campo"></small>
@@ -759,7 +762,7 @@
   <script src="{{ url_for('static', filename='js/pericias.js') }}?v=40" defer></script>
   <script src="{{ url_for('static', filename='js/talentos.js') }}?v=40" defer></script>
   <script src="{{ url_for('static', filename='js/magias.js') }}?v=42" defer></script>
-  <script src="{{ url_for('static', filename='js/equipamentos.js') }}?v=42" defer></script>
+  <script src="{{ url_for('static', filename='js/equipamentos.js') }}?v=43" defer></script>
   <script src="{{ url_for('static', filename='js/app.js') }}?v=40" defer></script>
 </body>
 </html>

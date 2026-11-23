@@ -255,6 +255,10 @@
     app.eqEstado.armas_cc = [];
     app.eqEstado.armas_dist = [];
     app.eqEstado.variados = [];
+    const notaHib = document.getElementById("eq-nota-hibrida");
+    if (notaHib) {
+      notaHib.textContent = 'Categorias deixadas em "Procedural" usarão automaticamente o saldo restante ao gerar a ficha.';
+    }
     atualizarVisibilidadeEquipamentosUI();
   }
 
@@ -624,6 +628,74 @@
       }
     }
 
+    const btnKitCls = document.getElementById("btn-eq-kit-classe");
+    if (btnKitCls) {
+      const kitCls = profs.filtrando ? cat.kits_de_classe?.[profs.clsId] : null;
+      if (kitCls) {
+        btnKitCls.classList.remove("oculto");
+        btnKitCls.textContent = `+ Kit de ${kitCls.classe} (${fmtPrecoEq(kitCls.preco_pc)})`;
+        const optTxt = kitCls.opcoes_sugeridas?.length
+          ? `\nOpções extras sugeridas pelo livro: ${kitCls.opcoes_sugeridas.join("; ")}`
+          : "";
+        const omitTxt = kitCls.itens_omitidos?.length
+          ? `\n(Omitido da loja inicial: ${kitCls.itens_omitidos.join(", ")})`
+          : "";
+        btnKitCls.title = `Aplicar Kit Oficial de ${kitCls.classe}: ${kitCls.resumo_itens.join(", ")}.${optTxt}${omitTxt}`;
+      } else {
+        btnKitCls.classList.add("oculto");
+        btnKitCls.textContent = "+ Kit de Classe";
+        btnKitCls.title = "";
+      }
+    }
+
+    atualizarOrcamentoEquipamentosUI();
+  }
+
+  function aplicarKitDeClasseUI() {
+    const clsId = document.getElementById("classe")?.value || "aleatorio";
+    const kit = app.opcoes?.catalogo_equipamentos?.kits_de_classe?.[clsId];
+    if (!kit) return;
+
+    const selArm = document.getElementById("eq-armadura");
+    const cardArmOculto = document.getElementById("card-eq-armadura")?.classList.contains("oculto");
+    if (selArm && !cardArmOculto) {
+      selArm.value = kit.armadura_id && app.mapaEq.armaduras[kit.armadura_id] ? kit.armadura_id : "nenhuma";
+    }
+
+    const selEsc = document.getElementById("eq-escudo");
+    if (selEsc) selEsc.value = "nenhum";
+
+    app.eqEstado.armas_cc = (kit.armas_corpo_a_corpo_ids || [])
+      .map((id) => app.mapaEq.armas_cc[id])
+      .filter(Boolean);
+    const selCc = document.getElementById("eq-arma-cc-select");
+    if (selCc) selCc.value = app.eqEstado.armas_cc.length ? "nenhuma" : "procedural";
+
+    app.eqEstado.armas_dist = (kit.armas_distancia_ids || [])
+      .map((id) => app.mapaEq.armas_dist[id])
+      .filter(Boolean);
+    const selDist = document.getElementById("eq-arma-dist-select");
+    if (selDist) selDist.value = app.eqEstado.armas_dist.length ? "nenhuma" : "procedural";
+
+    app.eqEstado.variados = [];
+    (kit.equipamentos_variados || []).forEach(({ id, quantidade }) => {
+      const it = app.mapaEq.variados[id];
+      if (!it) return;
+      app.eqEstado.variados.push({ ...it, quantidade: Number(quantidade || 1) });
+    });
+    const selVar = document.getElementById("eq-variado-select");
+    if (selVar) selVar.value = "nenhum";
+    const qtdVar = document.getElementById("eq-variado-qtd");
+    if (qtdVar) qtdVar.value = "1";
+
+    const notaHib = document.getElementById("eq-nota-hibrida");
+    if (notaHib) {
+      const optNota = kit.opcoes_sugeridas?.length
+        ? ` Sugestões extras do livro p/ o saldo restante: ${kit.opcoes_sugeridas.join(" • ")}.`
+        : "";
+      notaHib.textContent = `Kit oficial de ${kit.classe} aplicado (${kit.resumo_itens.join(", ")}).${optNota}`;
+    }
+
     atualizarOrcamentoEquipamentosUI();
   }
 
@@ -698,6 +770,74 @@
       if (sel) sel.value = "nenhum";
       if (qtdEl) qtdEl.value = "1";
     }
+    const btnKitCls = document.getElementById("btn-eq-kit-classe");
+    if (btnKitCls) {
+      const kitCls = profs.filtrando ? cat.kits_de_classe?.[profs.clsId] : null;
+      if (kitCls) {
+        btnKitCls.classList.remove("oculto");
+        btnKitCls.textContent = `+ Kit de ${kitCls.classe} (${fmtPrecoEq(kitCls.preco_pc)})`;
+        const optTxt = kitCls.opcoes_sugeridas?.length
+          ? `\nOpções extras sugeridas pelo livro: ${kitCls.opcoes_sugeridas.join("; ")}`
+          : "";
+        const omitTxt = kitCls.itens_omitidos?.length
+          ? `\n(Omitido da loja inicial: ${kitCls.itens_omitidos.join(", ")})`
+          : "";
+        btnKitCls.title = `Aplicar Kit Oficial de ${kitCls.classe}: ${kitCls.resumo_itens.join(", ")}.${optTxt}${omitTxt}`;
+      } else {
+        btnKitCls.classList.add("oculto");
+        btnKitCls.textContent = "+ Kit de Classe";
+        btnKitCls.title = "";
+      }
+    }
+
+    atualizarOrcamentoEquipamentosUI();
+  }
+
+  function aplicarKitDeClasseUI() {
+    const clsId = document.getElementById("classe")?.value || "aleatorio";
+    const kit = app.opcoes?.catalogo_equipamentos?.kits_de_classe?.[clsId];
+    if (!kit) return;
+
+    const selArm = document.getElementById("eq-armadura");
+    const cardArmOculto = document.getElementById("card-eq-armadura")?.classList.contains("oculto");
+    if (selArm && !cardArmOculto) {
+      selArm.value = kit.armadura_id && app.mapaEq.armaduras[kit.armadura_id] ? kit.armadura_id : "nenhuma";
+    }
+
+    const selEsc = document.getElementById("eq-escudo");
+    if (selEsc) selEsc.value = "nenhum";
+
+    app.eqEstado.armas_cc = (kit.armas_corpo_a_corpo_ids || [])
+      .map((id) => app.mapaEq.armas_cc[id])
+      .filter(Boolean);
+    const selCc = document.getElementById("eq-arma-cc-select");
+    if (selCc) selCc.value = app.eqEstado.armas_cc.length ? "nenhuma" : "procedural";
+
+    app.eqEstado.armas_dist = (kit.armas_distancia_ids || [])
+      .map((id) => app.mapaEq.armas_dist[id])
+      .filter(Boolean);
+    const selDist = document.getElementById("eq-arma-dist-select");
+    if (selDist) selDist.value = app.eqEstado.armas_dist.length ? "nenhuma" : "procedural";
+
+    app.eqEstado.variados = [];
+    (kit.equipamentos_variados || []).forEach(({ id, quantidade }) => {
+      const it = app.mapaEq.variados[id];
+      if (!it) return;
+      app.eqEstado.variados.push({ ...it, quantidade: Number(quantidade || 1) });
+    });
+    const selVar = document.getElementById("eq-variado-select");
+    if (selVar) selVar.value = "nenhum";
+    const qtdVar = document.getElementById("eq-variado-qtd");
+    if (qtdVar) qtdVar.value = "1";
+
+    const notaHib = document.getElementById("eq-nota-hibrida");
+    if (notaHib) {
+      const optNota = kit.opcoes_sugeridas?.length
+        ? ` Sugestões extras do livro p/ o saldo restante: ${kit.opcoes_sugeridas.join(" • ")}.`
+        : "";
+      notaHib.textContent = `Kit oficial de ${kit.classe} aplicado (${kit.resumo_itens.join(", ")}).${optNota}`;
+    }
+
     atualizarOrcamentoEquipamentosUI();
   }
 
@@ -708,6 +848,7 @@
       }
     );
     document.getElementById("eq-variado-qtd")?.addEventListener("input", atualizarOrcamentoEquipamentosUI);
+    document.getElementById("btn-eq-kit-classe")?.addEventListener("click", aplicarKitDeClasseUI);
     document.getElementById("btn-eq-reset-procedural")?.addEventListener("click", () => {
       resetarEquipamentosProcedural();
       const modoEl = document.getElementById("modo-equipamentos");

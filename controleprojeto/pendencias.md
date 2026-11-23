@@ -13,8 +13,6 @@ Lista viva e priorizada das entregas, melhorias e expansões que ainda precisam 
 
 ## 2. Melhorias de Interface e Experiência do Usuário (1º Nível)
 
-- [ ] **Atalho de Kit de Classe na Loja de Equipamentos**
-  - Adicionar botão `+ Kit de <Classe>` na loja de equipamentos consumindo `kits_de_classe` de `dados/equipamentos.json`.
 - [ ] **Histórico Local e Exportação/Importação `.json` da Ficha** *(sugestão de melhoria)*
   - Salvar fichas geradas no `localStorage` do navegador (nome, classe, conceito e `seed`) e permitir baixar/importar o `.json` da ficha para backup ou edição posterior.
 - [ ] **Modo "Ficha Viva" em Mesa** *(sugestão de melhoria)*

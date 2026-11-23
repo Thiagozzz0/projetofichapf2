@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 from .dados import BaseDados
@@ -176,19 +177,121 @@ def listar_catalogo_equipamentos_loja(dados: BaseDados) -> dict[str, Any]:
         return res
 
     armas_json = dados.equipamentos["armas"]
+    armas_cc = _serializar_armas(armas_json["corpo_a_corpo"])
+    armas_dist = _serializar_armas(armas_json["distancia"])
+    variados = _itens_variados_loja_brutos(dados)
+
     return {
         "orcamento_inicial_pc": ORCAMENTO_INICIAL_PC,
         "orcamento_inicial_pp": ORCAMENTO_INICIAL_PC // 10,
         "armaduras": armaduras,
         "escudos": escudos,
-        "armas_corpo_a_corpo": _serializar_armas(armas_json["corpo_a_corpo"]),
-        "armas_distancia": _serializar_armas(armas_json["distancia"]),
-        "equipamentos_variados": _itens_variados_loja_brutos(dados),
+        "armas_corpo_a_corpo": armas_cc,
+        "armas_distancia": armas_dist,
+        "equipamentos_variados": variados,
+        "kits_de_classe": _listar_kits_de_classe_loja(dados, armaduras, armas_cc, armas_dist, variados),
         "familiaridade_armas_ancestral": {
             tid: {"armas": list(armas_lista), "traco": traco}
             for tid, (armas_lista, traco) in _FAMILIARIDADE_ARMAS_ANCESTRAL.items()
         },
     }
+
+
+def _listar_kits_de_classe_loja(
+    dados: BaseDados,
+    armaduras: list[dict[str, Any]],
+    armas_cc: list[dict[str, Any]],
+    armas_dist: list[dict[str, Any]],
+    variados: list[dict[str, Any]],
+) -> dict[str, dict[str, Any]]:
+    """Resolve os 12 Kits de Classe de dados/equipamentos.json para IDs reais da loja."""
+    arm_por_nome = {normalizar(a["nome"]): a for a in armaduras}
+    wcc_por_nome = {normalizar(w["nome"]): w for w in armas_cc}
+    wdi_por_nome = {normalizar(w["nome"]): w for w in armas_dist}
+    var_por_nome = {normalizar(v["nome"]): v for v in variados}
+
+    def _buscar_por_nome(mapa: dict[str, dict[str, Any]], texto: str) -> dict[str, Any] | None:
+        n = normalizar(texto)
+        if n in mapa:
+            return mapa[n]
+        if n.endswith("s") and n[:-1] in mapa:
+            return mapa[n[:-1]]
+        return None
+
+    kits_out: dict[str, dict[str, Any]] = {}
+    for k in dados.equipamentos.get("kits_de_classe") or []:
+        arm_id: str | None = None
+        armas_cc_ids: list[str] = []
+        armas_dist_ids: list[str] = []
+        variados_acum: dict[str, int] = {}
+        preco_total_pc = 0
+        resumo_itens: list[str] = []
+        itens_omitidos: list[str] = []
+
+        if k.get("armadura"):
+            arm_obj = _buscar_por_nome(arm_por_nome, k["armadura"])
+            if arm_obj:
+                arm_id = arm_obj["id"]
+                preco_total_pc += int(arm_obj["preco_pc"])
+                resumo_itens.append(arm_obj["nome"])
+
+        for entrada_w in k.get("armas") or []:
+            m_mun = re.search(r"\(com\s+(\d+)\s+([^)]+)\)", entrada_w, flags=re.IGNORECASE)
+            if m_mun:
+                qtd_mun = int(m_mun.group(1))
+                nome_mun = m_mun.group(2).strip()
+                mun_obj = _buscar_por_nome(var_por_nome, nome_mun)
+                if mun_obj:
+                    pac = max(1, int(mun_obj.get("quantidade_pacote") or 1))
+                    lotes = max(1, (qtd_mun + pac - 1) // pac)
+                    variados_acum[mun_obj["id"]] = variados_acum.get(mun_obj["id"], 0) + lotes
+                    preco_total_pc += int(mun_obj["preco_pc"]) * lotes
+                    resumo_itens.append(f"{qtd_mun} {mun_obj['nome']}")
+
+            base_w = re.sub(r"\s*\([^)]*\)", "", entrada_w).strip()
+            m_qtd = re.match(r"^(\d+)\s+(.+)$", base_w)
+            qtd_w = int(m_qtd.group(1)) if m_qtd else 1
+            nome_w = m_qtd.group(2).strip() if m_qtd else base_w
+
+            w_obj = _buscar_por_nome(wcc_por_nome, nome_w)
+            if w_obj:
+                armas_cc_ids.extend([w_obj["id"]] * qtd_w)
+                preco_total_pc += int(w_obj["preco_pc"]) * qtd_w
+                resumo_itens.append(f"{qtd_w}× {w_obj['nome']}" if qtd_w > 1 else w_obj["nome"])
+            else:
+                w_obj = _buscar_por_nome(wdi_por_nome, nome_w)
+                if w_obj:
+                    armas_dist_ids.extend([w_obj["id"]] * qtd_w)
+                    preco_total_pc += int(w_obj["preco_pc"]) * qtd_w
+                    resumo_itens.append(f"{qtd_w}× {w_obj['nome']}" if qtd_w > 1 else w_obj["nome"])
+                else:
+                    itens_omitidos.append(entrada_w)
+
+        for entrada_eq in k.get("equipamentos") or []:
+            m_eq = re.match(r"^(\d+)\s+(?:conjuntos?\s+de\s+)?(.+)$", entrada_eq.strip(), flags=re.IGNORECASE)
+            qtd_eq = int(m_eq.group(1)) if m_eq else 1
+            nome_eq = m_eq.group(2).strip() if m_eq else entrada_eq.strip()
+            v_obj = _buscar_por_nome(var_por_nome, nome_eq)
+            if v_obj:
+                variados_acum[v_obj["id"]] = variados_acum.get(v_obj["id"], 0) + qtd_eq
+                preco_total_pc += int(v_obj["preco_pc"]) * qtd_eq
+                resumo_itens.append(f"{qtd_eq}× {v_obj['nome']}" if qtd_eq > 1 else v_obj["nome"])
+            else:
+                itens_omitidos.append(entrada_eq)
+
+        kits_out[k["id"]] = {
+            "id": k["id"],
+            "classe": k["classe"],
+            "armadura_id": arm_id,
+            "armas_corpo_a_corpo_ids": armas_cc_ids,
+            "armas_distancia_ids": armas_dist_ids,
+            "equipamentos_variados": [{"id": iid, "quantidade": q} for iid, q in variados_acum.items()],
+            "preco_pc": preco_total_pc,
+            "resumo_itens": resumo_itens,
+            "opcoes_sugeridas": list(k.get("opcoes") or []),
+            "itens_omitidos": itens_omitidos,
+        }
+    return kits_out
 
 
 def formatar_armadura_resumo(armadura: dict[str, Any]) -> str:
