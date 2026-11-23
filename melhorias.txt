@@ -11,3 +11,5 @@ zero como o gerador gerar para ele.
 [Concluído - Etapa 32] Opção do jogador escolher os equipamentos (Armaduras, Escudos, Armas Corporais, Armas à Distância — separando Simples, Marciais e Avançadas — e Equipamentos Variados) no final após Divindades, deduzindo automaticamente do orçamento inicial de 15 po (150 pp) ou mantendo o modo procedural.
 
 [Concluído - Etapa 33] Aba/seção de Talentos (Ancestralidade, Biografia automático, Classe e Demais Tipos: Perícia e Gerais) com seleção manual ou procedural e curadoria estrita de 1º nível (liberação dinâmica por Ambição Natural, Treinamento Geral, Herança Versátil e Ladino) + interface reorganizada em lista/acordeão limpo de 3 etapas (Criação Inicial, Talentos, Equipamentos).
+
+[Concluído - Etapas 34/35/36] Filtragem de equipamentos por classe (incluindo Anátema do Druida no back-end), Etapa de Perícias (Manual ou Procedural) com cruzamento de pré-requisitos nos Talentos da UI, modularização do Front-End JS (`estado.js`, `atributos.js`, `pericias.js`, `talentos.js`, `equipamentos.js`, `app.js`) e Etapa de Magias e Truques para Conjuradores (`motor/magias.py` + `magias.js`).
