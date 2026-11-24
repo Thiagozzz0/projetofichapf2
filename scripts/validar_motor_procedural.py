@@ -768,6 +768,7 @@ def main() -> None:
                 0: [dr_matilha["ficha"]["cabecalho"]["nome_personagem"], "Druida"],
                 2: ["Companheiro Animal"],
                 3: ["Truques Mágicos"],
+                4: [dr_matilha["meta_geracao"]["companheiro_ou_familiar"]["nome"], "PV"],
             },
         ),
     ):
@@ -779,8 +780,9 @@ def main() -> None:
         raw_pdf = r_pdf.get_data()
         assert raw_pdf.startswith(b"%PDF-")
 
+        esperado_pags = 5 if caso_res["meta_geracao"].get("companheiro_ou_familiar") else 4
         with pymupdf.open(stream=raw_pdf, filetype="pdf") as pdf_doc:
-            assert len(pdf_doc) == 4
+            assert len(pdf_doc) == esperado_pags
             for pg_idx, page in enumerate(pdf_doc):
                 assert abs(page.rect.width - 603.0) < 0.5 and abs(page.rect.height - 783.0) < 0.5
                 if pg_idx in checks_por_pagina:

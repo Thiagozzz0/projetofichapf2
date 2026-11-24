@@ -97,28 +97,6 @@
           : `Excedido em ${fmtPrecoEq(Math.abs(saldoPc))}`;
       }
     }
-
-    const elPerf = document.getElementById("resumo-etapa-perfil");
-    if (elPerf) {
-      const partesP = [];
-      const tend = document.getElementById("perfil-tendencia")?.value || "procedural";
-      if (tend !== "procedural") partesP.push(`Tend. ${tend}`);
-      const bioPreenchidos = ["perfil-idade", "perfil-genero", "perfil-etnia", "perfil-nacionalidade", "perfil-altura", "perfil-peso", "perfil-aparencia", "perfil-crencas", "perfil-aversoes"]
-        .filter((id) => Boolean((document.getElementById(id)?.value || "").trim())).length;
-      if (bioPreenchidos > 0) partesP.push(`${bioPreenchidos} bio`);
-      const cardComp = document.getElementById("card-perfil-companheiro");
-      if (cardComp && !cardComp.classList.contains("oculto")) {
-        const ehAnimal = !document.getElementById("bloco-perfil-comp-animal")?.classList.contains("oculto");
-        if (ehAnimal) {
-          const tComp = document.getElementById("perfil-comp-tipo")?.value || "procedural";
-          const nComp = (document.getElementById("perfil-comp-nome")?.value || "").trim();
-          if (tComp !== "procedural" || nComp) partesP.push("Companheiro");
-        } else if (app.perfilEstado.familiarHabs.length || (document.getElementById("perfil-fam-nome")?.value || "").trim()) {
-          partesP.push("Familiar");
-        }
-      }
-      elPerf.textContent = partesP.length ? partesP.join(" • ") : "Opcional / Padrão";
-    }
   }
 
   async function inicializar() {

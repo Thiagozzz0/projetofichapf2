@@ -1676,7 +1676,116 @@ body {
   font-size: 0.84rem;
 }
 
+.detalhes-perfil-inicial {
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: #fcf8ee;
+  padding: 8px 12px;
+}
+
+.detalhes-perfil-inicial > summary {
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--accent-dark);
+}
+
+.detalhes-perfil-inicial[open] > summary {
+  margin-bottom: 6px;
+}
+
+.detalhes-perfil-inicial .grid-perfil-bio {
+  margin-top: 8px;
+}
+
+.card-comp-inicial {
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: 8px;
+  background: #fdf9f0;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.comp-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.comp-stat-box {
+  background: #fffdf8;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 4px 6px;
+  text-align: center;
+}
+
+.comp-stat-box small {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.comp-stat-box strong {
+  font-size: 0.92rem;
+  color: var(--accent-dark);
+}
+
+.comp-atb-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.comp-atb-pill {
+  display: inline-block;
+  padding: 2px 7px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: #fffdf8;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.comp-ataques-lista {
+  margin: 2px 0 0;
+  padding-left: 16px;
+  font-size: 0.78rem;
+  color: var(--ink);
+}
+
+.comp-ataques-lista li {
+  margin-bottom: 2px;
+}
+
+.p5-layout {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.p5-stat-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
 @media (max-width: 980px) {
+  .comp-stats-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .p5-layout {
+    grid-template-columns: 1fr;
+  }
   .grid-perfil-bio {
     grid-template-columns: 1fr;
   }
@@ -1730,5 +1839,8 @@ body {
   }
   .pagina-ficha.oculta {
     display: block !important;
+  }
+  .pagina-ficha[hidden] {
+    display: none !important;
   }
 }

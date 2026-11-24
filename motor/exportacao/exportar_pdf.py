@@ -713,8 +713,192 @@ def _pdf_preencher_pagina_4(page: Any, pymupdf: Any, resultado: dict[str, Any]) 
             _pdf_preencher_slot_magia(page, pymupdf, slot, 399.5, y_m, x_prep=566.4, x_acoes=551.6, x_comp_base=556.2)
 
 
+def _pdf_desenhar_caixa_secao(
+    page: Any,
+    pymupdf: Any,
+    x0: float,
+    y0: float,
+    x1: float,
+    y1: float,
+    titulo: str,
+    conteudo: str,
+    *,
+    fontsize: float = 8.2,
+    min_fontsize: float = 5.2,
+) -> float:
+    """Desenha um bloco retangular com cabeçalho e texto multilinha na página extra do PDF."""
+    page.draw_rect(pymupdf.Rect(x0, y0, x1, y1), color=(0.55, 0.48, 0.40), fill=(0.995, 0.988, 0.97), width=0.8)
+    page.draw_rect(pymupdf.Rect(x0, y0, x1, y0 + 15.0), color=(0.55, 0.48, 0.40), fill=(0.94, 0.90, 0.83), width=0.6)
+    _pdf_inserir_linha(
+        page, pymupdf, x0 + 5.0, y0 + 1.5, x1 - 5.0, y0 + 14.0,
+        titulo.upper(), fontsize=7.6, bold=True, color=_PDF_COR_DESTAQUE,
+    )
+    if conteudo:
+        _pdf_inserir_bloco(
+            page, pymupdf, x0 + 6.0, y0 + 18.0, x1 - 6.0, y1 - 4.0,
+            conteudo, fontsize=fontsize, min_fontsize=min_fontsize, color=_PDF_COR_TINTA,
+        )
+    return y1
+
+
+def _pdf_adicionar_pagina_5_companheiro(doc: Any, pymupdf: Any, resultado: dict[str, Any]) -> None:
+    """Adiciona Página 5 extra ao PDF quando o personagem possui Companheiro Animal ou Familiar."""
+    comp = resultado.get("meta_geracao", {}).get("companheiro_ou_familiar")
+    if not comp:
+        return
+
+    base_rect = doc[0].rect
+    page = doc.new_page(width=base_rect.width, height=base_rect.height)
+    x0 = 26.0
+    x1 = base_rect.width - 26.0
+    largura = x1 - x0
+    cab = resultado["ficha"]["cabecalho"]
+    categoria = comp.get("categoria", "Companheiro")
+
+    # Banner superior
+    page.draw_rect(
+        pymupdf.Rect(x0, 24.0, x1, 68.0),
+        color=_PDF_COR_DESTAQUE,
+        fill=(0.95, 0.92, 0.85),
+        width=1.4,
+    )
+    titulo_topo = (
+        "FICHA DE COMPANHEIRO ANIMAL — PATHFINDER 2ª EDIÇÃO"
+        if categoria == "Companheiro Animal"
+        else "FICHA DE FAMILIAR — PATHFINDER 2ª EDIÇÃO"
+    )
+    _pdf_inserir_linha(page, pymupdf, x0 + 8.0, 28.0, x1 - 8.0, 45.0, titulo_topo, fontsize=12.0, align=1, bold=True, color=_PDF_COR_DESTAQUE)
+    subtitulo = f"Mestre: {cab.get('nome_personagem', '—')} | Classe: {cab.get('classe', '—')} | Nível {cab.get('nivel', 1)} | Página 5"
+    _pdf_inserir_linha(page, pymupdf, x0 + 8.0, 47.0, x1 - 8.0, 63.0, subtitulo, fontsize=8.5, align=1, color=_PDF_COR_TINTA)
+
+    # Identidade
+    y = 76.0
+    col_w = (largura - 12.0) / 3.0
+    identidades = [
+        ("NOME", comp.get("nome", "—")),
+        ("ESTÁGIO / TIPO" if categoria == "Companheiro Animal" else "CATEGORIA", f"{comp.get('estagio', '—')} ({comp.get('tipo_nome', '—')})" if categoria == "Companheiro Animal" else categoria),
+        ("TAMANHO & VELOCIDADE", f"{comp.get('tamanho', '—')} | {comp.get('velocidades') or comp.get('velocidade', '—')}"),
+    ]
+    for idx, (rot, val) in enumerate(identidades):
+        cx0 = x0 + idx * (col_w + 6.0)
+        cx1 = cx0 + col_w
+        page.draw_rect(pymupdf.Rect(cx0, y, cx1, y + 34.0), color=(0.55, 0.48, 0.40), fill=(0.995, 0.988, 0.97), width=0.8)
+        _pdf_inserir_linha(page, pymupdf, cx0 + 5.0, y + 2.0, cx1 - 5.0, y + 12.0, rot, fontsize=6.6, bold=True, color=_PDF_COR_DESTAQUE)
+        _pdf_inserir_linha(page, pymupdf, cx0 + 5.0, y + 14.0, cx1 - 5.0, y + 31.0, str(val), fontsize=8.8, bold=True)
+
+    y = 116.0
+    page.draw_rect(pymupdf.Rect(x0, y, x1, y + 20.0), color=(0.55, 0.48, 0.40), fill=(0.995, 0.988, 0.97), width=0.8)
+    _pdf_inserir_linha(page, pymupdf, x0 + 6.0, y + 3.0, x1 - 6.0, y + 17.0, f"SENTIDOS: {comp.get('sentidos', '—')}", fontsize=8.2, bold=True)
+
+    # Estatísticas de combate (6 caixas)
+    y = 144.0
+    stat_w = (largura - 5.0 * 6.0) / 6.0
+    stats_comb = [
+        ("PV MÁX", str(comp.get("pv_max", 0))),
+        ("CA", str(comp.get("ca", 10))),
+        ("FORTITUDE", formatar_bonus(comp.get("fortitude", 0))),
+        ("REFLEXOS", formatar_bonus(comp.get("reflexos", 0))),
+        ("VONTADE", formatar_bonus(comp.get("vontade", 0))),
+        ("PERCEPÇÃO", formatar_bonus(comp.get("percepcao", 0))),
+    ]
+    for idx, (rot, val) in enumerate(stats_comb):
+        sx0 = x0 + idx * (stat_w + 6.0)
+        sx1 = sx0 + stat_w
+        page.draw_rect(pymupdf.Rect(sx0, y, sx1, y + 42.0), color=_PDF_COR_DESTAQUE, fill=(0.98, 0.96, 0.92), width=1.0)
+        _pdf_inserir_linha(page, pymupdf, sx0 + 3.0, y + 3.0, sx1 - 3.0, y + 14.0, rot, fontsize=6.6, align=1, bold=True, color=_PDF_COR_DESTAQUE)
+        _pdf_inserir_linha(page, pymupdf, sx0 + 3.0, y + 16.0, sx1 - 3.0, y + 38.0, val, fontsize=12.0, align=1, bold=True, color=_PDF_COR_TINTA)
+
+    y = 194.0
+    if categoria == "Companheiro Animal":
+        mods = comp.get("modificadores_atributo") or {}
+        if mods:
+            atb_itens = [
+                ("FOR", mods.get("forca", 0)),
+                ("DES", mods.get("destreza", 0)),
+                ("CON", mods.get("constituicao", 0)),
+                ("INT", mods.get("inteligencia", 0)),
+                ("SAB", mods.get("sabedoria", 0)),
+                ("CAR", mods.get("carisma", 0)),
+            ]
+            for idx, (sig, mv) in enumerate(atb_itens):
+                ax0 = x0 + idx * (stat_w + 6.0)
+                ax1 = ax0 + stat_w
+                page.draw_rect(pymupdf.Rect(ax0, y, ax1, y + 32.0), color=(0.55, 0.48, 0.40), fill=(0.995, 0.988, 0.97), width=0.8)
+                _pdf_inserir_linha(page, pymupdf, ax0 + 3.0, y + 2.0, ax1 - 3.0, y + 12.0, sig, fontsize=6.6, align=1, bold=True, color=_PDF_COR_DESTAQUE)
+                _pdf_inserir_linha(page, pymupdf, ax0 + 3.0, y + 13.0, ax1 - 3.0, y + 29.0, formatar_bonus(int(mv)), fontsize=10.0, align=1, bold=True)
+            y += 40.0
+
+        pers_txt = " | ".join(f"{p['nome']} {formatar_bonus(p['total'])}" for p in comp.get("pericias", [])) or "—"
+        y = _pdf_desenhar_caixa_secao(page, pymupdf, x0, y, x1, y + 36.0, "Perícias Treinadas", pers_txt, fontsize=8.6) + 8.0
+
+        atks = comp.get("ataques") or []
+        atk_linhas = []
+        for atk in atks:
+            tracos_str = ", ".join(atk.get("tracos") or [])
+            atk_linhas.append(
+                f"{atk['nome']} ({_pdf_acao_curta(atk.get('acoes'))}): "
+                f"Ataque {formatar_bonus(atk['ataque_total'])} | Dano {atk['dano']}"
+                + (f" [{tracos_str}]" if tracos_str else "")
+            )
+        atk_h = max(44.0, 22.0 + len(atk_linhas) * 16.0)
+        y = _pdf_desenhar_caixa_secao(
+            page, pymupdf, x0, y, x1, y + atk_h,
+            "Golpes & Ataques", "\n".join(atk_linhas) or "—", fontsize=8.4,
+        ) + 8.0
+
+        if comp.get("especial"):
+            y = _pdf_desenhar_caixa_secao(
+                page, pymupdf, x0, y, x1, y + 54.0,
+                "Especial do Companheiro", comp["especial"], fontsize=8.0,
+            ) + 8.0
+
+        y = _pdf_desenhar_caixa_secao(
+            page, pymupdf, x0, y, x1, y + 72.0,
+            "Benefício de Suporte", comp.get("beneficio_de_suporte", "—"), fontsize=8.0,
+        ) + 8.0
+
+        man_det = comp.get("manobra_avancada_detalhes") or {}
+        man_nome = comp.get("manobra_avancada") or man_det.get("nome") or "—"
+        man_ac = _pdf_acao_curta(man_det.get("acoes"))
+        man_tit = f"Manobra Avançada: {man_nome}" + (f" ({man_ac})" if man_ac else "")
+        man_desc = man_det.get("descricao") or "Disponível ao evoluir para Ágil ou Selvagem."
+        man_h = min(98.0, max(62.0, (base_rect.height - 26.0 - y) * 0.55))
+        y = _pdf_desenhar_caixa_secao(page, pymupdf, x0, y, x1, y + man_h, man_tit, man_desc, fontsize=7.9) + 8.0
+
+        desc_h = max(46.0, base_rect.height - 26.0 - y)
+        if comp.get("descricao") and desc_h >= 40.0:
+            _pdf_desenhar_caixa_secao(page, pymupdf, x0, y, x1, min(base_rect.height - 26.0, y + min(desc_h, 90.0)), "Descrição", comp["descricao"], fontsize=7.9)
+    else:
+        testes_txt = (
+            f"Percepção {formatar_bonus(comp.get('percepcao', 0))} | "
+            f"Acrobatismo {formatar_bonus(comp.get('acrobatismo', 0))} | "
+            f"Furtividade {formatar_bonus(comp.get('furtividade', 0))} | "
+            f"Demais Testes {formatar_bonus(comp.get('outros_testes', 0))}"
+        )
+        y = _pdf_desenhar_caixa_secao(page, pymupdf, x0, y, x1, y + 38.0, "Perícias & Testes Derivados do Mestre", testes_txt, fontsize=8.5) + 10.0
+
+        habs = comp.get("habilidades_selecionadas") or []
+        max_habs = comp.get("habilidades_diarias_max", len(habs))
+        _pdf_inserir_linha(
+            page, pymupdf, x0, y, x1, y + 15.0,
+            f"HABILIDADES DIÁRIAS SELECIONADAS ({len(habs)} / {max_habs})",
+            fontsize=8.6, bold=True, color=_PDF_COR_DESTAQUE,
+        )
+        y += 18.0
+        espaco_disp = max(120.0, (base_rect.height - 26.0) - y)
+        qtd_cards = max(1, len(habs))
+        card_gap = 8.0
+        card_h = min(145.0, (espaco_disp - card_gap * (qtd_cards - 1)) / qtd_cards)
+        for hab in habs:
+            tit_h = f"{hab.get('nome', '—')} [{hab.get('tipo', 'Familiar')}]"
+            y = _pdf_desenhar_caixa_secao(
+                page, pymupdf, x0, y, x1, y + card_h,
+                tit_h, hab.get("descricao", ""), fontsize=8.2, min_fontsize=5.0,
+            ) + card_gap
+
+
 def exportar_ficha_pdf(resultado: dict[str, Any]) -> bytes:
-    """Exporta a ficha completa em bytes `.pdf` idênticos à ficha oficial do livro (4 páginas)."""
+    """Exporta a ficha completa em bytes `.pdf` idênticos à ficha oficial do livro (4 pág. + Pág. 5 p/ Companheiro/Familiar)."""
     if not _TEMPLATE_PDF_OFICIAL.exists():
         raise FileNotFoundError(
             f"Template PDF oficial não encontrado em {_TEMPLATE_PDF_OFICIAL}"
@@ -730,6 +914,7 @@ def exportar_ficha_pdf(resultado: dict[str, Any]) -> bytes:
         _pdf_preencher_pagina_2(doc[1], pymupdf, resultado)
         _pdf_preencher_pagina_3(doc[2], pymupdf, resultado)
         _pdf_preencher_pagina_4(doc[3], pymupdf, resultado)
+        _pdf_adicionar_pagina_5_companheiro(doc, pymupdf, resultado)
         return doc.tobytes(deflate=True)
     finally:
         doc.close()

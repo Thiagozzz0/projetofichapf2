@@ -2,6 +2,7 @@
   "use strict";
 
   let ABA_ATIVA = "todas";
+  let TEM_PAGINA_5 = false;
 
   const NOMES_ATRIBUTOS = {
     for: ["FOR", "Força"],
@@ -336,9 +337,26 @@
       `<div style="margin-top:8px"><span class="pill">Nível ${esc(cab.nivel)}</span><span class="pill">${esc(cab.tamanho)}</span><span class="pill">${esc(cab.tendencia)}</span></div>`;
 
     const perf = f.perfil_e_campanha;
+    const bioD = perf.dados_biograficos || {};
+    const persD = perf.personalidade || {};
     const divDet = m.divindade_detalhes;
+    const extrasBio = [
+      ["Gênero / Pronomes", bioD.genero_pronomes],
+      ["Etnia", bioD.etnia],
+      ["Nacionalidade", bioD.nacionalidade],
+      ["Altura", bioD.altura],
+      ["Peso", bioD.peso],
+      ["Aparência", bioD.aparencia],
+      ["Crenças / Código", persD.crencas],
+      ["Aversões / Anátemas", persD.aversoes],
+    ]
+      .filter(([, val]) => Boolean(String(val || "").trim()))
+      .map(([rot, val]) => `<div><strong>${esc(rot)}:</strong> ${esc(val)}</div>`)
+      .join("");
+
     document.getElementById("p3-perfil").innerHTML =
-      `<div><strong>Idade Base:</strong> ${esc(perf.dados_biograficos.idade || "—")} anos</div>` +
+      `<div><strong>Idade Base:</strong> ${esc(bioD.idade || "—")}</div>` +
+      extrasBio +
       `<div style="margin-top:6px"><strong>Conceito &amp; Biografia:</strong> ${esc(perf.anotacoes_campanha.anotacoes || "—")}</div>` +
       (divDet
         ? `<div class="abcd-historico" style="margin-top:8px">` +
@@ -428,17 +446,147 @@
         renderSlotsMagia("Magias de 1º Círculo", conj.magias, true);
     }
 
+    // Página 5 (Companheiro Animal / Familiar)
+    const abaBtn5 = document.getElementById("aba-btn-companheiro");
+    const pag5 = document.getElementById("pagina-companheiro");
+    const p5Titulo = document.getElementById("p5-titulo");
+    const p5Sub = document.getElementById("p5-subtitulo");
+    const p5Conteudo = document.getElementById("p5-conteudo");
+    TEM_PAGINA_5 = Boolean(comp);
+
+    if (abaBtn5 && pag5 && p5Conteudo) {
+      abaBtn5.classList.toggle("oculto", !TEM_PAGINA_5);
+      pag5.hidden = !TEM_PAGINA_5;
+      if (!TEM_PAGINA_5) {
+        pag5.classList.add("oculto");
+        p5Conteudo.innerHTML = "";
+      } else {
+        abaBtn5.textContent = `Pág. 5: ${comp.categoria}`;
+        if (p5Titulo) p5Titulo.textContent = `${comp.categoria}: ${comp.nome}`;
+        if (p5Sub) p5Sub.textContent = `Página 5 (Mestre: ${cab.nome_personagem} • Nível ${cab.nivel})`;
+
+        if (comp.categoria === "Companheiro Animal") {
+          const cardsStats = [
+            ["PV Máx", comp.pv_max],
+            ["CA", comp.ca],
+            ["Fortitude", fmtMod(comp.fortitude)],
+            ["Reflexos", fmtMod(comp.reflexos)],
+            ["Vontade", fmtMod(comp.vontade)],
+            ["Percepção", fmtMod(comp.percepcao)],
+          ]
+            .map(([rot, val]) => `<div class="comp-stat-box"><small>${esc(rot)}</small><strong>${esc(val)}</strong></div>`)
+            .join("");
+
+          const mods = comp.modificadores_atributo || {};
+          const atbPills = [
+            ["FOR", mods.forca],
+            ["DES", mods.destreza],
+            ["CON", mods.constituicao],
+            ["INT", mods.inteligencia],
+            ["SAB", mods.sabedoria],
+            ["CAR", mods.carisma],
+          ]
+            .filter(([, v]) => v !== undefined)
+            .map(([sig, v]) => `<span class="comp-atb-pill">${sig} ${fmtMod(v)}</span>`)
+            .join("");
+
+          const periciasHtml = (comp.pericias || [])
+            .map((p) => `<span class="pill">${esc(p.nome)} ${fmtMod(p.total)}</span>`)
+            .join("");
+
+          const golpesHtml = (comp.ataques || [])
+            .map((a) => {
+              const tr = (a.tracos || []).map((t) => `<span class="pill">${esc(t)}</span>`).join("");
+              return (
+                `<div class="golpe-card">` +
+                `<div class="golpe-topo"><span>${esc(a.nome)} (${fmtAcaoIcone(a.acoes)})</span><span class="golpe-atk">Ataque ${fmtMod(a.ataque_total)}</span></div>` +
+                `<div class="golpe-det"><strong>Dano:</strong> ${esc(a.dano)}</div>` +
+                (tr ? `<div>${tr}</div>` : "") +
+                `</div>`
+              );
+            })
+            .join("");
+
+          const manDet = comp.manobra_avancada_detalhes || {};
+          p5Conteudo.innerHTML =
+            `<div class="p5-layout">` +
+            `<div>` +
+            `<div class="bloco"><h3 class="bloco-titulo">Combate &amp; Salvamentos</h3>` +
+            `<div class="p5-stat-cards">${cardsStats}</div>` +
+            `<div class="nota-campo"><strong>Estágio:</strong> ${esc(comp.estagio)} • <strong>Tamanho:</strong> ${esc(comp.tamanho)}</div>` +
+            `<div class="nota-campo"><strong>Velocidade:</strong> ${esc(comp.velocidades)} • <strong>Sentidos:</strong> ${esc(comp.sentidos)}</div>` +
+            (atbPills ? `<div style="margin-top:8px"><strong>Modificadores:</strong><div class="comp-atb-strip" style="margin-top:4px">${atbPills}</div></div>` : "") +
+            `</div>` +
+            `<div class="bloco"><h3 class="bloco-titulo">Perícias Treinadas</h3><div>${periciasHtml || "—"}</div></div>` +
+            `<div class="bloco"><h3 class="bloco-titulo">Descrição</h3><div class="slot-resumo">${esc(comp.descricao)}</div></div>` +
+            `</div>` +
+            `<div>` +
+            `<div class="bloco"><h3 class="bloco-titulo">Golpes &amp; Ataques</h3>${golpesHtml || "—"}</div>` +
+            `<div class="bloco"><h3 class="bloco-titulo">Habilidades do Companheiro</h3>` +
+            (comp.especial ? `<div style="margin-bottom:6px"><strong>Especial:</strong> ${esc(comp.especial)}</div>` : "") +
+            `<div style="margin-bottom:6px"><strong>Benefício de Suporte:</strong> ${esc(comp.beneficio_de_suporte)}</div>` +
+            `<div><strong>Manobra Avançada (${esc(comp.manobra_avancada)}${manDet.acoes ? ` — ${fmtAcaoIcone(manDet.acoes)}` : ""}):</strong> ${esc(manDet.descricao || "Disponível quando evoluir para Ágil/Selvagem.")}</div>` +
+            `</div>` +
+            `</div>` +
+            `</div>`;
+        } else {
+          const cardsFam = [
+            ["PV Máx", comp.pv_max],
+            ["CA (Mestre)", comp.ca],
+            ["Fortitude", fmtMod(comp.fortitude)],
+            ["Reflexos", fmtMod(comp.reflexos)],
+            ["Vontade", fmtMod(comp.vontade)],
+            ["Percepção", fmtMod(comp.percepcao)],
+          ]
+            .map(([rot, val]) => `<div class="comp-stat-box"><small>${esc(rot)}</small><strong>${esc(val)}</strong></div>`)
+            .join("");
+
+          const habsFamHtml = (comp.habilidades_selecionadas || [])
+            .map(
+              (h) =>
+                `<div class="acao-card">` +
+                `<strong>${esc(h.nome)}</strong> <span class="pill">${esc(h.tipo)}</span>` +
+                `<div class="slot-resumo">${esc(h.descricao)}</div>` +
+                `</div>`
+            )
+            .join("");
+
+          p5Conteudo.innerHTML =
+            `<div class="p5-layout">` +
+            `<div>` +
+            `<div class="bloco"><h3 class="bloco-titulo">Estatísticas Base do Familiar</h3>` +
+            `<div class="p5-stat-cards">${cardsFam}</div>` +
+            `<div class="nota-campo"><strong>Tamanho:</strong> ${esc(comp.tamanho)} • <strong>Velocidade:</strong> ${esc(comp.velocidade)}</div>` +
+            `<div class="nota-campo"><strong>Sentidos:</strong> ${esc(comp.sentidos)}</div>` +
+            `<div class="nota-campo" style="margin-top:6px"><strong>Testes Derivados:</strong> Acrobatismo ${fmtMod(comp.acrobatismo)} • Furtividade ${fmtMod(comp.furtividade)} • Outros testes ${fmtMod(comp.outros_testes)}</div>` +
+            `</div>` +
+            `</div>` +
+            `<div>` +
+            `<div class="bloco"><h3 class="bloco-titulo">Habilidades Diárias Selecionadas (${esc((comp.habilidades_selecionadas || []).length)} / ${esc(comp.habilidades_diarias_max)})</h3>` +
+            `<div class="cards-acoes-grid">${habsFamHtml || "<em>Nenhuma habilidade selecionada</em>"}</div>` +
+            `</div>` +
+            `</div>` +
+            `</div>`;
+        }
+      }
+    }
+
     document.getElementById("json-bruto").textContent = JSON.stringify(res, null, 2);
-    aplicarAba(ABA_ATIVA);
+    aplicarAba(!TEM_PAGINA_5 && ABA_ATIVA === "5" ? "todas" : ABA_ATIVA);
   }
 
   function aplicarAba(aba) {
-    ABA_ATIVA = aba;
+    const alvo = aba === "5" && !TEM_PAGINA_5 ? "todas" : aba;
+    ABA_ATIVA = alvo;
     document.querySelectorAll(".aba-btn").forEach((b) => {
-      b.classList.toggle("ativa", b.dataset.aba === aba);
+      b.classList.toggle("ativa", b.dataset.aba === alvo);
     });
     document.querySelectorAll(".pagina-ficha").forEach((pag) => {
-      const mostrar = aba === "todas" || pag.dataset.pagina === aba;
+      if (pag.dataset.pagina === "5" && !TEM_PAGINA_5) {
+        pag.classList.add("oculta");
+        return;
+      }
+      const mostrar = alvo === "todas" || pag.dataset.pagina === alvo;
       pag.classList.toggle("oculta", !mostrar);
     });
   }

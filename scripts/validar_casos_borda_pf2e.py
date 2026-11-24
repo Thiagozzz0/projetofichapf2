@@ -1315,6 +1315,31 @@ def test_personalizacao_companheiro_familiar_e_perfil() -> None:
             pass
 
 
+    # 4. Catálogo completo de estatísticas N1 e Página 5 automática no PDF (5 pág. c/ companheiro ou familiar, 4 pág. sem)
+    import pymupdf
+    from motor.companheiros import listar_catalogo_companheiros_familiares
+
+    cat_cf = listar_catalogo_companheiros_familiares(db)
+    assert len(cat_cf["companheiros_animais"]) == 8
+    for tipo_c in cat_cf["companheiros_animais"]:
+        for chave in ("pv_n1", "ca_n1", "fortitude_n1", "reflexos_n1", "vontade_n1", "percepcao_n1", "modificadores_atributo", "pericias_n1", "ataques_n1", "manobra_avancada"):
+            assert chave in tipo_c, f"Campo {chave!r} ausente no catálogo de {tipo_c['id']}"
+
+    with pymupdf.open(stream=exportar_ficha_pdf(dru_comp), filetype="pdf") as doc_d:
+        assert len(doc_d) == 5
+        txt_p5_d = doc_d[4].get_text()
+        assert "Balgor" in txt_p5_d and "Urso" in txt_p5_d and "PV" in txt_p5_d and "BENEFÍCIO DE SUPORTE" in txt_p5_d.upper()
+
+    with pymupdf.open(stream=exportar_ficha_pdf(mg_fam), filetype="pdf") as doc_m:
+        assert len(doc_m) == 5
+        txt_p5_m = doc_m[4].get_text()
+        assert "Pip" in txt_p5_m and "FAMILIAR" in txt_p5_m.upper() and "VISÃO NO ESCURO" in txt_p5_m.upper()
+
+    guer_sem = gerar_personagem("humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor", seed=3, dados=db)
+    with pymupdf.open(stream=exportar_ficha_pdf(guer_sem), filetype="pdf") as doc_g:
+        assert len(doc_g) == 4
+
+
 def main() -> None:
     test_ca_limite_destreza_e_sem_armadura()
     test_penalidade_armadura_barulhenta_flexivel_e_ferro_desimpedido()

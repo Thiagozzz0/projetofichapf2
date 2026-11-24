@@ -12,22 +12,99 @@ from .util import formatar_bonus, normalizar
 _DADOS_FAMILIAR_TALENTOS = {"familiar", "familiar_alquimico", "familiar_leshy"}
 
 
-def listar_catalogo_companheiros_familiares(dados: BaseDados) -> dict[str, Any]:
-    """Retorna os 8 tipos de Companheiro Animal e as habilidades de Familiar/Mestre."""
-    cf = dados.companheiros_familiares
-    companheiros = [
-        {
-            "id": t["id"],
-            "nome": t["nome"],
-            "tamanho": t["tamanho"],
-            "pericia": t.get("pericia", ""),
-            "velocidades_texto": t.get("velocidades_texto", ""),
-            "sentidos": t.get("sentidos", ""),
-            "beneficio_de_suporte": t.get("beneficio_de_suporte", ""),
-            "descricao": t.get("descricao", ""),
-        }
-        for t in cf["companheiros_animais"]["tipos_de_companheiro"]
+def _calcular_bloco_companheiro_animal(tipo: dict[str, Any], nivel: int = 1) -> dict[str, Any]:
+    """Calcula estatísticas de combate, perícias e ataques do Companheiro Animal no nível informado."""
+    mods = {k: int(v) for k, v in tipo["modificadores_atributo"].items()}
+    prof_treinado = 2 + nivel
+    pv_max = int(tipo["pontos_de_vida_ancestralidade"]) + (6 + mods["constituicao"]) * nivel
+    ca = 10 + mods["destreza"] + prof_treinado
+    percepcao = mods["sabedoria"] + prof_treinado
+    fortitude = mods["constituicao"] + prof_treinado
+    reflexos = mods["destreza"] + prof_treinado
+    vontade = mods["sabedoria"] + prof_treinado
+
+    pericias = [
+        {"nome": "Acrobatismo", "total": mods["destreza"] + prof_treinado},
+        {"nome": "Atletismo", "total": mods["forca"] + prof_treinado},
     ]
+    per_extra = tipo.get("pericia", "")
+    mapa_atr_per = {
+        "furtividade": "destreza",
+        "sobrevivencia": "sabedoria",
+        "intimidacao": "carisma",
+    }
+    atr_p = mapa_atr_per.get(normalizar(per_extra), "sabedoria")
+    if per_extra and normalizar(per_extra) not in {"acrobatismo", "atletismo"}:
+        pericias.append({"nome": per_extra, "total": mods[atr_p] + prof_treinado})
+
+    ataques = []
+    for atk in tipo["ataques"]:
+        tracos_l = [normalizar(t) for t in atk.get("tracos", [])]
+        mod_atk = max(mods["forca"], mods["destreza"]) if "acuidade" in tracos_l else mods["forca"]
+        partes_dano = atk["dano"].split(" ", 1)
+        dado_base = partes_dano[0]
+        tipo_dano = partes_dano[1] if len(partes_dano) > 1 else ""
+        mod_for = mods["forca"]
+        dano_fmt = f"{dado_base}{formatar_bonus(mod_for) if mod_for else ''} {tipo_dano}".strip()
+        ataques.append(
+            {
+                "nome": atk["nome"].title(),
+                "acoes": atk.get("acoes", "1"),
+                "ataque_total": mod_atk + prof_treinado,
+                "dano": dano_fmt,
+                "tracos": list(atk.get("tracos", [])),
+            }
+        )
+
+    return {
+        "modificadores_atributo": mods,
+        "pv_max": pv_max,
+        "ca": ca,
+        "percepcao": percepcao,
+        "fortitude": fortitude,
+        "reflexos": reflexos,
+        "vontade": vontade,
+        "pericias": pericias,
+        "ataques": ataques,
+    }
+
+
+def listar_catalogo_companheiros_familiares(dados: BaseDados) -> dict[str, Any]:
+    """Retorna os 8 tipos de Companheiro Animal (com estatísticas N1) e habilidades de Familiar/Mestre."""
+    cf = dados.companheiros_familiares
+    companheiros = []
+    for t in cf["companheiros_animais"]["tipos_de_companheiro"]:
+        calc = _calcular_bloco_companheiro_animal(t, nivel=1)
+        man = dict(t.get("manobra_avancada") or {})
+        companheiros.append(
+            {
+                "id": t["id"],
+                "nome": t["nome"],
+                "tamanho": t["tamanho"],
+                "pericia": t.get("pericia", ""),
+                "velocidades_texto": t.get("velocidades_texto", ""),
+                "sentidos": t.get("sentidos", ""),
+                "beneficio_de_suporte": t.get("beneficio_de_suporte", ""),
+                "descricao": t.get("descricao", ""),
+                "modificadores_atributo": calc["modificadores_atributo"],
+                "pv_n1": calc["pv_max"],
+                "ca_n1": calc["ca"],
+                "percepcao_n1": calc["percepcao"],
+                "fortitude_n1": calc["fortitude"],
+                "reflexos_n1": calc["reflexos"],
+                "vontade_n1": calc["vontade"],
+                "pericias_n1": calc["pericias"],
+                "ataques_n1": calc["ataques"],
+                "especial": t.get("especial"),
+                "manobra_avancada": {
+                    "nome": man.get("nome", ""),
+                    "acoes": man.get("acoes", ""),
+                    "tracos": list(man.get("tracos") or []),
+                    "requerimentos": man.get("requerimentos", ""),
+                    "descricao": man.get("descricao", ""),
+                },
+            }
+        )
     habs_fam = [
         {
             "id": h["id"],
@@ -166,47 +243,7 @@ def _gerar_companheiro_animal(
         candidatos = [t for pts, t in avaliados if pts >= topo - 3][:3] or tipos
         escolhido = rng.choice(candidatos) if (rng and len(candidatos) > 1) else candidatos[0]
 
-    mods = escolhido["modificadores_atributo"]
-    prof_treinado = 2 + nivel
-    pv_max = int(escolhido["pontos_de_vida_ancestralidade"]) + (6 + int(mods["constituicao"])) * nivel
-    ca = 10 + int(mods["destreza"]) + prof_treinado
-    percepcao = int(mods["sabedoria"]) + prof_treinado
-    fortitude = int(mods["constituicao"]) + prof_treinado
-    reflexos = int(mods["destreza"]) + prof_treinado
-    vontade = int(mods["sabedoria"]) + prof_treinado
-
-    pericias = [
-        {"nome": "Acrobatismo", "total": int(mods["destreza"]) + prof_treinado},
-        {"nome": "Atletismo", "total": int(mods["forca"]) + prof_treinado},
-    ]
-    per_extra = escolhido.get("pericia", "")
-    mapa_atr_per = {
-        "furtividade": "destreza",
-        "sobrevivencia": "sabedoria",
-        "intimidacao": "carisma",
-    }
-    atr_p = mapa_atr_per.get(normalizar(per_extra), "sabedoria")
-    if per_extra and normalizar(per_extra) not in {"acrobatismo", "atletismo"}:
-        pericias.append({"nome": per_extra, "total": int(mods[atr_p]) + prof_treinado})
-
-    ataques = []
-    for atk in escolhido["ataques"]:
-        tracos_l = [normalizar(t) for t in atk.get("tracos", [])]
-        mod_atk = max(int(mods["forca"]), int(mods["destreza"])) if "acuidade" in tracos_l else int(mods["forca"])
-        partes_dano = atk["dano"].split(" ", 1)
-        dado_base = partes_dano[0]
-        tipo_dano = partes_dano[1] if len(partes_dano) > 1 else ""
-        mod_for = int(mods["forca"])
-        dano_fmt = f"{dado_base}{formatar_bonus(mod_for) if mod_for else ''} {tipo_dano}".strip()
-        ataques.append(
-            {
-                "nome": atk["nome"].title(),
-                "acoes": atk.get("acoes", "1"),
-                "ataque_total": mod_atk + prof_treinado,
-                "dano": dano_fmt,
-                "tracos": list(atk.get("tracos", [])),
-            }
-        )
+    calc = _calcular_bloco_companheiro_animal(escolhido, nivel=nivel)
 
     nome_limpo = (nome_personalizado or "").strip()
     nome_final = f"{nome_limpo} ({escolhido['nome']})" if nome_limpo else escolhido["nome"]
@@ -219,19 +256,21 @@ def _gerar_companheiro_animal(
         "estagio": estagio_jovem["nome"],
         "tamanho": escolhido["tamanho"],
         "descricao": escolhido["descricao"],
-        "pv_max": pv_max,
-        "ca": ca,
-        "percepcao": percepcao,
-        "fortitude": fortitude,
-        "reflexos": reflexos,
-        "vontade": vontade,
+        "modificadores_atributo": calc["modificadores_atributo"],
+        "pv_max": calc["pv_max"],
+        "ca": calc["ca"],
+        "percepcao": calc["percepcao"],
+        "fortitude": calc["fortitude"],
+        "reflexos": calc["reflexos"],
+        "vontade": calc["vontade"],
         "velocidades": escolhido["velocidades_texto"],
         "sentidos": escolhido["sentidos"],
-        "pericias": pericias,
-        "ataques": ataques,
+        "pericias": calc["pericias"],
+        "ataques": calc["ataques"],
         "especial": escolhido.get("especial"),
         "beneficio_de_suporte": escolhido["beneficio_de_suporte"],
         "manobra_avancada": escolhido["manobra_avancada"]["nome"],
+        "manobra_avancada_detalhes": dict(escolhido.get("manobra_avancada") or {}),
     }
 
 

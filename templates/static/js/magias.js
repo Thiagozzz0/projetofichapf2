@@ -110,7 +110,6 @@
   function _atualizarNavegacaoEtapaMagias(ehConjurador) {
     const cardMag = document.getElementById("etapa-magias");
     const numEq = document.getElementById("etapa-num-equipamentos");
-    const numPerf = document.getElementById("etapa-num-perfil");
     const btnTalProx = document.getElementById("btn-tal-avancar");
     const btnEqVolt = document.getElementById("btn-eq-voltar");
 
@@ -119,7 +118,6 @@
       app.alternarEtapaAcordeao?.(null, false);
     }
     if (numEq) numEq.textContent = ehConjurador ? "5" : "4";
-    if (numPerf) numPerf.textContent = ehConjurador ? "6" : "5";
     if (btnTalProx) {
       btnTalProx.dataset.etapaIr = ehConjurador ? "magias" : "equipamentos";
       btnTalProx.textContent = ehConjurador ? "Avançar para Magias →" : "Avançar para Equipamentos →";

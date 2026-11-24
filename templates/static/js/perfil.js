@@ -2,7 +2,7 @@
   "use strict";
 
   const app = window.PF2EApp;
-  const { esc } = window.PF2EFichaUI;
+  const { esc, fmtMod, fmtAcaoIcone } = window.PF2EFichaUI;
   const { CLASSES_CONJURADORAS_UI, IDS_TAL_CLASSE } = app;
 
   const TENDENCIAS_LABELS = [
@@ -121,6 +121,15 @@
   function _renderPreviewCompanheiroAnimal(tipoId) {
     const box = document.getElementById("desc-perfil-comp");
     if (!box) return;
+    if (!tipoId || tipoId === "procedural" || tipoId === "aleatorio") {
+      const msg =
+        tipoId === "aleatorio"
+          ? "Um dos 8 tipos de Companheiro Animal será sorteado ao gerar a ficha."
+          : "O motor escolherá o Companheiro Animal de melhor sinergia com seu conceito/classe. Selecione um animal específico acima para visualizar todas as estatísticas de 1º nível.";
+      box.innerHTML = `<div class="desc-preview-texto">${esc(msg)}</div>`;
+      box.classList.remove("oculto");
+      return;
+    }
     const cat = app.opcoes?.catalogo_companheiros?.companheiros_animais || [];
     const comp = cat.find((t) => t.id === tipoId);
     if (!comp) {
@@ -128,20 +137,68 @@
       box.classList.add("oculto");
       return;
     }
+
+    const statsCombate = [
+      ["PV (N1)", comp.pv_n1],
+      ["CA", comp.ca_n1],
+      ["Fort", fmtMod(comp.fortitude_n1)],
+      ["Ref", fmtMod(comp.reflexos_n1)],
+      ["Von", fmtMod(comp.vontade_n1)],
+      ["Percepção", fmtMod(comp.percepcao_n1)],
+    ]
+      .map(([rot, val]) => `<div class="comp-stat-box"><small>${esc(rot)}</small><strong>${esc(val)}</strong></div>`)
+      .join("");
+
+    const mods = comp.modificadores_atributo || {};
+    const atbs = [
+      ["FOR", mods.forca],
+      ["DES", mods.destreza],
+      ["CON", mods.constituicao],
+      ["INT", mods.inteligencia],
+      ["SAB", mods.sabedoria],
+      ["CAR", mods.carisma],
+    ]
+      .map(([sig, v]) => `<span class="comp-atb-pill">${sig} ${fmtMod(v)}</span>`)
+      .join("");
+
+    const periciasStr = (comp.pericias_n1 || [])
+      .map((p) => `${p.nome} ${fmtMod(p.total)}`)
+      .join(", ");
+
     const pills = [
       `Tamanho: ${comp.tamanho}`,
       `Velocidade: ${comp.velocidades_texto}`,
-      comp.pericia ? `Perícia: ${comp.pericia}` : null,
-      comp.sentidos || null,
+      comp.sentidos ? `Sentidos: ${comp.sentidos}` : null,
+      periciasStr ? `Perícias: ${periciasStr}` : null,
     ]
       .filter(Boolean)
       .map((p) => `<span class="desc-preview-pill">${esc(p)}</span>`)
       .join("");
 
+    const ataquesHtml = (comp.ataques_n1 || [])
+      .map((a) => {
+        const tr = (a.tracos || []).length ? ` (${a.tracos.join(", ")})` : "";
+        return (
+          `<li><strong>${esc(a.nome)}</strong> ${fmtAcaoIcone(a.acoes)}: ` +
+          `<strong>${fmtMod(a.ataque_total)}</strong> • ${esc(a.dano)}${esc(tr)}</li>`
+        );
+      })
+      .join("");
+
+    const man = comp.manobra_avancada || {};
+    const manHtml = man.nome
+      ? `<div class="desc-preview-conteudo"><strong>Manobra Avançada — ${esc(man.nome)} (${fmtAcaoIcone(man.acoes)}):</strong> ${esc(man.descricao)}</div>`
+      : "";
+
     box.innerHTML =
-      `<div class="desc-preview-topo"><span class="desc-preview-titulo">${esc(comp.nome)} (Jovem)</span></div>` +
+      `<div class="desc-preview-topo"><span class="desc-preview-titulo">${esc(comp.nome)} (Jovem • ${esc(comp.tamanho)})</span></div>` +
+      `<div class="comp-stats-grid">${statsCombate}</div>` +
+      `<div class="comp-atb-strip">${atbs}</div>` +
       (pills ? `<div class="desc-preview-pills">${pills}</div>` : "") +
+      (ataquesHtml ? `<ul class="comp-ataques-lista">${ataquesHtml}</ul>` : "") +
+      (comp.especial ? `<div class="desc-preview-conteudo"><strong>Especial:</strong> ${esc(comp.especial)}</div>` : "") +
       `<div class="desc-preview-conteudo"><strong>Benefício de Suporte:</strong> ${esc(comp.beneficio_de_suporte)}</div>` +
+      manHtml +
       `<div class="desc-preview-texto">${esc(comp.descricao)}</div>`;
     box.classList.remove("oculto");
   }
@@ -219,6 +276,20 @@
         if (tituloComp) tituloComp.textContent = "Familiar";
         blocoAnimal?.classList.add("oculto");
         blocoFam?.classList.remove("oculto");
+
+        const elResumoFam = document.getElementById("resumo-stats-familiar");
+        if (elResumoFam) {
+          elResumoFam.innerHTML =
+            `<div class="desc-preview-topo"><span class="desc-preview-titulo">Estatísticas Base do Familiar (1º Nível)</span></div>` +
+            `<div class="desc-preview-pills">` +
+            `<span class="desc-preview-pill">Tamanho: Miúdo</span>` +
+            `<span class="desc-preview-pill">PV: 5 / nível (5 no N1)</span>` +
+            `<span class="desc-preview-pill">CA &amp; Salvamentos: iguais aos do mestre</span>` +
+            `<span class="desc-preview-pill">Velocidade: 7,5 m</span>` +
+            `<span class="desc-preview-pill">Sentidos: Visão na Penumbra; empatia até 1,5 km</span>` +
+            `</div>` +
+            `<div class="desc-preview-texto">Testes de Percepção, Acrobatismo e Furtividade usam <strong>Nível + Mod. do Atributo-Chave</strong> do mestre (${stComp.maxHabs} habilidades diárias neste nível).</div>`;
+        }
 
         const catFam = app.opcoes?.catalogo_companheiros || {};
         const todasHabs = [
