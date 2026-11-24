@@ -2,7 +2,7 @@
   "use strict";
 
   const app = window.PF2EApp;
-  const { esc } = window.PF2EFichaUI;
+  const { esc, renderSeloAcao, renderBadgeTradicao } = window.PF2EFichaUI;
   const { CLASSES_CONJURADORAS_UI, normTxt } = app;
 
   const NOMES_TRADICAO = {
@@ -199,7 +199,7 @@
             `<input type="checkbox" checked disabled>` +
             `<span class="pericia-check-info" style="width:100%">` +
             `<span class="mag-card-linha-topo">` +
-            `<span class="pericia-check-titulo">${esc(m.nome)} <span class="pericia-check-atb">${esc(acaoIco)} • ${esc(m.escola)}</span></span>` +
+            `<span class="pericia-check-titulo">${esc(m.nome)} ${renderSeloAcao(acaoIco)} <span class="pericia-check-atb">${esc(m.escola)}</span></span>` +
             `${btnInfo}</span>` +
             `<span class="pericia-check-badge fixa">Fixa: ${esc(origFixa)}</span>` +
             `${resumoHtml}</span></label>`
@@ -217,7 +217,7 @@
           `<input type="checkbox" data-magia-tipo="${tipoAttr}" data-magia-id="${esc(mid)}" ${marcada ? "checked" : ""} ${bloqueada ? "disabled" : ""}>` +
           `<span class="pericia-check-info" style="width:100%">` +
           `<span class="mag-card-linha-topo">` +
-          `<span class="pericia-check-titulo">${esc(m.nome)} <span class="pericia-check-atb">${esc(acaoIco)} • ${esc(m.escola)}</span></span>` +
+          `<span class="pericia-check-titulo">${esc(m.nome)} ${renderSeloAcao(acaoIco)} <span class="pericia-check-atb">${esc(m.escola)}</span></span>` +
           `${btnInfo}</span>` +
           (marcada ? `<span class="pericia-check-badge manual">Escolhida</span>` : badgeDiv) +
           `${resumoHtml}</span></label>`
@@ -273,7 +273,7 @@
     const tradNome = NOMES_TRADICAO[st.tradicao] || st.tradicao;
     const estiloNome = st.estilo === "espontanea" ? "Espontânea" : "Preparada";
     if (elTrad) {
-      elTrad.textContent = `Tradição: ${tradNome} • ${estiloNome} • ${st.espacosN1} espaço(s) de 1º círculo/dia`;
+      elTrad.innerHTML = `Tradição: ${renderBadgeTradicao(st.tradicao, tradNome)} • ${esc(estiloNome)} • ${esc(st.espacosN1)} espaço(s) de 1º círculo/dia`;
     }
     if (elVagas) {
       elVagas.textContent = `Truques: ${app.magEstado.truques.length}/${st.vagasLivresTruques} • 1º Círculo: ${app.magEstado.magias_n1.length}/${st.vagasLivresN1}`;

@@ -31,14 +31,34 @@
   function fmtAcaoIcone(acoes) {
     const mapa = {
       "1": "◆ 1 Ação",
+      "◆": "◆ 1 Ação",
       "2": "◆◆ 2 Ações",
+      "◆◆": "◆◆ 2 Ações",
       "3": "◆◆◆ 3 Ações",
+      "◆◆◆": "◆◆◆ 3 Ações",
       livre: "◇ Ação Livre",
+      "◇": "◇ Ação Livre",
       reacao: "↺ Reação",
+      "↺": "↺ Reação",
       "AÇÃO LIVRE": "◇ Ação Livre",
       "REAÇÃO": "↺ Reação",
     };
     return mapa[acoes] || esc(acoes || "—");
+  }
+
+  function renderSeloAcao(acoes) {
+    const raw = String(acoes || "").trim().toLowerCase();
+    let clsExtra = "";
+    if (raw.includes("livre") || raw === "◇") clsExtra = " acao-livre";
+    else if (raw.includes("rea") || raw === "↺") clsExtra = " acao-reacao";
+    return `<span class="acao-selo${clsExtra}">${fmtAcaoIcone(acoes)}</span>`;
+  }
+
+  function renderBadgeTradicao(tradId, rotulo = null) {
+    const chave = String(tradId || "").trim().toLowerCase();
+    const validas = new Set(["arcana", "divina", "ocultista", "primal"]);
+    const clsTrad = validas.has(chave) ? ` trad-${chave}` : "";
+    return `<span class="trad-badge${clsTrad}">${esc(rotulo || tradId || "—")}</span>`;
   }
 
   function renderTeml(grau) {
@@ -369,7 +389,7 @@
     document.getElementById("p3-acoes").innerHTML = f.acoes_e_atividades
       .map((a) =>
         a.nome
-          ? `<div class="acao-card"><strong>${esc(a.nome)}</strong> <span class="pill">${fmtAcaoIcone(a.acoes)}</span><div>${(a.tracos || []).map((t) => `<span class="pill">${esc(t)}</span>`).join("")}</div><div class="slot-resumo">${esc(a.descricao)}</div></div>`
+          ? `<div class="acao-card"><strong>${esc(a.nome)}</strong> ${renderSeloAcao(a.acoes)}<div>${(a.tracos || []).map((t) => `<span class="pill">${esc(t)}</span>`).join("")}</div><div class="slot-resumo">${esc(a.descricao)}</div></div>`
           : `<div class="acao-card vazio"><em>Espaço de ação livre</em></div>`
       )
       .join("");
@@ -377,7 +397,7 @@
     document.getElementById("p3-reacoes").innerHTML = f.acoes_livres_e_reacoes
       .map((a) =>
         a.nome
-          ? `<div class="acao-card"><strong>${esc(a.nome)}</strong> <span class="pill">${fmtAcaoIcone(a.tipo)}</span>` +
+          ? `<div class="acao-card"><strong>${esc(a.nome)}</strong> ${renderSeloAcao(a.tipo)}` +
             (a.acionamento ? `<div class="nota-campo"><strong>Acionamento:</strong> ${esc(a.acionamento)}</div>` : "") +
             `<div class="slot-resumo">${esc(a.descricao)}</div></div>`
           : `<div class="acao-card vazio"><em>Espaço de reação / ação livre</em></div>`
@@ -396,10 +416,12 @@
     if (!temMagia) {
       p4.innerHTML = `<div class="bloco"><em>Este personagem não possui conjuração de classe, foco ou magias inatas no 1º nível.</em></div>`;
     } else {
-      const trads = Object.entries(conj.tradicoes_marcadas)
+      const tradsIds = Object.entries(conj.tradicoes_marcadas)
         .filter(([, v]) => v)
-        .map(([k]) => k.toUpperCase())
-        .join(", ") || "INATA / FOCO";
+        .map(([k]) => k);
+      const tradsHtml = tradsIds.length
+        ? tradsIds.map((k) => renderBadgeTradicao(k, k.toUpperCase())).join(" ")
+        : `<span class="trad-badge">INATA / FOCO</span>`;
       const est = Object.entries(conj.estilo_conjuracao)
         .filter(([, v]) => v)
         .map(([k]) => k.toUpperCase())
@@ -417,8 +439,8 @@
               const tagPrep = comPrep && s.preparada ? `<span class="pill">Preparada</span>` : "";
               const tagFreq = s.frequencia ? `<span class="pill">${esc(s.frequencia)}</span>` : "";
               return (
-                `<div class="acao-card"><strong>${esc(s.nome)}</strong> ${tagPrep}${tagFreq}` +
-                `<div class="nota-campo">Ações: ${esc(s.acoes || "—")} • Comp: ${esc(comp || "—")}</div>` +
+                `<div class="acao-card"><strong>${esc(s.nome)}</strong> ${renderSeloAcao(s.acoes || "—")} ${tagPrep}${tagFreq}` +
+                `<div class="nota-campo">Comp: ${esc(comp || "—")}</div>` +
                 (s.anotacoes ? `<div class="slot-resumo">${esc(s.anotacoes)}</div>` : "") +
                 `</div>`
               );
@@ -432,7 +454,7 @@
         `<div class="p4-topo">` +
         renderCampo("Ataque de Magia", `${fmtMod(conj.ataque_magia.total)} ${renderTeml(conj.ataque_magia.grau_proficiencia)}`) +
         renderCampo("CD de Magia", `${esc(conj.cd_magia.total)} ${renderTeml(conj.cd_magia.grau_proficiencia)}`) +
-        renderCampo("Tradição & Estilo", `${esc(trads)} • ${esc(est)}`) +
+        renderCampo("Tradição & Estilo", `${tradsHtml} • ${esc(est)}`) +
         renderCampo("Nível de Truque / Pontos de Foco", `Truque ${esc(conj.nivel_truque)} • Foco ${esc(conj.magias_foco.pontos_foco.maximo)}`) +
         `</div>` +
         `<table class="espacos-tabela"><thead><tr><th>Espaços / Dia</th>${colsEspacos.map((n) => `<th>${n}º</th>`).join("")}</tr></thead>` +
@@ -499,7 +521,7 @@
               const tr = (a.tracos || []).map((t) => `<span class="pill">${esc(t)}</span>`).join("");
               return (
                 `<div class="golpe-card">` +
-                `<div class="golpe-topo"><span>${esc(a.nome)} (${fmtAcaoIcone(a.acoes)})</span><span class="golpe-atk">Ataque ${fmtMod(a.ataque_total)}</span></div>` +
+                `<div class="golpe-topo"><span>${esc(a.nome)} ${renderSeloAcao(a.acoes)}</span><span class="golpe-atk">Ataque ${fmtMod(a.ataque_total)}</span></div>` +
                 `<div class="golpe-det"><strong>Dano:</strong> ${esc(a.dano)}</div>` +
                 (tr ? `<div>${tr}</div>` : "") +
                 `</div>`
@@ -525,7 +547,7 @@
             `<div class="bloco"><h3 class="bloco-titulo">Habilidades do Companheiro</h3>` +
             (comp.especial ? `<div style="margin-bottom:6px"><strong>Especial:</strong> ${esc(comp.especial)}</div>` : "") +
             `<div style="margin-bottom:6px"><strong>Benefício de Suporte:</strong> ${esc(comp.beneficio_de_suporte)}</div>` +
-            `<div><strong>Manobra Avançada (${esc(comp.manobra_avancada)}${manDet.acoes ? ` — ${fmtAcaoIcone(manDet.acoes)}` : ""}):</strong> ${esc(manDet.descricao || "Disponível quando evoluir para Ágil/Selvagem.")}</div>` +
+            `<div><strong>Manobra Avançada (${esc(comp.manobra_avancada)}${manDet.acoes ? ` ${renderSeloAcao(manDet.acoes)}` : ""}):</strong> ${esc(manDet.descricao || "Disponível quando evoluir para Ágil/Selvagem.")}</div>` +
             `</div>` +
             `</div>` +
             `</div>`;
@@ -596,6 +618,8 @@
     esc,
     fmtMod,
     fmtAcaoIcone,
+    renderSeloAcao,
+    renderBadgeTradicao,
     renderTeml,
     renderizarFicha,
     aplicarAba,

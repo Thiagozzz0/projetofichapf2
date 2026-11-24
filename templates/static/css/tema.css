@@ -1,0 +1,328 @@
+/* Identidade Visual PF2E: Tipografia RPG, Cabeçalho com Brasão, Selos de Ação, Tradições e Modo Escuro ("Grimório Noturno") */
+
+body {
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.topbar h1,
+.painel-controle h2,
+.pagina-topo h2,
+.bloco-titulo,
+.etapa-titulo {
+  font-family: "Cinzel", Georgia, "Times New Roman", serif;
+}
+
+/* Cabeçalho com Brasão + Botão de Tema */
+.topbar-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.topbar-marca {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+  min-width: 240px;
+}
+
+.topbar-logo {
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.42));
+}
+
+.btn-tema {
+  background: rgba(255, 250, 240, 0.14);
+  color: #fdf8ef;
+  border: 1px solid rgba(212, 175, 106, 0.55);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-tema:hover {
+  background: rgba(255, 250, 240, 0.24);
+  border-color: #ecd093;
+}
+
+/* Selos de Ações PF2E */
+.acao-selo {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: #2b1d18;
+  color: #fdf8ef;
+  border: 1px solid var(--border-dark);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+  vertical-align: middle;
+}
+
+.acao-selo.acao-livre {
+  background: #3d3324;
+  border-color: var(--gold);
+  color: #f6e7c5;
+}
+
+.acao-selo.acao-reacao {
+  background: var(--accent-dark);
+  border-color: var(--gold);
+  color: #fdece8;
+}
+
+/* Cores por Tradição Mágica */
+.trad-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+  vertical-align: middle;
+}
+
+.trad-arcana {
+  background: #e4eefb;
+  color: #1c4b85;
+  border-color: #b4cde9;
+}
+
+.trad-divina {
+  background: #fcf0d4;
+  color: #825200;
+  border-color: #e3c47b;
+}
+
+.trad-ocultista {
+  background: #efe4fa;
+  color: #5b2682;
+  border-color: #ccb0e8;
+}
+
+.trad-primal {
+  background: #e1f3e7;
+  color: #1c5f35;
+  border-color: #a8d9b8;
+}
+
+/* =========================================================
+   Modo Escuro — "Grimório Noturno"
+   ========================================================= */
+html[data-tema="escuro"] {
+  color-scheme: dark;
+  --bg: #141210;
+  --paper: #1e1a17;
+  --card: #26211d;
+  --tint: #2b241f;
+  --tint-strong: #3a3028;
+  --border: #4e4237;
+  --border-dark: #746251;
+  --accent: #b83b36;
+  --accent-dark: #df6960;
+  --gold: #cfa355;
+  --ink: #f0e8dc;
+  --muted: #baac99;
+  --ok-bg: #1a3523;
+  --ok-fg: #82e3a2;
+  --warn-bg: #3b2d14;
+  --warn-fg: #f4c76b;
+}
+
+html[data-tema="escuro"] .topbar {
+  background: linear-gradient(135deg, #2d0d0d, #561816);
+}
+
+html[data-tema="escuro"] .painel-controle h2,
+html[data-tema="escuro"] .pagina-topo h2,
+html[data-tema="escuro"] .bloco-titulo,
+html[data-tema="escuro"] .etapa-titulo,
+html[data-tema="escuro"] .etapa-d-titulo,
+html[data-tema="escuro"] .mag-circulo-titulo,
+html[data-tema="escuro"] .desc-preview-titulo,
+html[data-tema="escuro"] .comp-stat-box strong,
+html[data-tema="escuro"] .previa-atributos-titulo {
+  color: #eab971;
+}
+
+html[data-tema="escuro"] select,
+html[data-tema="escuro"] input[type="text"],
+html[data-tema="escuro"] input[type="number"],
+html[data-tema="escuro"] input[type="search"] {
+  background: #171411;
+  color: var(--ink);
+  border-color: var(--border);
+}
+
+html[data-tema="escuro"] .etapa-card,
+html[data-tema="escuro"] .etapa-header,
+html[data-tema="escuro"] .card-tal-cat,
+html[data-tema="escuro"] .card-eq-cat,
+html[data-tema="escuro"] .card-resumo,
+html[data-tema="escuro"] .pericia-check-card,
+html[data-tema="escuro"] .mag-circulo-card,
+html[data-tema="escuro"] .mag-circulo-header,
+html[data-tema="escuro"] .comp-stat-box,
+html[data-tema="escuro"] .comp-atb-pill,
+html[data-tema="escuro"] .previa-atributos-abcd,
+html[data-tema="escuro"] .campo-ficha,
+html[data-tema="escuro"] .golpe-card,
+html[data-tema="escuro"] .acao-card,
+html[data-tema="escuro"] .salv-card,
+html[data-tema="escuro"] .moeda-card,
+html[data-tema="escuro"] .emblema-personagem,
+html[data-tema="escuro"] .atributo-row {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--ink);
+}
+
+html[data-tema="escuro"] .etapa-corpo,
+html[data-tema="escuro"] .mag-circulo-corpo,
+html[data-tema="escuro"] .desc-preview-box,
+html[data-tema="escuro"] .detalhes-perfil-inicial,
+html[data-tema="escuro"] .card-comp-inicial,
+html[data-tema="escuro"] .pericia-check-card.fixa,
+html[data-tema="escuro"] .subcard-tal-demais,
+html[data-tema="escuro"] .box-tal-auto {
+  background: #221d19;
+  border-color: var(--border);
+  color: var(--ink);
+}
+
+html[data-tema="escuro"] .painel-talentos-custom,
+html[data-tema="escuro"] .painel-pericias-custom,
+html[data-tema="escuro"] .painel-equipamentos-custom,
+html[data-tema="escuro"] .overlay-download-card {
+  background: var(--paper);
+  border-color: var(--border);
+  color: var(--ink);
+}
+
+html[data-tema="escuro"] .pericia-check-card.selecionada {
+  background: #1d3523;
+  border-color: #46945b;
+}
+
+html[data-tema="escuro"] .card-tal-bloqueado,
+html[data-tema="escuro"] .golpe-card.vazio,
+html[data-tema="escuro"] .acao-card.vazio {
+  background: #191613;
+  color: var(--muted);
+}
+
+html[data-tema="escuro"] .desc-preview-texto,
+html[data-tema="escuro"] .slot-resumo,
+html[data-tema="escuro"] .comp-ataques-lista {
+  color: #dfd4c5;
+}
+
+html[data-tema="escuro"] .btn-sutil,
+html[data-tema="escuro"] .aba-btn,
+html[data-tema="escuro"] .pill,
+html[data-tema="escuro"] .slot-nivel-tag,
+html[data-tema="escuro"] .etapa-resumo-pill {
+  background: var(--tint-strong);
+  color: var(--ink);
+  border-color: var(--border);
+}
+
+html[data-tema="escuro"] .aba-btn.ativa {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+html[data-tema="escuro"] .pericia-check-badge.fixa {
+  background: #3d311f;
+  color: #ebd09d;
+}
+
+html[data-tema="escuro"] .pericia-check-badge.manual {
+  background: #1c3b23;
+  color: #8ee5a4;
+}
+
+html[data-tema="escuro"] .previa-atb-card.previa-atb-alta {
+  background: #381e1b;
+  border-color: var(--accent);
+}
+
+html[data-tema="escuro"] .previa-atb-card.previa-atb-baixa {
+  background: #2f201e;
+  border-color: #b4695a;
+}
+
+html[data-tema="escuro"] .tabela-pericias th,
+html[data-tema="escuro"] .espacos-tabela th {
+  background: var(--tint-strong);
+  color: #eab971;
+}
+
+html[data-tema="escuro"] .tabela-pericias tr.treinada {
+  background: #243326;
+}
+
+html[data-tema="escuro"] .espacos-tabela td.ativo {
+  background: #3d211d;
+  color: #ffd7c9;
+}
+
+html[data-tema="escuro"] .trad-arcana {
+  background: #1a2d47;
+  color: #9ec8ff;
+  border-color: #365d91;
+}
+
+html[data-tema="escuro"] .trad-divina {
+  background: #3a2d13;
+  color: #f4cf7a;
+  border-color: #7e6126;
+}
+
+html[data-tema="escuro"] .trad-ocultista {
+  background: #2f1d45;
+  color: #d6b2ff;
+  border-color: #674194;
+}
+
+html[data-tema="escuro"] .trad-primal {
+  background: #193624;
+  color: #90e6ae;
+  border-color: #326e48;
+}
+
+html[data-tema="escuro"] .overlay-anel-fundo {
+  stroke: rgba(207, 163, 85, 0.22);
+}
+
+html[data-tema="escuro"] .overlay-seta-girando {
+  color: var(--gold);
+}
+
+@media print {
+  html[data-tema="escuro"] {
+    --bg: #fff;
+    --paper: #fff;
+    --card: #fff;
+    --tint: #f4ece0;
+    --border: #999;
+    --ink: #000;
+    --muted: #333;
+  }
+}

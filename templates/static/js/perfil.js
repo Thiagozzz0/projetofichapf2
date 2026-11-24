@@ -2,7 +2,7 @@
   "use strict";
 
   const app = window.PF2EApp;
-  const { esc, fmtMod, fmtAcaoIcone } = window.PF2EFichaUI;
+  const { esc, fmtMod, renderSeloAcao } = window.PF2EFichaUI;
   const { CLASSES_CONJURADORAS_UI, IDS_TAL_CLASSE } = app;
 
   const TENDENCIAS_LABELS = [
@@ -179,7 +179,7 @@
       .map((a) => {
         const tr = (a.tracos || []).length ? ` (${a.tracos.join(", ")})` : "";
         return (
-          `<li><strong>${esc(a.nome)}</strong> ${fmtAcaoIcone(a.acoes)}: ` +
+          `<li><strong>${esc(a.nome)}</strong> ${renderSeloAcao(a.acoes)}: ` +
           `<strong>${fmtMod(a.ataque_total)}</strong> • ${esc(a.dano)}${esc(tr)}</li>`
         );
       })
@@ -187,7 +187,7 @@
 
     const man = comp.manobra_avancada || {};
     const manHtml = man.nome
-      ? `<div class="desc-preview-conteudo"><strong>Manobra Avançada — ${esc(man.nome)} (${fmtAcaoIcone(man.acoes)}):</strong> ${esc(man.descricao)}</div>`
+      ? `<div class="desc-preview-conteudo"><strong>Manobra Avançada — ${esc(man.nome)} ${renderSeloAcao(man.acoes)}:</strong> ${esc(man.descricao)}</div>`
       : "";
 
     box.innerHTML =
