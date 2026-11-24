@@ -474,23 +474,52 @@
     }
   }
 
+  const MAPA_ESTILO_EMPUNHADURA = {
+    uma_mao_e_escudo: "Arma e Escudo",
+    duas_maos: "Arma de Duas Mãos",
+    duas_armas: "Combate com Duas Armas",
+    distancia: "Combate à Distância",
+    uma_mao: "Uma Mão / Mão Livre",
+    desarmado: "Combate Desarmado",
+  };
+
   function atualizarResumoConceito() {
     const clsId = document.getElementById("classe").value;
     const conId = document.getElementById("conceito").value;
     const cls = app.opcoes.classes.find((c) => c.id === clsId);
     const con = cls ? cls.conceitos.find((x) => x.id === conId) : null;
     const el = document.getElementById("resumo-conceito");
+    const elInline = document.getElementById("desc-conceito-inline");
     if (clsId === "aleatorio" || !cls) {
-      el.innerHTML =
-        `<strong>Classe &amp; Conceito: Aleatórios</strong>` +
-        `<div>Uma das 12 classes básicas e um de seus 56 conceitos/subclasses PF2E serão sorteados ao gerar a ficha.</div>`;
+      if (el) {
+        el.innerHTML =
+          `<strong>Classe &amp; Conceito: Aleatórios</strong>` +
+          `<div>Uma das 12 classes básicas e um de seus 72 conceitos/subclasses PF2E (6 por classe) serão sorteados ao gerar a ficha.</div>`;
+      }
+      if (elInline) {
+        elInline.innerHTML =
+          `<div class="desc-preview-topo"><span class="desc-preview-titulo">Conceito Aleatório (72 opções)</span></div>` +
+          `<div class="desc-preview-pills"><span class="desc-preview-pill">12 Classes • 6 Conceitos por Classe</span></div>` +
+          `<div class="desc-preview-texto">Escolha uma Classe acima para explorar seus 6 conceitos específicos com descrição do estilo de jogo e caminho de evolução.</div>`;
+      }
       return;
     }
     if (!con) {
-      el.innerHTML =
-        `<strong>${esc(cls.nome)} — Conceito Aleatório</strong>` +
-        `<div>PV/Nível: ${esc(cls.pontos_de_vida_por_nivel)} • Chave: ${esc(cls.atributo_chave.join(" / "))}</div>` +
-        `<div class="conceito-desc">Um conceito/subclasse desta classe será sorteado ao gerar a ficha.</div>`;
+      if (el) {
+        el.innerHTML =
+          `<strong>${esc(cls.nome)} — Conceito Aleatório</strong>` +
+          `<div>PV/Nível: ${esc(cls.pontos_de_vida_por_nivel)} • Chave: ${esc(cls.atributo_chave.join(" / "))}</div>` +
+          `<div class="conceito-desc">Um conceito/subclasse desta classe será sorteado ao gerar a ficha.</div>`;
+      }
+      if (elInline) {
+        elInline.innerHTML =
+          `<div class="desc-preview-topo"><span class="desc-preview-titulo">${esc(cls.nome)} — Conceito Sorteado</span></div>` +
+          `<div class="desc-preview-pills">` +
+            `<span class="desc-preview-pill">PV/Nível: ${esc(cls.pontos_de_vida_por_nivel)}</span>` +
+            `<span class="desc-preview-pill">Atributo-Chave: ${esc(cls.atributo_chave.join(" / "))}</span>` +
+          `</div>` +
+          `<div class="desc-preview-texto">Um dos ${esc(String(cls.conceitos.length))} conceitos de ${esc(cls.nome)} será sorteado ao gerar a ficha.</div>`;
+      }
       return;
     }
     const nomesSubs =
@@ -501,14 +530,41 @@
       nomesSubs.length > 1
         ? `Automática entre: ${nomesSubs.join(" ou ")}`
         : `Automática: ${nomesSubs[0]}`;
-    el.innerHTML =
-      `<strong>${esc(con.titulo_completo)}</strong>` +
-      `<div>PV/Nível: ${esc(cls.pontos_de_vida_por_nivel)} • Chave: ${esc(cls.atributo_chave.join(" / "))}</div>` +
-      `<div class="conceito-desc"><b>O que faz:</b> ${esc(con.resumo_proposta)}</div>` +
-      (con.sinergia_mecanica
-        ? `<div class="conceito-sinergia"><b>Sinergia:</b> ${esc(con.sinergia_mecanica)}</div>`
-        : "") +
-      `<div class="conceito-sub-tag">Subclasse PF2E: ${esc(subTexto)}</div>`;
+    const subCurto = nomesSubs.length > 1 ? nomesSubs.join(" / ") : nomesSubs[0];
+    if (el) {
+      el.innerHTML =
+        `<strong>${esc(con.titulo_completo)}</strong>` +
+        `<div>PV/Nível: ${esc(cls.pontos_de_vida_por_nivel)} • Chave: ${esc(cls.atributo_chave.join(" / "))}</div>` +
+        `<div class="conceito-desc"><b>O que faz:</b> ${esc(con.resumo_proposta)}</div>` +
+        (con.sinergia_mecanica
+          ? `<div class="conceito-sinergia"><b>Sinergia:</b> ${esc(con.sinergia_mecanica)}</div>`
+          : "") +
+        `<div class="conceito-sub-tag">Subclasse PF2E: ${esc(subTexto)}</div>`;
+    }
+    if (elInline) {
+      const focoAtb = Array.isArray(con.prioridade_atributos) && con.prioridade_atributos.length
+        ? con.prioridade_atributos.slice(0, 3).map((a) => String(a).toUpperCase()).join(" → ")
+        : "";
+      const estiloRotulo = MAPA_ESTILO_EMPUNHADURA[con.estilo_empunhadura] || "";
+      const pilulas = [
+        `<span class="desc-preview-pill">Subclasse: ${esc(subCurto)}</span>`,
+        focoAtb ? `<span class="desc-preview-pill">Foco ABCD: ${esc(focoAtb)}</span>` : "",
+        estiloRotulo ? `<span class="desc-preview-pill">Estilo: ${esc(estiloRotulo)}</span>` : "",
+        con.companheiro_padrao_conceito === "companheiro_animal"
+          ? `<span class="desc-preview-pill">Inclui Companheiro Animal</span>`
+          : "",
+        con.companheiro_padrao_conceito === "familiar"
+          ? `<span class="desc-preview-pill">Inclui Familiar</span>`
+          : "",
+      ].filter(Boolean).join("");
+      elInline.innerHTML =
+        `<div class="desc-preview-topo"><span class="desc-preview-titulo">${esc(con.nome)}</span></div>` +
+        `<div class="desc-preview-pills">${pilulas}</div>` +
+        `<div class="desc-preview-texto"><strong>O que é / Estilo:</strong> ${esc(con.resumo_proposta)}</div>` +
+        (con.sinergia_mecanica
+          ? `<div class="desc-preview-conteudo"><strong>Caminho do Personagem:</strong> ${esc(con.sinergia_mecanica)}</div>`
+          : "");
+    }
   }
 
   function atualizarConceitos() {

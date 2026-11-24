@@ -351,6 +351,8 @@ def listar_opcoes_criacao(dados: BaseDados | None = None) -> dict[str, Any]:
                     ),
                     "atributo_chave_opcoes": _atributo_chave_opcoes(db, c, con),
                     "prioridade_atributos": list(con.get("prioridade_atributos", [])),
+                    "estilo_empunhadura": (con.get("equipamento_recomendado") or {}).get("estilo_empunhadura", ""),
+                    "saber_sugerido": con.get("saber_sugerido", ""),
                     "resumo_proposta": con["resumo_proposta"],
                     "sinergia_mecanica": con.get("sinergia_mecanica", ""),
                     "divindades_compativeis_ids": divindades_compativeis_conceito(db, c["id"], con),

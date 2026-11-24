@@ -95,7 +95,7 @@ def main() -> None:
     assert len(opcoes["ancestralidades"]) == 6
     assert len(opcoes["biografias"]) == 35
     assert len(opcoes["classes"]) == 12
-    assert opcoes["total_conceitos"] == 56
+    assert opcoes["total_conceitos"] == 72
 
     # ------------------------------------------------------------------
     # 1. Determinismo com seed fixa e variação com seeds distintas
@@ -111,7 +111,7 @@ def main() -> None:
     )
 
     # ------------------------------------------------------------------
-    # 2. Cobertura total de 56 conceitos + todas as 29 heranças
+    # 2. Cobertura total de 72 conceitos (6 por classe) + todas as 29 heranças
     # ------------------------------------------------------------------
     todas_herancas = [
         (anc["id"], her["id"])
@@ -121,7 +121,7 @@ def main() -> None:
     assert len(todas_herancas) == 29
 
     todos_conceitos = list(dados.conceitos.values())
-    assert len(todos_conceitos) == 56
+    assert len(todos_conceitos) == 72
     total_combinacoes = max(len(todas_herancas), len(todos_conceitos))
     for i in range(total_combinacoes):
         anc_id, her_id = todas_herancas[i % len(todas_herancas)]
@@ -252,6 +252,7 @@ def main() -> None:
     assert "ficha.css" in html_idx and "render_ficha.js" in html_idx and "app.js" in html_idx
     for id_dom in (
         "acordeao-etapas",
+        "desc-conceito-inline",
         "etapa-criacao-inicial",
         "etapa-talentos",
         "etapa-equipamentos",
@@ -294,7 +295,7 @@ def main() -> None:
 
     r_saude = client.get("/api/saude")
     assert r_saude.status_code == 200
-    assert r_saude.get_json()["conceitos"] == 56
+    assert r_saude.get_json()["conceitos"] == 72
     assert r_saude.get_json()["divindades"] == 20
 
     r_opcoes = client.get("/api/opcoes")
@@ -352,10 +353,11 @@ def main() -> None:
     assert client.get("/api/ancestralidades/inexistente/herancas").status_code == 404
 
     r_con = client.get("/api/classes/mago/conceitos")
-    assert r_con.status_code == 200 and len(r_con.get_json()["conceitos"]) == 5
+    assert r_con.status_code == 200 and len(r_con.get_json()["conceitos"]) == 6
     assert r_con.get_json()["divindade_obrigatoria"] is False
     primeiro_con = r_con.get_json()["conceitos"][0]
     assert "subclasses_oficiais_candidatas" in primeiro_con and "sinergia_mecanica" in primeiro_con
+    assert "estilo_empunhadura" in primeiro_con and "saber_sugerido" in primeiro_con
     assert len(primeiro_con["divindades_compativeis_ids"]) == 20
     r_con_camp = client.get("/api/classes/campeao/conceitos")
     assert r_con_camp.status_code == 200 and r_con_camp.get_json()["divindade_obrigatoria"] is True
@@ -809,7 +811,7 @@ def main() -> None:
     assert client.post("/api/exportar/pdf", json={"ficha": {}}).status_code == 400
 
     print("SUCESSO TOTAL — Validação da Etapa 3 + Etapa 4 concluída!")
-    print(f"Conceitos validados: {len(todos_conceitos)}/56 | Heranças validadas: {len(todas_herancas)}/29")
+    print(f"Conceitos validados: {len(todos_conceitos)}/72 | Heranças validadas: {len(todas_herancas)}/29")
     print(f"Casos especiais validados: {len(casos_especiais)} | Rotas Flask validadas: 9 endpoints + static (200/400/404)")
     print("Exportadores validados: .txt (UTF-8), .docx (OOXML/XML) e .pdf (4 páginas oficiais do livro)")
 

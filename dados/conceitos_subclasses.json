@@ -1,10 +1,10 @@
 {
   "meta": {
     "titulo": "Pathfinder 2ª Edição — Catálogo de Conceitos e Subclasses Procedurais",
-    "versao": "2.0",
+    "versao": "2.1",
     "total_classes_cobertas": 12,
-    "total_conceitos": 56,
-    "descricao": "Catálogo com 56 conceitos temáticos cobrindo todas as 12 classes básicas. O jogador escolhe a Classe e o Conceito, e o motor seleciona proceduralmente a Subclasse Oficial do PF2E mais compatível (exata ou dentre candidatas), atributos ABCD, biografia, perícias, talentos, equipamentos (15 po) e magias."
+    "total_conceitos": 72,
+    "descricao": "Catálogo com 72 conceitos temáticos (6 por classe) cobrindo todas as 12 classes básicas. O jogador escolhe a Classe e o Conceito, e o motor seleciona proceduralmente a Subclasse Oficial do PF2E mais compatível (exata ou dentre candidatas), atributos ABCD, biografia, perícias, talentos, equipamentos (15 po) e magias."
   },
   "regras_uso_procedural": {
     "subclasse_procedural": "A partir do conceito escolhido, o motor resolve a subclasse oficial consultando `subclasses_oficiais_candidatas` (usando a subclasse exata quando única ou selecionando deterministicamente via seed entre as candidatas compatíveis).",
@@ -21,45 +21,56 @@
       "alquimista_sabotador_debilitante",
       "alquimista_medico_combate",
       "alquimista_aberracao_mutante",
-      "alquimista_mestre_venenos"
+      "alquimista_mestre_venenos",
+      "alquimista_sabio_cognitivo"
     ],
     "barbaro": [
       "barbaro_fera_selvagem",
       "barbaro_colosso_titanico",
       "barbaro_guerreiro_draconico",
       "barbaro_cacador_assombracoes",
-      "barbaro_incursor_vanguarda"
+      "barbaro_incursor_vanguarda",
+      "barbaro_quebra_feiticos"
     ],
     "bardo": [
       "bardo_comandante_inspirador",
       "bardo_erudito_ocultista",
       "bardo_duelista_gracioso",
-      "bardo_controlador_mental"
+      "bardo_controlador_mental",
+      "bardo_trovador_arqueiro",
+      "bardo_dramaturgo_sombras"
     ],
     "campeao": [
       "campeao_bastiao_impenetravel",
       "campeao_cruzado_vingador",
       "campeao_cavaleiro_montado",
       "campeao_quebrador_correntes",
-      "campeao_inquisidor_litanias"
+      "campeao_inquisidor_litanias",
+      "campeao_sentinela_arqueiro"
     ],
     "clerigo": [
       "clerigo_hospitalario_sagrado",
       "clerigo_arauto_guerra",
       "clerigo_ceifador_sombrio",
-      "clerigo_teologo_dominios"
+      "clerigo_teologo_dominios",
+      "clerigo_inquisidor_expurgador",
+      "clerigo_pregador_carismatico"
     ],
     "druida": [
       "druida_metamorfo_primal",
       "druida_senhor_matilha",
       "druida_furia_elementos",
-      "druida_guardiao_botanico"
+      "druida_guardiao_botanico",
+      "druida_piromante_cinzas",
+      "druida_errante_ermos"
     ],
     "feiticeiro": [
       "feiticeiro_artifice_elemental_draconico",
       "feiticeiro_manipulador_feerico_aberrante",
       "feiticeiro_emissario_celestial_infernal",
-      "feiticeiro_arquimago_versatil"
+      "feiticeiro_arquimago_versatil",
+      "feiticeiro_herdeiro_morto_vivo",
+      "feiticeiro_bruxo_estriga"
     ],
     "guerreiro": [
       "guerreiro_muralha_aco",
@@ -73,28 +84,33 @@
       "ladino_valentao_brutal",
       "ladino_duelista_fanfarrao",
       "ladino_sombra_silenciosa",
-      "ladino_sabotador_venenoso"
+      "ladino_sabotador_venenoso",
+      "ladino_acrobata_explorador",
+      "ladino_infiltrador_arcano"
     ],
     "mago": [
       "mago_evocador_artilharia",
       "mago_duelista_contramagica",
       "mago_ilusionista_enganador",
       "mago_invocador_necromante",
-      "mago_arquimago_enciclopedico"
+      "mago_arquimago_enciclopedico",
+      "mago_transmutador_batalha"
     ],
     "monge": [
       "monge_artista_posturas",
       "monge_muralha_pedra",
       "monge_mestre_ki_mistico",
       "monge_guerreiro_armas_monasticas",
-      "monge_mestre_arremessos"
+      "monge_mestre_arremessos",
+      "monge_dancarino_garca"
     ],
     "patrulheiro": [
       "patrulheiro_metralhadora_flechas",
       "patrulheiro_atirador_precisao",
       "patrulheiro_tormenta_duas_laminas",
       "patrulheiro_mestre_feras",
-      "patrulheiro_mestre_arapucas"
+      "patrulheiro_mestre_arapucas",
+      "patrulheiro_cacador_colossos"
     ]
   },
   "conceitos": [
@@ -574,6 +590,101 @@
       "aliado_divino_sugerido": null
     },
     {
+      "id": "alquimista_sabio_cognitivo",
+      "classe_id": "alquimista",
+      "classe_nome": "Alquimista",
+      "nome": "Sábio Cognitivo e Estrategista (Elixires e Familiar)",
+      "titulo_completo": "Alquimista — Sábio Cognitivo e Estrategista (Elixires e Familiar)",
+      "subclasse_oficial_id": "cirurgiao",
+      "subclasse_oficial_nome": "Cirurgião",
+      "subclasses_oficiais_candidatas": [
+        "cirurgiao",
+        "mutagenista"
+      ],
+      "subclasses_oficiais_nomes": [
+        "Cirurgião",
+        "Mutagenista"
+      ],
+      "resumo_proposta": "Pesquisador de retaguarda assistido por um familiar alquímico que potencializa perícias mentais e distribui elixires utilitários ao grupo.",
+      "sinergia_mecanica": "Prioriza Familiar Alquímico (1º) com assistente de laboratório e reagentes extras junto a Alquímico Sagaz (1º); escala com Alquimia Duradoura (4º), Alquimia Eficiente (4º) e Combinar Elixires (6º).",
+      "prioridade_atributos": [
+        "int",
+        "des",
+        "sab",
+        "con",
+        "car",
+        "for"
+      ],
+      "biografias_recomendadas": [
+        "estudioso",
+        "detetive",
+        "eremita",
+        "herbalista"
+      ],
+      "pericias_prioritarias": [
+        "manufatura",
+        "arcanismo",
+        "ocultismo",
+        "natureza",
+        "sociedade"
+      ],
+      "saber_sugerido": "Saber Acadêmico",
+      "talentos_recomendados": {
+        "classe_nivel_1": [
+          "familiar_alquimico",
+          "alquimico_sagaz",
+          "lancador_longinquo"
+        ],
+        "classe_nivel_2_mais": [
+          "alquimia_duradoura",
+          "alquimia_eficiente",
+          "combinar_elixires"
+        ],
+        "pericia": [
+          "manufatura_alquimica",
+          "identificacao_rapida",
+          "conhecimento_duvidoso"
+        ],
+        "gerais": [
+          "perspicacia_astuta",
+          "iniciativa_incrivel",
+          "vitalidade"
+        ],
+        "tracos_ancestralidade_afinidade": [
+          "inteligencia",
+          "saber",
+          "alquimia",
+          "engenho"
+        ]
+      },
+      "equipamento_recomendado": {
+        "categoria_armadura_preferida": "leve",
+        "armaduras_ids": [
+          "couro_batido",
+          "couro"
+        ],
+        "usa_escudo": false,
+        "escudos_ids": [],
+        "armas_corpo_a_corpo_ids": [
+          "adaga",
+          "cajado"
+        ],
+        "armas_distancia_ids": [
+          "besta_leve",
+          "bomba_alquimica"
+        ],
+        "estilo_empunhadura": "distancia",
+        "kit_classe_preferido": "Alquimista"
+      },
+      "conjuracao_recomendada": null,
+      "conjuracao_por_tradicao": null,
+      "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
+      "tendencia_preferida": null,
+      "tese_arcana_id": null,
+      "aliado_divino_sugerido": null
+    },
+    {
       "id": "barbaro_fera_selvagem",
       "classe_id": "barbaro",
       "classe_nome": "Bárbaro",
@@ -1024,6 +1135,106 @@
           "dardo"
         ],
         "estilo_empunhadura": "uma_mao",
+        "kit_classe_preferido": "Bárbaro"
+      },
+      "conjuracao_recomendada": null,
+      "conjuracao_por_tradicao": null,
+      "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
+      "tendencia_preferida": null,
+      "tese_arcana_id": null,
+      "aliado_divino_sugerido": null
+    },
+    {
+      "id": "barbaro_quebra_feiticos",
+      "classe_id": "barbaro",
+      "classe_nome": "Bárbaro",
+      "nome": "Quebra-Feitiços Implacável (Bastião de Escudo)",
+      "titulo_completo": "Bárbaro — Quebra-Feitiços Implacável (Bastião de Escudo)",
+      "subclasse_oficial_id": "instinto_do_furor",
+      "subclasse_oficial_nome": "Instinto do Furor",
+      "subclasses_oficiais_candidatas": [
+        "instinto_do_furor",
+        "instinto_espiritual"
+      ],
+      "subclasses_oficiais_nomes": [
+        "Instinto do Furor",
+        "Instinto Espiritual"
+      ],
+      "resumo_proposta": "Bárbaro disciplinado de arma e escudo capaz de manter o controle mental em plena Fúria e pressionar conjuradores na linha de frente.",
+      "sinergia_mecanica": "Combina escudo erguido para mitigar a penalidade de CA da Fúria com Momento de Clareza (1º) e Intimidação Enfurecida (1º); evolui com Retomar o Fôlego (2º), Fúria Ferida (4º) e Ataque de Oportunidade (6º).",
+      "prioridade_atributos": [
+        "for",
+        "con",
+        "sab",
+        "des",
+        "car",
+        "int"
+      ],
+      "biografias_recomendadas": [
+        "guarda",
+        "soldado",
+        "prisioneiro",
+        "cacador_de_recompensas"
+      ],
+      "pericias_prioritarias": [
+        "atletismo",
+        "intimidacao",
+        "sobrevivencia",
+        "acrobatismo",
+        "religiao"
+      ],
+      "saber_sugerido": "Saber de Guerra",
+      "talentos_recomendados": {
+        "classe_nivel_1": [
+          "momento_de_clareza",
+          "intimidacao_enfurecida",
+          "investida_subita"
+        ],
+        "classe_nivel_2_mais": [
+          "retomar_o_folego",
+          "furia_ferida",
+          "ataque_de_oportunidade"
+        ],
+        "pericia": [
+          "carregador_robusto",
+          "olhar_intimidante",
+          "lutador_titanico"
+        ],
+        "gerais": [
+          "duro_de_matar",
+          "vitalidade",
+          "iniciativa_incrivel"
+        ],
+        "tracos_ancestralidade_afinidade": [
+          "escudo",
+          "resistencia",
+          "forca",
+          "coragem"
+        ]
+      },
+      "equipamento_recomendado": {
+        "categoria_armadura_preferida": "media",
+        "armaduras_ids": [
+          "placa_peitoral",
+          "cota_de_escamas",
+          "gibao_de_peles"
+        ],
+        "usa_escudo": true,
+        "escudos_ids": [
+          "escudo_de_aco",
+          "escudo_de_madeira"
+        ],
+        "armas_corpo_a_corpo_ids": [
+          "martelo_de_guerra",
+          "machado_de_batalha",
+          "espada_longa"
+        ],
+        "armas_distancia_ids": [
+          "azagaia",
+          "machadinha"
+        ],
+        "estilo_empunhadura": "uma_mao_e_escudo",
         "kit_classe_preferido": "Bárbaro"
       },
       "conjuracao_recomendada": null,
@@ -1511,6 +1722,251 @@
       "aliado_divino_sugerido": null
     },
     {
+      "id": "bardo_trovador_arqueiro",
+      "classe_id": "bardo",
+      "classe_nome": "Bardo",
+      "nome": "Trovador de Vanguarda (Arqueiro Inspirador)",
+      "titulo_completo": "Bardo — Trovador de Vanguarda (Arqueiro Inspirador)",
+      "subclasse_oficial_id": "maestro",
+      "subclasse_oficial_nome": "Maestro",
+      "subclasses_oficiais_candidatas": [
+        "maestro",
+        "polimata"
+      ],
+      "subclasses_oficiais_nomes": [
+        "Maestro",
+        "Polímata"
+      ],
+      "resumo_proposta": "Arqueiro móvel que entoa composições de batalha enquanto dispara flechas guiadas por magias de precisão e encantamento.",
+      "sinergia_mecanica": "Aproveita a proficiência marcial em arco curto com Inspirar Coragem, Golpe Certo e Arma Mágica; escala com Composição Prolongada (1º), Inspirar Competência (2º) e Tempo Triplo (4º) para mobilidade do grupo.",
+      "prioridade_atributos": [
+        "car",
+        "des",
+        "con",
+        "sab",
+        "int",
+        "for"
+      ],
+      "biografias_recomendadas": [
+        "batedor",
+        "nomade",
+        "animador",
+        "marinheiro"
+      ],
+      "pericias_prioritarias": [
+        "performance",
+        "acrobatismo",
+        "furtividade",
+        "ocultismo",
+        "diplomacia"
+      ],
+      "saber_sugerido": "Saber de Guerra",
+      "talentos_recomendados": {
+        "classe_nivel_1": [
+          "composicao_prolongada",
+          "performance_versatil",
+          "magia_de_alcance"
+        ],
+        "classe_nivel_2_mais": [
+          "inspirar_competencia",
+          "tempo_triplo",
+          "inspirar_defesa"
+        ],
+        "pericia": [
+          "performance_impressionante",
+          "esgueirador_de_terreno",
+          "queda_do_gato"
+        ],
+        "gerais": [
+          "veloz",
+          "iniciativa_incrivel",
+          "vitalidade"
+        ],
+        "tracos_ancestralidade_afinidade": [
+          "arco",
+          "agilidade",
+          "velocidade",
+          "carisma"
+        ]
+      },
+      "equipamento_recomendado": {
+        "categoria_armadura_preferida": "leve",
+        "armaduras_ids": [
+          "couro_batido",
+          "couro"
+        ],
+        "usa_escudo": false,
+        "escudos_ids": [],
+        "armas_corpo_a_corpo_ids": [
+          "espada_curta",
+          "rapieira",
+          "adaga"
+        ],
+        "armas_distancia_ids": [
+          "arco_curto",
+          "funda"
+        ],
+        "estilo_empunhadura": "distancia",
+        "kit_classe_preferido": "Bardo"
+      },
+      "conjuracao_recomendada": {
+        "tradicao": "ocultista",
+        "tracos_prioritarios": [
+          "adivinhacao",
+          "transmutacao",
+          "emocao"
+        ],
+        "escolas_prioritarias": [
+          "adivinhacao",
+          "transmutacao",
+          "encantamento"
+        ],
+        "truques_prioritarios": [
+          "orientacao",
+          "escudo_mistico",
+          "projetil_telecinetico",
+          "luz",
+          "intuir_direcao"
+        ],
+        "magias_nivel_1_prioritarias": [
+          "golpe_certo",
+          "arma_magica",
+          "bencao",
+          "abrandar"
+        ]
+      },
+      "conjuracao_por_tradicao": null,
+      "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
+      "tendencia_preferida": null,
+      "tese_arcana_id": null,
+      "aliado_divino_sugerido": null
+    },
+    {
+      "id": "bardo_dramaturgo_sombras",
+      "classe_id": "bardo",
+      "classe_nome": "Bardo",
+      "nome": "Dramaturgo das Sombras (Infiltrador e Ilusionista)",
+      "titulo_completo": "Bardo — Dramaturgo das Sombras (Infiltrador e Ilusionista)",
+      "subclasse_oficial_id": "polimata",
+      "subclasse_oficial_nome": "Polímata",
+      "subclasses_oficiais_candidatas": [
+        "polimata",
+        "enigma"
+      ],
+      "subclasses_oficiais_nomes": [
+        "Polímata",
+        "Enigma"
+      ],
+      "resumo_proposta": "Artista furtivo de intriga e espionagem que oculta conjurações em atuações, manipula sombras e desorienta guardas e sentinelas.",
+      "sinergia_mecanica": "Combina Magia de Alcance (1º) e Performance Versátil (1º) com Magia Melodiosa (4º) para conjurar sem ser notado, apoiado por broquel, Furtividade e magias de ilusão e sombra.",
+      "prioridade_atributos": [
+        "car",
+        "des",
+        "int",
+        "con",
+        "sab",
+        "for"
+      ],
+      "biografias_recomendadas": [
+        "charlatao",
+        "artista",
+        "criminoso",
+        "crianca_de_rua"
+      ],
+      "pericias_prioritarias": [
+        "performance",
+        "furtividade",
+        "dissimulacao",
+        "ocultismo",
+        "ladroagem"
+      ],
+      "saber_sugerido": "Saber do Submundo",
+      "talentos_recomendados": {
+        "classe_nivel_1": [
+          "magia_de_alcance",
+          "performance_versatil",
+          "saber_bardico"
+        ],
+        "classe_nivel_2_mais": [
+          "magia_melodiosa",
+          "expansao_de_truque_magico",
+          "musa_multifacetada"
+        ],
+        "pericia": [
+          "distracao_prolongada",
+          "mentiroso_charmoso",
+          "furto_subito"
+        ],
+        "gerais": [
+          "iniciativa_incrivel",
+          "veloz",
+          "perspicacia_astuta"
+        ],
+        "tracos_ancestralidade_afinidade": [
+          "sombra",
+          "furtividade",
+          "ilusao",
+          "carisma"
+        ]
+      },
+      "equipamento_recomendado": {
+        "categoria_armadura_preferida": "leve",
+        "armaduras_ids": [
+          "couro_batido",
+          "couro"
+        ],
+        "usa_escudo": true,
+        "escudos_ids": [
+          "broquel"
+        ],
+        "armas_corpo_a_corpo_ids": [
+          "espada_curta",
+          "adaga",
+          "chicote"
+        ],
+        "armas_distancia_ids": [
+          "besta_de_mao",
+          "dardo"
+        ],
+        "estilo_empunhadura": "uma_mao_e_escudo",
+        "kit_classe_preferido": "Bardo"
+      },
+      "conjuracao_recomendada": {
+        "tradicao": "ocultista",
+        "tracos_prioritarios": [
+          "ilusao",
+          "sombra",
+          "negativo",
+          "mental"
+        ],
+        "escolas_prioritarias": [
+          "ilusao",
+          "necromancia",
+          "encantamento"
+        ],
+        "truques_prioritarios": [
+          "som_fantasma",
+          "toque_gelido",
+          "mao_mistica",
+          "mensagem",
+          "prestidigitacao"
+        ],
+        "magias_nivel_1_prioritarias": [
+          "gavinhas_sombrias",
+          "disfarce_ilusorio",
+          "servo_invisivel",
+          "objeto_ilusorio"
+        ]
+      },
+      "conjuracao_por_tradicao": null,
+      "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
+      "tendencia_preferida": null,
+      "tese_arcana_id": null,
+      "aliado_divino_sugerido": null
+    },
+    {
       "id": "campeao_bastiao_impenetravel",
       "classe_id": "campeao",
       "classe_nome": "Campeão",
@@ -1985,6 +2441,105 @@
           "azagaia"
         ],
         "estilo_empunhadura": "uma_mao_e_escudo",
+        "kit_classe_preferido": "Campeão"
+      },
+      "conjuracao_recomendada": null,
+      "conjuracao_por_tradicao": null,
+      "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
+      "tendencia_preferida": null,
+      "tese_arcana_id": null,
+      "aliado_divino_sugerido": "lamina"
+    },
+    {
+      "id": "campeao_sentinela_arqueiro",
+      "classe_id": "campeao",
+      "classe_nome": "Campeão",
+      "nome": "Sentinela Celeste (Vigilante à Distância e Acuidade)",
+      "titulo_completo": "Campeão — Sentinela Celeste (Vigilante à Distância e Acuidade)",
+      "subclasse_oficial_id": "paladino",
+      "subclasse_oficial_nome": "Paladino",
+      "subclasses_oficiais_candidatas": [
+        "paladino",
+        "libertador",
+        "redentor"
+      ],
+      "subclasses_oficiais_nomes": [
+        "Paladino",
+        "Libertador",
+        "Redentor"
+      ],
+      "resumo_proposta": "Campeão ágil focado em Destreza que vigia o campo com arco longo e lâminas leves, punindo inimigos à distância quando ferem aliados.",
+      "sinergia_mecanica": "Escolhe Destreza como atributo-chave e combina Represália à Distância (1º) para desferir Golpe Retributivo com arco; evolui com Graça Divina (2º), Aura de Coragem (4º) e futuro Aliado de Lâmina (3º).",
+      "prioridade_atributos": [
+        "des",
+        "car",
+        "con",
+        "for",
+        "sab",
+        "int"
+      ],
+      "biografias_recomendadas": [
+        "cacador",
+        "batedor",
+        "acolito",
+        "guarda"
+      ],
+      "pericias_prioritarias": [
+        "religiao",
+        "acrobatismo",
+        "furtividade",
+        "diplomacia",
+        "sobrevivencia"
+      ],
+      "saber_sugerido": "Saber de Patrulha",
+      "talentos_recomendados": {
+        "classe_nivel_1": [
+          "represalia_a_distancia",
+          "passo_desimpedido",
+          "dominio_de_divindade"
+        ],
+        "classe_nivel_2_mais": [
+          "graca_divina",
+          "aura_de_coragem",
+          "ataque_de_oportunidade"
+        ],
+        "pericia": [
+          "esgueirador_de_terreno",
+          "queda_do_gato",
+          "estudante_do_canone"
+        ],
+        "gerais": [
+          "iniciativa_incrivel",
+          "veloz",
+          "vitalidade"
+        ],
+        "tracos_ancestralidade_afinidade": [
+          "arco",
+          "agilidade",
+          "sagrado",
+          "elfo"
+        ]
+      },
+      "equipamento_recomendado": {
+        "categoria_armadura_preferida": "leve",
+        "armaduras_ids": [
+          "couro_batido",
+          "cota_de_escamas",
+          "couro"
+        ],
+        "usa_escudo": false,
+        "escudos_ids": [],
+        "armas_corpo_a_corpo_ids": [
+          "rapieira",
+          "espada_curta",
+          "adaga"
+        ],
+        "armas_distancia_ids": [
+          "arco_longo",
+          "arco_curto"
+        ],
+        "estilo_empunhadura": "distancia",
         "kit_classe_preferido": "Campeão"
       },
       "conjuracao_recomendada": null,
@@ -2482,6 +3037,254 @@
       "aliado_divino_sugerido": null
     },
     {
+      "id": "clerigo_inquisidor_expurgador",
+      "classe_id": "clerigo",
+      "classe_nome": "Clérigo",
+      "nome": "Inquisidor Expurgador (Caçador de Mortos-Vivos e Ímpios)",
+      "titulo_completo": "Clérigo — Inquisidor Expurgador (Caçador de Mortos-Vivos e Ímpios)",
+      "subclasse_oficial_id": "capelao_da_guerra",
+      "subclasse_oficial_nome": "Capelão da Guerra",
+      "subclasses_oficiais_candidatas": [
+        "capelao_da_guerra"
+      ],
+      "subclasses_oficiais_nomes": [
+        "Capelão da Guerra"
+      ],
+      "resumo_proposta": "Exorcista de campo equipado para caçar mortos-vivos e ínferos, convertendo energia positiva em dano sagrado purificador.",
+      "sinergia_mecanica": "Capelão da Guerra une Castigo Sagrado (1º) para ferir ínferos com Curar a Afastar Mortos-Vivos (2º), Canalizar Punição (4º) e Armas de Disrupção no 1º círculo.",
+      "prioridade_atributos": [
+        "sab",
+        "des",
+        "car",
+        "con",
+        "for",
+        "int"
+      ],
+      "biografias_recomendadas": [
+        "detetive",
+        "cacador_de_recompensas",
+        "acolito",
+        "guarda"
+      ],
+      "pericias_prioritarias": [
+        "religiao",
+        "medicina",
+        "furtividade",
+        "intimidacao",
+        "sobrevivencia"
+      ],
+      "saber_sugerido": "Saber de Mortos-Vivos",
+      "talentos_recomendados": {
+        "classe_nivel_1": [
+          "castigo_sagrado",
+          "simplicidade_mortal",
+          "maos_curandeiras"
+        ],
+        "classe_nivel_2_mais": [
+          "afastar_mortos_vivos",
+          "canalizar_punicao",
+          "arma_divina"
+        ],
+        "pericia": [
+          "estudante_do_canone",
+          "identificacao_rapida",
+          "medicina_de_batalha"
+        ],
+        "gerais": [
+          "iniciativa_incrivel",
+          "vitalidade",
+          "perspicacia_astuta"
+        ],
+        "tracos_ancestralidade_afinidade": [
+          "luz",
+          "positivo",
+          "sagrado",
+          "visao"
+        ]
+      },
+      "equipamento_recomendado": {
+        "categoria_armadura_preferida": "leve",
+        "armaduras_ids": [
+          "couro_batido",
+          "cota_de_escamas",
+          "couro"
+        ],
+        "usa_escudo": true,
+        "escudos_ids": [
+          "escudo_de_madeira",
+          "broquel"
+        ],
+        "armas_corpo_a_corpo_ids": [
+          "maca_estrela",
+          "maca",
+          "adaga"
+        ],
+        "armas_distancia_ids": [
+          "besta_leve",
+          "funda"
+        ],
+        "estilo_empunhadura": "uma_mao_e_escudo",
+        "kit_classe_preferido": "Clérigo"
+      },
+      "conjuracao_recomendada": {
+        "tradicao": "divina",
+        "tracos_prioritarios": [
+          "positivo",
+          "luz",
+          "cura",
+          "bem"
+        ],
+        "escolas_prioritarias": [
+          "necromancia",
+          "evocacao",
+          "abjuracao"
+        ],
+        "truques_prioritarios": [
+          "disrupcao_de_morto_vivo",
+          "lanca_divina",
+          "luz",
+          "protecao_proibitiva",
+          "orientacao"
+        ],
+        "magias_nivel_1_prioritarias": [
+          "armas_de_disrupcao",
+          "curar",
+          "protecao",
+          "detectar_tendencia"
+        ]
+      },
+      "conjuracao_por_tradicao": null,
+      "fonte_divina_preferida": "cura",
+      "fontes_divinas_aceitas": [
+        "cura"
+      ],
+      "tendencia_preferida": null,
+      "tese_arcana_id": null,
+      "aliado_divino_sugerido": null
+    },
+    {
+      "id": "clerigo_pregador_carismatico",
+      "classe_id": "clerigo",
+      "classe_nome": "Clérigo",
+      "nome": "Orador Eclesiástico (Arauto Diplomata e Comandante)",
+      "titulo_completo": "Clérigo — Orador Eclesiástico (Arauto Diplomata e Comandante)",
+      "subclasse_oficial_id": "sacerdote_enclausurado",
+      "subclasse_oficial_nome": "Sacerdote Enclausurado",
+      "subclasses_oficiais_candidatas": [
+        "sacerdote_enclausurado"
+      ],
+      "subclasses_oficiais_nomes": [
+        "Sacerdote Enclausurado"
+      ],
+      "resumo_proposta": "Emissário sagrado de Carisma elevado que lidera negociações, amplia o alcance de bênçãos e dita ordens divinas no campo de batalha.",
+      "sinergia_mecanica": "Prioriza Magia de Alcance (1º) para lançar Santuário, Bênção e Curar a 9 metros com estoque máximo de Fonte Divina via Carisma; escala com Fonte Versátil (2º) e Canalização Direcionada (4º).",
+      "prioridade_atributos": [
+        "sab",
+        "car",
+        "des",
+        "con",
+        "int",
+        "for"
+      ],
+      "biografias_recomendadas": [
+        "emissario",
+        "nobre",
+        "advogado",
+        "acolito"
+      ],
+      "pericias_prioritarias": [
+        "religiao",
+        "diplomacia",
+        "sociedade",
+        "intimidacao",
+        "ocultismo"
+      ],
+      "saber_sugerido": "Saber de Heráldica",
+      "talentos_recomendados": {
+        "classe_nivel_1": [
+          "magia_de_alcance",
+          "iniciado_no_dominio",
+          "maos_curandeiras"
+        ],
+        "classe_nivel_2_mais": [
+          "fonte_versatil",
+          "expansao_de_truque_magico",
+          "canalizacao_direcionada"
+        ],
+        "pericia": [
+          "impressionar_grupo",
+          "gracejos_da_corte",
+          "estudante_do_canone"
+        ],
+        "gerais": [
+          "iniciativa_incrivel",
+          "perspicacia_astuta",
+          "vitalidade"
+        ],
+        "tracos_ancestralidade_afinidade": [
+          "carisma",
+          "diplomacia",
+          "divino",
+          "inspiracao"
+        ]
+      },
+      "equipamento_recomendado": {
+        "categoria_armadura_preferida": "sem_armadura",
+        "armaduras_ids": [
+          "roupa_de_explorador",
+          "nenhuma_armadura"
+        ],
+        "usa_escudo": false,
+        "escudos_ids": [],
+        "armas_corpo_a_corpo_ids": [
+          "cajado",
+          "adaga"
+        ],
+        "armas_distancia_ids": [
+          "besta_leve",
+          "funda"
+        ],
+        "estilo_empunhadura": "distancia",
+        "kit_classe_preferido": "Clérigo"
+      },
+      "conjuracao_recomendada": {
+        "tradicao": "divina",
+        "tracos_prioritarios": [
+          "mental",
+          "encantamento",
+          "emocao",
+          "cura"
+        ],
+        "escolas_prioritarias": [
+          "encantamento",
+          "abjuracao",
+          "adivinhacao"
+        ],
+        "truques_prioritarios": [
+          "orientacao",
+          "mensagem",
+          "protecao_proibitiva",
+          "escudo_mistico",
+          "detectar_magia"
+        ],
+        "magias_nivel_1_prioritarias": [
+          "comando",
+          "santuario",
+          "bencao",
+          "vinculo_espiritual"
+        ]
+      },
+      "conjuracao_por_tradicao": null,
+      "fonte_divina_preferida": "cura",
+      "fontes_divinas_aceitas": [
+        "cura",
+        "ferimento"
+      ],
+      "tendencia_preferida": null,
+      "tese_arcana_id": null,
+      "aliado_divino_sugerido": null
+    },
+    {
       "id": "druida_metamorfo_primal",
       "classe_id": "druida",
       "classe_nome": "Druida",
@@ -2956,6 +3759,252 @@
           "curar",
           "convocar_planta_ou_fungo",
           "passos_sem_pegadas"
+        ]
+      },
+      "conjuracao_por_tradicao": null,
+      "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
+      "tendencia_preferida": null,
+      "tese_arcana_id": null,
+      "aliado_divino_sugerido": null
+    },
+    {
+      "id": "druida_piromante_cinzas",
+      "classe_id": "druida",
+      "classe_nome": "Druida",
+      "nome": "Piromante das Cinzas (Incendiário Primal)",
+      "titulo_completo": "Druida — Piromante das Cinzas (Incendiário Primal)",
+      "subclasse_oficial_id": "tempestade",
+      "subclasse_oficial_nome": "Tempestade",
+      "subclasses_oficiais_candidatas": [
+        "tempestade",
+        "folha"
+      ],
+      "subclasses_oficiais_nomes": [
+        "Tempestade",
+        "Folha"
+      ],
+      "resumo_proposta": "Conjurador primal de fogo, fumaça e ácido que amplia o raio de suas explosões para controlar grandes áreas de terreno.",
+      "sinergia_mecanica": "Prioriza Ampliar Magia (1º) para expandir áreas elementais e combina Produzir Chama, Jorro Ácido e Mãos Flamejantes com Explorador de Ordem (2º) e Conjuração Consistente (6º).",
+      "prioridade_atributos": [
+        "sab",
+        "des",
+        "con",
+        "int",
+        "car",
+        "for"
+      ],
+      "biografias_recomendadas": [
+        "nomade",
+        "eremita",
+        "herbalista",
+        "mineiro"
+      ],
+      "pericias_prioritarias": [
+        "natureza",
+        "sobrevivencia",
+        "acrobatismo",
+        "arcanismo",
+        "intimidacao"
+      ],
+      "saber_sugerido": "Saber de Vulcões",
+      "talentos_recomendados": {
+        "classe_nivel_1": [
+          "ampliar_magia",
+          "nascido_da_tempestade",
+          "magia_de_alcance"
+        ],
+        "classe_nivel_2_mais": [
+          "explorador_de_ordem",
+          "magia_de_ordem",
+          "conjuracao_consistente"
+        ],
+        "pericia": [
+          "reconhecer_magia",
+          "forrageador",
+          "esgueirador_de_terreno"
+        ],
+        "gerais": [
+          "iniciativa_incrivel",
+          "veloz",
+          "vitalidade"
+        ],
+        "tracos_ancestralidade_afinidade": [
+          "fogo",
+          "terra",
+          "deserto",
+          "elemental"
+        ]
+      },
+      "equipamento_recomendado": {
+        "categoria_armadura_preferida": "leve",
+        "armaduras_ids": [
+          "couro_batido",
+          "couro",
+          "gibao_de_peles"
+        ],
+        "usa_escudo": false,
+        "escudos_ids": [],
+        "armas_corpo_a_corpo_ids": [
+          "cajado",
+          "foice",
+          "adaga"
+        ],
+        "armas_distancia_ids": [
+          "funda",
+          "dardo"
+        ],
+        "estilo_empunhadura": "distancia",
+        "kit_classe_preferido": "Druida"
+      },
+      "conjuracao_recomendada": {
+        "tradicao": "primal",
+        "tracos_prioritarios": [
+          "fogo",
+          "acido",
+          "terra",
+          "evocacao"
+        ],
+        "escolas_prioritarias": [
+          "evocacao",
+          "conjuracao",
+          "transmutacao"
+        ],
+        "truques_prioritarios": [
+          "produzir_chama",
+          "jorro_acido",
+          "arco_eletrico",
+          "detectar_magia",
+          "luz"
+        ],
+        "magias_nivel_1_prioritarias": [
+          "maos_flamejantes",
+          "lubrificar",
+          "passos_largos",
+          "alarme"
+        ]
+      },
+      "conjuracao_por_tradicao": null,
+      "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
+      "tendencia_preferida": null,
+      "tese_arcana_id": null,
+      "aliado_divino_sugerido": null
+    },
+    {
+      "id": "druida_errante_ermos",
+      "classe_id": "druida",
+      "classe_nome": "Druida",
+      "nome": "Andarilho dos Ermos (Batedor e Sobrevivente)",
+      "titulo_completo": "Druida — Andarilho dos Ermos (Batedor e Sobrevivente)",
+      "subclasse_oficial_id": "selvagens",
+      "subclasse_oficial_nome": "Selvagens",
+      "subclasses_oficiais_candidatas": [
+        "selvagens",
+        "folha"
+      ],
+      "subclasses_oficiais_nomes": [
+        "Selvagens",
+        "Folha"
+      ],
+      "resumo_proposta": "Guia furtivo das fronteiras selvagens que combina lança longa, magias de mobilidade e camuflagem natural para emboscadas.",
+      "sinergia_mecanica": "Une Magia de Alcance (1º) e lança longa (alcance 3m) a Chamado dos Ermos (2º), Deslocamento da Floresta (4º) e Mil Faces (4º), cobrindo rastreamento, furtividade e cura de expedição.",
+      "prioridade_atributos": [
+        "sab",
+        "des",
+        "con",
+        "for",
+        "int",
+        "car"
+      ],
+      "biografias_recomendadas": [
+        "batedor",
+        "cacador",
+        "nomade",
+        "herbalista"
+      ],
+      "pericias_prioritarias": [
+        "natureza",
+        "sobrevivencia",
+        "furtividade",
+        "medicina",
+        "atletismo"
+      ],
+      "saber_sugerido": "Saber de Ermos",
+      "talentos_recomendados": {
+        "classe_nivel_1": [
+          "magia_de_alcance",
+          "aspecto_selvagem",
+          "familiar_leshy"
+        ],
+        "classe_nivel_2_mais": [
+          "chamado_dos_ermos",
+          "deslocamento_da_floresta",
+          "mil_faces"
+        ],
+        "pericia": [
+          "rastreador_experiente",
+          "esgueirador_de_terreno",
+          "medicina_natural"
+        ],
+        "gerais": [
+          "veloz",
+          "iniciativa_incrivel",
+          "vitalidade"
+        ],
+        "tracos_ancestralidade_afinidade": [
+          "floresta",
+          "velocidade",
+          "furtividade",
+          "natureza"
+        ]
+      },
+      "equipamento_recomendado": {
+        "categoria_armadura_preferida": "media",
+        "armaduras_ids": [
+          "couro_batido",
+          "gibao_de_peles",
+          "couro"
+        ],
+        "usa_escudo": false,
+        "escudos_ids": [],
+        "armas_corpo_a_corpo_ids": [
+          "lanca_longa",
+          "lanca",
+          "foice"
+        ],
+        "armas_distancia_ids": [
+          "azagaia",
+          "funda"
+        ],
+        "estilo_empunhadura": "duas_maos",
+        "kit_classe_preferido": "Druida"
+      },
+      "conjuracao_recomendada": {
+        "tradicao": "primal",
+        "tracos_prioritarios": [
+          "planta",
+          "animal",
+          "transmutacao",
+          "deteccao"
+        ],
+        "escolas_prioritarias": [
+          "transmutacao",
+          "adivinhacao",
+          "abjuracao"
+        ],
+        "truques_prioritarios": [
+          "intuir_direcao",
+          "emaranhape",
+          "orientacao",
+          "estabilizar",
+          "raio_de_gelo"
+        ],
+        "magias_nivel_1_prioritarias": [
+          "passos_sem_pegadas",
+          "passos_largos",
+          "anular_aroma",
+          "curar"
         ]
       },
       "conjuracao_por_tradicao": null,
@@ -3552,6 +4601,301 @@
         ]
       },
       "conjuracao_por_tradicao": null,
+      "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
+      "tendencia_preferida": null,
+      "tese_arcana_id": null,
+      "aliado_divino_sugerido": null
+    },
+    {
+      "id": "feiticeiro_herdeiro_morto_vivo",
+      "classe_id": "feiticeiro",
+      "classe_nome": "Feiticeiro",
+      "nome": "Herdeiro dos Mortos-Vivos (Necromante de Sangue)",
+      "titulo_completo": "Feiticeiro — Herdeiro dos Mortos-Vivos (Necromante de Sangue)",
+      "subclasse_oficial_id": "morta_viva",
+      "subclasse_oficial_nome": "Morta-Viva",
+      "subclasses_oficiais_candidatas": [
+        "morta_viva"
+      ],
+      "subclasses_oficiais_nomes": [
+        "Morta-Viva"
+      ],
+      "resumo_proposta": "Conjurador marcado pelo toque da morte que drena vitalidade inimiga com energia negativa e resiste a efeitos letais.",
+      "sinergia_mecanica": "Linhagem Morta-Viva (tradição divina, Ferir no repertório e magia de foco Toque dos Mortos-Vivos) somada a Feitiçaria Perigosa (1º), Evolução Divina (4º) e Linhagem Avançada (6º).",
+      "prioridade_atributos": [
+        "car",
+        "con",
+        "des",
+        "sab",
+        "int",
+        "for"
+      ],
+      "biografias_recomendadas": [
+        "eremita",
+        "acolito",
+        "vidente",
+        "prisioneiro"
+      ],
+      "pericias_prioritarias": [
+        "religiao",
+        "intimidacao",
+        "medicina",
+        "ocultismo",
+        "furtividade"
+      ],
+      "saber_sugerido": "Saber Necromântico",
+      "talentos_recomendados": {
+        "classe_nivel_1": [
+          "feiticaria_perigosa",
+          "magia_de_alcance",
+          "familiar"
+        ],
+        "classe_nivel_2_mais": [
+          "evolucao_divina",
+          "linhagem_avancada",
+          "resistencia_de_linhagem"
+        ],
+        "pericia": [
+          "olhar_intimidante",
+          "estudante_do_canone",
+          "medicina_de_batalha"
+        ],
+        "gerais": [
+          "duro_de_matar",
+          "vitalidade",
+          "iniciativa_incrivel"
+        ],
+        "tracos_ancestralidade_afinidade": [
+          "morte",
+          "negativo",
+          "sombra",
+          "resistencia"
+        ]
+      },
+      "equipamento_recomendado": {
+        "categoria_armadura_preferida": "sem_armadura",
+        "armaduras_ids": [
+          "roupa_de_explorador",
+          "nenhuma_armadura"
+        ],
+        "usa_escudo": false,
+        "escudos_ids": [],
+        "armas_corpo_a_corpo_ids": [
+          "foice",
+          "adaga"
+        ],
+        "armas_distancia_ids": [
+          "besta_leve",
+          "funda"
+        ],
+        "estilo_empunhadura": "distancia",
+        "kit_classe_preferido": "Feiticeiro"
+      },
+      "conjuracao_recomendada": {
+        "tradicao": "divina",
+        "tracos_prioritarios": [
+          "negativo",
+          "necromancia",
+          "morte",
+          "medo"
+        ],
+        "escolas_prioritarias": [
+          "necromancia",
+          "abjuracao",
+          "encantamento"
+        ],
+        "truques_prioritarios": [
+          "toque_gelido",
+          "escudo_mistico",
+          "lanca_divina",
+          "pasmar",
+          "detectar_magia"
+        ],
+        "magias_nivel_1_prioritarias": [
+          "ferir",
+          "raio_de_enfraquecimento",
+          "ruina",
+          "medo"
+        ]
+      },
+      "conjuracao_por_tradicao": {
+        "divina": {
+          "tradicao": "divina",
+          "tracos_prioritarios": [
+            "negativo",
+            "necromancia",
+            "morte",
+            "medo"
+          ],
+          "escolas_prioritarias": [
+            "necromancia",
+            "abjuracao",
+            "encantamento"
+          ],
+          "truques_prioritarios": [
+            "toque_gelido",
+            "escudo_mistico",
+            "lanca_divina",
+            "pasmar",
+            "detectar_magia"
+          ],
+          "magias_nivel_1_prioritarias": [
+            "ferir",
+            "raio_de_enfraquecimento",
+            "ruina",
+            "medo"
+          ]
+        }
+      },
+      "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
+      "tendencia_preferida": null,
+      "tese_arcana_id": null,
+      "aliado_divino_sugerido": null
+    },
+    {
+      "id": "feiticeiro_bruxo_estriga",
+      "classe_id": "feiticeiro",
+      "classe_nome": "Feiticeiro",
+      "nome": "Bruxo da Estriga (Maldições e Familiar Ocultista)",
+      "titulo_completo": "Feiticeiro — Bruxo da Estriga (Maldições e Familiar Ocultista)",
+      "subclasse_oficial_id": "estriga",
+      "subclasse_oficial_nome": "Estriga",
+      "subclasses_oficiais_candidatas": [
+        "estriga"
+      ],
+      "subclasses_oficiais_nomes": [
+        "Estriga"
+      ],
+      "resumo_proposta": "Místico ocultista ligado ao sangue de bruxas que lança maldições ciumentas, ilusões traiçoeiras e conta com um familiar espião.",
+      "sinergia_mecanica": "Linhagem Estriga (tradição ocultista e Maldição Ciumenta) combinada com Familiar (1º), Familiar Melhorado (2º), Evolução Ocultista (4º) e Linhagem Avançada (6º).",
+      "prioridade_atributos": [
+        "car",
+        "des",
+        "con",
+        "int",
+        "sab",
+        "for"
+      ],
+      "biografias_recomendadas": [
+        "vidente",
+        "herbalista",
+        "eremita",
+        "charlatao"
+      ],
+      "pericias_prioritarias": [
+        "ocultismo",
+        "dissimulacao",
+        "intimidacao",
+        "natureza",
+        "furtividade"
+      ],
+      "saber_sugerido": "Saber de Maldições",
+      "talentos_recomendados": {
+        "classe_nivel_1": [
+          "familiar",
+          "magia_de_alcance",
+          "contramagica"
+        ],
+        "classe_nivel_2_mais": [
+          "familiar_melhorado",
+          "evolucao_ocultista",
+          "linhagem_avancada"
+        ],
+        "pericia": [
+          "identificar_estranhezas",
+          "olhar_intimidante",
+          "mentiroso_charmoso"
+        ],
+        "gerais": [
+          "perspicacia_astuta",
+          "iniciativa_incrivel",
+          "vitalidade"
+        ],
+        "tracos_ancestralidade_afinidade": [
+          "maldicao",
+          "ocultismo",
+          "ilusao",
+          "sombra"
+        ]
+      },
+      "equipamento_recomendado": {
+        "categoria_armadura_preferida": "sem_armadura",
+        "armaduras_ids": [
+          "roupa_de_explorador",
+          "nenhuma_armadura"
+        ],
+        "usa_escudo": false,
+        "escudos_ids": [],
+        "armas_corpo_a_corpo_ids": [
+          "cajado",
+          "adaga",
+          "foice"
+        ],
+        "armas_distancia_ids": [
+          "funda",
+          "dardo"
+        ],
+        "estilo_empunhadura": "distancia",
+        "kit_classe_preferido": "Feiticeiro"
+      },
+      "conjuracao_recomendada": {
+        "tradicao": "ocultista",
+        "tracos_prioritarios": [
+          "maldicao",
+          "mental",
+          "ilusao",
+          "necromancia"
+        ],
+        "escolas_prioritarias": [
+          "encantamento",
+          "necromancia",
+          "ilusao"
+        ],
+        "truques_prioritarios": [
+          "pasmar",
+          "toque_gelido",
+          "som_fantasma",
+          "ler_aura",
+          "escudo_mistico"
+        ],
+        "magias_nivel_1_prioritarias": [
+          "dor_fantasma",
+          "ruina",
+          "medo",
+          "gavinhas_sombrias"
+        ]
+      },
+      "conjuracao_por_tradicao": {
+        "ocultista": {
+          "tradicao": "ocultista",
+          "tracos_prioritarios": [
+            "maldicao",
+            "mental",
+            "ilusao",
+            "necromancia"
+          ],
+          "escolas_prioritarias": [
+            "encantamento",
+            "necromancia",
+            "ilusao"
+          ],
+          "truques_prioritarios": [
+            "pasmar",
+            "toque_gelido",
+            "som_fantasma",
+            "ler_aura",
+            "escudo_mistico"
+          ],
+          "magias_nivel_1_prioritarias": [
+            "dor_fantasma",
+            "ruina",
+            "medo",
+            "gavinhas_sombrias"
+          ]
+        }
+      },
       "fonte_divina_preferida": null,
       "fontes_divinas_aceitas": null,
       "tendencia_preferida": null,
@@ -4497,6 +5841,197 @@
       "aliado_divino_sugerido": null
     },
     {
+      "id": "ladino_acrobata_explorador",
+      "classe_id": "ladino",
+      "classe_nome": "Ladino",
+      "nome": "Explorador de Ruínas (Caçador de Armadilhas)",
+      "titulo_completo": "Ladino — Explorador de Ruínas (Caçador de Armadilhas)",
+      "subclasse_oficial_id": "ladrao",
+      "subclasse_oficial_nome": "Ladrão",
+      "subclasses_oficiais_candidatas": [
+        "ladrao"
+      ],
+      "subclasses_oficiais_nomes": [
+        "Ladrão"
+      ],
+      "resumo_proposta": "Especialista em masmorras e relíquias que detecta e desativa armadilhas complexas antes que o grupo caia em emboscadas.",
+      "sinergia_mecanica": "Prioriza Descobridor de Armadilha (1º) com Sabedoria e Inteligência altas para Percepção e Ladroagem; evolui com Mobilidade (2º), Aviso do Batedor (4º) e Perseguição Reativa (4º).",
+      "prioridade_atributos": [
+        "des",
+        "sab",
+        "int",
+        "con",
+        "car",
+        "for"
+      ],
+      "biografias_recomendadas": [
+        "batedor",
+        "detetive",
+        "funileiro",
+        "cacador_de_recompensas"
+      ],
+      "pericias_prioritarias": [
+        "ladroagem",
+        "acrobatismo",
+        "furtividade",
+        "atletismo",
+        "sobrevivencia"
+      ],
+      "saber_sugerido": "Saber de Arquitetura",
+      "talentos_recomendados": {
+        "classe_nivel_1": [
+          "descobridor_de_armadilha",
+          "esquiva_agil"
+        ],
+        "classe_nivel_2_mais": [
+          "mobilidade",
+          "aviso_do_batedor",
+          "perseguicao_reativa"
+        ],
+        "pericia": [
+          "queda_do_gato",
+          "escalador_de_combate",
+          "salto_rapido"
+        ],
+        "gerais": [
+          "perspicacia_astuta",
+          "veloz",
+          "iniciativa_incrivel"
+        ],
+        "tracos_ancestralidade_afinidade": [
+          "armadilha",
+          "sentidos",
+          "agilidade",
+          "masmorra"
+        ]
+      },
+      "equipamento_recomendado": {
+        "categoria_armadura_preferida": "leve",
+        "armaduras_ids": [
+          "couro_batido",
+          "couro"
+        ],
+        "usa_escudo": false,
+        "escudos_ids": [],
+        "armas_corpo_a_corpo_ids": [
+          "espada_curta",
+          "rapieira",
+          "adaga"
+        ],
+        "armas_distancia_ids": [
+          "besta_de_mao",
+          "arco_curto",
+          "dardo"
+        ],
+        "estilo_empunhadura": "uma_mao",
+        "kit_classe_preferido": "Ladino"
+      },
+      "conjuracao_recomendada": null,
+      "conjuracao_por_tradicao": null,
+      "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
+      "tendencia_preferida": null,
+      "tese_arcana_id": null,
+      "aliado_divino_sugerido": null
+    },
+    {
+      "id": "ladino_infiltrador_arcano",
+      "classe_id": "ladino",
+      "classe_nome": "Ladino",
+      "nome": "Infiltrador Místico (Espião e Impostor Social)",
+      "titulo_completo": "Ladino — Infiltrador Místico (Espião e Impostor Social)",
+      "subclasse_oficial_id": "malandro",
+      "subclasse_oficial_nome": "Malandro",
+      "subclasses_oficiais_candidatas": [
+        "malandro"
+      ],
+      "subclasses_oficiais_nomes": [
+        "Malandro"
+      ],
+      "resumo_proposta": "Agente de intriga com Carisma como atributo principal que domina salões nobres, disfarces e truques místicos de infiltração.",
+      "sinergia_mecanica": "Assume Carisma como atributo-chave no Esquema Malandro, unindo Finta Dupla (1º) e broquel a Mágica Menor (2º) e Avaliação de Batalha (4º) para ler fraquezas inimigas.",
+      "prioridade_atributos": [
+        "car",
+        "des",
+        "int",
+        "sab",
+        "con",
+        "for"
+      ],
+      "biografias_recomendadas": [
+        "emissario",
+        "nobre",
+        "charlatao",
+        "advogado"
+      ],
+      "pericias_prioritarias": [
+        "dissimulacao",
+        "diplomacia",
+        "sociedade",
+        "ocultismo",
+        "furtividade"
+      ],
+      "saber_sugerido": "Saber de Espionagem",
+      "talentos_recomendados": {
+        "classe_nivel_1": [
+          "finta_dupla",
+          "voce_e_o_proximo",
+          "esquiva_agil"
+        ],
+        "classe_nivel_2_mais": [
+          "magica_menor",
+          "finta_de_distracao",
+          "avaliacao_de_batalha"
+        ],
+        "pericia": [
+          "gracejos_da_corte",
+          "mentiroso_charmoso",
+          "poliglota"
+        ],
+        "gerais": [
+          "iniciativa_incrivel",
+          "perspicacia_astuta",
+          "veloz"
+        ],
+        "tracos_ancestralidade_afinidade": [
+          "carisma",
+          "ilusao",
+          "diplomacia",
+          "enganacao"
+        ]
+      },
+      "equipamento_recomendado": {
+        "categoria_armadura_preferida": "leve",
+        "armaduras_ids": [
+          "couro",
+          "couro_batido",
+          "armadura_acolchoada"
+        ],
+        "usa_escudo": true,
+        "escudos_ids": [
+          "broquel"
+        ],
+        "armas_corpo_a_corpo_ids": [
+          "rapieira",
+          "adaga",
+          "espada_curta"
+        ],
+        "armas_distancia_ids": [
+          "besta_de_mao",
+          "dardo"
+        ],
+        "estilo_empunhadura": "uma_mao_e_escudo",
+        "kit_classe_preferido": "Ladino"
+      },
+      "conjuracao_recomendada": null,
+      "conjuracao_por_tradicao": null,
+      "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
+      "tendencia_preferida": null,
+      "tese_arcana_id": null,
+      "aliado_divino_sugerido": null
+    },
+    {
       "id": "mago_evocador_artilharia",
       "classe_id": "mago",
       "classe_nome": "Mago",
@@ -5085,6 +6620,126 @@
       "aliado_divino_sugerido": null
     },
     {
+      "id": "mago_transmutador_batalha",
+      "classe_id": "mago",
+      "classe_nome": "Mago",
+      "nome": "Transmutador de Batalha (Mestre de Metamagia e Forma)",
+      "titulo_completo": "Mago — Transmutador de Batalha (Mestre de Metamagia e Forma)",
+      "subclasse_oficial_id": "transmutacao",
+      "subclasse_oficial_nome": "Transmutação",
+      "subclasses_oficiais_candidatas": [
+        "transmutacao",
+        "adivinhacao"
+      ],
+      "subclasses_oficiais_nomes": [
+        "Transmutação",
+        "Adivinhação"
+      ],
+      "resumo_proposta": "Mago tático que altera propriedades físicas de armas e aliados, acelera movimentos e adapta metamagias diariamente em combate.",
+      "sinergia_mecanica": "Escola de Transmutação ou Adivinhação + Tese Experimentação Metamágica (ganha Magia de Alcance no 1º nível e flexibilidade metamágica no 4º); evolui com Magia Residual em Arma (4º) e Foco Vinculado (4º).",
+      "prioridade_atributos": [
+        "int",
+        "des",
+        "con",
+        "for",
+        "sab",
+        "car"
+      ],
+      "biografias_recomendadas": [
+        "artesao",
+        "funileiro",
+        "estudioso",
+        "soldado"
+      ],
+      "pericias_prioritarias": [
+        "arcanismo",
+        "manufatura",
+        "acrobatismo",
+        "atletismo",
+        "natureza"
+      ],
+      "saber_sugerido": "Saber de Engenharia",
+      "talentos_recomendados": {
+        "classe_nivel_1": [
+          "magia_de_alcance",
+          "ampliar_magia",
+          "ignorar_materiais"
+        ],
+        "classe_nivel_2_mais": [
+          "magia_residual_em_arma",
+          "foco_vinculado",
+          "magia_de_escola_avancada"
+        ],
+        "pericia": [
+          "sentido_arcano",
+          "reparo_rapido",
+          "reconhecer_magia"
+        ],
+        "gerais": [
+          "veloz",
+          "iniciativa_incrivel",
+          "vitalidade"
+        ],
+        "tracos_ancestralidade_afinidade": [
+          "transmutacao",
+          "velocidade",
+          "engenho",
+          "arcano"
+        ]
+      },
+      "equipamento_recomendado": {
+        "categoria_armadura_preferida": "sem_armadura",
+        "armaduras_ids": [
+          "roupa_de_explorador",
+          "nenhuma_armadura"
+        ],
+        "usa_escudo": false,
+        "escudos_ids": [],
+        "armas_corpo_a_corpo_ids": [
+          "cajado",
+          "adaga",
+          "clava"
+        ],
+        "armas_distancia_ids": [
+          "besta_leve"
+        ],
+        "estilo_empunhadura": "duas_maos",
+        "kit_classe_preferido": "Mago"
+      },
+      "conjuracao_recomendada": {
+        "tradicao": "arcana",
+        "tracos_prioritarios": [
+          "transmutacao",
+          "adivinhacao",
+          "metamorfose"
+        ],
+        "escolas_prioritarias": [
+          "transmutacao",
+          "adivinhacao"
+        ],
+        "truques_prioritarios": [
+          "escudo_mistico",
+          "projetil_telecinetico",
+          "mao_mistica",
+          "arco_eletrico",
+          "detectar_magia"
+        ],
+        "magias_nivel_1_prioritarias": [
+          "arma_magica",
+          "passos_velozes",
+          "golpe_certo",
+          "salto",
+          "carga_de_formiga"
+        ]
+      },
+      "conjuracao_por_tradicao": null,
+      "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
+      "tendencia_preferida": null,
+      "tese_arcana_id": "experimentacao_metamagica",
+      "aliado_divino_sugerido": null
+    },
+    {
       "id": "monge_artista_posturas",
       "classe_id": "monge",
       "classe_nome": "Monge",
@@ -5511,6 +7166,94 @@
           "forca",
           "combate",
           "resistencia"
+        ]
+      },
+      "equipamento_recomendado": {
+        "categoria_armadura_preferida": "sem_armadura",
+        "armaduras_ids": [
+          "roupa_de_explorador",
+          "nenhuma_armadura"
+        ],
+        "usa_escudo": false,
+        "escudos_ids": [],
+        "armas_corpo_a_corpo_ids": [],
+        "armas_distancia_ids": [
+          "dardo"
+        ],
+        "estilo_empunhadura": "desarmado",
+        "kit_classe_preferido": "Monge"
+      },
+      "conjuracao_recomendada": null,
+      "conjuracao_por_tradicao": null,
+      "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
+      "tendencia_preferida": null,
+      "tese_arcana_id": null,
+      "aliado_divino_sugerido": null
+    },
+    {
+      "id": "monge_dancarino_garca",
+      "classe_id": "monge",
+      "classe_nome": "Monge",
+      "nome": "Dançarino da Garça (Esquiva Aérea e Contra-Ataque)",
+      "titulo_completo": "Monge — Dançarino da Garça (Esquiva Aérea e Contra-Ataque)",
+      "subclasse_oficial_id": "monge_da_garca",
+      "subclasse_oficial_nome": "Monge da Garça",
+      "subclasses_oficiais_candidatas": [
+        "monge_da_garca"
+      ],
+      "subclasses_oficiais_nomes": [
+        "Monge da Garça"
+      ],
+      "resumo_proposta": "Acrobata marcial de defesa fluida que eleva sua CA na Postura da Garça, salta sobre obstáculos e contra-ataca com golpes de asa.",
+      "sinergia_mecanica": "Prioriza Postura da Garça (1º) para +1 de bônus de circunstância na CA e saltos aprimorados, escalando com Folha Dançante (2º), Chute Voador (4º) e Alvoroço da Garça (6º) como reação de contra-ataque.",
+      "prioridade_atributos": [
+        "des",
+        "sab",
+        "con",
+        "for",
+        "car",
+        "int"
+      ],
+      "biografias_recomendadas": [
+        "acrobata",
+        "discipulo_marcial",
+        "artista",
+        "nomade"
+      ],
+      "pericias_prioritarias": [
+        "acrobatismo",
+        "atletismo",
+        "performance",
+        "medicina",
+        "furtividade"
+      ],
+      "saber_sugerido": "Saber de Artes Marciais",
+      "talentos_recomendados": {
+        "classe_nivel_1": [
+          "postura_da_garca",
+          "disparada_de_ki"
+        ],
+        "classe_nivel_2_mais": [
+          "folha_dancante",
+          "chute_voador",
+          "alvoroco_da_garca"
+        ],
+        "pericia": [
+          "queda_do_gato",
+          "equilibrio_estavel",
+          "salto_rapido"
+        ],
+        "gerais": [
+          "veloz",
+          "iniciativa_incrivel",
+          "vitalidade"
+        ],
+        "tracos_ancestralidade_afinidade": [
+          "agilidade",
+          "velocidade",
+          "ar",
+          "equilibrio"
         ]
       },
       "equipamento_recomendado": {
@@ -5999,6 +7742,99 @@
           "besta_leve"
         ],
         "estilo_empunhadura": "distancia",
+        "kit_classe_preferido": "Patrulheiro"
+      },
+      "conjuracao_recomendada": null,
+      "conjuracao_por_tradicao": null,
+      "fonte_divina_preferida": null,
+      "fontes_divinas_aceitas": null,
+      "tendencia_preferida": null,
+      "tese_arcana_id": null,
+      "aliado_divino_sugerido": null
+    },
+    {
+      "id": "patrulheiro_cacador_colossos",
+      "classe_id": "patrulheiro",
+      "classe_nome": "Patrulheiro",
+      "nome": "Caçador de Colossos (Arma Pesada de Duas Mãos)",
+      "titulo_completo": "Patrulheiro — Caçador de Colossos (Arma Pesada de Duas Mãos)",
+      "subclasse_oficial_id": "precisao",
+      "subclasse_oficial_nome": "Precisão",
+      "subclasses_oficiais_candidatas": [
+        "precisao"
+      ],
+      "subclasses_oficiais_nomes": [
+        "Precisão"
+      ],
+      "resumo_proposta": "Matador de feras gigantes que empunha armas pesadas de duas mãos para somar o dado extra de Precisão a golpes únicos devastadores.",
+      "sinergia_mecanica": "Foca em Força 18 com Excelência Precisão (+1d8 no primeiro acerto) e Caçador de Monstros (1º), evoluindo com Guardião Contra Monstros (2º), Inimigo Predileto (4º) e Interromper Presa (4º).",
+      "prioridade_atributos": [
+        "for",
+        "con",
+        "des",
+        "sab",
+        "int",
+        "car"
+      ],
+      "biografias_recomendadas": [
+        "cacador",
+        "cacador_de_recompensas",
+        "soldado",
+        "operario"
+      ],
+      "pericias_prioritarias": [
+        "atletismo",
+        "natureza",
+        "sobrevivencia",
+        "intimidacao",
+        "medicina"
+      ],
+      "saber_sugerido": "Saber de Gigantes",
+      "talentos_recomendados": {
+        "classe_nivel_1": [
+          "cacador_de_monstros",
+          "companheiro_animal"
+        ],
+        "classe_nivel_2_mais": [
+          "guardiao_contra_monstros",
+          "inimigo_predileto",
+          "interromper_presa"
+        ],
+        "pericia": [
+          "lutador_titanico",
+          "rastreador_experiente",
+          "olhar_intimidante"
+        ],
+        "gerais": [
+          "vitalidade",
+          "duro_de_matar",
+          "iniciativa_incrivel"
+        ],
+        "tracos_ancestralidade_afinidade": [
+          "forca",
+          "arma",
+          "resistencia",
+          "selvagem"
+        ]
+      },
+      "equipamento_recomendado": {
+        "categoria_armadura_preferida": "media",
+        "armaduras_ids": [
+          "cota_de_escamas",
+          "gibao_de_peles",
+          "couro_batido"
+        ],
+        "usa_escudo": false,
+        "escudos_ids": [],
+        "armas_corpo_a_corpo_ids": [
+          "machado_longo",
+          "montante",
+          "alabarda"
+        ],
+        "armas_distancia_ids": [
+          "azagaia"
+        ],
+        "estilo_empunhadura": "duas_maos",
         "kit_classe_preferido": "Patrulheiro"
       },
       "conjuracao_recomendada": null,

@@ -225,6 +225,8 @@ def api_conceitos_por_classe(classe_id: str):
             ),
             "atributo_chave_opcoes": opcoes_por_id.get(c["id"], {}).get("atributo_chave_opcoes", []),
             "prioridade_atributos": list(c.get("prioridade_atributos", [])),
+            "estilo_empunhadura": opcoes_por_id.get(c["id"], {}).get("estilo_empunhadura", ""),
+            "saber_sugerido": opcoes_por_id.get(c["id"], {}).get("saber_sugerido", ""),
             "resumo_proposta": c["resumo_proposta"],
             "sinergia_mecanica": c.get("sinergia_mecanica", ""),
             "divindades_compativeis_ids": divindades_compativeis_conceito(dados, classe_id, c),

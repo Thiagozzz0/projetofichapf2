@@ -46,7 +46,7 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 │   ├── classes02.json            # Capítulo 3 (Leva 02: Clérigo, Druida, Feiticeiro e Guerreiro)
 │   ├── classes03.json            # Capítulo 3 (Leva 03: Ladino, Mago, Monge e Patrulheiro)
 │   ├── companheiros_familiares.json     # Capítulo 3 (Companheiros Animais e Familiares)
-│   ├── conceitos_subclasses.json        # Etapa 2: 56 conceitos procedurais (mapeando subclasses PF2E) para as 12 classes
+│   ├── conceitos_subclasses.json        # Etapa 2: 72 conceitos procedurais (6 por classe, mapeando subclasses PF2E) para as 12 classes
 │   ├── divindades.json           # 20 divindades principais do Livro Básico e seus 37 domínios (com fontes, armas e perícias divinas)
 │   ├── equipamentos.json         # Capítulo 6 completo (Equipamentos) convertido e validado
 │   ├── estrutura_ficha.json      # Ficha Oficial PF2E (pp. 580–583): blueprint das 4 páginas e contrato vazio
@@ -160,7 +160,7 @@ Os PDFs de referência estão sendo convertidos **um por vez** para garantir fid
 | `ref/Enchacent02.pdf` | `dados/magias02.json` | Cap. 7 (Parte 2): `159` descrições M–Z (`379/379` combinado), quadro Servo Invisível, `158` Magias de Foco, Regras/Tabelas de Rituais e `20` Rituais | Concluído (`11.md`) |
 | `ref/Compendium specific tools.pdf` | `dados/itens_magicos_tesouros.json` | Runas, materiais preciosos, itens alquímicos completos e tesouros | Adiado (futuro) |
 | `ref/Sheet Update.pdf` | `dados/estrutura_ficha.json` | Estrutura oficial das 4 páginas da ficha (`pp. 580–583`), legendas, fórmulas de cálculo, `18` linhas de perícia cruzadas com `pericias.json` e contrato `modelo_ficha_vazia` | Concluído (`12.md`) |
-| *Etapa 2 (Conceitos)* | `dados/conceitos_subclasses.json` | `56` conceitos ("nortes") para todas as `12` classes com mapeamento procedural de subclasses PF2E, atributos, biografias, perícias, talentos, equipamentos (`15 po`) e magias | Concluído (`13.md` / `20.md`) |
+| *Etapa 2 (Conceitos)* | `dados/conceitos_subclasses.json` | `72` conceitos ("nortes", `6` por classe) para todas as `12` classes com mapeamento procedural de subclasses PF2E, atributos, biografias, perícias, talentos, equipamentos (`15 po`) e magias | Concluído (`13.md` / `20.md` / `47.md`) |
 | *Etapa 2B (Divindades)* | `dados/divindades.json` | `20` divindades do Livro Básico, `37` domínios, tendências aceitas, armas prediletas, perícias divinas, fontes e magias de clérigo | Concluído (`22.md`) |
 | *Etapa 3B (Companheiros)* | `motor/companheiros.py` | Geração matemática de Companheiro Animal Jovem (Druida/Patrulheiro) e Familiar Aprimorado/Padrão (Mago/Druida/Talentos) | Concluído (`22.md`) |
 | *Etapa 5 (Casos de Borda)* | `scripts/validar_casos_borda_pf2e.py` | Suíte unitária de casos de borda PF2E (CA/Limite DES, `Barulhenta`/`Flexível`/`Ferro Desimpedido`, `Propulsiva`, idiomas, `Duro de Matar`, mochila/carga, divindades obrigatórias/opcionais, efeitos de talentos ancestrais/gerais e companheiros) | Concluído (`21.md` / `23.md`) |
