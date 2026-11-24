@@ -13,3 +13,5 @@ zero como o gerador gerar para ele.
 [Concluído - Etapa 33] Aba/seção de Talentos (Ancestralidade, Biografia automático, Classe e Demais Tipos: Perícia e Gerais) com seleção manual ou procedural e curadoria estrita de 1º nível (liberação dinâmica por Ambição Natural, Treinamento Geral, Herança Versátil e Ladino) + interface reorganizada em lista/acordeão limpo de 3 etapas (Criação Inicial, Talentos, Equipamentos).
 
 [Concluído - Etapas 34/35/36] Filtragem de equipamentos por classe (incluindo Anátema do Druida no back-end), Etapa de Perícias (Manual ou Procedural) com cruzamento de pré-requisitos nos Talentos da UI, modularização do Front-End JS (`estado.js`, `atributos.js`, `pericias.js`, `talentos.js`, `equipamentos.js`, `app.js`) e Etapa de Magias e Truques para Conjuradores (`motor/magias.py` + `magias.js`).
+
+- Ok, vamos fazer o seguinte. Deixe sempre por padrão ao entrar no site, estar com a opção "Regras da Casa". Caso quiser mudar, vai solicitar uma senha. Ao colocar a senha ele te permite mudar a opção. Porém após a opção ser escolhida, ele solicita a senha novamente ao tentar mudar novamente, independente de qual opção esteja.
