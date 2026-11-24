@@ -275,9 +275,24 @@
     }
   }
 
+  function mostrarOverlayDownload(ativo) {
+    const overlay = document.getElementById("overlay-download");
+    const txt = document.getElementById("overlay-download-texto");
+    if (txt) txt.textContent = "Processando seu arquivo";
+    if (overlay) {
+      overlay.hidden = !ativo;
+      overlay.classList.toggle("oculto", !ativo);
+    }
+    ["btn-pdf", "btn-docx", "btn-txt"].forEach((id) => {
+      const btn = document.getElementById(id);
+      if (btn) btn.disabled = ativo || !app.ultimaFicha;
+    });
+  }
+
   async function baixarExportacao(formato) {
     if (!app.ultimaFicha) return;
     setStatus(`Preparando arquivo .${formato.toUpperCase()}...`);
+    mostrarOverlayDownload(true);
     try {
       const resp = await fetch(`/api/exportar/${formato}`, {
         method: "POST",
@@ -305,6 +320,8 @@
       setStatus(`Download concluído: ${nomeArquivo}`, "ok");
     } catch (err) {
       setStatus(`Erro ao baixar .${formato}: ${err.message}`, "erro");
+    } finally {
+      mostrarOverlayDownload(false);
     }
   }
 

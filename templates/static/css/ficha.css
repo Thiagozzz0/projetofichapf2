@@ -1844,3 +1844,91 @@ body {
     display: none !important;
   }
 }
+
+.overlay-download {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(24, 16, 12, 0.72);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.overlay-download.oculto,
+.overlay-download[hidden] {
+  display: none !important;
+}
+
+.overlay-download-card {
+  background: var(--paper, #fbf7ee);
+  border: 2px solid var(--accent, #6e1414);
+  border-radius: 12px;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.45);
+  padding: 26px 34px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+  min-width: 240px;
+}
+
+.overlay-spinner-wrap {
+  position: relative;
+  width: 128px;
+  height: 128px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay-seta-girando {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--accent, #6e1414);
+  animation: girar-seta 1.35s linear infinite;
+}
+
+.overlay-anel-fundo {
+  fill: none;
+  stroke: rgba(110, 20, 20, 0.16);
+  stroke-width: 4;
+}
+
+.overlay-arco-seta {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 4.5;
+  stroke-linecap: round;
+}
+
+.overlay-logo-img {
+  width: 68px;
+  height: 68px;
+  object-fit: contain;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.28));
+}
+
+.overlay-download-texto {
+  margin: 0;
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: var(--accent-dark, #4b0d0d);
+  letter-spacing: 0.02em;
+}
+
+@keyframes girar-seta {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

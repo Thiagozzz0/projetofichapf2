@@ -4,7 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gerador Procedural PF2E — Ficha Oficial</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}?v=45">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=46">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=46">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}?v=46">
 </head>
 <body>
   <div class="app-container">
@@ -852,14 +854,32 @@
     </section>
   </div>
 
-  <script src="{{ url_for('static', filename='js/render_ficha.js') }}?v=45" defer></script>
-  <script src="{{ url_for('static', filename='js/estado.js') }}?v=45" defer></script>
-  <script src="{{ url_for('static', filename='js/atributos.js') }}?v=45" defer></script>
-  <script src="{{ url_for('static', filename='js/pericias.js') }}?v=45" defer></script>
-  <script src="{{ url_for('static', filename='js/talentos.js') }}?v=45" defer></script>
-  <script src="{{ url_for('static', filename='js/magias.js') }}?v=45" defer></script>
-  <script src="{{ url_for('static', filename='js/equipamentos.js') }}?v=45" defer></script>
-  <script src="{{ url_for('static', filename='js/perfil.js') }}?v=45" defer></script>
-  <script src="{{ url_for('static', filename='js/app.js') }}?v=45" defer></script>
+  <div id="overlay-download" class="overlay-download oculto nao-imprimir" role="status" aria-live="polite" aria-busy="true" hidden>
+    <div class="overlay-download-card">
+      <div class="overlay-spinner-wrap">
+        <svg class="overlay-seta-girando" viewBox="0 0 120 120" aria-hidden="true">
+          <defs>
+            <marker id="overlay-seta-ponta" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+              <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="currentColor" />
+            </marker>
+          </defs>
+          <circle class="overlay-anel-fundo" cx="60" cy="60" r="50" />
+          <path class="overlay-arco-seta" d="M 60 10 A 50 50 0 1 1 24.6 95.4" marker-end="url(#overlay-seta-ponta)" />
+        </svg>
+        <img class="overlay-logo-img" src="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=46" alt="Processando seu arquivo">
+      </div>
+      <p id="overlay-download-texto" class="overlay-download-texto">Processando seu arquivo</p>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/render_ficha.js') }}?v=46" defer></script>
+  <script src="{{ url_for('static', filename='js/estado.js') }}?v=46" defer></script>
+  <script src="{{ url_for('static', filename='js/atributos.js') }}?v=46" defer></script>
+  <script src="{{ url_for('static', filename='js/pericias.js') }}?v=46" defer></script>
+  <script src="{{ url_for('static', filename='js/talentos.js') }}?v=46" defer></script>
+  <script src="{{ url_for('static', filename='js/magias.js') }}?v=46" defer></script>
+  <script src="{{ url_for('static', filename='js/equipamentos.js') }}?v=46" defer></script>
+  <script src="{{ url_for('static', filename='js/perfil.js') }}?v=46" defer></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}?v=46" defer></script>
 </body>
 </html>
