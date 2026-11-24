@@ -126,18 +126,18 @@ body {
    ========================================================= */
 html[data-tema="escuro"] {
   color-scheme: dark;
-  --bg: #141210;
-  --paper: #1e1a17;
-  --card: #26211d;
-  --tint: #2b241f;
-  --tint-strong: #3a3028;
-  --border: #4e4237;
-  --border-dark: #746251;
+  --bg: #12100e;
+  --paper: #1b1714;
+  --card: #241f1a;
+  --tint: #2a231d;
+  --tint-strong: #372d25;
+  --border: #4a3e33;
+  --border-dark: #6c5b4a;
   --accent: #b83b36;
-  --accent-dark: #df6960;
+  --accent-dark: #e2746b;
   --gold: #cfa355;
-  --ink: #f0e8dc;
-  --muted: #baac99;
+  --ink: #efe7db;
+  --muted: #b5a795;
   --ok-bg: #1a3523;
   --ok-fg: #82e3a2;
   --warn-bg: #3b2d14;
@@ -150,7 +150,6 @@ html[data-tema="escuro"] .topbar {
 
 html[data-tema="escuro"] .painel-controle h2,
 html[data-tema="escuro"] .pagina-topo h2,
-html[data-tema="escuro"] .bloco-titulo,
 html[data-tema="escuro"] .etapa-titulo,
 html[data-tema="escuro"] .etapa-d-titulo,
 html[data-tema="escuro"] .mag-circulo-titulo,
@@ -160,9 +159,22 @@ html[data-tema="escuro"] .previa-atributos-titulo {
   color: #eab971;
 }
 
+html[data-tema="escuro"] .bloco {
+  background: #201b17;
+  border-color: #3f352c;
+}
+
+html[data-tema="escuro"] .bloco-titulo {
+  background: linear-gradient(90deg, #5c1917, #3f1110);
+  border: 1px solid #792623;
+  border-left: 3px solid var(--gold);
+  color: #f4dfb4;
+}
+
 html[data-tema="escuro"] select,
 html[data-tema="escuro"] input[type="text"],
 html[data-tema="escuro"] input[type="number"],
+html[data-tema="escuro"] input[type="password"],
 html[data-tema="escuro"] input[type="search"] {
   background: #171411;
   color: var(--ink);
@@ -186,10 +198,77 @@ html[data-tema="escuro"] .acao-card,
 html[data-tema="escuro"] .salv-card,
 html[data-tema="escuro"] .moeda-card,
 html[data-tema="escuro"] .emblema-personagem,
-html[data-tema="escuro"] .atributo-row {
-  background: var(--card);
-  border-color: var(--border);
+html[data-tema="escuro"] .atributo-row,
+html[data-tema="escuro"] .slot-item {
+  background: #2b241f;
+  border-color: #4a3e33;
   color: var(--ink);
+}
+
+html[data-tema="escuro"] .caixa-numero {
+  background: #1c1713;
+  border-color: var(--border-dark);
+  color: var(--ink);
+}
+
+html[data-tema="escuro"] .caixa-numero strong {
+  color: #f5ebd9;
+}
+
+html[data-tema="escuro"] .teml span {
+  background: #1d1814;
+  border-color: var(--border-dark);
+  color: #9f907e;
+}
+
+html[data-tema="escuro"] .teml span.ativo {
+  background: #8e2824;
+  border-color: #b8423c;
+  color: #fff;
+}
+
+html[data-tema="escuro"] .hero-pip {
+  background: #1c1713;
+  border-color: var(--gold);
+}
+
+html[data-tema="escuro"] .hero-pip.ativo {
+  background: var(--gold);
+  border-color: #f4d694;
+}
+
+html[data-tema="escuro"] .slot-item strong {
+  color: #f7efe2;
+}
+
+html[data-tema="escuro"] .slot-nivel-tag {
+  background: #3a2e21;
+  color: #eab971;
+  border-color: #614b31;
+}
+
+html[data-tema="escuro"] .slot-origem {
+  color: #c8ad7f;
+}
+
+html[data-tema="escuro"] .slot-item.vazio,
+html[data-tema="escuro"] .golpe-card.vazio,
+html[data-tema="escuro"] .acao-card.vazio {
+  background: #191512;
+  border: 1px dashed #393028;
+  color: #8b7d6e;
+  opacity: 0.78;
+}
+
+html[data-tema="escuro"] .slot-item.vazio strong {
+  color: #8b7d6e;
+  font-weight: 600;
+}
+
+html[data-tema="escuro"] .slot-item.vazio .slot-nivel-tag {
+  background: #241e19;
+  color: #9c8a74;
+  border-color: #3f352c;
 }
 
 html[data-tema="escuro"] .etapa-corpo,
@@ -203,6 +282,15 @@ html[data-tema="escuro"] .box-tal-auto {
   background: #221d19;
   border-color: var(--border);
   color: var(--ink);
+}
+
+html[data-tema="escuro"] .box-tal-auto.ativo {
+  background: #2b241d;
+  color: var(--ink);
+}
+
+html[data-tema="escuro"] .pericia-check-card.bloqueada {
+  background: #1b1714;
 }
 
 html[data-tema="escuro"] .painel-talentos-custom,
@@ -219,9 +307,7 @@ html[data-tema="escuro"] .pericia-check-card.selecionada {
   border-color: #46945b;
 }
 
-html[data-tema="escuro"] .card-tal-bloqueado,
-html[data-tema="escuro"] .golpe-card.vazio,
-html[data-tema="escuro"] .acao-card.vazio {
+html[data-tema="escuro"] .card-tal-bloqueado {
   background: #191613;
   color: var(--muted);
 }
@@ -229,13 +315,26 @@ html[data-tema="escuro"] .acao-card.vazio {
 html[data-tema="escuro"] .desc-preview-texto,
 html[data-tema="escuro"] .slot-resumo,
 html[data-tema="escuro"] .comp-ataques-lista {
-  color: #dfd4c5;
+  color: #d6cbbd;
+}
+
+html[data-tema="escuro"] .btn-exportar {
+  background: #2b221e;
+  color: #f3c4bd;
+  border-color: #8e3834;
+}
+
+html[data-tema="escuro"] .btn-exportar:hover:not(:disabled) {
+  background: #3b2a25;
+}
+
+html[data-tema="escuro"] .btn-secundario:hover:not(:disabled) {
+  background: #483b31;
 }
 
 html[data-tema="escuro"] .btn-sutil,
 html[data-tema="escuro"] .aba-btn,
 html[data-tema="escuro"] .pill,
-html[data-tema="escuro"] .slot-nivel-tag,
 html[data-tema="escuro"] .etapa-resumo-pill {
   background: var(--tint-strong);
   color: var(--ink);
@@ -367,6 +466,29 @@ html[data-tema="escuro"] .banner-regras-casa-ficha {
 
 html[data-tema="escuro"] .regra-casa-check-info strong {
   color: #eab971;
+}
+
+@media screen and (max-width: 640px) {
+  .topbar-inner {
+    gap: 10px;
+  }
+
+  .topbar-marca {
+    min-width: 0;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .topbar-logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .btn-tema {
+    width: 100%;
+    text-align: center;
+    padding: 7px 12px;
+  }
 }
 
 @media print {

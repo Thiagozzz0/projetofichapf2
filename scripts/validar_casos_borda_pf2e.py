@@ -21,12 +21,18 @@ from motor import (
     divindades_compativeis_conceito,
     gerar_personagem,
     listar_opcoes_regras_casa,
+    resolver_configuracao_regras_casa,
     validar_senha_regras_casa,
 )
 from motor.biografia_pericias import calcular_idiomas, calcular_pericias
 from motor.combate_matematica import calcular_matematica_final
 from motor.companheiros import gerar_companheiro_ou_familiar
-from motor.equipamentos import calcular_proficiencias_combate, comprar_equipamentos, grau_arma
+from motor.equipamentos import (
+    calcular_proficiencias_combate,
+    comprar_equipamentos,
+    grau_arma,
+    listar_catalogo_equipamentos_loja,
+)
 from motor.exportacao import exportar_ficha_docx, exportar_ficha_pdf, exportar_ficha_txt
 from motor.magias import gerar_conjuracao
 from motor.regras_atributos import calcular_atributos
@@ -1463,6 +1469,31 @@ def test_regras_da_casa_peso_racao_e_oleo() -> None:
     assert opcoes_rc["protegido_por_senha"] is True
     assert opcoes_rc["exigir_senha_a_cada_troca"] is True
     assert "senha" not in opcoes_rc
+
+    # 6. Transição ida-e-volta (regras_da_casa -> oficial -> regras_da_casa) na loja e ficha sem contaminação
+    cat_rc = listar_catalogo_equipamentos_loja(db, resolver_configuracao_regras_casa({"modo": "regras_da_casa"}))
+    cat_of = listar_catalogo_equipamentos_loja(db, resolver_configuracao_regras_casa({"modo": "oficial"}))
+    var_rc = {it["id"]: it for it in cat_rc["equipamentos_variados"]}
+    var_of = {it["id"]: it for it in cat_of["equipamentos_variados"]}
+    assert var_rc["racoes_1_semana"]["nome"] == "Ração (1 unidade)"
+    assert var_of["racoes_1_semana"]["nome"] == "Rações (1 semana)"
+    assert var_rc["oleo_meio_litro"]["volume"] == "L"
+    assert var_of["oleo_meio_litro"]["volume"] == "—"
+
+    for modo_seq, esp_leves, esp_ativa in (
+        ("regras_da_casa", 5, True),
+        ("oficial", 10, False),
+        ("regras_da_casa", 5, True),
+    ):
+        r_seq = gerar_personagem(
+            "humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor",
+            escolhas_equipamentos=eq_teste,
+            escolhas_regras_casa={"modo": modo_seq},
+            seed=42,
+            dados=db,
+        )
+        assert r_seq["meta_geracao"]["regras_casa"]["ativa"] is esp_ativa
+        assert r_seq["meta_geracao"]["itens_leves_por_volume"] == esp_leves
 
 
 def main() -> None:
