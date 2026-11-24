@@ -8,6 +8,10 @@ from .gerador import (
     gerar_personagem,
     listar_opcoes_criacao,
 )
+from .regras_casa import (
+    listar_opcoes_regras_casa,
+    resolver_configuracao_regras_casa,
+)
 
 __all__ = [
     "BaseDados",
@@ -20,5 +24,7 @@ __all__ = [
     "exportar_ficha_txt",
     "gerar_personagem",
     "listar_opcoes_criacao",
+    "listar_opcoes_regras_casa",
     "nome_arquivo_seguro",
+    "resolver_configuracao_regras_casa",
 ]

@@ -891,7 +891,184 @@
     atualizarOrcamentoEquipamentosUI();
   }
 
+  const STORAGE_REGRAS_CASA = "pf2e_regras_casa_v1";
+
+  function _lerEstadoRegrasCasaStorage() {
+    try {
+      const bruto = window.localStorage?.getItem(STORAGE_REGRAS_CASA);
+      if (!bruto) return null;
+      const parsed = JSON.parse(bruto);
+      return parsed && typeof parsed === "object" ? parsed : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function _salvarEstadoRegrasCasaStorage(estado) {
+    try {
+      window.localStorage?.setItem(STORAGE_REGRAS_CASA, JSON.stringify(estado));
+    } catch (_) {
+      // Ignora indisponibilidade de localStorage
+    }
+  }
+
+  function _obterCatalogoRegrasCasa() {
+    return app.opcoes?.catalogo_regras_casa || { perfis: [], regras: [], padrao_modo: "oficial" };
+  }
+
+  function obterRegrasCasaAtivasIdsUI() {
+    const catRc = _obterCatalogoRegrasCasa();
+    const modo = document.getElementById("modo-regras-casa")?.value || "oficial";
+    if (modo === "oficial") return [];
+    if (modo === "personalizado") {
+      return Array.from(document.querySelectorAll('#lista-regras-casa-checks input[type="checkbox"]:checked'))
+        .map((el) => el.value)
+        .filter(Boolean);
+    }
+    const perfil = (catRc.perfis || []).find((p) => p.id === modo);
+    return perfil ? [...(perfil.regras_ativas || [])] : [];
+  }
+
+  function montarPayloadRegrasCasaUI() {
+    const modo = document.getElementById("modo-regras-casa")?.value || "oficial";
+    return {
+      modo,
+      regras_ativas: obterRegrasCasaAtivasIdsUI(),
+    };
+  }
+
+  function _aplicarOverrideItemCatalogo(itemBase, regrasAtivasObjs) {
+    let copia = { ...itemBase, conteudo: [...(itemBase.conteudo || [])] };
+    regrasAtivasObjs.forEach((regra) => {
+      const ov = regra?.overrides_itens?.[copia.id];
+      if (!ov) return;
+      ["nome", "quantidade_pacote", "volume", "volume_valor", "descricao"].forEach((campo) => {
+        if (ov[campo] !== undefined) copia[campo] = ov[campo];
+      });
+      if (ov.substituir_conteudo && Array.isArray(copia.conteudo)) {
+        copia.conteudo = copia.conteudo.map((c) => ov.substituir_conteudo[c] || c);
+      }
+    });
+    return copia;
+  }
+
+  function aplicarRegrasCasaNoCatalogoUI({ salvar = true } = {}) {
+    const catRc = _obterCatalogoRegrasCasa();
+    const catEq = app.opcoes?.catalogo_equipamentos;
+    const modo = document.getElementById("modo-regras-casa")?.value || "oficial";
+    const ativasIds = obterRegrasCasaAtivasIdsUI();
+    const ativasSet = new Set(ativasIds);
+    const regrasAtivasObjs = (catRc.regras || []).filter((r) => ativasSet.has(r.id));
+
+    const painelCustom = document.getElementById("painel-regras-casa-custom");
+    if (painelCustom) {
+      painelCustom.classList.toggle("oculto", modo !== "personalizado");
+    }
+
+    const perfilObj = (catRc.perfis || []).find((p) => p.id === modo);
+    const descPerfil = document.getElementById("desc-perfil-regras-casa");
+    if (descPerfil && perfilObj) {
+      descPerfil.textContent = perfilObj.descricao || "";
+    }
+
+    document.querySelectorAll("#lista-regras-casa-checks .regra-casa-check-card").forEach((card) => {
+      const cb = card.querySelector('input[type="checkbox"]');
+      if (!cb) return;
+      if (modo !== "personalizado") {
+        cb.checked = ativasSet.has(cb.value);
+      }
+      card.classList.toggle("ativa", cb.checked);
+    });
+
+    const pillsEl = document.getElementById("pills-regras-casa-ativas");
+    if (pillsEl) {
+      if (!regrasAtivasObjs.length) {
+        pillsEl.innerHTML = `<span class="pill-regra-casa">Oficial (10 L = 1 Volume)</span>`;
+      } else {
+        pillsEl.innerHTML = regrasAtivasObjs
+          .map((r) => `<span class="pill-regra-casa ativa">${esc(r.resumo_curto || r.nome)}</span>`)
+          .join("");
+      }
+    }
+
+    if (catEq && Array.isArray(catEq.equipamentos_variados)) {
+      if (!app._variadosOriginais) {
+        app._variadosOriginais = catEq.equipamentos_variados.map((it) => ({
+          ...it,
+          conteudo: [...(it.conteudo || [])],
+        }));
+      }
+      catEq.equipamentos_variados = app._variadosOriginais.map((orig) =>
+        _aplicarOverrideItemCatalogo(orig, regrasAtivasObjs)
+      );
+      const porId = new Map(catEq.equipamentos_variados.map((it) => [it.id, it]));
+      app.eqEstado.variados = app.eqEstado.variados.map((it) => {
+        const atualizado = porId.get(it.id);
+        return atualizado ? { ...atualizado, quantidade: it.quantidade } : it;
+      });
+      atualizarCatalogoEquipamentosUI();
+    }
+
+    if (salvar) {
+      _salvarEstadoRegrasCasaStorage({ modo, regras_ativas: ativasIds });
+    }
+  }
+
+  function inicializarRegrasCasaUI() {
+    const catRc = _obterCatalogoRegrasCasa();
+    const selModo = document.getElementById("modo-regras-casa");
+    const gridChecks = document.getElementById("lista-regras-casa-checks");
+
+    if (selModo && (catRc.perfis || []).length) {
+      const valAtual = selModo.value;
+      selModo.innerHTML = "";
+      catRc.perfis.forEach((p) => {
+        const opt = document.createElement("option");
+        opt.value = p.id;
+        opt.textContent = p.nome;
+        selModo.appendChild(opt);
+      });
+      selModo.value = (catRc.perfis || []).some((p) => p.id === valAtual) ? valAtual : catRc.padrao_modo || "oficial";
+    }
+
+    if (gridChecks) {
+      gridChecks.innerHTML = (catRc.regras || [])
+        .map(
+          (r) =>
+            `<label class="regra-casa-check-card">` +
+            `<input type="checkbox" value="${esc(r.id)}">` +
+            `<span class="regra-casa-check-info">` +
+            `<strong>${esc(r.nome)}</strong>` +
+            `<span>${esc(r.descricao)}</span>` +
+            `</span>` +
+            `</label>`
+        )
+        .join("");
+    }
+
+    const salvo = _lerEstadoRegrasCasaStorage();
+    if (salvo && selModo && (catRc.perfis || []).some((p) => p.id === salvo.modo)) {
+      selModo.value = salvo.modo;
+      if (salvo.modo === "personalizado" && Array.isArray(salvo.regras_ativas)) {
+        const setSalvo = new Set(salvo.regras_ativas);
+        document.querySelectorAll('#lista-regras-casa-checks input[type="checkbox"]').forEach((cb) => {
+          cb.checked = setSalvo.has(cb.value);
+        });
+      }
+    }
+
+    aplicarRegrasCasaNoCatalogoUI({ salvar: false });
+  }
+
   function registrarEventosEquipamentos() {
+    document.getElementById("modo-regras-casa")?.addEventListener("change", () => {
+      aplicarRegrasCasaNoCatalogoUI({ salvar: true });
+    });
+    document.getElementById("lista-regras-casa-checks")?.addEventListener("change", (e) => {
+      if (e.target.matches('input[type="checkbox"]')) {
+        aplicarRegrasCasaNoCatalogoUI({ salvar: true });
+      }
+    });
     ["modo-equipamentos", "eq-armadura", "eq-escudo", "eq-arma-cc-select", "eq-arma-dist-select", "eq-variado-select"].forEach(
       (id) => {
         document.getElementById(id)?.addEventListener("change", atualizarVisibilidadeEquipamentosUI);
@@ -949,6 +1126,10 @@
     atualizarCatalogoEquipamentosUI,
     inicializarCatalogoEquipamentosUI,
     montarPayloadEquipamentosUI,
+    inicializarRegrasCasaUI,
+    obterRegrasCasaAtivasIdsUI,
+    montarPayloadRegrasCasaUI,
+    aplicarRegrasCasaNoCatalogoUI,
     registrarEventosEquipamentos,
   });
 })();

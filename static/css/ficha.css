@@ -2043,3 +2043,128 @@ body {
     transform: rotate(360deg);
   }
 }
+
+/* Regras da Casa (Homebrew) */
+.painel-regras-casa {
+  background: var(--tint);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--gold);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+}
+
+.regras-casa-topo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.regras-casa-controle {
+  flex: 1 1 340px;
+}
+
+.regras-casa-controle label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--accent-dark);
+  margin-bottom: 4px;
+}
+
+.regras-casa-controle select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.pills-regras-casa {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.pill-regra-casa {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.pill-regra-casa.ativa {
+  background: var(--warn-bg);
+  border-color: var(--gold);
+  color: var(--warn-fg);
+}
+
+.painel-regras-casa-custom {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+}
+
+.grid-regras-casa-checks {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 10px;
+}
+
+.regra-casa-check-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 9px 11px;
+  border-radius: 6px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  font-size: 0.82rem;
+}
+
+.regra-casa-check-card.ativa {
+  background: var(--warn-bg);
+  border-color: var(--gold);
+}
+
+.regra-casa-check-card input[type="checkbox"] {
+  margin-top: 3px;
+  accent-color: var(--accent);
+}
+
+.regra-casa-check-info strong {
+  display: block;
+  color: var(--accent-dark);
+  font-size: 0.84rem;
+}
+
+.regra-casa-check-info span {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+
+.banner-regras-casa-ficha {
+  background: var(--warn-bg);
+  border: 1px solid var(--gold);
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin-bottom: 10px;
+  font-size: 0.8rem;
+  color: var(--warn-fg);
+}

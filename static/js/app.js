@@ -197,6 +197,7 @@
       app.atualizarResumoBiografia();
       app.atualizarSeletoresAtributosBiografia();
       app.atualizarConceitos();
+      app.inicializarRegrasCasaUI?.();
       app.inicializarCatalogoEquipamentosUI();
       app.atualizarCatalogoTalentosUI();
       app.atualizarVisibilidadeTalentosUI();
@@ -254,6 +255,7 @@
       escolhas_equipamentos: app.montarPayloadEquipamentosUI(),
       escolhas_perfil: app.montarPayloadPerfilUI(),
       escolhas_companheiro: app.montarPayloadCompanheiroUI(),
+      escolhas_regras_casa: app.montarPayloadRegrasCasaUI?.() || { modo: "oficial", regras_ativas: [] },
     };
 
     try {

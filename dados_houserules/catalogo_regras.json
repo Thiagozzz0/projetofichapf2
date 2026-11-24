@@ -1,0 +1,55 @@
+{
+  "versao": 1,
+  "descricao": "Catálogo modular de Regras da Casa (Homebrew) para o Gerador PF2E. Não altera os arquivos oficiais em dados/.",
+  "regras": [
+    {
+      "id": "racao_por_unidade_peso_l",
+      "nome": "Ração por Unidade (Peso L)",
+      "categoria": "equipamentos_e_carga",
+      "padrao": false,
+      "resumo_curto": "Ração por unidade (Vol. L)",
+      "descricao": "Não existe mais ração semanal: as rações passam a ser vendidas e contabilizadas apenas por unidade, e cada unidade tem peso Leve (L).",
+      "overrides_itens": {
+        "racoes_1_semana": {
+          "nome": "Ração (1 unidade)",
+          "quantidade_pacote": 1,
+          "volume": "L",
+          "volume_valor": 0.1,
+          "descricao": "Suprimento individual de comida de viagem por unidade (1 refeição/dia). Cada unidade possui Volume leve (L)."
+        },
+        "kit_de_aventureiro": {
+          "substituir_conteudo": {
+            "2 semanas de ração": "2 unidades de ração (Volume L cada)"
+          }
+        }
+      }
+    },
+    {
+      "id": "oleo_500ml_peso_l",
+      "nome": "Óleo (500 ml) com Peso Leve (L)",
+      "categoria": "equipamentos_e_carga",
+      "padrao": false,
+      "resumo_curto": "Óleo 500ml = Vol. L",
+      "descricao": "O peso do óleo de 500 ml (meio litro) deixa de ser desprezível (—) e passa a ser Leve (L) a unidade.",
+      "overrides_itens": {
+        "oleo_meio_litro": {
+          "volume": "L",
+          "volume_valor": 0.1,
+          "descricao": "Abastece lanternas (500 ml duram 6 horas; peso Leve 'L' por unidade na regra da casa) ou pode ser incendiado (1 ação Interagir) e arremessado (1 ação ataque à distância): em acerto e teste simples CD 10, causa 1d6 de dano de fogo."
+        }
+      }
+    },
+    {
+      "id": "conversao_5_leves_por_volume",
+      "nome": "Conversão de Peso Realista (5 L = 1 Volume)",
+      "categoria": "equipamentos_e_carga",
+      "padrao": false,
+      "resumo_curto": "5 L = 1 Volume",
+      "descricao": "A regra de conversão de peso deixa de ser 10 L = 1 Volume e passa a ser 5 L = 1 Volume, tornando a gestão de carga e equipamentos mais realista.",
+      "parametros": {
+        "itens_leves_por_volume": 5,
+        "oficial_itens_leves_por_volume": 10
+      }
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "versao": 1,
+  "padrao_modo": "oficial",
+  "perfis": [
+    {
+      "id": "oficial",
+      "nome": "Oficial — Livro Básico PF2E",
+      "descricao": "Regras originais do Livro Básico (10 L = 1 Volume, Ração semanal, Óleo de 500 ml com peso desprezível).",
+      "regras_ativas": []
+    },
+    {
+      "id": "regras_da_casa",
+      "nome": "Regras da Casa — Gestão Realista de Peso",
+      "descricao": "Ativa todas as regras da mesa: Ração por unidade (peso L), Óleo de 500 ml (peso L) e conversão 5 L = 1 Volume.",
+      "regras_ativas": [
+        "racao_por_unidade_peso_l",
+        "oleo_500ml_peso_l",
+        "conversao_5_leves_por_volume"
+      ]
+    },
+    {
+      "id": "personalizado",
+      "nome": "Personalizado (Escolher Regras)",
+      "descricao": "Permite habilitar ou desabilitar individualmente cada regra da casa.",
+      "regras_ativas": []
+    }
+  ]
+}

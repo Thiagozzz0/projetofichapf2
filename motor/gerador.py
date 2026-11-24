@@ -38,6 +38,7 @@ from .magias import (
     resumo_conjuracao_classe,
 )
 from .regras_atributos import calcular_atributos, normalizar_escolha_atributo, opcoes_atributo_classe
+from .regras_casa import listar_opcoes_regras_casa, resolver_configuracao_regras_casa
 from .talentos import listar_catalogo_talentos_n1, selecionar_talentos
 from .util import ATRIBUTOS, atributo_id, formatar_preco, normalizar
 
@@ -389,6 +390,7 @@ def listar_opcoes_criacao(dados: BaseDados | None = None) -> dict[str, Any]:
         "catalogo_magias": listar_catalogo_magias_n1(db),
         "catalogo_equipamentos": listar_catalogo_equipamentos_loja(db),
         "catalogo_companheiros": listar_catalogo_companheiros_familiares(db),
+        "catalogo_regras_casa": listar_opcoes_regras_casa(),
         "total_conceitos": len(db.conceitos),
     }
 
@@ -411,10 +413,16 @@ def gerar_personagem(
     escolhas_equipamentos: dict[str, Any] | None = None,
     escolhas_perfil: dict[str, Any] | None = None,
     escolhas_companheiro: dict[str, Any] | None = None,
+    escolhas_regras_casa: dict[str, Any] | str | None = None,
     dados: BaseDados | None = None,
 ) -> dict[str, Any]:
     """Gera uma ficha completa e válida de Pathfinder 2E guiada pelo conceito escolhido."""
     db = dados or carregar_dados()
+
+    try:
+        config_regras_casa = resolver_configuracao_regras_casa(escolhas_regras_casa)
+    except ValueError as exc:
+        raise ErroValidacao(str(exc)) from exc
 
     # Seed opcional no início para tornar determinísticos também os sorteios de entrada
     if seed is None or str(seed).strip() == "":
@@ -657,6 +665,7 @@ def gerar_personagem(
             divindade=divindade,
             biografia=biografia,
             escolhas_equipamentos=escolhas_equipamentos,
+            regras_casa=config_regras_casa,
         )
     except ValueError as exc:
         raise ErroValidacao(str(exc)) from exc
@@ -778,11 +787,17 @@ def gerar_personagem(
         if val_p:
             pers_ficha[campo_p] = val_p
 
+    nota_regras_casa = (
+        f" Regras da Casa Ativas: {', '.join(config_regras_casa['regras_ativas_resumo'])}."
+        if config_regras_casa.get("ativa")
+        else ""
+    )
     ficha["perfil_e_campanha"]["anotacoes_campanha"]["anotacoes"] = (
         f"Conceito: {conceito['titulo_completo']} (Subclasse PF2E: {sub_nome_final}{tese_nota}). "
         f"{conceito['resumo_proposta']} "
         f"Sinergia: {conceito.get('sinergia_mecanica', '')} "
         f"Biografia: {biografia['descricao']}"
+        f"{nota_regras_casa}"
     ).strip()
 
     escolhas_perfil_aplicadas = {
@@ -830,6 +845,16 @@ def gerar_personagem(
             "saldo_pc": equip_res["saldo_pc"],
             "armadura_equipada": equip_res["armadura"]["nome"],
             "armadura_equipada_resumo": equip_res["armadura_resumo"],
+            "volume_leves_soltos": equip_res["volume_leves_soltos"],
+            "itens_leves_por_volume": equip_res["itens_leves_por_volume"],
+            "regras_casa": {
+                "modo": config_regras_casa["modo"],
+                "nome_perfil": config_regras_casa["nome_perfil"],
+                "ativa": config_regras_casa["ativa"],
+                "regras_ativas_ids": config_regras_casa["regras_ativas_ids"],
+                "regras_ativas_resumo": config_regras_casa["regras_ativas_resumo"],
+                "itens_leves_por_volume": config_regras_casa["itens_leves_por_volume"],
+            },
             "observacoes_combate": notas_combate,
         },
         "ficha": ficha,

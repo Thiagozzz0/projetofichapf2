@@ -315,6 +315,30 @@ html[data-tema="escuro"] .overlay-seta-girando {
   color: var(--gold);
 }
 
+html[data-tema="escuro"] .painel-regras-casa {
+  background: #241f1a;
+  border-color: var(--border);
+  border-left-color: var(--gold);
+}
+
+html[data-tema="escuro"] .regra-casa-check-card {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--ink);
+}
+
+html[data-tema="escuro"] .regra-casa-check-card.ativa,
+html[data-tema="escuro"] .pill-regra-casa.ativa,
+html[data-tema="escuro"] .banner-regras-casa-ficha {
+  background: var(--warn-bg);
+  border-color: var(--gold);
+  color: var(--warn-fg);
+}
+
+html[data-tema="escuro"] .regra-casa-check-info strong {
+  color: #eab971;
+}
+
 @media print {
   html[data-tema="escuro"] {
     --bg: #fff;

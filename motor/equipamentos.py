@@ -6,6 +6,7 @@ import re
 from typing import Any
 
 from .dados import BaseDados
+from .regras_casa import aplicar_override_item_casa
 from .util import formatar_preco, grau_normalizado, normalizar, pc_para_moedas
 
 
@@ -14,14 +15,18 @@ RESERVA_MOEDAS_MIN_PC = 150  # 10% (1 po e 5 pp) reservados em moedas no modo pr
 TETO_GASTO_PROCEDURAL_PC = ORCAMENTO_INICIAL_PC - RESERVA_MOEDAS_MIN_PC  # 1.350 pc (90%)
 
 
-def _itens_variados_loja_brutos(dados: BaseDados) -> list[dict[str, Any]]:
+def _itens_variados_loja_brutos(
+    dados: BaseDados,
+    regras_casa: dict[str, Any] | None = None,
+) -> list[dict[str, Any]]:
     """Retorna equipamentos de aventura (comuns/incomuns) e munições disponíveis para compra inicial."""
     av = dados.equipamentos["equipamentos_aventura"]
     itens: list[dict[str, Any]] = []
     vistos: set[str] = set()
 
     for grupo_nome, chave_av in (("Equipamentos de Aventura", "comuns"), ("Equipamentos Incomuns", "incomuns")):
-        for item in av.get(chave_av, []):
+        for item_bruto in av.get(chave_av, []):
+            item = aplicar_override_item_casa(item_bruto, regras_casa)
             iid = item["id"]
             if iid in vistos:
                 continue
@@ -105,7 +110,10 @@ def resumo_proficiencias_equipamento_classe(classe: dict[str, Any]) -> dict[str,
     }
 
 
-def listar_catalogo_equipamentos_loja(dados: BaseDados) -> dict[str, Any]:
+def listar_catalogo_equipamentos_loja(
+    dados: BaseDados,
+    regras_casa: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     """Catálogo inicial de equipamentos para o jogador (sem itens alquímicos, mágicos ou fórmulas)."""
     armaduras = [
         {
@@ -179,7 +187,7 @@ def listar_catalogo_equipamentos_loja(dados: BaseDados) -> dict[str, Any]:
     armas_json = dados.equipamentos["armas"]
     armas_cc = _serializar_armas(armas_json["corpo_a_corpo"])
     armas_dist = _serializar_armas(armas_json["distancia"])
-    variados = _itens_variados_loja_brutos(dados)
+    variados = _itens_variados_loja_brutos(dados, regras_casa)
 
     return {
         "orcamento_inicial_pc": ORCAMENTO_INICIAL_PC,
@@ -559,9 +567,19 @@ def _eh_modo_procedural_eq(valor: Any) -> bool:
 
 
 def _somar_volumes(lista_itens: list[dict[str, Any]]) -> tuple[int, int]:
-    """Soma volumes de uma lista de itens respeitando itens Leves (0,1)."""
+    """Soma volumes de uma lista de itens respeitando itens Leves (L / 0,1) e lotes em L."""
     inteiros, leves = 0, 0
     for item in lista_itens:
+        if item.get("volume_leves") is not None:
+            leves += max(0, int(item["volume_leves"]))
+            continue
+        vol_txt = str(item.get("volume") or "").strip().upper()
+        if vol_txt == "L":
+            leves += 1
+            continue
+        if vol_txt.endswith("L") and vol_txt[:-1].isdigit():
+            leves += int(vol_txt[:-1])
+            continue
         vv = float(item.get("volume_valor") or 0.0)
         if vv >= 1.0:
             inteiros += int(round(vv))
@@ -574,8 +592,10 @@ def _calcular_volume_efetivo(
     itens_vestidos: list[dict[str, Any]],
     itens_preparados: list[dict[str, Any]],
     outros_itens: list[dict[str, Any]],
+    leves_por_volume: int = 10,
 ) -> tuple[int, int]:
     """Calcula `(volume_total, volume_leves_soltos)` aplicando a isenção de 2 Volumes da mochila."""
+    divisor_leves = max(1, int(leves_por_volume or 10))
     int_vest, lev_vest = _somar_volumes(itens_vestidos + itens_preparados)
     int_outros, lev_outros = _somar_volumes(outros_itens)
     tem_mochila = any(
@@ -587,7 +607,7 @@ def _calcular_volume_efetivo(
             int_outros_efetivo = int_outros - 2
             lev_outros_efetivo = lev_outros
         else:
-            folga_leves = (2 - int_outros) * 10
+            folga_leves = (2 - int_outros) * divisor_leves
             int_outros_efetivo = 0
             lev_outros_efetivo = max(0, lev_outros - folga_leves)
     else:
@@ -595,7 +615,7 @@ def _calcular_volume_efetivo(
 
     soma_inteiros = int_vest + int_outros_efetivo
     soma_leves = lev_vest + lev_outros_efetivo
-    return soma_inteiros + (soma_leves // 10), soma_leves % 10
+    return soma_inteiros + (soma_leves // divisor_leves), soma_leves % divisor_leves
 
 
 def _pool_equipamentos_viagem(
@@ -686,9 +706,11 @@ def comprar_equipamentos(
     divindade: dict[str, Any] | None = None,
     biografia: dict[str, Any] | None = None,
     escolhas_equipamentos: dict[str, Any] | None = None,
+    regras_casa: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Executa a compra procedural, manual ou híbrida dentro de 15 po (1.500 pc) e calcula o Volume."""
     saldo_pc = ORCAMENTO_INICIAL_PC
+    leves_por_volume = max(1, int((regras_casa or {}).get("itens_leves_por_volume") or 10))
     defesas = profs_combate["defesas"]
     armas_prof = profs_combate["armas"]
     nao_metal = profs_combate["restricao_nao_metal"]
@@ -834,7 +856,7 @@ def comprar_equipamentos(
 
     variados_manuais_reg: list[tuple[dict[str, Any], int]] = []
     if variados_manual:
-        mapa_variados = {it["id"]: it for it in _itens_variados_loja_brutos(dados)}
+        mapa_variados = {it["id"]: it for it in _itens_variados_loja_brutos(dados, regras_casa)}
         lista_var = [variados_req] if isinstance(variados_req, (str, dict)) else list(variados_req)
         for entrada in lista_var:
             if isinstance(entrada, str):
@@ -887,9 +909,13 @@ def comprar_equipamentos(
         if classe["id"] == "alquimista":
             prep_f.append({"nome": "Livro de Fórmulas e Reagentes Infundidos", "volume_valor": 0.1})
         for item_loja, qtd_m in variados_manuais_reg:
-            vol_tot = round(float(item_loja["volume_valor"]) * qtd_m, 2)
+            vol_unit = float(item_loja["volume_valor"])
+            vol_tot = round(vol_unit * qtd_m, 2)
             alvo = vest_f if item_loja["eh_municao"] else out_f
-            alvo.append({"nome": item_loja["nome"], "volume_valor": vol_tot})
+            entry_m: dict[str, Any] = {"nome": item_loja["nome"], "volume_valor": vol_tot}
+            if 0.05 <= vol_unit < 1.0:
+                entry_m["volume_leves"] = max(1, int(round(vol_unit * 10))) * qtd_m
+            alvo.append(entry_m)
         return vest_f, prep_f, out_f
 
     def _vol_simulando(
@@ -904,7 +930,7 @@ def comprar_equipamentos(
             vest_s.append({"nome": w_c["nome"], "volume_valor": float(w_c.get("volume_valor") or 0.0)})
         if esc_cand:
             vest_s.append({"nome": esc_cand["nome"], "volume_valor": float(esc_cand.get("volume_valor") or 0.0)})
-        vol_tot, _ = _calcular_volume_efetivo(vest_s, prep_s, out_s)
+        vol_tot, _ = _calcular_volume_efetivo(vest_s, prep_s, out_s, leves_por_volume=leves_por_volume)
         return vol_tot
 
     reserva_kit = 0 if variados_manual else 70
@@ -1102,13 +1128,17 @@ def comprar_equipamentos(
             if mun:
                 # 2 lotes (20 munições) quando houver saldo dentro dos 90% e peso leve, senão 1 lote
                 disp_m = _saldo_procedural_disp()
-                vol_atual_m = _calcular_volume_efetivo(itens_vestidos, itens_preparados, outros_itens)[0]
+                vol_atual_m = _calcular_volume_efetivo(
+                    itens_vestidos, itens_preparados, outros_itens, leves_por_volume=leves_por_volume
+                )[0]
                 lotes = 0
                 for cand_lotes in (2, 1):
                     if mun["preco_pc"] * cand_lotes > disp_m:
                         continue
-                    sim_m = {"nome": mun["nome"], "volume_valor": round(0.1 * cand_lotes, 2)}
-                    vol_c = _calcular_volume_efetivo([*itens_vestidos, sim_m], itens_preparados, outros_itens)[0]
+                    sim_m = {"nome": mun["nome"], "volume_valor": round(0.1 * cand_lotes, 2), "volume_leves": cand_lotes}
+                    vol_c = _calcular_volume_efetivo(
+                        [*itens_vestidos, sim_m], itens_preparados, outros_itens, leves_por_volume=leves_por_volume
+                    )[0]
                     if vol_atual_m > sobrecarregado_lim or vol_c <= sobrecarregado_lim:
                         lotes = cand_lotes
                         break
@@ -1194,7 +1224,9 @@ def comprar_equipamentos(
             )
     else:
         ids_variados_comprados: set[str] = set()
-        ja_sobre_var = _calcular_volume_efetivo(itens_vestidos, itens_preparados, outros_itens)[0] > sobrecarregado_lim
+        ja_sobre_var = _calcular_volume_efetivo(
+            itens_vestidos, itens_preparados, outros_itens, leves_por_volume=leves_por_volume
+        )[0] > sobrecarregado_lim
 
         def _tentar_comprar_variado_proc(
             iid: str,
@@ -1205,9 +1237,10 @@ def comprar_equipamentos(
             nonlocal saldo_pc
             if iid in ids_variados_comprados:
                 return False
-            gitem = dados.itens_gerais.get(iid)
-            if not gitem:
+            gitem_bruto = dados.itens_gerais.get(iid)
+            if not gitem_bruto:
                 return False
+            gitem = aplicar_override_item_casa(gitem_bruto, regras_casa)
             preco_unit = int(gitem.get("preco_pc") or 0)
             preco_tot = preco_unit * qtd
             if preco_tot > _saldo_procedural_disp():
@@ -1216,12 +1249,15 @@ def comprar_equipamentos(
             vol_unit = float(gitem.get("volume_valor") or 0.0)
             vol_tot = round(vol_unit * qtd, 2)
             lista_alvo = outros_itens if destino is None else destino
-            sim_item = {"nome": gitem["nome"], "volume_valor": vol_tot}
+            sim_item: dict[str, Any] = {"nome": gitem["nome"], "volume_valor": vol_tot}
+            if 0.05 <= vol_unit < 1.0:
+                sim_item["volume_leves"] = max(1, int(round(vol_unit * 10))) * qtd
             if not ja_sobre_var:
                 vol_sim = _calcular_volume_efetivo(
                     itens_vestidos,
                     [*itens_preparados, sim_item] if lista_alvo is itens_preparados else itens_preparados,
                     [*outros_itens, sim_item] if lista_alvo is outros_itens else outros_itens,
+                    leves_por_volume=leves_por_volume,
                 )[0]
                 if vol_sim > sobrecarregado_lim:
                     return False
@@ -1270,7 +1306,7 @@ def comprar_equipamentos(
             _tentar_comprar_variado_proc(iid_v, qtd_v, destino=dest_v)
 
     volume_total, volume_leves_soltos = _calcular_volume_efetivo(
-        itens_vestidos, itens_preparados, outros_itens
+        itens_vestidos, itens_preparados, outros_itens, leves_por_volume=leves_por_volume
     )
 
     return {
@@ -1283,6 +1319,7 @@ def comprar_equipamentos(
         "outros_itens": outros_itens,
         "volume_total": float(volume_total),
         "volume_leves_soltos": volume_leves_soltos,
+        "itens_leves_por_volume": leves_por_volume,
         "volume_sobrecarregado": sobrecarregado_lim,
         "volume_maximo": maximo_lim,
         "esta_sobrecarregado": volume_total > sobrecarregado_lim,

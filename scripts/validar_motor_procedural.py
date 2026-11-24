@@ -251,6 +251,9 @@ def main() -> None:
     assert "Pathfinder 2" in html_idx
     assert "ficha.css" in html_idx and "render_ficha.js" in html_idx and "app.js" in html_idx
     for id_dom in (
+        "painel-regras-casa",
+        "modo-regras-casa",
+        "painel-regras-casa-custom",
         "acordeao-etapas",
         "desc-conceito-inline",
         "etapa-criacao-inicial",
@@ -297,6 +300,16 @@ def main() -> None:
     assert r_saude.status_code == 200
     assert r_saude.get_json()["conceitos"] == 72
     assert r_saude.get_json()["divindades"] == 20
+
+    r_rc = client.get("/api/regras-casa")
+    assert r_rc.status_code == 200
+    rc_json = r_rc.get_json()
+    assert len(rc_json["perfis"]) == 3 and len(rc_json["regras"]) == 3
+    assert {r["id"] for r in rc_json["regras"]} == {
+        "racao_por_unidade_peso_l",
+        "oleo_500ml_peso_l",
+        "conversao_5_leves_por_volume",
+    }
 
     r_opcoes = client.get("/api/opcoes")
     assert r_opcoes.status_code == 200
@@ -376,6 +389,41 @@ def main() -> None:
     assert r_ok.status_code == 200
     payload_ok = r_ok.get_json()
     verificar_contrato_e_matematica(payload_ok, dados)
+    assert payload_ok["meta_geracao"]["regras_casa"]["ativa"] is False
+    assert payload_ok["meta_geracao"]["itens_leves_por_volume"] == 10
+
+    r_ok_rc = client.post(
+        "/api/gerar",
+        json={
+            "ancestralidade_id": "humano",
+            "heranca_id": "heranca_versatil",
+            "classe_id": "guerreiro",
+            "conceito_id": "guerreiro_colosso_demolidor",
+            "escolhas_regras_casa": {"modo": "regras_da_casa"},
+            "seed": 12345,
+        },
+    )
+    assert r_ok_rc.status_code == 200
+    payload_ok_rc = r_ok_rc.get_json()
+    verificar_contrato_e_matematica(payload_ok_rc, dados)
+    assert payload_ok_rc["meta_geracao"]["regras_casa"]["ativa"] is True
+    assert payload_ok_rc["meta_geracao"]["itens_leves_por_volume"] == 5
+
+    r_txt_rc = client.post("/api/exportar/txt", json={"resultado": payload_ok_rc})
+    assert r_txt_rc.status_code == 200
+    txt_rc_body = r_txt_rc.get_data(as_text=True)
+    assert "Regras Casa:" in txt_rc_body and "5 L = 1 Vol" in txt_rc_body
+
+    assert client.post(
+        "/api/gerar",
+        json={
+            "ancestralidade_id": "humano",
+            "heranca_id": "heranca_versatil",
+            "classe_id": "mago",
+            "conceito_id": "mago_evocador_artilharia",
+            "escolhas_regras_casa": {"modo": "personalizado", "regras_ativas": ["nao_existe"]},
+        },
+    ).status_code == 400
 
     # Talentos manuais válidos via POST /api/gerar e bloqueio 400 para slots inativos no 1º nível
     r_tal_ok = client.post(

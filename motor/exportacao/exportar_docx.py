@@ -291,13 +291,19 @@ def _montar_document_xml(resultado: dict[str, Any]) -> str:
     if linhas_inv:
         partes.append(_xml_tabela(["Local", "Item", "Qtd", "Volume"], linhas_inv, [1600, 6266, 1100, 1500]))
     riq = inv["riqueza"]
+    leves_soltos = meta.get("volume_leves_soltos", 0)
+    leves_por_vol = meta.get("itens_leves_por_volume") or (meta.get("regras_casa") or {}).get("itens_leves_por_volume") or 10
     partes.append(
         _xml_p_rotulo(
             "Carga e Moedas",
-            f"Volume {inv['volume_total']} (Sobrecarregado > {inv['volume_sobrecarregado']} / Máximo {inv['volume_maximo']}) | "
+            f"Volume {inv['volume_total']} (Leves soltos: {leves_soltos}/{leves_por_vol} L | Regra: {leves_por_vol} L = 1 Vol | "
+            f"Sobrecarregado > {inv['volume_sobrecarregado']} / Máximo {inv['volume_maximo']}) | "
             f"{riq['po']} po, {riq['pp']} pp, {riq['pc']} pc ({riq['pl']} pl)",
         )
     )
+    rc = meta.get("regras_casa") or {}
+    if rc.get("ativa") and rc.get("regras_ativas_resumo"):
+        partes.append(_xml_p_rotulo("Regras da Casa Ativas", ", ".join(rc["regras_ativas_resumo"])))
 
     # Página 3 — Perfil e Ações
     partes.append(_xml_p("Página 3 (p. 582) — Perfil, Campanha e Ações", estilo="SecaoTitulo"))

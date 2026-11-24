@@ -67,6 +67,9 @@ class CasosBordaPF2ETests(unittest.TestCase):
     def test_personalizacao_companheiro_familiar_e_perfil(self) -> None:
         suite.test_personalizacao_companheiro_familiar_e_perfil()
 
+    def test_regras_da_casa_peso_racao_e_oleo(self) -> None:
+        suite.test_regras_da_casa_peso_racao_e_oleo()
+
 
 if __name__ == "__main__":
     unittest.main()

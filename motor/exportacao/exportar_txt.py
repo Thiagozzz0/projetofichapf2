@@ -59,6 +59,9 @@ def exportar_ficha_txt(resultado: dict[str, Any]) -> str:
             f"Seed       : {meta['seed']} | Orçamento: {meta.get('orcamento_inicial', '15 po')} | "
             f"Gasto: {meta.get('gasto_equipamentos', '—')} | Saldo: {meta.get('saldo_restante', '—')}"
         )
+    rc = meta.get("regras_casa") or {}
+    if rc.get("ativa") and rc.get("regras_ativas_resumo"):
+        linhas.append(f"Regras Casa: {', '.join(rc['regras_ativas_resumo'])}")
 
     # PÁGINA 1
     sec("PÁGINA 1 (p. 580) — ESTATÍSTICAS PRINCIPAIS, COMBATE E PERÍCIAS")
@@ -182,9 +185,12 @@ def exportar_ficha_txt(resultado: dict[str, Any]) -> str:
         else:
             linhas.append("    - (vazio)")
     riq = inv["riqueza"]
+    leves_soltos = meta.get("volume_leves_soltos", 0)
+    leves_por_vol = meta.get("itens_leves_por_volume") or (meta.get("regras_casa") or {}).get("itens_leves_por_volume") or 10
     linhas.append(
         f"  Volume Total: {inv['volume_total']} "
-        f"(Sobrecarregado > {inv['volume_sobrecarregado']} / Máximo {inv['volume_maximo']})"
+        f"(Leves soltos: {leves_soltos}/{leves_por_vol} L | Regra: {leves_por_vol} L = 1 Vol | "
+        f"Sobrecarregado > {inv['volume_sobrecarregado']} / Máximo {inv['volume_maximo']})"
     )
     linhas.append(f"  Moedas      : {riq['po']} po, {riq['pp']} pp, {riq['pc']} pc ({riq['pl']} pl)")
 

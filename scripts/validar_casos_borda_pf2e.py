@@ -1340,6 +1340,114 @@ def test_personalizacao_companheiro_familiar_e_perfil() -> None:
         assert len(doc_g) == 4
 
 
+def test_regras_da_casa_peso_racao_e_oleo() -> None:
+    db = carregar_dados()
+
+    eq_teste = {
+        "modo": "personalizado",
+        "armadura_id": "nenhuma",
+        "escudo_id": "nenhum",
+        "armas_corpo_a_corpo_ids": [],
+        "armas_distancia_ids": [],
+        "equipamentos_variados": [
+            {"id": "racoes_1_semana", "quantidade": 1},
+            {"id": "oleo_meio_litro", "quantidade": 5},
+            {"id": "corda", "quantidade": 4},
+        ],
+    }
+
+    # 1. Padrão Oficial: Ração semanal (L=1), Óleo desprezível (0), Corda 4L -> 5 L / (10 L = 1 V) = 0 Vol + 5 L
+    r_of = gerar_personagem(
+        "humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor",
+        escolhas_equipamentos=eq_teste, seed=10, dados=db,
+    )
+    out_of = r_of["ficha"]["inventario"]["outros_itens"]
+    assert r_of["meta_geracao"]["regras_casa"]["ativa"] is False
+    assert r_of["meta_geracao"]["itens_leves_por_volume"] == 10
+    assert r_of["ficha"]["inventario"]["volume_total"] == 0.0
+    assert r_of["meta_geracao"]["volume_leves_soltos"] == 5
+    assert any(it["nome"] == "Rações (1 semana)" and it["volume"] == "L" for it in out_of)
+    assert any(it["nome"].startswith("Óleo (meio litro)") and it["volume"] == "—" for it in out_of)
+
+    # 2. Regras da Casa completas: Ração unidade (1L) + Óleo 500ml (5L) + Corda (4L) = 10 L / (5 L = 1 V) = 2 Vol + 0 L
+    r_rc = gerar_personagem(
+        "humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor",
+        escolhas_equipamentos=eq_teste,
+        escolhas_regras_casa={"modo": "regras_da_casa"},
+        seed=10,
+        dados=db,
+    )
+    out_rc = r_rc["ficha"]["inventario"]["outros_itens"]
+    assert r_rc["meta_geracao"]["regras_casa"]["ativa"] is True
+    assert r_rc["meta_geracao"]["itens_leves_por_volume"] == 5
+    assert r_rc["ficha"]["inventario"]["volume_total"] == 2.0
+    assert r_rc["meta_geracao"]["volume_leves_soltos"] == 0
+    assert any(it["nome"] == "Ração (1 unidade)" and it["volume"] == "L" for it in out_rc)
+    assert any(it["nome"].startswith("Óleo (meio litro)") and it["volume"] == "5L" for it in out_rc)
+    assert "Regras da Casa Ativas:" in r_rc["ficha"]["perfil_e_campanha"]["anotacoes_campanha"]["anotacoes"]
+
+    # 6 frascos de óleo sozinhos na regra da casa => 6 L => 1 Vol + 1 L solto
+    r_oleo6 = gerar_personagem(
+        "humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor",
+        escolhas_equipamentos={
+            "modo": "personalizado",
+            "armadura_id": "nenhuma",
+            "escudo_id": "nenhum",
+            "armas_corpo_a_corpo_ids": [],
+            "armas_distancia_ids": [],
+            "equipamentos_variados": [{"id": "oleo_meio_litro", "quantidade": 6}],
+        },
+        escolhas_regras_casa={"modo": "regras_da_casa"},
+        seed=10,
+        dados=db,
+    )
+    assert r_oleo6["ficha"]["inventario"]["volume_total"] == 1.0
+    assert r_oleo6["meta_geracao"]["volume_leves_soltos"] == 1
+
+    # Kit de aventureiro procedural com ração por unidade substitui texto de conteúdo
+    r_kit_rc = gerar_personagem(
+        "humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor",
+        escolhas_regras_casa={"modo": "personalizado", "regras_ativas": ["racao_por_unidade_peso_l"]},
+        seed=10,
+        dados=db,
+    )
+    kit_item = next(
+        it for it in r_kit_rc["ficha"]["inventario"]["outros_itens"]
+        if it["nome"].startswith("Kit de aventureiro")
+    )
+    assert "2 unidades de ração (Volume L cada)" in kit_item["nome"]
+    assert "2 semanas de ração" not in kit_item["nome"]
+
+    # 3. Garante que BaseDados oficial em cache nunca foi mutada pelas regras da casa
+    assert db.itens_gerais["racoes_1_semana"]["nome"] == "Rações (1 semana)"
+    assert db.itens_gerais["oleo_meio_litro"]["volume"] == "—"
+    assert "2 semanas de ração" in db.itens_gerais["kit_de_aventureiro"]["conteudo"]
+
+    # 4. Modo personalizado parcial (só óleo com peso L, mantendo 10 L = 1 V)
+    r_parc = gerar_personagem(
+        "humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor",
+        escolhas_equipamentos=eq_teste,
+        escolhas_regras_casa={"modo": "personalizado", "regras_ativas": ["oleo_500ml_peso_l"]},
+        seed=10,
+        dados=db,
+    )
+    assert r_parc["meta_geracao"]["itens_leves_por_volume"] == 10
+    assert r_parc["ficha"]["inventario"]["volume_total"] == 1.0  # 10 L / 10 = 1 Vol
+    assert r_parc["meta_geracao"]["volume_leves_soltos"] == 0
+
+    # 5. Regra inexistente deve levantar ErroValidacao
+    try:
+        gerar_personagem(
+            "humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor",
+            escolhas_regras_casa={"modo": "personalizado", "regras_ativas": ["regra_falsa"]},
+            seed=1,
+            dados=db,
+        )
+        raise AssertionError("Deveria falhar com ErroValidacao para regra inexistente")
+    except ErroValidacao:
+        pass
+
+
 def main() -> None:
     test_ca_limite_destreza_e_sem_armadura()
     test_penalidade_armadura_barulhenta_flexivel_e_ferro_desimpedido()
@@ -1360,6 +1468,7 @@ def main() -> None:
     test_aderencia_procedural_nortes()
     test_orcamento_90_peso_leve_e_viagem_procedural()
     test_personalizacao_companheiro_familiar_e_perfil()
+    test_regras_da_casa_peso_racao_e_oleo()
     print("SUCESSO TOTAL — Todos os testes de casos de borda PF2E passaram!")
 
 

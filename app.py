@@ -17,6 +17,7 @@ from motor import (
     exportar_ficha_txt,
     gerar_personagem,
     listar_opcoes_criacao,
+    listar_opcoes_regras_casa,
     nome_arquivo_seguro,
 )
 
@@ -102,6 +103,17 @@ def _gerar_a_partir_payload(payload: dict[str, Any]) -> dict[str, Any]:
             raise ErroValidacao("Campo 'escolhas_companheiro' deve ser um objeto JSON.")
         escolhas_companheiro = bruto_comp
 
+    escolhas_regras_casa: dict[str, Any] | str | None = None
+    bruto_rc = (
+        payload.get("escolhas_regras_casa")
+        if "escolhas_regras_casa" in payload
+        else payload.get("regras_casa")
+    )
+    if bruto_rc is not None:
+        if not isinstance(bruto_rc, (dict, str)):
+            raise ErroValidacao("Campo 'escolhas_regras_casa' deve ser um objeto JSON ou string.")
+        escolhas_regras_casa = bruto_rc
+
     return gerar_personagem(
         ancestralidade_id=str(payload["ancestralidade_id"]).strip(),
         heranca_id=str(payload["heranca_id"]).strip(),
@@ -120,6 +132,7 @@ def _gerar_a_partir_payload(payload: dict[str, Any]) -> dict[str, Any]:
         escolhas_equipamentos=escolhas_equipamentos,
         escolhas_perfil=escolhas_perfil,
         escolhas_companheiro=escolhas_companheiro,
+        escolhas_regras_casa=escolhas_regras_casa,
     )
 
 
@@ -179,6 +192,12 @@ def api_saude():
 def api_opcoes():
     """Retorna todas as ancestralidades, biografias, classes e conceitos disponíveis."""
     return jsonify(listar_opcoes_criacao())
+
+
+@app.get("/api/regras-casa")
+def api_regras_casa():
+    """Retorna os perfis e opções de regras da casa disponíveis em `dados_houserules/`."""
+    return jsonify(listar_opcoes_regras_casa())
 
 
 @app.get("/api/ancestralidades/<ancestralidade_id>/herancas")
