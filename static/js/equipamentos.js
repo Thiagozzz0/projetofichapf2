@@ -891,41 +891,24 @@
     atualizarOrcamentoEquipamentosUI();
   }
 
-  const STORAGE_REGRAS_CASA = "pf2e_regras_casa_v1";
-
-  function _lerEstadoRegrasCasaStorage() {
-    try {
-      const bruto = window.localStorage?.getItem(STORAGE_REGRAS_CASA);
-      if (!bruto) return null;
-      const parsed = JSON.parse(bruto);
-      return parsed && typeof parsed === "object" ? parsed : null;
-    } catch (_) {
-      return null;
-    }
-  }
-
-  function _salvarEstadoRegrasCasaStorage(estado) {
-    try {
-      window.localStorage?.setItem(STORAGE_REGRAS_CASA, JSON.stringify(estado));
-    } catch (_) {
-      // Ignora indisponibilidade de localStorage
-    }
-  }
+  const STORAGE_REGRAS_CASA_LEGADO = "pf2e_regras_casa_v1";
+  let _regrasCasaDesbloqueado = false;
+  let _modoRegrasCasaConfirmado = "regras_da_casa";
 
   function _obterCatalogoRegrasCasa() {
-    return app.opcoes?.catalogo_regras_casa || { perfis: [], regras: [], padrao_modo: "oficial" };
+    return app.opcoes?.catalogo_regras_casa || { perfis: [], regras: [], padrao_modo: "regras_da_casa" };
   }
 
   function obterRegrasCasaAtivasIdsUI() {
     const catRc = _obterCatalogoRegrasCasa();
-    const modo = document.getElementById("modo-regras-casa")?.value || "oficial";
+    const modo = document.getElementById("modo-regras-casa")?.value || "regras_da_casa";
     if (modo !== "regras_da_casa") return [];
     const perfil = (catRc.perfis || []).find((p) => p.id === modo);
     return perfil ? [...(perfil.regras_ativas || [])] : [];
   }
 
   function montarPayloadRegrasCasaUI() {
-    const modo = document.getElementById("modo-regras-casa")?.value || "oficial";
+    const modo = document.getElementById("modo-regras-casa")?.value || "regras_da_casa";
     return { modo };
   }
 
@@ -944,10 +927,9 @@
     return copia;
   }
 
-  function aplicarRegrasCasaNoCatalogoUI({ salvar = true } = {}) {
+  function aplicarRegrasCasaNoCatalogoUI() {
     const catRc = _obterCatalogoRegrasCasa();
     const catEq = app.opcoes?.catalogo_equipamentos;
-    const modo = document.getElementById("modo-regras-casa")?.value || "oficial";
     const ativasIds = obterRegrasCasaAtivasIdsUI();
     const ativasSet = new Set(ativasIds);
     const regrasAtivasObjs = (catRc.regras || []).filter((r) => ativasSet.has(r.id));
@@ -969,18 +951,104 @@
       });
       atualizarCatalogoEquipamentosUI();
     }
+  }
 
-    if (salvar) {
-      _salvarEstadoRegrasCasaStorage({ modo });
+  function _atualizarEstadoBloqueioRegrasCasaUI() {
+    const selModo = document.getElementById("modo-regras-casa");
+    const btnCadeado = document.getElementById("btn-desbloquear-regras-casa");
+    const boxSenha = document.getElementById("box-senha-regras-casa");
+    if (selModo) {
+      selModo.disabled = !_regrasCasaDesbloqueado;
+    }
+    if (btnCadeado) {
+      btnCadeado.classList.toggle("desbloqueado", _regrasCasaDesbloqueado);
+      const caixaAberta = Boolean(boxSenha && !boxSenha.classList.contains("oculto"));
+      btnCadeado.setAttribute("aria-expanded", String(_regrasCasaDesbloqueado || caixaAberta));
+      btnCadeado.textContent = _regrasCasaDesbloqueado ? "🔓 Cancelar" : "🔒 Alterar";
+    }
+  }
+
+  function _fecharCaixaSenhaRegrasCasa() {
+    const boxSenha = document.getElementById("box-senha-regras-casa");
+    const inputSenha = document.getElementById("input-senha-regras-casa");
+    const msgSenha = document.getElementById("msg-senha-regras-casa");
+    if (boxSenha) boxSenha.classList.add("oculto");
+    if (inputSenha) inputSenha.value = "";
+    if (msgSenha) msgSenha.textContent = "";
+    _atualizarEstadoBloqueioRegrasCasaUI();
+  }
+
+  function _abrirCaixaSenhaRegrasCasa() {
+    const boxSenha = document.getElementById("box-senha-regras-casa");
+    const inputSenha = document.getElementById("input-senha-regras-casa");
+    const msgSenha = document.getElementById("msg-senha-regras-casa");
+    if (!boxSenha) return;
+    boxSenha.classList.remove("oculto");
+    if (msgSenha) msgSenha.textContent = "";
+    if (inputSenha) {
+      inputSenha.value = "";
+      inputSenha.focus();
+    }
+    _atualizarEstadoBloqueioRegrasCasaUI();
+  }
+
+  async function _confirmarSenhaRegrasCasaUI() {
+    const inputSenha = document.getElementById("input-senha-regras-casa");
+    const msgSenha = document.getElementById("msg-senha-regras-casa");
+    const btnConfirmar = document.getElementById("btn-confirmar-senha-regras-casa");
+    const selModo = document.getElementById("modo-regras-casa");
+    const senha = (inputSenha?.value || "").trim();
+
+    if (!senha) {
+      if (msgSenha) msgSenha.textContent = "Informe a senha.";
+      inputSenha?.focus();
+      return;
+    }
+
+    if (btnConfirmar) btnConfirmar.disabled = true;
+    if (msgSenha) msgSenha.textContent = "Validando...";
+
+    try {
+      const resp = await fetch("/api/regras-casa/validar-senha", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ senha }),
+      });
+      const dados = await resp.json().catch(() => ({}));
+      if (!resp.ok || !dados.autorizado) {
+        _regrasCasaDesbloqueado = false;
+        if (msgSenha) msgSenha.textContent = dados.erro || "Senha incorreta.";
+        if (inputSenha) {
+          inputSenha.select();
+          inputSenha.focus();
+        }
+        _atualizarEstadoBloqueioRegrasCasaUI();
+        return;
+      }
+
+      _regrasCasaDesbloqueado = true;
+      _fecharCaixaSenhaRegrasCasa();
+      if (selModo) selModo.focus();
+      app.setStatus?.("Senha confirmada. Escolha a opção desejada em Sistema de Regras.", "ok");
+    } catch (err) {
+      if (msgSenha) msgSenha.textContent = `Erro ao validar: ${err.message}`;
+    } finally {
+      if (btnConfirmar) btnConfirmar.disabled = false;
     }
   }
 
   function inicializarRegrasCasaUI() {
+    try {
+      window.localStorage?.removeItem(STORAGE_REGRAS_CASA_LEGADO);
+    } catch (_) {
+      // Ignora indisponibilidade de localStorage
+    }
+
     const catRc = _obterCatalogoRegrasCasa();
     const selModo = document.getElementById("modo-regras-casa");
+    const padrao = catRc.padrao_modo || "regras_da_casa";
 
     if (selModo && (catRc.perfis || []).length) {
-      const valAtual = selModo.value;
       selModo.innerHTML = "";
       catRc.perfis.forEach((p) => {
         const opt = document.createElement("option");
@@ -988,20 +1056,60 @@
         opt.textContent = p.nome;
         selModo.appendChild(opt);
       });
-      selModo.value = (catRc.perfis || []).some((p) => p.id === valAtual) ? valAtual : catRc.padrao_modo || "oficial";
+      selModo.value = (catRc.perfis || []).some((p) => p.id === padrao) ? padrao : "regras_da_casa";
+    } else if (selModo) {
+      selModo.value = "regras_da_casa";
     }
 
-    const salvo = _lerEstadoRegrasCasaStorage();
-    if (salvo && selModo && (salvo.modo === "oficial" || salvo.modo === "regras_da_casa")) {
-      selModo.value = salvo.modo;
-    }
-
-    aplicarRegrasCasaNoCatalogoUI({ salvar: false });
+    _modoRegrasCasaConfirmado = selModo?.value || "regras_da_casa";
+    _regrasCasaDesbloqueado = false;
+    _fecharCaixaSenhaRegrasCasa();
+    aplicarRegrasCasaNoCatalogoUI();
   }
 
   function registrarEventosEquipamentos() {
-    document.getElementById("modo-regras-casa")?.addEventListener("change", () => {
-      aplicarRegrasCasaNoCatalogoUI({ salvar: true });
+    document.getElementById("btn-desbloquear-regras-casa")?.addEventListener("click", () => {
+      if (_regrasCasaDesbloqueado) {
+        _regrasCasaDesbloqueado = false;
+        _atualizarEstadoBloqueioRegrasCasaUI();
+        return;
+      }
+      const boxSenha = document.getElementById("box-senha-regras-casa");
+      if (boxSenha && !boxSenha.classList.contains("oculto")) {
+        _fecharCaixaSenhaRegrasCasa();
+      } else {
+        _abrirCaixaSenhaRegrasCasa();
+      }
+    });
+    document.getElementById("wrap-modo-regras-casa")?.addEventListener("click", (e) => {
+      if (_regrasCasaDesbloqueado) return;
+      if (e.target?.closest("#btn-desbloquear-regras-casa")) return;
+      _abrirCaixaSenhaRegrasCasa();
+    });
+    document.getElementById("btn-confirmar-senha-regras-casa")?.addEventListener("click", _confirmarSenhaRegrasCasaUI);
+    document.getElementById("btn-cancelar-senha-regras-casa")?.addEventListener("click", _fecharCaixaSenhaRegrasCasa);
+    document.getElementById("input-senha-regras-casa")?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        _confirmarSenhaRegrasCasaUI();
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        _fecharCaixaSenhaRegrasCasa();
+      }
+    });
+    document.getElementById("modo-regras-casa")?.addEventListener("change", (e) => {
+      const selModo = e.currentTarget;
+      if (!_regrasCasaDesbloqueado) {
+        selModo.value = _modoRegrasCasaConfirmado;
+        _abrirCaixaSenhaRegrasCasa();
+        return;
+      }
+      _modoRegrasCasaConfirmado = selModo.value;
+      aplicarRegrasCasaNoCatalogoUI();
+      _regrasCasaDesbloqueado = false;
+      _atualizarEstadoBloqueioRegrasCasaUI();
+      const rotulo = selModo.options[selModo.selectedIndex]?.textContent || selModo.value;
+      app.setStatus?.(`Sistema de Regras alterado para "${rotulo}". Seletor bloqueado novamente.`, "ok");
     });
     ["modo-equipamentos", "eq-armadura", "eq-escudo", "eq-arma-cc-select", "eq-arma-dist-select", "eq-variado-select"].forEach(
       (id) => {

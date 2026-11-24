@@ -1,12 +1,7 @@
 {
   "versao": 1,
-  "padrao_modo": "oficial",
+  "padrao_modo": "regras_da_casa",
   "perfis": [
-    {
-      "id": "oficial",
-      "nome": "Regras Originais",
-      "regras_ativas": []
-    },
     {
       "id": "regras_da_casa",
       "nome": "Regras da Casa",
@@ -15,6 +10,11 @@
         "oleo_500ml_peso_l",
         "conversao_5_leves_por_volume"
       ]
+    },
+    {
+      "id": "oficial",
+      "nome": "Regras Originais",
+      "regras_ativas": []
     }
   ]
 }

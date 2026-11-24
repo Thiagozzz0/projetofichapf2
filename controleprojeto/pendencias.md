@@ -55,7 +55,7 @@ Lista viva e priorizada das entregas, melhorias e expansões que ainda precisam 
 
 ## 6. Gestão de Regras da Casa e Acesso do Mestre
 
-- [ ] **Painel do Mestre com Senha e Persistência Instantânea de Regras da Casa** *(solicitado pelo usuário em `24/11/2026`)*
-  - **Experiência do Jogador:** Acesso livre e limpo pelo celular/PC sem exibir seletores de regras da casa; a geração de ficha segue instantaneamente o que o Mestre deixou ativo no servidor.
-  - **Experiência do Mestre:** Campo/modal discreto de senha (ex: ícone de cadeado 🔒 ou link "Acesso do Mestre") no próprio site. Ao digitar a senha correta, destrava o painel para alternar entre *Oficial*, *Regras da Casa* ou regras específicas.
-  - **Persistência Imediata:** A alteração feita pelo Mestre no navegador salva diretamente no arquivo de configuração do servidor (`dados_houserules/config_ativa.json`), aplicando-se imediatamente para qualquer nova ficha gerada em qualquer dispositivo, sem necessidade de tocar no código ou reiniciar o servidor.
+- [x] **Padrão "Regras da Casa" e Controle por Senha por Alteração (`dados_houserules/acesso_mestre.json`)** *(concluído em `24/11/2026` — Etapa 51)*
+  - Site inicia sempre em `Regras da Casa` com o seletor bloqueado, solicita a senha `"9930"` (lida de `dados_houserules/acesso_mestre.json`) via `/api/regras-casa/validar-senha` antes de liberar a escolha e bloqueia novamente após cada troca.
+- [ ] **Persistência Global no Servidor (`dados_houserules/config_ativa.json`)** *(opcional / futuro)*
+  - Caso deseje que a troca feita pelo Mestre passe a valer automaticamente para todos os dispositivos sem exibir seletor para os jogadores, salvar o estado ativo em `dados_houserules/config_ativa.json`.

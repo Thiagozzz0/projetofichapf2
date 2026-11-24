@@ -255,7 +255,7 @@
       escolhas_equipamentos: app.montarPayloadEquipamentosUI(),
       escolhas_perfil: app.montarPayloadPerfilUI(),
       escolhas_companheiro: app.montarPayloadCompanheiroUI(),
-      escolhas_regras_casa: app.montarPayloadRegrasCasaUI?.() || { modo: "oficial", regras_ativas: [] },
+      escolhas_regras_casa: app.montarPayloadRegrasCasaUI?.() || { modo: "regras_da_casa" },
     };
 
     try {

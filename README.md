@@ -75,7 +75,9 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 │   ├── magias.py
 │   ├── regras_atributos.py
 │   ├── talentos.py
+│   ├── regras_casa.py
 │   └── util.py
+├── dados_houserules/             # Regras da Casa (Homebrew) e controle de acesso (`acesso_mestre.json`)
 ├── pdf_fonte/                    # PDF completo comprimido do Livro Básico PF2E
 ├── ref/                          # PDFs fragmentados por categoria para conversão gradual
 ├── scripts/                      # Scripts Python de geração, extração e validação de JSONs

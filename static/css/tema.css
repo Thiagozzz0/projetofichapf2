@@ -321,6 +321,36 @@ html[data-tema="escuro"] .painel-regras-casa {
   border-left-color: var(--gold);
 }
 
+html[data-tema="escuro"] .regras-casa-controle select:disabled {
+  background: #1c1814;
+  color: var(--ink);
+}
+
+html[data-tema="escuro"] .btn-regras-casa-cadeado {
+  background: #332a21;
+  border-color: var(--border-dark);
+  color: #eab971;
+}
+
+html[data-tema="escuro"] .btn-regras-casa-cadeado:hover {
+  background: #42362a;
+}
+
+html[data-tema="escuro"] .box-senha-regras-casa {
+  background: #1c1814;
+  border-color: var(--border-dark);
+}
+
+html[data-tema="escuro"] .input-senha-regras-casa {
+  background: #28221c;
+  border-color: var(--border);
+  color: var(--ink);
+}
+
+html[data-tema="escuro"] .msg-senha-regras-casa {
+  color: #f08a7e;
+}
+
 html[data-tema="escuro"] .regra-casa-check-card {
   background: var(--card);
   border-color: var(--border);

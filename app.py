@@ -19,6 +19,7 @@ from motor import (
     listar_opcoes_criacao,
     listar_opcoes_regras_casa,
     nome_arquivo_seguro,
+    validar_senha_regras_casa,
 )
 
 _DEBUG_ATIVO = os.environ.get("FLASK_DEBUG", "0").strip().lower() in {"1", "true", "yes"}
@@ -198,6 +199,19 @@ def api_opcoes():
 def api_regras_casa():
     """Retorna os perfis e opções de regras da casa disponíveis em `dados_houserules/`."""
     return jsonify(listar_opcoes_regras_casa())
+
+
+@app.post("/api/regras-casa/validar-senha")
+def api_validar_senha_regras_casa():
+    """Valida a senha do mestre para liberar uma alteração do Sistema de Regras na UI."""
+    payload = _extrair_payload()
+    if payload is None:
+        return jsonify({"erro": "Corpo da requisição inválido; esperado objeto JSON."}), 400
+
+    senha = str(payload.get("senha") or "").strip()
+    if validar_senha_regras_casa(senha):
+        return jsonify({"autorizado": True}), 200
+    return jsonify({"autorizado": False, "erro": "Senha incorreta."}), 403
 
 
 @app.get("/api/ancestralidades/<ancestralidade_id>/herancas")

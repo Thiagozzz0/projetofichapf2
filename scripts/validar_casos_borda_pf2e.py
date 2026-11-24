@@ -14,7 +14,15 @@ RAIZ_PROJETO = Path(__file__).resolve().parent.parent
 if str(RAIZ_PROJETO) not in sys.path:
     sys.path.insert(0, str(RAIZ_PROJETO))
 
-from motor import ErroValidacao, carregar_dados, divindades_compativeis_conceito, gerar_personagem
+from motor import (
+    ErroValidacao,
+    carregar_acesso_mestre,
+    carregar_dados,
+    divindades_compativeis_conceito,
+    gerar_personagem,
+    listar_opcoes_regras_casa,
+    validar_senha_regras_casa,
+)
 from motor.biografia_pericias import calcular_idiomas, calcular_pericias
 from motor.combate_matematica import calcular_matematica_final
 from motor.companheiros import gerar_companheiro_ou_familiar
@@ -1435,6 +1443,26 @@ def test_regras_da_casa_peso_racao_e_oleo() -> None:
             raise AssertionError(f"Deveria falhar com ErroValidacao para modo '{modo_inv}'")
         except ErroValidacao:
             pass
+
+    # 5. Arquivo de controle de senha e padrão "Regras da Casa"
+    arq_acesso = RAIZ_PROJETO / "dados_houserules" / "acesso_mestre.json"
+    assert arq_acesso.exists(), "Arquivo dados_houserules/acesso_mestre.json ausente"
+    acesso = carregar_acesso_mestre()
+    assert acesso["senha"] == "9930"
+    assert acesso["padrao_modo"] == "regras_da_casa"
+    assert acesso["exigir_senha_a_cada_troca"] is True
+
+    assert validar_senha_regras_casa("9930") is True
+    assert validar_senha_regras_casa(" 9930 ") is True
+    assert validar_senha_regras_casa("9931") is False
+    assert validar_senha_regras_casa("") is False
+    assert validar_senha_regras_casa(None) is False
+
+    opcoes_rc = listar_opcoes_regras_casa()
+    assert opcoes_rc["padrao_modo"] == "regras_da_casa"
+    assert opcoes_rc["protegido_por_senha"] is True
+    assert opcoes_rc["exigir_senha_a_cada_troca"] is True
+    assert "senha" not in opcoes_rc
 
 
 def main() -> None:

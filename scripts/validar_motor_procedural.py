@@ -253,6 +253,9 @@ def main() -> None:
     for id_dom in (
         "painel-regras-casa",
         "modo-regras-casa",
+        "btn-desbloquear-regras-casa",
+        "box-senha-regras-casa",
+        "input-senha-regras-casa",
         "acordeao-etapas",
         "desc-conceito-inline",
         "etapa-criacao-inicial",
@@ -304,11 +307,21 @@ def main() -> None:
     assert r_rc.status_code == 200
     rc_json = r_rc.get_json()
     assert len(rc_json["perfis"]) == 2 and len(rc_json["regras"]) == 3
+    assert rc_json["padrao_modo"] == "regras_da_casa"
+    assert rc_json["protegido_por_senha"] is True
+    assert rc_json["exigir_senha_a_cada_troca"] is True
+    assert "senha" not in rc_json
     assert {r["id"] for r in rc_json["regras"]} == {
         "racao_por_unidade_peso_l",
         "oleo_500ml_peso_l",
         "conversao_5_leves_por_volume",
     }
+
+    assert client.post("/api/regras-casa/validar-senha", json={"senha": "9930"}).status_code == 200
+    assert client.post("/api/regras-casa/validar-senha", json={"senha": "9930"}).get_json()["autorizado"] is True
+    r_senha_err = client.post("/api/regras-casa/validar-senha", json={"senha": "0000"})
+    assert r_senha_err.status_code == 403 and r_senha_err.get_json()["autorizado"] is False
+    assert client.post("/api/regras-casa/validar-senha", json={"senha": ""}).status_code == 403
 
     r_opcoes = client.get("/api/opcoes")
     assert r_opcoes.status_code == 200

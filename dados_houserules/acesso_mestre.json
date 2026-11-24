@@ -1,0 +1,7 @@
+{
+  "versao": 1,
+  "descricao": "Controle de senha para autorização de troca do Sistema de Regras (Regras da Casa / Regras Originais) na interface web.",
+  "padrao_modo": "regras_da_casa",
+  "exigir_senha_a_cada_troca": true,
+  "senha": "9930"
+}

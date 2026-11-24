@@ -2087,6 +2087,77 @@ body {
   font-weight: 600;
 }
 
+.regras-casa-select-linha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: stretch;
+  cursor: pointer;
+}
+
+.regras-casa-select-linha select {
+  flex: 1 1 220px;
+}
+
+.regras-casa-select-linha select:disabled {
+  pointer-events: none;
+  opacity: 0.85;
+  background: var(--card);
+  cursor: not-allowed;
+}
+
+.btn-regras-casa-cadeado {
+  padding: 7px 12px;
+  border: 1px solid var(--border-dark);
+  border-radius: 6px;
+  background: var(--tint-strong);
+  color: var(--accent-dark);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-regras-casa-cadeado:hover {
+  background: #e1ceb2;
+}
+
+.btn-regras-casa-cadeado.desbloqueado {
+  background: var(--warn-bg);
+  border-color: var(--gold);
+  color: var(--warn-fg);
+}
+
+.box-senha-regras-casa {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 8px 10px;
+  border: 1px dashed var(--border-dark);
+  border-radius: 6px;
+  background: var(--card);
+}
+
+.input-senha-regras-casa {
+  flex: 1 1 180px;
+  max-width: 240px;
+  padding: 6px 9px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 0.85rem;
+}
+
+.msg-senha-regras-casa {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
 .pills-regras-casa {
   display: flex;
   flex-wrap: wrap;

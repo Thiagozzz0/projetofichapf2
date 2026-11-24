@@ -9,14 +9,17 @@ from .gerador import (
     listar_opcoes_criacao,
 )
 from .regras_casa import (
+    carregar_acesso_mestre,
     listar_opcoes_regras_casa,
     resolver_configuracao_regras_casa,
+    validar_senha_regras_casa,
 )
 
 __all__ = [
     "BaseDados",
     "CLASSES_DIVINDADE_OBRIGATORIA",
     "ErroValidacao",
+    "carregar_acesso_mestre",
     "carregar_dados",
     "divindades_compativeis_conceito",
     "exportar_ficha_docx",
@@ -27,4 +30,5 @@ __all__ = [
     "listar_opcoes_regras_casa",
     "nome_arquivo_seguro",
     "resolver_configuracao_regras_casa",
+    "validar_senha_regras_casa",
 ]
