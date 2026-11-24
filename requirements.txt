@@ -1,6 +1,6 @@
 # Dependências do Gerador Procedural de Fichas Pathfinder 2E
 # Os exportadores .txt e .docx usam apenas a biblioteca padrão do Python 3,
-# o exportador .pdf oficial utiliza PyMuPDF sobre ref/Sheet Update.pdf,
+# o exportador .pdf oficial utiliza PyMuPDF sobre dados/templates/ficha_oficial_pf2e.pdf,
 # e o gunicorn atua como servidor WSGI de produção (Render).
 Flask>=3.0,<4.0
 PyMuPDF>=1.24

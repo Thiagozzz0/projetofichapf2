@@ -54,7 +54,9 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 │   ├── magias02.json             # Capítulo 7 (Parte 2: Descrições M–Z, Magias de Foco e Rituais)
 │   ├── pericias.json             # Capítulo 4 completo (Perícias, Ações Gerais e Tabelas 4–1 a 4–4)
 │   ├── regras_especificas.json   # Regras específicas, exceções estruturais, PV (N1–20), morrendo e acúmulo de bônus
-│   └── talentos.json             # Capítulo 5 completo (17 Talentos Gerais e 100 Talentos de Perícia)
+│   ├── talentos.json             # Capítulo 5 completo (17 Talentos Gerais e 100 Talentos de Perícia)
+│   └── templates/
+│       └── ficha_oficial_pf2e.pdf # Template oficial de 4+ páginas usado pelo exportador PDF
 ├── motor/                        # Pacote Python do motor procedural de regras PF2E
 │   ├── __init__.py
 │   ├── biografia_pericias.py
@@ -94,14 +96,30 @@ O sistema combina escolhas principais do jogador com automação procedural guia
 │   ├── gerar_talentos_json.py
 │   ├── validar_casos_borda_pf2e.py
 │   └── validar_motor_procedural.py
-└── templates/                    # Front-End HTML/CSS/JS renderizado pelo Flask
-    ├── index.html                # Tela de criação e visualização completa das 4 páginas da ficha
-    └── static/                   # Ativos estáticos do Front-End
-        ├── css/
-        │   └── ficha.css         # Estilização oficial de pergaminho PF2E e @media print
-        └── js/
-            ├── app.js            # Formulário de criação, travas ABCD e API/exportações
-            └── render_ficha.js   # Renderização visual das 4 páginas da ficha e abas
+├── static/                       # Ativos estáticos do Front-End (convenção padrão Flask)
+│   ├── css/
+│   │   ├── ficha.css             # Estilização oficial de pergaminho PF2E e @media print
+│   │   └── tema.css              # Tipografia Cinzel/Inter, Modo Escuro (Grimório Noturno) e selos PF2E
+│   ├── img/
+│   │   └── pf2e-logo.png         # Brasão e favicon da aplicação
+│   └── js/
+│       ├── app.js                # Orquestração principal, acordeão, eventos e API/exportações
+│       ├── atributos.js          # Seletores e travas matemáticas do sistema ABCD
+│       ├── equipamentos.js       # Compra de equipamentos (15 po), kits de classe e filtro/busca
+│       ├── estado.js             # Estado central compartilhado da montagem
+│       ├── magias.js             # Seleção de tradições, truques e magias de 1º círculo
+│       ├── perfil.js             # Tendência, dados biográficos, companheiro animal e familiar
+│       ├── pericias.js           # Seleção manual/procedural de perícias e vagas
+│       ├── previa_atributos.js   # Barra viva ABCD em tempo real
+│       ├── render_ficha.js       # Renderização visual das 4–5 páginas da ficha e abas
+│       ├── talentos.js           # Curadoria e pré-requisitos de talentos (1º nível)
+│       └── tema.js               # Alternância de tema claro/escuro com persistência local
+├── templates/                    # Templates HTML renderizados pelo Flask
+│   └── index.html                # Tela de criação e visualização completa das 4–5 páginas da ficha
+└── tests/                        # Suíte de testes padrão unittest / pytest
+    ├── __init__.py
+    ├── test_casos_borda_pf2e.py  # Wrapper unittest para casos de borda PF2E
+    └── test_motor_procedural.py  # Wrapper unittest para integração completa (motor, Flask e exportação)
 ```
 
 ---
@@ -147,7 +165,7 @@ Os PDFs de referência estão sendo convertidos **um por vez** para garantir fid
 | *Etapa 3B (Companheiros)* | `motor/companheiros.py` | Geração matemática de Companheiro Animal Jovem (Druida/Patrulheiro) e Familiar Aprimorado/Padrão (Mago/Druida/Talentos) | Concluído (`22.md`) |
 | *Etapa 5 (Casos de Borda)* | `scripts/validar_casos_borda_pf2e.py` | Suíte unitária de casos de borda PF2E (CA/Limite DES, `Barulhenta`/`Flexível`/`Ferro Desimpedido`, `Propulsiva`, idiomas, `Duro de Matar`, mochila/carga, divindades obrigatórias/opcionais, efeitos de talentos ancestrais/gerais e companheiros) | Concluído (`21.md` / `23.md`) |
 | *Etapa 3 (Motor & Flask)* | `motor/`, `app.py`, `templates/index.html` | Motor procedural PF2E (1º nível, `seed` opcional), API REST Flask e tela simples de teste | Concluído (`14.md`) |
-| *Etapa 4 (Front-End & Export)* | `templates/`, `templates/static/`, `motor/exportacao.py`, `requirements.txt` | Interface completa em 4 páginas inspirada na ficha oficial (`pp. 580–583`), impressão e download `.pdf` oficial do livro (`ref/Sheet Update.pdf`), `.docx` e `.txt` | Concluído (`16.md` / `25.md`) |
+| *Etapa 4 (Front-End & Export)* | `templates/`, `static/`, `motor/exportacao/`, `requirements.txt` | Interface completa em 4 páginas inspirada na ficha oficial (`pp. 580–583`), impressão e download `.pdf` oficial do livro (`dados/templates/ficha_oficial_pf2e.pdf`), `.docx` e `.txt` | Concluído (`16.md` / `25.md`) |
 
 ---
 
@@ -171,6 +189,7 @@ python scripts/gerar_estrutura_ficha_json.py
 python scripts/gerar_conceitos_subclasses_json.py
 python scripts/gerar_divindades_json.py
 python scripts/gerar_regras_especificas_json.py
+python -m unittest discover -s tests -v
 python scripts/validar_motor_procedural.py
 python scripts/validar_casos_borda_pf2e.py
 ```

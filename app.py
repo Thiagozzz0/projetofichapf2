@@ -20,10 +20,12 @@ from motor import (
     nome_arquivo_seguro,
 )
 
-app = Flask(__name__, static_folder="templates/static", static_url_path="/static")
+_DEBUG_ATIVO = os.environ.get("FLASK_DEBUG", "0").strip().lower() in {"1", "true", "yes"}
+app = Flask(__name__, static_folder="static", static_url_path="/static")
 app.json.ensure_ascii = False
-app.config["TEMPLATES_AUTO_RELOAD"] = True
-app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
+if _DEBUG_ATIVO:
+    app.config["TEMPLATES_AUTO_RELOAD"] = True
+    app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
 
 
 def _extrair_payload() -> dict[str, Any] | None:
@@ -307,5 +309,4 @@ def api_exportar_pdf():
 
 
 if __name__ == "__main__":
-    debug_ativo = os.environ.get("FLASK_DEBUG", "0").strip().lower() in {"1", "true", "yes"}
-    app.run(debug=debug_ativo, use_reloader=True, host="127.0.0.1", port=5000)
+    app.run(debug=_DEBUG_ATIVO, use_reloader=True, host="127.0.0.1", port=5000)
