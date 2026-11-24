@@ -293,9 +293,6 @@
     const rc = m.regras_casa || {};
     const levesPorVol = Number(m.itens_leves_por_volume || rc.itens_leves_por_volume || 10);
     const levesSoltos = Number(m.volume_leves_soltos || 0);
-    const bannerRegrasCasa = rc.ativa && (rc.regras_ativas_resumo || []).length
-      ? `<div class="banner-regras-casa-ficha"><strong>Regras da Casa Ativas:</strong> ${esc(rc.regras_ativas_resumo.join(" • "))}</div>`
-      : "";
     const renderSecaoInv = (titulo, lista) =>
       `<div style="margin-bottom:8px"><strong>${titulo}:</strong>` +
       (lista.length
@@ -308,11 +305,10 @@
       `</div>`;
 
     document.getElementById("p2-inventario").innerHTML =
-      bannerRegrasCasa +
       renderSecaoInv("Itens Vestidos", inv.itens_vestidos) +
       renderSecaoInv("Itens Preparados", inv.itens_preparados) +
       renderSecaoInv("Outros Itens", inv.outros_itens) +
-      `<div><strong>Volume Total: ${esc(inv.volume_total)}</strong> (Leves soltos: ${esc(levesSoltos)}/${esc(levesPorVol)} L • Regra: ${esc(levesPorVol)} L = 1 Vol • Sobrecarregado = ${esc(inv.volume_sobrecarregado)} / Máximo = ${esc(inv.volume_maximo)})</div>` +
+      `<div><strong>Volume Total: ${esc(inv.volume_total)}</strong> (Leves soltos: ${esc(levesSoltos)}/${esc(levesPorVol)} L • Sobrecarregado = ${esc(inv.volume_sobrecarregado)} / Máximo = ${esc(inv.volume_maximo)})</div>` +
       `<div class="barra-volume-track"><div class="barra-volume-fill ${sobre ? "alerta" : ""}" style="width:${pctVol}%"></div></div>` +
       `<div class="moedas-grid">` +
       `<div class="moeda-card"><small>PC</small><strong>${esc(inv.riqueza.pc)}</strong></div>` +

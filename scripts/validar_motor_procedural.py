@@ -253,7 +253,6 @@ def main() -> None:
     for id_dom in (
         "painel-regras-casa",
         "modo-regras-casa",
-        "painel-regras-casa-custom",
         "acordeao-etapas",
         "desc-conceito-inline",
         "etapa-criacao-inicial",
@@ -304,7 +303,7 @@ def main() -> None:
     r_rc = client.get("/api/regras-casa")
     assert r_rc.status_code == 200
     rc_json = r_rc.get_json()
-    assert len(rc_json["perfis"]) == 3 and len(rc_json["regras"]) == 3
+    assert len(rc_json["perfis"]) == 2 and len(rc_json["regras"]) == 3
     assert {r["id"] for r in rc_json["regras"]} == {
         "racao_por_unidade_peso_l",
         "oleo_500ml_peso_l",
@@ -412,7 +411,7 @@ def main() -> None:
     r_txt_rc = client.post("/api/exportar/txt", json={"resultado": payload_ok_rc})
     assert r_txt_rc.status_code == 200
     txt_rc_body = r_txt_rc.get_data(as_text=True)
-    assert "Regras Casa:" in txt_rc_body and "5 L = 1 Vol" in txt_rc_body
+    assert "Regras Casa:" not in txt_rc_body and "5 L = 1 Vol" in txt_rc_body
 
     assert client.post(
         "/api/gerar",
@@ -421,7 +420,7 @@ def main() -> None:
             "heranca_id": "heranca_versatil",
             "classe_id": "mago",
             "conceito_id": "mago_evocador_artilharia",
-            "escolhas_regras_casa": {"modo": "personalizado", "regras_ativas": ["nao_existe"]},
+            "escolhas_regras_casa": {"modo": "invalido"},
         },
     ).status_code == 400
 

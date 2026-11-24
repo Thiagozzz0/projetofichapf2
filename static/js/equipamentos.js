@@ -919,22 +919,14 @@
   function obterRegrasCasaAtivasIdsUI() {
     const catRc = _obterCatalogoRegrasCasa();
     const modo = document.getElementById("modo-regras-casa")?.value || "oficial";
-    if (modo === "oficial") return [];
-    if (modo === "personalizado") {
-      return Array.from(document.querySelectorAll('#lista-regras-casa-checks input[type="checkbox"]:checked'))
-        .map((el) => el.value)
-        .filter(Boolean);
-    }
+    if (modo !== "regras_da_casa") return [];
     const perfil = (catRc.perfis || []).find((p) => p.id === modo);
     return perfil ? [...(perfil.regras_ativas || [])] : [];
   }
 
   function montarPayloadRegrasCasaUI() {
     const modo = document.getElementById("modo-regras-casa")?.value || "oficial";
-    return {
-      modo,
-      regras_ativas: obterRegrasCasaAtivasIdsUI(),
-    };
+    return { modo };
   }
 
   function _aplicarOverrideItemCatalogo(itemBase, regrasAtivasObjs) {
@@ -960,37 +952,6 @@
     const ativasSet = new Set(ativasIds);
     const regrasAtivasObjs = (catRc.regras || []).filter((r) => ativasSet.has(r.id));
 
-    const painelCustom = document.getElementById("painel-regras-casa-custom");
-    if (painelCustom) {
-      painelCustom.classList.toggle("oculto", modo !== "personalizado");
-    }
-
-    const perfilObj = (catRc.perfis || []).find((p) => p.id === modo);
-    const descPerfil = document.getElementById("desc-perfil-regras-casa");
-    if (descPerfil && perfilObj) {
-      descPerfil.textContent = perfilObj.descricao || "";
-    }
-
-    document.querySelectorAll("#lista-regras-casa-checks .regra-casa-check-card").forEach((card) => {
-      const cb = card.querySelector('input[type="checkbox"]');
-      if (!cb) return;
-      if (modo !== "personalizado") {
-        cb.checked = ativasSet.has(cb.value);
-      }
-      card.classList.toggle("ativa", cb.checked);
-    });
-
-    const pillsEl = document.getElementById("pills-regras-casa-ativas");
-    if (pillsEl) {
-      if (!regrasAtivasObjs.length) {
-        pillsEl.innerHTML = `<span class="pill-regra-casa">Oficial (10 L = 1 Volume)</span>`;
-      } else {
-        pillsEl.innerHTML = regrasAtivasObjs
-          .map((r) => `<span class="pill-regra-casa ativa">${esc(r.resumo_curto || r.nome)}</span>`)
-          .join("");
-      }
-    }
-
     if (catEq && Array.isArray(catEq.equipamentos_variados)) {
       if (!app._variadosOriginais) {
         app._variadosOriginais = catEq.equipamentos_variados.map((it) => ({
@@ -1010,14 +971,13 @@
     }
 
     if (salvar) {
-      _salvarEstadoRegrasCasaStorage({ modo, regras_ativas: ativasIds });
+      _salvarEstadoRegrasCasaStorage({ modo });
     }
   }
 
   function inicializarRegrasCasaUI() {
     const catRc = _obterCatalogoRegrasCasa();
     const selModo = document.getElementById("modo-regras-casa");
-    const gridChecks = document.getElementById("lista-regras-casa-checks");
 
     if (selModo && (catRc.perfis || []).length) {
       const valAtual = selModo.value;
@@ -1031,30 +991,9 @@
       selModo.value = (catRc.perfis || []).some((p) => p.id === valAtual) ? valAtual : catRc.padrao_modo || "oficial";
     }
 
-    if (gridChecks) {
-      gridChecks.innerHTML = (catRc.regras || [])
-        .map(
-          (r) =>
-            `<label class="regra-casa-check-card">` +
-            `<input type="checkbox" value="${esc(r.id)}">` +
-            `<span class="regra-casa-check-info">` +
-            `<strong>${esc(r.nome)}</strong>` +
-            `<span>${esc(r.descricao)}</span>` +
-            `</span>` +
-            `</label>`
-        )
-        .join("");
-    }
-
     const salvo = _lerEstadoRegrasCasaStorage();
-    if (salvo && selModo && (catRc.perfis || []).some((p) => p.id === salvo.modo)) {
+    if (salvo && selModo && (salvo.modo === "oficial" || salvo.modo === "regras_da_casa")) {
       selModo.value = salvo.modo;
-      if (salvo.modo === "personalizado" && Array.isArray(salvo.regras_ativas)) {
-        const setSalvo = new Set(salvo.regras_ativas);
-        document.querySelectorAll('#lista-regras-casa-checks input[type="checkbox"]').forEach((cb) => {
-          cb.checked = setSalvo.has(cb.value);
-        });
-      }
     }
 
     aplicarRegrasCasaNoCatalogoUI({ salvar: false });
@@ -1063,11 +1002,6 @@
   function registrarEventosEquipamentos() {
     document.getElementById("modo-regras-casa")?.addEventListener("change", () => {
       aplicarRegrasCasaNoCatalogoUI({ salvar: true });
-    });
-    document.getElementById("lista-regras-casa-checks")?.addEventListener("change", (e) => {
-      if (e.target.matches('input[type="checkbox"]')) {
-        aplicarRegrasCasaNoCatalogoUI({ salvar: true });
-      }
     });
     ["modo-equipamentos", "eq-armadura", "eq-escudo", "eq-arma-cc-select", "eq-arma-dist-select", "eq-variado-select"].forEach(
       (id) => {

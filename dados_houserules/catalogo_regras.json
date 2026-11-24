@@ -35,7 +35,7 @@
         "oleo_meio_litro": {
           "volume": "L",
           "volume_valor": 0.1,
-          "descricao": "Abastece lanternas (500 ml duram 6 horas; peso Leve 'L' por unidade na regra da casa) ou pode ser incendiado (1 ação Interagir) e arremessado (1 ação ataque à distância): em acerto e teste simples CD 10, causa 1d6 de dano de fogo."
+          "descricao": "Abastece lanternas (500 ml duram 6 horas) ou pode ser incendiado (1 ação Interagir) e arremessado (1 ação ataque à distância): em acerto e teste simples CD 10, causa 1d6 de dano de fogo."
         }
       }
     },

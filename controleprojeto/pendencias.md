@@ -50,3 +50,12 @@ Lista viva e priorizada das entregas, melhorias e expansões que ainda precisam 
   - Expandir `motor/` (`regras_atributos.py` com melhorias nos níveis `5/10/15/20`, incremento de perícias e proficiências de armas/armaduras/salvamentos/conjuração conforme `tabela_progressao` das 12 classes, seleção de talentos por nível de Classe, Perícia, Geral e Ancestralidade até o 20º nível, além de espaços/repertório/grimório de magias dos círculos `2–10`).
 - [ ] **Itens Mágicos, Runas e Tesouros (`ref/Compendium specific tools.pdf` → `dados/itens_magicos_tesouros.json`)** *(Adiado para implementação futura conforme decisão do usuário em `19/11/2026`)*
   - Converter runas fundamentais e de propriedade, materiais preciosos, itens alquímicos completos, poções, pergaminhos, talismãs e itens mágicos permanentes, e integrá-los ao motor para personagens de nível `2+`.
+
+---
+
+## 6. Gestão de Regras da Casa e Acesso do Mestre
+
+- [ ] **Painel do Mestre com Senha e Persistência Instantânea de Regras da Casa** *(solicitado pelo usuário em `24/11/2026`)*
+  - **Experiência do Jogador:** Acesso livre e limpo pelo celular/PC sem exibir seletores de regras da casa; a geração de ficha segue instantaneamente o que o Mestre deixou ativo no servidor.
+  - **Experiência do Mestre:** Campo/modal discreto de senha (ex: ícone de cadeado 🔒 ou link "Acesso do Mestre") no próprio site. Ao digitar a senha correta, destrava o painel para alternar entre *Oficial*, *Regras da Casa* ou regras específicas.
+  - **Persistência Imediata:** A alteração feita pelo Mestre no navegador salva diretamente no arquivo de configuração do servidor (`dados_houserules/config_ativa.json`), aplicando-se imediatamente para qualquer nova ficha gerada em qualquer dispositivo, sem necessidade de tocar no código ou reiniciar o servidor.

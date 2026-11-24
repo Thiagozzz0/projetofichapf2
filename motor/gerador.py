@@ -787,17 +787,11 @@ def gerar_personagem(
         if val_p:
             pers_ficha[campo_p] = val_p
 
-    nota_regras_casa = (
-        f" Regras da Casa Ativas: {', '.join(config_regras_casa['regras_ativas_resumo'])}."
-        if config_regras_casa.get("ativa")
-        else ""
-    )
     ficha["perfil_e_campanha"]["anotacoes_campanha"]["anotacoes"] = (
         f"Conceito: {conceito['titulo_completo']} (Subclasse PF2E: {sub_nome_final}{tese_nota}). "
         f"{conceito['resumo_proposta']} "
         f"Sinergia: {conceito.get('sinergia_mecanica', '')} "
         f"Biografia: {biografia['descricao']}"
-        f"{nota_regras_casa}"
     ).strip()
 
     escolhas_perfil_aplicadas = {

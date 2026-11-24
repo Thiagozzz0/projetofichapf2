@@ -59,9 +59,6 @@ def exportar_ficha_txt(resultado: dict[str, Any]) -> str:
             f"Seed       : {meta['seed']} | Orçamento: {meta.get('orcamento_inicial', '15 po')} | "
             f"Gasto: {meta.get('gasto_equipamentos', '—')} | Saldo: {meta.get('saldo_restante', '—')}"
         )
-    rc = meta.get("regras_casa") or {}
-    if rc.get("ativa") and rc.get("regras_ativas_resumo"):
-        linhas.append(f"Regras Casa: {', '.join(rc['regras_ativas_resumo'])}")
 
     # PÁGINA 1
     sec("PÁGINA 1 (p. 580) — ESTATÍSTICAS PRINCIPAIS, COMBATE E PERÍCIAS")

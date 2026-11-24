@@ -72,77 +72,43 @@ def resolver_configuracao_regras_casa(
     escolhas: dict[str, Any] | str | None = None,
     diretorio: Path | str | None = None,
 ) -> dict[str, Any]:
-    """Resolve o modo ('oficial', 'regras_da_casa', 'personalizado') e flags ativas."""
+    """Resolve o modo ('oficial' ou 'regras_da_casa') e flags ativas."""
     dados_rc = carregar_regras_casa(diretorio)
     regras_por_id = dados_rc["regras_por_id"]
     perfis_por_id = dados_rc["perfis_por_id"]
 
     if escolhas is None or (isinstance(escolhas, str) and not escolhas.strip()):
         modo = "oficial"
-        req_regras: list[str] = []
-        flags_map: dict[str, Any] = {}
     elif isinstance(escolhas, str):
         modo_norm = normalizar(escolhas)
-        if modo_norm in ("", "oficial", "padrao", "livro"):
+        if modo_norm in ("", "oficial", "padrao", "livro", "originais", "regras_originais"):
             modo = "oficial"
-            req_regras = []
         elif modo_norm in ("regras_da_casa", "homebrew", "casa"):
             modo = "regras_da_casa"
-            req_regras = list((perfis_por_id.get("regras_da_casa") or {}).get("regras_ativas") or [])
-        elif modo_norm in perfis_por_id:
-            modo = modo_norm
-            req_regras = list(perfis_por_id[modo_norm].get("regras_ativas") or [])
         else:
             raise ValueError(f"Modo de regras da casa desconhecido: '{escolhas}'.")
-        flags_map = {}
     elif isinstance(escolhas, dict):
         modo_bruto = normalizar(str(escolhas.get("modo") or escolhas.get("perfil") or "oficial"))
-        if modo_bruto in ("", "oficial", "padrao", "livro"):
+        if modo_bruto in ("", "oficial", "padrao", "livro", "originais", "regras_originais"):
             modo = "oficial"
         elif modo_bruto in ("regras_da_casa", "homebrew", "casa"):
             modo = "regras_da_casa"
-        elif modo_bruto in ("personalizado", "custom"):
-            modo = "personalizado"
-        elif modo_bruto in perfis_por_id:
-            modo = modo_bruto
         else:
-            raise ValueError(f"Modo de regras da casa desconhecido: '{escolhas.get('modo') or escolhas.get('perfil')}'.")
-
-        bruto_ativas = escolhas.get("regras_ativas")
-        bruto_flags = escolhas.get("flags")
-        flags_map = dict(bruto_flags) if isinstance(bruto_flags, dict) else {}
-
-        if modo == "oficial":
-            req_regras = []
-        elif modo in perfis_por_id and modo != "personalizado" and bruto_ativas is None and not flags_map:
-            req_regras = list(perfis_por_id[modo].get("regras_ativas") or [])
-        else:
-            req_regras = []
-            if bruto_ativas is not None:
-                if not isinstance(bruto_ativas, list):
-                    raise ValueError("Campo 'regras_ativas' deve ser uma lista de IDs de regras.")
-                for rid in bruto_ativas:
-                    rid_str = str(rid).strip()
-                    if rid_str and rid_str not in req_regras:
-                        req_regras.append(rid_str)
-            for rid, ativo in flags_map.items():
-                rid_str = str(rid).strip()
-                if rid_str not in regras_por_id:
-                    raise ValueError(f"Regra da casa desconhecida: '{rid_str}'.")
-                if bool(ativo) and rid_str not in req_regras:
-                    req_regras.append(rid_str)
-                elif not bool(ativo) and rid_str in req_regras:
-                    req_regras.remove(rid_str)
+            raise ValueError(
+                f"Modo de regras da casa desconhecido: '{escolhas.get('modo') or escolhas.get('perfil')}'."
+            )
     else:
         raise ValueError("Campo 'escolhas_regras_casa' deve ser um objeto JSON ou string.")
+
+    req_regras = (
+        list((perfis_por_id.get("regras_da_casa") or {}).get("regras_ativas") or [])
+        if modo == "regras_da_casa"
+        else []
+    )
 
     for rid in req_regras:
         if rid not in regras_por_id:
             raise ValueError(f"Regra da casa desconhecida: '{rid}'.")
-
-    if modo == "personalizado" and not req_regras:
-        # Personalizado sem nenhuma regra marcada equivale mecanicamente ao Oficial, mantendo o modo explícito.
-        pass
 
     itens_leves_por_volume = ITENS_LEVES_OFICIAL
     overrides_itens: dict[str, dict[str, Any]] = {}

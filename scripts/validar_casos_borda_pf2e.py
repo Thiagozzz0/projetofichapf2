@@ -1384,7 +1384,7 @@ def test_regras_da_casa_peso_racao_e_oleo() -> None:
     assert r_rc["meta_geracao"]["volume_leves_soltos"] == 0
     assert any(it["nome"] == "Ração (1 unidade)" and it["volume"] == "L" for it in out_rc)
     assert any(it["nome"].startswith("Óleo (meio litro)") and it["volume"] == "5L" for it in out_rc)
-    assert "Regras da Casa Ativas:" in r_rc["ficha"]["perfil_e_campanha"]["anotacoes_campanha"]["anotacoes"]
+    assert "Regras da Casa Ativas:" not in r_rc["ficha"]["perfil_e_campanha"]["anotacoes_campanha"]["anotacoes"]
 
     # 6 frascos de óleo sozinhos na regra da casa => 6 L => 1 Vol + 1 L solto
     r_oleo6 = gerar_personagem(
@@ -1404,10 +1404,10 @@ def test_regras_da_casa_peso_racao_e_oleo() -> None:
     assert r_oleo6["ficha"]["inventario"]["volume_total"] == 1.0
     assert r_oleo6["meta_geracao"]["volume_leves_soltos"] == 1
 
-    # Kit de aventureiro procedural com ração por unidade substitui texto de conteúdo
+    # Kit de aventureiro procedural com regras da casa substitui texto de conteúdo
     r_kit_rc = gerar_personagem(
         "humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor",
-        escolhas_regras_casa={"modo": "personalizado", "regras_ativas": ["racao_por_unidade_peso_l"]},
+        escolhas_regras_casa={"modo": "regras_da_casa"},
         seed=10,
         dados=db,
     )
@@ -1423,29 +1423,18 @@ def test_regras_da_casa_peso_racao_e_oleo() -> None:
     assert db.itens_gerais["oleo_meio_litro"]["volume"] == "—"
     assert "2 semanas de ração" in db.itens_gerais["kit_de_aventureiro"]["conteudo"]
 
-    # 4. Modo personalizado parcial (só óleo com peso L, mantendo 10 L = 1 V)
-    r_parc = gerar_personagem(
-        "humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor",
-        escolhas_equipamentos=eq_teste,
-        escolhas_regras_casa={"modo": "personalizado", "regras_ativas": ["oleo_500ml_peso_l"]},
-        seed=10,
-        dados=db,
-    )
-    assert r_parc["meta_geracao"]["itens_leves_por_volume"] == 10
-    assert r_parc["ficha"]["inventario"]["volume_total"] == 1.0  # 10 L / 10 = 1 Vol
-    assert r_parc["meta_geracao"]["volume_leves_soltos"] == 0
-
-    # 5. Regra inexistente deve levantar ErroValidacao
-    try:
-        gerar_personagem(
-            "humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor",
-            escolhas_regras_casa={"modo": "personalizado", "regras_ativas": ["regra_falsa"]},
-            seed=1,
-            dados=db,
-        )
-        raise AssertionError("Deveria falhar com ErroValidacao para regra inexistente")
-    except ErroValidacao:
-        pass
+    # 4. Modo personalizado removido / modo inexistente deve levantar ErroValidacao
+    for modo_inv in ("personalizado", "regra_falsa"):
+        try:
+            gerar_personagem(
+                "humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor",
+                escolhas_regras_casa={"modo": modo_inv},
+                seed=1,
+                dados=db,
+            )
+            raise AssertionError(f"Deveria falhar com ErroValidacao para modo '{modo_inv}'")
+        except ErroValidacao:
+            pass
 
 
 def main() -> None:

@@ -301,9 +301,6 @@ def _montar_document_xml(resultado: dict[str, Any]) -> str:
             f"{riq['po']} po, {riq['pp']} pp, {riq['pc']} pc ({riq['pl']} pl)",
         )
     )
-    rc = meta.get("regras_casa") or {}
-    if rc.get("ativa") and rc.get("regras_ativas_resumo"):
-        partes.append(_xml_p_rotulo("Regras da Casa Ativas", ", ".join(rc["regras_ativas_resumo"])))
 
     # Página 3 — Perfil e Ações
     partes.append(_xml_p("Página 3 (p. 582) — Perfil, Campanha e Ações", estilo="SecaoTitulo"))
