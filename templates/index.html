@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gerador Procedural PF2E — Ficha Oficial</title>
-  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=46">
-  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=46">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}?v=46">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=47">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=47">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}?v=47">
 </head>
 <body>
   <div class="app-container">
@@ -225,6 +225,13 @@
                       <label for="attr-livre-4">4º Bônus Livre</label>
                       <select id="attr-livre-4" name="attr_livre_4"></select>
                     </div>
+                  </div>
+                  <div id="previa-atributos-abcd" class="previa-atributos-abcd" aria-live="polite">
+                    <div class="previa-atributos-topo">
+                      <span class="previa-atributos-titulo">Prévia Viva dos Atributos (ABCD)</span>
+                      <span id="nota-previa-atributos" class="previa-atributos-nota"></span>
+                    </div>
+                    <div id="grid-previa-atributos" class="grid-previa-atributos"></div>
                   </div>
                 </div>
 
@@ -508,7 +515,11 @@
                   <small id="mag-info-extra" class="nota-campo"></small>
 
                   <div class="mag-busca-wrap">
-                    <input type="search" id="mag-filtro-busca" placeholder="Filtrar magias por nome ou escola (ex.: Curar, Evocação, Escudo)..." aria-label="Filtrar magias">
+                    <div class="busca-linha-flex">
+                      <input type="search" id="mag-filtro-busca" placeholder="Filtrar magias por nome, escola ou traço (ex.: Curar, Evocação, Fogo)..." aria-label="Filtrar magias">
+                      <button type="button" id="btn-mag-limpar-busca" class="btn btn-sutil btn-compacto oculto">Limpar</button>
+                    </div>
+                    <small id="mag-busca-status" class="nota-campo oculto"></small>
                   </div>
 
                   <div class="acordeao-magias" id="acordeao-magias">
@@ -592,6 +603,14 @@
                   <small id="eq-nota-hibrida" class="nota-campo">Categorias deixadas em "Procedural" usarão automaticamente o saldo restante ao gerar a ficha.</small>
                   <small id="eq-nota-curadoria" class="nota-campo"></small>
 
+                  <div class="mag-busca-wrap eq-busca-wrap">
+                    <div class="busca-linha-flex">
+                      <input type="search" id="eq-filtro-busca" placeholder="Filtrar equipamentos nos seletores (ex.: Espada, Couro, Tocha, Kit)..." aria-label="Filtrar equipamentos">
+                      <button type="button" id="btn-eq-limpar-busca" class="btn btn-sutil btn-compacto oculto">Limpar</button>
+                    </div>
+                    <small id="eq-busca-status" class="nota-campo oculto"></small>
+                  </div>
+
                   <div class="grid-equipamentos-custom">
                     <div class="card-eq-cat" id="card-eq-armadura">
                       <label for="eq-armadura">1. Armaduras</label>
@@ -661,9 +680,11 @@
           <button type="button" id="btn-imprimir" class="btn btn-secundario" disabled>Imprimir Web</button>
 
           <div class="atalhos-rapidos">
-            <span>Exemplos:</span>
+            <span>Atalhos:</span>
+            <button type="button" class="btn btn-sutil" data-preset="aleatorio">100% Aleatório</button>
             <button type="button" class="btn btn-sutil" data-preset="mago">Mago Evocador</button>
             <button type="button" class="btn btn-sutil" data-preset="guerreiro">Guerreiro Colosso 2M</button>
+            <button type="button" id="btn-limpar-form" class="btn btn-sutil">Limpar Formulário</button>
           </div>
         </div>
 
@@ -866,20 +887,21 @@
           <circle class="overlay-anel-fundo" cx="60" cy="60" r="50" />
           <path class="overlay-arco-seta" d="M 60 10 A 50 50 0 1 1 24.6 95.4" marker-end="url(#overlay-seta-ponta)" />
         </svg>
-        <img class="overlay-logo-img" src="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=46" alt="Processando seu arquivo">
+        <img class="overlay-logo-img" src="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=47" alt="Processando seu arquivo">
       </div>
       <p id="overlay-download-texto" class="overlay-download-texto">Processando seu arquivo</p>
     </div>
   </div>
 
-  <script src="{{ url_for('static', filename='js/render_ficha.js') }}?v=46" defer></script>
-  <script src="{{ url_for('static', filename='js/estado.js') }}?v=46" defer></script>
-  <script src="{{ url_for('static', filename='js/atributos.js') }}?v=46" defer></script>
-  <script src="{{ url_for('static', filename='js/pericias.js') }}?v=46" defer></script>
-  <script src="{{ url_for('static', filename='js/talentos.js') }}?v=46" defer></script>
-  <script src="{{ url_for('static', filename='js/magias.js') }}?v=46" defer></script>
-  <script src="{{ url_for('static', filename='js/equipamentos.js') }}?v=46" defer></script>
-  <script src="{{ url_for('static', filename='js/perfil.js') }}?v=46" defer></script>
-  <script src="{{ url_for('static', filename='js/app.js') }}?v=46" defer></script>
+  <script src="{{ url_for('static', filename='js/render_ficha.js') }}?v=47" defer></script>
+  <script src="{{ url_for('static', filename='js/estado.js') }}?v=47" defer></script>
+  <script src="{{ url_for('static', filename='js/atributos.js') }}?v=47" defer></script>
+  <script src="{{ url_for('static', filename='js/previa_atributos.js') }}?v=47" defer></script>
+  <script src="{{ url_for('static', filename='js/pericias.js') }}?v=47" defer></script>
+  <script src="{{ url_for('static', filename='js/talentos.js') }}?v=47" defer></script>
+  <script src="{{ url_for('static', filename='js/magias.js') }}?v=47" defer></script>
+  <script src="{{ url_for('static', filename='js/equipamentos.js') }}?v=47" defer></script>
+  <script src="{{ url_for('static', filename='js/perfil.js') }}?v=47" defer></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}?v=47" defer></script>
 </body>
 </html>

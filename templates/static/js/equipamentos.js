@@ -252,6 +252,7 @@
     setVal("eq-arma-dist-select", "procedural");
     setVal("eq-variado-select", "procedural");
     setVal("eq-variado-qtd", "1");
+    setVal("eq-filtro-busca", "");
     app.eqEstado.armas_cc = [];
     app.eqEstado.armas_dist = [];
     app.eqEstado.variados = [];
@@ -406,9 +407,29 @@
     return true;
   }
 
+  function _itemEqCorrespondeBusca(item, termo) {
+    if (!termo) return true;
+    const campos = [
+      item.nome,
+      item.categoria,
+      item.subcategoria,
+      item.grupo,
+      item.material,
+      ...(item.tracos || []),
+      item.descricao,
+    ]
+      .filter(Boolean)
+      .join(" ");
+    return normTxt(campos).includes(termo);
+  }
+
   function atualizarCatalogoEquipamentosUI() {
     const cat = app.opcoes?.catalogo_equipamentos;
     if (!cat) return;
+
+    const termoBusca = normTxt(document.getElementById("eq-filtro-busca")?.value || "");
+    document.getElementById("btn-eq-limpar-busca")?.classList.toggle("oculto", !termoBusca);
+    let totalEncontrados = 0;
 
     const profs = _calcularProficienciasEquipamentosUI();
     app.mapaEq.armaduras = {};
@@ -449,10 +470,14 @@
             if (profs.restricaoNaoMetal && normTxt(a.material) === "metal") return false;
             return true;
           });
-          if (!lista.length) return;
-          const og = criarOptgroup(selArm, grupo);
           lista.forEach((a) => {
             app.mapaEq.armaduras[a.id] = a;
+            if (_itemEqCorrespondeBusca(a, termoBusca)) totalEncontrados += 1;
+          });
+          const visiveis = lista.filter((a) => _itemEqCorrespondeBusca(a, termoBusca) || a.id === antArm);
+          if (!visiveis.length) return;
+          const og = criarOptgroup(selArm, grupo);
+          visiveis.forEach((a) => {
             const opt = document.createElement("option");
             opt.value = a.id;
             const lim = a.limite_destreza !== null ? `Lim DES +${a.limite_destreza}` : "Sem Lim DES";
@@ -480,6 +505,9 @@
         .filter((s) => !(profs.restricaoNaoMetal && s.eh_metal))
         .forEach((s) => {
           app.mapaEq.escudos[s.id] = s;
+          const bate = _itemEqCorrespondeBusca(s, termoBusca);
+          if (bate) totalEncontrados += 1;
+          if (!bate && s.id !== antEsc) return;
           const opt = document.createElement("option");
           opt.value = s.id;
           opt.textContent = `${s.nome} (+${s.bonus_ca} CA, Dureza ${s.dureza}, PV ${s.pv}) — ${fmtPrecoEq(s.preco_pc)}`;
@@ -523,10 +551,14 @@
           ["Arma Avançada", "Armas Avançadas"],
         ].forEach(([catNome, rotulo]) => {
           const itens = permitidas.filter((w) => w.categoria === catNome);
-          if (!itens.length) return;
-          const og = criarOptgroup(sel, rotulo);
           itens.forEach((w) => {
             mapaDestino[w.id] = w;
+            if (_itemEqCorrespondeBusca(w, termoBusca)) totalEncontrados += 1;
+          });
+          const visiveis = itens.filter((w) => _itemEqCorrespondeBusca(w, termoBusca) || w.id === antVal);
+          if (!visiveis.length) return;
+          const og = criarOptgroup(sel, rotulo);
+          visiveis.forEach((w) => {
             const opt = document.createElement("option");
             opt.value = w.id;
             const alc = w.distancia_m ? ` • Alc ${w.distancia_m}m` : "";
@@ -575,8 +607,12 @@
         `<option value="procedural">Procedural (Kit de Aventureiro + ferramentas da classe)</option>` +
         `<option value="nenhum">Nenhum item variado (ou usar lista abaixo)</option>`;
 
-      const addItemOpt = (og, it) => {
+      variadosPermitidos.forEach((it) => {
         app.mapaEq.variados[it.id] = it;
+        if (_itemEqCorrespondeBusca(it, termoBusca)) totalEncontrados += 1;
+      });
+
+      const addItemOpt = (og, it) => {
         const opt = document.createElement("option");
         opt.value = it.id;
         const pac = it.quantidade_pacote > 1 && !it.nome.includes(`(${it.quantidade_pacote})`) ? ` (${it.quantidade_pacote} un.)` : "";
@@ -586,7 +622,9 @@
 
       const usadosRec = new Set();
       if (profs.filtrando && profs.ferramentasRecomendadas.size > 0) {
-        const recItens = variadosPermitidos.filter((it) => profs.ferramentasRecomendadas.has(it.id));
+        const recItens = variadosPermitidos.filter(
+          (it) => profs.ferramentasRecomendadas.has(it.id) && (_itemEqCorrespondeBusca(it, termoBusca) || it.id === antVar)
+        );
         if (recItens.length) {
           const ogRec = criarOptgroup(selVar, `Essenciais de ${profs.clsNome}`);
           recItens.forEach((it) => {
@@ -597,12 +635,24 @@
       }
 
       ["Equipamentos de Aventura", "Equipamentos Incomuns", "Munições"].forEach((subcat) => {
-        const itens = variadosPermitidos.filter((it) => it.subcategoria === subcat && !usadosRec.has(it.id));
+        const itens = variadosPermitidos.filter(
+          (it) => it.subcategoria === subcat && !usadosRec.has(it.id) && (_itemEqCorrespondeBusca(it, termoBusca) || it.id === antVar)
+        );
         if (!itens.length) return;
         const og = criarOptgroup(selVar, subcat);
         itens.forEach((it) => addItemOpt(og, it));
       });
       selVar.value = antVar === "procedural" || antVar === "nenhum" || app.mapaEq.variados[antVar] ? antVar : "procedural";
+    }
+
+    const elBuscaStatus = document.getElementById("eq-busca-status");
+    if (elBuscaStatus) {
+      elBuscaStatus.classList.toggle("oculto", !termoBusca);
+      elBuscaStatus.textContent = termoBusca
+        ? totalEncontrados
+          ? `${totalEncontrados} equipamento(s) encontrado(s) nos seletores abaixo.`
+          : "Nenhum equipamento compatível encontrado para o filtro informado."
+        : "";
     }
 
     const elCurEq = document.getElementById("eq-nota-curadoria");
@@ -848,6 +898,15 @@
       }
     );
     document.getElementById("eq-variado-qtd")?.addEventListener("input", atualizarOrcamentoEquipamentosUI);
+    document.getElementById("eq-filtro-busca")?.addEventListener("input", atualizarCatalogoEquipamentosUI);
+    document.getElementById("btn-eq-limpar-busca")?.addEventListener("click", () => {
+      const inp = document.getElementById("eq-filtro-busca");
+      if (inp) {
+        inp.value = "";
+        inp.focus();
+      }
+      atualizarCatalogoEquipamentosUI();
+    });
     document.getElementById("btn-eq-kit-classe")?.addEventListener("click", aplicarKitDeClasseUI);
     document.getElementById("btn-eq-reset-procedural")?.addEventListener("click", () => {
       resetarEquipamentosProcedural();

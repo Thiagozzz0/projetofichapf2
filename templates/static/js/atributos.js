@@ -72,6 +72,7 @@
       document.getElementById("attr-bio-livre"),
     ]);
     _sincronizarGrupoSelects(IDS_LIVRES_N1.map((id) => document.getElementById(id)));
+    app.atualizarPreviaAtributosABCD?.();
   }
 
   function atualizarSeletoresAtributosAncestralidade() {
@@ -94,6 +95,7 @@
       });
       if (grp2) grp2.classList.add("oculto");
       preencherSelectAtributo(sel2, [], { preservar: false });
+      app.atualizarPreviaAtributosABCD?.();
       return;
     }
 
@@ -212,6 +214,7 @@
       if (sub) sub.classList.add("oculto");
       if (info) info.textContent = "";
       preencherSelectAtributo(selChave, [], { preservar: false });
+      app.atualizarPreviaAtributosABCD?.();
       return;
     }
 
@@ -241,6 +244,7 @@
       if (grpChave) grpChave.classList.add("oculto");
       preencherSelectAtributo(selChave, [], { preservar: false });
     }
+    app.atualizarPreviaAtributosABCD?.();
   }
 
   function definirModoTodosAtributos(modo) {

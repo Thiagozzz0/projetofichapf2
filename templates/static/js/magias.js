@@ -176,12 +176,12 @@
       if (!termoBusca) return true;
       const m = st.porId[mid];
       if (!m) return false;
-      return normTxt(`${m.nome} ${m.escola} ${m.resumo}`).includes(termoBusca);
+      return normTxt(`${m.nome} ${m.escola} ${(m.tracos || []).join(" ")} ${m.resumo}`).includes(termoBusca);
     });
 
     if (!filtrados.length) {
       grid.innerHTML = `<div class="box-tal-auto">Nenhuma magia encontrada para o filtro informado.</div>`;
-      return;
+      return 0;
     }
 
     grid.innerHTML = filtrados
@@ -224,6 +224,7 @@
         );
       })
       .join("");
+    return filtrados.length;
   }
 
   function atualizarCatalogoMagiasUI() {
@@ -313,7 +314,8 @@
     }
 
     const termoBusca = normTxt(document.getElementById("mag-filtro-busca")?.value || "");
-    _renderGradeMagias(
+    document.getElementById("btn-mag-limpar-busca")?.classList.toggle("oculto", !termoBusca);
+    const qtdTruq = _renderGradeMagias(
       "grid-magias-truques",
       st.poolTruquesIds,
       st.truquesFixos,
@@ -323,7 +325,7 @@
       st,
       termoBusca
     );
-    _renderGradeMagias(
+    const qtdN1 = _renderGradeMagias(
       "grid-magias-n1",
       st.poolN1Ids,
       st.magiasN1Fixas,
@@ -333,6 +335,13 @@
       st,
       termoBusca
     );
+    const elBuscaStatus = document.getElementById("mag-busca-status");
+    if (elBuscaStatus) {
+      elBuscaStatus.classList.toggle("oculto", !termoBusca);
+      if (termoBusca) {
+        elBuscaStatus.textContent = `Encontradas: ${qtdTruq} truque(s) • ${qtdN1} magia(s) de 1º círculo.`;
+      }
+    }
 
     app.atualizarResumosEtapasUI?.();
   }
@@ -401,6 +410,14 @@
       }
       atualizarCatalogoMagiasUI();
     });
+    document.getElementById("btn-mag-limpar-busca")?.addEventListener("click", () => {
+      const inp = document.getElementById("mag-filtro-busca");
+      if (inp) {
+        inp.value = "";
+        inp.focus();
+      }
+      atualizarCatalogoMagiasUI();
+    });
     document.getElementById("painel-magias-custom")?.addEventListener("click", (e) => {
       const btnInfo = e.target.closest("[data-magia-detalhe]");
       if (btnInfo) {
@@ -432,6 +449,14 @@
       } else {
         const idx = lista.indexOf(mid);
         if (idx >= 0) lista.splice(idx, 1);
+      }
+      atualizarCatalogoMagiasUI();
+    });
+    document.getElementById("btn-mag-limpar-busca")?.addEventListener("click", () => {
+      const inp = document.getElementById("mag-filtro-busca");
+      if (inp) {
+        inp.value = "";
+        inp.focus();
       }
       atualizarCatalogoMagiasUI();
     });

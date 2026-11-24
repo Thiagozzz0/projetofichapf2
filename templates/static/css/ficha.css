@@ -1462,9 +1462,117 @@ body {
   color: #1f5c23;
 }
 
-/* Etapa Magias */
+/* Prévia Viva dos Atributos (ABCD) */
+.previa-atributos-abcd {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: #fffdf8;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.previa-atributos-topo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.previa-atributos-titulo {
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--accent-dark);
+}
+
+.previa-atributos-nota {
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+
+.grid-previa-atributos {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.previa-atb-card {
+  background: var(--tint);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.previa-atb-card.previa-atb-alta {
+  border-color: var(--accent);
+  background: #fbf1ec;
+}
+
+.previa-atb-card.previa-atb-baixa {
+  border-color: #b4695a;
+  background: #fcf4f2;
+}
+
+.previa-atb-topo {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.previa-atb-sigla {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--accent-dark);
+}
+
+.previa-atb-chave {
+  font-size: 0.6rem;
+  font-weight: 800;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.previa-atb-mod {
+  font-size: 1.05rem;
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+.previa-atb-val {
+  font-size: 0.74rem;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+/* Etapa Magias e Barras de Busca */
+.mag-busca-wrap {
+  margin-bottom: 10px;
+}
+
+.eq-busca-wrap {
+  margin-top: 8px;
+  margin-bottom: 6px;
+}
+
+.busca-linha-flex {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
 .mag-busca-wrap input[type="search"] {
   width: 100%;
+  flex: 1;
   padding: 7px 10px;
   border: 1px solid var(--border);
   border-radius: 5px;
@@ -1780,6 +1888,9 @@ body {
 }
 
 @media (max-width: 980px) {
+  .grid-previa-atributos {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
   .comp-stats-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }

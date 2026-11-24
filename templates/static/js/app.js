@@ -205,6 +205,7 @@
       app.atualizarCatalogoMagiasUI();
       app.atualizarVisibilidadeMagiasUI();
       app.atualizarPerfilUI();
+      app.atualizarPreviaAtributosABCD?.();
     } catch (err) {
       setStatus(`Erro ao carregar opções: ${err.message}`, "erro");
     }
@@ -325,8 +326,39 @@
     }
   }
 
+  function limparFormularioUI({ silencioso = false } = {}) {
+    if (!app.opcoes) return;
+    document.getElementById("ancestralidade").value = "aleatorio";
+    document.getElementById("biografia").value = "procedural";
+    document.getElementById("classe").value = "aleatorio";
+    document.getElementById("nivel").value = "1";
+    document.getElementById("nome").value = "";
+    document.getElementById("jogador").value = "";
+    document.getElementById("seed").value = "";
+    app.bioManualExpAutomatica = false;
+    app.atualizarHerancas();
+    app.atualizarResumoBiografia();
+    app.atualizarSeletoresAtributosBiografia();
+    app.atualizarConceitos();
+    app.definirModoTodosAtributos("procedural");
+    app.resetarPericiasProcedural();
+    app.resetarTalentosProcedural();
+    app.resetarMagiasProcedural();
+    app.resetarEquipamentosProcedural();
+    app.resetarPerfilUI();
+    app.atualizarPreviaAtributosABCD?.();
+    if (!silencioso) {
+      setStatus("Formulário restaurado para o padrão inicial.", "ok");
+    }
+  }
+
   function aplicarPreset(chave) {
     if (!app.opcoes) return;
+    if (chave === "aleatorio") {
+      limparFormularioUI({ silencioso: true });
+      gerarFichaAtual(true);
+      return;
+    }
     if (chave === "mago") {
       document.getElementById("ancestralidade").value = "elfo";
       app.atualizarHerancas();
@@ -359,6 +391,7 @@
     app.atualizarResumoConceito();
     app.atualizarSeletoresAtributosClasse();
     app.atualizarCatalogoTalentosUI();
+    app.atualizarPreviaAtributosABCD?.();
     gerarFichaAtual(true);
   }
 
@@ -367,6 +400,7 @@
     atualizarResumosEtapasUI,
     gerarFichaAtual,
     baixarExportacao,
+    limparFormularioUI,
     aplicarPreset,
   });
 
@@ -420,6 +454,7 @@
   document.querySelectorAll("[data-preset]").forEach((btn) => {
     btn.addEventListener("click", () => aplicarPreset(btn.dataset.preset));
   });
+  document.getElementById("btn-limpar-form")?.addEventListener("click", () => limparFormularioUI());
 
   inicializar();
 })();
