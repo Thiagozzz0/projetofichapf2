@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from typing import Any
 
-from ..util import formatar_bonus, formatar_metros
-from .comum import _formatar_item_inventario, _tem_conjuracao
+from ..dados import BaseDados, carregar_dados
+from ..util import formatar_bonus, formatar_metros, normalizar, slugify
+from .comum import _formatar_custo_acao, _formatar_item_inventario, _tem_conjuracao
 
 
 _RAIZ_PROJETO = Path(__file__).resolve().parent.parent.parent
@@ -428,10 +430,10 @@ def _pdf_preencher_talentos_grupo(
         nome = (slot.get("nome") or "").strip()
         if not nome or nome == "—":
             continue
-        origem = (slot.get("origem_regra") or "").strip()
-        resumo = (slot.get("resumo") or "").strip()
-        texto = f"{nome}: {resumo}" if resumo else (f"{nome} ({origem})" if origem else nome)
-        _pdf_inserir_bloco(page, pymupdf, x0, y0 + 0.6, x1, y0 + 15.0, texto, fontsize=6.0, bold=False, min_fontsize=4.3)
+        _pdf_inserir_linha(
+            page, pymupdf, x0, y0 + 0.6, x1, y0 + 15.0,
+            nome, fontsize=8.0, bold=True, min_fontsize=5.0,
+        )
 
 
 def _pdf_preencher_lista_inventario(
@@ -566,12 +568,11 @@ def _pdf_preencher_pagina_3(page: Any, pymupdf: Any, resultado: dict[str, Any]) 
     for slot, (cx, cy) in zip(ficha["acoes_e_atividades"], pos_acoes):
         if not slot.get("nome"):
             continue
-        _pdf_inserir_linha(page, pymupdf, cx + 2.0, cy + 8.0, cx + 97.5, cy + 22.0, slot["nome"], fontsize=7.8, bold=True)
+        _pdf_inserir_linha(page, pymupdf, cx + 2.0, cy + 8.0, cx + 97.5, cy + 22.0, slot["nome"], fontsize=8.0, bold=True, min_fontsize=4.8)
         _pdf_inserir_linha(page, pymupdf, cx + 99.5, cy + 6.5, cx + 134.8, cy + 22.0, _pdf_acao_curta(slot.get("acoes")), fontsize=7.5, align=1, bold=True)
         _pdf_inserir_linha(page, pymupdf, cx + 137.0, cy + 8.0, cx + 239.0, cy + 22.0, ", ".join(slot.get("tracos") or []), fontsize=6.8)
         if slot.get("pagina") is not None:
             _pdf_inserir_linha(page, pymupdf, cx + 243.0, cy + 8.0, cx + 275.5, cy + 22.0, str(slot["pagina"]), fontsize=7.0, align=1)
-        _pdf_inserir_bloco(page, pymupdf, cx + 2.0, cy + 32.5, cx + 275.5, cy + 55.2, slot.get("descricao") or "", fontsize=6.4, min_fontsize=4.2)
 
     # Ações Livres e Reações (4 slots: 2 colunas x 2 linhas)
     pos_reacoes = (
@@ -583,15 +584,12 @@ def _pdf_preencher_pagina_3(page: Any, pymupdf: Any, resultado: dict[str, Any]) 
             continue
         tipo_norm = (slot.get("tipo") or "").strip().lower()
         eh_livre = "livre" in tipo_norm
-        _pdf_inserir_linha(page, pymupdf, cx + 2.0, cy + 8.0, cx + 94.0, cy + 20.8, slot["nome"], fontsize=7.5, bold=True)
+        _pdf_inserir_linha(page, pymupdf, cx + 2.0, cy + 8.0, cx + 94.0, cy + 20.8, slot["nome"], fontsize=7.8, bold=True, min_fontsize=4.8)
         _pdf_marcar_checkbox(page, pymupdf, cx + 96.0, cy + 3.2, cx + 101.4, cy + 8.6, eh_livre)
         _pdf_marcar_checkbox(page, pymupdf, cx + 96.0, cy + 12.5, cx + 101.4, cy + 17.9, not eh_livre)
         _pdf_inserir_linha(page, pymupdf, cx + 137.0, cy + 8.0, cx + 239.0, cy + 20.8, ", ".join(slot.get("tracos") or []), fontsize=6.8)
         if slot.get("pagina") is not None:
             _pdf_inserir_linha(page, pymupdf, cx + 243.0, cy + 8.0, cx + 275.5, cy + 20.8, str(slot["pagina"]), fontsize=7.0, align=1)
-        if slot.get("acionamento"):
-            _pdf_inserir_linha(page, pymupdf, cx + 40.5, cy + 24.5, cx + 275.5, cy + 33.8, slot["acionamento"], fontsize=6.4, min_fontsize=4.2)
-        _pdf_inserir_bloco(page, pymupdf, cx + 2.0, cy + 43.2, cx + 275.5, cy + 68.5, slot.get("descricao") or "", fontsize=6.2, min_fontsize=4.2)
 
 
 def _pdf_preencher_slot_magia(
@@ -634,8 +632,6 @@ def _pdf_preencher_slot_magia(
         if letra in comps:
             cy = y_top + 31.8
             page.draw_rect(pymupdf.Rect(x_comp_base + dx0, cy, x_comp_base + dx1, cy + 6.7), color=_PDF_COR_DESTAQUE, width=0.75)
-
-    _pdf_inserir_bloco(page, pymupdf, x0 + 2.0, y_top + 14.5, x_acoes - 2.5, y_top + 37.8, slot.get("anotacoes") or "", fontsize=6.0, min_fontsize=4.0)
 
 
 def _pdf_preencher_pagina_4(page: Any, pymupdf: Any, resultado: dict[str, Any]) -> None:
@@ -698,11 +694,7 @@ def _pdf_preencher_pagina_4(page: Any, pymupdf: Any, resultado: dict[str, Any]) 
     for slot, y_f in zip(conj["magias_foco"]["slots"], (653.3, 680.7, 708.1, 735.6)):
         if not slot.get("nome"):
             continue
-        comps = ",".join(slot.get("componentes") or [])
-        detalhe = f"{slot['nome']} ({_pdf_acao_curta(slot.get('acoes'))}; {comps})"
-        if slot.get("anotacoes"):
-            detalhe = f"{detalhe} — {slot['anotacoes']}"
-        _pdf_inserir_bloco(page, pymupdf, 22.0, y_f + 1.0, 171.5, y_f + 23.8, detalhe, fontsize=6.4, min_fontsize=4.2)
+        _pdf_inserir_linha(page, pymupdf, 22.0, y_f + 4.0, 171.5, y_f + 20.0, slot["nome"], fontsize=8.0, bold=True, min_fontsize=5.0)
         _pdf_inserir_linha(page, pymupdf, 173.0, y_f + 6.8, 200.0, y_f + 17.5, _pdf_acao_curta(slot.get("acoes")), fontsize=6.5, align=1, bold=True)
 
     # Magias (32 slots = 16 na coluna 1 + 16 na coluna 2)
@@ -898,8 +890,558 @@ def _pdf_adicionar_pagina_5_companheiro(doc: Any, pymupdf: Any, resultado: dict[
             ) + card_gap
 
 
+def _formatar_resultados_texto(resultados: dict[str, Any] | None) -> str:
+    if not isinstance(resultados, dict) or not resultados:
+        return ""
+    rotulos = (
+        ("sucesso_critico", "Sucesso Crítico"),
+        ("sucesso", "Sucesso"),
+        ("falha", "Falha"),
+        ("falha_critica", "Falha Crítica"),
+    )
+    partes = [f"{rot}: {resultados[chave]}" for chave, rot in rotulos if resultados.get(chave)]
+    return "\n".join(partes)
+
+
+def _formatar_elevada_texto(elevada: Any) -> str:
+    if not isinstance(elevada, list) or not elevada:
+        return ""
+    partes = []
+    for item in elevada:
+        if isinstance(item, dict) and item.get("efeito"):
+            niv = str(item.get("nivel") or "").strip()
+            prefixo = f"Elevada ({niv})" if niv else "Elevada"
+            partes.append(f"{prefixo}: {item['efeito']}")
+    return "\n".join(partes)
+
+
+def _formatar_detalhes_habilidade(obj: dict[str, Any], *, titulo_extra: str = "") -> str:
+    """Monta a descrição completa de uma habilidade/talento/ação a partir do objeto JSON."""
+    meta_partes: list[str] = []
+    if obj.get("acoes"):
+        meta_partes.append(f"Execução: {_formatar_custo_acao(obj['acoes'])}")
+    if obj.get("pre_requisitos"):
+        meta_partes.append(f"Pré-requisitos: {obj['pre_requisitos']}")
+    if obj.get("frequencia"):
+        meta_partes.append(f"Frequência: {obj['frequencia']}")
+    if obj.get("custo"):
+        meta_partes.append(f"Custo: {obj['custo']}")
+    if obj.get("requerimentos"):
+        meta_partes.append(f"Requerimentos: {obj['requerimentos']}")
+    if obj.get("acionamento"):
+        meta_partes.append(f"Acionamento: {obj['acionamento']}")
+    if obj.get("tracos"):
+        meta_partes.append(f"Traços: {', '.join(str(t) for t in obj['tracos'])}")
+    if titulo_extra:
+        meta_partes.append(titulo_extra)
+
+    blocos: list[str] = []
+    if meta_partes:
+        blocos.append(f"[{' | '.join(meta_partes)}]")
+    corpo = (obj.get("descricao") or obj.get("efeito") or "").strip()
+    if corpo:
+        blocos.append(corpo)
+    if obj.get("especial"):
+        blocos.append(f"Especial: {obj['especial']}")
+    res_txt = _formatar_resultados_texto(obj.get("resultados"))
+    if res_txt:
+        blocos.append(res_txt)
+    return "\n".join(blocos).strip()
+
+
+def _formatar_detalhes_magia(magia: dict[str, Any], *, nota_extra: str = "") -> str:
+    """Monta os metadados e a descrição integral de uma magia/truque/magia de foco."""
+    meta_partes: list[str] = []
+    if magia.get("execucao"):
+        meta_partes.append(f"Execução: {magia['execucao']}")
+    elif magia.get("acoes"):
+        comps = ", ".join(str(c) for c in (magia.get("componentes") or []))
+        comp_txt = f" ({comps})" if comps else ""
+        meta_partes.append(f"Execução: {_formatar_custo_acao(magia['acoes'])}{comp_txt}")
+    if magia.get("distancia"):
+        meta_partes.append(f"Distância: {magia['distancia']}")
+    if magia.get("area"):
+        meta_partes.append(f"Área: {magia['area']}")
+    if magia.get("alvos"):
+        meta_partes.append(f"Alvos: {magia['alvos']}")
+    if magia.get("salvamento"):
+        meta_partes.append(f"Salvamento: {magia['salvamento']}")
+    if magia.get("duracao"):
+        meta_partes.append(f"Duração: {magia['duracao']}")
+    if magia.get("custo"):
+        meta_partes.append(f"Custo: {magia['custo']}")
+    if magia.get("acionamento"):
+        meta_partes.append(f"Acionamento: {magia['acionamento']}")
+    if magia.get("requerimentos"):
+        meta_partes.append(f"Requerimentos: {magia['requerimentos']}")
+    if nota_extra:
+        meta_partes.append(nota_extra)
+
+    blocos: list[str] = []
+    if meta_partes:
+        blocos.append(f"[{' | '.join(meta_partes)}]")
+    corpo = (magia.get("descricao") or magia.get("resumo_lista") or "").strip()
+    if corpo:
+        blocos.append(corpo)
+    res_txt = _formatar_resultados_texto(magia.get("resultados"))
+    if res_txt:
+        blocos.append(res_txt)
+    elev_txt = _formatar_elevada_texto(magia.get("elevada"))
+    if elev_txt:
+        blocos.append(elev_txt)
+    return "\n".join(blocos).strip()
+
+
+def _resolver_tese_arcana_dados(classe: dict[str, Any] | None, tese_id: str | None) -> dict[str, Any] | None:
+    if not classe or not tese_id:
+        return None
+    for car in classe.get("caracteristicas_de_classe", []):
+        if car.get("id") == "tese_arcana":
+            for op in car.get("detalhes", {}).get("opcoes", []):
+                if op.get("id") == tese_id:
+                    return op
+    return None
+
+
+def _pdf_coletar_secoes_referencia(
+    resultado: dict[str, Any],
+    dados: BaseDados | None = None,
+) -> list[dict[str, Any]]:
+    """Coleta as descrições completas em 4 seções ordenadas: Raça, Perícias, Talentos/Classe e Magias."""
+    db = dados or carregar_dados()
+    ficha = resultado["ficha"]
+    meta = resultado.get("meta_geracao") or {}
+    hab = ficha["habilidades_e_talentos"]
+
+    anc_id = meta.get("ancestralidade_id")
+    her_id = meta.get("heranca_id")
+    cls_id = meta.get("classe_id")
+    sub_id = meta.get("subclasse_oficial_id")
+    tese_id = meta.get("tese_arcana_id")
+
+    anc = db.ancestralidades.get(anc_id) if anc_id else None
+    her = db.heranca(anc_id, her_id) if (anc_id and her_id) else None
+    cls = db.classes.get(cls_id) if cls_id else None
+    sub = db.subclasse(cls_id, sub_id) if (cls_id and sub_id) else None
+    tese = _resolver_tese_arcana_dados(cls, tese_id)
+
+    def _add_item(lista: list[dict[str, str]], vistos: set[str], titulo: str, descricao: str) -> None:
+        tit = str(titulo or "").strip()
+        desc = str(descricao or "").strip()
+        chave = normalizar(tit)
+        if not tit or not desc or chave in vistos:
+            return
+        vistos.add(chave)
+        lista.append({"titulo": tit, "descricao": desc})
+
+    # 1. Habilidades da Raça (Ancestralidade, Herança e Talento de Ancestralidade)
+    itens_raca: list[dict[str, str]] = []
+    vistos_raca: set[str] = set()
+    if anc:
+        especiais = anc.get("habilidades_especiais") or []
+        if especiais:
+            for esp in especiais:
+                _add_item(itens_raca, vistos_raca, esp.get("nome", ""), esp.get("descricao", ""))
+        else:
+            slot0 = hab["ancestralidade"][0] if hab.get("ancestralidade") else {}
+            _add_item(
+                itens_raca,
+                vistos_raca,
+                slot0.get("nome") or "Versatilidade Humana",
+                slot0.get("resumo") or "Sem habilidade especial fixa além da herança.",
+            )
+    elif hab.get("ancestralidade"):
+        slot0 = hab["ancestralidade"][0]
+        _add_item(itens_raca, vistos_raca, slot0.get("nome", ""), slot0.get("resumo", ""))
+
+    if her:
+        desc_her = her.get("descricao", "")
+        ha = her.get("habilidade_acao")
+        if isinstance(ha, dict):
+            desc_ha = _formatar_detalhes_habilidade(ha)
+            if desc_ha:
+                desc_her = f"{desc_her}\n{ha.get('nome', 'Habilidade de Herança')}: {desc_ha}".strip()
+        _add_item(itens_raca, vistos_raca, f"{her['nome']} (Herança)", desc_her)
+    elif len(hab.get("ancestralidade") or []) > 1:
+        slot1 = hab["ancestralidade"][1]
+        _add_item(itens_raca, vistos_raca, slot1.get("nome", ""), slot1.get("resumo", ""))
+
+    pool_tal_anc: dict[str, dict[str, Any]] = {}
+    if anc:
+        for t in anc.get("talentos_ancestralidade") or []:
+            pool_tal_anc[normalizar(t.get("nome"))] = t
+        if her_id == "meio_elfo":
+            for t in db.ancestralidades["elfo"].get("talentos_ancestralidade") or []:
+                pool_tal_anc.setdefault(normalizar(t.get("nome")), t)
+            for t in db.talentos_mesticos.get("meio_elfo") or []:
+                pool_tal_anc.setdefault(normalizar(t.get("nome")), t)
+        elif her_id == "meio_orc":
+            for t in db.talentos_mesticos.get("meio_orc") or []:
+                pool_tal_anc.setdefault(normalizar(t.get("nome")), t)
+
+    for slot in (hab.get("ancestralidade") or [])[2:]:
+        nome_s = (slot.get("nome") or "").strip()
+        if not nome_s or nome_s == "—":
+            continue
+        t_obj = pool_tal_anc.get(normalizar(nome_s))
+        desc_t = _formatar_detalhes_habilidade(t_obj) if t_obj else (slot.get("resumo") or "")
+        _add_item(itens_raca, vistos_raca, nome_s, desc_t)
+
+    # 2. Perícias (Talentos de Perícia da Biografia e Bônus de Perícia)
+    itens_pericias: list[dict[str, str]] = []
+    vistos_pericias: set[str] = set()
+
+    def _resolver_talento_geral_ou_pericia(nome_tal: str) -> dict[str, Any] | None:
+        t_obj = db.talentos_gerais_pericia.get(slugify(nome_tal))
+        if t_obj:
+            return t_obj
+        return db.resolver_talento_geral_pericia(nome_tal)
+
+    for slot in hab.get("pericia") or []:
+        nome_s = (slot.get("nome") or "").strip()
+        if not nome_s or nome_s == "—":
+            continue
+        t_obj = _resolver_talento_geral_ou_pericia(nome_s)
+        desc_t = _formatar_detalhes_habilidade(t_obj) if t_obj else (slot.get("resumo") or "")
+        _add_item(itens_pericias, vistos_pericias, nome_s, desc_t)
+
+    for slot in hab.get("bonus") or []:
+        nome_s = (slot.get("nome") or "").strip()
+        if not nome_s or nome_s == "—":
+            continue
+        t_obj = _resolver_talento_geral_ou_pericia(nome_s)
+        origem_norm = normalizar(slot.get("origem_regra") or "")
+        eh_pericia = (t_obj and t_obj.get("categoria") == "pericia") or ("pericia" in origem_norm)
+        if eh_pericia:
+            desc_t = _formatar_detalhes_habilidade(t_obj) if t_obj else (slot.get("resumo") or "")
+            _add_item(itens_pericias, vistos_pericias, nome_s, desc_t)
+
+    # 3. Talentos e Habilidades (Subclasse, Tese, Características de Classe N1, Talentos de Classe, Gerais e Ações)
+    itens_talentos: list[dict[str, str]] = []
+    vistos_talentos: set[str] = set()
+
+    if sub:
+        sub_extras: list[str] = [sub.get("descricao") or ""]
+        if sub.get("principios_adicionais"):
+            sub_extras.append(f"Princípios: {sub['principios_adicionais']}")
+        if isinstance(sub.get("habilidade_instinto"), dict):
+            hi = sub["habilidade_instinto"]
+            sub_extras.append(f"{hi.get('nome', 'Instinto')}: {hi.get('descricao', '')}")
+        _add_item(itens_talentos, vistos_talentos, f"{cls['subclasses']['nome_tipo']}: {sub['nome']}" if cls else sub["nome"], "\n".join(x for x in sub_extras if x))
+
+    if tese:
+        desc_tese = tese.get("descricao") or ""
+        if isinstance(tese.get("acao_substituta"), dict):
+            ac_sub = tese["acao_substituta"]
+            desc_tese = f"{desc_tese}\n{ac_sub.get('nome', 'Ação da Tese')}: {_formatar_detalhes_habilidade(ac_sub)}".strip()
+        _add_item(itens_talentos, vistos_talentos, f"Tese Arcana: {tese['nome']}", desc_tese)
+
+    if cls:
+        for car in cls.get("caracteristicas_de_classe") or []:
+            if int(car.get("nivel") or 1) != 1:
+                continue
+            nome_car = car.get("nome") or ""
+            if not nome_car or car.get("id") == "tese_arcana" and tese:
+                continue
+            partes_car: list[str] = [car.get("descricao") or ""]
+            if car.get("id") == "elo_arcano" and tese and tese.get("acao_substituta"):
+                acoes_car = [tese["acao_substituta"]]
+            else:
+                acoes_car = list(car.get("acoes_concedidas") or [])
+            for ac_c in acoes_car:
+                if car.get("id") == "reacao_de_campeao" and sub and sub.get("reacao_campeao"):
+                    if normalizar(ac_c.get("nome")) != normalizar(sub["reacao_campeao"]):
+                        continue
+                det_ac = _formatar_detalhes_habilidade(ac_c)
+                if det_ac:
+                    partes_car.append(f"{ac_c.get('nome', '')}: {det_ac}".strip())
+            _add_item(itens_talentos, vistos_talentos, nome_car, "\n".join(p for p in partes_car if p))
+
+    tal_cls_por_nome = (
+        {normalizar(t.get("nome")): t for t in cls.get("talentos_de_classe") or []}
+        if cls
+        else {}
+    )
+    for slot in (hab.get("classe") or [])[2:]:
+        nome_s = (slot.get("nome") or "").strip()
+        if not nome_s or nome_s == "—":
+            continue
+        t_obj = tal_cls_por_nome.get(normalizar(nome_s))
+        desc_t = _formatar_detalhes_habilidade(t_obj) if t_obj else (slot.get("resumo") or "")
+        _add_item(itens_talentos, vistos_talentos, nome_s, desc_t)
+
+    for slot in hab.get("gerais") or []:
+        nome_s = (slot.get("nome") or "").strip()
+        if not nome_s or nome_s == "—":
+            continue
+        t_obj = _resolver_talento_geral_ou_pericia(nome_s)
+        desc_t = _formatar_detalhes_habilidade(t_obj) if t_obj else (slot.get("resumo") or "")
+        _add_item(itens_talentos, vistos_talentos, nome_s, desc_t)
+
+    for slot in hab.get("bonus") or []:
+        nome_s = (slot.get("nome") or "").strip()
+        if not nome_s or nome_s == "—":
+            continue
+        if normalizar(nome_s) in vistos_pericias:
+            continue
+        t_obj = tal_cls_por_nome.get(normalizar(nome_s)) or _resolver_talento_geral_ou_pericia(nome_s)
+        desc_t = _formatar_detalhes_habilidade(t_obj) if t_obj else (slot.get("resumo") or "")
+        _add_item(itens_talentos, vistos_talentos, nome_s, desc_t)
+
+    if any("bloqueio com escudo" in normalizar(s.get("nome")) for s in (hab.get("classe") or [])):
+        be = db.talentos_gerais_pericia.get("bloqueio_com_escudo")
+        if be:
+            _add_item(itens_talentos, vistos_talentos, be["nome"], _formatar_detalhes_habilidade(be))
+
+    # Garante inclusão de ações/reações da Página 3 não cobertas acima
+    vistos_combinados = vistos_raca | vistos_pericias | vistos_talentos
+    for lista_acoes in (ficha.get("acoes_e_atividades") or [], ficha.get("acoes_livres_e_reacoes") or []):
+        for slot in lista_acoes:
+            nome_a = (slot.get("nome") or "").strip()
+            if not nome_a:
+                continue
+            chave_a = normalizar(nome_a)
+            if chave_a in vistos_combinados:
+                continue
+            if any(chave_a in normalizar(it["descricao"]) for it in itens_talentos):
+                continue
+            _add_item(itens_talentos, vistos_talentos, nome_a, _formatar_detalhes_habilidade(slot))
+
+    secoes: list[dict[str, Any]] = []
+    if itens_raca:
+        secoes.append({"titulo": "Habilidades da Raça (Ancestralidade e Herança)", "itens": itens_raca})
+    if itens_pericias:
+        secoes.append({"titulo": "Perícias (Talentos de Perícia)", "itens": itens_pericias})
+    if itens_talentos:
+        secoes.append({"titulo": "Talentos e Habilidades (Classe e Gerais)", "itens": itens_talentos})
+
+    # 4. Magias (apenas se o personagem possuir magias/truques/foco/inatas)
+    conj = ficha["conjuracao"]
+    if _tem_conjuracao(conj):
+        itens_magias: list[dict[str, str]] = []
+        vistos_magias: set[str] = set()
+
+        def _resolver_magia_slot(nome_slot: str, *, eh_foco: bool = False) -> dict[str, Any] | None:
+            if eh_foco:
+                m = db.resolver_magia_foco(nome_slot)
+                if m:
+                    return m
+            m = db.resolver_magia(nome_slot)
+            if m:
+                return m
+            base = re.sub(r"\s*\([^)]*\)\s*$", "", nome_slot).strip()
+            if base and base != nome_slot:
+                return db.resolver_magia_foco(base) if eh_foco else db.resolver_magia(base)
+            return None
+
+        grupos_mag = (
+            ("Truque", False, conj.get("truques_magicos") or []),
+            ("Inata", False, conj.get("magias_inatas") or []),
+            ("Foco", True, (conj.get("magias_foco") or {}).get("slots") or []),
+            ("1º Círculo", False, conj.get("magias") or []),
+        )
+        for rot_cat, eh_foco, lista_m in grupos_mag:
+            for slot in lista_m:
+                nome_m = (slot.get("nome") or "").strip()
+                if not nome_m:
+                    continue
+                m_obj = _resolver_magia_slot(nome_m, eh_foco=eh_foco)
+                nota_freq = f"Frequência: {slot['frequencia']}" if slot.get("frequencia") else ""
+                if m_obj:
+                    desc_m = _formatar_detalhes_magia(m_obj, nota_extra=nota_freq)
+                else:
+                    desc_m = _formatar_detalhes_magia(
+                        {
+                            "acoes": slot.get("acoes"),
+                            "componentes": slot.get("componentes"),
+                            "descricao": slot.get("anotacoes") or "",
+                        },
+                        nota_extra=nota_freq,
+                    )
+                titulo_m = f"{nome_m} ({rot_cat})"
+                _add_item(itens_magias, vistos_magias, titulo_m, desc_m)
+
+        if itens_magias:
+            secoes.append({"titulo": "Magias, Truques e Magias de Foco", "itens": itens_magias})
+
+    return secoes
+
+
+def _pdf_quebrar_linhas_com_prefixo_negrito(
+    pymupdf: Any,
+    prefixo_bold: str,
+    texto_normal: str,
+    max_w: float,
+    fontsize: float,
+) -> list[tuple[str, str]]:
+    """Quebra um item em linhas garantindo `prefixo_bold` em negrito na 1ª linha e descrição contínua à frente."""
+    pref = _pdf_sanitizar_texto(prefixo_bold)
+    corpo = _pdf_sanitizar_texto(texto_normal.replace("\r\n", "\n"))
+    if not pref:
+        return []
+    if not corpo:
+        return [(pref, "")]
+
+    larg_pref = pymupdf.get_text_length(pref + " ", fontname="hebo", fontsize=fontsize)
+    larg_disp_linha1 = max(40.0, max_w - larg_pref)
+    linhas_out: list[tuple[str, str]] = []
+    eh_primeira = True
+
+    paragrafos = [p.strip() for p in corpo.split("\n") if p.strip()]
+    for p_idx, parag in enumerate(paragrafos):
+        palavras = parag.split()
+        idx = 0
+        while idx < len(palavras):
+            limite = larg_disp_linha1 if eh_primeira else max_w
+            atual = palavras[idx]
+            idx += 1
+            while idx < len(palavras):
+                cand = f"{atual} {palavras[idx]}"
+                if pymupdf.get_text_length(cand, fontname="helv", fontsize=fontsize) <= limite:
+                    atual = cand
+                    idx += 1
+                else:
+                    break
+            linhas_out.append((pref + " " if eh_primeira else "", atual))
+            eh_primeira = False
+        if eh_primeira and p_idx == len(paragrafos) - 1:
+            linhas_out.append((pref, ""))
+            eh_primeira = False
+
+    return linhas_out
+
+
+def _pdf_adicionar_paginas_referencia_habilidades(
+    doc: Any,
+    pymupdf: Any,
+    resultado: dict[str, Any],
+    dados: BaseDados | None = None,
+) -> None:
+    """Adiciona folha(s) final(is) com as descrições completas (Raça | Perícias | Talentos | Magias)."""
+    secoes = _pdf_coletar_secoes_referencia(resultado, dados=dados)
+    if not secoes:
+        return
+
+    base_rect = doc[0].rect
+    x0 = 26.0
+    x1 = base_rect.width - 26.0
+    largura = x1 - x0
+    y_min_cont = 56.0
+    y_max = base_rect.height - 26.0
+    cab = resultado["ficha"]["cabecalho"]
+    nome_pj = cab.get("nome_personagem", "—")
+    classe_pj = cab.get("classe", "—")
+    nivel_pj = cab.get("nivel", 1)
+
+    fontsize = 8.4
+    line_h = 11.2
+    num_folha = 0
+    page: Any = None
+    y = 0.0
+
+    def _nova_pagina_ref(continuacao: bool = False) -> None:
+        nonlocal page, y, num_folha
+        num_folha += 1
+        page = doc.new_page(width=base_rect.width, height=base_rect.height)
+        if not continuacao:
+            page.draw_rect(
+                pymupdf.Rect(x0, 22.0, x1, 58.0),
+                color=_PDF_COR_DESTAQUE,
+                fill=(0.95, 0.92, 0.85),
+                width=1.2,
+            )
+            _pdf_inserir_linha(
+                page, pymupdf, x0 + 8.0, 25.0, x1 - 8.0, 40.0,
+                "REFERÊNCIA COMPLETA — HABILIDADES, TALENTOS E MAGIAS",
+                fontsize=11.0, align=1, bold=True, color=_PDF_COR_DESTAQUE,
+            )
+            _pdf_inserir_linha(
+                page, pymupdf, x0 + 8.0, 41.0, x1 - 8.0, 54.0,
+                f"{nome_pj} | {classe_pj} | Nível {nivel_pj}",
+                fontsize=8.2, align=1, color=_PDF_COR_TINTA,
+            )
+            y = 68.0
+        else:
+            page.draw_rect(
+                pymupdf.Rect(x0, 22.0, x1, 44.0),
+                color=_PDF_COR_DESTAQUE,
+                fill=(0.95, 0.92, 0.85),
+                width=0.9,
+            )
+            _pdf_inserir_linha(
+                page, pymupdf, x0 + 8.0, 26.0, x1 - 8.0, 40.0,
+                f"REFERÊNCIA COMPLETA (CONTINUAÇÃO — FOLHA {num_folha}) | {nome_pj}",
+                fontsize=9.2, align=1, bold=True, color=_PDF_COR_DESTAQUE,
+            )
+            y = y_min_cont
+
+    _nova_pagina_ref(continuacao=False)
+
+    for sec_idx, secao in enumerate(secoes):
+        # Garante espaço mínimo para divisória + cabeçalho de seção + 1ª linha do primeiro item
+        if y + 36.0 > y_max:
+            _nova_pagina_ref(continuacao=True)
+
+        if sec_idx > 0:
+            y += 4.0
+            page.draw_line(
+                pymupdf.Point(x0, y),
+                pymupdf.Point(x1, y),
+                color=_PDF_COR_DESTAQUE,
+                width=0.9,
+            )
+            y += 7.0
+
+        page.draw_rect(
+            pymupdf.Rect(x0, y, x1, y + 15.0),
+            color=(0.55, 0.48, 0.40),
+            fill=(0.93, 0.89, 0.82),
+            width=0.6,
+        )
+        _pdf_inserir_linha(
+            page, pymupdf, x0 + 6.0, y + 1.5, x1 - 6.0, y + 13.8,
+            secao["titulo"].upper(),
+            fontsize=8.2, bold=True, color=_PDF_COR_DESTAQUE,
+        )
+        y += 20.0
+
+        for item in secao["itens"]:
+            linhas = _pdf_quebrar_linhas_com_prefixo_negrito(
+                pymupdf, f"{item['titulo']}:", item["descricao"], largura, fontsize,
+            )
+            if not linhas:
+                continue
+            if y + min(2, len(linhas)) * line_h > y_max:
+                _nova_pagina_ref(continuacao=True)
+
+            for pref, texto_ln in linhas:
+                if y + line_h > y_max:
+                    _nova_pagina_ref(continuacao=True)
+                base_y = y + fontsize * 0.85
+                px_texto = x0
+                if pref:
+                    page.insert_text(
+                        pymupdf.Point(x0, base_y),
+                        pref,
+                        fontsize=fontsize,
+                        fontname="hebo",
+                        color=_PDF_COR_DESTAQUE,
+                    )
+                    px_texto = x0 + pymupdf.get_text_length(pref, fontname="hebo", fontsize=fontsize)
+                if texto_ln:
+                    page.insert_text(
+                        pymupdf.Point(px_texto, base_y),
+                        texto_ln,
+                        fontsize=fontsize,
+                        fontname="helv",
+                        color=_PDF_COR_TINTA,
+                    )
+                y += line_h
+            y += 4.0
+
+
 def exportar_ficha_pdf(resultado: dict[str, Any]) -> bytes:
-    """Exporta a ficha completa em bytes `.pdf` idênticos à ficha oficial do livro (4 pág. + Pág. 5 p/ Companheiro/Familiar)."""
+    """Exporta a ficha completa em bytes `.pdf` (4 pág. + Pág. 5 p/ Companheiro/Familiar + Referência Completa)."""
     if not _TEMPLATE_PDF_OFICIAL.exists():
         raise FileNotFoundError(
             f"Template PDF oficial não encontrado em {_TEMPLATE_PDF_OFICIAL}"
@@ -916,6 +1458,7 @@ def exportar_ficha_pdf(resultado: dict[str, Any]) -> bytes:
         _pdf_preencher_pagina_3(doc[2], pymupdf, resultado)
         _pdf_preencher_pagina_4(doc[3], pymupdf, resultado)
         _pdf_adicionar_pagina_5_companheiro(doc, pymupdf, resultado)
+        _pdf_adicionar_paginas_referencia_habilidades(doc, pymupdf, resultado)
         return doc.tobytes(deflate=True)
     finally:
         doc.close()

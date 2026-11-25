@@ -70,6 +70,9 @@ class CasosBordaPF2ETests(unittest.TestCase):
     def test_regras_da_casa_peso_racao_e_oleo(self) -> None:
         suite.test_regras_da_casa_peso_racao_e_oleo()
 
+    def test_pdf_secoes_referencia_completa(self) -> None:
+        suite.test_pdf_secoes_referencia_completa()
+
 
 if __name__ == "__main__":
     unittest.main()

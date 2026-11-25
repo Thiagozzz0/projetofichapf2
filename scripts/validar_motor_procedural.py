@@ -842,9 +842,9 @@ def main() -> None:
         raw_pdf = r_pdf.get_data()
         assert raw_pdf.startswith(b"%PDF-")
 
-        esperado_pags = 5 if caso_res["meta_geracao"].get("companheiro_ou_familiar") else 4
+        esperado_pags_min = 6 if caso_res["meta_geracao"].get("companheiro_ou_familiar") else 5
         with pymupdf.open(stream=raw_pdf, filetype="pdf") as pdf_doc:
-            assert len(pdf_doc) == esperado_pags
+            assert len(pdf_doc) >= esperado_pags_min
             for pg_idx, page in enumerate(pdf_doc):
                 assert abs(page.rect.width - 603.0) < 0.5 and abs(page.rect.height - 783.0) < 0.5
                 if pg_idx in checks_por_pagina:
@@ -852,6 +852,10 @@ def main() -> None:
                     for trecho in checks_por_pagina[pg_idx]:
                         if trecho:
                             assert trecho in pg_txt, f"Trecho {trecho!r} ausente na página {pg_idx + 1} do PDF"
+            ref_idx = 5 if caso_res["meta_geracao"].get("companheiro_ou_familiar") else 4
+            txt_ref_all = "\n".join(pdf_doc[i].get_text() for i in range(ref_idx, len(pdf_doc)))
+            assert "REFERÊNCIA COMPLETA" in txt_ref_all
+            assert "HABILIDADES DA RAÇA" in txt_ref_all
 
     r_pdf_params = client.post(
         "/api/exportar/pdf",

@@ -34,6 +34,7 @@ from motor.equipamentos import (
     listar_catalogo_equipamentos_loja,
 )
 from motor.exportacao import exportar_ficha_docx, exportar_ficha_pdf, exportar_ficha_txt
+from motor.exportacao.exportar_pdf import _pdf_coletar_secoes_referencia
 from motor.magias import gerar_conjuracao
 from motor.regras_atributos import calcular_atributos
 from motor.talentos import selecionar_talentos
@@ -598,11 +599,12 @@ def test_exportar_pdf_oficial_4_paginas() -> None:
     assert pdf_bytes.startswith(b"%PDF-")
 
     with pymupdf.open(stream=pdf_bytes, filetype="pdf") as doc:
-        assert len(doc) == 4
+        assert len(doc) >= 5
         txt_p1 = doc[0].get_text()
         txt_p2 = doc[1].get_text()
         txt_p3 = doc[2].get_text()
         txt_p4 = doc[3].get_text()
+        txt_ref = "\n".join(doc[i].get_text() for i in range(4, len(doc)))
 
     assert "Valeros Teste PDF" in txt_p1
     assert "Iomedae" in txt_p1
@@ -614,6 +616,8 @@ def test_exportar_pdf_oficial_4_paginas() -> None:
     assert cl["ficha"]["conjuracao"]["tradicoes_marcadas"]["divina"] is True
     assert cl["ficha"]["conjuracao"]["truques_magicos"][0]["nome"] in txt_p4
     assert cl["ficha"]["conjuracao"]["magias"][0]["nome"] in txt_p4
+    assert "REFERÊNCIA COMPLETA" in txt_ref
+    assert "HABILIDADES DA RAÇA" in txt_ref and "PERÍCIAS" in txt_ref and "MAGIAS" in txt_ref
 
 
 def test_escolhas_atributos_manual_procedural_aleatorio() -> None:
@@ -1340,18 +1344,18 @@ def test_personalizacao_companheiro_familiar_e_perfil() -> None:
             assert chave in tipo_c, f"Campo {chave!r} ausente no catálogo de {tipo_c['id']}"
 
     with pymupdf.open(stream=exportar_ficha_pdf(dru_comp), filetype="pdf") as doc_d:
-        assert len(doc_d) == 5
+        assert len(doc_d) >= 6
         txt_p5_d = doc_d[4].get_text()
         assert "Balgor" in txt_p5_d and "Urso" in txt_p5_d and "PV" in txt_p5_d and "BENEFÍCIO DE SUPORTE" in txt_p5_d.upper()
 
     with pymupdf.open(stream=exportar_ficha_pdf(mg_fam), filetype="pdf") as doc_m:
-        assert len(doc_m) == 5
+        assert len(doc_m) >= 6
         txt_p5_m = doc_m[4].get_text()
         assert "Pip" in txt_p5_m and "FAMILIAR" in txt_p5_m.upper() and "VISÃO NO ESCURO" in txt_p5_m.upper()
 
     guer_sem = gerar_personagem("humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor", seed=3, dados=db)
     with pymupdf.open(stream=exportar_ficha_pdf(guer_sem), filetype="pdf") as doc_g:
-        assert len(doc_g) == 4
+        assert len(doc_g) >= 5
 
 
 def test_regras_da_casa_peso_racao_e_oleo() -> None:
@@ -1496,6 +1500,57 @@ def test_regras_da_casa_peso_racao_e_oleo() -> None:
         assert r_seq["meta_geracao"]["itens_leves_por_volume"] == esp_leves
 
 
+def test_pdf_secoes_referencia_completa() -> None:
+    db = carregar_dados()
+
+    # 1. Conjurador (Mago Elfo Vidente): deve gerar as 4 seções na ordem exata (Raça -> Perícias -> Talentos -> Magias)
+    mg = gerar_personagem(
+        "elfo", "elfo_vidente", "mago", "mago_evocador_artilharia",
+        seed=15, dados=db,
+    )
+    secoes_mg = _pdf_coletar_secoes_referencia(mg, dados=db)
+    titulos_mg = [s["titulo"] for s in secoes_mg]
+    assert len(titulos_mg) == 4
+    assert titulos_mg[0].startswith("Habilidades da Raça")
+    assert titulos_mg[1].startswith("Perícias")
+    assert titulos_mg[2].startswith("Talentos e Habilidades")
+    assert titulos_mg[3].startswith("Magias")
+
+    raca_titulos = [it["titulo"] for it in secoes_mg[0]["itens"]]
+    assert any("Visão na Penumbra" in t for t in raca_titulos)
+    assert any("Elfo Vidente" in t for t in raca_titulos)
+    assert any(mg["ficha"]["habilidades_e_talentos"]["ancestralidade"][2]["nome"] in t for t in raca_titulos)
+
+    per_titulos = [it["titulo"] for it in secoes_mg[1]["itens"]]
+    assert mg["ficha"]["habilidades_e_talentos"]["pericia"][0]["nome"] in per_titulos
+
+    tal_titulos = [it["titulo"] for it in secoes_mg[2]["itens"]]
+    assert any("Elo Arcano" in t for t in tal_titulos)
+    elo_item = next(it for it in secoes_mg[2]["itens"] if "Elo Arcano" in it["titulo"])
+    assert len(elo_item["descricao"]) > 160  # Descrição integral, sem corte
+
+    mag_titulos = [it["titulo"] for it in secoes_mg[3]["itens"]]
+    assert any("Detectar Magia" in t for t in mag_titulos)
+    assert any("Mãos Flamejantes" in t for t in mag_titulos)
+    maos_item = next(it for it in secoes_mg[3]["itens"] if "Mãos Flamejantes" in it["titulo"])
+    assert "Área: cone de 4,5 metros" in maos_item["descricao"] and "2d6 de dano de fogo" in maos_item["descricao"]
+
+    # 2. Não-conjurador (Guerreiro Anão): deve gerar apenas 3 seções (sem seção de Magias)
+    gu = gerar_personagem(
+        "anao", "anao_das_rochas", "guerreiro", "guerreiro_colosso_demolidor",
+        seed=15, dados=db,
+    )
+    secoes_gu = _pdf_coletar_secoes_referencia(gu, dados=db)
+    titulos_gu = [s["titulo"] for s in secoes_gu]
+    assert len(titulos_gu) == 3
+    assert titulos_gu[0].startswith("Habilidades da Raça")
+    assert titulos_gu[1].startswith("Perícias")
+    assert titulos_gu[2].startswith("Talentos e Habilidades")
+    gu_tal_titulos = [it["titulo"] for it in secoes_gu[2]["itens"]]
+    assert any("Ataque de Oportunidade" in t for t in gu_tal_titulos)
+    assert any("Bloqueio com Escudo" in t for t in gu_tal_titulos)
+
+
 def main() -> None:
     test_ca_limite_destreza_e_sem_armadura()
     test_penalidade_armadura_barulhenta_flexivel_e_ferro_desimpedido()
@@ -1517,6 +1572,7 @@ def main() -> None:
     test_orcamento_90_peso_leve_e_viagem_procedural()
     test_personalizacao_companheiro_familiar_e_perfil()
     test_regras_da_casa_peso_racao_e_oleo()
+    test_pdf_secoes_referencia_completa()
     print("SUCESSO TOTAL — Todos os testes de casos de borda PF2E passaram!")
 
 
