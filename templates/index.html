@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gerador Procedural PF2E â€” Ficha Oficial</title>
+  <title>Gerador Procedural PF2E — Ficha Oficial</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -17,19 +17,19 @@
     <header class="topbar nao-imprimir">
       <div class="topbar-inner">
         <div class="topbar-marca">
-          <img class="topbar-logo" src="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=56" alt="Pathfinder 2Âª EdiÃ§Ã£o">
+          <img class="topbar-logo" src="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=56" alt="Pathfinder 2ª Edição">
           <div>
-            <h1>Gerador Procedural de Personagens â€” Pathfinder 2Âª EdiÃ§Ã£o</h1>
-            <p>Monte fichas completas guiadas por conceito/subclasse com matemÃ¡tica ABCD, equipamentos de 15 po, magias e exportaÃ§Ã£o em PDF (Livro), DOCX e TXT.</p>
+            <h1>Gerador Procedural de Personagens — Pathfinder 2ª Edição</h1>
+            <p>Monte fichas completas guiadas por conceito/subclasse com matemática ABCD, equipamentos de 15 po, magias e exportação em PDF (Livro), DOCX e TXT.</p>
           </div>
         </div>
-        <button type="button" id="btn-alternar-tema" class="btn-tema" aria-pressed="false">ðŸŒ™ GrimÃ³rio Noturno</button>
+        <button type="button" id="btn-alternar-tema" class="btn-tema" aria-pressed="false">🌙 Grimório Noturno</button>
       </div>
     </header>
 
     <section class="painel-controle nao-imprimir">
-      <h2>1. ConfiguraÃ§Ã£o do Personagem</h2>
-      <p class="nota-topo-etapas">Clique em uma etapa para abrir e configurar; clique novamente (ou em Recolher) para manter a tela limpa antes de passar para a prÃ³xima.</p>
+      <h2>1. Configuração do Personagem</h2>
+      <p class="nota-topo-etapas">Clique em uma etapa para abrir e configurar; clique novamente (ou em Recolher) para manter a tela limpa antes de passar para a próxima.</p>
       <form id="form-gerador">
         <div id="painel-regras-casa" class="painel-regras-casa">
           <div class="regras-casa-topo">
@@ -40,7 +40,7 @@
                   <option value="regras_da_casa" selected>Regras da Casa</option>
                   <option value="oficial">Regras Originais</option>
                 </select>
-                <button type="button" id="btn-desbloquear-regras-casa" class="btn-regras-casa-cadeado" aria-expanded="false">ðŸ”’ Alterar</button>
+                <button type="button" id="btn-desbloquear-regras-casa" class="btn-regras-casa-cadeado" aria-expanded="false">🔒 Alterar</button>
               </div>
               <div id="box-senha-regras-casa" class="box-senha-regras-casa oculto" aria-live="polite">
                 <input type="password" id="input-senha-regras-casa" class="input-senha-regras-casa" inputmode="numeric" placeholder="Digite a senha para alterar..." autocomplete="off">
@@ -58,19 +58,19 @@
               <span class="etapa-header-esq">
                 <span class="etapa-num">1</span>
                 <span>
-                  <span class="etapa-titulo">CriaÃ§Ã£o Inicial</span>
-                  <span class="etapa-subtitulo">Ancestralidade, HeranÃ§a, Biografia, Classe, Conceito, Divindade, TendÃªncia, Perfil, Companheiro e Atributos ABCD</span>
+                  <span class="etapa-titulo">Criação Inicial</span>
+                  <span class="etapa-subtitulo">Ancestralidade, Herança, Biografia, Classe, Conceito, Divindade, Tendência, Perfil, Companheiro e Atributos ABCD</span>
                 </span>
               </span>
               <span class="etapa-header-dir">
-                <span id="resumo-etapa-criacao" class="etapa-resumo-pill">AleatÃ³rio (Procedural)</span>
-                <span class="etapa-seta" aria-hidden="true">â–¾</span>
+                <span id="resumo-etapa-criacao" class="etapa-resumo-pill">Aleatório (Procedural)</span>
+                <span class="etapa-seta" aria-hidden="true">▾</span>
               </span>
             </button>
             <div id="corpo-etapa-criacao" class="etapa-corpo oculto">
               <div class="grid-config">
                 <div class="campo-grupo">
-                  <label for="ancestralidade">A â€” Ancestralidade</label>
+                  <label for="ancestralidade">A — Ancestralidade</label>
                   <select id="ancestralidade" required></select>
                   <div id="subgrupo-atb-ancestralidade" class="subgrupo-atb-inline oculto">
                     <div class="subgrupo-atb-cabecalho">
@@ -78,11 +78,11 @@
                     </div>
                     <div class="subgrupo-atb-campos">
                       <div class="campo-atb-inline">
-                        <label for="attr-anc-livre-1">BÃ´nus Livre da Ancestralidade (+2)</label>
+                        <label for="attr-anc-livre-1">Bônus Livre da Ancestralidade (+2)</label>
                         <select id="attr-anc-livre-1" name="attr_anc_livre_1"></select>
                       </div>
                       <div class="campo-atb-inline oculto" id="grupo-attr-anc-livre-2">
-                        <label for="attr-anc-livre-2">2Âº BÃ´nus Livre (+2 â€” Humano)</label>
+                        <label for="attr-anc-livre-2">2º Bônus Livre (+2 — Humano)</label>
                         <select id="attr-anc-livre-2" name="attr_anc_livre_2"></select>
                       </div>
                     </div>
@@ -90,25 +90,25 @@
                 </div>
 
                 <div class="campo-grupo">
-                  <label for="heranca">HeranÃ§a</label>
+                  <label for="heranca">Herança</label>
                   <select id="heranca" required></select>
                 </div>
 
                 <div class="campo-grupo">
-                  <label for="biografia">B â€” Biografia / Antecedente</label>
+                  <label for="biografia">B — Biografia / Antecedente</label>
                   <select id="biografia"></select>
-                  <button type="button" id="btn-bio-atb-opcional" class="btn-link-atb oculto">+ Escolher bÃ´nus de atributo mesmo com biografia automÃ¡tica</button>
+                  <button type="button" id="btn-bio-atb-opcional" class="btn-link-atb oculto">+ Escolher bônus de atributo mesmo com biografia automática</button>
                   <div id="subgrupo-atb-biografia" class="subgrupo-atb-inline oculto">
                     <div class="subgrupo-atb-cabecalho">
                       <span id="info-atb-bio-opcoes" class="nota-atb-inline"></span>
                     </div>
                     <div class="subgrupo-atb-campos">
                       <div class="campo-atb-inline" id="grupo-attr-bio-restrito">
-                        <label for="attr-bio-restrito">1Âº BÃ´nus (Restrito da Biografia) (+2)</label>
+                        <label for="attr-bio-restrito">1º Bônus (Restrito da Biografia) (+2)</label>
                         <select id="attr-bio-restrito" name="attr_bio_restrito"></select>
                       </div>
                       <div class="campo-atb-inline" id="grupo-attr-bio-livre">
-                        <label for="attr-bio-livre">2Âº BÃ´nus Livre da Biografia (+2)</label>
+                        <label for="attr-bio-livre">2º Bônus Livre da Biografia (+2)</label>
                         <select id="attr-bio-livre" name="attr_bio_livre"></select>
                       </div>
                     </div>
@@ -116,7 +116,7 @@
                 </div>
 
                 <div class="campo-grupo">
-                  <label for="classe">C â€” Classe</label>
+                  <label for="classe">C — Classe</label>
                   <select id="classe" required></select>
                   <div id="subgrupo-atb-classe" class="subgrupo-atb-inline oculto">
                     <div class="subgrupo-atb-cabecalho">
@@ -135,31 +135,31 @@
                   <label for="conceito">Conceito ("Norte")</label>
                   <select id="conceito" required></select>
                   <div id="desc-conceito-inline" class="desc-preview-box" aria-live="polite"></div>
-                  <small class="nota-campo">Guia perÃ­cias, talentos, equipamentos e apenas os atributos deixados em "Procedural"; escolhas manuais nunca sÃ£o alteradas.</small>
+                  <small class="nota-campo">Guia perícias, talentos, equipamentos e apenas os atributos deixados em "Procedural"; escolhas manuais nunca são alteradas.</small>
                 </div>
 
                 <div class="campo-grupo" id="grupo-divindade">
                   <label for="divindade" id="label-divindade">Divindade <span id="badge-divindade" class="badge-opcional">Opcional</span></label>
                   <select id="divindade"></select>
-                  <small class="nota-campo" id="nota-divindade">Opcional para esta classe (apenas interpretaÃ§Ã£o; nÃ£o concede poderes de ClÃ©rigo/CampeÃ£o).</small>
+                  <small class="nota-campo" id="nota-divindade">Opcional para esta classe (apenas interpretação; não concede poderes de Clérigo/Campeão).</small>
                 </div>
 
                 <div class="campo-grupo" id="grupo-tendencia">
-                  <label for="perfil-tendencia">TendÃªncia <span class="badge-opcional">Opcional</span></label>
+                  <label for="perfil-tendencia">Tendência <span class="badge-opcional">Opcional</span></label>
                   <select id="perfil-tendencia" name="perfil_tendencia"></select>
                   <small id="nota-perfil-tendencia" class="nota-campo"></small>
                 </div>
 
                 <details class="campo-grupo campo-span-full detalhes-perfil-inicial" id="grupo-perfil-bio">
-                  <summary>Dados BiogrÃ¡ficos &amp; Personalidade (PÃ¡g. 3 â€” Opcional)</summary>
-                  <small class="nota-campo">Campos em branco usam os padrÃµes da ancestralidade/conceito na PÃ¡gina 3 da ficha.</small>
+                  <summary>Dados Biográficos &amp; Personalidade (Pág. 3 — Opcional)</summary>
+                  <small class="nota-campo">Campos em branco usam os padrões da ancestralidade/conceito na Página 3 da ficha.</small>
                   <div class="grid-perfil-bio">
                     <div class="campo-atb-inline">
                       <label for="perfil-idade">Idade</label>
                       <input id="perfil-idade" name="perfil_idade" type="text" placeholder="Ex.: 22 anos">
                     </div>
                     <div class="campo-atb-inline">
-                      <label for="perfil-genero">GÃªnero / Pronomes</label>
+                      <label for="perfil-genero">Gênero / Pronomes</label>
                       <input id="perfil-genero" name="perfil_genero" type="text" placeholder="Ex.: Ele/Dele, Ela/Dela">
                     </div>
                     <div class="campo-atb-inline">
@@ -179,15 +179,15 @@
                       <input id="perfil-peso" name="perfil_peso" type="text" placeholder="Ex.: 72 kg">
                     </div>
                     <div class="campo-atb-inline span-perfil-wide">
-                      <label for="perfil-aparencia">AparÃªncia</label>
+                      <label for="perfil-aparencia">Aparência</label>
                       <input id="perfil-aparencia" name="perfil_aparencia" type="text" placeholder="Cabelos, olhos, cicatrizes, vestimenta...">
                     </div>
                     <div class="campo-atb-inline">
-                      <label for="perfil-crencas">CrenÃ§as / CÃ³digo</label>
-                      <input id="perfil-crencas" name="perfil_crencas" type="text" placeholder="PrincÃ­pios, valores pessoais...">
+                      <label for="perfil-crencas">Crenças / Código</label>
+                      <input id="perfil-crencas" name="perfil_crencas" type="text" placeholder="Princípios, valores pessoais...">
                     </div>
                     <div class="campo-atb-inline">
-                      <label for="perfil-aversoes">AversÃµes / AnÃ¡temas</label>
+                      <label for="perfil-aversoes">Aversões / Anátemas</label>
                       <input id="perfil-aversoes" name="perfil_aversoes" type="text" placeholder="O que rejeita ou evita">
                     </div>
                   </div>
@@ -221,7 +221,7 @@
                         <input id="perfil-fam-nome" name="perfil_fam_nome" type="text" placeholder="Ex.: Sombra, Pip (opcional)">
                       </div>
                       <div class="campo-atb-inline span-perfil-wide">
-                        <label>Habilidades DiÃ¡rias do Familiar / Mestre</label>
+                        <label>Habilidades Diárias do Familiar / Mestre</label>
                         <div id="perfil-fam-vagas" class="box-tal-auto">0 / 2 selecionada(s)</div>
                       </div>
                     </div>
@@ -232,37 +232,37 @@
                 <div class="campo-grupo campo-span-full subgrupo-atb-etapa-d" id="painel-atributos-abcd">
                   <div class="etapa-d-topo">
                     <div>
-                      <label for="attr-livre-1" class="etapa-d-titulo">D â€” 4 BÃ´nus Livres Finais de 1Âº NÃ­vel (+2 em 4 atributos distintos)</label>
+                      <label for="attr-livre-1" class="etapa-d-titulo">D — 4 Bônus Livres Finais de 1º Nível (+2 em 4 atributos distintos)</label>
                       <small id="nota-atb-abcd" class="nota-campo">
-                        Os atributos escolhidos manualmente aqui (e nas etapas A, B e C acima) sÃ£o fixos e nunca serÃ£o alterados pelo Conceito. Os deixados em "Procedural" seguem o Conceito.
+                        Os atributos escolhidos manualmente aqui (e nas etapas A, B e C acima) são fixos e nunca serão alterados pelo Conceito. Os deixados em "Procedural" seguem o Conceito.
                       </small>
                     </div>
                     <div class="box-atb-botoes">
                       <button type="button" id="btn-atb-todos-procedural" class="btn btn-sutil">Resetar Todos p/ Procedural</button>
-                      <button type="button" id="btn-atb-todos-aleatorio" class="btn btn-sutil">Todos AleatÃ³rios</button>
+                      <button type="button" id="btn-atb-todos-aleatorio" class="btn btn-sutil">Todos Aleatórios</button>
                     </div>
                   </div>
                   <div class="grid-atributos-livres">
                     <div class="campo-atb-inline">
-                      <label for="attr-livre-1">1Âº BÃ´nus Livre</label>
+                      <label for="attr-livre-1">1º Bônus Livre</label>
                       <select id="attr-livre-1" name="attr_livre_1"></select>
                     </div>
                     <div class="campo-atb-inline">
-                      <label for="attr-livre-2">2Âº BÃ´nus Livre</label>
+                      <label for="attr-livre-2">2º Bônus Livre</label>
                       <select id="attr-livre-2" name="attr_livre_2"></select>
                     </div>
                     <div class="campo-atb-inline">
-                      <label for="attr-livre-3">3Âº BÃ´nus Livre</label>
+                      <label for="attr-livre-3">3º Bônus Livre</label>
                       <select id="attr-livre-3" name="attr_livre_3"></select>
                     </div>
                     <div class="campo-atb-inline">
-                      <label for="attr-livre-4">4Âº BÃ´nus Livre</label>
+                      <label for="attr-livre-4">4º Bônus Livre</label>
                       <select id="attr-livre-4" name="attr_livre_4"></select>
                     </div>
                   </div>
                   <div id="previa-atributos-abcd" class="previa-atributos-abcd" aria-live="polite">
                     <div class="previa-atributos-topo">
-                      <span class="previa-atributos-titulo">PrÃ©via Viva dos Atributos (ABCD)</span>
+                      <span class="previa-atributos-titulo">Prévia Viva dos Atributos (ABCD)</span>
                       <span id="nota-previa-atributos" class="previa-atributos-nota"></span>
                     </div>
                     <div id="grid-previa-atributos" class="grid-previa-atributos"></div>
@@ -270,12 +270,12 @@
                 </div>
 
                 <div class="campo-grupo">
-                  <label for="nivel">NÃ­vel</label>
+                  <label for="nivel">Nível</label>
                   <select id="nivel" name="nivel">
-                    <option value="1" selected>1Âº NÃ­vel</option>
-                    <option value="aleatorio">AleatÃ³rio (1Âº NÃ­vel disponÃ­vel)</option>
+                    <option value="1" selected>1º Nível</option>
+                    <option value="aleatorio">Aleatório (1º Nível disponível)</option>
                   </select>
-                  <small class="nota-campo">NÃ­veis 2â€“20 planejados para expansÃ£o futura.</small>
+                  <small class="nota-campo">Níveis 2–20 planejados para expansão futura.</small>
                 </div>
                 <div class="campo-grupo">
                   <label for="nome">Nome do Personagem</label>
@@ -287,7 +287,7 @@
                 </div>
                 <div class="campo-grupo">
                   <label for="seed">Seed (Reprodutibilidade)</label>
-                  <input id="seed" type="text" placeholder="AleatÃ³ria se vazia">
+                  <input id="seed" type="text" placeholder="Aleatória se vazia">
                 </div>
               </div>
 
@@ -298,8 +298,8 @@
               </div>
 
               <div class="etapa-rodape">
-                <button type="button" class="btn btn-sutil" data-etapa-acao="fechar">Recolher CriaÃ§Ã£o Inicial</button>
-                <button type="button" class="btn btn-secundario" data-etapa-ir="pericias">AvanÃ§ar para PerÃ­cias â†’</button>
+                <button type="button" class="btn btn-sutil" data-etapa-acao="fechar">Recolher Criação Inicial</button>
+                <button type="button" class="btn btn-secundario" data-etapa-ir="pericias">Avançar para Perícias →</button>
               </div>
             </div>
           </div>
@@ -309,26 +309,26 @@
               <span class="etapa-header-esq">
                 <span class="etapa-num">2</span>
                 <span>
-                  <span class="etapa-titulo">PerÃ­cias</span>
-                  <span class="etapa-subtitulo">Treinamentos de Biografia, Classe, Subclasse, HeranÃ§a e InteligÃªncia</span>
+                  <span class="etapa-titulo">Perícias</span>
+                  <span class="etapa-subtitulo">Treinamentos de Biografia, Classe, Subclasse, Herança e Inteligência</span>
                 </span>
               </span>
               <span class="etapa-header-dir">
                 <span id="resumo-etapa-pericias" class="etapa-resumo-pill">Procedural</span>
-                <span class="etapa-seta" aria-hidden="true">â–¾</span>
+                <span class="etapa-seta" aria-hidden="true">▾</span>
               </span>
             </button>
             <div id="corpo-etapa-pericias" class="etapa-corpo oculto">
               <div class="campo-grupo subgrupo-atb-etapa-d" id="grupo-pericias">
                 <div class="etapa-d-topo">
                   <div>
-                    <label for="modo-pericias" class="etapa-d-titulo">E â€” PerÃ­cias Treinadas (1Âº NÃ­vel)</label>
-                    <small class="nota-campo">Deixe em Procedural (guiado pelo conceito) ou escolha manualmente suas perÃ­cias treinadas respeitando o limite exato de vagas da sua classe, raÃ§a, biografia e InteligÃªncia.</small>
+                    <label for="modo-pericias" class="etapa-d-titulo">E — Perícias Treinadas (1º Nível)</label>
+                    <small class="nota-campo">Deixe em Procedural (guiado pelo conceito) ou escolha manualmente suas perícias treinadas respeitando o limite exato de vagas da sua classe, raça, biografia e Inteligência.</small>
                   </div>
                 </div>
                 <select id="modo-pericias" name="modo_pericias">
-                  <option value="procedural" selected>Procedural (perÃ­cias escolhidas automaticamente pelo conceito)</option>
-                  <option value="personalizado">Personalizar PerÃ­cias (escolher manualmente dentro do limite de vagas)</option>
+                  <option value="procedural" selected>Procedural (perícias escolhidas automaticamente pelo conceito)</option>
+                  <option value="personalizado">Personalizar Perícias (escolher manualmente dentro do limite de vagas)</option>
                 </select>
 
                 <div id="painel-pericias-custom" class="painel-pericias-custom oculto">
@@ -339,13 +339,13 @@
                     </div>
                     <button type="button" id="btn-per-reset-procedural" class="btn btn-sutil">Voltar Tudo p/ Procedural</button>
                   </div>
-                  <small id="per-nota-geral" class="nota-campo">PerÃ­cias jÃ¡ concedidas por Classe, Subclasse, Biografia ou Divindade ficam travadas como automÃ¡ticas. SobreposiÃ§Ãµes geram +1 vaga livre automaticamente (regra oficial PF2E). Vagas nÃ£o marcadas serÃ£o completadas pelo modo procedural.</small>
+                  <small id="per-nota-geral" class="nota-campo">Perícias já concedidas por Classe, Subclasse, Biografia ou Divindade ficam travadas como automáticas. Sobreposições geram +1 vaga livre automaticamente (regra oficial PF2E). Vagas não marcadas serão completadas pelo modo procedural.</small>
 
                   <div id="grid-pericias-opcoes" class="grid-pericias-opcoes">
                     <div class="card-tal-cat oculto" id="card-per-bio-opcao">
                       <div class="card-tal-topo">
                         <label for="per-bio-opcao">Escolha da Biografia</label>
-                        <span class="badge-tal-liberado">ObrigatÃ³ria</span>
+                        <span class="badge-tal-liberado">Obrigatória</span>
                       </div>
                       <select id="per-bio-opcao" name="per_bio_opcao"></select>
                     </div>
@@ -353,23 +353,23 @@
                     <div class="card-tal-cat oculto" id="card-per-cls-opcao">
                       <div class="card-tal-topo">
                         <label for="per-cls-opcao">Escolha Inicial da Classe</label>
-                        <span class="badge-tal-liberado">ObrigatÃ³ria</span>
+                        <span class="badge-tal-liberado">Obrigatória</span>
                       </div>
                       <select id="per-cls-opcao" name="per_cls_opcao"></select>
                     </div>
 
                     <div class="card-tal-cat oculto" id="card-per-div-opcao">
                       <div class="card-tal-topo">
-                        <label for="per-div-opcao">PerÃ­cia da Divindade</label>
-                        <span class="badge-tal-liberado">ObrigatÃ³ria</span>
+                        <label for="per-div-opcao">Perícia da Divindade</label>
+                        <span class="badge-tal-liberado">Obrigatória</span>
                       </div>
                       <select id="per-div-opcao" name="per_div_opcao"></select>
                     </div>
 
                     <div class="card-tal-cat" id="card-per-saber">
                       <div class="card-tal-topo">
-                        <span>Saber AutomÃ¡tico (Biografia)</span>
-                        <span class="badge-tal-auto">AutomÃ¡tico</span>
+                        <span>Saber Automático (Biografia)</span>
+                        <span class="badge-tal-auto">Automático</span>
                       </div>
                       <div id="info-per-saber" class="box-tal-auto"></div>
                     </div>
@@ -380,9 +380,9 @@
               </div>
 
               <div class="etapa-rodape">
-                <button type="button" class="btn btn-sutil" data-etapa-ir="criacao">â† Voltar p/ CriaÃ§Ã£o Inicial</button>
+                <button type="button" class="btn btn-sutil" data-etapa-ir="criacao">← Voltar p/ Criação Inicial</button>
                 <button type="button" class="btn btn-sutil" data-etapa-acao="fechar">Recolher</button>
-                <button type="button" class="btn btn-secundario" data-etapa-ir="talentos">AvanÃ§ar para Talentos â†’</button>
+                <button type="button" class="btn btn-secundario" data-etapa-ir="talentos">Avançar para Talentos →</button>
               </div>
             </div>
           </div>
@@ -393,20 +393,20 @@
                 <span class="etapa-num">3</span>
                 <span>
                   <span class="etapa-titulo">Talentos</span>
-                  <span class="etapa-subtitulo">Ancestralidade, Biografia (automÃ¡tico), Classe, PerÃ­cia e Gerais â€” 1Âº NÃ­vel</span>
+                  <span class="etapa-subtitulo">Ancestralidade, Biografia (automático), Classe, Perícia e Gerais — 1º Nível</span>
                 </span>
               </span>
               <span class="etapa-header-dir">
                 <span id="resumo-etapa-talentos" class="etapa-resumo-pill">Procedural</span>
-                <span class="etapa-seta" aria-hidden="true">â–¾</span>
+                <span class="etapa-seta" aria-hidden="true">▾</span>
               </span>
             </button>
             <div id="corpo-etapa-talentos" class="etapa-corpo oculto">
               <div class="campo-grupo subgrupo-atb-etapa-d" id="grupo-talentos">
                 <div class="etapa-d-topo">
                   <div>
-                    <label for="modo-talentos" class="etapa-d-titulo">F â€” Talentos Iniciais (1Âº NÃ­vel)</label>
-                    <small class="nota-campo">Escolha automÃ¡tica procedural pelo conceito ou personalize manualmente nos slots realmente liberados por sua ancestralidade, heranÃ§a e classe.</small>
+                    <label for="modo-talentos" class="etapa-d-titulo">F — Talentos Iniciais (1º Nível)</label>
+                    <small class="nota-campo">Escolha automática procedural pelo conceito ou personalize manualmente nos slots realmente liberados por sua ancestralidade, herança e classe.</small>
                   </div>
                 </div>
                 <select id="modo-talentos" name="modo_talentos">
@@ -417,16 +417,16 @@
                 <div id="painel-talentos-custom" class="painel-talentos-custom oculto">
                   <div class="barra-orcamento-eq">
                     <div class="orc-metricas">
-                      <span id="tal-resumo-curadoria">Curadoria PF2E (1Âº NÃ­vel): apenas slots liberados pela sua combinaÃ§Ã£o ficam ativos.</span>
+                      <span id="tal-resumo-curadoria">Curadoria PF2E (1º Nível): apenas slots liberados pela sua combinação ficam ativos.</span>
                     </div>
                     <button type="button" id="btn-tal-reset-procedural" class="btn btn-sutil">Voltar Tudo p/ Procedural</button>
                   </div>
-                  <small class="nota-campo">Ordem dos talentos: Ancestralidade â†’ Biografia (automÃ¡tico) â†’ Classe â†’ Demais Tipos (PerÃ­cia &amp; Gerais). Campos em "Procedural" seguem o conceito.</small>
+                  <small class="nota-campo">Ordem dos talentos: Ancestralidade → Biografia (automático) → Classe → Demais Tipos (Perícia &amp; Gerais). Campos em "Procedural" seguem o conceito.</small>
 
                   <div class="grid-talentos-custom">
                     <div class="card-tal-cat" id="card-tal-ancestralidade">
                       <div class="card-tal-topo">
-                        <label for="tal-ancestralidade">1. Talento de Ancestralidade (1Âº NÃ­vel)</label>
+                        <label for="tal-ancestralidade">1. Talento de Ancestralidade (1º Nível)</label>
                         <span id="badge-tal-ancestralidade" class="badge-tal-liberado">1 Slot Liberado</span>
                       </div>
                       <select id="tal-ancestralidade" name="tal_ancestralidade"></select>
@@ -436,28 +436,28 @@
                     <div class="card-tal-cat" id="card-tal-biografia">
                       <div class="card-tal-topo">
                         <span>2. Talento de Biografia</span>
-                        <span class="badge-tal-auto">AutomÃ¡tico</span>
+                        <span class="badge-tal-auto">Automático</span>
                       </div>
                       <div id="info-tal-biografia" class="box-tal-auto"></div>
-                      <small class="nota-campo">Concedido automaticamente pela Biografia escolhida (nÃ£o consome escolha).</small>
+                      <small class="nota-campo">Concedido automaticamente pela Biografia escolhida (não consome escolha).</small>
                     </div>
 
                     <div class="card-tal-cat card-tal-wide" id="card-tal-classe">
                       <div class="card-tal-topo">
-                        <label for="tal-classe-1">3. Talentos de Classe (1Âº NÃ­vel)</label>
+                        <label for="tal-classe-1">3. Talentos de Classe (1º Nível)</label>
                         <span id="badge-tal-classe" class="badge-tal-bloqueado">Verificar Classe</span>
                       </div>
                       <div class="grid-tal-slots">
                         <div id="grupo-tal-classe-1" class="campo-atb-inline">
-                          <label id="lbl-tal-classe-1" for="tal-classe-1">Talento de Classe (1Âº NÃ­vel)</label>
+                          <label id="lbl-tal-classe-1" for="tal-classe-1">Talento de Classe (1º Nível)</label>
                           <select id="tal-classe-1" name="tal_classe_1"></select>
                         </div>
                         <div id="grupo-tal-classe-2" class="campo-atb-inline oculto">
-                          <label id="lbl-tal-classe-2" for="tal-classe-2">2Âº Talento de Classe (Extra)</label>
+                          <label id="lbl-tal-classe-2" for="tal-classe-2">2º Talento de Classe (Extra)</label>
                           <select id="tal-classe-2" name="tal_classe_2"></select>
                         </div>
                         <div id="grupo-tal-classe-3" class="campo-atb-inline oculto">
-                          <label id="lbl-tal-classe-3" for="tal-classe-3">3Âº Talento de Classe (Extra)</label>
+                          <label id="lbl-tal-classe-3" for="tal-classe-3">3º Talento de Classe (Extra)</label>
                           <select id="tal-classe-3" name="tal_classe_3"></select>
                         </div>
                       </div>
@@ -466,14 +466,14 @@
 
                     <div class="card-tal-cat card-tal-wide" id="card-tal-demais">
                       <div class="card-tal-topo">
-                        <span>4. Demais Talentos â€” PerÃ­cia Adicional &amp; Gerais (1Âº NÃ­vel)</span>
-                        <span class="badge-tal-auto">Curadoria de NÃ­vel &amp; Classe</span>
+                        <span>4. Demais Talentos — Perícia Adicional &amp; Gerais (1º Nível)</span>
+                        <span class="badge-tal-auto">Curadoria de Nível &amp; Classe</span>
                       </div>
                       <div class="grid-tal-demais">
                         <div class="subcard-tal-demais" id="subcard-tal-pericia">
                           <div class="card-tal-topo">
-                            <label for="tal-pericia-1">Talento de PerÃ­cia Extra (1Âº NÃ­vel)</label>
-                            <span id="badge-tal-pericia" class="badge-tal-bloqueado">Bloqueado (SÃ³ Ladino N1)</span>
+                            <label for="tal-pericia-1">Talento de Perícia Extra (1º Nível)</label>
+                            <span id="badge-tal-pericia" class="badge-tal-bloqueado">Bloqueado (Só Ladino N1)</span>
                           </div>
                           <select id="tal-pericia-1" name="tal_pericia_1"></select>
                           <small id="nota-tal-pericia" class="nota-campo"></small>
@@ -481,16 +481,16 @@
 
                         <div class="subcard-tal-demais" id="subcard-tal-geral">
                           <div class="card-tal-topo">
-                            <label for="tal-geral-1">Talentos Gerais (1Âº NÃ­vel)</label>
-                            <span id="badge-tal-geral" class="badge-tal-bloqueado">Bloqueado (3Âº NÃ­vel)</span>
+                            <label for="tal-geral-1">Talentos Gerais (1º Nível)</label>
+                            <span id="badge-tal-geral" class="badge-tal-bloqueado">Bloqueado (3º Nível)</span>
                           </div>
                           <div class="stack-tal-slots">
                             <div id="grupo-tal-geral-1" class="campo-atb-inline">
-                              <label id="lbl-tal-geral-1" for="tal-geral-1">1Âº Talento Geral (1Âº NÃ­vel)</label>
+                              <label id="lbl-tal-geral-1" for="tal-geral-1">1º Talento Geral (1º Nível)</label>
                               <select id="tal-geral-1" name="tal_geral_1"></select>
                             </div>
                             <div id="grupo-tal-geral-2" class="campo-atb-inline oculto">
-                              <label id="lbl-tal-geral-2" for="tal-geral-2">2Âº Talento Geral (Treinamento Geral)</label>
+                              <label id="lbl-tal-geral-2" for="tal-geral-2">2º Talento Geral (Treinamento Geral)</label>
                               <select id="tal-geral-2" name="tal_geral_2"></select>
                             </div>
                           </div>
@@ -503,9 +503,9 @@
               </div>
 
               <div class="etapa-rodape">
-                <button type="button" class="btn btn-sutil" data-etapa-ir="pericias">â† Voltar p/ PerÃ­cias</button>
+                <button type="button" class="btn btn-sutil" data-etapa-ir="pericias">← Voltar p/ Perícias</button>
                 <button type="button" class="btn btn-sutil" data-etapa-acao="fechar">Recolher</button>
-                <button type="button" id="btn-tal-avancar" class="btn btn-secundario" data-etapa-ir="equipamentos">AvanÃ§ar para Equipamentos â†’</button>
+                <button type="button" id="btn-tal-avancar" class="btn btn-secundario" data-etapa-ir="equipamentos">Avançar para Equipamentos →</button>
               </div>
             </div>
           </div>
@@ -516,33 +516,33 @@
                 <span class="etapa-num">4</span>
                 <span>
                   <span class="etapa-titulo">Magias</span>
-                  <span class="etapa-subtitulo">Truques MÃ¡gicos e Magias de 1Âº CÃ­rculo conforme tradiÃ§Ã£o e espaÃ§os da classe</span>
+                  <span class="etapa-subtitulo">Truques Mágicos e Magias de 1º Círculo conforme tradição e espaços da classe</span>
                 </span>
               </span>
               <span class="etapa-header-dir">
                 <span id="resumo-etapa-magias" class="etapa-resumo-pill">Procedural</span>
-                <span class="etapa-seta" aria-hidden="true">â–¾</span>
+                <span class="etapa-seta" aria-hidden="true">▾</span>
               </span>
             </button>
             <div id="corpo-etapa-magias" class="etapa-corpo oculto">
               <div class="campo-grupo subgrupo-atb-etapa-d" id="grupo-magias">
                 <div class="etapa-d-topo">
                   <div>
-                    <label for="modo-magias" class="etapa-d-titulo">G â€” ConjuraÃ§Ã£o e Magias (1Âº NÃ­vel)</label>
-                    <small class="nota-campo">Escolha entre seleÃ§Ã£o procedural (sinÃ©rgica com o conceito), sorteio aleatÃ³rio na tradiÃ§Ã£o ou seleÃ§Ã£o manual respeitando tradiÃ§Ã£o, espaÃ§os e magias fixas de subclasse.</small>
+                    <label for="modo-magias" class="etapa-d-titulo">G — Conjuração e Magias (1º Nível)</label>
+                    <small class="nota-campo">Escolha entre seleção procedural (sinérgica com o conceito), sorteio aleatório na tradição ou seleção manual respeitando tradição, espaços e magias fixas de subclasse.</small>
                   </div>
                 </div>
                 <select id="modo-magias" name="modo_magias">
                   <option value="procedural" selected>Procedural (truques e magias recomendados pelo conceito)</option>
-                  <option value="aleatorio">AleatÃ³rio (sortear truques e magias vÃ¡lidos da tradiÃ§Ã£o)</option>
-                  <option value="personalizado">Personalizar / Manual (escolher truques e magias de 1Âº cÃ­rculo)</option>
+                  <option value="aleatorio">Aleatório (sortear truques e magias válidos da tradição)</option>
+                  <option value="personalizado">Personalizar / Manual (escolher truques e magias de 1º círculo)</option>
                 </select>
 
                 <div id="painel-magias-custom" class="painel-pericias-custom oculto">
                   <div class="barra-orcamento-eq">
                     <div class="orc-metricas">
-                      <span id="mag-resumo-tradicao">TradiÃ§Ã£o: â€”</span>
-                      <span><strong id="mag-resumo-vagas" class="saldo-ok">Truques: 0/0 â€¢ 1Âº CÃ­rculo: 0/0</strong></span>
+                      <span id="mag-resumo-tradicao">Tradição: —</span>
+                      <span><strong id="mag-resumo-vagas" class="saldo-ok">Truques: 0/0 • 1º Círculo: 0/0</strong></span>
                     </div>
                     <button type="button" id="btn-mag-reset-procedural" class="btn btn-sutil">Voltar Tudo p/ Procedural</button>
                   </div>
@@ -550,7 +550,7 @@
 
                   <div class="mag-busca-wrap">
                     <div class="busca-linha-flex">
-                      <input type="search" id="mag-filtro-busca" placeholder="Filtrar magias por nome, escola ou traÃ§o (ex.: Curar, EvocaÃ§Ã£o, Fogo)..." aria-label="Filtrar magias">
+                      <input type="search" id="mag-filtro-busca" placeholder="Filtrar magias por nome, escola ou traço (ex.: Curar, Evocação, Fogo)..." aria-label="Filtrar magias">
                       <button type="button" id="btn-mag-limpar-busca" class="btn btn-sutil btn-compacto oculto">Limpar</button>
                     </div>
                     <small id="mag-busca-status" class="nota-campo oculto"></small>
@@ -559,10 +559,10 @@
                   <div class="acordeao-magias" id="acordeao-magias">
                     <div class="mag-circulo-card" data-mag-circulo="truques">
                       <button type="button" class="mag-circulo-header" data-mag-toggle="truques" aria-expanded="false" aria-controls="corpo-mag-truques">
-                        <span id="lbl-mag-truques" class="mag-circulo-titulo">Truques MÃ¡gicos (NÃ­vel 0)</span>
+                        <span id="lbl-mag-truques" class="mag-circulo-titulo">Truques Mágicos (Nível 0)</span>
                         <span class="mag-circulo-dir">
                           <span id="pill-mag-truques" class="etapa-resumo-pill">0 / 5</span>
-                          <span class="etapa-seta" aria-hidden="true">â–¾</span>
+                          <span class="etapa-seta" aria-hidden="true">▾</span>
                         </span>
                       </button>
                       <div id="corpo-mag-truques" class="mag-circulo-corpo oculto">
@@ -572,10 +572,10 @@
 
                     <div class="mag-circulo-card" data-mag-circulo="n1">
                       <button type="button" class="mag-circulo-header" data-mag-toggle="n1" aria-expanded="false" aria-controls="corpo-mag-n1">
-                        <span id="lbl-mag-n1" class="mag-circulo-titulo">Magias de 1Âº CÃ­rculo</span>
+                        <span id="lbl-mag-n1" class="mag-circulo-titulo">Magias de 1º Círculo</span>
                         <span class="mag-circulo-dir">
                           <span id="pill-mag-n1" class="etapa-resumo-pill">0 / 2</span>
-                          <span class="etapa-seta" aria-hidden="true">â–¾</span>
+                          <span class="etapa-seta" aria-hidden="true">▾</span>
                         </span>
                       </button>
                       <div id="corpo-mag-n1" class="mag-circulo-corpo oculto">
@@ -588,9 +588,9 @@
               </div>
 
               <div class="etapa-rodape">
-                <button type="button" class="btn btn-sutil" data-etapa-ir="talentos">â† Voltar p/ Talentos</button>
+                <button type="button" class="btn btn-sutil" data-etapa-ir="talentos">← Voltar p/ Talentos</button>
                 <button type="button" class="btn btn-sutil" data-etapa-acao="fechar">Recolher</button>
-                <button type="button" class="btn btn-secundario" data-etapa-ir="equipamentos">AvanÃ§ar para Equipamentos â†’</button>
+                <button type="button" class="btn btn-secundario" data-etapa-ir="equipamentos">Avançar para Equipamentos →</button>
               </div>
             </div>
           </div>
@@ -601,31 +601,31 @@
                 <span class="etapa-num" id="etapa-num-equipamentos">4</span>
                 <span>
                   <span class="etapa-titulo">Equipamentos</span>
-                  <span class="etapa-subtitulo">Compra procedural ou manual com orÃ§amento inicial de 15 po (150 pp)</span>
+                  <span class="etapa-subtitulo">Compra procedural ou manual com orçamento inicial de 15 po (150 pp)</span>
                 </span>
               </span>
               <span class="etapa-header-dir">
                 <span id="resumo-etapa-equipamentos" class="etapa-resumo-pill">Procedural (15 po)</span>
-                <span class="etapa-seta" aria-hidden="true">â–¾</span>
+                <span class="etapa-seta" aria-hidden="true">▾</span>
               </span>
             </button>
             <div id="corpo-etapa-equipamentos" class="etapa-corpo oculto">
               <div class="campo-grupo subgrupo-atb-etapa-d" id="grupo-equipamentos">
                 <div class="etapa-d-topo">
                   <div>
-                    <label for="modo-equipamentos" class="etapa-d-titulo">H â€” Equipamentos Iniciais (OrÃ§amento: 15 po / 150 pp)</label>
-                    <small class="nota-campo">Escolha entre compra automÃ¡tica procedural (pelo conceito) ou selecionar seus itens manualmente descontando direto das 150 pp da ficha.</small>
+                    <label for="modo-equipamentos" class="etapa-d-titulo">H — Equipamentos Iniciais (Orçamento: 15 po / 150 pp)</label>
+                    <small class="nota-campo">Escolha entre compra automática procedural (pelo conceito) ou selecionar seus itens manualmente descontando direto das 150 pp da ficha.</small>
                   </div>
                 </div>
                 <select id="modo-equipamentos" name="modo_equipamentos">
-                  <option value="procedural" selected>Procedural (compra automÃ¡tica guiada pelo conceito)</option>
+                  <option value="procedural" selected>Procedural (compra automática guiada pelo conceito)</option>
                   <option value="personalizado">Personalizar / Comprar Equipamentos (deduzir de 15 po / 150 pp)</option>
                 </select>
 
                 <div id="painel-equipamentos-custom" class="painel-equipamentos-custom oculto">
                   <div id="barra-orcamento-eq" class="barra-orcamento-eq">
                     <div class="orc-metricas">
-                      <span>OrÃ§amento Inicial: <strong>150 pp (15 po)</strong></span>
+                      <span>Orçamento Inicial: <strong>150 pp (15 po)</strong></span>
                       <span>Gasto: <strong id="eq-resumo-gasto">0 pp</strong></span>
                       <span>Saldo Restante na Ficha: <strong id="eq-resumo-saldo" class="saldo-ok">150 pp (15 po)</strong></span>
                     </div>
@@ -633,7 +633,7 @@
                       <button type="button" id="btn-eq-reset-procedural" class="btn btn-sutil">Voltar Tudo p/ Procedural</button>
                     </div>
                   </div>
-                  <small id="eq-nota-hibrida" class="nota-campo">Categorias deixadas em "Procedural" usarÃ£o automaticamente o saldo restante ao gerar a ficha.</small>
+                  <small id="eq-nota-hibrida" class="nota-campo">Categorias deixadas em "Procedural" usarão automaticamente o saldo restante ao gerar a ficha.</small>
                   <small id="eq-nota-curadoria" class="nota-campo"></small>
 
                   <div class="mag-busca-wrap eq-busca-wrap">
@@ -660,7 +660,7 @@
                     </div>
 
                     <div class="card-eq-cat card-eq-wide" id="card-eq-arma-cc">
-                      <label for="eq-arma-cc-select">3. Armas Corporais (ProficiÃªncias da Classe)</label>
+                      <label for="eq-arma-cc-select">3. Armas Corporais (Proficiências da Classe)</label>
                       <div class="linha-compra-eq">
                         <select id="eq-arma-cc-select" name="eq_arma_cc"></select>
                         <button type="button" id="btn-add-arma-cc" class="btn btn-secundario btn-compacto">+ Adicionar Outra</button>
@@ -671,7 +671,7 @@
                     </div>
 
                     <div class="card-eq-cat card-eq-wide" id="card-eq-arma-dist">
-                      <label for="eq-arma-dist-select">4. Armas Ã  DistÃ¢ncia (ProficiÃªncias da Classe)</label>
+                      <label for="eq-arma-dist-select">4. Armas à Distância (Proficiências da Classe)</label>
                       <div class="linha-compra-eq">
                         <select id="eq-arma-dist-select" name="eq_arma_dist"></select>
                         <button type="button" id="btn-add-arma-dist" class="btn btn-secundario btn-compacto">+ Adicionar Outra</button>
@@ -682,7 +682,7 @@
                     </div>
 
                     <div class="card-eq-cat card-eq-wide" id="card-eq-variados">
-                      <label for="eq-variado-select">5. Equipamentos Variados (Aventura &amp; MuniÃ§Ãµes)</label>
+                      <label for="eq-variado-select">5. Equipamentos Variados (Aventura &amp; Munições)</label>
                       <div class="linha-compra-eq linha-compra-qtd">
                         <select id="eq-variado-select" name="eq_variado"></select>
                         <input id="eq-variado-qtd" type="number" min="1" max="99" value="1" aria-label="Quantidade">
@@ -696,8 +696,8 @@
               </div>
 
               <div class="etapa-rodape">
-                <button type="button" id="btn-eq-voltar" class="btn btn-sutil" data-etapa-ir="talentos">â† Voltar p/ Talentos</button>
-                <button type="button" class="btn btn-secundario" data-etapa-acao="fechar">Concluir e Recolher âœ“</button>
+                <button type="button" id="btn-eq-voltar" class="btn btn-sutil" data-etapa-ir="talentos">← Voltar p/ Talentos</button>
+                <button type="button" class="btn btn-secundario" data-etapa-acao="fechar">Concluir e Recolher ✓</button>
               </div>
             </div>
           </div>
@@ -705,7 +705,7 @@
 
         <div class="barra-acoes">
           <button type="submit" class="btn btn-primario">Gerar Ficha</button>
-          <button type="button" id="btn-sortear" class="btn btn-secundario">Sortear VariaÃ§Ã£o</button>
+          <button type="button" id="btn-sortear" class="btn btn-secundario">Sortear Variação</button>
           <button type="button" id="btn-pdf" class="btn btn-exportar" disabled>Baixar .PDF (Livro)</button>
           <button type="button" id="btn-docx" class="btn btn-exportar" disabled>Baixar .DOCX</button>
           <button type="button" id="btn-txt" class="btn btn-exportar" disabled>Baixar .TXT</button>
@@ -713,10 +713,10 @@
 
           <div class="atalhos-rapidos">
             <span>Atalhos:</span>
-            <button type="button" class="btn btn-sutil" data-preset="aleatorio">100% AleatÃ³rio</button>
+            <button type="button" class="btn btn-sutil" data-preset="aleatorio">100% Aleatório</button>
             <button type="button" class="btn btn-sutil" data-preset="mago">Mago Evocador</button>
             <button type="button" class="btn btn-sutil" data-preset="guerreiro">Guerreiro Colosso 2M</button>
-            <button type="button" id="btn-limpar-form" class="btn btn-sutil">Limpar FormulÃ¡rio</button>
+            <button type="button" id="btn-limpar-form" class="btn btn-sutil">Limpar Formulário</button>
           </div>
         </div>
 
@@ -725,25 +725,25 @@
     </section>
 
     <section id="area-ficha" hidden>
-      <nav class="barra-abas nao-imprimir" aria-label="PÃ¡ginas da ficha oficial">
-        <button type="button" class="aba-btn ativa" data-aba="todas">Todas as PÃ¡ginas</button>
-        <button type="button" class="aba-btn" data-aba="1">PÃ¡g. 1: Combate &amp; PerÃ­cias</button>
-        <button type="button" class="aba-btn" data-aba="2">PÃ¡g. 2: Talentos &amp; InventÃ¡rio</button>
-        <button type="button" class="aba-btn" data-aba="3">PÃ¡g. 3: Perfil &amp; AÃ§Ãµes</button>
-        <button type="button" class="aba-btn" data-aba="4">PÃ¡g. 4: ConjuraÃ§Ã£o &amp; Magias</button>
-        <button type="button" id="aba-btn-companheiro" class="aba-btn oculto" data-aba="5">PÃ¡g. 5: Companheiro / Familiar</button>
+      <nav class="barra-abas nao-imprimir" aria-label="Páginas da ficha oficial">
+        <button type="button" class="aba-btn ativa" data-aba="todas">Todas as Páginas</button>
+        <button type="button" class="aba-btn" data-aba="1">Pág. 1: Combate &amp; Perícias</button>
+        <button type="button" class="aba-btn" data-aba="2">Pág. 2: Talentos &amp; Inventário</button>
+        <button type="button" class="aba-btn" data-aba="3">Pág. 3: Perfil &amp; Ações</button>
+        <button type="button" class="aba-btn" data-aba="4">Pág. 4: Conjuração &amp; Magias</button>
+        <button type="button" id="aba-btn-companheiro" class="aba-btn oculto" data-aba="5">Pág. 5: Companheiro / Familiar</button>
       </nav>
 
-      <!-- PÃGINA 1 (p. 580) -->
+      <!-- PÁGINA 1 (p. 580) -->
       <article class="pagina-ficha" data-pagina="1">
         <div class="pagina-topo">
-          <h2>Ficha de Personagem â€” Pathfinder 2Âª EdiÃ§Ã£o</h2>
-          <span class="pagina-ref">PÃ¡gina 1 (Livro BÃ¡sico, p. 580)</span>
+          <h2>Ficha de Personagem — Pathfinder 2ª Edição</h2>
+          <span class="pagina-ref">Página 1 (Livro Básico, p. 580)</span>
         </div>
 
         <div class="legenda-topo">
-          <span><strong>ProficiÃªncia:</strong> [D] Destreinado +0 â€¢ [T] Treinado 2+NÃ­vel â€¢ [E] Especialista 4+NÃ­vel â€¢ [M] Mestre 6+NÃ­vel â€¢ [L] LendÃ¡rio 8+NÃ­vel</span>
-          <span><strong>AÃ§Ãµes:</strong> â—† Ãšnica â€¢ â—†â—† Duas â€¢ â—†â—†â—† TrÃªs â€¢ â—‡ Livre â€¢ â†º ReaÃ§Ã£o</span>
+          <span><strong>Proficiência:</strong> [D] Destreinado +0 • [T] Treinado 2+Nível • [E] Especialista 4+Nível • [M] Mestre 6+Nível • [L] Lendário 8+Nível</span>
+          <span><strong>Ações:</strong> ◆ Única • ◆◆ Duas • ◆◆◆ Três • ◇ Livre • ↺ Reação</span>
         </div>
 
         <div class="bloco">
@@ -764,7 +764,7 @@
             </div>
 
             <div class="bloco">
-              <h3 class="bloco-titulo">ProficiÃªncia com Armas</h3>
+              <h3 class="bloco-titulo">Proficiência com Armas</h3>
               <div id="p1-prof-armas" class="prof-tira"></div>
             </div>
           </div>
@@ -781,7 +781,7 @@
             </div>
 
             <div class="bloco">
-              <h3 class="bloco-titulo">Pontos de Vida &amp; PercepÃ§Ã£o</h3>
+              <h3 class="bloco-titulo">Pontos de Vida &amp; Percepção</h3>
               <div id="p1-pv-percepcao"></div>
             </div>
 
@@ -791,14 +791,14 @@
             </div>
 
             <div class="bloco">
-              <h3 class="bloco-titulo">Golpes Ã€ DistÃ¢ncia</h3>
+              <h3 class="bloco-titulo">Golpes À Distância</h3>
               <div id="p1-golpes-dist"></div>
             </div>
           </div>
 
           <div>
             <div class="bloco">
-              <h3 class="bloco-titulo">PerÃ­cias (18 Linhas Oficiais)</h3>
+              <h3 class="bloco-titulo">Perícias (18 Linhas Oficiais)</h3>
               <div id="p1-pericias"></div>
             </div>
 
@@ -810,11 +810,11 @@
         </div>
       </article>
 
-      <!-- PÃGINA 2 (p. 581) -->
+      <!-- PÁGINA 2 (p. 581) -->
       <article class="pagina-ficha" data-pagina="2">
         <div class="pagina-topo">
-          <h2>Habilidades, Talentos e InventÃ¡rio</h2>
-          <span class="pagina-ref">PÃ¡gina 2 (Livro BÃ¡sico, p. 581)</span>
+          <h2>Habilidades, Talentos e Inventário</h2>
+          <span class="pagina-ref">Página 2 (Livro Básico, p. 581)</span>
         </div>
 
         <div class="p2-layout">
@@ -824,7 +824,7 @@
               <ul id="p2-tal-anc" class="slot-lista"></ul>
             </div>
             <div class="bloco">
-              <h3 class="bloco-titulo">Talentos de PerÃ­cia</h3>
+              <h3 class="bloco-titulo">Talentos de Perícia</h3>
               <ul id="p2-tal-per" class="slot-lista"></ul>
             </div>
             <div class="bloco">
@@ -839,11 +839,11 @@
               <ul id="p2-tal-cls" class="slot-lista"></ul>
             </div>
             <div class="bloco">
-              <h3 class="bloco-titulo">Talentos BÃ´nus</h3>
+              <h3 class="bloco-titulo">Talentos Bônus</h3>
               <ul id="p2-tal-bon" class="slot-lista"></ul>
             </div>
             <div class="bloco">
-              <h3 class="bloco-titulo">InventÃ¡rio, Volume e Riqueza</h3>
+              <h3 class="bloco-titulo">Inventário, Volume e Riqueza</h3>
               <div id="p2-inventario"></div>
             </div>
             <div class="bloco" id="p2-companheiro-wrap" hidden>
@@ -854,47 +854,47 @@
         </div>
       </article>
 
-      <!-- PÃGINA 3 (p. 582) -->
+      <!-- PÁGINA 3 (p. 582) -->
       <article class="pagina-ficha" data-pagina="3">
         <div class="pagina-topo">
-          <h2>Perfil, Campanha e AÃ§Ãµes</h2>
-          <span class="pagina-ref">PÃ¡gina 3 (Livro BÃ¡sico, p. 582)</span>
+          <h2>Perfil, Campanha e Ações</h2>
+          <span class="pagina-ref">Página 3 (Livro Básico, p. 582)</span>
         </div>
 
         <div class="p3-topo">
           <div class="emblema-personagem" id="p3-rascunho"></div>
           <div class="bloco" style="margin-bottom:0">
-            <h3 class="bloco-titulo">Dados BiogrÃ¡ficos &amp; Campanha</h3>
+            <h3 class="bloco-titulo">Dados Biográficos &amp; Campanha</h3>
             <div id="p3-perfil"></div>
           </div>
         </div>
 
         <div class="bloco">
-          <h3 class="bloco-titulo">AÃ§Ãµes e Atividades (6 Slots)</h3>
+          <h3 class="bloco-titulo">Ações e Atividades (6 Slots)</h3>
           <div id="p3-acoes" class="cards-acoes-grid"></div>
         </div>
 
         <div class="bloco">
-          <h3 class="bloco-titulo">AÃ§Ãµes Livres e ReaÃ§Ãµes (4 Slots)</h3>
+          <h3 class="bloco-titulo">Ações Livres e Reações (4 Slots)</h3>
           <div id="p3-reacoes" class="cards-acoes-grid"></div>
         </div>
       </article>
 
-      <!-- PÃGINA 4 (p. 583) -->
+      <!-- PÁGINA 4 (p. 583) -->
       <article class="pagina-ficha" data-pagina="4">
         <div class="pagina-topo">
-          <h2>ConjuraÃ§Ã£o e Magias</h2>
-          <span class="pagina-ref">PÃ¡gina 4 (Livro BÃ¡sico, p. 583)</span>
+          <h2>Conjuração e Magias</h2>
+          <span class="pagina-ref">Página 4 (Livro Básico, p. 583)</span>
         </div>
 
         <div id="p4-conteudo"></div>
       </article>
 
-      <!-- PÃGINA 5 (Extra: Companheiro Animal / Familiar) -->
+      <!-- PÁGINA 5 (Extra: Companheiro Animal / Familiar) -->
       <article id="pagina-companheiro" class="pagina-ficha oculto" data-pagina="5">
         <div class="pagina-topo">
           <h2 id="p5-titulo">Companheiro Animal / Familiar</h2>
-          <span id="p5-subtitulo" class="pagina-ref">PÃ¡gina 5 (Folha Extra de EstatÃ­sticas)</span>
+          <span id="p5-subtitulo" class="pagina-ref">Página 5 (Folha Extra de Estatísticas)</span>
         </div>
 
         <div id="p5-conteudo"></div>
