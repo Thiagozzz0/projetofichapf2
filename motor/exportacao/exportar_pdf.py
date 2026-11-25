@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+import unicodedata
 from pathlib import Path
 from typing import Any
 
@@ -1267,6 +1268,22 @@ def _pdf_coletar_secoes_referencia(
     return secoes
 
 
+_GAP_POS_TITULO_REF = 5.0
+
+
+def _pdf_largura_texto(
+    pymupdf: Any,
+    texto: str,
+    *,
+    fontname: str = "helv",
+    fontsize: float = 7.4,
+) -> float:
+    """Mede largura de texto Base-14 preservando caracteres acentuados (evita largura zero em Latin-1)."""
+    nfd = unicodedata.normalize("NFD", texto)
+    ascii_equiv = "".join(ch for ch in nfd if unicodedata.category(ch) != "Mn")
+    return float(pymupdf.get_text_length(ascii_equiv, fontname=fontname, fontsize=fontsize))
+
+
 def _pdf_quebrar_linhas_com_prefixo_negrito(
     pymupdf: Any,
     prefixo_bold: str,
@@ -1282,7 +1299,7 @@ def _pdf_quebrar_linhas_com_prefixo_negrito(
     if not corpo:
         return [(pref, "")]
 
-    larg_pref = pymupdf.get_text_length(pref + " ", fontname="hebo", fontsize=fontsize)
+    larg_pref = _pdf_largura_texto(pymupdf, pref, fontname="hebo", fontsize=fontsize) + _GAP_POS_TITULO_REF
     larg_disp_linha1 = max(40.0, max_w - larg_pref)
     linhas_out: list[tuple[str, str]] = []
     eh_primeira = True
@@ -1297,12 +1314,12 @@ def _pdf_quebrar_linhas_com_prefixo_negrito(
             idx += 1
             while idx < len(palavras):
                 cand = f"{atual} {palavras[idx]}"
-                if pymupdf.get_text_length(cand, fontname="helv", fontsize=fontsize) <= limite:
+                if _pdf_largura_texto(pymupdf, cand, fontname="helv", fontsize=fontsize) <= limite:
                     atual = cand
                     idx += 1
                 else:
                     break
-            linhas_out.append((pref + " " if eh_primeira else "", atual))
+            linhas_out.append((pref if eh_primeira else "", atual))
             eh_primeira = False
         if eh_primeira and p_idx == len(paragrafos) - 1:
             linhas_out.append((pref, ""))
@@ -1333,8 +1350,8 @@ def _pdf_adicionar_paginas_referencia_habilidades(
     classe_pj = cab.get("classe", "—")
     nivel_pj = cab.get("nivel", 1)
 
-    fontsize = 8.4
-    line_h = 11.2
+    fontsize = 7.4
+    line_h = 10.2
     num_folha = 0
     page: Any = None
     y = 0.0
@@ -1401,9 +1418,9 @@ def _pdf_adicionar_paginas_referencia_habilidades(
         _pdf_inserir_linha(
             page, pymupdf, x0 + 6.0, y + 1.5, x1 - 6.0, y + 13.8,
             secao["titulo"].upper(),
-            fontsize=8.2, bold=True, color=_PDF_COR_DESTAQUE,
+            fontsize=8.0, bold=True, color=_PDF_COR_DESTAQUE,
         )
-        y += 20.0
+        y += 19.0
 
         for item in secao["itens"]:
             linhas = _pdf_quebrar_linhas_com_prefixo_negrito(
@@ -1427,7 +1444,7 @@ def _pdf_adicionar_paginas_referencia_habilidades(
                         fontname="hebo",
                         color=_PDF_COR_DESTAQUE,
                     )
-                    px_texto = x0 + pymupdf.get_text_length(pref, fontname="hebo", fontsize=fontsize)
+                    px_texto = x0 + _pdf_largura_texto(pymupdf, pref, fontname="hebo", fontsize=fontsize) + _GAP_POS_TITULO_REF
                 if texto_ln:
                     page.insert_text(
                         pymupdf.Point(px_texto, base_y),
@@ -1437,7 +1454,7 @@ def _pdf_adicionar_paginas_referencia_habilidades(
                         color=_PDF_COR_TINTA,
                     )
                 y += line_h
-            y += 4.0
+            y += 4.5
 
 
 def exportar_ficha_pdf(resultado: dict[str, Any]) -> bytes:
