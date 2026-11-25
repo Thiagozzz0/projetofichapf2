@@ -277,7 +277,7 @@ def api_conceitos_por_classe(classe_id: str):
 
 @app.post("/api/gerar")
 def api_gerar():
-    """Gera uma ficha de personagem de 1º nível em JSON a partir das escolhas do usuário."""
+    """Gera uma ficha de personagem (níveis 1 a 5) em JSON a partir das escolhas do usuário."""
     payload = _extrair_payload()
     if payload is None:
         return jsonify({"erro": "Corpo da requisição inválido; esperado objeto JSON."}), 400
@@ -329,7 +329,7 @@ def api_exportar_docx():
 
 @app.post("/api/exportar/pdf")
 def api_exportar_pdf():
-    """Exporta a ficha (já gerada ou gerada sob demanda) em PDF oficial idêntico ao livro (4 páginas)."""
+    """Exporta a ficha (já gerada ou gerada sob demanda) em PDF oficial do livro (4 páginas + extras)."""
     payload = _extrair_payload()
     if payload is None:
         return jsonify({"erro": "Corpo da requisição inválido; esperado objeto JSON."}), 400

@@ -206,12 +206,34 @@
     }
   }
 
+  function obterOrcamentoAtualPc() {
+    const cat = app.opcoes?.catalogo_equipamentos;
+    const nivel = app.obterNivelSelecionadoUI?.() || 1;
+    return Number(cat?.orcamento_por_nivel_pc?.[String(nivel)] ?? cat?.orcamento_inicial_pc ?? 1500);
+  }
+
   function atualizarOrcamentoEquipamentosUI() {
     const cat = app.opcoes?.catalogo_equipamentos;
     if (!cat) return;
-    const orcPc = Number(cat.orcamento_inicial_pc || 1500);
+    const orcPc = obterOrcamentoAtualPc();
+    const ehRandNiv = app.ehNivelAleatorioUI?.() || false;
     const gastoPc = gastoManualEquipamentosPc();
     const saldoPc = orcPc - gastoPc;
+
+    const elOrcVal = document.getElementById("eq-orcamento-inicial-val");
+    if (elOrcVal) elOrcVal.textContent = fmtPrecoEq(orcPc);
+    const elTitEtapa = document.getElementById("eq-titulo-etapa");
+    if (elTitEtapa) {
+      elTitEtapa.textContent = ehRandNiv
+        ? "H — Equipamentos Iniciais (Orçamento varia por nível; base 15 po)"
+        : `H — Equipamentos Iniciais (Orçamento: ${fmtPrecoEq(orcPc)})`;
+    }
+    const elSubEtapa = document.getElementById("eq-subtitulo-etapa");
+    if (elSubEtapa) {
+      elSubEtapa.textContent = ehRandNiv
+        ? "Compra procedural ou manual com orçamento conforme nível (15–270 po)"
+        : `Compra procedural ou manual com orçamento inicial de ${fmtPrecoEq(orcPc)}`;
+    }
 
     const elGasto = document.getElementById("eq-resumo-gasto");
     const elSaldo = document.getElementById("eq-resumo-saldo");
@@ -294,11 +316,15 @@
     };
 
     const subId = conObj?.subclasse_oficial_id || "";
+    const nivel = app.obterNivelSelecionadoUI?.() || 1;
     let notaArmaduraExtra = "";
     if (clsId === "clerigo") {
       if (subId === "capelao_da_guerra") {
         armaduras.leve = true;
         armaduras.media = true;
+        if (nivel >= 3) {
+          armas.marcial = true;
+        }
       } else if (conId === "aleatorio") {
         armaduras.leve = true;
         armaduras.media = true;
@@ -1018,6 +1044,7 @@
   }
 
   Object.assign(app, {
+    obterOrcamentoAtualPc,
     gastoManualEquipamentosPc,
     atualizarOrcamentoEquipamentosUI,
     atualizarVisibilidadeEquipamentosUI,

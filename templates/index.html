@@ -7,20 +7,20 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=56">
-  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=56">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}?v=56">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/tema.css') }}?v=56">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=58">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=58">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}?v=58">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/tema.css') }}?v=58">
 </head>
 <body>
   <div class="app-container">
     <header class="topbar nao-imprimir">
       <div class="topbar-inner">
         <div class="topbar-marca">
-          <img class="topbar-logo" src="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=56" alt="Pathfinder 2ª Edição">
+          <img class="topbar-logo" src="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=58" alt="Pathfinder 2ª Edição">
           <div>
             <h1>Gerador Procedural de Personagens — Pathfinder 2ª Edição</h1>
-            <p>Monte fichas completas guiadas por conceito/subclasse com matemática ABCD, equipamentos de 15 po, magias e exportação em PDF (Livro), DOCX e TXT.</p>
+            <p>Monte fichas completas (níveis 1 a 5) guiadas por conceito/subclasse com matemática ABCD, equipamentos por nível (15–270 po), magias e exportação em PDF (Livro), DOCX e TXT.</p>
           </div>
         </div>
         <button type="button" id="btn-alternar-tema" class="btn-tema" aria-pressed="false">🌙 Grimório Noturno</button>
@@ -273,9 +273,13 @@
                   <label for="nivel">Nível</label>
                   <select id="nivel" name="nivel">
                     <option value="1" selected>1º Nível</option>
-                    <option value="aleatorio">Aleatório (1º Nível disponível)</option>
+                    <option value="2">2º Nível</option>
+                    <option value="3">3º Nível</option>
+                    <option value="4">4º Nível</option>
+                    <option value="5">5º Nível</option>
+                    <option value="aleatorio">Aleatório (Níveis 1 a 5)</option>
                   </select>
-                  <small class="nota-campo">Níveis 2–20 planejados para expansão futura.</small>
+                  <small class="nota-campo">Suporte completo aos níveis 1 a 5 (Níveis 6–20 planejados para expansão futura).</small>
                 </div>
                 <div class="campo-grupo">
                   <label for="nome">Nome do Personagem</label>
@@ -340,6 +344,7 @@
                     <button type="button" id="btn-per-reset-procedural" class="btn btn-sutil">Voltar Tudo p/ Procedural</button>
                   </div>
                   <small id="per-nota-geral" class="nota-campo">Perícias já concedidas por Classe, Subclasse, Biografia ou Divindade ficam travadas como automáticas. Sobreposições geram +1 vaga livre automaticamente (regra oficial PF2E). Vagas não marcadas serão completadas pelo modo procedural.</small>
+                  <small id="per-nota-progressao" class="nota-campo oculto"></small>
 
                   <div id="grid-pericias-opcoes" class="grid-pericias-opcoes">
                     <div class="card-tal-cat oculto" id="card-per-bio-opcao">
@@ -422,6 +427,7 @@
                     <button type="button" id="btn-tal-reset-procedural" class="btn btn-sutil">Voltar Tudo p/ Procedural</button>
                   </div>
                   <small class="nota-campo">Ordem dos talentos: Ancestralidade → Biografia (automático) → Classe → Demais Tipos (Perícia &amp; Gerais). Campos em "Procedural" seguem o conceito.</small>
+                  <small id="tal-nota-progressao" class="nota-campo oculto"></small>
 
                   <div class="grid-talentos-custom">
                     <div class="card-tal-cat" id="card-tal-ancestralidade">
@@ -582,6 +588,32 @@
                         <div id="grid-magias-n1" class="grid-pericias-checkboxes"></div>
                       </div>
                     </div>
+
+                    <div class="mag-circulo-card oculto" data-mag-circulo="n2">
+                      <button type="button" class="mag-circulo-header" data-mag-toggle="n2" aria-expanded="false" aria-controls="corpo-mag-n2">
+                        <span id="lbl-mag-n2" class="mag-circulo-titulo">Magias de 2º Círculo</span>
+                        <span class="mag-circulo-dir">
+                          <span id="pill-mag-n2" class="etapa-resumo-pill">0 / 0</span>
+                          <span class="etapa-seta" aria-hidden="true">▾</span>
+                        </span>
+                      </button>
+                      <div id="corpo-mag-n2" class="mag-circulo-corpo oculto">
+                        <div id="grid-magias-n2" class="grid-pericias-checkboxes"></div>
+                      </div>
+                    </div>
+
+                    <div class="mag-circulo-card oculto" data-mag-circulo="n3">
+                      <button type="button" class="mag-circulo-header" data-mag-toggle="n3" aria-expanded="false" aria-controls="corpo-mag-n3">
+                        <span id="lbl-mag-n3" class="mag-circulo-titulo">Magias de 3º Círculo</span>
+                        <span class="mag-circulo-dir">
+                          <span id="pill-mag-n3" class="etapa-resumo-pill">0 / 0</span>
+                          <span class="etapa-seta" aria-hidden="true">▾</span>
+                        </span>
+                      </button>
+                      <div id="corpo-mag-n3" class="mag-circulo-corpo oculto">
+                        <div id="grid-magias-n3" class="grid-pericias-checkboxes"></div>
+                      </div>
+                    </div>
                   </div>
                   <div id="desc-magia-detalhe" class="desc-preview-box oculto" aria-live="polite"></div>
                 </div>
@@ -601,7 +633,7 @@
                 <span class="etapa-num" id="etapa-num-equipamentos">4</span>
                 <span>
                   <span class="etapa-titulo">Equipamentos</span>
-                  <span class="etapa-subtitulo">Compra procedural ou manual com orçamento inicial de 15 po (150 pp)</span>
+                  <span id="eq-subtitulo-etapa" class="etapa-subtitulo">Compra procedural ou manual com orçamento inicial de 15 po (150 pp)</span>
                 </span>
               </span>
               <span class="etapa-header-dir">
@@ -613,19 +645,19 @@
               <div class="campo-grupo subgrupo-atb-etapa-d" id="grupo-equipamentos">
                 <div class="etapa-d-topo">
                   <div>
-                    <label for="modo-equipamentos" class="etapa-d-titulo">H — Equipamentos Iniciais (Orçamento: 15 po / 150 pp)</label>
-                    <small class="nota-campo">Escolha entre compra automática procedural (pelo conceito) ou selecionar seus itens manualmente descontando direto das 150 pp da ficha.</small>
+                    <label id="eq-titulo-etapa" for="modo-equipamentos" class="etapa-d-titulo">H — Equipamentos Iniciais (Orçamento: 15 po / 150 pp)</label>
+                    <small class="nota-campo">Escolha entre compra automática procedural (pelo conceito) ou selecionar seus itens manualmente descontando direto do orçamento da ficha.</small>
                   </div>
                 </div>
                 <select id="modo-equipamentos" name="modo_equipamentos">
                   <option value="procedural" selected>Procedural (compra automática guiada pelo conceito)</option>
-                  <option value="personalizado">Personalizar / Comprar Equipamentos (deduzir de 15 po / 150 pp)</option>
+                  <option value="personalizado">Personalizar / Comprar Equipamentos (deduzir do orçamento da ficha)</option>
                 </select>
 
                 <div id="painel-equipamentos-custom" class="painel-equipamentos-custom oculto">
                   <div id="barra-orcamento-eq" class="barra-orcamento-eq">
                     <div class="orc-metricas">
-                      <span>Orçamento Inicial: <strong>150 pp (15 po)</strong></span>
+                      <span>Orçamento Inicial: <strong id="eq-orcamento-inicial-val">150 pp (15 po)</strong></span>
                       <span>Gasto: <strong id="eq-resumo-gasto">0 pp</strong></span>
                       <span>Saldo Restante na Ficha: <strong id="eq-resumo-saldo" class="saldo-ok">150 pp (15 po)</strong></span>
                     </div>
@@ -919,22 +951,22 @@
           <circle class="overlay-anel-fundo" cx="60" cy="60" r="50" />
           <path class="overlay-arco-seta" d="M 60 10 A 50 50 0 1 1 24.6 95.4" marker-end="url(#overlay-seta-ponta)" />
         </svg>
-        <img class="overlay-logo-img" src="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=56" alt="Processando seu arquivo">
+        <img class="overlay-logo-img" src="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=58" alt="Processando seu arquivo">
       </div>
       <p id="overlay-download-texto" class="overlay-download-texto">Processando seu arquivo</p>
     </div>
   </div>
 
-  <script src="{{ url_for('static', filename='js/tema.js') }}?v=56" defer></script>
-  <script src="{{ url_for('static', filename='js/render_ficha.js') }}?v=56" defer></script>
-  <script src="{{ url_for('static', filename='js/estado.js') }}?v=56" defer></script>
-  <script src="{{ url_for('static', filename='js/atributos.js') }}?v=56" defer></script>
-  <script src="{{ url_for('static', filename='js/previa_atributos.js') }}?v=56" defer></script>
-  <script src="{{ url_for('static', filename='js/pericias.js') }}?v=56" defer></script>
-  <script src="{{ url_for('static', filename='js/talentos.js') }}?v=56" defer></script>
-  <script src="{{ url_for('static', filename='js/magias.js') }}?v=56" defer></script>
-  <script src="{{ url_for('static', filename='js/equipamentos.js') }}?v=56" defer></script>
-  <script src="{{ url_for('static', filename='js/perfil.js') }}?v=56" defer></script>
-  <script src="{{ url_for('static', filename='js/app.js') }}?v=56" defer></script>
+  <script src="{{ url_for('static', filename='js/tema.js') }}?v=58" defer></script>
+  <script src="{{ url_for('static', filename='js/render_ficha.js') }}?v=58" defer></script>
+  <script src="{{ url_for('static', filename='js/estado.js') }}?v=58" defer></script>
+  <script src="{{ url_for('static', filename='js/atributos.js') }}?v=58" defer></script>
+  <script src="{{ url_for('static', filename='js/previa_atributos.js') }}?v=58" defer></script>
+  <script src="{{ url_for('static', filename='js/pericias.js') }}?v=58" defer></script>
+  <script src="{{ url_for('static', filename='js/talentos.js') }}?v=58" defer></script>
+  <script src="{{ url_for('static', filename='js/magias.js') }}?v=58" defer></script>
+  <script src="{{ url_for('static', filename='js/equipamentos.js') }}?v=58" defer></script>
+  <script src="{{ url_for('static', filename='js/perfil.js') }}?v=58" defer></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}?v=58" defer></script>
 </body>
 </html>

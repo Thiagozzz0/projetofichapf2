@@ -675,11 +675,16 @@ def _pdf_preencher_slot_magia(
     x_acoes: float,
     x_comp_base: float,
     mostrar_freq: bool = False,
+    mostrar_circulo: bool = False,
 ) -> None:
     """Preenche um card de Truque, Magia Inata ou Magia de Círculo na Página 4."""
     nome = (slot.get("nome") or "").strip()
     if not nome:
         return
+    if mostrar_circulo:
+        circ = int(slot.get("nivel") or 1)
+        if circ >= 2:
+            nome = f"{nome} ({circ}º)"
     fim_nome = (x_prep - 2.0) if x_prep is not None else (x_acoes - 2.0)
     _pdf_inserir_linha(page, pymupdf, x0 + 2.0, y_top + 1.0, fim_nome, y_top + 13.4, nome, fontsize=7.5, bold=True)
 
@@ -773,9 +778,13 @@ def _pdf_preencher_pagina_4(page: Any, pymupdf: Any, resultado: dict[str, Any]) 
     for idx, slot in enumerate(conj["magias"][:32]):
         y_m = _PDF_MAGIAS_YS[idx % 16]
         if idx < 16:
-            _pdf_preencher_slot_magia(page, pymupdf, slot, 214.8, y_m, x_prep=381.6, x_acoes=366.9, x_comp_base=371.4)
+            _pdf_preencher_slot_magia(
+                page, pymupdf, slot, 214.8, y_m, x_prep=381.6, x_acoes=366.9, x_comp_base=371.4, mostrar_circulo=True,
+            )
         else:
-            _pdf_preencher_slot_magia(page, pymupdf, slot, 399.5, y_m, x_prep=566.4, x_acoes=551.6, x_comp_base=556.2)
+            _pdf_preencher_slot_magia(
+                page, pymupdf, slot, 399.5, y_m, x_prep=566.4, x_acoes=551.6, x_comp_base=556.2, mostrar_circulo=True,
+            )
 
 
 def _pdf_desenhar_caixa_secao(
@@ -1208,9 +1217,10 @@ def _pdf_coletar_secoes_referencia(
             desc_tese = f"{desc_tese}\n{ac_sub.get('nome', 'Ação da Tese')}: {_formatar_detalhes_habilidade(ac_sub)}".strip()
         _add_item(itens_talentos, vistos_talentos, f"Tese Arcana: {tese['nome']}", desc_tese)
 
+    nivel_pj = int((ficha.get("cabecalho") or {}).get("nivel") or 1)
     if cls:
         for car in cls.get("caracteristicas_de_classe") or []:
-            if int(car.get("nivel") or 1) != 1:
+            if int(car.get("nivel") or 1) > nivel_pj:
                 continue
             nome_car = car.get("nome") or ""
             if not nome_car or car.get("id") == "tese_arcana" and tese:
@@ -1235,6 +1245,8 @@ def _pdf_coletar_secoes_referencia(
         else {}
     )
     for slot in (hab.get("classe") or [])[2:]:
+        if "caracter" in normalizar(slot.get("rotulo_oficial") or ""):
+            continue
         nome_s = (slot.get("nome") or "").strip()
         if not nome_s or nome_s == "—":
             continue
@@ -1310,13 +1322,14 @@ def _pdf_coletar_secoes_referencia(
             ("Truque", False, conj.get("truques_magicos") or []),
             ("Inata", False, conj.get("magias_inatas") or []),
             ("Foco", True, (conj.get("magias_foco") or {}).get("slots") or []),
-            ("1º Círculo", False, conj.get("magias") or []),
+            (None, False, conj.get("magias") or []),
         )
         for rot_cat, eh_foco, lista_m in grupos_mag:
             for slot in lista_m:
                 nome_m = (slot.get("nome") or "").strip()
                 if not nome_m:
                     continue
+                rot_final = rot_cat if rot_cat is not None else f"{int(slot.get('nivel') or 1)}º Círculo"
                 m_obj = _resolver_magia_slot(nome_m, eh_foco=eh_foco)
                 nota_freq = f"Frequência: {slot['frequencia']}" if slot.get("frequencia") else ""
                 if m_obj:
@@ -1330,7 +1343,7 @@ def _pdf_coletar_secoes_referencia(
                         },
                         nota_extra=nota_freq,
                     )
-                titulo_m = f"{nome_m} ({rot_cat})"
+                titulo_m = f"{nome_m} ({rot_final})"
                 _add_item(itens_magias, vistos_magias, titulo_m, desc_m)
 
         if itens_magias:

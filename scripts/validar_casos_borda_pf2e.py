@@ -1600,19 +1600,19 @@ def test_progressao_niveis_2_a_5() -> None:
         nivel=5, seed=515, dados=db,
     )
     assert l5["meta_geracao"]["escolhas_pericias"]["incrementos_disponiveis"] == 4
-    assert sum(1 for p in l5["ficha"]["pericias"][:14] if p["grau_proficiencia"] == "especialista") == 4
+    assert sum(1 for p in l5["ficha"]["pericias"] if p["grau_proficiencia"] == "especialista") == 4
     assert l5["ficha"]["proficiencia_armas"][0]["grau_proficiencia"] == "especialista"
     assert l5["ficha"]["proficiencia_armas"][3]["grau_proficiencia"] == "especialista"
 
     # 3. Monge Nível 3: Movimento Incrível (+3m sem armadura) + Nível 5 (Especialidade em Golpes + Prontidão)
     mo3 = gerar_personagem(
-        "humano", "heranca_versatil", "monge", "monge_punho_ferro",
+        "humano", "heranca_versatil", "monge", "monge_artista_posturas",
         nivel=3, seed=523, dados=db,
     )
     assert "Movimento Incrível (+3m)" in mo3["ficha"]["velocidade"]["tipos_movimento_anotacoes"]
     assert mo3["ficha"]["velocidade"]["metros"] >= 10.5
     mo5 = gerar_personagem(
-        "humano", "heranca_versatil", "monge", "monge_punho_ferro",
+        "humano", "heranca_versatil", "monge", "monge_artista_posturas",
         nivel=5, seed=525, dados=db,
     )
     assert mo5["ficha"]["percepcao"]["grau_proficiencia"] == "especialista"
@@ -1656,6 +1656,134 @@ def test_progressao_niveis_2_a_5() -> None:
             assert r["ficha"]["cabecalho"]["nivel"] == niv
             assert r["ficha"]["pontos_vida"]["max"] >= 15
 
+    # 7. Casos de borda matemáticos de talentos N2–N5 (Companheiro Maduro N4, Familiar Melhorado N2,
+    #    Foco acumulativo Ki/Domínio/Bardo, Expansão de Truque Mágico, Evolução Arcana, Armas Ancestrais no slot N5)
+    con_druida_anim = next(
+        c["id"] for c in db.conceitos_da_classe("druida") if c["subclasse_oficial_id"] == "animais"
+    )
+    dr4 = gerar_personagem(
+        "elfo", "elfo_vidente", "druida", con_druida_anim, nivel=4, seed=551,
+        escolhas_talentos={"modo": "personalizado", "classe_ids": ["procedural", "companheiro_animal_maduro"]},
+        dados=db,
+    )
+    comp_dr4 = dr4["meta_geracao"]["companheiro_ou_familiar"]
+    assert comp_dr4 is not None and comp_dr4["estagio"] == "Companheiro Animal Maduro"
+    assert any(a["dano"].startswith("2d") for a in comp_dr4["ataques"])
+
+    con_mago_fam = next(
+        c["id"] for c in db.conceitos_da_classe("mago")
+        if c.get("tese_arcana_id") == "sintonizacao_com_familiar_aprimorada"
+    )
+    mg_fam2 = gerar_personagem(
+        "gnomo", "gnomo_camaleao", "mago", con_mago_fam, nivel=2, seed=552,
+        escolhas_talentos={"modo": "personalizado", "classe_ids": ["familiar_melhorado"]},
+        dados=db,
+    )
+    fam_mg2 = mg_fam2["meta_geracao"]["companheiro_ou_familiar"]
+    assert fam_mg2 is not None and fam_mg2["habilidades_diarias_max"] == 4 and len(fam_mg2["habilidades_selecionadas"]) == 4
+
+    mo_ki4 = gerar_personagem(
+        "humano", "heranca_versatil", "monge", "monge_artista_posturas", nivel=4, seed=553,
+        escolhas_talentos={
+            "modo": "personalizado",
+            "ancestralidade_id": "pericia_natural",
+            "classe_ids": ["golpe_de_ki", "procedural", "integridade_corporal"],
+        },
+        dados=db,
+    )
+    foco_mo4 = mo_ki4["ficha"]["conjuracao"]["magias_foco"]
+    assert foco_mo4["pontos_foco"]["maximo"] == 2
+    assert {s["nome"] for s in foco_mo4["slots"] if s["nome"]} >= {"Golpe de Ki", "Integridade Corporal"}
+
+    cl_exp2 = gerar_personagem(
+        "humano", "heranca_perita", "clerigo", "clerigo_hospitalario_sagrado",
+        divindade_id="sarenrae", nivel=2, seed=554,
+        escolhas_talentos={
+            "modo": "personalizado",
+            "ancestralidade_id": "pericia_natural",
+            "classe_ids": ["expansao_de_truque_magico"],
+        },
+        dados=db,
+    )
+    assert sum(1 for s in cl_exp2["ficha"]["conjuracao"]["truques_magicos"] if s["nome"]) == 7
+
+    mg_anao5 = gerar_personagem(
+        "anao", "anao_da_forja", "mago", "mago_evocador_artilharia", nivel=5, seed=555,
+        escolhas_talentos={
+            "modo": "personalizado",
+            "ancestralidade_id": "aptidao_com_pedras",
+            "ancestralidade_n5_id": "familiaridade_com_armas_enanicas",
+        },
+        dados=db,
+    )
+    armas_anao5 = [normalizar(g["arma"]) for g in mg_anao5["ficha"]["golpes_corpo_a_corpo"] if g["arma"]]
+    assert any(a in ("machado de batalha", "martelo de guerra", "picareta") for a in armas_anao5)
+
+
+def test_exportadores_e_ui_niveis_2_a_5() -> None:
+    """Valida HTML da UI (níveis 1–5 e círculos 2–3) e exportadores TXT/DOCX/PDF nos níveis 2–5."""
+    import pymupdf
+    from app import app as flask_app
+
+    client = flask_app.test_client()
+
+    # 1. GET / deve expor opções de nível 1..5 e aleatório, além dos acordeões de 2º e 3º círculos
+    resp_home = client.get("/")
+    assert resp_home.status_code == 200
+    html = resp_home.get_data(as_text=True)
+    for niv in ("1", "2", "3", "4", "5", "aleatorio"):
+        assert f'value="{niv}"' in html, f"Opção de nível '{niv}' ausente no HTML."
+    assert 'id="grid-magias-n2"' in html and 'id="grid-magias-n3"' in html
+
+    # 2. Exportação TXT, DOCX e PDF para Mago N5 (círculos 1–3)
+    payload_mg5 = {
+        "ancestralidade_id": "elfo",
+        "heranca_id": "elfo_vidente",
+        "classe_id": "mago",
+        "conceito_id": "mago_evocador_artilharia",
+        "nivel": 5,
+        "seed": 545,
+    }
+    resp_txt = client.post("/api/exportar/txt", json=payload_mg5)
+    assert resp_txt.status_code == 200
+    txt_out = resp_txt.get_data(as_text=True)
+    assert "Nível 5" in txt_out
+    assert "2º Círculo" in txt_out and "3º Círculo" in txt_out
+
+    resp_docx = client.post("/api/exportar/docx", json=payload_mg5)
+    assert resp_docx.status_code == 200
+    with zipfile.ZipFile(io.BytesIO(resp_docx.data), "r") as zf:
+        doc_xml = zf.read("word/document.xml").decode("utf-8")
+    assert "2º Círculo" in doc_xml and "3º Círculo" in doc_xml
+
+    resp_pdf_mg = client.post("/api/exportar/pdf", json=payload_mg5)
+    assert resp_pdf_mg.status_code == 200
+    assert resp_pdf_mg.data.startswith(b"%PDF-")
+    with pymupdf.open(stream=resp_pdf_mg.data, filetype="pdf") as doc_mg:
+        assert len(doc_mg) >= 5
+        texto_ref_mg = "\n".join(doc_mg[i].get_text() for i in range(4, len(doc_mg)))
+    assert "(2º Círculo)" in texto_ref_mg and "(3º Círculo)" in texto_ref_mg
+    assert "Reflexos Rápidos" in texto_ref_mg
+
+    # 3. Exportação TXT, DOCX e PDF para Monge N5 (Movimento Incrível e características N3/N5)
+    payload_mo5 = {
+        "ancestralidade_id": "humano",
+        "heranca_id": "heranca_versatil",
+        "classe_id": "monge",
+        "conceito_id": "monge_artista_posturas",
+        "nivel": 5,
+        "seed": 525,
+    }
+    resp_pdf_mo = client.post("/api/exportar/pdf", json=payload_mo5)
+    assert resp_pdf_mo.status_code == 200
+    assert resp_pdf_mo.data.startswith(b"%PDF-")
+    with pymupdf.open(stream=resp_pdf_mo.data, filetype="pdf") as doc_mo:
+        assert len(doc_mo) >= 5
+        texto_mo_p1 = doc_mo[0].get_text()
+        texto_mo_ref = "\n".join(doc_mo[i].get_text() for i in range(4, len(doc_mo)))
+    assert "Movimento Incrível" in texto_mo_p1 or "Movimento Incrível" in texto_mo_ref
+    assert "Prontidão" in texto_mo_ref or "Especialidade em Golpes" in texto_mo_ref
+
 
 def main() -> None:
     test_ca_limite_destreza_e_sem_armadura()
@@ -1680,6 +1808,7 @@ def main() -> None:
     test_regras_da_casa_peso_racao_e_oleo()
     test_pdf_secoes_referencia_completa()
     test_progressao_niveis_2_a_5()
+    test_exportadores_e_ui_niveis_2_a_5()
     print("SUCESSO TOTAL — Todos os testes de casos de borda PF2E passaram!")
 
 

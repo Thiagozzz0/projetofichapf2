@@ -648,7 +648,15 @@ def selecionar_talentos(
             escolhidos_classe_ids.add(tid)
             talentos_classe_selecionados.append(dict(t, origem=origem, nivel_slot=nivel_slot))
             _registrar_talento_possuido(t)
-            if tid in {"iniciado_no_dominio", "golpe_de_ki", "disparada_de_ki"}:
+            if tid in {
+                "iniciado_no_dominio",
+                "dominio_de_divindade",
+                "golpe_de_ki",
+                "disparada_de_ki",
+                "integridade_corporal",
+                "aspecto_selvagem",
+                "mao_do_aprendiz",
+            }:
                 ctx["possui_reserva_foco"] = True
             return True
         return False
@@ -1042,7 +1050,9 @@ def selecionar_talentos(
 
     efeitos = {
         "extras_pericias": (2 if "pericia_natural" in ids_anc_ativos else 0)
-        + (1 if "longevidade_ancestral" in ids_anc_ativos else 0),
+        + (1 if "longevidade_ancestral" in ids_anc_ativos else 0)
+        + (1 if "evolucao_arcana" in escolhidos_classe_ids else 0)
+        + (1 if "evolucao_ocultista" in escolhidos_classe_ids else 0),
         "pericias_ancestrais_fixas": pericias_anc_fixas,
         "saber_ancestral": saber_anc,
         "vitalidade": vitalidade_ativo,

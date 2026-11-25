@@ -406,8 +406,13 @@ def gerar_conjuracao(
             inatas.append(dict(escolhido, frequencia="À vontade (Herança)"))
             tradicao_inata = trad_pref
 
+    tal_anc_set = (
+        {str(x) for x in talento_ancestral_id if x}
+        if isinstance(talento_ancestral_id, (list, tuple, set))
+        else ({str(talento_ancestral_id)} if talento_ancestral_id else set())
+    )
     inatas_ids = {m["id"] for m in inatas}
-    if talento_ancestral_id == "magia_extraterrena":
+    if "magia_extraterrena" in tal_anc_set:
         pool_ext = [
             m for m in dados.magias.values()
             if "arcana" in m.get("tradicoes", []) and "Truque Mágico" in m.get("tracos", []) and m["id"] not in inatas_ids
@@ -416,7 +421,7 @@ def gerar_conjuracao(
         if escolhido_ext:
             inatas.append(dict(escolhido_ext, frequencia="À vontade (Talento Ancestral)"))
             tradicao_inata = tradicao_inata or "arcana"
-    elif talento_ancestral_id == "magia_do_primeiro_mundo":
+    if "magia_do_primeiro_mundo" in tal_anc_set:
         pool_pm = [
             m for m in dados.magias.values()
             if "primal" in m.get("tradicoes", []) and "Truque Mágico" in m.get("tracos", []) and m["id"] not in inatas_ids
@@ -430,8 +435,24 @@ def gerar_conjuracao(
     # 2. Conjurador Pleno vs Foco Marcial vs Não-conjurador
     # ------------------------------------------------------------------
     conjuracao_plena = classe_id in {"bardo", "clerigo", "druida", "feiticeiro", "mago"}
-    possui_foco_monge = classe_id == "monge" and any(t in talentos_classe_ids for t in ("golpe_de_ki", "disparada_de_ki"))
+    possui_foco_monge = classe_id == "monge" and any(
+        t in talentos_classe_ids for t in ("golpe_de_ki", "disparada_de_ki", "integridade_corporal")
+    )
     possui_foco_campeao = classe_id in _CLASSES_FOCO_CAR
+    possui_magica_menor_ladino = classe_id == "ladino" and "magica_menor" in talentos_classe_ids
+    if possui_magica_menor_ladino:
+        trad_lad = conj_rec.get("tradicao") if conj_rec.get("tradicao") in TRADICOES_OFICIAIS else "arcana"
+        for _ in range(2):
+            pool_mm = [
+                m for m in dados.magias.values()
+                if trad_lad in m.get("tradicoes", [])
+                and "Truque Mágico" in m.get("tracos", [])
+                and m["id"] not in {x["id"] for x in inatas}
+            ]
+            esc_mm = _escolher_truque_por_conceito(pool_mm, conceito, trad_lad, rng)
+            if esc_mm:
+                inatas.append(dict(esc_mm, frequencia="À vontade (Mágica Menor)"))
+                tradicao_inata = tradicao_inata or trad_lad
 
     if conjuracao_plena:
         if prof_magia_info["tradicao"] == "conforme_linhagem" and subclasse:
@@ -513,6 +534,8 @@ def gerar_conjuracao(
         conj_rec = conj_por_trad.get(tradicao) or conj_rec
         tabela = _tabela_magias_por_nivel(classe, nivel) or {"truques_magicos": 5, "espacos_por_circulo": {"1": 2}}
         qtd_truques = int(tabela.get("truques_magicos", 5))
+        if "expansao_de_truque_magico" in talentos_classe_ids:
+            qtd_truques += 2
         qtd_truques_total = qtd_truques
         espacos_tabela = {
             str(k): int(v)
@@ -610,7 +633,7 @@ def gerar_conjuracao(
             rng,
             extras_permitidas_ids=extras_truques_sub,
         )
-        if talento_ancestral_id == "truque_magico_adaptado" and truques_selecionados and modo_mag != "personalizado":
+        if "truque_magico_adaptado" in tal_anc_set and truques_selecionados and modo_mag != "personalizado":
             pool_adapt = [
                 m for m in dados.magias.values()
                 if "Truque Mágico" in m.get("tracos", [])
@@ -726,27 +749,42 @@ def gerar_conjuracao(
         add_foco(dados.magias_foco.get("contraperformance"))
         for tid in talentos_classe_ids:
             add_foco(dados.magias_foco.get(tid))
+            if tid in ("composicao_prolongada", "etude_do_mestre_do_saber"):
+                pontos_foco = min(3, pontos_foco + 1)
     elif classe_id == "campeao":
         pontos_foco = 1
         add_foco(dados.magias_foco.get("imposicao_de_maos"))
+        if "dominio_de_divindade" in talentos_classe_ids:
+            add_foco(_resolver_magia_foco_dominio(dados, conceito, rng, divindade=divindade))
+            pontos_foco = min(3, pontos_foco + 1)
     elif classe_id == "clerigo" and "iniciado_no_dominio" in talentos_classe_ids:
         pontos_foco = 1
         add_foco(_resolver_magia_foco_dominio(dados, conceito, rng, divindade=divindade))
     elif classe_id == "druida" and subclasse:
         pontos_foco = 1 + int(subclasse.get("pontos_foco_adicionais") or 0)
         add_foco(dados.resolver_magia_foco(subclasse.get("magia_ordem")))
+        for tid in talentos_classe_ids:
+            if tid in ("aspecto_selvagem", "curar_animal", "bom_fruto"):
+                add_foco(dados.magias_foco.get(tid))
+                pontos_foco = min(3, pontos_foco + 1)
     elif classe_id == "feiticeiro" and subclasse:
         pontos_foco = 1
         nome_fi = subclasse.get("magias_de_linhagem", {}).get("inicial")
         add_foco(dados.resolver_magia_foco(nome_fi))
-    elif classe_id == "mago" and subclasse and sub_id != "universalista":
-        pontos_foco = 1
-        add_foco(dados.resolver_magia_foco(subclasse.get("magia_de_escola")))
+    elif classe_id == "mago":
+        if subclasse and sub_id != "universalista":
+            pontos_foco = 1
+            add_foco(dados.resolver_magia_foco(subclasse.get("magia_de_escola")))
+        if "mao_do_aprendiz" in talentos_classe_ids:
+            pontos_foco = max(1, pontos_foco)
+            add_foco(dados.magias_foco.get("mao_do_aprendiz"))
     elif possui_foco_monge:
-        pontos_foco = 1
+        pontos_foco = 0
         for tid in talentos_classe_ids:
-            if tid in ("golpe_de_ki", "disparada_de_ki"):
+            if tid in ("golpe_de_ki", "disparada_de_ki", "integridade_corporal"):
                 add_foco(dados.magias_foco.get(tid))
+                pontos_foco = min(3, pontos_foco + 1)
+        pontos_foco = max(1, pontos_foco)
 
     return {
         "eh_conjurador": True,

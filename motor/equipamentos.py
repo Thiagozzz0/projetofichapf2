@@ -450,8 +450,15 @@ def calcular_proficiencias_combate(
         elif avancada_g == "destreinado":
             avancada_g = "treinado"
 
-    tal_anc_id = efeitos.get("talento_ancestral_id") or ""
-    armas_anc_lista, traco_anc_armas = _FAMILIARIDADE_ARMAS_ANCESTRAL.get(tal_anc_id, ([], None))
+    tal_anc_ids_lista = list(efeitos.get("talentos_ancestrais_ids") or [])
+    if not tal_anc_ids_lista and efeitos.get("talento_ancestral_id"):
+        tal_anc_ids_lista.append(str(efeitos["talento_ancestral_id"]))
+    armas_anc_lista: list[str] = []
+    traco_anc_armas: str | None = None
+    for tid_anc in tal_anc_ids_lista:
+        if tid_anc in _FAMILIARIDADE_ARMAS_ANCESTRAL:
+            armas_anc_lista, traco_anc_armas = _FAMILIARIDADE_ARMAS_ANCESTRAL[tid_anc]
+            break
     armas_monge_grau = "treinado" if armas_monge_treinadas else "destreinado"
     maestria_guerreiro_grupo: str | None = None
 
@@ -506,7 +513,7 @@ def calcular_proficiencias_combate(
         "especificas_grau": grau_esp,
         "armas_ancestrais_lista": list(armas_anc_lista),
         "traco_ancestral_armas": traco_anc_armas,
-        "armamento_nao_convencional": tal_anc_id == "armamento_nao_convencional",
+        "armamento_nao_convencional": "armamento_nao_convencional" in tal_anc_ids_lista,
         "maestria_guerreiro_grupo": maestria_guerreiro_grupo,
     }
 
@@ -850,7 +857,10 @@ def comprar_equipamentos(
                 armas_cc_ids = [wid_fav] + [x for x in armas_cc_ids if x != wid_fav]
 
     # Armas de Familiaridade Ancestral (priorizadas quando o talento ancestral concede proficiência)
-    tal_anc_id = (efeitos_talentos or {}).get("talento_ancestral_id") or ""
+    tal_anc_ids_eq = list((efeitos_talentos or {}).get("talentos_ancestrais_ids") or [])
+    if not tal_anc_ids_eq and (efeitos_talentos or {}).get("talento_ancestral_id"):
+        tal_anc_ids_eq.append(str(efeitos_talentos["talento_ancestral_id"]))
+    tal_anc_id = next((tid for tid in tal_anc_ids_eq if tid in _FAMILIARIDADE_ARMAS_ANCESTRAL), "")
     if tal_anc_id in _FAMILIARIDADE_ARMAS_ANCESTRAL:
         armas_anc_nomes, traco_anc = _FAMILIARIDADE_ARMAS_ANCESTRAL[tal_anc_id]
         nomes_anc_norm = {normalizar(n) for n in armas_anc_nomes}

@@ -279,11 +279,13 @@
 
         const elResumoFam = document.getElementById("resumo-stats-familiar");
         if (elResumoFam) {
+          const nivelFam = app.obterNivelSelecionadoUI?.() || 1;
+          const pvFam = 5 * nivelFam;
           elResumoFam.innerHTML =
-            `<div class="desc-preview-topo"><span class="desc-preview-titulo">Estatísticas Base do Familiar (1º Nível)</span></div>` +
+            `<div class="desc-preview-topo"><span class="desc-preview-titulo">Estatísticas Base do Familiar (${nivelFam}º Nível)</span></div>` +
             `<div class="desc-preview-pills">` +
             `<span class="desc-preview-pill">Tamanho: Miúdo</span>` +
-            `<span class="desc-preview-pill">PV: 5 / nível (5 no N1)</span>` +
+            `<span class="desc-preview-pill">PV: 5 / nível (${pvFam} no N${nivelFam})</span>` +
             `<span class="desc-preview-pill">CA &amp; Salvamentos: iguais aos do mestre</span>` +
             `<span class="desc-preview-pill">Velocidade: 7,5 m</span>` +
             `<span class="desc-preview-pill">Sentidos: Visão na Penumbra; empatia até 1,5 km</span>` +

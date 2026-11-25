@@ -363,12 +363,25 @@ def _montar_document_xml(resultado: dict[str, Any]) -> str:
     if _tem_conjuracao(conj):
         partes.append(_xml_p("Página 4 (p. 583) — Conjuração e Magias", estilo="SecaoTitulo"))
         trad_txt, est_txt = _tradicao_e_estilo_texto(conj)
+        esp_map = conj.get("espacos_magia_por_dia") or {}
+        esp_ativos = [
+            (int(k), int(v))
+            for k, v in esp_map.items()
+            if str(k).isdigit() and int(v or 0) > 0
+        ]
+        esp_ativos.sort(key=lambda par: par[0])
+        if not esp_ativos:
+            esp_txt = "Espaços 1º Círculo/Dia: 0"
+        elif len(esp_ativos) == 1 and esp_ativos[0][0] == 1:
+            esp_txt = f"Espaços 1º Círculo/Dia: {esp_ativos[0][1]}"
+        else:
+            esp_txt = "Espaços/Dia: " + ", ".join(f"{c}º: {q}" for c, q in esp_ativos)
         partes.append(
             _xml_p_rotulo(
                 "Atributos de Conjuração",
                 f"Tradição {trad_txt} ({est_txt}) | Ataque de Magia {formatar_bonus(conj['ataque_magia']['total'])} | "
                 f"CD {conj['cd_magia']['total']} | Nível de Truque {conj['nivel_truque']} | "
-                f"Espaços 1º Círculo/Dia: {conj['espacos_magia_por_dia'].get('1', 0)} | "
+                f"{esp_txt} | "
                 f"Pontos de Foco: {conj['magias_foco']['pontos_foco']['maximo']}",
             )
         )
@@ -377,16 +390,17 @@ def _montar_document_xml(resultado: dict[str, Any]) -> str:
             ("Truque", conj["truques_magicos"], False),
             ("Foco", conj["magias_foco"]["slots"], False),
             ("Inata", conj["magias_inatas"], False),
-            ("1º Círculo", conj["magias"], True),
+            (None, conj["magias"], True),
         ):
             for m in lst:
                 if m.get("nome"):
+                    cat_lbl = grp if grp is not None else f"{int(m.get('nivel') or 1)}º Círculo"
                     notas_base = m.get("frequencia") or m.get("anotacoes") or ""
                     if mostrar_prep and m.get("preparada"):
                         extra = f"Preparada • {notas_base}" if notas_base else "Preparada"
                     else:
                         extra = notas_base or "—"
-                    linhas_mag.append([grp, m["nome"], m.get("acoes") or "—", ",".join(m.get("componentes") or []) or "—", extra])
+                    linhas_mag.append([cat_lbl, m["nome"], m.get("acoes") or "—", ",".join(m.get("componentes") or []) or "—", extra])
         if linhas_mag:
             partes.append(_xml_tabela(["Categoria", "Magia", "Ações", "Comp.", "Observações"], linhas_mag, [1400, 2800, 1000, 1200, 4066]))
 

@@ -46,8 +46,8 @@ Lista viva e priorizada das entregas, melhorias e expansões que ainda precisam 
 
 > Detalhamento completo e propostas adicionais estão catalogados em [`controleprojeto/sugestoes/`](sugestoes/README.md).
 
-- [ ] **Geração de Fichas Acima do 1º Nível (Níveis `2` a `20`)** *(Etapa 2 Níveis 2–5 concluída no motor em `25/11/2026` — Etapa 57; pendente UI/Exportadores N2–N5 e expansão para N6–N20)*
-  - Expandir `motor/` (`regras_atributos.py` com melhorias nos níveis `10/15/20`, incremento de perícias e proficiências acima do 5º nível, talentos e círculos `4–10` de magias), além de liberar seleção e exibição de níveis `2–5` no Front-End e exportadores.
+- [ ] **Geração de Fichas Acima do 1º Nível (Níveis `2` a `20`)** *(Níveis `2–5` concluídos integralmente no Motor, Front-End e Exportadores em `25/11/2026` — Etapas 57 e 58; pendente expansão para `N6–N20`)*
+  - Expandir `motor/`, Front-End e exportadores além do 5º nível (`regras_atributos.py` com melhorias nos níveis `10/15/20`, incremento de perícias e proficiências acima do 5º nível, talentos e círculos `4–10` de magias).
 - [ ] **Itens Mágicos, Runas e Tesouros (`ref/Compendium specific tools.pdf` → `dados/itens_magicos_tesouros.json`)** *(Adiado para implementação futura conforme decisão do usuário em `19/11/2026`)*
   - Converter runas fundamentais e de propriedade, materiais preciosos, itens alquímicos completos, poções, pergaminhos, talismãs e itens mágicos permanentes, e integrá-los ao motor para personagens de nível `2+`.
 

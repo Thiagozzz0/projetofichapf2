@@ -106,10 +106,15 @@
 
     if (nota) {
       const partes = [];
+      const nivel = app.obterNivelSelecionadoUI?.() || 1;
+      const ehRandNiv = app.ehNivelAleatorioUI?.() || false;
       if (anc && cls && cls.pontos_de_vida_por_nivel !== undefined) {
         const modCon = Math.floor((valores.con - 10) / 2);
-        const pvEst = Number(anc.pontos_vida || 0) + Number(cls.pontos_de_vida_por_nivel || 0) + modCon;
-        partes.push(`PV N1 est.: ${pvEst}`);
+        const pvBase = Number(anc.pontos_vida || 0) + Math.max(1, Number(cls.pontos_de_vida_por_nivel || 0) + modCon) * nivel;
+        partes.push(ehRandNiv ? `PV N1 est.: ${pvBase} (varia c/ nível)` : `PV N${nivel} est.: ${pvBase}`);
+      }
+      if (nivel >= 5) {
+        partes.push("+4 melhorias livres N5 aplicadas na geração");
       }
       if (pendentes.length) {
         partes.push(`Em Procedural/Aleatório: ${pendentes.join(", ")}`);

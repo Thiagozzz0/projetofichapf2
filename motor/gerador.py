@@ -317,7 +317,7 @@ def _preencher_pagina_talentos(
             destino = next((s for s in lista_cat if not (s.get("nome") or "").strip()), None)
             if destino is None:
                 continue
-            origem_txt = f"{b['origem_regra']} (Bônus 1º Nível)"
+            origem_txt = b["origem_regra"]
         destino["nome"] = b["nome"]
         destino["origem_regra"] = origem_txt
         destino["pagina"] = b.get("pagina")
@@ -760,7 +760,8 @@ def gerar_personagem(
             nivel=nivel,
             fonte_divina=fonte_divina,
             divindade=divindade,
-            talento_ancestral_id=talentos_res["efeitos"].get("talento_ancestral_id"),
+            talento_ancestral_id=talentos_res["efeitos"].get("talentos_ancestrais_ids")
+            or talentos_res["efeitos"].get("talento_ancestral_id"),
             escolhas_magias=escolhas_magias,
             rng=rng,
         )
@@ -839,7 +840,8 @@ def gerar_personagem(
             ficha_mestre=ficha,
             modificadores_mestre=atributos_res["modificadores"],
             tese_arcana_id=tese_arcana["id"] if tese_arcana else None,
-            talento_ancestral_id=talentos_res["efeitos"].get("talento_ancestral_id"),
+            talento_ancestral_id=talentos_res["efeitos"].get("talentos_ancestrais_ids")
+            or talentos_res["efeitos"].get("talento_ancestral_id"),
             ancestralidade=ancestralidade,
             biografia=biografia,
             nivel=nivel,

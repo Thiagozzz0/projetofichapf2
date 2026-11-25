@@ -27,6 +27,8 @@
 
   function atualizarResumosEtapasUI() {
     if (!app.opcoes) return;
+    const nivelVal = document.getElementById("nivel")?.value || "1";
+    const ehRandNiv = app.ehNivelAleatorioUI?.() || false;
     const elCriacao = document.getElementById("resumo-etapa-criacao");
     if (elCriacao) {
       const ancId = document.getElementById("ancestralidade")?.value || "aleatorio";
@@ -35,12 +37,13 @@
       const anc = app.opcoes.ancestralidades.find((a) => a.id === ancId);
       const cls = app.opcoes.classes.find((c) => c.id === clsId);
       const con = cls ? cls.conceitos.find((x) => x.id === conId) : null;
+      const prefixoNiv = ehRandNiv ? "N1–5 • " : nivelVal !== "1" ? `N${nivelVal} • ` : "";
       if (ancId === "aleatorio" && clsId === "aleatorio") {
-        elCriacao.textContent = "Aleatório (Procedural)";
+        elCriacao.textContent = `${prefixoNiv}Aleatório (Procedural)`;
       } else {
         const pAnc = anc ? anc.nome : "Anc. Aleatória";
         const pCls = cls ? (con ? `${cls.nome} (${con.nome})` : cls.nome) : "Classe Aleatória";
-        elCriacao.textContent = `${pAnc} • ${pCls}`;
+        elCriacao.textContent = `${prefixoNiv}${pAnc} • ${pCls}`;
       }
     }
 
@@ -78,18 +81,33 @@
         elMag.textContent = "Aleatório";
       } else {
         const stMag = app.calcularEstadoMagiasUI?.();
-        elMag.textContent = !stMag || !stMag.disponivel
-          ? "Manual (aguardando linhagem)"
-          : `Manual (T:${app.magEstado.truques.length}/${stMag.vagasLivresTruques} • N1:${app.magEstado.magias_n1.length}/${stMag.vagasLivresN1})`;
+        if (!stMag || !stMag.disponivel) {
+          elMag.textContent = "Manual (aguardando linhagem)";
+        } else {
+          const partesMag = [`T:${app.magEstado.truques.length}/${stMag.vagasLivresTruques}`, `N1:${app.magEstado.magias_n1.length}/${stMag.vagasLivresN1}`];
+          if ((stMag.espacosPorCirculo?.[2] || 0) > 0) {
+            partesMag.push(`N2:${app.magEstado.magias_n2.length}/${stMag.vagasLivresPorCirculo[2]}`);
+          }
+          if ((stMag.espacosPorCirculo?.[3] || 0) > 0) {
+            partesMag.push(`N3:${app.magEstado.magias_n3.length}/${stMag.vagasLivresPorCirculo[3]}`);
+          }
+          elMag.textContent = `Manual (${partesMag.join(" • ")})`;
+        }
       }
     }
 
     const elEq = document.getElementById("resumo-etapa-equipamentos");
     if (elEq) {
       if ((document.getElementById("modo-equipamentos")?.value || "procedural") !== "personalizado") {
-        elEq.textContent = "Procedural (15 po)";
+        if (ehRandNiv) {
+          elEq.textContent = "Procedural (por nível)";
+        } else {
+          const orcPc = app.obterOrcamentoAtualPc?.() || 1500;
+          const poTot = Math.round(orcPc / 100);
+          elEq.textContent = `Procedural (${poTot} po)`;
+        }
       } else {
-        const orcPc = Number(app.opcoes?.catalogo_equipamentos?.orcamento_inicial_pc || 1500);
+        const orcPc = app.obterOrcamentoAtualPc?.() || 1500;
         const gastoPc = app.gastoManualEquipamentosPc();
         const saldoPc = orcPc - gastoPc;
         elEq.textContent = saldoPc >= 0
@@ -175,6 +193,15 @@
         app.atualizarCatalogoMagiasUI();
         app.atualizarCatalogoEquipamentosUI();
         app.atualizarPerfilUI();
+      });
+      document.getElementById("nivel")?.addEventListener("change", () => {
+        app.atualizarCatalogoEquipamentosUI();
+        app.atualizarCatalogoMagiasUI();
+        app.atualizarCatalogoTalentosUI();
+        app.atualizarCatalogoPericiasUI();
+        app.atualizarPerfilUI();
+        app.atualizarPreviaAtributosABCD?.();
+        atualizarResumosEtapasUI();
       });
 
       IDS_LIVRES_N1.forEach((id) => {

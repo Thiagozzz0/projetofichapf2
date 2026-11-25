@@ -296,6 +296,21 @@
       elFormula.textContent = st.formulaTxt;
     }
 
+    const elNotaProg = document.getElementById("per-nota-progressao");
+    if (elNotaProg) {
+      const nivel = app.obterNivelSelecionadoUI?.() || 1;
+      const ehRandNiv = app.ehNivelAleatorioUI?.() || false;
+      if (ehRandNiv || nivel > 1) {
+        elNotaProg.classList.remove("oculto");
+        elNotaProg.textContent = ehRandNiv
+          ? "Se o nível sorteado for 2–5, incrementos de perícia adicionais (até Especialista) serão aplicados automaticamente pelo motor."
+          : `Nível ${nivel}: os incrementos de perícia de progressão N2–N${nivel} (até Especialista) são aplicados automaticamente pelo motor.`;
+      } else {
+        elNotaProg.classList.add("oculto");
+        elNotaProg.textContent = "";
+      }
+    }
+
     if (grid) {
       grid.innerHTML = catPer
         .map((p) => {

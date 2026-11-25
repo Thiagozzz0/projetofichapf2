@@ -347,6 +347,21 @@
         : "Escolha uma Ancestralidade ou Classe fixa em Criação Inicial para liberar seletores manuais de talentos.";
     }
 
+    const elNotaProg = document.getElementById("tal-nota-progressao");
+    if (elNotaProg) {
+      const nivel = app.obterNivelSelecionadoUI?.() || 1;
+      const ehRandNiv = app.ehNivelAleatorioUI?.() || false;
+      if (ehRandNiv || nivel > 1) {
+        elNotaProg.classList.remove("oculto");
+        elNotaProg.textContent = ehRandNiv
+          ? "Slots de progressão N2–N5 (Classe N2/N4, Perícia N2/N4, Geral N3, Ancestralidade N5) são preenchidos automaticamente pelo motor com validação de pré-requisitos."
+          : `Nível ${nivel}: os slots de progressão N2–N${nivel} (Classe, Perícia, Geral e Ancestralidade) são preenchidos automaticamente pelo motor com validação de pré-requisitos.`;
+      } else {
+        elNotaProg.classList.add("oculto");
+        elNotaProg.textContent = "";
+      }
+    }
+
     sincronizarExclusaoTalentos();
     app.atualizarCatalogoPericiasUI?.();
     app.atualizarCatalogoMagiasUI?.();

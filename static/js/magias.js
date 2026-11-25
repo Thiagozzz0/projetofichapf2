@@ -51,18 +51,26 @@
       };
     }
 
-    const qtdTruquesTotal = Number(conjCls.qtd_truques || 5);
-    const espacosN1 = Number(subDeterm?.espacos_n1 ?? conjCls.espacos_n1_base ?? 2);
-    const qtdMagiasN1Total = Number(subDeterm?.qtd_magias_n1 ?? espacosN1);
+    const nivel = app.obterNivelSelecionadoUI?.() || 1;
+    const prog = conjCls.progressao_por_nivel?.[String(nivel)] || null;
+    const ehEspecialistaMago = clsId === "mago" && !(subDeterm?.eh_universalista || conObj?.mago_universalista);
+
+    const qtdTruquesTotal = Number(prog?.truques_magicos ?? conjCls.qtd_truques ?? 5);
+    const espProg = prog?.espacos_por_circulo || { "1": conjCls.espacos_n1_base ?? 2 };
+
+    const espacosPorCirculo = {};
+    const qtdMagiasPorCirculo = {};
+    const fixasPorCirculo = { 1: new Map(), 2: new Map(), 3: new Map() };
+    const poolsPorCirculo = { 1: [], 2: [], 3: [] };
+    const vagasLivresPorCirculo = { 1: 0, 2: 0, 3: 0 };
 
     const truquesFixos = new Map();
-    const magiasN1Fixas = new Map();
     if (subDeterm?.truque_fixo_id && cat.por_id[subDeterm.truque_fixo_id]) {
       truquesFixos.set(subDeterm.truque_fixo_id, `Linhagem (${conObj.subclasse_oficial_nome})`);
     }
     if (subDeterm?.magia_n1_fixa_id && cat.por_id[subDeterm.magia_n1_fixa_id]) {
       const rot = clsId === "bardo" ? "Musa" : "Linhagem";
-      magiasN1Fixas.set(subDeterm.magia_n1_fixa_id, `${rot} (${conObj.subclasse_oficial_nome})`);
+      fixasPorCirculo[1].set(subDeterm.magia_n1_fixa_id, `${rot} (${conObj.subclasse_oficial_nome})`);
     }
 
     const poolTruquesIds = [...(cat.por_tradicao[tradicao]?.truques || [])];
@@ -70,23 +78,53 @@
       if (!poolTruquesIds.includes(mid)) poolTruquesIds.unshift(mid);
     });
 
-    const poolN1Ids = [...(cat.por_tradicao[tradicao]?.nivel_1 || [])];
-    magiasN1Fixas.forEach((_, mid) => {
-      if (!poolN1Ids.includes(mid)) poolN1Ids.unshift(mid);
+    let magiaDivinaId = null;
+    [1, 2, 3].forEach((c) => {
+      const baseEsp = Number(espProg[String(c)] || 0);
+      if (baseEsp <= 0) {
+        espacosPorCirculo[c] = 0;
+        qtdMagiasPorCirculo[c] = 0;
+        vagasLivresPorCirculo[c] = 0;
+        return;
+      }
+      const espC = baseEsp + (ehEspecialistaMago ? 1 : 0);
+      espacosPorCirculo[c] = espC;
+
+      let qtdC = espC;
+      if (clsId === "mago") {
+        if (c === 1) {
+          const baseM1 = ehEspecialistaMago ? 6 : 5;
+          qtdC = baseM1 + (nivel >= 2 ? 2 : 0);
+        } else {
+          qtdC = Math.max(espC, nivel === 2 * c - 1 ? 2 : 4);
+        }
+      } else if (clsId === "bardo") {
+        qtdC = espC + (c === 1 && fixasPorCirculo[1].size > 0 ? 1 : 0);
+      } else if (clsId === "feiticeiro") {
+        qtdC = c === 1 ? Math.max(espC, 3) : espC;
+      }
+      qtdMagiasPorCirculo[c] = qtdC;
+
+      const tradObj = cat.por_tradicao[tradicao] || {};
+      const listaTrad = tradObj.por_circulo?.[String(c)] || tradObj[`nivel_${c}`] || [];
+      const poolC = [...listaTrad];
+      fixasPorCirculo[c].forEach((_, mid) => {
+        if (!poolC.includes(mid)) poolC.unshift(mid);
+      });
+      if (c === 1 && clsId === "clerigo" && divObj?.magia_clerigo_n1_id && cat.por_id[divObj.magia_clerigo_n1_id]) {
+        magiaDivinaId = divObj.magia_clerigo_n1_id;
+        if (!poolC.includes(magiaDivinaId)) poolC.unshift(magiaDivinaId);
+      }
+      poolsPorCirculo[c] = poolC;
+      vagasLivresPorCirculo[c] = Math.max(0, qtdC - fixasPorCirculo[c].size);
     });
 
-    let magiaDivinaId = null;
-    if (clsId === "clerigo" && divObj?.magia_clerigo_n1_id && cat.por_id[divObj.magia_clerigo_n1_id]) {
-      magiaDivinaId = divObj.magia_clerigo_n1_id;
-      if (!poolN1Ids.includes(magiaDivinaId)) poolN1Ids.unshift(magiaDivinaId);
-    }
-
     const vagasLivresTruques = Math.max(0, qtdTruquesTotal - truquesFixos.size);
-    const vagasLivresN1 = Math.max(0, qtdMagiasN1Total - magiasN1Fixas.size);
 
     return {
       ehConjurador: true,
       disponivel: true,
+      nivel,
       clsId,
       clsObj,
       conObj,
@@ -94,15 +132,20 @@
       tradicao,
       estilo: conjCls.estilo,
       qtdTruquesTotal,
-      espacosN1,
-      qtdMagiasN1Total,
+      espacosPorCirculo,
+      qtdMagiasPorCirculo,
+      vagasLivresPorCirculo,
+      fixasPorCirculo,
+      poolsPorCirculo,
+      espacosN1: espacosPorCirculo[1] || 0,
+      qtdMagiasN1Total: qtdMagiasPorCirculo[1] || 0,
       vagasLivresTruques,
-      vagasLivresN1,
+      vagasLivresN1: vagasLivresPorCirculo[1] || 0,
       truquesFixos,
-      magiasN1Fixas,
+      magiasN1Fixas: fixasPorCirculo[1],
       magiaDivinaId,
       poolTruquesIds,
-      poolN1Ids,
+      poolN1Ids: poolsPorCirculo[1],
       porId: cat.por_id,
     };
   }
@@ -234,6 +277,8 @@
     if (!st.ehConjurador) {
       app.magEstado.truques = [];
       app.magEstado.magias_n1 = [];
+      app.magEstado.magias_n2 = [];
+      app.magEstado.magias_n3 = [];
       mostrarDetalheMagiaUI(null);
       app.atualizarResumosEtapasUI?.();
       return;
@@ -243,56 +288,98 @@
     const elVagas = document.getElementById("mag-resumo-vagas");
     const elExtra = document.getElementById("mag-info-extra");
     const lblTruq = document.getElementById("lbl-mag-truques");
-    const lblN1 = document.getElementById("lbl-mag-n1");
     const pillTruq = document.getElementById("pill-mag-truques");
-    const pillN1 = document.getElementById("pill-mag-n1");
 
     if (!st.disponivel) {
       app.magEstado.truques = [];
       app.magEstado.magias_n1 = [];
+      app.magEstado.magias_n2 = [];
+      app.magEstado.magias_n3 = [];
       if (elTrad) elTrad.textContent = st.motivoIndisponivel || "Aguardando definição de subclasse.";
       if (elVagas) elVagas.textContent = "—";
       if (elExtra) elExtra.textContent = "";
       const gT = document.getElementById("grid-magias-truques");
-      const g1 = document.getElementById("grid-magias-n1");
       if (gT) gT.innerHTML = `<div class="box-tal-auto">${esc(st.motivoIndisponivel)}</div>`;
-      if (g1) g1.innerHTML = "";
+      [1, 2, 3].forEach((c) => {
+        const gC = document.getElementById(`grid-magias-n${c}`);
+        if (gC) gC.innerHTML = "";
+        const cardC = document.querySelector(`.mag-circulo-card[data-mag-circulo="n${c}"]`);
+        if (cardC && c >= 2) cardC.classList.add("oculto");
+      });
       app.atualizarResumosEtapasUI?.();
       return;
     }
 
     const setPoolT = new Set(st.poolTruquesIds);
-    const setPool1 = new Set(st.poolN1Ids);
     app.magEstado.truques = app.magEstado.truques
       .filter((id) => setPoolT.has(id) && !st.truquesFixos.has(id))
       .slice(0, st.vagasLivresTruques);
-    app.magEstado.magias_n1 = app.magEstado.magias_n1
-      .filter((id) => setPool1.has(id) && !st.magiasN1Fixas.has(id))
-      .slice(0, st.vagasLivresN1);
+
+    [1, 2, 3].forEach((c) => {
+      const chave = `magias_n${c}`;
+      if ((st.espacosPorCirculo[c] || 0) <= 0) {
+        app.magEstado[chave] = [];
+        return;
+      }
+      const setPoolC = new Set(st.poolsPorCirculo[c] || []);
+      const fixasC = st.fixasPorCirculo[c];
+      app.magEstado[chave] = (app.magEstado[chave] || [])
+        .filter((id) => setPoolC.has(id) && !fixasC.has(id))
+        .slice(0, st.vagasLivresPorCirculo[c]);
+    });
 
     const tradNome = NOMES_TRADICAO[st.tradicao] || st.tradicao;
     const estiloNome = st.estilo === "espontanea" ? "Espontânea" : "Preparada";
+    const espTextoLista = [1, 2, 3]
+      .filter((c) => (st.espacosPorCirculo[c] || 0) > 0)
+      .map((c) => `${c}º: ${st.espacosPorCirculo[c]}`);
+    const espResumoTrad =
+      espTextoLista.length <= 1
+        ? `${st.espacosN1} espaço(s) de 1º círculo/dia`
+        : `Espaços/dia: ${espTextoLista.join(" • ")}`;
+
     if (elTrad) {
-      elTrad.innerHTML = `Tradição: ${renderBadgeTradicao(st.tradicao, tradNome)} • ${esc(estiloNome)} • ${esc(st.espacosN1)} espaço(s) de 1º círculo/dia`;
+      elTrad.innerHTML = `Tradição: ${renderBadgeTradicao(st.tradicao, tradNome)} • ${esc(estiloNome)} • ${esc(espResumoTrad)}`;
     }
+
+    const vagasPartes = [`Truques: ${app.magEstado.truques.length}/${st.vagasLivresTruques}`];
+    [1, 2, 3].forEach((c) => {
+      if ((st.espacosPorCirculo[c] || 0) > 0) {
+        vagasPartes.push(`${c}º Círculo: ${app.magEstado[`magias_n${c}`].length}/${st.vagasLivresPorCirculo[c]}`);
+      }
+    });
     if (elVagas) {
-      elVagas.textContent = `Truques: ${app.magEstado.truques.length}/${st.vagasLivresTruques} • 1º Círculo: ${app.magEstado.magias_n1.length}/${st.vagasLivresN1}`;
+      elVagas.textContent = vagasPartes.join(" • ");
     }
+
     if (lblTruq) {
       const fixT = st.truquesFixos.size ? ` (+${st.truquesFixos.size} fixa da Linhagem)` : "";
-      lblTruq.textContent = `Truques Mágicos — Nível 0${fixT}`;
+      const nivelTruque = Math.ceil((st.nivel || 1) / 2);
+      lblTruq.textContent =
+        nivelTruque > 1
+          ? `Truques Mágicos — Elevados p/ ${nivelTruque}º Círculo${fixT}`
+          : `Truques Mágicos — Nível 0${fixT}`;
     }
     if (pillTruq) {
       pillTruq.textContent = `${app.magEstado.truques.length} / ${st.vagasLivresTruques} livres`;
     }
-    if (lblN1) {
-      const fix1 = st.magiasN1Fixas.size ? ` (+${st.magiasN1Fixas.size} fixa da Subclasse)` : "";
-      const rotN1 = st.clsId === "mago" ? "Grimório" : st.estilo === "espontanea" ? "Repertório" : "Preparadas";
-      lblN1.textContent = `Magias de 1º Círculo — ${rotN1}${fix1}`;
-    }
-    if (pillN1) {
-      pillN1.textContent = `${app.magEstado.magias_n1.length} / ${st.vagasLivresN1} livres`;
-    }
+
+    const rotCirc = st.clsId === "mago" ? "Grimório" : st.estilo === "espontanea" ? "Repertório" : "Preparadas";
+    [1, 2, 3].forEach((c) => {
+      const cardC = document.querySelector(`.mag-circulo-card[data-mag-circulo="n${c}"]`);
+      const ativoC = (st.espacosPorCirculo[c] || 0) > 0;
+      if (cardC) cardC.classList.toggle("oculto", !ativoC);
+
+      const lblC = document.getElementById(`lbl-mag-n${c}`);
+      const pillC = document.getElementById(`pill-mag-n${c}`);
+      if (lblC) {
+        const fixC = st.fixasPorCirculo[c].size ? ` (+${st.fixasPorCirculo[c].size} fixa da Subclasse)` : "";
+        lblC.textContent = `Magias de ${c}º Círculo — ${rotCirc}${fixC}`;
+      }
+      if (pillC) {
+        pillC.textContent = `${(app.magEstado[`magias_n${c}`] || []).length} / ${st.vagasLivresPorCirculo[c]} livres`;
+      }
+    });
 
     if (elExtra) {
       const notas = [];
@@ -300,14 +387,14 @@
         notas.push("Clérigo recebe Fonte Divina automática (Curar ou Ferir, 1 + Mod. CAR espaços extras/dia).");
       } else if (st.clsId === "mago") {
         notas.push(
-          st.qtdMagiasN1Total === 6
-            ? "Mago Especialista: 6 magias no grimório inicial e 3 espaços/dia (incluindo o espaço extra da Escola Arcana)."
-            : "Mago Universalista: 5 magias no grimório inicial e 2 espaços/dia."
+          st.qtdMagiasN1Total >= 6
+            ? `Mago Especialista: ${st.qtdMagiasN1Total} magias de 1º círculo no grimório e +1 espaço/dia por círculo desbloqueado.`
+            : `Mago Universalista: ${st.qtdMagiasN1Total} magias de 1º círculo no grimório.`
         );
       } else if (st.clsId === "feiticeiro") {
-        notas.push("Feiticeiro recebe automaticamente o truque e a magia de 1º círculo concedidos pela Linhagem.");
+        notas.push("Feiticeiro recebe automaticamente o truque e as magias concedidas pela Linhagem.");
       } else if (st.clsId === "bardo" && st.magiasN1Fixas.size) {
-        notas.push("Bardo recebe automaticamente a magia de 1º círculo concedida pela Musa além das 2 livres.");
+        notas.push("Bardo recebe automaticamente a magia de 1º círculo concedida pela Musa além das livres.");
       }
       notas.push("Vagas deixadas desmarcadas serão completadas automaticamente no modo procedural.");
       elExtra.textContent = notas.join(" ");
@@ -325,21 +412,35 @@
       st,
       termoBusca
     );
-    const qtdN1 = _renderGradeMagias(
-      "grid-magias-n1",
-      st.poolN1Ids,
-      st.magiasN1Fixas,
-      app.magEstado.magias_n1,
-      st.vagasLivresN1,
-      "n1",
-      st,
-      termoBusca
-    );
+    const qtdPorCirc = {};
+    [1, 2, 3].forEach((c) => {
+      if ((st.espacosPorCirculo[c] || 0) > 0) {
+        qtdPorCirc[c] = _renderGradeMagias(
+          `grid-magias-n${c}`,
+          st.poolsPorCirculo[c],
+          st.fixasPorCirculo[c],
+          app.magEstado[`magias_n${c}`],
+          st.vagasLivresPorCirculo[c],
+          `n${c}`,
+          st,
+          termoBusca
+        );
+      } else {
+        const gC = document.getElementById(`grid-magias-n${c}`);
+        if (gC) gC.innerHTML = "";
+      }
+    });
     const elBuscaStatus = document.getElementById("mag-busca-status");
     if (elBuscaStatus) {
       elBuscaStatus.classList.toggle("oculto", !termoBusca);
       if (termoBusca) {
-        elBuscaStatus.textContent = `Encontradas: ${qtdTruq} truque(s) • ${qtdN1} magia(s) de 1º círculo.`;
+        const partesBusca = [`${qtdTruq} truque(s)`];
+        [1, 2, 3].forEach((c) => {
+          if (qtdPorCirc[c] !== undefined) {
+            partesBusca.push(`${qtdPorCirc[c]} magia(s) de ${c}º círculo`);
+          }
+        });
+        elBuscaStatus.textContent = `Encontradas: ${partesBusca.join(" • ")}.`;
       }
     }
 
@@ -360,6 +461,8 @@
     if (buscaEl) buscaEl.value = "";
     app.magEstado.truques = [];
     app.magEstado.magias_n1 = [];
+    app.magEstado.magias_n2 = [];
+    app.magEstado.magias_n3 = [];
     mostrarDetalheMagiaUI(null);
     atualizarVisibilidadeMagiasUI();
   }
@@ -371,11 +474,18 @@
     if (modo !== "personalizado") {
       return { modo };
     }
-    return {
+    const payload = {
       modo: "personalizado",
       truques_ids: app.magEstado.truques.length ? [...app.magEstado.truques] : "procedural",
       magias_n1_ids: app.magEstado.magias_n1.length ? [...app.magEstado.magias_n1] : "procedural",
     };
+    if ((st.espacosPorCirculo?.[2] || 0) > 0 && app.magEstado.magias_n2.length) {
+      payload.magias_n2_ids = [...app.magEstado.magias_n2];
+    }
+    if ((st.espacosPorCirculo?.[3] || 0) > 0 && app.magEstado.magias_n3.length) {
+      payload.magias_n3_ids = [...app.magEstado.magias_n3];
+    }
+    return payload;
   }
 
   function alternarCirculoMagia(chave, forcarEstado = null) {
@@ -403,6 +513,7 @@
       const temTexto = Boolean((e.target.value || "").trim());
       if (temTexto) {
         document.querySelectorAll(".mag-circulo-card[data-mag-circulo]").forEach((card) => {
+          if (card.classList.contains("oculto")) return;
           card.classList.add("aberta");
           card.querySelector("[data-mag-toggle]")?.setAttribute("aria-expanded", "true");
           card.querySelector(".mag-circulo-corpo")?.classList.remove("oculto");
@@ -438,10 +549,21 @@
       const mid = chk.dataset.magiaId;
       const st = calcularEstadoMagiasUI();
       if (!st.disponivel) return;
-      const lista = tipo === "truque" ? app.magEstado.truques : app.magEstado.magias_n1;
-      const limite = tipo === "truque" ? st.vagasLivresTruques : st.vagasLivresN1;
-      const fixas = tipo === "truque" ? st.truquesFixos : st.magiasN1Fixas;
-      if (fixas.has(mid)) return;
+
+      let lista;
+      let limite;
+      let fixas;
+      if (tipo === "truque") {
+        lista = app.magEstado.truques;
+        limite = st.vagasLivresTruques;
+        fixas = st.truquesFixos;
+      } else {
+        const circ = parseInt(String(tipo || "").replace("n", ""), 10) || 1;
+        lista = app.magEstado[`magias_n${circ}`];
+        limite = st.vagasLivresPorCirculo[circ] || 0;
+        fixas = st.fixasPorCirculo[circ] || new Map();
+      }
+      if (!lista || fixas.has(mid)) return;
 
       if (chk.checked) {
         if (!lista.includes(mid) && lista.length < limite) lista.push(mid);
@@ -449,14 +571,6 @@
       } else {
         const idx = lista.indexOf(mid);
         if (idx >= 0) lista.splice(idx, 1);
-      }
-      atualizarCatalogoMagiasUI();
-    });
-    document.getElementById("btn-mag-limpar-busca")?.addEventListener("click", () => {
-      const inp = document.getElementById("mag-filtro-busca");
-      if (inp) {
-        inp.value = "";
-        inp.focus();
       }
       atualizarCatalogoMagiasUI();
     });

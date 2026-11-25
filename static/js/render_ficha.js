@@ -417,7 +417,7 @@
 
     const p4 = document.getElementById("p4-conteudo");
     if (!temMagia) {
-      p4.innerHTML = `<div class="bloco"><em>Este personagem não possui conjuração de classe, foco ou magias inatas no 1º nível.</em></div>`;
+      p4.innerHTML = `<div class="bloco"><em>Este personagem não possui conjuração de classe, foco ou magias inatas no ${esc(cab.nivel)}º nível.</em></div>`;
     } else {
       const tradsIds = Object.entries(conj.tradicoes_marcadas)
         .filter(([, v]) => v)
@@ -453,6 +453,18 @@
         );
       };
 
+      const porCirculo = new Map();
+      (conj.magias || []).forEach((s) => {
+        if (!s || !s.nome) return;
+        const c = Number(s.nivel || 1);
+        if (!porCirculo.has(c)) porCirculo.set(c, []);
+        porCirculo.get(c).push(s);
+      });
+      const circulosOrdenados = Array.from(porCirculo.keys()).sort((a, b) => a - b);
+      const blocosCirculos = circulosOrdenados
+        .map((c) => renderSlotsMagia(`Magias de ${c}º Círculo`, porCirculo.get(c), true))
+        .join("");
+
       p4.innerHTML =
         `<div class="p4-topo">` +
         renderCampo("Ataque de Magia", `${fmtMod(conj.ataque_magia.total)} ${renderTeml(conj.ataque_magia.grau_proficiencia)}`) +
@@ -468,7 +480,7 @@
         renderSlotsMagia("Truques Mágicos", conj.truques_magicos, false) +
         renderSlotsMagia("Magias de Foco", conj.magias_foco.slots, false) +
         renderSlotsMagia("Magias Inatas", conj.magias_inatas, false) +
-        renderSlotsMagia("Magias de 1º Círculo", conj.magias, true);
+        blocosCirculos;
     }
 
     // Página 5 (Companheiro Animal / Familiar)

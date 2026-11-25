@@ -266,17 +266,39 @@ def exportar_ficha_txt(resultado: dict[str, Any]) -> str:
             f"CD de Magia: {conj['cd_magia']['total']} "
             f"[{_formatar_grau_curto(conj['cd_magia']['grau_proficiencia'])}]"
         )
+        esp_map = conj.get("espacos_magia_por_dia") or {}
+        esp_ativos = [
+            (int(k), int(v))
+            for k, v in esp_map.items()
+            if str(k).isdigit() and int(v or 0) > 0
+        ]
+        esp_ativos.sort(key=lambda par: par[0])
+        if not esp_ativos:
+            esp_txt = "Espaços de 1º Círculo/Dia: 0"
+        elif len(esp_ativos) == 1 and esp_ativos[0][0] == 1:
+            esp_txt = f"Espaços de 1º Círculo/Dia: {esp_ativos[0][1]}"
+        else:
+            esp_txt = "Espaços/Dia: " + ", ".join(f"{c}º: {q}" for c, q in esp_ativos)
         linhas.append(
             f"  Nível de Truque: {conj['nivel_truque']} | "
-            f"Espaços de 1º Círculo/Dia: {conj['espacos_magia_por_dia'].get('1', 0)} | "
+            f"{esp_txt} | "
             f"Pontos de Foco: {conj['magias_foco']['pontos_foco']['maximo']}"
         )
-        for titulo_m, lista_m, mostrar_prep in (
+        grupos_txt: list[tuple[str, list[dict[str, Any]], bool]] = [
             ("Truques Mágicos", conj["truques_magicos"], False),
             ("Magias de Foco", conj["magias_foco"]["slots"], False),
             ("Magias Inatas", conj["magias_inatas"], False),
-            ("Magias de 1º Círculo", conj["magias"], True),
-        ):
+        ]
+        magias_por_circ: dict[int, list[dict[str, Any]]] = {}
+        for m in conj["magias"]:
+            if not m.get("nome"):
+                continue
+            circ = int(m.get("nivel") or 1)
+            magias_por_circ.setdefault(circ, []).append(m)
+        for circ in sorted(magias_por_circ.keys()):
+            grupos_txt.append((f"Magias de {circ}º Círculo", magias_por_circ[circ], True))
+
+        for titulo_m, lista_m, mostrar_prep in grupos_txt:
             itens_m = [m for m in lista_m if m.get("nome")]
             if itens_m:
                 sub(titulo_m)

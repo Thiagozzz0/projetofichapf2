@@ -12,16 +12,25 @@ from .util import formatar_bonus, normalizar
 _DADOS_FAMILIAR_TALENTOS = {"familiar", "familiar_alquimico", "familiar_leshy"}
 
 
-def _calcular_bloco_companheiro_animal(tipo: dict[str, Any], nivel: int = 1) -> dict[str, Any]:
-    """Calcula estatísticas de combate, perícias e ataques do Companheiro Animal no nível informado."""
+def _calcular_bloco_companheiro_animal(
+    tipo: dict[str, Any],
+    nivel: int = 1,
+    maduro: bool = False,
+) -> dict[str, Any]:
+    """Calcula estatísticas de combate, perícias e ataques do Companheiro Animal (Jovem ou Maduro) no nível informado."""
     mods = {k: int(v) for k, v in tipo["modificadores_atributo"].items()}
+    if maduro:
+        for atr_m in ("forca", "destreza", "constituicao", "sabedoria"):
+            mods[atr_m] = mods.get(atr_m, 0) + 1
+
     prof_treinado = 2 + nivel
+    prof_esp = (4 + nivel) if maduro else prof_treinado
     pv_max = int(tipo["pontos_de_vida_ancestralidade"]) + (6 + mods["constituicao"]) * nivel
     ca = 10 + mods["destreza"] + prof_treinado
-    percepcao = mods["sabedoria"] + prof_treinado
-    fortitude = mods["constituicao"] + prof_treinado
-    reflexos = mods["destreza"] + prof_treinado
-    vontade = mods["sabedoria"] + prof_treinado
+    percepcao = mods["sabedoria"] + prof_esp
+    fortitude = mods["constituicao"] + prof_esp
+    reflexos = mods["destreza"] + prof_esp
+    vontade = mods["sabedoria"] + prof_esp
 
     pericias = [
         {"nome": "Acrobatismo", "total": mods["destreza"] + prof_treinado},
@@ -35,7 +44,13 @@ def _calcular_bloco_companheiro_animal(tipo: dict[str, Any], nivel: int = 1) -> 
     }
     atr_p = mapa_atr_per.get(normalizar(per_extra), "sabedoria")
     if per_extra and normalizar(per_extra) not in {"acrobatismo", "atletismo"}:
-        pericias.append({"nome": per_extra, "total": mods[atr_p] + prof_treinado})
+        pericias.append({"nome": per_extra, "total": mods[atr_p] + prof_esp})
+    if maduro:
+        nomes_per = {normalizar(p["nome"]) for p in pericias}
+        for nome_m, atr_m in (("Intimidação", "carisma"), ("Furtividade", "destreza"), ("Sobrevivência", "sabedoria")):
+            if normalizar(nome_m) not in nomes_per:
+                pericias.append({"nome": nome_m, "total": mods[atr_m] + prof_treinado})
+                break
 
     ataques = []
     for atk in tipo["ataques"]:
@@ -43,6 +58,8 @@ def _calcular_bloco_companheiro_animal(tipo: dict[str, Any], nivel: int = 1) -> 
         mod_atk = max(mods["forca"], mods["destreza"]) if "acuidade" in tracos_l else mods["forca"]
         partes_dano = atk["dano"].split(" ", 1)
         dado_base = partes_dano[0]
+        if maduro and dado_base.startswith("1d"):
+            dado_base = f"2{dado_base[1:]}"
         tipo_dano = partes_dano[1] if len(partes_dano) > 1 else ""
         mod_for = mods["forca"]
         dano_fmt = f"{dado_base}{formatar_bonus(mod_for) if mod_for else ''} {tipo_dano}".strip()
@@ -221,9 +238,10 @@ def _gerar_companheiro_animal(
     biografia: dict[str, Any] | None = None,
     tipo_manual_id: str | None = None,
     nome_personalizado: str | None = None,
+    maduro: bool = False,
 ) -> dict[str, Any]:
     comp_root = cf["companheiros_animais"]
-    estagio_jovem = comp_root["estagios_evolucao"][0]
+    estagio_obj = comp_root["estagios_evolucao"][1 if maduro else 0]
     tipos = comp_root["tipos_de_companheiro"]
 
     tipo_req = normalizar(tipo_manual_id) if tipo_manual_id else ""
@@ -243,7 +261,13 @@ def _gerar_companheiro_animal(
         candidatos = [t for pts, t in avaliados if pts >= topo - 3][:3] or tipos
         escolhido = rng.choice(candidatos) if (rng and len(candidatos) > 1) else candidatos[0]
 
-    calc = _calcular_bloco_companheiro_animal(escolhido, nivel=nivel)
+    calc = _calcular_bloco_companheiro_animal(escolhido, nivel=nivel, maduro=maduro)
+    tam_base = escolhido["tamanho"]
+    if maduro:
+        mapa_tam = {"Pequeno": "Médio", "Médio": "Grande", "Pequeno ou Médio": "Médio ou Grande"}
+        tam_final = mapa_tam.get(tam_base, tam_base)
+    else:
+        tam_final = tam_base
 
     nome_limpo = (nome_personalizado or "").strip()
     nome_final = f"{nome_limpo} ({escolhido['nome']})" if nome_limpo else escolhido["nome"]
@@ -253,8 +277,8 @@ def _gerar_companheiro_animal(
         "id": escolhido["id"],
         "nome": nome_final,
         "tipo_nome": escolhido["nome"],
-        "estagio": estagio_jovem["nome"],
-        "tamanho": escolhido["tamanho"],
+        "estagio": estagio_obj["nome"],
+        "tamanho": tam_final,
         "descricao": escolhido["descricao"],
         "modificadores_atributo": calc["modificadores_atributo"],
         "pv_max": calc["pv_max"],
@@ -293,7 +317,11 @@ def _gerar_familiar(
     hab_fam = {h["id"]: h for h in fam_root["habilidades_de_familiar"]}
     hab_mestre = {h["id"]: h for h in fam_root["habilidades_de_mestre"]}
 
-    qtd_habilidades = 3 if tese_arcana_id == "sintonizacao_com_familiar_aprimorada" else int(est["habilidades_diarias_base"])
+    qtd_habilidades = (
+        4
+        if "familiar_melhorado" in talentos_classe_ids
+        else (3 if tese_arcana_id == "sintonizacao_com_familiar_aprimorada" else int(est["habilidades_diarias_base"]))
+    )
     eh_leshy = "familiar_leshy" in talentos_classe_ids
     eh_alquimico = "familiar_alquimico" in talentos_classe_ids
 
@@ -481,9 +509,15 @@ def gerar_companheiro_ou_familiar(
             biografia=biografia,
             tipo_manual_id=esc.get("tipo_id"),
             nome_personalizado=nome_custom,
+            maduro=("companheiro_animal_maduro" in talentos_classe_ids),
         )
 
-    if any(tid in _DADOS_FAMILIAR_TALENTOS for tid in talentos_classe_ids) or talento_ancestral_id == "cumplice_animal":
+    tal_anc_set = (
+        {str(x) for x in talento_ancestral_id if x}
+        if isinstance(talento_ancestral_id, (list, tuple, set))
+        else ({str(talento_ancestral_id)} if talento_ancestral_id else set())
+    )
+    if any(tid in _DADOS_FAMILIAR_TALENTOS for tid in talentos_classe_ids) or "cumplice_animal" in tal_anc_set:
         habs_req = esc.get("habilidades_ids")
         if isinstance(habs_req, str) and normalizar(habs_req) in {"", "procedural", "auto", "automatico"}:
             habs_req = None

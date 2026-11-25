@@ -38,12 +38,23 @@
     return `${ppStr} (${partes.join(", ")})`;
   }
 
+  function ehNivelAleatorioUI() {
+    return (document.getElementById("nivel")?.value || "1") === "aleatorio";
+  }
+
+  function obterNivelSelecionadoUI() {
+    const raw = document.getElementById("nivel")?.value || "1";
+    const parsed = parseInt(raw, 10);
+    if (!Number.isFinite(parsed) || parsed < 1) return 1;
+    return Math.min(5, parsed);
+  }
+
   window.PF2EApp = {
     opcoes: null,
     ultimaFicha: null,
     bioManualExpAutomatica: false,
     perEstado: { selecionadas: [] },
-    magEstado: { truques: [], magias_n1: [] },
+    magEstado: { truques: [], magias_n1: [], magias_n2: [], magias_n3: [] },
     eqEstado: { armas_cc: [], armas_dist: [], variados: [] },
     perfilEstado: { familiarHabs: [] },
     mapaEq: { armaduras: {}, escudos: {}, armas_cc: {}, armas_dist: {}, variados: {} },
@@ -67,5 +78,7 @@
     normTxt,
     criarOptgroup,
     fmtPrecoEq,
+    ehNivelAleatorioUI,
+    obterNivelSelecionadoUI,
   };
 })();

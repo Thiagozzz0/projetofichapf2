@@ -76,6 +76,9 @@ class CasosBordaPF2ETests(unittest.TestCase):
     def test_progressao_niveis_2_a_5(self) -> None:
         suite.test_progressao_niveis_2_a_5()
 
+    def test_exportadores_e_ui_niveis_2_a_5(self) -> None:
+        suite.test_exportadores_e_ui_niveis_2_a_5()
+
 
 if __name__ == "__main__":
     unittest.main()
