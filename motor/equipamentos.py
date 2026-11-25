@@ -10,9 +10,21 @@ from .regras_casa import aplicar_override_item_casa
 from .util import formatar_preco, grau_normalizado, normalizar, pc_para_moedas
 
 
-ORCAMENTO_INICIAL_PC = 1500  # 15 po = 150 pp = 1.500 pc
-RESERVA_MOEDAS_MIN_PC = 150  # 10% (1 po e 5 pp) reservados em moedas no modo procedural
+ORCAMENTO_POR_NIVEL_PC: dict[int, int] = {
+    1: 1500,   # 15 po (150 pp)
+    2: 3000,   # 30 po (300 pp)
+    3: 7500,   # 75 po (750 pp)
+    4: 14000,  # 140 po (1.400 pp)
+    5: 27000,  # 270 po (2.700 pp)
+}
+ORCAMENTO_INICIAL_PC = ORCAMENTO_POR_NIVEL_PC[1]  # 15 po = 150 pp = 1.500 pc
+RESERVA_MOEDAS_MIN_PC = 150  # 10% (1 po e 5 pp) reservados em moedas no modo procedural N1
 TETO_GASTO_PROCEDURAL_PC = ORCAMENTO_INICIAL_PC - RESERVA_MOEDAS_MIN_PC  # 1.350 pc (90%)
+
+
+def orcamento_por_nivel_pc(nivel: int = 1) -> int:
+    """Retorna o orçamento inicial em peças de cobre para criação de personagem no `nivel` (1–5)."""
+    return ORCAMENTO_POR_NIVEL_PC.get(max(1, int(nivel)), ORCAMENTO_INICIAL_PC)
 
 # Etapa 55: pacotes compostos (que trazem rações/corda/cantil embutidos) saem da loja
 # para não quebrar a matemática de compra item a item. Kits específicos de perícia
@@ -197,6 +209,8 @@ def listar_catalogo_equipamentos_loja(
     return {
         "orcamento_inicial_pc": ORCAMENTO_INICIAL_PC,
         "orcamento_inicial_pp": ORCAMENTO_INICIAL_PC // 10,
+        "orcamento_por_nivel_pc": {str(k): v for k, v in ORCAMENTO_POR_NIVEL_PC.items()},
+        "orcamento_por_nivel_pp": {str(k): v // 10 for k, v in ORCAMENTO_POR_NIVEL_PC.items()},
         "armaduras": armaduras,
         "escudos": escudos,
         "armas_corpo_a_corpo": armas_cc,
@@ -711,11 +725,15 @@ def comprar_equipamentos(
     efeitos_talentos: dict[str, Any] | None = None,
     divindade: dict[str, Any] | None = None,
     biografia: dict[str, Any] | None = None,
+    nivel: int = 1,
+    orcamento_pc: int | None = None,
     escolhas_equipamentos: dict[str, Any] | None = None,
     regras_casa: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Executa a compra procedural, manual ou híbrida dentro de 15 po (1.500 pc) e calcula o Volume."""
-    saldo_pc = ORCAMENTO_INICIAL_PC
+    """Executa a compra procedural, manual ou híbrida dentro do orçamento do nível e calcula o Volume."""
+    orcamento_base_pc = int(orcamento_pc) if orcamento_pc is not None else orcamento_por_nivel_pc(nivel)
+    reserva_min_pc = orcamento_base_pc // 10
+    saldo_pc = orcamento_base_pc
     leves_por_volume = max(1, int((regras_casa or {}).get("itens_leves_por_volume") or 10))
     defesas = profs_combate["defesas"]
     armas_prof = profs_combate["armas"]
@@ -886,14 +904,14 @@ def comprar_equipamentos(
             variados_manuais_reg.append((item_loja, qtd))
 
     if saldo_pc < 0:
-        gasto_manual = ORCAMENTO_INICIAL_PC - saldo_pc
+        gasto_manual = orcamento_base_pc - saldo_pc
         raise ValueError(
-            f"Orçamento inicial de 15 po (150 pp) excedido pelos equipamentos escolhidos "
+            f"Orçamento inicial de {formatar_preco(orcamento_base_pc)} excedido pelos equipamentos escolhidos "
             f"(gasto: {formatar_preco(gasto_manual)})."
         )
 
     # ------------------------------------------------------------------
-    # 2ª Passada — Categorias deixadas em Procedural usam até 90% (reservando >= 150 pc)
+    # 2ª Passada — Categorias deixadas em Procedural usam até 90% (reservando >= 10%)
     # e mantêm o personagem dentro do limite leve (<= sobrecarregado_lim)
     # ------------------------------------------------------------------
     bonus_carga = 2 if (efeitos_talentos or {}).get("carregador_robusto") else 0
@@ -901,7 +919,7 @@ def comprar_equipamentos(
     maximo_lim = 10 + mod_for + bonus_carga
 
     def _saldo_procedural_disp() -> int:
-        return max(0, saldo_pc - RESERVA_MOEDAS_MIN_PC)
+        return max(0, saldo_pc - reserva_min_pc)
 
     def _itens_fixos_gratuitos() -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
         vest_f: list[dict[str, Any]] = []
@@ -1337,7 +1355,8 @@ def comprar_equipamentos(
         "volume_sobrecarregado": sobrecarregado_lim,
         "volume_maximo": maximo_lim,
         "esta_sobrecarregado": volume_total > sobrecarregado_lim,
-        "gasto_pc": ORCAMENTO_INICIAL_PC - saldo_pc,
+        "orcamento_pc": orcamento_base_pc,
+        "gasto_pc": orcamento_base_pc - saldo_pc,
         "saldo_pc": saldo_pc,
         "riqueza": pc_para_moedas(saldo_pc),
         "escolhas_equipamentos": {

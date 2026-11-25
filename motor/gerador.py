@@ -33,13 +33,14 @@ from .equipamentos import (
 )
 from .magias import (
     gerar_conjuracao,
+    listar_catalogo_magias,
     listar_catalogo_magias_n1,
     preencher_bloco_conjuracao_ficha,
     resumo_conjuracao_classe,
 )
 from .regras_atributos import calcular_atributos, normalizar_escolha_atributo, opcoes_atributo_classe
 from .regras_casa import listar_opcoes_regras_casa, resolver_configuracao_regras_casa
-from .talentos import listar_catalogo_talentos_n1, selecionar_talentos
+from .talentos import listar_catalogo_talentos, listar_catalogo_talentos_n1, selecionar_talentos
 from .util import ATRIBUTOS, atributo_id, formatar_preco, normalizar
 
 
@@ -48,6 +49,9 @@ class ErroValidacao(ValueError):
 
 
 VALORES_ALEATORIOS = frozenset({"aleatorio", "aleatoria", "procedural", "random"})
+NIVEL_MINIMO = 1
+NIVEL_MAXIMO_CATALOGO = 5
+NIVEIS_CATALOGO = (1, 2, 3, 4, 5)
 
 
 _NOMES_HUMANOS_PADRAO = [
@@ -183,8 +187,8 @@ def _preencher_pagina_talentos(
     hab_tal["pericia"][0]["origem_regra"] = tb["origem"]
     hab_tal["pericia"][0]["resumo"] = tb["resumo"]
 
-    # Classe — slots 0 e 1 (CARACTERÍSTICA 1º) e slot 2 (TALENTO 1º)
-    caracts = talentos_res["caracteristicas_classe_n1"]
+    # Classe — slots 0 e 1 (CARACTERÍSTICA) e slot 2 (TALENTO)
+    caracts = talentos_res.get("caracteristicas_classe") or talentos_res["caracteristicas_classe_n1"]
     if subclasse and tese_arcana:
         hab_tal["classe"][0]["nome"] = (
             f"{classe['subclasses']['nome_tipo']}: {subclasse['nome']} | Tese: {tese_arcana['nome']}"
@@ -381,13 +385,16 @@ def listar_opcoes_criacao(dados: BaseDados | None = None) -> dict[str, Any]:
     ]
 
     return {
+        "nivel_minimo": NIVEL_MINIMO,
+        "nivel_maximo_catalogo": NIVEL_MAXIMO_CATALOGO,
+        "niveis_catalogo": list(NIVEIS_CATALOGO),
         "ancestralidades": ancestralidades,
         "biografias": biografias,
         "classes": classes,
         "divindades": divindades,
         "catalogo_pericias": listar_catalogo_pericias(db),
-        "catalogo_talentos": listar_catalogo_talentos_n1(db),
-        "catalogo_magias": listar_catalogo_magias_n1(db),
+        "catalogo_talentos": listar_catalogo_talentos(db, nivel_maximo=NIVEL_MAXIMO_CATALOGO),
+        "catalogo_magias": listar_catalogo_magias(db, circulo_maximo=3),
         "catalogo_equipamentos": listar_catalogo_equipamentos_loja(db),
         "catalogo_companheiros": listar_catalogo_companheiros_familiares(db),
         "catalogo_regras_casa": listar_opcoes_regras_casa(),
@@ -605,6 +612,7 @@ def gerar_personagem(
             tese_arcana_id=tese_arcana["id"] if tese_arcana else None,
             divindade=divindade,
             atributos=atributos_res["valores"],
+            nivel=nivel,
             escolhas_talentos=escolhas_talentos,
             rng=rng,
         )
@@ -664,6 +672,7 @@ def gerar_personagem(
             efeitos_talentos=talentos_res["efeitos"],
             divindade=divindade,
             biografia=biografia,
+            nivel=nivel,
             escolhas_equipamentos=escolhas_equipamentos,
             regras_casa=config_regras_casa,
         )
@@ -831,7 +840,8 @@ def gerar_personagem(
             "escolhas_talentos": talentos_res["escolhas_talentos"],
             "escolhas_magias": magias_res.get("escolhas_magias"),
             "escolhas_perfil": escolhas_perfil_aplicadas,
-            "orcamento_inicial": "15 po",
+            "orcamento_inicial": formatar_preco(equip_res.get("orcamento_pc", 1500)),
+            "orcamento_pc": equip_res.get("orcamento_pc", 1500),
             "escolhas_equipamentos": equip_res["escolhas_equipamentos"],
             "gasto_equipamentos": formatar_preco(equip_res["gasto_pc"]),
             "saldo_restante": formatar_preco(equip_res["saldo_pc"]),

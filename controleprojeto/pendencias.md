@@ -33,8 +33,8 @@ Lista viva e priorizada das entregas, melhorias e expansões que ainda precisam 
 
 ## 4. Refatoração Arquitetural e Qualidade (Pré-Níveis 2–20)
 
-- [ ] **Desacoplar Contratos Fixados em 1º Nível no Motor**
-  - Generalizar funções e constantes presas ao 1º nível (`listar_catalogo_talentos_n1`, `magias_n1`, `espacos_nivel_1`, `caracteristicas_classe_n1`, `ORCAMENTO_INICIAL_PC`) preparando o caminho para evolução de níveis.
+- [x] **Desacoplar Contratos Fixados em 1º Nível no Motor** *(concluído em `25/11/2026` — Etapa 56)*
+  - Generalizar funções e constantes presas ao 1º nível (`listar_catalogo_talentos`, `listar_catalogo_magias`, `resumo_conjuracao_classe` com `progressao_por_nivel`, `espacos_por_circulo`, `magias_por_circulo`, `caracteristicas_classe`, `ORCAMENTO_POR_NIVEL_PC`) mantendo aliases `*_n1` retrocompatíveis e preparando a evolução para os níveis `1` a `5`.
 - [ ] **Avaliador de Pré-requisitos Completo para Níveis 2+** *(sugestão de melhoria)*
   - Expandir `atende_prerequisitos()` em `motor/talentos.py` para requisitos compostos de nível `2+` (talento prévio, proficiência `Especialista`/`Mestre`/`Lendário` e combinações de atributos).
 - [ ] **Validação Automatizada de Contratos Front-End ↔ API** *(sugestão de melhoria)*

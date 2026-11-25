@@ -16,25 +16,32 @@ CLASSES_CONJURACAO_PLENA = frozenset({"bardo", "clerigo", "druida", "feiticeiro"
 TRADICOES_OFICIAIS = ("arcana", "divina", "ocultista", "primal")
 
 
-def listar_catalogo_magias_n1(dados: BaseDados) -> dict[str, Any]:
-    """Retorna catálogo de Truques Mágicos (N0) e Magias de 1º Círculo a partir de magias01/02.json."""
+def listar_catalogo_magias(dados: BaseDados, circulo_maximo: int = 3) -> dict[str, Any]:
+    """Retorna catálogo de Truques Mágicos (N0) e Magias até `circulo_maximo` a partir de magias01/02.json."""
+    circ_lim = max(1, int(circulo_maximo))
     por_id: dict[str, dict[str, Any]] = {}
-    por_tradicao: dict[str, dict[str, list[str]]] = {
-        t: {"truques": [], "nivel_1": []} for t in TRADICOES_OFICIAIS
+    por_tradicao: dict[str, dict[str, Any]] = {
+        t: {
+            "truques": [],
+            **{f"nivel_{c}": [] for c in range(1, circ_lim + 1)},
+            "por_circulo": {str(c): [] for c in range(1, circ_lim + 1)},
+        }
+        for t in TRADICOES_OFICIAIS
     }
 
     for m in dados.magias.values():
         tracos = m.get("tracos") or []
         eh_truque = "Truque Mágico" in tracos
         nivel_m = m.get("nivel")
-        if not eh_truque and nivel_m != 1:
+        if not eh_truque and (not isinstance(nivel_m, int) or nivel_m < 1 or nivel_m > circ_lim):
             continue
         mid = m["id"]
         trads = [t for t in (m.get("tradicoes") or []) if t in TRADICOES_OFICIAIS]
+        circ_efetivo = 0 if eh_truque else int(nivel_m)
         por_id[mid] = {
             "id": mid,
             "nome": m["nome"],
-            "nivel": 0 if eh_truque else 1,
+            "nivel": circ_efetivo,
             "eh_truque": eh_truque,
             "tradicoes": trads,
             "escola": m.get("escola") or "",
@@ -50,24 +57,38 @@ def listar_catalogo_magias_n1(dados: BaseDados) -> dict[str, Any]:
             "resumo": m.get("resumo_lista") or (m.get("descricao") or "")[:160],
             "descricao": m.get("descricao") or m.get("resumo_lista") or "",
         }
-        chave_lista = "truques" if eh_truque else "nivel_1"
         for t in trads:
-            por_tradicao[t][chave_lista].append(mid)
+            if eh_truque:
+                por_tradicao[t]["truques"].append(mid)
+            else:
+                por_tradicao[t][f"nivel_{circ_efetivo}"].append(mid)
+                por_tradicao[t]["por_circulo"][str(circ_efetivo)].append(mid)
 
     for t in TRADICOES_OFICIAIS:
         por_tradicao[t]["truques"].sort(key=lambda mid: normalizar(por_id[mid]["nome"]))
-        por_tradicao[t]["nivel_1"].sort(key=lambda mid: normalizar(por_id[mid]["nome"]))
+        for c in range(1, circ_lim + 1):
+            por_tradicao[t][f"nivel_{c}"].sort(key=lambda mid: normalizar(por_id[mid]["nome"]))
+            por_tradicao[t]["por_circulo"][str(c)].sort(key=lambda mid: normalizar(por_id[mid]["nome"]))
 
-    return {"por_id": por_id, "por_tradicao": por_tradicao}
+    return {"circulo_maximo": circ_lim, "por_id": por_id, "por_tradicao": por_tradicao}
 
 
-def resumo_conjuracao_classe(dados: BaseDados, classe: dict[str, Any]) -> dict[str, Any] | None:
-    """Extrai de dados/classes*.json as regras de conjuração de 1º nível da classe e subclasses."""
+def listar_catalogo_magias_n1(dados: BaseDados) -> dict[str, Any]:
+    """Alias retrocompatível para o catálogo de magias (cobre Truques e círculos 1 a 3)."""
+    return listar_catalogo_magias(dados, circulo_maximo=3)
+
+
+def resumo_conjuracao_classe(
+    dados: BaseDados,
+    classe: dict[str, Any],
+    nivel_maximo: int = 5,
+) -> dict[str, Any] | None:
+    """Extrai de dados/classes*.json as regras de conjuração da classe e subclasses (1º ao `nivel_maximo`)."""
     cid = classe["id"]
     if cid not in CLASSES_CONJURACAO_PLENA:
         return None
     prof = classe["proficiencias_iniciais"].get("magias") or {}
-    tabela = _tabela_magias_classe(classe) or {"truques_magicos": 5, "espacos_por_circulo": {"1": 2}}
+    tabela = _tabela_magias_por_nivel(classe, 1) or {"truques_magicos": 5, "espacos_por_circulo": {"1": 2}}
     qtd_truques = int(tabela.get("truques_magicos", 5))
     espacos_base = int(tabela.get("espacos_por_circulo", {}).get("1", 2))
     trad_raw = prof.get("tradicao")
@@ -116,6 +137,21 @@ def resumo_conjuracao_classe(dados: BaseDados, classe: dict[str, Any]) -> dict[s
             "eh_universalista": cid == "mago" and sid == "universalista",
         }
 
+    progressao_por_nivel: dict[str, dict[str, Any]] = {}
+    for niv in range(1, max(1, int(nivel_maximo)) + 1):
+        row = _tabela_magias_por_nivel(classe, niv)
+        if not row:
+            continue
+        esp_row = {
+            str(k): int(v)
+            for k, v in (row.get("espacos_por_circulo") or {}).items()
+            if v is not None
+        }
+        progressao_por_nivel[str(niv)] = {
+            "truques_magicos": int(row.get("truques_magicos") or qtd_truques),
+            "espacos_por_circulo": esp_row,
+        }
+
     return {
         "tradicao_fixa": trad_fixa,
         "estilo": prof.get("tipo_conjuracao", "preparada"),
@@ -123,6 +159,7 @@ def resumo_conjuracao_classe(dados: BaseDados, classe: dict[str, Any]) -> dict[s
         "qtd_truques": qtd_truques,
         "espacos_n1_base": espacos_base,
         "subclasses": subclasses_info,
+        "progressao_por_nivel": progressao_por_nivel,
     }
 
 
@@ -267,12 +304,20 @@ def _selecionar_magias_por_nivel(
     return escolhidas
 
 
-def _tabela_magias_classe(classe: dict[str, Any]) -> dict[str, Any] | None:
+def _tabela_magias_por_nivel(classe: dict[str, Any], nivel: int = 1) -> dict[str, Any] | None:
     te = classe.get("tabelas_especificas") or {}
+    nivel_alvo = max(1, int(nivel))
     for chave, valor in te.items():
-        if "magias_por_dia" in chave and isinstance(valor, list):
+        if "magias_por_dia" in chave and isinstance(valor, list) and valor:
+            for row in valor:
+                if int(row.get("nivel", 0)) == nivel_alvo:
+                    return row
             return valor[0]
     return None
+
+
+def _tabela_magias_classe(classe: dict[str, Any]) -> dict[str, Any] | None:
+    return _tabela_magias_por_nivel(classe, 1)
 
 
 def _resolver_magia_foco_dominio(
@@ -419,9 +464,11 @@ def gerar_conjuracao(
             "cd_magia": {"total": 10, "mod_atributo_chave": 0, "proficiencia": 0, "grau_proficiencia": "destreinado"},
             "nivel_truque": math.ceil(nivel / 2),
             "espacos_nivel_1": 0,
+            "espacos_por_circulo": {},
             "fonte_divina": None,
             "truques": [],
             "magias_n1": [],
+            "magias_por_circulo": {},
             "pontos_foco": 0,
             "magias_foco": [],
             "magias_inatas": [],
@@ -687,9 +734,11 @@ def gerar_conjuracao(
         },
         "nivel_truque": math.ceil(nivel / 2),
         "espacos_nivel_1": espacos_n1,
+        "espacos_por_circulo": {"1": espacos_n1} if conjuracao_plena else {},
         "fonte_divina": fonte_divina_info,
         "truques": truques_selecionados,
         "magias_n1": magias_selecionadas,
+        "magias_por_circulo": {"1": magias_selecionadas} if conjuracao_plena else {},
         "pontos_foco": pontos_foco,
         "magias_foco": foco_selecionadas,
         "magias_inatas": inatas,
@@ -698,8 +747,10 @@ def gerar_conjuracao(
             "tradicao": tradicao,
             "qtd_truques_total": qtd_truques_total,
             "qtd_magias_n1_total": qtd_magias_n1_total,
+            "qtd_magias_por_circulo": {"1": qtd_magias_n1_total} if conjuracao_plena else {},
             "truques_manuais": truques_manuais_aplicados,
             "magias_n1_manuais": magias_n1_manuais_aplicadas,
+            "magias_manuais_por_circulo": {"1": magias_n1_manuais_aplicadas} if conjuracao_plena else {},
         },
     }
 
@@ -723,10 +774,14 @@ def preencher_bloco_conjuracao_ficha(
     elif estilo == "espontanea":
         bloco_conjuracao["estilo_conjuracao"]["espontanea"] = True
 
-    esp_n1 = resumo_magias.get("espacos_nivel_1", 0)
-    bloco_conjuracao["espacos_magia_por_dia"]["1"] = esp_n1
-    if estilo == "espontanea":
-        bloco_conjuracao["espacos_magia_espontanea_remanescentes"]["1"] = esp_n1
+    espacos_por_circulo = resumo_magias.get("espacos_por_circulo")
+    if not espacos_por_circulo and resumo_magias.get("espacos_nivel_1"):
+        espacos_por_circulo = {"1": resumo_magias.get("espacos_nivel_1", 0)}
+    for circ, qtd_esp in (espacos_por_circulo or {}).items():
+        chave_circ = str(circ)
+        bloco_conjuracao["espacos_magia_por_dia"][chave_circ] = qtd_esp
+        if estilo == "espontanea":
+            bloco_conjuracao["espacos_magia_espontanea_remanescentes"][chave_circ] = qtd_esp
 
     # Truques (até 7 slots)
     for idx, m in enumerate(resumo_magias["truques"][: len(bloco_conjuracao["truques_magicos"])]):
@@ -761,8 +816,14 @@ def preencher_bloco_conjuracao_ficha(
         slot["componentes"] = _formatar_componentes(m.get("componentes"))
         slot["anotacoes"] = m.get("escola") or ""
 
-    # Magias N1 (até 32 slots) — inclui Fonte Divina extra do Clérigo quando aplicável
-    magias_lista = list(resumo_magias["magias_n1"])
+    # Magias (até 32 slots) — consolida círculos 1..10 + Fonte Divina do Clérigo quando aplicável
+    magias_por_circulo = resumo_magias.get("magias_por_circulo")
+    if isinstance(magias_por_circulo, dict) and magias_por_circulo:
+        magias_lista = []
+        for circ_key in sorted(magias_por_circulo.keys(), key=lambda c: int(c)):
+            magias_lista.extend(magias_por_circulo[circ_key])
+    else:
+        magias_lista = list(resumo_magias.get("magias_n1") or [])
     fonte = resumo_magias.get("fonte_divina")
     if fonte and len(magias_lista) < len(bloco_conjuracao["magias"]):
         nome_magia_fonte = "Ferir" if "ferimento" in fonte["tipo"].lower() else "Curar"

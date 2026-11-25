@@ -542,8 +542,8 @@ def calcular_matematica_final(
     acoes_reativas: list[dict[str, Any]] = []
 
     fontes_acoes: list[dict[str, Any] | None] = []
-    # Ações concedidas por características de classe de 1º nível e subclasse
-    for car in talentos_res["caracteristicas_classe_n1"]:
+    # Ações concedidas por características de classe e subclasse
+    for car in (talentos_res.get("caracteristicas_classe") or talentos_res["caracteristicas_classe_n1"]):
         if car.get("id") == "elo_arcano" and tese_arcana and tese_arcana.get("acao_substituta"):
             fontes_acoes.append(tese_arcana["acao_substituta"])
             continue

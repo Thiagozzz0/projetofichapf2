@@ -344,17 +344,36 @@ def main() -> None:
     mapa_conceitos_ui = {con["id"]: con for c in opcoes_json["classes"] for con in c["conceitos"]}
     assert set(mapa_conceitos_ui["ladino_duelista_fanfarrao"]["atributo_chave_opcoes"]) == {"des", "car"}
     assert "prioridade_atributos" in mapa_conceitos_ui["guerreiro_colosso_demolidor"]
+    assert opcoes_json["nivel_minimo"] == 1
+    assert opcoes_json["nivel_maximo_catalogo"] == 5
+    assert opcoes_json["niveis_catalogo"] == [1, 2, 3, 4, 5]
     cat_tal = opcoes_json["catalogo_talentos"]
     assert cat_tal["nivel"] == 1
+    assert cat_tal["nivel_maximo"] == 5
     assert set(cat_tal["ancestralidade_por_id"]) == set(anc_por_id)
+    assert "5" in cat_tal["ancestralidade_por_nivel"]["humano"]
     assert set(cat_tal["mesticos"]) == {"meio_elfo", "meio_orc"}
+    assert "5" in cat_tal["mesticos_por_nivel"]["meio_elfo"]
     assert cat_tal["classe_por_id"]["guerreiro"]["tem_slot_n1_base"] is True
+    assert cat_tal["classe_por_id"]["guerreiro"]["niveis_slot_classe"] == [1, 2, 4]
+    assert "2" in cat_tal["classe_por_id"]["guerreiro"]["talentos_por_nivel"]
+    assert "4" in cat_tal["classe_por_id"]["guerreiro"]["talentos_por_nivel"]
     assert cat_tal["classe_por_id"]["bardo"]["tem_slot_n1_base"] is False
+    assert cat_tal["classe_por_id"]["bardo"]["niveis_slot_classe"] == [2, 4]
     assert cat_tal["classe_por_id"]["clerigo"]["tem_slot_n1_base"] is False
     assert cat_tal["classe_por_id"]["ladino"]["tem_slot_n1_base"] is True
     assert len(cat_tal["pericia_n1"]) >= 30 and len(cat_tal["gerais_n1"]) >= 10
+    assert "2" in cat_tal["pericia_por_nivel"] and "3" in cat_tal["gerais_por_nivel"]
+    cat_mag = opcoes_json["catalogo_magias"]
+    assert cat_mag["circulo_maximo"] == 3
+    assert len(cat_mag["por_tradicao"]["arcana"]["nivel_2"]) > 0
+    assert len(cat_mag["por_tradicao"]["arcana"]["nivel_3"]) > 0
+    assert set(cat_mag["por_tradicao"]["arcana"]["por_circulo"]) == {"1", "2", "3"}
+    assert "5" in cls_por_id["mago"]["conjuracao_classe"]["progressao_por_nivel"]
+    assert cls_por_id["mago"]["conjuracao_classe"]["progressao_por_nivel"]["5"]["espacos_por_circulo"] == {"1": 3, "2": 3, "3": 2}
     cat_eq = opcoes_json["catalogo_equipamentos"]
     assert cat_eq["orcamento_inicial_pc"] == 1500
+    assert cat_eq["orcamento_por_nivel_pc"] == {"1": 1500, "2": 3000, "3": 7500, "4": 14000, "5": 27000}
     assert {w["categoria"] for w in cat_eq["armas_corpo_a_corpo"]} == {"Arma Simples", "Arma Marcial", "Arma Avançada"}
     assert {w["categoria"] for w in cat_eq["armas_distancia"]} == {"Arma Simples", "Arma Marcial"}
     ids_var_cat = {it["id"] for it in cat_eq["equipamentos_variados"]}
@@ -403,6 +422,8 @@ def main() -> None:
     assert r_ok.status_code == 200
     payload_ok = r_ok.get_json()
     verificar_contrato_e_matematica(payload_ok, dados)
+    assert payload_ok["meta_geracao"]["orcamento_pc"] == 1500
+    assert payload_ok["meta_geracao"]["escolhas_magias"]["qtd_magias_por_circulo"] == {"1": 6}
     assert payload_ok["meta_geracao"]["regras_casa"]["ativa"] is False
     assert payload_ok["meta_geracao"]["itens_leves_por_volume"] == 10
 

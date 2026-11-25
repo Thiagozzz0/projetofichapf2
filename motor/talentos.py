@@ -54,41 +54,70 @@ def _tem_traco_metamagia(talento: dict[str, Any]) -> bool:
     return any(normalizar(x).startswith("metamag") for x in talento.get("tracos", []))
 
 
-def listar_catalogo_talentos_n1(dados: BaseDados) -> dict[str, Any]:
-    """Retorna o catálogo curado de talentos de 1º nível para seleção na interface/API."""
+def listar_catalogo_talentos(dados: BaseDados, nivel_maximo: int = 5) -> dict[str, Any]:
+    """Retorna o catálogo curado de talentos (1º ao `nivel_maximo`) para seleção na interface/API."""
+    nivel_lim = max(1, int(nivel_maximo))
+
     def _resumir_anc(t: dict[str, Any]) -> dict[str, Any]:
         return {
             "id": t["id"],
             "nome": t["nome"],
+            "nivel": int(t.get("nivel", 1)),
             "pre_requisitos": t.get("pre_requisitos"),
             "resumo": t.get("descricao", ""),
         }
 
-    ancestralidade_por_id = {
-        aid: [_resumir_anc(t) for t in anc.get("talentos_ancestralidade", []) if t.get("nivel") == 1]
-        for aid, anc in dados.ancestralidades.items()
-    }
-    mesticos = {
-        hid: [_resumir_anc(t) for t in lista if t.get("nivel") == 1]
-        for hid, lista in dados.talentos_mesticos.items()
-    }
+    def _agrupar_por_nivel(lista: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
+        agrupado: dict[str, list[dict[str, Any]]] = {}
+        for item in lista:
+            chave = str(int(item.get("nivel", 1)))
+            agrupado.setdefault(chave, []).append(item)
+        return agrupado
+
+    ancestralidade_por_id: dict[str, list[dict[str, Any]]] = {}
+    ancestralidade_por_nivel: dict[str, dict[str, list[dict[str, Any]]]] = {}
+    for aid, anc in dados.ancestralidades.items():
+        lista_ate = [
+            _resumir_anc(t)
+            for t in anc.get("talentos_ancestralidade", [])
+            if int(t.get("nivel", 1)) <= nivel_lim
+        ]
+        ancestralidade_por_id[aid] = [t for t in lista_ate if t["nivel"] == 1]
+        ancestralidade_por_nivel[aid] = _agrupar_por_nivel(lista_ate)
+
+    mesticos: dict[str, list[dict[str, Any]]] = {}
+    mesticos_por_nivel: dict[str, dict[str, list[dict[str, Any]]]] = {}
+    for hid, lista in dados.talentos_mesticos.items():
+        lista_ate = [_resumir_anc(t) for t in lista if int(t.get("nivel", 1)) <= nivel_lim]
+        mesticos[hid] = [t for t in lista_ate if t["nivel"] == 1]
+        mesticos_por_nivel[hid] = _agrupar_por_nivel(lista_ate)
 
     classe_por_id: dict[str, Any] = {}
     for cid, cls in dados.classes.items():
+        nome_cls_norm = normalizar(cls["nome"])
+        marcador_slot_cls = f"talento de {nome_cls_norm}"
         prog1 = [normalizar(x) for x in cls["tabela_progressao"][0]["caracteristicas"]]
-        tem_slot_n1_base = any(x.startswith("talento de ") for x in prog1)
-        talentos_n1 = [
+        tem_slot_n1_base = any(x == marcador_slot_cls for x in prog1)
+        niveis_slot_classe = [
+            int(row["nivel"])
+            for row in cls.get("tabela_progressao", [])
+            if int(row.get("nivel", 1)) <= nivel_lim
+            and any(normalizar(x) == marcador_slot_cls for x in row.get("caracteristicas", []))
+        ]
+        talentos_ate_max = [
             {
                 "id": t["id"],
                 "nome": t["nome"],
+                "nivel": int(t.get("nivel", 1)),
                 "pre_requisitos": t.get("pre_requisitos"),
                 "tracos": list(t.get("tracos", [])),
                 "eh_metamagia": _tem_traco_metamagia(t),
                 "resumo": t.get("descricao", ""),
             }
             for t in cls.get("talentos_de_classe", [])
-            if t.get("nivel") == 1
+            if int(t.get("nivel", 1)) <= nivel_lim
         ]
+        talentos_n1 = [t for t in talentos_ate_max if t["nivel"] == 1]
         subclasses_concedido = {
             sub["id"]: slugify(sub["talento_concedido"])
             for sub in cls.get("subclasses", {}).get("opcoes", [])
@@ -96,45 +125,61 @@ def listar_catalogo_talentos_n1(dados: BaseDados) -> dict[str, Any]:
         }
         classe_por_id[cid] = {
             "tem_slot_n1_base": tem_slot_n1_base,
+            "niveis_slot_classe": niveis_slot_classe,
             "talentos_n1": talentos_n1,
+            "talentos_por_nivel": _agrupar_por_nivel(talentos_ate_max),
+            "talentos_ate_nivel_maximo": talentos_ate_max,
             "subclasses_concedido": subclasses_concedido,
         }
 
-    pericia_n1 = sorted(
+    def _resumir_geral_pericia(t: dict[str, Any]) -> dict[str, Any]:
+        return {
+            "id": t["id"],
+            "nome": t["nome"],
+            "nivel": int(t.get("nivel", 1)),
+            "pre_requisitos": t.get("pre_requisitos"),
+            "resumo": t.get("resumo_beneficio") or t.get("descricao", ""),
+        }
+
+    pericia_ate_max = sorted(
         [
-            {
-                "id": t["id"],
-                "nome": t["nome"],
-                "pre_requisitos": t.get("pre_requisitos"),
-                "resumo": t.get("resumo_beneficio") or t.get("descricao", ""),
-            }
+            _resumir_geral_pericia(t)
             for t in dados.talentos_gerais_pericia.values()
-            if t.get("nivel") == 1 and t.get("categoria") == "pericia"
+            if int(t.get("nivel", 1)) <= nivel_lim and t.get("categoria") == "pericia"
         ],
-        key=lambda x: x["nome"],
+        key=lambda x: (x["nivel"], x["nome"]),
     )
-    gerais_n1 = sorted(
+    gerais_ate_max = sorted(
         [
-            {
-                "id": t["id"],
-                "nome": t["nome"],
-                "pre_requisitos": t.get("pre_requisitos"),
-                "resumo": t.get("resumo_beneficio") or t.get("descricao", ""),
-            }
+            _resumir_geral_pericia(t)
             for t in dados.talentos_gerais_pericia.values()
-            if t.get("nivel") == 1 and t.get("categoria") == "geral"
+            if int(t.get("nivel", 1)) <= nivel_lim and t.get("categoria") == "geral"
         ],
-        key=lambda x: x["nome"],
+        key=lambda x: (x["nivel"], x["nome"]),
     )
+    pericia_n1 = sorted([t for t in pericia_ate_max if t["nivel"] == 1], key=lambda x: x["nome"])
+    gerais_n1 = sorted([t for t in gerais_ate_max if t["nivel"] == 1], key=lambda x: x["nome"])
 
     return {
         "nivel": 1,
+        "nivel_maximo": nivel_lim,
         "ancestralidade_por_id": ancestralidade_por_id,
+        "ancestralidade_por_nivel": ancestralidade_por_nivel,
         "mesticos": mesticos,
+        "mesticos_por_nivel": mesticos_por_nivel,
         "classe_por_id": classe_por_id,
         "pericia_n1": pericia_n1,
+        "pericia_por_nivel": _agrupar_por_nivel(pericia_ate_max),
+        "pericia_ate_nivel_maximo": pericia_ate_max,
         "gerais_n1": gerais_n1,
+        "gerais_por_nivel": _agrupar_por_nivel(gerais_ate_max),
+        "gerais_ate_nivel_maximo": gerais_ate_max,
     }
+
+
+def listar_catalogo_talentos_n1(dados: BaseDados) -> dict[str, Any]:
+    """Alias retrocompatível para o catálogo de talentos (cobre até o 5º nível)."""
+    return listar_catalogo_talentos(dados, nivel_maximo=5)
 
 
 def atende_prerequisitos(texto_prereq: str | None, ctx: dict[str, Any]) -> bool:
@@ -322,10 +367,12 @@ def selecionar_talentos(
     tese_arcana_id: str | None = None,
     divindade: dict[str, Any] | None = None,
     atributos: dict[str, int] | None = None,
+    nivel: int = 1,
     escolhas_talentos: dict[str, Any] | None = None,
     rng: random.Random | None = None,
 ) -> dict[str, Any]:
-    """Seleciona todos os talentos e características aplicáveis ao 1º nível (procedural ou personalizado)."""
+    """Seleciona todos os talentos e características aplicáveis até `nivel` (procedural ou personalizado)."""
+    nivel_alvo = max(1, int(nivel))
     keywords = list(conceito["talentos_recomendados"].get("tracos_ancestralidade_afinidade", []))
     sub_id = subclasse["id"] if subclasse else ""
     visao_na_penumbra = heranca["id"] in {"meio_elfo", "meio_orc"} or any(
@@ -334,6 +381,7 @@ def selecionar_talentos(
     )
     ctx = {
         "dados": dados,
+        "nivel": nivel_alvo,
         "graus_pericias": graus_pericias,
         "classe_id": classe["id"],
         "subclasse_id": sub_id,
@@ -719,15 +767,16 @@ def selecionar_talentos(
             )
 
     # ------------------------------------------------------------------
-    # 5. Características de Classe de 1º nível (filtrando metas genéricas)
+    # 5. Características de Classe até `nivel_alvo` (filtrando metas genéricas)
     # ------------------------------------------------------------------
     ignorar_ids = {"ancestralidade_e_biografia", "proficiencias_iniciais"}
-    caracteristicas_n1 = [
+    caracteristicas_classe = [
         c for c in classe["caracteristicas_de_classe"]
-        if c.get("nivel") == 1
+        if int(c.get("nivel", 1)) <= nivel_alvo
         and c["id"] not in ignorar_ids
         and not c["id"].startswith("talentos_de_")
     ]
+    caracteristicas_n1 = [c for c in caracteristicas_classe if int(c.get("nivel", 1)) == 1]
 
     regras_morr = dados.regras_especificas.get("morrendo_e_testes_de_recuperacao", {})
     limite_morr_padrao = int(regras_morr.get("limite_morrendo_padrao", 4))
@@ -810,6 +859,7 @@ def selecionar_talentos(
         "talentos_classe_ids": [t["id"] for t in talentos_classe_selecionados],
         "talentos_bonus": talentos_bonus_slots,
         "talentos_gerais_ids": sorted(talentos_gerais_ativos),
+        "caracteristicas_classe": caracteristicas_classe,
         "caracteristicas_classe_n1": caracteristicas_n1,
         "efeitos": efeitos,
         "escolhas_talentos": escolhas_resumo,
