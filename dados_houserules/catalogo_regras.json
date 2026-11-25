@@ -16,11 +16,6 @@
           "volume": "L",
           "volume_valor": 0.1,
           "descricao": "Suprimento individual de comida de viagem por unidade (1 refeição/dia). Cada unidade possui Volume leve (L)."
-        },
-        "kit_de_aventureiro": {
-          "substituir_conteudo": {
-            "2 semanas de ração": "2 unidades de ração (Volume L cada)"
-          }
         }
       }
     },

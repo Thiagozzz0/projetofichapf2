@@ -358,7 +358,9 @@ def main() -> None:
     assert {w["categoria"] for w in cat_eq["armas_corpo_a_corpo"]} == {"Arma Simples", "Arma Marcial", "Arma Avançada"}
     assert {w["categoria"] for w in cat_eq["armas_distancia"]} == {"Arma Simples", "Arma Marcial"}
     ids_var_cat = {it["id"] for it in cat_eq["equipamentos_variados"]}
-    assert "kit_de_aventureiro" in ids_var_cat and "flechas" in ids_var_cat
+    assert "kit_de_aventureiro" not in ids_var_cat and "flechas" in ids_var_cat
+    assert {"kit_de_escalada", "kit_de_disfarce", "kit_de_reparo", "kit_de_pesca"} <= ids_var_cat
+    assert cat_eq["kits_de_classe"] == {}
     assert "fogo_alquimico" not in ids_var_cat and "bomba_alquimica" not in {w["id"] for w in cat_eq["armas_distancia"]}
     esperado_div_compat = {
         "campeao_cruzado_vingador": 7,
@@ -653,7 +655,14 @@ def main() -> None:
                 "escudo_id": "escudo_de_aco",               # 200 pc
                 "armas_corpo_a_corpo_ids": ["espada_longa"],  # 100 pc
                 "armas_distancia_ids": [],
-                "equipamentos_variados": [{"id": "kit_de_aventureiro", "quantidade": 1}, {"id": "corda", "quantidade": 2}],  # 70 + 100 pc
+                "equipamentos_variados": [
+                    {"id": "mochila", "quantidade": 1},          # 10 pc
+                    {"id": "racoes_1_semana", "quantidade": 1},  # 40 pc
+                    {"id": "cantil", "quantidade": 1},           # 5 pc
+                    {"id": "pederneira_e_isqueiro", "quantidade": 1},  # 5 pc
+                    {"id": "tocha", "quantidade": 10},           # 10 pc
+                    {"id": "corda", "quantidade": 2},            # 100 pc
+                ],
             },
             "seed": 111,
         },
@@ -803,7 +812,7 @@ def main() -> None:
             mago_elem,
             {
                 0: [mago_elem["ficha"]["cabecalho"]["nome_personagem"], "Mago", "ARCANISMO"],
-                1: ["Elfo", "Kit de aventureiro", "PO"],
+                1: ["Elfo", "Mochila", "PO"],
                 2: ["Evocador de Artilharia"],
                 3: ["Mãos Flamejantes", "Produzir Chama"],
             },

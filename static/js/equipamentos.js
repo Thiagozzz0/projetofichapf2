@@ -99,9 +99,6 @@
     setAddDisabled("btn-add-arma-cc", "eq-arma-cc-select", app.mapaEq.armas_cc);
     setAddDisabled("btn-add-arma-dist", "eq-arma-dist-select", app.mapaEq.armas_dist);
     setAddDisabled("btn-add-variado", "eq-variado-select", app.mapaEq.variados);
-
-    const btnKit = document.getElementById("btn-add-kit-av");
-    if (btnKit) btnKit.disabled = saldoPc < 70;
   }
 
   function _renderPreviewItemEq(elId, titulo, pills, texto, conteudo = []) {
@@ -604,7 +601,7 @@
     if (selVar) {
       const antVar = selVar.value || "procedural";
       selVar.innerHTML =
-        `<option value="procedural">Procedural (Kit de Aventureiro + ferramentas da classe)</option>` +
+        `<option value="procedural">Procedural (itens básicos de viagem + ferramentas da classe)</option>` +
         `<option value="nenhum">Nenhum item variado (ou usar lista abaixo)</option>`;
 
       variadosPermitidos.forEach((it) => {
@@ -676,74 +673,6 @@
         const txtArma = `Armas: ${catsArma.join(" + ") || "Nenhuma"}`;
         elCurEq.textContent = `Filtro da Classe (${profs.clsNome}): ${txtArm} • ${txtArma}.`;
       }
-    }
-
-    const btnKitCls = document.getElementById("btn-eq-kit-classe");
-    if (btnKitCls) {
-      const kitCls = profs.filtrando ? cat.kits_de_classe?.[profs.clsId] : null;
-      if (kitCls) {
-        btnKitCls.classList.remove("oculto");
-        btnKitCls.textContent = `+ Kit de ${kitCls.classe} (${fmtPrecoEq(kitCls.preco_pc)})`;
-        const optTxt = kitCls.opcoes_sugeridas?.length
-          ? `\nOpções extras sugeridas pelo livro: ${kitCls.opcoes_sugeridas.join("; ")}`
-          : "";
-        const omitTxt = kitCls.itens_omitidos?.length
-          ? `\n(Omitido da loja inicial: ${kitCls.itens_omitidos.join(", ")})`
-          : "";
-        btnKitCls.title = `Aplicar Kit Oficial de ${kitCls.classe}: ${kitCls.resumo_itens.join(", ")}.${optTxt}${omitTxt}`;
-      } else {
-        btnKitCls.classList.add("oculto");
-        btnKitCls.textContent = "+ Kit de Classe";
-        btnKitCls.title = "";
-      }
-    }
-
-    atualizarOrcamentoEquipamentosUI();
-  }
-
-  function aplicarKitDeClasseUI() {
-    const clsId = document.getElementById("classe")?.value || "aleatorio";
-    const kit = app.opcoes?.catalogo_equipamentos?.kits_de_classe?.[clsId];
-    if (!kit) return;
-
-    const selArm = document.getElementById("eq-armadura");
-    const cardArmOculto = document.getElementById("card-eq-armadura")?.classList.contains("oculto");
-    if (selArm && !cardArmOculto) {
-      selArm.value = kit.armadura_id && app.mapaEq.armaduras[kit.armadura_id] ? kit.armadura_id : "nenhuma";
-    }
-
-    const selEsc = document.getElementById("eq-escudo");
-    if (selEsc) selEsc.value = "nenhum";
-
-    app.eqEstado.armas_cc = (kit.armas_corpo_a_corpo_ids || [])
-      .map((id) => app.mapaEq.armas_cc[id])
-      .filter(Boolean);
-    const selCc = document.getElementById("eq-arma-cc-select");
-    if (selCc) selCc.value = app.eqEstado.armas_cc.length ? "nenhuma" : "procedural";
-
-    app.eqEstado.armas_dist = (kit.armas_distancia_ids || [])
-      .map((id) => app.mapaEq.armas_dist[id])
-      .filter(Boolean);
-    const selDist = document.getElementById("eq-arma-dist-select");
-    if (selDist) selDist.value = app.eqEstado.armas_dist.length ? "nenhuma" : "procedural";
-
-    app.eqEstado.variados = [];
-    (kit.equipamentos_variados || []).forEach(({ id, quantidade }) => {
-      const it = app.mapaEq.variados[id];
-      if (!it) return;
-      app.eqEstado.variados.push({ ...it, quantidade: Number(quantidade || 1) });
-    });
-    const selVar = document.getElementById("eq-variado-select");
-    if (selVar) selVar.value = "nenhum";
-    const qtdVar = document.getElementById("eq-variado-qtd");
-    if (qtdVar) qtdVar.value = "1";
-
-    const notaHib = document.getElementById("eq-nota-hibrida");
-    if (notaHib) {
-      const optNota = kit.opcoes_sugeridas?.length
-        ? ` Sugestões extras do livro p/ o saldo restante: ${kit.opcoes_sugeridas.join(" • ")}.`
-        : "";
-      notaHib.textContent = `Kit oficial de ${kit.classe} aplicado (${kit.resumo_itens.join(", ")}).${optNota}`;
     }
 
     atualizarOrcamentoEquipamentosUI();
@@ -1067,7 +996,6 @@
       }
       atualizarCatalogoEquipamentosUI();
     });
-    document.getElementById("btn-eq-kit-classe")?.addEventListener("click", aplicarKitDeClasseUI);
     document.getElementById("btn-eq-reset-procedural")?.addEventListener("click", () => {
       resetarEquipamentosProcedural();
       const modoEl = document.getElementById("modo-equipamentos");
@@ -1077,18 +1005,6 @@
     document.getElementById("btn-add-arma-cc")?.addEventListener("click", () => _adicionarItemListaEq("cc"));
     document.getElementById("btn-add-arma-dist")?.addEventListener("click", () => _adicionarItemListaEq("dist"));
     document.getElementById("btn-add-variado")?.addEventListener("click", () => _adicionarItemListaEq("var"));
-    document.getElementById("btn-add-kit-av")?.addEventListener("click", () => {
-      const orcPc = Number(app.opcoes?.catalogo_equipamentos?.orcamento_inicial_pc || 1500);
-      if (orcPc - gastoManualEquipamentosPc() < 70) return;
-      const kit = app.mapaEq.variados.kit_de_aventureiro;
-      if (!kit) return;
-      const existente = app.eqEstado.variados.find((x) => x.id === "kit_de_aventureiro");
-      if (existente) existente.quantidade += 1;
-      else app.eqEstado.variados.push({ ...kit, quantidade: 1 });
-      const sel = document.getElementById("eq-variado-select");
-      if (sel && sel.value === "procedural") sel.value = "nenhum";
-      atualizarOrcamentoEquipamentosUI();
-    });
     document.getElementById("painel-equipamentos-custom")?.addEventListener("click", (e) => {
       const btn = e.target.closest("[data-eq-rem]");
       if (!btn) return;

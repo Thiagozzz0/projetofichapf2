@@ -14,6 +14,11 @@ ORCAMENTO_INICIAL_PC = 1500  # 15 po = 150 pp = 1.500 pc
 RESERVA_MOEDAS_MIN_PC = 150  # 10% (1 po e 5 pp) reservados em moedas no modo procedural
 TETO_GASTO_PROCEDURAL_PC = ORCAMENTO_INICIAL_PC - RESERVA_MOEDAS_MIN_PC  # 1.350 pc (90%)
 
+# Etapa 55: pacotes compostos (que trazem rações/corda/cantil embutidos) saem da loja
+# para não quebrar a matemática de compra item a item. Kits específicos de perícia
+# (escalada, disfarce, reparo, pesca, arapuca, montaria...) continuam disponíveis.
+IDS_KITS_COMPOSTOS_REMOVIDOS: frozenset[str] = frozenset({"kit_de_aventureiro"})
+
 
 def _itens_variados_loja_brutos(
     dados: BaseDados,
@@ -28,7 +33,7 @@ def _itens_variados_loja_brutos(
         for item_bruto in av.get(chave_av, []):
             item = aplicar_override_item_casa(item_bruto, regras_casa)
             iid = item["id"]
-            if iid in vistos:
+            if iid in vistos or iid in IDS_KITS_COMPOSTOS_REMOVIDOS:
                 continue
             vistos.add(iid)
             itens.append(
@@ -197,7 +202,8 @@ def listar_catalogo_equipamentos_loja(
         "armas_corpo_a_corpo": armas_cc,
         "armas_distancia": armas_dist,
         "equipamentos_variados": variados,
-        "kits_de_classe": _listar_kits_de_classe_loja(dados, armaduras, armas_cc, armas_dist, variados),
+        # Etapa 55: kits de classe (pacotes prontos) removidos da loja — compra item a item.
+        "kits_de_classe": {},
         "familiaridade_armas_ancestral": {
             tid: {"armas": list(armas_lista), "traco": traco}
             for tid, (armas_lista, traco) in _FAMILIARIDADE_ARMAS_ANCESTRAL.items()
@@ -1287,10 +1293,18 @@ def comprar_equipamentos(
             ids_variados_comprados.add(iid)
             return True
 
-        # 4.1 Kit de aventureiro primeiro (libera a isenção de 2 Volumes da mochila)
-        if not _tentar_comprar_variado_proc("kit_de_aventureiro", 1, destino=outros_itens):
-            for fallback_viagem in ("mochila", "cantil", "racoes_1_semana", "pederneira_e_isqueiro"):
-                _tentar_comprar_variado_proc(fallback_viagem, 1, destino=outros_itens)
+        # 4.1 Básico de viagem comprado item a item (Etapa 55: sem kits compostos).
+        # A mochila vem primeiro para liberar a isenção de 2 Volumes.
+        for iid_basico, qtd_basico in (
+            ("mochila", 1),
+            ("esteira_de_dormir", 1),
+            ("cantil", 1),
+            ("pederneira_e_isqueiro", 1),
+            ("racoes_1_semana", 1),
+            ("tocha", 5),
+            ("sabao", 1),
+        ):
+            _tentar_comprar_variado_proc(iid_basico, qtd_basico, destino=outros_itens)
 
         # 4.2 Ferramentas essenciais da classe/conceito/biografia
         sub_id = subclasse["id"] if subclasse else ""

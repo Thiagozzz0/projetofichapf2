@@ -571,7 +571,8 @@ def test_aleatorio_7_campos_e_bonus_equipamentos() -> None:
     assert arm_res in vestidos
     assert any("Escudo" in n and "CA" in n and "Dureza" in n for n in vestidos)
     assert any("(1d" in n for n in vestidos)
-    assert any("Kit de aventureiro" in n and "mochila" in n for n in outros)
+    assert any(n.startswith("Mochila") for n in outros)
+    assert not any("Kit de aventureiro" in n for n in outros)
 
     # Munições e Reagentes Alquímicos exibem quantidade clara sem duplicar "×"
     r_arq = gerar_personagem("elfo", "elfo_vidente", "guerreiro", "guerreiro_atirador_elite", seed=9, dados=db)
@@ -795,7 +796,11 @@ def test_compra_manual_e_hibrida_equipamentos() -> None:
             "armas_corpo_a_corpo_ids": ["espada_curta"],  # 90 pc (Vol L)
             "armas_distancia_ids": ["arco_curto"],        # 300 pc (Vol 1)
             "equipamentos_variados": [
-                {"id": "kit_de_aventureiro", "quantidade": 1},  # 70 pc (Vol 1 -> isento 2 Vol)
+                {"id": "mochila", "quantidade": 1},                # 10 pc
+                {"id": "racoes_1_semana", "quantidade": 1},        # 40 pc
+                {"id": "cantil", "quantidade": 1},                 # 5 pc
+                {"id": "pederneira_e_isqueiro", "quantidade": 1},  # 5 pc
+                {"id": "tocha", "quantidade": 10},                 # 10 pc
                 {"id": "flechas", "quantidade": 2},             # 20 pc (20 flechas, Vol 2L)
             ],
         },
@@ -818,17 +823,28 @@ def test_compra_manual_e_hibrida_equipamentos() -> None:
         seed=8,
         dados=db,
     )
-    # Montante manual é 2M -> escudo procedural não é comprado; distância/variados procedurais compram Azagaia + Kit de Aventureiro + itens de viagem dentro dos 90% (saldo >= 150 pc)
+    # Montante manual é 2M -> escudo procedural não é comprado; distância/variados procedurais compram Azagaia + itens básicos de viagem (1 a 1) dentro dos 90% (saldo >= 150 pc)
     assert 880 <= guerr_hib["meta_geracao"]["gasto_pc"] <= 1350
     assert guerr_hib["meta_geracao"]["saldo_pc"] >= 150
     assert guerr_hib["meta_geracao"]["observacoes_combate"]["esta_sobrecarregado"] is False
     assert guerr_hib["ficha"]["classe_armadura"]["escudo"]["nome"] == ""
-    assert any("Kit de aventureiro" in it["nome"] for it in guerr_hib["ficha"]["inventario"]["outros_itens"])
+    outros_hib = [it["nome"] for it in guerr_hib["ficha"]["inventario"]["outros_itens"]]
+    assert any(n.startswith("Mochila") for n in outros_hib)
+    assert not any("Kit de aventureiro" in n for n in outros_hib)
 
-    # 3. Orçamento excedido ou item alquímico bloqueado levantam ErroValidacao
+    # Etapa 55: Kit de Aventureiro e Kits de Classe fora da loja; kits específicos de perícia permanecem
+    cat_loja = listar_catalogo_equipamentos_loja(db)
+    ids_cat_loja = {it["id"] for it in cat_loja["equipamentos_variados"]}
+    assert "kit_de_aventureiro" not in ids_cat_loja
+    assert cat_loja["kits_de_classe"] == {}
+    for kit_especifico in ("kit_de_escalada", "kit_de_disfarce", "kit_de_reparo", "kit_de_pesca", "kit_de_arapuca", "kit_de_montaria"):
+        assert kit_especifico in ids_cat_loja, kit_especifico
+
+    # 3. Orçamento excedido, kit composto removido ou item alquímico bloqueado levantam ErroValidacao
     for esc_inv in (
         {"armadura_id": "armadura_completa"},
-        {"equipamentos_variados": [{"id": "kit_de_aventureiro", "quantidade": 30}]},
+        {"equipamentos_variados": [{"id": "corda", "quantidade": 31}]},  # 1.550 pc > 1.500 pc
+        {"equipamentos_variados": [{"id": "kit_de_aventureiro", "quantidade": 1}]},
         {"equipamentos_variados": ["elixir_da_vida_menor"]},
     ):
         try:
@@ -1232,7 +1248,7 @@ def test_orcamento_90_peso_leve_e_viagem_procedural() -> None:
         nomes_inv = " | ".join(
             it["nome"] for it in (inv["itens_vestidos"] + inv["itens_preparados"] + inv["outros_itens"])
         )
-        assert "Kit de aventureiro" in nomes_inv
+        assert "Mochila" in nomes_inv and "Kit de aventureiro" not in nomes_inv
         assert any(
             termo in nomes_inv
             for termo in ("Tenda individual", "Roupas de inverno", "Lanterna coberta", "Bússola", "Rações")
@@ -1422,24 +1438,21 @@ def test_regras_da_casa_peso_racao_e_oleo() -> None:
     assert r_oleo6["ficha"]["inventario"]["volume_total"] == 1.0
     assert r_oleo6["meta_geracao"]["volume_leves_soltos"] == 1
 
-    # Kit de aventureiro procedural com regras da casa substitui texto de conteúdo
+    # Básico de viagem procedural com regras da casa: itens 1 a 1, ração unitária, sem kit composto
     r_kit_rc = gerar_personagem(
         "humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor",
         escolhas_regras_casa={"modo": "regras_da_casa"},
         seed=10,
         dados=db,
     )
-    kit_item = next(
-        it for it in r_kit_rc["ficha"]["inventario"]["outros_itens"]
-        if it["nome"].startswith("Kit de aventureiro")
-    )
-    assert "2 unidades de ração (Volume L cada)" in kit_item["nome"]
-    assert "2 semanas de ração" not in kit_item["nome"]
+    outros_rc = [it["nome"] for it in r_kit_rc["ficha"]["inventario"]["outros_itens"]]
+    assert any(n.startswith("Mochila") for n in outros_rc)
+    assert not any(n.startswith("Kit de aventureiro") for n in outros_rc)
+    assert any(n.startswith("Ração (1 unidade)") for n in outros_rc)
 
     # 3. Garante que BaseDados oficial em cache nunca foi mutada pelas regras da casa
     assert db.itens_gerais["racoes_1_semana"]["nome"] == "Rações (1 semana)"
     assert db.itens_gerais["oleo_meio_litro"]["volume"] == "—"
-    assert "2 semanas de ração" in db.itens_gerais["kit_de_aventureiro"]["conteudo"]
 
     # 4. Modo personalizado removido / modo inexistente deve levantar ErroValidacao
     for modo_inv in ("personalizado", "regra_falsa"):

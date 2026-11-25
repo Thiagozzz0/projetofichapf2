@@ -1238,7 +1238,7 @@ body {
 }
 
 .linha-compra-eq.linha-compra-qtd {
-  grid-template-columns: 1fr 72px auto auto;
+  grid-template-columns: 1fr 72px auto;
 }
 
 .btn-compacto {
