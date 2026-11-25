@@ -73,6 +73,9 @@ class CasosBordaPF2ETests(unittest.TestCase):
     def test_pdf_secoes_referencia_completa(self) -> None:
         suite.test_pdf_secoes_referencia_completa()
 
+    def test_progressao_niveis_2_a_5(self) -> None:
+        suite.test_progressao_niveis_2_a_5()
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,4 +1,4 @@
-"""Orquestrador principal de geração procedural de fichas PF2E (1º nível)."""
+"""Orquestrador principal de geração procedural de fichas PF2E (1º ao 5º nível)."""
 
 from __future__ import annotations
 
@@ -181,14 +181,41 @@ def _preencher_pagina_talentos(
     hab_tal["ancestralidade"][2]["origem_regra"] = f"Talento de Ancestralidade ({ancestralidade['nome']} N1)"
     hab_tal["ancestralidade"][2]["resumo"] = t_anc["descricao"]
 
-    # Perícia — slot 0 (BIOGRAFIA)
+    t_anc5 = talentos_res.get("talento_ancestral_n5")
+    if t_anc5 and len(hab_tal["ancestralidade"]) > 3:
+        hab_tal["ancestralidade"][3]["nome"] = t_anc5["nome"]
+        hab_tal["ancestralidade"][3]["origem_regra"] = f"Talento de Ancestralidade ({ancestralidade['nome']} N5)"
+        hab_tal["ancestralidade"][3]["resumo"] = t_anc5["descricao"]
+
+    # Perícia — slot 0 (BIOGRAFIA), slot 1 (2º), slot 2 (4º)
     tb = talentos_res["talento_biografia"]
     hab_tal["pericia"][0]["nome"] = tb["nome"]
     hab_tal["pericia"][0]["origem_regra"] = tb["origem"]
     hab_tal["pericia"][0]["resumo"] = tb["resumo"]
 
-    # Classe — slots 0 e 1 (CARACTERÍSTICA) e slot 2 (TALENTO)
-    caracts = talentos_res.get("caracteristicas_classe") or talentos_res["caracteristicas_classe_n1"]
+    mapa_slot_pericia_nivel = {2: 1, 4: 2}
+    for tp_prog in talentos_res.get("talentos_pericia_progressao") or []:
+        idx_p = mapa_slot_pericia_nivel.get(tp_prog.get("nivel_slot"))
+        if idx_p is not None and idx_p < len(hab_tal["pericia"]):
+            hab_tal["pericia"][idx_p]["nome"] = tp_prog["nome"]
+            hab_tal["pericia"][idx_p]["origem_regra"] = tp_prog["origem_regra"]
+            hab_tal["pericia"][idx_p]["resumo"] = tp_prog["resumo"]
+
+    # Gerais — slot 0 (3º nível)
+    for tg_prog in talentos_res.get("talentos_gerais_progressao") or []:
+        if tg_prog.get("nivel_slot") == 3 and hab_tal["gerais"]:
+            hab_tal["gerais"][0]["nome"] = tg_prog["nome"]
+            hab_tal["gerais"][0]["origem_regra"] = tg_prog["origem_regra"]
+            hab_tal["gerais"][0]["resumo"] = tg_prog["resumo"]
+            break
+
+    # Classe — slots 0 e 1 (CARACTERÍSTICA 1º), slot 2 (TALENTO 1º), slot 3 (TALENTO 2º),
+    # slot 4 (CARACTERÍSTICA 3º), slot 5 (TALENTO 4º), slot 6 (CARACTERÍSTICA 5º)
+    caracts_todas = talentos_res.get("caracteristicas_classe") or talentos_res["caracteristicas_classe_n1"]
+    caracts_n1 = [c for c in caracts_todas if int(c.get("nivel", 1)) == 1]
+    caracts_2_3 = [c for c in caracts_todas if 2 <= int(c.get("nivel", 1)) <= 3]
+    caracts_4_5 = [c for c in caracts_todas if 4 <= int(c.get("nivel", 1)) <= 5]
+
     if subclasse and tese_arcana:
         hab_tal["classe"][0]["nome"] = (
             f"{classe['subclasses']['nome_tipo']}: {subclasse['nome']} | Tese: {tese_arcana['nome']}"
@@ -202,30 +229,54 @@ def _preencher_pagina_talentos(
         hab_tal["classe"][0]["nome"] = f"{classe['subclasses']['nome_tipo']}: {subclasse['nome']}"
         hab_tal["classe"][0]["origem_regra"] = f"Classe ({classe['nome']})"
         hab_tal["classe"][0]["resumo"] = subclasse.get("descricao", "")
-    elif caracts:
-        hab_tal["classe"][0]["nome"] = caracts[0]["nome"]
+    elif caracts_n1:
+        hab_tal["classe"][0]["nome"] = caracts_n1[0]["nome"]
         hab_tal["classe"][0]["origem_regra"] = f"Classe ({classe['nome']})"
-        hab_tal["classe"][0]["resumo"] = caracts[0].get("descricao", "")
+        hab_tal["classe"][0]["resumo"] = caracts_n1[0].get("descricao", "")
 
-    nomes_caract = [c["nome"] for c in caracts]
+    nomes_caract = [c["nome"] for c in caracts_n1]
     if talentos_res["efeitos"].get("bloqueio_com_escudo") and "Bloqueio com Escudo" not in nomes_caract:
         nomes_caract.append("Bloqueio com Escudo")
     if nomes_caract:
         hab_tal["classe"][1]["nome"] = "; ".join(nomes_caract)
         hab_tal["classe"][1]["origem_regra"] = f"Características de 1º Nível ({classe['nome']})"
         hab_tal["classe"][1]["resumo"] = " | ".join(
-            f"{c['nome']}: {c.get('descricao', '')[:160]}" for c in caracts[:3]
+            f"{c['nome']}: {c.get('descricao', '')[:160]}" for c in caracts_n1[:3]
+        )
+
+    if caracts_2_3 and len(hab_tal["classe"]) > 4:
+        hab_tal["classe"][4]["nome"] = "; ".join(c["nome"] for c in caracts_2_3)
+        hab_tal["classe"][4]["origem_regra"] = f"Características de 2º–3º Nível ({classe['nome']})"
+        hab_tal["classe"][4]["resumo"] = " | ".join(
+            f"{c['nome']}: {c.get('descricao', '')[:160]}" for c in caracts_2_3[:3]
+        )
+    if caracts_4_5 and len(hab_tal["classe"]) > 6:
+        hab_tal["classe"][6]["nome"] = "; ".join(c["nome"] for c in caracts_4_5)
+        hab_tal["classe"][6]["origem_regra"] = f"Características de 4º–5º Nível ({classe['nome']})"
+        hab_tal["classe"][6]["resumo"] = " | ".join(
+            f"{c['nome']}: {c.get('descricao', '')[:160]}" for c in caracts_4_5[:3]
         )
 
     talentos_classe = talentos_res["talentos_classe"]
-    bonus_extras = list(talentos_res["talentos_bonus"])
+    talentos_classe_n1 = [t for t in talentos_classe if int(t.get("nivel_slot", 1)) == 1]
+    talentos_classe_n2 = [t for t in talentos_classe if int(t.get("nivel_slot", 1)) == 2]
+    talentos_classe_n4 = [t for t in talentos_classe if int(t.get("nivel_slot", 1)) == 4]
 
-    if talentos_classe:
-        t0 = talentos_classe[0]
+    # Filtra talentos_bonus para evitar duplicar os que já ocupam slots dedicados (perícia N2/N4 e geral N3)
+    bonus_extras = [
+        b for b in talentos_res["talentos_bonus"]
+        if not (
+            (b.get("categoria") == "pericia" and b.get("nivel_slot") in (2, 4))
+            or (b.get("categoria") == "geral" and b.get("nivel_slot") == 3)
+        )
+    ]
+
+    if talentos_classe_n1:
+        t0 = talentos_classe_n1[0]
         hab_tal["classe"][2]["nome"] = t0["nome"]
         hab_tal["classe"][2]["origem_regra"] = t0["origem"]
         hab_tal["classe"][2]["resumo"] = t0["descricao"]
-        for t_extra in talentos_classe[1:]:
+        for t_extra in talentos_classe_n1[1:]:
             bonus_extras.append(
                 {
                     "nome": t_extra["nome"],
@@ -239,6 +290,17 @@ def _preencher_pagina_talentos(
         hab_tal["classe"][2]["nome"] = "—"
         hab_tal["classe"][2]["origem_regra"] = f"{classe['nome']} não escolhe talento livre no 1º nível"
         hab_tal["classe"][2]["resumo"] = ""
+
+    if talentos_classe_n2 and len(hab_tal["classe"]) > 3:
+        t2 = talentos_classe_n2[0]
+        hab_tal["classe"][3]["nome"] = t2["nome"]
+        hab_tal["classe"][3]["origem_regra"] = t2["origem"]
+        hab_tal["classe"][3]["resumo"] = t2["descricao"]
+    if talentos_classe_n4 and len(hab_tal["classe"]) > 5:
+        t4 = talentos_classe_n4[0]
+        hab_tal["classe"][5]["nome"] = t4["nome"]
+        hab_tal["classe"][5]["origem_regra"] = t4["origem"]
+        hab_tal["classe"][5]["resumo"] = t4["descricao"]
 
     # Bônus — até 2 slots oficiais; eventuais extras vão para o 1º slot livre da categoria (sem descarte)
     mapa_cat_slots = {
@@ -443,14 +505,17 @@ def gerar_personagem(
     # 1. Validação e resolução (manual ou aleatória) das entradas
     # ------------------------------------------------------------------
     if str(nivel or "").strip().lower() in VALORES_ALEATORIOS:
-        nivel_int = 1
+        nivel_int = rng.randint(NIVEL_MINIMO, NIVEL_MAXIMO_CATALOGO)
     else:
         try:
             nivel_int = int(nivel)
         except (TypeError, ValueError) as exc:
             raise ErroValidacao(f"Valor inválido para 'nivel': {nivel!r}.") from exc
-    if nivel_int != 1:
-        raise ErroValidacao("Esta versão do motor gera personagens de 1º nível (nivel=1).")
+    if not (NIVEL_MINIMO <= nivel_int <= NIVEL_MAXIMO_CATALOGO):
+        raise ErroValidacao(
+            f"Esta versão do motor gera personagens do {NIVEL_MINIMO}º ao {NIVEL_MAXIMO_CATALOGO}º nível "
+            f"(nivel={NIVEL_MINIMO}..{NIVEL_MAXIMO_CATALOGO})."
+        )
     nivel = nivel_int
 
     div_req = None if divindade_id is None else str(divindade_id).strip()
@@ -578,6 +643,7 @@ def gerar_personagem(
             mod_int,
             extras_pericias=0,
             divindade=divindade,
+            nivel=nivel,
             escolhas_pericias=escolhas_pericias,
             validar_limite=False,
             rng=rng,
@@ -638,6 +704,7 @@ def gerar_personagem(
                 divindade=divindade,
                 pericias_ancestrais_fixas=pericias_anc_fixas,
                 saber_ancestral=saber_anc,
+                nivel=nivel,
                 escolhas_pericias=escolhas_pericias,
                 validar_limite=True,
                 rng=random.Random(f"{seed_usada}:pericias"),
@@ -658,6 +725,9 @@ def gerar_personagem(
         talentos_classe_ids=talentos_res["talentos_classe_ids"],
         divindade=divindade,
         efeitos_talentos=talentos_res["efeitos"],
+        nivel=nivel,
+        conceito=conceito,
+        dados=db,
     )
     try:
         equip_res = comprar_equipamentos(

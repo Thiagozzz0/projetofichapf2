@@ -7,7 +7,7 @@ from typing import Any
 
 from .dados import BaseDados
 from .regras_casa import aplicar_override_item_casa
-from .util import formatar_preco, grau_normalizado, normalizar, pc_para_moedas
+from .util import GRAUS, formatar_preco, grau_normalizado, normalizar, pc_para_moedas
 
 
 ORCAMENTO_POR_NIVEL_PC: dict[int, int] = {
@@ -373,14 +373,25 @@ _FAMILIARIDADE_ARMAS_ANCESTRAL: dict[str, tuple[list[str], str]] = {
 }
 
 
+def _subir_grau(atual: str, alvo: str) -> str:
+    """Promove o grau de proficiência apenas se `alvo` for superior ao `atual`."""
+    if atual not in GRAUS or alvo not in GRAUS:
+        return atual
+    return alvo if GRAUS.index(alvo) > GRAUS.index(atual) else atual
+
+
 def calcular_proficiencias_combate(
     classe: dict[str, Any],
     subclasse: dict[str, Any] | None,
     talentos_classe_ids: list[str] | None = None,
     divindade: dict[str, Any] | None = None,
     efeitos_talentos: dict[str, Any] | None = None,
+    nivel: int = 1,
+    conceito: dict[str, Any] | None = None,
+    dados: BaseDados | None = None,
 ) -> dict[str, Any]:
-    """Resolve as proficiências de armaduras e armas considerando classe, subclasse, talentos e divindade."""
+    """Resolve as proficiências de armaduras e armas considerando classe, subclasse, talentos, divindade e nível."""
+    nivel_alvo = max(1, int(nivel))
     efeitos = efeitos_talentos or {}
     defesas_brutas = classe["proficiencias_iniciais"]["defesas"]
     defesas = {
@@ -441,6 +452,48 @@ def calcular_proficiencias_combate(
 
     tal_anc_id = efeitos.get("talento_ancestral_id") or ""
     armas_anc_lista, traco_anc_armas = _FAMILIARIDADE_ARMAS_ANCESTRAL.get(tal_anc_id, ([], None))
+    armas_monge_grau = "treinado" if armas_monge_treinadas else "destreinado"
+    maestria_guerreiro_grupo: str | None = None
+
+    # Marcos de proficiência de combate dos níveis 2 a 5 (tabela_progressao)
+    if nivel_alvo >= 3:
+        if classe["id"] == "clerigo" and sub_id == "capelao_da_guerra":
+            marcial_g = _subir_grau(marcial_g, "treinado")
+
+    if nivel_alvo >= 5:
+        cid = classe["id"]
+        if cid in ("barbaro", "campeao", "patrulheiro"):
+            simples_g = _subir_grau(simples_g, "especialista")
+            marcial_g = _subir_grau(marcial_g, "especialista")
+            desarmado_grau = _subir_grau(desarmado_grau, "especialista")
+            if cid == "campeao" and grau_esp != "destreinado":
+                grau_esp = _subir_grau(grau_esp, "especialista")
+        elif cid == "ladino":
+            simples_g = _subir_grau(simples_g, "especialista")
+            desarmado_grau = _subir_grau(desarmado_grau, "especialista")
+            if grau_esp != "destreinado":
+                grau_esp = _subir_grau(grau_esp, "especialista")
+        elif cid == "monge":
+            desarmado_grau = _subir_grau(desarmado_grau, "especialista")
+            simples_g = _subir_grau(simples_g, "especialista")
+            if armas_monge_treinadas:
+                armas_monge_grau = _subir_grau(armas_monge_grau, "especialista")
+        elif cid == "guerreiro":
+            if conceito and dados:
+                eq_rec = conceito.get("equipamento_recomendado") or {}
+                estilo_eq = eq_rec.get("estilo_empunhadura", "")
+                cand_wids = (
+                    list(eq_rec.get("armas_distancia_ids") or [])
+                    if estilo_eq == "distancia"
+                    else list(eq_rec.get("armas_corpo_a_corpo_ids") or [])
+                )
+                for wid in cand_wids:
+                    arma_ref = dados.armas.get(wid)
+                    if arma_ref and arma_ref.get("grupo"):
+                        maestria_guerreiro_grupo = normalizar(arma_ref["grupo"])
+                        break
+            if not maestria_guerreiro_grupo:
+                maestria_guerreiro_grupo = "*"
 
     armas = {
         "simples": simples_g,
@@ -448,12 +501,13 @@ def calcular_proficiencias_combate(
         "avancada": avancada_g,
         "desarmado": desarmado_grau,
         "bombas_alquimicas": grau_normalizado(ataques_brutos.get("bombas_alquimicas")),
-        "armas_traco_monge": "treinado" if armas_monge_treinadas else "destreinado",
+        "armas_traco_monge": armas_monge_grau,
         "especificas_lista": lista_esp,
         "especificas_grau": grau_esp,
         "armas_ancestrais_lista": list(armas_anc_lista),
         "traco_ancestral_armas": traco_anc_armas,
         "armamento_nao_convencional": tal_anc_id == "armamento_nao_convencional",
+        "maestria_guerreiro_grupo": maestria_guerreiro_grupo,
     }
 
     return {
@@ -507,7 +561,14 @@ def grau_arma(arma: dict[str, Any], profs_armas: dict[str, Any]) -> str:
         grau = "destreinado"
 
     if grau == "destreinado" and nome_norm in profs_armas.get("armas_ancestrais_lista", []):
-        return "treinado"
+        grau = "treinado"
+
+    maestria_grp = profs_armas.get("maestria_guerreiro_grupo")
+    if maestria_grp and (maestria_grp == "*" or normalizar(arma.get("grupo")) == maestria_grp):
+        if "simples" in cat or "marcial" in cat or "desarmado" in cat:
+            grau = _subir_grau(grau, "mestre")
+        elif "avancada" in cat:
+            grau = _subir_grau(grau, "especialista")
     return grau
 
 

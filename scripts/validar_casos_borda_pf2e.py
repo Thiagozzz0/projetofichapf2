@@ -539,7 +539,7 @@ def test_aleatorio_7_campos_e_bonus_equipamentos() -> None:
         biografia_id="aleatoria", divindade_id="aleatoria", nivel="aleatorio", seed=31415, dados=db,
     )
     assert r1 == r2
-    assert r1["ficha"]["cabecalho"]["nivel"] == 1
+    assert 1 <= r1["ficha"]["cabecalho"]["nivel"] <= 5
 
     # Variando seeds com classe aleatória + divindade "nenhuma" nunca sorteia Clérigo/Campeão
     classes_vistas = set()
@@ -1564,6 +1564,99 @@ def test_pdf_secoes_referencia_completa() -> None:
     assert any("Bloqueio com Escudo" in t for t in gu_tal_titulos)
 
 
+def test_progressao_niveis_2_a_5() -> None:
+    """Valida todas as regras de progressão PF2E do 2º ao 5º nível (atributos, perícias, combate, talentos e magias)."""
+    db = carregar_dados()
+
+    # 1. Guerreiro Nível 5: atributo chave atinge 19, N5 em historico_abcd, Maestria em Armas (Mestre), Bravura (Vontade E),
+    # 2 incrementos de perícia (especialista), talentos N2/N3/N4/N5 e orçamento 270 po (27000 pc).
+    g5 = gerar_personagem(
+        "humano", "heranca_versatil", "guerreiro", "guerreiro_colosso_demolidor",
+        nivel=5, seed=505, dados=db,
+    )
+    f_g5 = g5["ficha"]
+    m_g5 = g5["meta_geracao"]
+    assert f_g5["cabecalho"]["nivel"] == 5
+    assert f_g5["atributos"]["for"]["valor"] == 19 and f_g5["atributos"]["for"]["modificador"] == 4
+    assert any(h["etapa"] == "N5" for h in m_g5["historico_abcd"])
+    assert f_g5["jogadas_salvamento"]["vontade"]["grau_proficiencia"] == "especialista"  # Bravura N3
+    assert f_g5["golpes_corpo_a_corpo"][0]["ataque"]["grau_proficiencia"] == "mestre"  # Maestria em Armas N5
+    assert m_g5["orcamento_pc"] == 27000
+    assert m_g5["escolhas_pericias"]["incrementos_disponiveis"] == 2
+    assert len(m_g5["escolhas_pericias"]["incrementos_aplicados"]) == 2
+    assert any(p["grau_proficiencia"] == "especialista" for p in f_g5["pericias"][:14])
+    hab_g5 = f_g5["habilidades_e_talentos"]
+    assert hab_g5["ancestralidade"][3]["nome"]  # TALENTO 5º
+    assert hab_g5["classe"][3]["nome"]  # TALENTO 2º
+    assert hab_g5["classe"][4]["nome"]  # CARACTERÍSTICA 3º
+    assert hab_g5["classe"][5]["nome"]  # TALENTO 4º
+    assert hab_g5["classe"][6]["nome"]  # CARACTERÍSTICA 5º
+    assert hab_g5["pericia"][1]["nome"] and hab_g5["pericia"][2]["nome"]  # 2º e 4º
+    assert hab_g5["gerais"][0]["nome"]  # 3º nível
+
+    # 2. Ladino Nível 5: 4 incrementos de perícia e Truques com Armas (simples/específicas -> especialista)
+    l5 = gerar_personagem(
+        "elfo", "elfo_das_cavernas", "ladino", "ladino_sombra_silenciosa",
+        nivel=5, seed=515, dados=db,
+    )
+    assert l5["meta_geracao"]["escolhas_pericias"]["incrementos_disponiveis"] == 4
+    assert sum(1 for p in l5["ficha"]["pericias"][:14] if p["grau_proficiencia"] == "especialista") == 4
+    assert l5["ficha"]["proficiencia_armas"][0]["grau_proficiencia"] == "especialista"
+    assert l5["ficha"]["proficiencia_armas"][3]["grau_proficiencia"] == "especialista"
+
+    # 3. Monge Nível 3: Movimento Incrível (+3m sem armadura) + Nível 5 (Especialidade em Golpes + Prontidão)
+    mo3 = gerar_personagem(
+        "humano", "heranca_versatil", "monge", "monge_punho_ferro",
+        nivel=3, seed=523, dados=db,
+    )
+    assert "Movimento Incrível (+3m)" in mo3["ficha"]["velocidade"]["tipos_movimento_anotacoes"]
+    assert mo3["ficha"]["velocidade"]["metros"] >= 10.5
+    mo5 = gerar_personagem(
+        "humano", "heranca_versatil", "monge", "monge_punho_ferro",
+        nivel=5, seed=525, dados=db,
+    )
+    assert mo5["ficha"]["percepcao"]["grau_proficiencia"] == "especialista"
+    assert mo5["ficha"]["proficiencia_armas"][2]["grau_proficiencia"] == "especialista"
+
+    # 4. Clérigo Sacerdote Enclausurado N3/N5 vs Capelão da Guerra N3
+    cl_enc5 = gerar_personagem(
+        "humano", "heranca_perita", "clerigo", "clerigo_hospitalario_sagrado",
+        divindade_id="sarenrae", nivel=5, seed=535, dados=db,
+    )
+    assert cl_enc5["ficha"]["jogadas_salvamento"]["fortitude"]["grau_proficiencia"] == "especialista"
+    assert cl_enc5["ficha"]["percepcao"]["grau_proficiencia"] == "especialista"
+    conj_cl5 = cl_enc5["ficha"]["conjuracao"]
+    assert conj_cl5["nivel_truque"] == 3
+    assert conj_cl5["espacos_magia_por_dia"]["1"] == 3
+    assert conj_cl5["espacos_magia_por_dia"]["2"] == 3
+    assert conj_cl5["espacos_magia_por_dia"]["3"] == 2
+    assert any(m["nivel"] == 3 for m in conj_cl5["magias"] if m["nome"])
+
+    cl_war3 = gerar_personagem(
+        "anao", "anao_da_forja", "clerigo", "clerigo_arauto_guerra",
+        divindade_id="gorum", nivel=3, seed=533, dados=db,
+    )
+    assert cl_war3["ficha"]["proficiencia_armas"][1]["grau_proficiencia"] == "treinado"  # Segunda Doutrina
+
+    # 5. Mago Especialista N5: +1 espaço em cada círculo (1º=4, 2º=4, 3º=3) e magias de 1º, 2º e 3º círculo
+    mg5 = gerar_personagem(
+        "elfo", "elfo_vidente", "mago", "mago_evocador_artilharia",
+        nivel=5, seed=545, dados=db,
+    )
+    esp_mg5 = mg5["ficha"]["conjuracao"]["espacos_magia_por_dia"]
+    assert esp_mg5["1"] == 4 and esp_mg5["2"] == 4 and esp_mg5["3"] == 3
+    assert any(m["nivel"] == 2 for m in mg5["ficha"]["conjuracao"]["magias"] if m["nome"])
+    assert any(m["nivel"] == 3 for m in mg5["ficha"]["conjuracao"]["magias"] if m["nome"])
+
+    # 6. Todas as 12 classes geram sem erros nos níveis 2, 3, 4 e 5
+    for cid, cls in db.classes.items():
+        con_id = db.conceitos_da_classe(cid)[0]["id"]
+        for niv in (2, 3, 4, 5):
+            r = gerar_personagem("humano", "heranca_versatil", cid, con_id, nivel=niv, seed=700 + niv, dados=db)
+            assert r["ficha"]["cabecalho"]["nivel"] == niv
+            assert r["ficha"]["pontos_vida"]["max"] >= 15
+
+
 def main() -> None:
     test_ca_limite_destreza_e_sem_armadura()
     test_penalidade_armadura_barulhenta_flexivel_e_ferro_desimpedido()
@@ -1586,6 +1679,7 @@ def main() -> None:
     test_personalizacao_companheiro_familiar_e_perfil()
     test_regras_da_casa_peso_racao_e_oleo()
     test_pdf_secoes_referencia_completa()
+    test_progressao_niveis_2_a_5()
     print("SUCESSO TOTAL — Todos os testes de casos de borda PF2E passaram!")
 
 

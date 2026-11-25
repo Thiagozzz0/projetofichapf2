@@ -183,7 +183,7 @@ def listar_catalogo_talentos_n1(dados: BaseDados) -> dict[str, Any]:
 
 
 def atende_prerequisitos(texto_prereq: str | None, ctx: dict[str, Any]) -> bool:
-    """Avalia expressões comuns de pré-requisitos de talentos de 1º nível do PF2E."""
+    """Avalia expressões comuns de pré-requisitos de talentos (níveis 1 a 5) do PF2E."""
     if not texto_prereq:
         return True
 
@@ -198,7 +198,28 @@ def atende_prerequisitos(texto_prereq: str | None, ctx: dict[str, Any]) -> bool:
     subclasse_id: str = ctx.get("subclasse_id", "")
     tradicoes_foco = ctx.get("conjuracao_plena", False)
 
-    for clausula in [c.strip() for c in t.split(",") if c.strip()]:
+    # Preserva vírgulas internas de listas de perícias (ex.: "especialista em Arcanismo, Natureza, Ocultismo ou Religião")
+    brutas = [c.strip() for c in t.split(",") if c.strip()]
+    clausulas: list[str] = []
+    _re_grau = re.compile(r"^(treinado|especialista|mestre|lendario) em ")
+    _pericias_ou_nomes = {
+        "arcanismo", "natureza", "ocultismo", "religiao", "atletismo", "acrobatismo",
+        "furtividade", "ladroagem", "diplomacia", "intimidacao", "dissimulacao",
+        "medicina", "manufatura", "sociedade", "sobrevivencia", "atuacao",
+    }
+    for parte in brutas:
+        tokens_ou = [x.strip() for x in parte.split(" ou ") if x.strip()]
+        eh_cont_pericia = (
+            bool(clausulas)
+            and bool(_re_grau.match(clausulas[-1]))
+            and all(tok in _pericias_ou_nomes for tok in tokens_ou)
+        )
+        if eh_cont_pericia:
+            clausulas[-1] = f"{clausulas[-1]}, {parte}"
+        else:
+            clausulas.append(parte)
+
+    for clausula in clausulas:
         if not _avaliar_clausula(
             clausula, graus_pericias, classe_id, subclasse_id, tradicoes_foco, ctx
         ):
@@ -239,6 +260,14 @@ def _avaliar_clausula(
                 return True
         return False
 
+    # Alternativas explícitas ("A ou B")
+    if " ou " in c:
+        return any(
+            _avaliar_clausula(alt.strip(), graus, classe_id, subclasse_id, conjuracao_plena, ctx)
+            for alt in c.split(" ou ")
+            if alt.strip()
+        )
+
     # Padrão: "<Atributo> <valor>" (ex.: "Inteligência 12", "Destreza 14")
     m_atb = re.match(r"^(forca|destreza|constituicao|inteligencia|sabedoria|carisma)\s+(\d+)$", c)
     if m_atb:
@@ -248,14 +277,33 @@ def _avaliar_clausula(
         aid = _ATRIBUTO_NOME_PREREQ[m_atb.group(1)]
         return int(atributos.get(aid, 10)) >= int(m_atb.group(2))
 
+    # Capacidade de conjurar magias de N-ésimo círculo (ex.: "capacidade de conjurar magias de 3º nível")
+    m_conj = re.match(r"^capacidade de conjurar magias de (\d+)o nivel$", c)
+    if m_conj:
+        circ_req = int(m_conj.group(1))
+        return conjuracao_plena and int(ctx.get("nivel", 1)) >= (2 * circ_req - 1)
+
+    possuidos_ids: set[str] = ctx.get("talentos_possuidos_ids", set())
+    possuidos_nomes: set[str] = ctx.get("talentos_possuidos_nomes", set())
+
     if c == "visao na penumbra":
         return bool(ctx.get("visao_na_penumbra"))
+
+    if c == "visao no escuro":
+        return bool(ctx.get("visao_no_escuro"))
+
+    if c == "visao agucada":
+        return "visao_agucada" in possuidos_ids
 
     if c.startswith("musa "):
         musa_req = slugify(c.replace("musa ", ""))
         return classe_id == "bardo" and subclasse_id == musa_req
 
-    if c == "reserva de foco":
+    if c.startswith("esquema de "):
+        esq_req = slugify(c.replace("esquema de ", ""))
+        return classe_id == "ladino" and subclasse_id == esq_req
+
+    if c in ("reserva de foco", "reservatorio de foco"):
         return (
             classe_id in {"bardo", "campeao", "druida", "feiticeiro", "mago"}
             or (classe_id == "clerigo" and subclasse_id == "sacerdote_enclausurado")
@@ -265,6 +313,12 @@ def _avaliar_clausula(
     if c.startswith("causa de "):
         causa_req = slugify(c.replace("causa de ", ""))
         return classe_id == "campeao" and subclasse_id == causa_req
+
+    if c == "principios do bem":
+        return classe_id == "campeao" and ctx.get("tendencia_bondosa", True)
+
+    if "imposicao de maos" in c:
+        return classe_id == "campeao" and ctx.get("tendencia_bondosa", True)
 
     if c.startswith("ordem d"):
         # ex.: "ordem dos animais", "ordem da folha", "ordem da tempestade", "ordem dos selvagens"
@@ -276,14 +330,62 @@ def _avaliar_clausula(
     if c == "mago universalista":
         return classe_id == "mago" and subclasse_id == "universalista"
 
+    if c == "elo arcano":
+        return classe_id == "mago"
+
+    if c == "escola arcana":
+        return classe_id == "mago" and subclasse_id != "universalista"
+
+    if c.startswith("linhagem que concede magias "):
+        trad_map = {
+            "arcanas": "arcana",
+            "divinas": "divina",
+            "ocultistas": "ocultista",
+            "primais": "primal",
+        }
+        alvo_trad = trad_map.get(c.replace("linhagem que concede magias ", "").strip())
+        return classe_id == "feiticeiro" and bool(alvo_trad) and ctx.get("tradicao") == alvo_trad
+
     if c == "tendencia bondosa":
         return ctx.get("tendencia_bondosa", True)
+
+    if c == "tendencia maligna":
+        return "M" in str(ctx.get("tendencia", "")).upper()
 
     if c == "fonte de cura":
         return classe_id == "clerigo" and ctx.get("fonte_divina", "cura") == "cura"
 
     if c == "fonte de ferimento":
         return classe_id == "clerigo" and ctx.get("fonte_divina", "cura") == "ferimento"
+
+    if "divindade que permite que clerigos escolham ambas as fontes" in c:
+        div = ctx.get("divindade")
+        return bool(div) and len(div.get("fontes_divinas") or []) > 1
+
+    if c == "um familiar":
+        return (
+            bool({"familiar", "familiar_alquimico", "familiar_leshy"} & possuidos_ids)
+            or (classe_id == "druida" and subclasse_id == "folha")
+        )
+
+    if c == "companheiro animal":
+        return (
+            "companheiro_animal" in possuidos_ids
+            or (classe_id == "druida" and subclasse_id == "animais")
+        )
+
+    if c == "magias de ki":
+        return bool({"golpe_de_ki", "disparada_de_ki"} & possuidos_ids)
+
+    if "certeza nessa pericia" in c:
+        return "certeza" in possuidos_ids
+
+    if "magia inata de heranca/talento gnomico" in c:
+        return (
+            ctx.get("ancestralidade_id") == "gnomo"
+            and ctx.get("heranca_id") in ("gnomo_tocado_pelas_fadas", "gnomo_manancial")
+            and (bool(ctx.get("possui_reserva_foco")) or classe_id in {"bardo", "campeao", "druida", "feiticeiro", "mago"})
+        )
 
     if "arma favorita simples" in c:
         if classe_id != "clerigo":
@@ -304,7 +406,10 @@ def _avaliar_clausula(
     if "pelo menos 100 anos" in c:
         return ctx.get("ancestralidade_id") == "elfo"
 
-    # Cláusulas específicas conhecidas de pré-requisitos em talentos de perícia N1 (ex.: Certeza, Gracejos da Corte)
+    # Talento prévio possuído pelo personagem (ex.: "Familiaridade com Armas Élficas", "Aspecto Selvagem", "Gracejos da Corte")
+    if slugify(c) in possuidos_ids or c in possuidos_nomes:
+        return True
+
     return False
 
 
@@ -379,6 +484,29 @@ def selecionar_talentos(
         "penumbra" in normalizar(e.get("nome", "")) or "escuro" in normalizar(e.get("nome", ""))
         for e in ancestralidade.get("habilidades_especiais", [])
     )
+    visao_no_escuro = any(
+        "escuro" in normalizar(e.get("nome", ""))
+        for e in ancestralidade.get("habilidades_especiais", [])
+    ) or any(
+        "escuro" in normalizar(s) for s in (heranca.get("sentidos_concedidos") or [])
+    )
+    prof_mag = classe["proficiencias_iniciais"].get("magias") or {}
+    tradicao_cls = (
+        subclasse.get("tradicao_magica")
+        if (subclasse and prof_mag.get("tradicao") == "conforme_linhagem")
+        else prof_mag.get("tradicao")
+    )
+    talentos_possuidos_ids: set[str] = set()
+    talentos_possuidos_nomes: set[str] = set()
+
+    def _registrar_talento_possuido(t_obj: dict[str, Any] | None) -> None:
+        if not t_obj:
+            return
+        if t_obj.get("id"):
+            talentos_possuidos_ids.add(str(t_obj["id"]))
+        if t_obj.get("nome"):
+            talentos_possuidos_nomes.add(normalizar(t_obj["nome"]))
+
     ctx = {
         "dados": dados,
         "nivel": nivel_alvo,
@@ -389,10 +517,15 @@ def selecionar_talentos(
         "heranca_id": heranca["id"],
         "atributos": atributos,
         "visao_na_penumbra": visao_na_penumbra,
+        "visao_no_escuro": visao_no_escuro,
         "conjuracao_plena": classe["id"] in _CLASSES_CONJURADORAS_PLENAS,
+        "tradicao": tradicao_cls,
+        "tendencia": tendencia,
         "tendencia_bondosa": "B" in tendencia.upper(),
         "fonte_divina": fonte_divina,
         "divindade": divindade,
+        "talentos_possuidos_ids": talentos_possuidos_ids,
+        "talentos_possuidos_nomes": talentos_possuidos_nomes,
     }
 
     esc_bruta = escolhas_talentos if isinstance(escolhas_talentos, dict) else {}
@@ -400,6 +533,7 @@ def selecionar_talentos(
     usar_personalizado = bool(esc_bruta) and modo_tal_req != "procedural"
 
     anc_escolha_id = _norm_escolha_talento(esc_bruta.get("ancestralidade_id")) if usar_personalizado else None
+    anc_n5_escolha_id = _norm_escolha_talento(esc_bruta.get("ancestralidade_n5_id")) if usar_personalizado else None
     classe_escolhas_req = _norm_lista_escolhas_talentos(esc_bruta.get("classe_ids")) if usar_personalizado else []
     pericia_escolhas_req = _norm_lista_escolhas_talentos(esc_bruta.get("pericia_ids")) if usar_personalizado else []
     gerais_escolhas_req = _norm_lista_escolhas_talentos(esc_bruta.get("gerais_ids")) if usar_personalizado else []
@@ -423,22 +557,38 @@ def selecionar_talentos(
         "resumo": (tal_bio.get("resumo_beneficio") or tal_bio.get("descricao", "")) if tal_bio else nome_talento_bio,
         "dados_completos": tal_bio,
     }
+    _registrar_talento_possuido({"id": talento_bio_registro["id"], "nome": talento_bio_registro["nome"]})
 
     # ------------------------------------------------------------------
     # 2. Talento de Ancestralidade (1º nível)
     # ------------------------------------------------------------------
-    pool_anc = [t for t in ancestralidade.get("talentos_ancestralidade", []) if t.get("nivel") == 1]
-    if heranca["id"] == "meio_elfo":
-        elfo = dados.ancestralidades["elfo"]
-        pool_anc.extend(t for t in elfo.get("talentos_ancestralidade", []) if t.get("nivel") == 1)
-        pool_anc.extend(t for t in dados.talentos_mesticos.get("meio_elfo", []) if t.get("nivel") == 1)
-    elif heranca["id"] == "meio_orc":
-        pool_anc.extend(t for t in dados.talentos_mesticos.get("meio_orc", []) if t.get("nivel") == 1)
+    def _coletar_pool_ancestral(nivel_lim_anc: int) -> dict[str, dict[str, Any]]:
+        lista_a = [
+            t for t in ancestralidade.get("talentos_ancestralidade", [])
+            if int(t.get("nivel", 1)) <= nivel_lim_anc
+        ]
+        if heranca["id"] == "meio_elfo":
+            elfo = dados.ancestralidades["elfo"]
+            lista_a.extend(
+                t for t in elfo.get("talentos_ancestralidade", [])
+                if int(t.get("nivel", 1)) <= nivel_lim_anc
+            )
+            lista_a.extend(
+                t for t in dados.talentos_mesticos.get("meio_elfo", [])
+                if int(t.get("nivel", 1)) <= nivel_lim_anc
+            )
+        elif heranca["id"] == "meio_orc":
+            lista_a.extend(
+                t for t in dados.talentos_mesticos.get("meio_orc", [])
+                if int(t.get("nivel", 1)) <= nivel_lim_anc
+            )
+        por_id: dict[str, dict[str, Any]] = {}
+        for t in lista_a:
+            if t["id"] not in por_id:
+                por_id[t["id"]] = t
+        return por_id
 
-    pool_anc_por_id: dict[str, dict[str, Any]] = {}
-    for t in pool_anc:
-        if t["id"] not in pool_anc_por_id:
-            pool_anc_por_id[t["id"]] = t
+    pool_anc_por_id = _coletar_pool_ancestral(1)
 
     if anc_escolha_id is not None:
         cand_anc = pool_anc_por_id.get(anc_escolha_id)
@@ -475,21 +625,29 @@ def selecionar_talentos(
         elegiveis_anc = [t for p, t in scored_anc if p >= max(0, melhor_anc - 2)][:3]
         talento_ancestral = rng.choice(elegiveis_anc) if (rng and len(elegiveis_anc) > 1) else elegiveis_anc[0]
 
+    _registrar_talento_possuido(talento_ancestral)
+    if talento_ancestral["id"] == "visao_orquica":
+        ctx["visao_no_escuro"] = True
+    talentos_ancestrais: list[dict[str, Any]] = [dict(talento_ancestral, nivel_slot=1)]
+
     # ------------------------------------------------------------------
-    # 3. Talentos de Classe N1 (automáticos de subclasse/doutrina/tese + slots selecionáveis)
+    # 3. Talentos de Classe (N1 + N2/N4 quando nivel >= 2)
     # ------------------------------------------------------------------
-    talentos_classe_n1_all = [t for t in classe["talentos_de_classe"] if t.get("nivel") == 1]
-    talentos_classe_por_id = {t["id"]: t for t in talentos_classe_n1_all}
+    talentos_classe_todos = [
+        t for t in classe["talentos_de_classe"] if int(t.get("nivel", 1)) <= nivel_alvo
+    ]
+    talentos_classe_por_id = {t["id"]: t for t in talentos_classe_todos}
     escolhidos_classe_ids: set[str] = set()
     talentos_classe_selecionados: list[dict[str, Any]] = []
 
-    def adicionar_classe_talento(tid: str | None, origem: str) -> bool:
+    def adicionar_classe_talento(tid: str | None, origem: str, nivel_slot: int = 1) -> bool:
         if not tid:
             return False
         t = talentos_classe_por_id.get(tid)
         if t and tid not in escolhidos_classe_ids:
             escolhidos_classe_ids.add(tid)
-            talentos_classe_selecionados.append(dict(t, origem=origem))
+            talentos_classe_selecionados.append(dict(t, origem=origem, nivel_slot=nivel_slot))
+            _registrar_talento_possuido(t)
             if tid in {"iniciado_no_dominio", "golpe_de_ki", "disparada_de_ki"}:
                 ctx["possui_reserva_foco"] = True
             return True
@@ -500,10 +658,11 @@ def selecionar_talentos(
         adicionar_classe_talento(
             slugify(subclasse["talento_concedido"]),
             f"Subclasse ({subclasse['nome']})",
+            nivel_slot=1,
         )
     if classe["id"] == "clerigo":
         if sub_id == "sacerdote_enclausurado":
-            adicionar_classe_talento("iniciado_no_dominio", "Doutrina (Primeira Doutrina)")
+            adicionar_classe_talento("iniciado_no_dominio", "Doutrina (Primeira Doutrina)", nivel_slot=1)
         elif sub_id == "capelao_da_guerra":
             wid_div = divindade.get("arma_favorecida_id") if divindade else None
             arma_div = dados.armas.get(wid_div) if wid_div else None
@@ -513,41 +672,48 @@ def selecionar_talentos(
                 or (arma_div is not None and arma_div.get("categoria") == "Arma Simples")
             )
             if arma_eh_simples:
-                adicionar_classe_talento("simplicidade_mortal", "Doutrina (Primeira Doutrina)")
+                adicionar_classe_talento("simplicidade_mortal", "Doutrina (Primeira Doutrina)", nivel_slot=1)
     if classe["id"] == "mago" and tese_arcana_id == "sintonizacao_com_familiar_aprimorada":
-        adicionar_classe_talento("familiar", "Tese Arcana (Sintonização com Familiar Aprimorada)")
+        adicionar_classe_talento("familiar", "Tese Arcana (Sintonização com Familiar Aprimorada)", nivel_slot=1)
 
-    # Monta a fila exata de slots selecionáveis de classe no 1º nível
+    # Monta a fila exata de slots selecionáveis de classe (N1 + níveis pares 2..nivel_alvo)
     slots_classe_cfg: list[dict[str, Any]] = []
     prog1 = [normalizar(x) for x in classe["tabela_progressao"][0]["caracteristicas"]]
     tem_talento_classe_livre = any(x.startswith("talento de ") for x in prog1) or (
         classe["id"] == "mago" and sub_id == "universalista"
     )
     if tem_talento_classe_livre:
-        slots_classe_cfg.append({"origem": f"Classe ({classe['nome']} 1º Nível)", "apenas_metamagia": False})
+        slots_classe_cfg.append({"origem": f"Classe ({classe['nome']} 1º Nível)", "apenas_metamagia": False, "nivel": 1})
     if (
         classe["id"] == "barbaro"
         and subclasse
         and isinstance(subclasse.get("habilidade_instinto"), dict)
         and subclasse["habilidade_instinto"].get("talento_bonus_1_nivel")
     ):
-        slots_classe_cfg.append({"origem": f"Subclasse ({subclasse['nome']})", "apenas_metamagia": False})
+        slots_classe_cfg.append({"origem": f"Subclasse ({subclasse['nome']})", "apenas_metamagia": False, "nivel": 1})
     if classe["id"] == "mago" and tese_arcana_id == "experimentacao_metamagica":
-        slots_classe_cfg.append({"origem": "Tese Arcana (Experimentação Metamágica)", "apenas_metamagia": True})
+        slots_classe_cfg.append({"origem": "Tese Arcana (Experimentação Metamágica)", "apenas_metamagia": True, "nivel": 1})
     if talento_ancestral["id"] == "ambicao_natural":
-        slots_classe_cfg.append({"origem": "Talento Ancestral (Ambição Natural)", "apenas_metamagia": False})
+        slots_classe_cfg.append({"origem": "Talento Ancestral (Ambição Natural)", "apenas_metamagia": False, "nivel": 1})
+
+    nome_cls_norm = normalizar(classe["nome"])
+    marcador_slot_cls = f"talento de {nome_cls_norm}"
+    for row in classe.get("tabela_progressao", []):
+        niv_row = int(row.get("nivel", 1))
+        if 2 <= niv_row <= nivel_alvo and any(normalizar(x) == marcador_slot_cls for x in row.get("caracteristicas", [])):
+            slots_classe_cfg.append({"origem": f"Classe ({classe['nome']} {niv_row}º Nível)", "apenas_metamagia": False, "nivel": niv_row})
 
     manuais_classe_explic = [x for x in classe_escolhas_req if x is not None]
     if manuais_classe_explic and not slots_classe_cfg:
         raise ValueError(
-            f"A classe {classe['nome']} não possui talento de classe selecionável no 1º nível "
+            f"A classe {classe['nome']} não possui talento de classe selecionável no {nivel_alvo}º nível "
             f"(salvo com Ambição Natural ou subclasse/tese específica)."
         )
     for idx_extra in range(len(slots_classe_cfg), len(classe_escolhas_req)):
         if classe_escolhas_req[idx_extra] is not None:
             raise ValueError(
                 f"Esta combinação libera apenas {len(slots_classe_cfg)} talento(s) de classe selecionável(is) "
-                f"no 1º nível (slot extra #{idx_extra + 1} não está disponível)."
+                f"no {nivel_alvo}º nível (slot extra #{idx_extra + 1} não está disponível)."
             )
 
     # Pré-reserva escolhas manuais válidas para que eventuais slots deixados em procedural não colidam com elas
@@ -557,16 +723,19 @@ def selecionar_talentos(
         if tid is not None and tid in talentos_classe_por_id
     }
     classe_selecionaveis_aplicados: list[dict[str, str]] = []
+    recs_classe_n1 = list(conceito["talentos_recomendados"]["classe_nivel_1"])
+    recs_classe_n2_mais = list(conceito["talentos_recomendados"].get("classe_nivel_2_mais") or [])
 
     for idx_slot, slot_cfg in enumerate(slots_classe_cfg):
         escolha_cid = classe_escolhas_req[idx_slot] if idx_slot < len(classe_escolhas_req) else None
         apenas_meta = bool(slot_cfg["apenas_metamagia"])
         origem_slot = str(slot_cfg["origem"])
+        niv_slot = int(slot_cfg["nivel"])
         if escolha_cid is not None:
             cand_c = talentos_classe_por_id.get(escolha_cid)
-            if cand_c is None:
+            if cand_c is None or int(cand_c.get("nivel", 1)) > niv_slot:
                 raise ValueError(
-                    f"Talento de classe '{escolha_cid}' não existe para {classe['nome']} no 1º nível."
+                    f"Talento de classe '{escolha_cid}' não existe para {classe['nome']} até o {niv_slot}º nível."
                 )
             if escolha_cid in escolhidos_classe_ids:
                 raise ValueError(
@@ -581,93 +750,108 @@ def selecionar_talentos(
                     f"O personagem não atende ao pré-requisito do talento '{cand_c['nome']}': "
                     f"{cand_c.get('pre_requisitos')}."
                 )
-            adicionar_classe_talento(cand_c["id"], origem_slot)
+            adicionar_classe_talento(cand_c["id"], origem_slot, nivel_slot=niv_slot)
             classe_selecionaveis_aplicados.append({"id": cand_c["id"], "origem": origem_slot})
         else:
             evitar_ids = escolhidos_classe_ids | (reservados_manuais_classe - escolhidos_classe_ids)
+            pool_slot = [t for t in talentos_classe_todos if int(t.get("nivel", 1)) <= niv_slot]
             if apenas_meta:
                 validos_slot = [
-                    t for t in talentos_classe_n1_all
+                    t for t in pool_slot
                     if t["id"] not in evitar_ids and _tem_traco_metamagia(t)
                 ]
             else:
                 validos_slot = [
-                    t for t in talentos_classe_n1_all
+                    t for t in pool_slot
                     if t["id"] not in evitar_ids and atende_prerequisitos(t.get("pre_requisitos"), ctx)
                 ]
+            preferidos_slot = (recs_classe_n2_mais + recs_classe_n1) if niv_slot >= 2 else recs_classe_n1
             escolhido_c = _escolher_por_lista_ou_afinidade(
                 validos_slot,
-                conceito["talentos_recomendados"]["classe_nivel_1"],
+                preferidos_slot,
                 keywords,
                 evitar_ids,
                 rng,
             )
-            if escolhido_c and adicionar_classe_talento(escolhido_c["id"], origem_slot):
+            if escolhido_c and adicionar_classe_talento(escolhido_c["id"], origem_slot, nivel_slot=niv_slot):
                 classe_selecionaveis_aplicados.append({"id": escolhido_c["id"], "origem": origem_slot})
 
     # ------------------------------------------------------------------
-    # 4. Talentos Extras (Ladino Perícia N1 + Gerais automáticos / Versátil / Treinamento Geral)
+    # 4. Talentos Extras (Perícia N1..N5, Gerais N1/N3 e Ancestralidade N5)
     # ------------------------------------------------------------------
     talentos_bonus_slots: list[dict[str, Any]] = []
     ids_gerais_pericia_usados: set[str] = {talento_bio_registro["id"]}
     pericia_selecionaveis_aplicados: list[dict[str, str]] = []
     gerais_selecionaveis_aplicados: list[dict[str, str]] = []
+    talentos_pericia_progressao: list[dict[str, Any]] = []
+    talentos_gerais_progressao: list[dict[str, Any]] = []
 
-    slots_pericia_n1 = 1 if classe["id"] == "ladino" else 0
-    if any(x is not None for x in pericia_escolhas_req) and slots_pericia_n1 == 0:
+    slots_pericia_cfg: list[tuple[str, int]] = []
+    if classe["id"] == "ladino":
+        slots_pericia_cfg.append(("Classe (Ladino — Talento de Perícia 1º Nível)", 1))
+    if nivel_alvo >= 2:
+        for row in classe.get("tabela_progressao", []):
+            niv_row = int(row.get("nivel", 1))
+            if 2 <= niv_row <= nivel_alvo and any(normalizar(x) == "talento de pericia" for x in row.get("caracteristicas", [])):
+                slots_pericia_cfg.append((f"Talento de Perícia ({niv_row}º Nível)", niv_row))
+
+    slots_pericia_total = len(slots_pericia_cfg)
+    if any(x is not None for x in pericia_escolhas_req) and slots_pericia_total == 0:
         raise ValueError(
             "No 1º nível, apenas o Ladino libera talento de perícia adicional selecionável além da Biografia."
         )
-    if len(pericia_escolhas_req) > slots_pericia_n1 and any(x is not None for x in pericia_escolhas_req[slots_pericia_n1:]):
-        raise ValueError("Há apenas 1 slot de talento de perícia adicional disponível no 1º nível.")
+    if len(pericia_escolhas_req) > slots_pericia_total and any(x is not None for x in pericia_escolhas_req[slots_pericia_total:]):
+        raise ValueError(f"Há apenas {slots_pericia_total} slot(s) de talento de perícia adicional disponível(is) no {nivel_alvo}º nível.")
 
-    if slots_pericia_n1 == 1:
-        origem_per = "Classe (Ladino — Talento de Perícia 1º Nível)"
-        escolha_pid = pericia_escolhas_req[0] if pericia_escolhas_req else None
+    for idx_per, (origem_per, niv_per) in enumerate(slots_pericia_cfg):
+        escolha_pid = pericia_escolhas_req[idx_per] if idx_per < len(pericia_escolhas_req) else None
         if escolha_pid is not None:
             cand_p = dados.talentos_gerais_pericia.get(escolha_pid)
-            if not cand_p or cand_p.get("nivel") != 1 or cand_p.get("categoria") != "pericia":
+            if not cand_p or int(cand_p.get("nivel", 1)) > niv_per or cand_p.get("categoria") != "pericia":
                 raise ValueError(
-                    f"Talento de perícia '{escolha_pid}' não é um talento de perícia válido de 1º nível."
+                    f"Talento de perícia '{escolha_pid}' não é um talento de perícia válido até o {niv_per}º nível."
                 )
             if escolha_pid in ids_gerais_pericia_usados:
                 raise ValueError(
-                    f"Talento de perícia '{cand_p['nome']}' já foi concedido pela Biografia ({biografia['nome']})."
+                    f"Talento de perícia '{cand_p['nome']}' já foi concedido ou selecionado em outro slot."
                 )
             if not atende_prerequisitos(cand_p.get("pre_requisitos"), ctx):
                 raise ValueError(
                     f"O personagem não atende ao pré-requisito do talento '{cand_p['nome']}': "
                     f"{cand_p.get('pre_requisitos')}."
                 )
-            tp_ladino = cand_p
+            tp_esc = cand_p
         else:
             candidatos_tp = [
                 t for t in dados.talentos_gerais_pericia.values()
-                if t.get("nivel") == 1
+                if int(t.get("nivel", 1)) <= niv_per
                 and t.get("categoria") == "pericia"
                 and t["id"] not in ids_gerais_pericia_usados
                 and atende_prerequisitos(t.get("pre_requisitos"), ctx)
             ]
-            tp_ladino = _escolher_por_lista_ou_afinidade(
+            tp_esc = _escolher_por_lista_ou_afinidade(
                 candidatos_tp,
                 conceito["talentos_recomendados"]["pericia"],
                 keywords,
                 ids_gerais_pericia_usados,
                 rng,
             )
-        if tp_ladino:
-            ids_gerais_pericia_usados.add(tp_ladino["id"])
-            pericia_selecionaveis_aplicados.append({"id": tp_ladino["id"], "origem": origem_per})
-            talentos_bonus_slots.append(
-                {
-                    "nome": tp_ladino["nome"],
-                    "categoria": "pericia",
-                    "origem_regra": origem_per,
-                    "pagina": None,
-                    "resumo": tp_ladino.get("resumo_beneficio") or tp_ladino.get("descricao", ""),
-                    "dados_completos": tp_ladino,
-                }
-            )
+        if tp_esc:
+            ids_gerais_pericia_usados.add(tp_esc["id"])
+            _registrar_talento_possuido(tp_esc)
+            pericia_selecionaveis_aplicados.append({"id": tp_esc["id"], "origem": origem_per})
+            reg_per = {
+                "nome": tp_esc["nome"],
+                "categoria": "pericia",
+                "nivel_slot": niv_per,
+                "origem_regra": origem_per,
+                "pagina": None,
+                "resumo": tp_esc.get("resumo_beneficio") or tp_esc.get("descricao", ""),
+                "dados_completos": tp_esc,
+            }
+            talentos_bonus_slots.append(reg_per)
+            if niv_per >= 2:
+                talentos_pericia_progressao.append(reg_per)
 
     talentos_gerais_ativos: set[str] = set()
     # Bloqueio com Escudo automático para Guerreiro, Campeão, Druida e Capelão da Guerra
@@ -677,16 +861,20 @@ def selecionar_talentos(
     if tem_bloqueio_escudo:
         talentos_gerais_ativos.add("bloqueio_com_escudo")
         ids_gerais_pericia_usados.add("bloqueio_com_escudo")
+        talentos_possuidos_ids.add("bloqueio_com_escudo")
+        talentos_possuidos_nomes.add("bloqueio com escudo")
 
     if talento_ancestral["id"] == "cavaleiro_brusco" and "cavalgar" not in ids_gerais_pericia_usados:
         tal_cav = dados.talentos_gerais_pericia.get("cavalgar")
         if tal_cav:
             ids_gerais_pericia_usados.add("cavalgar")
             talentos_gerais_ativos.add("cavalgar")
+            _registrar_talento_possuido(tal_cav)
             talentos_bonus_slots.append(
                 {
                     "nome": tal_cav["nome"],
                     "categoria": "geral",
+                    "nivel_slot": 1,
                     "origem_regra": "Talento Ancestral (Cavaleiro Brusco)",
                     "pagina": None,
                     "resumo": tal_cav.get("resumo_beneficio") or tal_cav.get("descricao", ""),
@@ -694,36 +882,38 @@ def selecionar_talentos(
                 }
             )
 
-    origens_extras_gerais: list[str] = []
+    origens_extras_gerais_cfg: list[tuple[str, int]] = []
     if heranca["id"] == "heranca_versatil":
-        origens_extras_gerais.append("Herança Versátil (Humano)")
+        origens_extras_gerais_cfg.append(("Herança Versátil (Humano)", 1))
     if talento_ancestral["id"] == "treinamento_geral":
-        origens_extras_gerais.append("Talento Ancestral (Treinamento Geral)")
+        origens_extras_gerais_cfg.append(("Talento Ancestral (Treinamento Geral)", 1))
+    if nivel_alvo >= 3:
+        origens_extras_gerais_cfg.append(("Talento Geral (3º Nível)", 3))
 
     manuais_gerais_explic = [x for x in gerais_escolhas_req if x is not None]
-    if manuais_gerais_explic and not origens_extras_gerais:
+    if manuais_gerais_explic and not origens_extras_gerais_cfg:
         raise ValueError(
             "Talentos gerais só são liberados no 3º nível (ou no 1º nível com Herança Versátil / Treinamento Geral)."
         )
-    for idx_extra in range(len(origens_extras_gerais), len(gerais_escolhas_req)):
+    for idx_extra in range(len(origens_extras_gerais_cfg), len(gerais_escolhas_req)):
         if gerais_escolhas_req[idx_extra] is not None:
             raise ValueError(
-                f"Esta combinação libera apenas {len(origens_extras_gerais)} talento(s) geral(is) no 1º nível."
+                f"Esta combinação libera apenas {len(origens_extras_gerais_cfg)} talento(s) geral(is) no {nivel_alvo}º nível."
             )
 
     reservados_manuais_gerais: set[str] = {
         tid
-        for tid in gerais_escolhas_req[: len(origens_extras_gerais)]
+        for tid in gerais_escolhas_req[: len(origens_extras_gerais_cfg)]
         if tid is not None and tid in dados.talentos_gerais_pericia
     }
 
-    for i, origem_geral in enumerate(origens_extras_gerais):
+    for i, (origem_geral, niv_geral) in enumerate(origens_extras_gerais_cfg):
         escolha_gid = gerais_escolhas_req[i] if i < len(gerais_escolhas_req) else None
         if escolha_gid is not None:
             cand_g = dados.talentos_gerais_pericia.get(escolha_gid)
-            if not cand_g or cand_g.get("nivel") != 1 or cand_g.get("categoria") != "geral":
+            if not cand_g or int(cand_g.get("nivel", 1)) > niv_geral or cand_g.get("categoria") != "geral":
                 raise ValueError(
-                    f"Talento geral '{escolha_gid}' não é um talento geral válido de 1º nível."
+                    f"Talento geral '{escolha_gid}' não é um talento geral válido até o {niv_geral}º nível."
                 )
             if escolha_gid in ids_gerais_pericia_usados:
                 raise ValueError(
@@ -739,7 +929,7 @@ def selecionar_talentos(
             evitar_g = ids_gerais_pericia_usados | (reservados_manuais_gerais - ids_gerais_pericia_usados)
             candidatos_tg = [
                 t for t in dados.talentos_gerais_pericia.values()
-                if t.get("nivel") == 1
+                if int(t.get("nivel", 1)) <= niv_geral
                 and t.get("categoria") == "geral"
                 and t["id"] not in evitar_g
                 and atende_prerequisitos(t.get("pre_requisitos"), ctx)
@@ -754,17 +944,61 @@ def selecionar_talentos(
         if tg:
             ids_gerais_pericia_usados.add(tg["id"])
             talentos_gerais_ativos.add(tg["id"])
+            _registrar_talento_possuido(tg)
             gerais_selecionaveis_aplicados.append({"id": tg["id"], "origem": origem_geral})
-            talentos_bonus_slots.append(
-                {
-                    "nome": tg["nome"],
-                    "categoria": "geral",
-                    "origem_regra": origem_geral,
-                    "pagina": None,
-                    "resumo": tg.get("resumo_beneficio") or tg.get("descricao", ""),
-                    "dados_completos": tg,
-                }
-            )
+            reg_g = {
+                "nome": tg["nome"],
+                "categoria": "geral",
+                "nivel_slot": niv_geral,
+                "origem_regra": origem_geral,
+                "pagina": None,
+                "resumo": tg.get("resumo_beneficio") or tg.get("descricao", ""),
+                "dados_completos": tg,
+            }
+            talentos_bonus_slots.append(reg_g)
+            if niv_geral >= 3:
+                talentos_gerais_progressao.append(reg_g)
+
+    # Talento de Ancestralidade de 5º Nível
+    talento_ancestral_n5: dict[str, Any] | None = None
+    if nivel_alvo >= 5:
+        pool_anc_n5 = _coletar_pool_ancestral(5)
+        if anc_n5_escolha_id is not None:
+            cand_anc5 = pool_anc_n5.get(anc_n5_escolha_id)
+            if cand_anc5 is None:
+                raise ValueError(
+                    f"Talento de ancestralidade '{anc_n5_escolha_id}' não pertence a "
+                    f"{ancestralidade['nome']} ({heranca['nome']}) até o 5º nível."
+                )
+            if cand_anc5["id"] == talento_ancestral["id"]:
+                raise ValueError(
+                    f"O talento ancestral '{cand_anc5['nome']}' já foi escolhido no 1º nível."
+                )
+            if not atende_prerequisitos(cand_anc5.get("pre_requisitos"), ctx):
+                raise ValueError(
+                    f"O personagem não atende ao pré-requisito do talento ancestral '{cand_anc5['nome']}': "
+                    f"{cand_anc5.get('pre_requisitos')}."
+                )
+            talento_ancestral_n5 = cand_anc5
+        else:
+            candidatos_anc5 = [
+                t for t in pool_anc_n5.values()
+                if t["id"] != talento_ancestral["id"] and atende_prerequisitos(t.get("pre_requisitos"), ctx)
+            ]
+            if candidatos_anc5:
+                scored_anc5 = []
+                for t in candidatos_anc5:
+                    pts = _pontuar_afinidade(t, keywords) + (2 if int(t.get("nivel", 1)) == 5 else 0)
+                    scored_anc5.append((pts, t))
+                scored_anc5.sort(key=lambda x: x[0], reverse=True)
+                melhor_anc5 = scored_anc5[0][0]
+                elegiveis_anc5 = [t for p, t in scored_anc5 if p >= max(0, melhor_anc5 - 2)][:3]
+                talento_ancestral_n5 = (
+                    rng.choice(elegiveis_anc5) if (rng and len(elegiveis_anc5) > 1) else elegiveis_anc5[0]
+                )
+        if talento_ancestral_n5:
+            _registrar_talento_possuido(talento_ancestral_n5)
+            talentos_ancestrais.append(dict(talento_ancestral_n5, nivel_slot=5))
 
     # ------------------------------------------------------------------
     # 5. Características de Classe até `nivel_alvo` (filtrando metas genéricas)
@@ -790,21 +1024,25 @@ def selecionar_talentos(
         or (arma_fav_obj is not None and arma_fav_obj.get("categoria") == "Arma Simples")
     )
 
-    pericias_anc_fixas, nome_saber_anc = _SABERES_ANCESTRAIS.get(talento_ancestral["id"], ([], None))
-    saber_anc: tuple[str, str] | None = (
-        (nome_saber_anc, f"Talento Ancestral ({talento_ancestral['nome']})")
-        if nome_saber_anc
-        else None
-    )
-    if talento_ancestral["id"] == "obsessao_gnomica":
-        saber_anc = (
-            conceito.get("saber_sugerido") or "Saber Gnômico",
-            "Talento Ancestral (Obsessão Gnômica)",
-        )
+    ids_anc_ativos = {t["id"] for t in talentos_ancestrais}
+    pericias_anc_fixas: list[str] = []
+    saber_anc: tuple[str, str] | None = None
+    for t_anc_item in talentos_ancestrais:
+        p_fixas_item, nome_saber_anc = _SABERES_ANCESTRAIS.get(t_anc_item["id"], ([], None))
+        for p_f in p_fixas_item:
+            if p_f not in pericias_anc_fixas:
+                pericias_anc_fixas.append(p_f)
+        if nome_saber_anc and saber_anc is None:
+            saber_anc = (nome_saber_anc, f"Talento Ancestral ({t_anc_item['nome']})")
+        if t_anc_item["id"] == "obsessao_gnomica" and saber_anc is None:
+            saber_anc = (
+                conceito.get("saber_sugerido") or "Saber Gnômico",
+                "Talento Ancestral (Obsessão Gnômica)",
+            )
 
     efeitos = {
-        "extras_pericias": (2 if talento_ancestral["id"] == "pericia_natural" else 0)
-        + (1 if talento_ancestral["id"] == "longevidade_ancestral" else 0),
+        "extras_pericias": (2 if "pericia_natural" in ids_anc_ativos else 0)
+        + (1 if "longevidade_ancestral" in ids_anc_ativos else 0),
         "pericias_ancestrais_fixas": pericias_anc_fixas,
         "saber_ancestral": saber_anc,
         "vitalidade": vitalidade_ativo,
@@ -820,11 +1058,12 @@ def selecionar_talentos(
         "arma_deificada": arma_deificada_ativa,
         "limite_morrendo": 5 if duro_de_matar else limite_morr_padrao,
         "cd_recuperacao_base": 9 if vitalidade_ativo else int(regras_morr.get("cd_recuperacao_base_padrao", 10)),
-        "elfo_ligeiro": talento_ancestral["id"] == "elfo_ligeiro",
-        "ferro_desimpedido": talento_ancestral["id"] == "ferro_desimpedido",
-        "visao_orquica": talento_ancestral["id"] == "visao_orquica",
+        "elfo_ligeiro": "elfo_ligeiro" in ids_anc_ativos,
+        "ferro_desimpedido": "ferro_desimpedido" in ids_anc_ativos,
+        "visao_orquica": "visao_orquica" in ids_anc_ativos,
         "dentes_de_navalha": heranca["id"] == "goblin_dentes_de_navalha",
         "talento_ancestral_id": talento_ancestral["id"],
+        "talentos_ancestrais_ids": [t["id"] for t in talentos_ancestrais],
     }
 
     escolhas_resumo = {
@@ -832,6 +1071,7 @@ def selecionar_talentos(
         if any(
             [
                 anc_escolha_id is not None,
+                anc_n5_escolha_id is not None,
                 any(x is not None for x in classe_escolhas_req),
                 any(x is not None for x in pericia_escolhas_req),
                 any(x is not None for x in gerais_escolhas_req),
@@ -839,25 +1079,30 @@ def selecionar_talentos(
         )
         else "procedural",
         "ancestralidade_id": talento_ancestral["id"],
+        "ancestralidade_n5_id": talento_ancestral_n5["id"] if talento_ancestral_n5 else None,
         "ancestralidade_procedural": anc_escolha_id is None,
         "classe_ids": [item["id"] for item in classe_selecionaveis_aplicados],
         "classe_origens": [item["origem"] for item in classe_selecionaveis_aplicados],
         "pericia_ids": [item["id"] for item in pericia_selecionaveis_aplicados],
         "gerais_ids": [item["id"] for item in gerais_selecionaveis_aplicados],
         "slots_disponiveis": {
-            "ancestralidade": 1,
+            "ancestralidade": 2 if nivel_alvo >= 5 else 1,
             "classe": len(slots_classe_cfg),
-            "pericia": slots_pericia_n1,
-            "gerais": len(origens_extras_gerais),
+            "pericia": slots_pericia_total,
+            "gerais": len(origens_extras_gerais_cfg),
         },
     }
 
     return {
         "talento_biografia": talento_bio_registro,
         "talento_ancestral": talento_ancestral,
+        "talento_ancestral_n5": talento_ancestral_n5,
+        "talentos_ancestrais": talentos_ancestrais,
         "talentos_classe": talentos_classe_selecionados,
         "talentos_classe_ids": [t["id"] for t in talentos_classe_selecionados],
         "talentos_bonus": talentos_bonus_slots,
+        "talentos_pericia_progressao": talentos_pericia_progressao,
+        "talentos_gerais_progressao": talentos_gerais_progressao,
         "talentos_gerais_ids": sorted(talentos_gerais_ativos),
         "caracteristicas_classe": caracteristicas_classe,
         "caracteristicas_classe_n1": caracteristicas_n1,

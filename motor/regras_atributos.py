@@ -163,16 +163,17 @@ def calcular_atributos(
     escolhas_atributos: dict[str, Any] | None = None,
     rng: random.Random | None = None,
 ) -> dict[str, Any]:
-    """Executa o fluxo ABCD do 1º nível guiado pelo conceito ou escolhas do jogador.
+    """Executa o fluxo ABCD do 1º nível e eventuais melhorias de 5º nível guiadas pelo conceito ou escolhas.
 
     Permite escolher manualmente, deixar no modo procedural (recomendado pelo conceito)
-    ou sortear aleatoriamente as melhorias livres da Ancestralidade, da Biografia e as
-    4 melhorias livres de 1º nível. Estrutura preparada para melhorias a cada 5 níveis.
+    ou sortear aleatoriamente as melhorias livres da Ancestralidade, da Biografia, as
+    4 melhorias livres de 1º nível e (quando `nivel >= 5`) as 4 melhorias livres de 5º nível.
     """
     escolhas = escolhas_atributos or {}
     rng_efetivo = rng or random.Random()
     prioridade = list(conceito["prioridade_atributos"])
-    teto_n1 = 18 if nivel == 1 else None
+    # Regra PF2E: no 1º nível (etapas A, B, C, D) nenhum atributo pode ultrapassar 18.
+    teto_n1 = 18
     valores: dict[str, int] = {attr: 10 for attr in ATRIBUTOS}
     historico_abcd: list[dict[str, Any]] = []
 
@@ -333,17 +334,42 @@ def calcular_atributos(
         }
     )
 
+    escolhas_aplicadas: dict[str, Any] = {
+        "ancestralidade_livres": escolhidos_a_livres,
+        "biografia_restrito": escolhido_b_restrito,
+        "biografia_livre": escolhido_b_livre,
+        "classe_chave": attr_chave,
+        "livres_nivel_1": escolhidos_d,
+    }
+
+    if nivel >= 5:
+        melhorados_n5: set[str] = set()
+        deltas_n5: dict[str, int] = {}
+        modos_n5 = _resolver_lista_modos(escolhas.get("livres_nivel_5"), 4)
+        escolhidos_n5 = _aplicar_slots_livres(
+            modos_n5,
+            valores,
+            melhorados_n5,
+            deltas_n5,
+            prioridade,
+            rng_efetivo,
+            None,
+            "4 Melhorias Livres (5º Nível)",
+        )
+        historico_abcd.append(
+            {
+                "etapa": "N5",
+                "origem": "4 Melhorias Livres (5º Nível)",
+                "deltas": deltas_n5,
+            }
+        )
+        escolhas_aplicadas["livres_nivel_5"] = escolhidos_n5
+
     modificadores = {attr: modificador(val) for attr, val in valores.items()}
     return {
         "valores": valores,
         "modificadores": modificadores,
         "atributo_chave": attr_chave,
         "historico_abcd": historico_abcd,
-        "escolhas_aplicadas": {
-            "ancestralidade_livres": escolhidos_a_livres,
-            "biografia_restrito": escolhido_b_restrito,
-            "biografia_livre": escolhido_b_livre,
-            "classe_chave": attr_chave,
-            "livres_nivel_1": escolhidos_d,
-        },
+        "escolhas_aplicadas": escolhas_aplicadas,
     }

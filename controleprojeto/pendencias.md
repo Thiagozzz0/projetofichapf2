@@ -35,8 +35,8 @@ Lista viva e priorizada das entregas, melhorias e expansões que ainda precisam 
 
 - [x] **Desacoplar Contratos Fixados em 1º Nível no Motor** *(concluído em `25/11/2026` — Etapa 56)*
   - Generalizar funções e constantes presas ao 1º nível (`listar_catalogo_talentos`, `listar_catalogo_magias`, `resumo_conjuracao_classe` com `progressao_por_nivel`, `espacos_por_circulo`, `magias_por_circulo`, `caracteristicas_classe`, `ORCAMENTO_POR_NIVEL_PC`) mantendo aliases `*_n1` retrocompatíveis e preparando a evolução para os níveis `1` a `5`.
-- [ ] **Avaliador de Pré-requisitos Completo para Níveis 2+** *(sugestão de melhoria)*
-  - Expandir `atende_prerequisitos()` em `motor/talentos.py` para requisitos compostos de nível `2+` (talento prévio, proficiência `Especialista`/`Mestre`/`Lendário` e combinações de atributos).
+- [x] **Avaliador de Pré-requisitos Completo para Níveis 2+** *(concluído até N5 em `25/11/2026` — Etapa 57)*
+  - Expandido `atende_prerequisitos()` em `motor/talentos.py` para listas com vírgulas, alternativas `" ou "`, talentos prévios, atributos, esquemas, linhagens, fontes, capacidades de conjuração (`N3+`) e graus `Especialista`/`Mestre`/`Lendário`.
 - [ ] **Validação Automatizada de Contratos Front-End ↔ API** *(sugestão de melhoria)*
   - Ampliar os scripts de validação para checar automaticamente a consistência entre o payload de `/api/opcoes` e os seletores/IDs consumidos pelos módulos JS (`estado.js`, `atributos.js`, `pericias.js`, `talentos.js`, `magias.js`, `equipamentos.js`).
 
@@ -46,8 +46,8 @@ Lista viva e priorizada das entregas, melhorias e expansões que ainda precisam 
 
 > Detalhamento completo e propostas adicionais estão catalogados em [`controleprojeto/sugestoes/`](sugestoes/README.md).
 
-- [ ] **Geração de Fichas Acima do 1º Nível (Níveis `2` a `20`)** *(solicitado pelo usuário em `19/11/2026`)*
-  - Expandir `motor/` (`regras_atributos.py` com melhorias nos níveis `5/10/15/20`, incremento de perícias e proficiências de armas/armaduras/salvamentos/conjuração conforme `tabela_progressao` das 12 classes, seleção de talentos por nível de Classe, Perícia, Geral e Ancestralidade até o 20º nível, além de espaços/repertório/grimório de magias dos círculos `2–10`).
+- [ ] **Geração de Fichas Acima do 1º Nível (Níveis `2` a `20`)** *(Etapa 2 Níveis 2–5 concluída no motor em `25/11/2026` — Etapa 57; pendente UI/Exportadores N2–N5 e expansão para N6–N20)*
+  - Expandir `motor/` (`regras_atributos.py` com melhorias nos níveis `10/15/20`, incremento de perícias e proficiências acima do 5º nível, talentos e círculos `4–10` de magias), além de liberar seleção e exibição de níveis `2–5` no Front-End e exportadores.
 - [ ] **Itens Mágicos, Runas e Tesouros (`ref/Compendium specific tools.pdf` → `dados/itens_magicos_tesouros.json`)** *(Adiado para implementação futura conforme decisão do usuário em `19/11/2026`)*
   - Converter runas fundamentais e de propriedade, materiais preciosos, itens alquímicos completos, poções, pergaminhos, talismãs e itens mágicos permanentes, e integrá-los ao motor para personagens de nível `2+`.
 

@@ -6,7 +6,14 @@ import re
 from typing import Any
 
 from .equipamentos import grau_arma
-from .util import bonus_proficiencia, formatar_bonus, grau_normalizado, normalizar
+from .util import GRAUS, bonus_proficiencia, formatar_bonus, grau_normalizado, normalizar
+
+
+def _subir_grau(atual: str, alvo: str) -> str:
+    """Promove o grau de proficiência apenas se `alvo` for superior ao `atual`."""
+    if atual not in GRAUS or alvo not in GRAUS:
+        return atual
+    return alvo if GRAUS.index(alvo) > GRAUS.index(atual) else atual
 
 
 def _chave_categoria_armadura(categoria_texto: str) -> str:
@@ -229,10 +236,15 @@ def calcular_matematica_final(
     # ------------------------------------------------------------------
     vel_base = float(ancestralidade["velocidade_m"])
     vel_bonus = (1.5 if efeitos.get("veloz") else 0.0) + (1.5 if efeitos.get("elfo_ligeiro") else 0.0)
+    mov_incrivel = (classe_id == "monge" and nivel >= 3 and cat_arm == "sem_armadura")
+    if mov_incrivel:
+        vel_bonus += 3.0
     pen_sobrecarga = -3.0 if equip_res["esta_sobrecarregado"] else 0.0
     vel_final = max(1.5, vel_base + vel_bonus + pen_vel_arm + pen_sobrecarga)
 
     obs_vel = []
+    if mov_incrivel:
+        obs_vel.append("Movimento Incrível (+3m)")
     if pen_vel_arm < 0:
         obs_vel.append(f"Armadura {formatar_bonus(int(pen_vel_arm))}m" if pen_vel_arm.is_integer() else f"Armadura {pen_vel_arm}m")
     if equip_res["esta_sobrecarregado"]:
@@ -267,6 +279,27 @@ def calcular_matematica_final(
         graus_salv["fortitude"] = "especialista"
 
     grau_perc = grau_normalizado(classe["proficiencias_iniciais"]["percepcao"])
+
+    # Marcos de Salvamentos e Percepção dos níveis 2 a 5 (tabela_progressao)
+    if nivel >= 3:
+        if classe_id == "bardo":
+            graus_salv["reflexos"] = _subir_grau(graus_salv["reflexos"], "especialista")
+        elif classe_id == "clerigo" and sub_id == "sacerdote_enclausurado":
+            graus_salv["fortitude"] = _subir_grau(graus_salv["fortitude"], "especialista")
+        elif classe_id == "druida":
+            graus_salv["fortitude"] = _subir_grau(graus_salv["fortitude"], "especialista")
+            grau_perc = _subir_grau(grau_perc, "especialista")
+        elif classe_id in ("guerreiro", "patrulheiro"):
+            graus_salv["vontade"] = _subir_grau(graus_salv["vontade"], "especialista")
+
+    if nivel >= 5:
+        if classe_id in ("clerigo", "monge"):
+            grau_perc = _subir_grau(grau_perc, "especialista")
+        elif classe_id in ("druida", "mago"):
+            graus_salv["reflexos"] = _subir_grau(graus_salv["reflexos"], "especialista")
+        elif classe_id == "feiticeiro":
+            graus_salv["fortitude"] = _subir_grau(graus_salv["fortitude"], "especialista")
+
     if efeitos.get("perspicacia_astuta"):
         if grau_perc == "treinado":
             grau_perc = "especialista"
@@ -557,7 +590,7 @@ def calcular_matematica_final(
             fontes_acoes.append(acao_s)
 
     fontes_acoes.extend(list(talentos_res["talentos_classe"]))
-    fontes_acoes.append(talentos_res["talento_ancestral"])
+    fontes_acoes.extend(list(talentos_res.get("talentos_ancestrais") or [talentos_res["talento_ancestral"]]))
     fontes_acoes.append(talentos_res["talento_biografia"].get("dados_completos"))
     for b in talentos_res["talentos_bonus"]:
         fontes_acoes.append(b.get("dados_completos"))
@@ -619,4 +652,5 @@ def calcular_matematica_final(
         "cd_recuperacao_base": efeitos.get("cd_recuperacao_base", 10),
         "ca_com_escudo": (ca_total + escudo_bonus) if escudo_bonus else None,
         "nota_postura": nota_postura,
+        "maestria_guerreiro_grupo": armas_prof.get("maestria_guerreiro_grupo"),
     }

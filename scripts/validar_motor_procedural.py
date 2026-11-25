@@ -48,11 +48,12 @@ def verificar_contrato_e_matematica(res: dict, dados) -> None:
     assert len(ficha["conjuracao"]["magias_foco"]["slots"]) == 4
     assert len(ficha["conjuracao"]["magias"]) == 32
 
-    # 2. Matemática de Atributos (1º nível: 8..18)
+    # 2. Matemática de Atributos (1º nível: 8..18; 5º nível: 8..19)
+    max_atr = 19 if ficha["cabecalho"]["nivel"] >= 5 else 18
     for atr in ATRIBUTOS:
         val = ficha["atributos"][atr]["valor"]
         mod = ficha["atributos"][atr]["modificador"]
-        assert 8 <= val <= 18, f"Atributo {atr} fora de 8..18: {val}"
+        assert 8 <= val <= max_atr, f"Atributo {atr} fora de 8..{max_atr}: {val}"
         assert mod == modificador(val), f"Modificador incorreto em {atr}: {mod} != {modificador(val)}"
 
     # 3. PV, CA, Velocidade, Percepção, Salvamentos, Perícias
@@ -72,10 +73,10 @@ def verificar_contrato_e_matematica(res: dict, dados) -> None:
         assert p["total"] == p["mod_atributo"] + p["proficiencia"] + p["item"] + pen
     assert ficha["pericias"][14]["grau_proficiencia"] == "treinado"  # saber_1 da biografia
 
-    # 4. Orçamento (15 po = 1500 pc) e Riqueza
+    # 4. Orçamento (conforme nível) e Riqueza
     assert meta["gasto_pc"] >= 0
     assert meta["saldo_pc"] >= 0
-    assert meta["gasto_pc"] + meta["saldo_pc"] == 1500
+    assert meta["gasto_pc"] + meta["saldo_pc"] == meta.get("orcamento_pc", 1500)
     riq = ficha["inventario"]["riqueza"]
     assert riq["po"] * 100 + riq["pp"] * 10 + riq["pc"] == meta["saldo_pc"]
 
@@ -742,9 +743,33 @@ def main() -> None:
             "heranca_id": "heranca_versatil",
             "classe_id": "mago",
             "conceito_id": "mago_evocador_artilharia",
-            "nivel": 2,
+            "nivel": 6,
         },
     ).status_code == 400
+
+    # Progressão completa N2..N5 para todas as 12 classes via /api/gerar
+    classes_lista = [c["id"] for c in opcoes_json["classes"]]
+    for idx_cls, cid in enumerate(classes_lista):
+        niv_teste = 2 + (idx_cls % 4)  # distribui entre níveis 2, 3, 4 e 5
+        con_teste = cls_por_id[cid]["conceitos"][0]["id"]
+        r_niv = client.post(
+            "/api/gerar",
+            json={
+                "ancestralidade_id": "humano",
+                "heranca_id": "heranca_versatil",
+                "classe_id": cid,
+                "conceito_id": con_teste,
+                "nivel": niv_teste,
+                "seed": 900 + idx_cls,
+            },
+        )
+        assert r_niv.status_code == 200, f"Falha em {cid} N{niv_teste}: {r_niv.get_data(as_text=True)}"
+        res_niv = r_niv.get_json()
+        verificar_contrato_e_matematica(res_niv, dados)
+        assert res_niv["ficha"]["cabecalho"]["nivel"] == niv_teste
+        if niv_teste >= 5:
+            assert any(h["etapa"] == "N5" for h in res_niv["meta_geracao"]["historico_abcd"])
+            assert res_niv["ficha"]["habilidades_e_talentos"]["ancestralidade"][3]["nome"]
 
     # ------------------------------------------------------------------
     # 6. Exportação .TXT e .DOCX (com resultado pronto e por parâmetros)

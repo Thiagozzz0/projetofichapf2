@@ -163,6 +163,20 @@ def resumo_pericias_classe(dados: BaseDados, classe: dict[str, Any]) -> dict[str
     }
 
 
+def contar_incrementos_pericia(classe: dict[str, Any], nivel: int = 1) -> int:
+    """Conta quantos Incrementos de Perícia a classe recebe entre o 2º nível e `nivel`."""
+    nivel_lim = max(1, int(nivel))
+    if nivel_lim < 2:
+        return 0
+    total = 0
+    for row in classe.get("tabela_progressao", []):
+        niv_row = int(row.get("nivel", 1))
+        if 2 <= niv_row <= nivel_lim:
+            if any(normalizar(x) == "incremento de pericia" for x in row.get("caracteristicas", [])):
+                total += 1
+    return total
+
+
 def calcular_pericias(
     dados: BaseDados,
     ancestralidade: dict[str, Any],
@@ -176,11 +190,13 @@ def calcular_pericias(
     divindade: dict[str, Any] | None = None,
     pericias_ancestrais_fixas: list[str] | None = None,
     saber_ancestral: tuple[str, str] | None = None,
+    nivel: int = 1,
     escolhas_pericias: dict[str, Any] | None = None,
     validar_limite: bool = True,
     rng: random.Random | None = None,
 ) -> dict[str, Any]:
-    """Determina todas as perícias treinadas (procedural, manual ou híbrido) e os 2 slots de Saber."""
+    """Determina todas as perícias treinadas, incrementos (N2–N5) e os 2 slots de Saber."""
+    nivel_alvo = max(1, int(nivel))
     treinadas: dict[str, str] = {}
     origens: dict[str, str] = {}
     escolhas_livres = 0
@@ -190,7 +206,13 @@ def calcular_pericias(
     modo_esc = normalizar(str(esc.get("modo") or "procedural"))
     modo_manual = modo_esc in ("personalizado", "manual") or any(
         esc.get(k) not in (None, "", "procedural", [])
-        for k in ("pericia_biografia_id", "pericia_classe_fixa_id", "pericia_divindade_id", "pericias_livres")
+        for k in (
+            "pericia_biografia_id",
+            "pericia_classe_fixa_id",
+            "pericia_divindade_id",
+            "pericias_livres",
+            "incrementos_pericias",
+        )
     )
 
     def _eh_proc_per(val: Any) -> bool:
@@ -347,6 +369,61 @@ def calcular_pericias(
             conceder(pid, "Escolha Livre (Adicional)")
             escolhas_livres -= 1
 
+    # 8. Incrementos de Perícia dos níveis 2 a 5 (treinado -> especialista ou destreinado -> treinado)
+    qtd_incrementos = contar_incrementos_pericia(classe, nivel_alvo)
+    incrementos_aplicados: list[str] = []
+    if qtd_incrementos > 0:
+        incrementos_restantes = qtd_incrementos
+        inc_req = esc.get("incrementos_pericias") if modo_manual else None
+        if inc_req is not None and not _eh_proc_per(inc_req):
+            if not isinstance(inc_req, list):
+                raise ValueError("Campo 'incrementos_pericias' deve ser uma lista de IDs de perícias.")
+            if validar_limite and len(inc_req) > qtd_incrementos:
+                raise ValueError(
+                    f"Você selecionou {len(inc_req)} incremento(s) de perícia, mas no {nivel_alvo}º nível "
+                    f"há apenas {qtd_incrementos} incremento(s) disponível(is)."
+                )
+            for item in inc_req[:qtd_incrementos]:
+                pid = dados.pericia_id(str(item)) or str(item).strip()
+                if pid not in dados.pericias or pid == "saber":
+                    raise ValueError(f"Perícia inválida em 'incrementos_pericias': '{item}'.")
+                grau_atual = treinadas.get(pid, "destreinado")
+                if grau_atual == "especialista":
+                    raise ValueError(
+                        f"A perícia '{dados.pericias[pid]['nome']}' já é Especialista e não pode subir para "
+                        f"Mestre antes do 7º nível."
+                    )
+                novo_grau = "especialista" if grau_atual == "treinado" else "treinado"
+                treinadas[pid] = novo_grau
+                origens[pid] = (
+                    f"{origens[pid]} + Incremento ({novo_grau.title()})"
+                    if pid in origens
+                    else f"Incremento de Perícia ({novo_grau.title()})"
+                )
+                incrementos_aplicados.append(pid)
+                incrementos_restantes -= 1
+
+        # Preenchimento procedural dos incrementos restantes: prioriza subir prioridades treinadas -> especialista
+        while incrementos_restantes > 0:
+            candidatos_esp = [p for p in prioridades if treinadas.get(p) == "treinado"]
+            if not candidatos_esp:
+                candidatos_esp = [p for p, g in treinadas.items() if g == "treinado" and p != "saber"]
+            if candidatos_esp:
+                pid_inc = candidatos_esp[0]
+                treinadas[pid_inc] = "especialista"
+                origens[pid_inc] = f"{origens[pid_inc]} + Incremento (Especialista)"
+            else:
+                candidatos_tr = [p for p in prioridades if p not in treinadas] or [
+                    p for p in dados.pericias if p not in treinadas and p != "saber"
+                ]
+                if not candidatos_tr:
+                    break
+                pid_inc = candidatos_tr[0]
+                treinadas[pid_inc] = "treinado"
+                origens[pid_inc] = "Incremento de Perícia (Treinado)"
+            incrementos_aplicados.append(pid_inc)
+            incrementos_restantes -= 1
+
     # Saberes (Página 1 tem 2 slots: saber_1 e saber_2)
     saber_bio = _limpar_nome_saber(biografia["saber_treinado"], conceito)
     saber_conceito = conceito.get("saber_sugerido", "")
@@ -390,6 +467,8 @@ def calcular_pericias(
             "sobreposicoes": sobreposicoes,
             "manuais_aplicadas": manuais_aplicadas,
             "pericia_biografia_id": pericia_bio,
+            "incrementos_disponiveis": qtd_incrementos,
+            "incrementos_aplicados": incrementos_aplicados,
         },
     }
 
