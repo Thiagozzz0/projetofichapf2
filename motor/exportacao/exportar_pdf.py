@@ -89,6 +89,19 @@ def _pdf_acao_curta(acoes: Any) -> str:
     return mapa.get(ac, _pdf_sanitizar_texto(acoes))
 
 
+def _pdf_largura_texto(
+    pymupdf: Any,
+    texto: str,
+    *,
+    fontname: str = "helv",
+    fontsize: float = 7.4,
+) -> float:
+    """Mede largura de texto Base-14 preservando caracteres acentuados (evita largura zero em Latin-1)."""
+    nfd = unicodedata.normalize("NFD", texto)
+    ascii_equiv = "".join(ch for ch in nfd if unicodedata.category(ch) != "Mn")
+    return float(pymupdf.get_text_length(ascii_equiv, fontname=fontname, fontsize=fontsize))
+
+
 def _pdf_inserir_linha(
     page: Any,
     pymupdf: Any,
@@ -113,17 +126,17 @@ def _pdf_inserir_linha(
     rect_h = y1 - y0
     max_w = max(4.0, rect_w - 3.0)
     fs = min(fontsize, max(min_fontsize, (rect_h - 0.8) / 0.82))
-    while fs > min_fontsize and pymupdf.get_text_length(txt, fontname=fontname, fontsize=fs) > max_w:
+    while fs > min_fontsize and _pdf_largura_texto(pymupdf, txt, fontname=fontname, fontsize=fs) > max_w:
         fs = round(fs - 0.4, 2)
     fs = max(fs, min_fontsize)
 
-    if pymupdf.get_text_length(txt, fontname=fontname, fontsize=fs) > max_w:
+    if _pdf_largura_texto(pymupdf, txt, fontname=fontname, fontsize=fs) > max_w:
         base = txt
-        while len(base) > 1 and pymupdf.get_text_length(base + "...", fontname=fontname, fontsize=fs) > max_w:
+        while len(base) > 1 and _pdf_largura_texto(pymupdf, base + "...", fontname=fontname, fontsize=fs) > max_w:
             base = base[:-1]
         txt = (base.rstrip() + "...") if len(base) > 1 else txt[:1]
 
-    tw = pymupdf.get_text_length(txt, fontname=fontname, fontsize=fs)
+    tw = _pdf_largura_texto(pymupdf, txt, fontname=fontname, fontsize=fs)
     if align == 1:
         px = x0 + max(1.0, (rect_w - tw) / 2.0)
     elif align == 2:
@@ -437,6 +450,33 @@ def _pdf_preencher_talentos_grupo(
         )
 
 
+def _pdf_quebrar_linhas_simples(
+    pymupdf: Any,
+    texto: str,
+    max_w: float,
+    fontsize: float,
+) -> list[str]:
+    """Quebra texto em linhas dentro de `max_w` sem truncar palavras quando houver espaço."""
+    txt = _pdf_sanitizar_texto(texto)
+    if not txt:
+        return []
+    palavras = txt.split()
+    linhas: list[str] = []
+    idx = 0
+    while idx < len(palavras):
+        atual = palavras[idx]
+        idx += 1
+        while idx < len(palavras):
+            cand = f"{atual} {palavras[idx]}"
+            if _pdf_largura_texto(pymupdf, cand, fontname="helv", fontsize=fontsize) <= max_w:
+                atual = cand
+                idx += 1
+            else:
+                break
+        linhas.append(atual)
+    return linhas
+
+
 def _pdf_preencher_lista_inventario(
     page: Any,
     pymupdf: Any,
@@ -450,22 +490,53 @@ def _pdf_preencher_lista_inventario(
     *,
     x_inv: tuple[float, float] | None = None,
 ) -> None:
+    """Empilha itens do inventário continuamente sem espaços vazios e ajusta fonte pela lotação da caixa."""
     if not itens:
         return
-    altura_disp = y_end - y_start
-    step = min(18.0, max(7.5, altura_disp / max(1, len(itens))))
-    max_rows = max(1, int(altura_disp // step))
-    for i, item in enumerate(itens[:max_rows]):
-        ry0 = y_start + i * step
-        ry1 = ry0 + step
-        item_txt = _formatar_item_inventario(item)
-        if step >= 14.0:
-            _pdf_inserir_bloco(page, pymupdf, x0, ry0 + 0.5, x1, ry1 - 0.5, item_txt, fontsize=6.6, min_fontsize=4.4)
-        else:
-            _pdf_inserir_linha(page, pymupdf, x0, ry0, x1, ry1, item_txt, fontsize=6.8, min_fontsize=4.3)
+    altura_disp = max(12.0, y_end - y_start - 1.0)
+    max_w = max(20.0, (x1 - x0) - 3.0)
+    textos_itens = [_formatar_item_inventario(item) for item in itens]
+
+    fs_escolhido = 4.8
+    blocos_escolhidos: list[list[str]] = []
+    for fs_cand in (7.0, 6.8, 6.6, 6.4, 6.2, 6.0, 5.8, 5.6, 5.4, 5.2, 5.0, 4.8):
+        line_h = round(fs_cand * 1.22, 2)
+        item_gap = round(fs_cand * 0.30, 2)
+        blocos = [_pdf_quebrar_linhas_simples(pymupdf, t, max_w, fs_cand) or [t] for t in textos_itens]
+        altura_tot = sum(len(b) * line_h + item_gap for b in blocos) - item_gap
+        fs_escolhido = fs_cand
+        blocos_escolhidos = blocos
+        if altura_tot <= altura_disp:
+            break
+
+    line_h = round(fs_escolhido * 1.22, 2)
+    item_gap = round(fs_escolhido * 0.30, 2)
+    y_cursor = y_start + 1.0
+
+    for item, linhas_item in zip(itens, blocos_escolhidos):
+        altura_item = len(linhas_item) * line_h
+        if y_cursor + altura_item > y_end + 0.5:
+            break
         if x_inv and item.get("investido"):
-            _pdf_inserir_linha(page, pymupdf, x_inv[0], ry0, x_inv[1], ry0 + min(step, 11.5), "X", fontsize=7.0, align=1, bold=True)
-        _pdf_inserir_linha(page, pymupdf, x_vol0, ry0, x_vol1, ry0 + min(step, 11.5), str(item.get("volume", "-")), fontsize=7.0, align=1, min_fontsize=4.5)
+            _pdf_inserir_linha(
+                page, pymupdf, x_inv[0], y_cursor, x_inv[1], y_cursor + line_h,
+                "X", fontsize=min(7.0, fs_escolhido + 0.4), align=1, bold=True,
+            )
+        _pdf_inserir_linha(
+            page, pymupdf, x_vol0, y_cursor, x_vol1, y_cursor + line_h,
+            str(item.get("volume", "-")), fontsize=min(7.0, fs_escolhido + 0.4), align=1, min_fontsize=4.4,
+        )
+        for linha in linhas_item:
+            baseline_y = y_cursor + fs_escolhido * 0.85
+            page.insert_text(
+                pymupdf.Point(x0 + 1.5, baseline_y),
+                linha,
+                fontsize=fs_escolhido,
+                fontname="helv",
+                color=_PDF_COR_TINTA,
+            )
+            y_cursor += line_h
+        y_cursor += item_gap
 
 
 def _pdf_preencher_pagina_2(page: Any, pymupdf: Any, resultado: dict[str, Any]) -> None:
@@ -1269,19 +1340,6 @@ def _pdf_coletar_secoes_referencia(
 
 
 _GAP_POS_TITULO_REF = 5.0
-
-
-def _pdf_largura_texto(
-    pymupdf: Any,
-    texto: str,
-    *,
-    fontname: str = "helv",
-    fontsize: float = 7.4,
-) -> float:
-    """Mede largura de texto Base-14 preservando caracteres acentuados (evita largura zero em Latin-1)."""
-    nfd = unicodedata.normalize("NFD", texto)
-    ascii_equiv = "".join(ch for ch in nfd if unicodedata.category(ch) != "Mn")
-    return float(pymupdf.get_text_length(ascii_equiv, fontname=fontname, fontsize=fontsize))
 
 
 def _pdf_quebrar_linhas_com_prefixo_negrito(
