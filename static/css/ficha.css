@@ -776,6 +776,10 @@ body {
   vertical-align: middle;
 }
 
+.slot-item strong.slot-titulo-compacto {
+  font-size: 0.86rem;
+}
+
 .slot-origem {
   display: block;
   margin-top: 3px;

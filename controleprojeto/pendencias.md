@@ -24,8 +24,8 @@ Lista viva e priorizada das entregas, melhorias e expansões que ainda precisam 
 
 ## 3. Lacunas de Customização do 1º Nível (Motor + UI)
 
-- [ ] **Escolha Manual de Idiomas Extras**
-  - Permitir escolher manualmente os idiomas adicionais concedidos por Inteligência, Ancestralidade e Herança (`motor/biografia_pericias.py` + API/UI).
+- [x] **Escolha Manual de Idiomas Extras** *(concluído em `26/11/2026` — Etapa 59)*
+  - Permitir escolher manualmente os idiomas adicionais concedidos por Inteligência, Ancestralidade e Herança (`motor/biografia_pericias.py`, `motor/gerador.py`, API `/api/opcoes` e Etapa 2 da UI com modo manual, híbrido e procedural).
 - [ ] **Customização de Conceitos pelo Usuário** *(sugestão de melhoria)*
   - Permitir criar e salvar conceitos/nortes próprios (ex.: `dados/conceitos_customizados.json` ou via UI) além dos `56` conceitos padrão.
 
@@ -42,11 +42,19 @@ Lista viva e priorizada das entregas, melhorias e expansões que ainda precisam 
 
 ---
 
-## 5. Expansões Futuras (Níveis 2–20 e Tesouros)
+## 5. Expansões Futuras (Guia Avançado do Jogador N1–N5 → Níveis 6–20 e Tesouros)
 
 > Detalhamento completo e propostas adicionais estão catalogados em [`controleprojeto/sugestoes/`](sugestoes/README.md).
+> **Ordem definida (26/11/2026):** Concluir primeiro a integração completa do **Guia Avançado do Jogador (Níveis 1 a 5)** antes de expandir o motor, front-end e exportadores para os níveis `6` a `20`.
 
-- [ ] **Geração de Fichas Acima do 1º Nível (Níveis `2` a `20`)** *(Níveis `2–5` concluídos integralmente no Motor, Front-End e Exportadores em `25/11/2026` — Etapas 57 e 58; pendente expansão para `N6–N20`)*
+- [ ] **Integração do Guia Avançado do Jogador (Níveis `1` a `5`)** *(Prioridade antes dos Níveis 6+)*
+  - **Novas Classes (N1–N5):** Adicionar *Bruxo*, *Espadachim*, *Investigador* e *Oráculo* (tabelas de progressão, características N1–N5, subclasses/patronos/estilos/metodologias/mistérios, talentos até N5, magias de foco/maldições/revelações e novos conceitos procedurais).
+  - **Novas Ancestralidades e Heranças Versáteis (N1–N5):** Adicionar as novas ancestralidades e heranças versáteis (com heranças, habilidades especiais, atributos e talentos de ancestralidade de 1º e 5º nível).
+  - **Expansões para Conteúdo Existente (N1–N5):** Novas biografias, novas heranças e talentos para as ancestralidades básicas, novas opções de subclasse/talentos N1–N5 para as `12` classes atuais e arquétipos até o 5º nível (slots de classe N2/N4).
+  - **Magias, Equipamentos, Talentos Gerais/Perícia e Familiares/Companheiros (N1–N5):** Novos truques e magias até o 3º círculo, novos talentos gerais (`N1`/`N3`) e de perícia (`N1`–`N4`), novas armas/armaduras/equipamentos comuns do livro e novas opções/habilidades de companheiros e familiares.
+  - **Front-End, Exportadores & Testes:** Atualizar `/api/opcoes`, interface web, `.txt`/`.docx`/`.pdf` e suíte `tests/` para cobrir todas as novidades do Guia Avançado do Jogador até o 5º nível.
+
+- [ ] **Geração de Fichas Acima do 5º Nível (Níveis `6` a `20`)** *(Níveis `1–5` do Livro Básico concluídos em `25/11/2026` — Etapas 56–58; expansão `N6–N20` será iniciada após o Guia Avançado do Jogador N1–N5)*
   - Expandir `motor/`, Front-End e exportadores além do 5º nível (`regras_atributos.py` com melhorias nos níveis `10/15/20`, incremento de perícias e proficiências acima do 5º nível, talentos e círculos `4–10` de magias).
 - [ ] **Itens Mágicos, Runas e Tesouros (`ref/Compendium specific tools.pdf` → `dados/itens_magicos_tesouros.json`)** *(Adiado para implementação futura conforme decisão do usuário em `19/11/2026`)*
   - Converter runas fundamentais e de propriedade, materiais preciosos, itens alquímicos completos, poções, pergaminhos, talismãs e itens mágicos permanentes, e integrá-los ao motor para personagens de nível `2+`.

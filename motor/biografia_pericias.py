@@ -473,6 +473,33 @@ def calcular_pericias(
     }
 
 
+def listar_catalogo_idiomas(dados: BaseDados) -> dict[str, Any]:
+    """Retorna o catálogo de idiomas comuns e incomuns do Livro Básico."""
+    idiomas_blk = dados.json("ancestralidades_biografias.json").get("idiomas", {})
+    comuns = [
+        {
+            "nome": item["idioma"],
+            "regioes_falantes": item.get("regioes_falantes", ""),
+            "categoria": "comum",
+        }
+        for item in idiomas_blk.get("tabela_2_1_idiomas_comuns", [])
+    ]
+    incomuns = [
+        {
+            "nome": item["idioma"],
+            "falantes": item.get("falantes", ""),
+            "categoria": "incomum",
+        }
+        for item in idiomas_blk.get("tabela_2_2_idiomas_incomuns", [])
+    ]
+    return {
+        "comuns": comuns,
+        "incomuns": incomuns,
+        "nomes_comuns": [c["nome"] for c in comuns],
+        "nomes_incomuns": [i["nome"] for i in incomuns],
+    }
+
+
 def calcular_idiomas(
     dados: BaseDados,
     ancestralidade: dict[str, Any],
@@ -480,11 +507,14 @@ def calcular_idiomas(
     classe: dict[str, Any],
     mod_int: int,
     rng: random.Random | None = None,
-) -> list[str]:
-    """Calcula os idiomas iniciais conforme ancestralidade, classe, herança e mod INT."""
-    idiomas = list(ancestralidade.get("idiomas_iniciais", ["Comum"]))
-    if classe["id"] == "druida" and "Druídico" not in idiomas:
-        idiomas.append("Druídico")
+    escolhas_idiomas: list[str] | str | None = None,
+    retornar_detalhes: bool = False,
+) -> list[str] | dict[str, Any]:
+    """Calcula os idiomas iniciais e extras conforme ancestralidade, classe, herança, mod INT e escolhas manuais."""
+    iniciais = list(ancestralidade.get("idiomas_iniciais", ["Comum"]))
+    if classe["id"] == "druida" and "Druídico" not in iniciais:
+        iniciais.append("Druídico")
+    idiomas = list(iniciais)
 
     regra_idiomas = normalizar(ancestralidade.get("regra_idiomas_adicionais", ""))
     if ancestralidade["id"] == "humano" or "1 + modificador" in regra_idiomas:
@@ -492,29 +522,87 @@ def calcular_idiomas(
     else:
         base_extras = max(0, mod_int)
     qtd_extras = base_extras + int(heranca.get("idiomas_adicionais", 0) or 0)
-    if qtd_extras <= 0:
-        return idiomas
 
-    pool_anc = [
+    catalogo = listar_catalogo_idiomas(dados)
+    nomes_comuns = catalogo["nomes_comuns"]
+    pool_anc_raw = [
         i
         for i in ancestralidade.get("idiomas_adicionais_opcoes", [])
-        if i not in idiomas and "qualquer" not in normalizar(i) and len(i) <= 25
-    ]
-    tabela_comuns = [
-        item["idioma"]
-        for item in dados.json("ancestralidades_biografias.json")["idiomas"]["tabela_2_1_idiomas_comuns"]
-        if item["idioma"] not in idiomas
+        if "qualquer" not in normalizar(i) and len(i) <= 25
     ]
 
-    if rng is not None:
-        rng.shuffle(pool_anc)
-        rng.shuffle(tabela_comuns)
+    mapa_validos: dict[str, str] = {}
+    for nome in [*pool_anc_raw, *nomes_comuns]:
+        mapa_validos.setdefault(normalizar(nome), nome)
 
-    for candidato in pool_anc + tabela_comuns:
-        if qtd_extras <= 0:
-            break
-        if candidato not in idiomas:
-            idiomas.append(candidato)
-            qtd_extras -= 1
+    if escolhas_idiomas is None or (
+        isinstance(escolhas_idiomas, str)
+        and normalizar(escolhas_idiomas) in ("", "procedural", "aleatorio", "aleatoria", "random")
+    ):
+        lista_solicitada: list[str] = []
+    elif isinstance(escolhas_idiomas, (list, tuple)):
+        lista_solicitada = [
+            str(item).strip()
+            for item in escolhas_idiomas
+            if str(item).strip() and normalizar(str(item)) != "procedural"
+        ]
+    else:
+        raise ValueError("Formato inválido para 'escolhas_idiomas' (esperado lista de idiomas ou 'procedural').")
 
-    return idiomas
+    if len(lista_solicitada) > max(0, qtd_extras):
+        raise ValueError(
+            f"Quantidade de idiomas extras selecionados ({len(lista_solicitada)}) excede o limite permitido ({max(0, qtd_extras)})."
+        )
+
+    iniciais_norm = {normalizar(i) for i in iniciais}
+    manuais_resolvidos: list[str] = []
+    vistos_norm: set[str] = set()
+    for item in lista_solicitada:
+        chave = normalizar(item)
+        if chave in iniciais_norm:
+            raise ValueError(f"O idioma '{item}' já faz parte dos idiomas iniciais automáticos do personagem.")
+        if chave not in mapa_validos:
+            raise ValueError(
+                f"Idioma extra inválido ou sem acesso pela ancestralidade ({ancestralidade['nome']}): '{item}'."
+            )
+        canonico = mapa_validos[chave]
+        if chave in vistos_norm:
+            raise ValueError(f"Idioma extra duplicado na seleção: '{canonico}'.")
+        vistos_norm.add(chave)
+        manuais_resolvidos.append(canonico)
+        idiomas.append(canonico)
+
+    restantes = max(0, qtd_extras - len(manuais_resolvidos))
+    adicionados_procedurais: list[str] = []
+    if restantes > 0:
+        pool_anc = [i for i in pool_anc_raw if i not in idiomas]
+        tabela_comuns = [i for i in nomes_comuns if i not in idiomas]
+
+        if rng is not None:
+            rng.shuffle(pool_anc)
+            rng.shuffle(tabela_comuns)
+
+        for candidato in pool_anc + tabela_comuns:
+            if restantes <= 0:
+                break
+            if candidato not in idiomas:
+                idiomas.append(candidato)
+                adicionados_procedurais.append(candidato)
+                restantes -= 1
+
+    if not retornar_detalhes:
+        return idiomas
+
+    modo = (
+        "manual"
+        if manuais_resolvidos and not adicionados_procedurais
+        else ("hibrido" if manuais_resolvidos else "procedural")
+    )
+    return {
+        "idiomas": idiomas,
+        "idiomas_iniciais": iniciais,
+        "qtd_extras": max(0, qtd_extras),
+        "escolhas_manuais": manuais_resolvidos,
+        "escolhas_procedurais": adicionados_procedurais,
+        "modo": modo,
+    }

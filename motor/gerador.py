@@ -9,6 +9,7 @@ from typing import Any
 from .biografia_pericias import (
     calcular_idiomas,
     calcular_pericias,
+    listar_catalogo_idiomas,
     listar_catalogo_pericias,
     resumo_pericias_classe,
     selecionar_biografia,
@@ -150,6 +151,36 @@ def _resolver_tese_arcana(classe: dict[str, Any], tese_id: str | None) -> dict[s
     return None
 
 
+def _anexar_talento_no_slot(
+    slot: dict[str, Any],
+    nome: str,
+    origem: str,
+    resumo: str,
+    pagina: Any = None,
+) -> None:
+    """Preenche um slot ou agrupa um talento adicional da mesma categoria/nível sem invadir slots futuros."""
+    nome_limpo = (nome or "").strip()
+    if not nome_limpo:
+        return
+    atual_nome = (slot.get("nome") or "").strip()
+    if not atual_nome or atual_nome == "—":
+        slot["nome"] = nome_limpo
+        slot["origem_regra"] = origem
+        slot["pagina"] = pagina
+        slot["resumo"] = resumo
+        return
+
+    existentes = {normalizar(x) for x in atual_nome.split(";") if x.strip()}
+    if normalizar(nome_limpo) not in existentes:
+        slot["nome"] = f"{atual_nome}; {nome_limpo}"
+    atual_orig = (slot.get("origem_regra") or "").strip()
+    if origem and normalizar(origem) not in {normalizar(x) for x in atual_orig.split(";") if x.strip()}:
+        slot["origem_regra"] = f"{atual_orig}; {origem}" if atual_orig else origem
+    atual_res = (slot.get("resumo") or "").strip()
+    if resumo and resumo not in atual_res:
+        slot["resumo"] = f"{atual_res} | {resumo}" if atual_res else resumo
+
+
 def _preencher_pagina_talentos(
     ficha: dict[str, Any],
     ancestralidade: dict[str, Any],
@@ -161,7 +192,7 @@ def _preencher_pagina_talentos(
 ) -> None:
     hab_tal = ficha["habilidades_e_talentos"]
 
-    # Ancestralidade (slots 0..2 de 7)
+    # Ancestralidade (slots 0..3 de 7)
     especiais = ancestralidade.get("habilidades_especiais", [])
     if especiais:
         hab_tal["ancestralidade"][0]["nome"] = "; ".join(e["nome"] for e in especiais)
@@ -177,37 +208,48 @@ def _preencher_pagina_talentos(
     hab_tal["ancestralidade"][1]["resumo"] = heranca["descricao"]
 
     t_anc = talentos_res["talento_ancestral"]
-    hab_tal["ancestralidade"][2]["nome"] = t_anc["nome"]
-    hab_tal["ancestralidade"][2]["origem_regra"] = f"Talento de Ancestralidade ({ancestralidade['nome']} N1)"
-    hab_tal["ancestralidade"][2]["resumo"] = t_anc["descricao"]
+    _anexar_talento_no_slot(
+        hab_tal["ancestralidade"][2],
+        t_anc["nome"],
+        f"Talento de Ancestralidade ({ancestralidade['nome']} N1)",
+        t_anc["descricao"],
+    )
 
     t_anc5 = talentos_res.get("talento_ancestral_n5")
     if t_anc5 and len(hab_tal["ancestralidade"]) > 3:
-        hab_tal["ancestralidade"][3]["nome"] = t_anc5["nome"]
-        hab_tal["ancestralidade"][3]["origem_regra"] = f"Talento de Ancestralidade ({ancestralidade['nome']} N5)"
-        hab_tal["ancestralidade"][3]["resumo"] = t_anc5["descricao"]
+        _anexar_talento_no_slot(
+            hab_tal["ancestralidade"][3],
+            t_anc5["nome"],
+            f"Talento de Ancestralidade ({ancestralidade['nome']} N5)",
+            t_anc5["descricao"],
+        )
 
-    # Perícia — slot 0 (BIOGRAFIA), slot 1 (2º), slot 2 (4º)
+    # Perícia — slot 0 (BIOGRAFIA / N1), slot 1 (2º), slot 2 (4º)
     tb = talentos_res["talento_biografia"]
-    hab_tal["pericia"][0]["nome"] = tb["nome"]
-    hab_tal["pericia"][0]["origem_regra"] = tb["origem"]
-    hab_tal["pericia"][0]["resumo"] = tb["resumo"]
+    _anexar_talento_no_slot(hab_tal["pericia"][0], tb["nome"], tb["origem"], tb["resumo"])
 
-    mapa_slot_pericia_nivel = {2: 1, 4: 2}
+    mapa_slot_pericia_nivel = {1: 0, 2: 1, 4: 2}
     for tp_prog in talentos_res.get("talentos_pericia_progressao") or []:
         idx_p = mapa_slot_pericia_nivel.get(tp_prog.get("nivel_slot"))
         if idx_p is not None and idx_p < len(hab_tal["pericia"]):
-            hab_tal["pericia"][idx_p]["nome"] = tp_prog["nome"]
-            hab_tal["pericia"][idx_p]["origem_regra"] = tp_prog["origem_regra"]
-            hab_tal["pericia"][idx_p]["resumo"] = tp_prog["resumo"]
+            _anexar_talento_no_slot(
+                hab_tal["pericia"][idx_p],
+                tp_prog["nome"],
+                tp_prog["origem_regra"],
+                tp_prog["resumo"],
+                pagina=tp_prog.get("pagina"),
+            )
 
     # Gerais — slot 0 (3º nível)
     for tg_prog in talentos_res.get("talentos_gerais_progressao") or []:
         if tg_prog.get("nivel_slot") == 3 and hab_tal["gerais"]:
-            hab_tal["gerais"][0]["nome"] = tg_prog["nome"]
-            hab_tal["gerais"][0]["origem_regra"] = tg_prog["origem_regra"]
-            hab_tal["gerais"][0]["resumo"] = tg_prog["resumo"]
-            break
+            _anexar_talento_no_slot(
+                hab_tal["gerais"][0],
+                tg_prog["nome"],
+                tg_prog["origem_regra"],
+                tg_prog["resumo"],
+                pagina=tg_prog.get("pagina"),
+            )
 
     # Classe — slots 0 e 1 (CARACTERÍSTICA 1º), slot 2 (TALENTO 1º), slot 3 (TALENTO 2º),
     # slot 4 (CARACTERÍSTICA 3º), slot 5 (TALENTO 4º), slot 6 (CARACTERÍSTICA 5º)
@@ -257,71 +299,66 @@ def _preencher_pagina_talentos(
             f"{c['nome']}: {c.get('descricao', '')[:160]}" for c in caracts_4_5[:3]
         )
 
+    # Talentos de Classe por nível entram todos no slot de seu respectivo nível (ex.: 2 talentos N1 em TALENTO 1º)
     talentos_classe = talentos_res["talentos_classe"]
     talentos_classe_n1 = [t for t in talentos_classe if int(t.get("nivel_slot", 1)) == 1]
     talentos_classe_n2 = [t for t in talentos_classe if int(t.get("nivel_slot", 1)) == 2]
     talentos_classe_n4 = [t for t in talentos_classe if int(t.get("nivel_slot", 1)) == 4]
 
-    # Filtra talentos_bonus para evitar duplicar os que já ocupam slots dedicados (perícia N2/N4 e geral N3)
-    bonus_extras = [
-        b for b in talentos_res["talentos_bonus"]
-        if not (
-            (b.get("categoria") == "pericia" and b.get("nivel_slot") in (2, 4))
-            or (b.get("categoria") == "geral" and b.get("nivel_slot") == 3)
-        )
-    ]
-
     if talentos_classe_n1:
-        t0 = talentos_classe_n1[0]
-        hab_tal["classe"][2]["nome"] = t0["nome"]
-        hab_tal["classe"][2]["origem_regra"] = t0["origem"]
-        hab_tal["classe"][2]["resumo"] = t0["descricao"]
-        for t_extra in talentos_classe_n1[1:]:
-            bonus_extras.append(
-                {
-                    "nome": t_extra["nome"],
-                    "categoria": "classe",
-                    "origem_regra": t_extra["origem"],
-                    "pagina": None,
-                    "resumo": t_extra["descricao"],
-                }
-            )
+        for t1 in talentos_classe_n1:
+            _anexar_talento_no_slot(hab_tal["classe"][2], t1["nome"], t1["origem"], t1["descricao"])
     else:
         hab_tal["classe"][2]["nome"] = "—"
         hab_tal["classe"][2]["origem_regra"] = f"{classe['nome']} não escolhe talento livre no 1º nível"
         hab_tal["classe"][2]["resumo"] = ""
 
     if talentos_classe_n2 and len(hab_tal["classe"]) > 3:
-        t2 = talentos_classe_n2[0]
-        hab_tal["classe"][3]["nome"] = t2["nome"]
-        hab_tal["classe"][3]["origem_regra"] = t2["origem"]
-        hab_tal["classe"][3]["resumo"] = t2["descricao"]
+        for t2 in talentos_classe_n2:
+            _anexar_talento_no_slot(hab_tal["classe"][3], t2["nome"], t2["origem"], t2["descricao"])
     if talentos_classe_n4 and len(hab_tal["classe"]) > 5:
-        t4 = talentos_classe_n4[0]
-        hab_tal["classe"][5]["nome"] = t4["nome"]
-        hab_tal["classe"][5]["origem_regra"] = t4["origem"]
-        hab_tal["classe"][5]["resumo"] = t4["descricao"]
+        for t4 in talentos_classe_n4:
+            _anexar_talento_no_slot(hab_tal["classe"][5], t4["nome"], t4["origem"], t4["descricao"])
 
-    # Bônus — até 2 slots oficiais; eventuais extras vão para o 1º slot livre da categoria (sem descarte)
-    mapa_cat_slots = {
-        "pericia": hab_tal["pericia"],
-        "geral": hab_tal["gerais"],
-        "classe": hab_tal["classe"],
-    }
-    for idx, b in enumerate(bonus_extras):
-        if idx < len(hab_tal["bonus"]):
-            destino = hab_tal["bonus"][idx]
-            origem_txt = b["origem_regra"]
+    # Bônus restantes (ex.: Perícia N1/N3/N5 do Ladino, Geral N1 de Herança Versátil/Treinamento Geral/Cavaleiro Brusco):
+    # - Talentos de Perícia N1 (Ladino 1º nível) agrupam no slot de Perícia N1 (`pericia[0]`, mesma categoria/nível da Biografia).
+    # - Perícia N2/N4 e Geral N3 já ocuparam seus slots dedicados.
+    # - Demais bônus sem slot próprio de nível entram nos 2 slots `BÔNUS`, agrupando no mesmo slot quando compartilharem categoria/nível
+    #   (ou categoria quando os 2 slots de Bônus estiverem cheios), nunca invadindo slots de níveis futuros (como `CARACTERÍSTICA 5º`).
+    bonus_sem_slot_dedicado = [
+        b for b in talentos_res["talentos_bonus"]
+        if not (
+            (b.get("categoria") == "pericia" and b.get("nivel_slot") in (2, 4))
+            or (b.get("categoria") == "geral" and b.get("nivel_slot") == 3)
+        )
+    ]
+    bonus_para_slots: list[dict[str, Any]] = []
+    for b in bonus_sem_slot_dedicado:
+        cat_b = b.get("categoria", "geral")
+        niv_b = int(b.get("nivel_slot") or 1)
+        if cat_b == "pericia" and niv_b == 1:
+            _anexar_talento_no_slot(
+                hab_tal["pericia"][0], b["nome"], b["origem_regra"], b["resumo"], pagina=b.get("pagina")
+            )
         else:
-            lista_cat = mapa_cat_slots.get(b.get("categoria", "classe"), hab_tal["classe"])
-            destino = next((s for s in lista_cat if not (s.get("nome") or "").strip()), None)
-            if destino is None:
-                continue
-            origem_txt = b["origem_regra"]
-        destino["nome"] = b["nome"]
-        destino["origem_regra"] = origem_txt
-        destino["pagina"] = b.get("pagina")
-        destino["resumo"] = b["resumo"]
+            bonus_para_slots.append(b)
+
+    grupos_bonus: list[tuple[tuple[str, int], dict[str, Any]]] = []
+    for b in bonus_para_slots:
+        chave = (str(b.get("categoria", "geral")), int(b.get("nivel_slot") or 1))
+        slot_existente = next((dest for ch, dest in grupos_bonus if ch == chave), None)
+        if slot_existente is not None:
+            _anexar_talento_no_slot(slot_existente, b["nome"], b["origem_regra"], b["resumo"], pagina=b.get("pagina"))
+            continue
+        if len(grupos_bonus) < len(hab_tal["bonus"]):
+            dest = hab_tal["bonus"][len(grupos_bonus)]
+            _anexar_talento_no_slot(dest, b["nome"], b["origem_regra"], b["resumo"], pagina=b.get("pagina"))
+            grupos_bonus.append((chave, dest))
+        else:
+            # Ex.: Ladino N5 + Humano Versátil (Geral N1 + Perícia N3 + Perícia N5 -> agrupa Perícia N3 e N5 em Bônus)
+            slot_mesma_cat = next((dest for (cat_g, _), dest in grupos_bonus if cat_g == chave[0]), None)
+            dest_final = slot_mesma_cat or hab_tal["bonus"][-1]
+            _anexar_talento_no_slot(dest_final, b["nome"], b["origem_regra"], b["resumo"], pagina=b.get("pagina"))
 
 
 def listar_opcoes_criacao(dados: BaseDados | None = None) -> dict[str, Any]:
@@ -345,7 +382,26 @@ def listar_opcoes_criacao(dados: BaseDados | None = None) -> dict[str, Any]:
                 defeito := (atributo_id(a["defeito_atributo"]) if a.get("defeito_atributo") else None)
             ),
             "atributos_bloqueados_livres_ids": list(dict.fromkeys([*fixos, *([defeito] if defeito else [])])),
-            "herancas": [{"id": h["id"], "nome": h["nome"], "descricao": h["descricao"]} for h in a["herancas"]],
+            "idiomas_iniciais": list(a.get("idiomas_iniciais", ["Comum"])),
+            "regra_idiomas_adicionais": a.get("regra_idiomas_adicionais", ""),
+            "idiomas_adicionais_opcoes": [
+                i
+                for i in a.get("idiomas_adicionais_opcoes", [])
+                if "qualquer" not in normalizar(i) and len(i) <= 25
+            ],
+            "idiomas_extras_qualquer_comum": (
+                a["id"] == "humano"
+                or any("qualquer" in normalizar(i) for i in a.get("idiomas_adicionais_opcoes", []))
+            ),
+            "herancas": [
+                {
+                    "id": h["id"],
+                    "nome": h["nome"],
+                    "descricao": h["descricao"],
+                    "idiomas_adicionais": int(h.get("idiomas_adicionais", 0) or 0),
+                }
+                for h in a["herancas"]
+            ],
         }
         for a in db.ancestralidades.values()
     ]
@@ -455,6 +511,7 @@ def listar_opcoes_criacao(dados: BaseDados | None = None) -> dict[str, Any]:
         "classes": classes,
         "divindades": divindades,
         "catalogo_pericias": listar_catalogo_pericias(db),
+        "catalogo_idiomas": listar_catalogo_idiomas(db),
         "catalogo_talentos": listar_catalogo_talentos(db, nivel_maximo=NIVEL_MAXIMO_CATALOGO),
         "catalogo_magias": listar_catalogo_magias(db, circulo_maximo=3),
         "catalogo_equipamentos": listar_catalogo_equipamentos_loja(db),
@@ -714,7 +771,24 @@ def gerar_personagem(
     else:
         pericias_res = pericias_base
 
-    idiomas = calcular_idiomas(db, ancestralidade, heranca, classe, mod_int, rng=rng)
+    esc_idiomas = None
+    if isinstance(escolhas_pericias, dict) and escolhas_pericias.get("idiomas_extras") is not None:
+        if normalizar(str(escolhas_pericias.get("modo", "personalizado"))) != "procedural":
+            esc_idiomas = escolhas_pericias.get("idiomas_extras")
+    try:
+        idiomas_res = calcular_idiomas(
+            db,
+            ancestralidade,
+            heranca,
+            classe,
+            mod_int,
+            rng=random.Random(f"{seed_usada}:idiomas"),
+            escolhas_idiomas=esc_idiomas,
+            retornar_detalhes=True,
+        )
+    except ValueError as exc:
+        raise ErroValidacao(str(exc)) from exc
+    idiomas = idiomas_res["idiomas"]
 
     # ------------------------------------------------------------------
     # 4. Equipamentos (15 po), Volume e Conjuração
@@ -908,7 +982,18 @@ def gerar_personagem(
             "atributo_chave": atributos_res["atributo_chave"],
             "escolhas_atributos": atributos_res["escolhas_aplicadas"],
             "historico_abcd": atributos_res["historico_abcd"],
-            "escolhas_pericias": pericias_res["escolhas_pericias"],
+            "escolhas_pericias": {
+                **pericias_res["escolhas_pericias"],
+                "idiomas_extras": list(idiomas_res["escolhas_manuais"]),
+            },
+            "escolhas_idiomas": {
+                "modo": idiomas_res["modo"],
+                "idiomas_iniciais": idiomas_res["idiomas_iniciais"],
+                "qtd_extras": idiomas_res["qtd_extras"],
+                "escolhas_manuais": idiomas_res["escolhas_manuais"],
+                "escolhas_procedurais": idiomas_res["escolhas_procedurais"],
+                "finais": idiomas,
+            },
             "escolhas_talentos": talentos_res["escolhas_talentos"],
             "escolhas_magias": magias_res.get("escolhas_magias"),
             "escolhas_perfil": escolhas_perfil_aplicadas,

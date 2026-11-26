@@ -53,9 +53,18 @@
         elPer.textContent = "Procedural";
       } else {
         const stPer = app.calcularEstadoPericiasUI();
-        elPer.textContent = !stPer.disponivel
-          ? "Personalizado (aguardando classe)"
-          : `Personalizado (${app.perEstado.selecionadas.length}/${stPer.vagasLivresTotal})`;
+        const stIdm = app.calcularEstadoIdiomasUI?.();
+        if (!stPer.disponivel && !stIdm?.disponivel) {
+          elPer.textContent = "Personalizado (aguardando classe/ancestralidade)";
+        } else {
+          const txtPer = stPer.disponivel
+            ? `${app.perEstado.selecionadas.length}/${stPer.vagasLivresTotal} per.`
+            : "Perícias auto";
+          const txtIdm = stIdm?.disponivel
+            ? `${app.perEstado.idiomasExtras.length}/${stIdm.vagasExtras} idi.`
+            : "Idiomas auto";
+          elPer.textContent = `Personalizado (${txtPer} • ${txtIdm})`;
+        }
       }
     }
 

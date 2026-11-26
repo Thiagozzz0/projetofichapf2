@@ -92,6 +92,10 @@
     if (usadosD.has("int")) intVal += 2;
 
     intVal = Math.min(18, intVal);
+    const nivelAtual = app.obterNivelSelecionadoUI?.() || 1;
+    if (nivelAtual >= 5 && pri.slice(0, 4).includes("int")) {
+      intVal += intVal >= 18 ? 1 : 2;
+    }
     return { intVal, modInt: Math.floor((intVal - 10) / 2) };
   }
 
@@ -243,7 +247,159 @@
     };
   }
 
+  function calcularEstadoIdiomasUI() {
+    const catIdm = app.opcoes?.catalogo_idiomas;
+    const ancId = document.getElementById("ancestralidade")?.value || "aleatorio";
+    const herId = document.getElementById("heranca")?.value || "aleatorio";
+    const clsId = document.getElementById("classe")?.value || "aleatorio";
+    const ancObj = app.opcoes?.ancestralidades?.find((a) => a.id === ancId) || null;
+    const herObj = ancObj?.herancas?.find((h) => h.id === herId) || null;
+
+    if (!catIdm || !ancObj || ancId === "aleatorio") {
+      return { disponivel: false };
+    }
+
+    const iniciais = [...(ancObj.idiomas_iniciais || ["Comum"])];
+    const origemFixa = new Map();
+    iniciais.forEach((nome) => origemFixa.set(nome, ancObj.nome));
+    if (clsId === "druida" && !origemFixa.has("Druídico")) {
+      iniciais.push("Druídico");
+      origemFixa.set("Druídico", "Classe (Druida)");
+    }
+    const iniciaisSet = new Set(iniciais);
+
+    const { intVal, modInt } = _calcularModIntAtualUI();
+    const ehHumano = Boolean(ancObj.idiomas_extras_qualquer_comum || ancObj.id === "humano");
+    const baseExtras = ehHumano ? Math.max(1, 1 + modInt) : Math.max(0, modInt);
+    const bonusHeranca = Number(herObj?.idiomas_adicionais || 0);
+    const vagasExtras = Math.max(0, baseExtras + bonusHeranca);
+
+    const partesFormula = [
+      ehHumano ? "Humano (1)" : `${ancObj.nome} (0)`,
+      `INT ${intVal} (${modInt >= 0 ? `+${modInt}` : modInt})`,
+    ];
+    if (bonusHeranca > 0) {
+      partesFormula.push(`${herObj?.nome || "Herança"} (+${bonusHeranca})`);
+    }
+    const formulaTxt = `${ehHumano ? "máx(1, " : "máx(0, "}${partesFormula.join(" + ")}) = ${vagasExtras}`;
+
+    const infoMap = new Map();
+    (catIdm.comuns || []).forEach((item) => {
+      infoMap.set(item.nome, { nome: item.nome, categoria: "Comum", detalhe: item.regioes_falantes || "" });
+    });
+    (catIdm.incomuns || []).forEach((item) => {
+      infoMap.set(item.nome, { nome: item.nome, categoria: "Incomum", detalhe: item.falantes || "" });
+    });
+
+    const opcoesAnc = (ancObj.idiomas_adicionais_opcoes || []).filter((n) => !iniciaisSet.has(n));
+    const opcoesAncSet = new Set(opcoesAnc);
+    const comunsRestantes = (catIdm.nomes_comuns || []).filter((n) => !iniciaisSet.has(n) && !opcoesAncSet.has(n));
+    const opcoesSelect = [
+      ...opcoesAnc.map((nome) => ({
+        nome,
+        ehAncestral: true,
+        ...(infoMap.get(nome) || { categoria: "Comum", detalhe: "" }),
+      })),
+      ...comunsRestantes.map((nome) => ({
+        nome,
+        ehAncestral: false,
+        ...(infoMap.get(nome) || { categoria: "Comum", detalhe: "" }),
+      })),
+    ];
+
+    return {
+      disponivel: true,
+      ancObj,
+      iniciais,
+      iniciaisSet,
+      origemFixa,
+      vagasExtras,
+      formulaTxt,
+      opcoesSelect,
+      nomesValidosSet: new Set(opcoesSelect.map((o) => o.nome)),
+    };
+  }
+
+  function _atualizarBlocoIdiomasUI() {
+    const elVagas = document.getElementById("per-idiomas-vagas");
+    const elFormula = document.getElementById("per-idiomas-formula");
+    const elIniciais = document.getElementById("per-idiomas-iniciais");
+    const elNota = document.getElementById("per-idiomas-nota");
+    const grid = document.getElementById("grid-idiomas-checkboxes");
+    if (!grid) return;
+
+    const st = calcularEstadoIdiomasUI();
+    if (!st.disponivel) {
+      app.perEstado.idiomasExtras = [];
+      if (elVagas) {
+        elVagas.textContent = "Selecione uma Ancestralidade fixa";
+        elVagas.className = "saldo-alerta";
+      }
+      if (elFormula) elFormula.textContent = "Escolha uma Ancestralidade em Criação Inicial para liberar os idiomas.";
+      if (elIniciais) elIniciais.textContent = "Idiomas automáticos";
+      if (elNota) elNota.textContent = "";
+      grid.innerHTML = `<div class="box-tal-auto">Ancestralidade Aleatória ativa: os idiomas serão definidos automaticamente conforme a raça sorteada.</div>`;
+      return;
+    }
+
+    app.perEstado.idiomasExtras = (app.perEstado.idiomasExtras || [])
+      .filter((nome) => st.nomesValidosSet.has(nome) && !st.iniciaisSet.has(nome))
+      .slice(0, st.vagasExtras);
+
+    const qtdSel = app.perEstado.idiomasExtras.length;
+    const cheio = qtdSel >= st.vagasExtras;
+
+    if (elVagas) {
+      elVagas.textContent = `${qtdSel} / ${st.vagasExtras} selecionados`;
+      elVagas.className = "saldo-ok";
+    }
+    if (elFormula) elFormula.textContent = st.formulaTxt;
+    if (elIniciais) elIniciais.textContent = `Iniciais fixos: ${st.iniciais.join(", ")}`;
+    if (elNota) {
+      elNota.textContent =
+        st.vagasExtras === 0
+          ? "Com essa ancestralidade e modificador de Inteligência, não há vagas extras adicionais no momento."
+          : `Selecione até ${st.vagasExtras} idioma(s) extra(s) ou deixe vagas livres para completar proceduralmente.`;
+    }
+
+    const cardsFixos = st.iniciais.map((nome) => {
+      const origem = st.origemFixa.get(nome) || "Ancestralidade";
+      return (
+        `<label class="pericia-check-card fixa" title="Idioma inicial concedido automaticamente por ${esc(origem)}">` +
+        `<input type="checkbox" checked disabled>` +
+        `<span class="pericia-check-info">` +
+        `<span class="pericia-check-titulo">${esc(nome)}</span>` +
+        `<span class="pericia-check-badge fixa">Fixo: ${esc(origem)}</span>` +
+        `</span></label>`
+      );
+    });
+
+    const cardsOpcoes = st.opcoesSelect.map((op) => {
+      const marcada = app.perEstado.idiomasExtras.includes(op.nome);
+      const bloqueada = !marcada && (cheio || st.vagasExtras === 0);
+      const clsCard = `pericia-check-card${marcada ? " selecionada" : ""}${bloqueada ? " bloqueada" : ""}`;
+      const badgeTxt = marcada
+        ? "Escolhido"
+        : op.ehAncestral
+          ? `Ancestralidade${op.categoria === "Incomum" ? " • Incomum" : ""}`
+          : "Comum";
+      const clsBadge = marcada ? "manual" : "";
+      const tip = op.detalhe ? `${op.categoria} — ${op.detalhe}` : op.categoria;
+      return (
+        `<label class="${clsCard}" title="${esc(tip)}">` +
+        `<input type="checkbox" data-idioma-nome="${esc(op.nome)}" ${marcada ? "checked" : ""} ${bloqueada ? "disabled" : ""}>` +
+        `<span class="pericia-check-info">` +
+        `<span class="pericia-check-titulo">${esc(op.nome)}</span>` +
+        `<span class="pericia-check-badge ${clsBadge}">${esc(badgeTxt)}</span>` +
+        `</span></label>`
+      );
+    });
+
+    grid.innerHTML = [...cardsFixos, ...cardsOpcoes].join("");
+  }
+
   function atualizarCatalogoPericiasUI() {
+    _atualizarBlocoIdiomasUI();
     const catPer = app.opcoes?.catalogo_pericias;
     if (!catPer) return;
 
@@ -360,6 +516,7 @@
       if (el) el.value = "procedural";
     });
     app.perEstado.selecionadas = [];
+    app.perEstado.idiomasExtras = [];
     atualizarVisibilidadePericiasUI();
   }
 
@@ -379,6 +536,7 @@
       pericia_classe_fixa_id: valAtivo("card-per-cls-opcao", "per-cls-opcao"),
       pericia_divindade_id: valAtivo("card-per-div-opcao", "per-div-opcao"),
       pericias_livres: app.perEstado.selecionadas.length ? [...app.perEstado.selecionadas] : "procedural",
+      idiomas_extras: app.perEstado.idiomasExtras.length ? [...app.perEstado.idiomasExtras] : "procedural",
     };
   }
 
@@ -402,6 +560,21 @@
       }
       atualizarCatalogoPericiasUI();
     });
+    document.getElementById("grid-idiomas-checkboxes")?.addEventListener("change", (e) => {
+      const chk = e.target.closest('input[type="checkbox"][data-idioma-nome]');
+      if (!chk) return;
+      const nome = chk.dataset.idiomaNome;
+      const stIdm = calcularEstadoIdiomasUI();
+      if (!stIdm.disponivel || stIdm.iniciaisSet.has(nome) || !stIdm.nomesValidosSet.has(nome)) return;
+      if (chk.checked) {
+        if (!app.perEstado.idiomasExtras.includes(nome) && app.perEstado.idiomasExtras.length < stIdm.vagasExtras) {
+          app.perEstado.idiomasExtras.push(nome);
+        }
+      } else {
+        app.perEstado.idiomasExtras = app.perEstado.idiomasExtras.filter((x) => x !== nome);
+      }
+      atualizarCatalogoPericiasUI();
+    });
     document.getElementById("btn-per-reset-procedural")?.addEventListener("click", () => {
       resetarPericiasProcedural();
       const modoEl = document.getElementById("modo-pericias");
@@ -412,6 +585,7 @@
 
   Object.assign(app, {
     calcularEstadoPericiasUI,
+    calcularEstadoIdiomasUI,
     atualizarCatalogoPericiasUI,
     atualizarVisibilidadePericiasUI,
     resetarPericiasProcedural,

@@ -84,10 +84,11 @@
       .map((s) => {
         const preenchido = s.nome && s.nome !== "—";
         if (!preenchido && !mostrarVazios) return "";
+        const clsTitulo = preenchido && String(s.nome).length > 36 ? ' class="slot-titulo-compacto"' : "";
         return (
           `<li class="slot-item ${preenchido ? "" : "vazio"}">` +
           `<span class="slot-nivel-tag">${esc(s.rotulo_oficial)}</span> ` +
-          `<strong>${esc(preenchido ? s.nome : "(espaço livre para progressão)")}</strong>` +
+          `<strong${clsTitulo}>${esc(preenchido ? s.nome : "(espaço livre para progressão)")}</strong>` +
           (preenchido && s.origem_regra ? `<span class="slot-origem">${esc(s.origem_regra)}</span>` : "") +
           (preenchido && s.resumo ? `<span class="slot-resumo">${esc(s.resumo)}</span>` : "") +
           `</li>`

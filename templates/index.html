@@ -7,17 +7,17 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=58">
-  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=58">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}?v=58">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/tema.css') }}?v=58">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=59">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=59">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}?v=59">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/tema.css') }}?v=59">
 </head>
 <body>
   <div class="app-container">
     <header class="topbar nao-imprimir">
       <div class="topbar-inner">
         <div class="topbar-marca">
-          <img class="topbar-logo" src="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=58" alt="Pathfinder 2ª Edição">
+          <img class="topbar-logo" src="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=59" alt="Pathfinder 2ª Edição">
           <div>
             <h1>Gerador Procedural de Personagens — Pathfinder 2ª Edição</h1>
             <p>Monte fichas completas (níveis 1 a 5) guiadas por conceito/subclasse com matemática ABCD, equipamentos por nível (15–270 po), magias e exportação em PDF (Livro), DOCX e TXT.</p>
@@ -313,8 +313,8 @@
               <span class="etapa-header-esq">
                 <span class="etapa-num">2</span>
                 <span>
-                  <span class="etapa-titulo">Perícias</span>
-                  <span class="etapa-subtitulo">Treinamentos de Biografia, Classe, Subclasse, Herança e Inteligência</span>
+                  <span class="etapa-titulo">Perícias &amp; Idiomas</span>
+                  <span class="etapa-subtitulo">Treinamentos e Idiomas de Ancestralidade, Biografia, Classe, Herança e Inteligência</span>
                 </span>
               </span>
               <span class="etapa-header-dir">
@@ -381,6 +381,18 @@
                   </div>
 
                   <div id="grid-pericias-checkboxes" class="grid-pericias-checkboxes"></div>
+
+                  <div id="bloco-idiomas-custom" class="bloco-subetapa-idiomas" style="margin-top: 1.1rem;">
+                    <div class="resumo-pericias-barra">
+                      <div>
+                        <strong>Idiomas Extras (<span id="per-idiomas-vagas">0 / 0 selecionados</span>):</strong>
+                        <span id="per-idiomas-formula" class="texto-suave"></span>
+                      </div>
+                      <span id="per-idiomas-iniciais" class="tag-destaque"></span>
+                    </div>
+                    <small id="per-idiomas-nota" class="nota-campo">Selecione manualmente ou deixe vagas livres para completar proceduralmente.</small>
+                    <div id="grid-idiomas-checkboxes" class="grid-pericias-checkboxes"></div>
+                  </div>
                 </div>
               </div>
 
@@ -951,22 +963,22 @@
           <circle class="overlay-anel-fundo" cx="60" cy="60" r="50" />
           <path class="overlay-arco-seta" d="M 60 10 A 50 50 0 1 1 24.6 95.4" marker-end="url(#overlay-seta-ponta)" />
         </svg>
-        <img class="overlay-logo-img" src="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=58" alt="Processando seu arquivo">
+        <img class="overlay-logo-img" src="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=59" alt="Processando seu arquivo">
       </div>
       <p id="overlay-download-texto" class="overlay-download-texto">Processando seu arquivo</p>
     </div>
   </div>
 
-  <script src="{{ url_for('static', filename='js/tema.js') }}?v=58" defer></script>
-  <script src="{{ url_for('static', filename='js/render_ficha.js') }}?v=58" defer></script>
-  <script src="{{ url_for('static', filename='js/estado.js') }}?v=58" defer></script>
-  <script src="{{ url_for('static', filename='js/atributos.js') }}?v=58" defer></script>
-  <script src="{{ url_for('static', filename='js/previa_atributos.js') }}?v=58" defer></script>
-  <script src="{{ url_for('static', filename='js/pericias.js') }}?v=58" defer></script>
-  <script src="{{ url_for('static', filename='js/talentos.js') }}?v=58" defer></script>
-  <script src="{{ url_for('static', filename='js/magias.js') }}?v=58" defer></script>
-  <script src="{{ url_for('static', filename='js/equipamentos.js') }}?v=58" defer></script>
-  <script src="{{ url_for('static', filename='js/perfil.js') }}?v=58" defer></script>
-  <script src="{{ url_for('static', filename='js/app.js') }}?v=58" defer></script>
+  <script src="{{ url_for('static', filename='js/tema.js') }}?v=59" defer></script>
+  <script src="{{ url_for('static', filename='js/render_ficha.js') }}?v=59" defer></script>
+  <script src="{{ url_for('static', filename='js/estado.js') }}?v=59" defer></script>
+  <script src="{{ url_for('static', filename='js/atributos.js') }}?v=59" defer></script>
+  <script src="{{ url_for('static', filename='js/previa_atributos.js') }}?v=59" defer></script>
+  <script src="{{ url_for('static', filename='js/pericias.js') }}?v=59" defer></script>
+  <script src="{{ url_for('static', filename='js/talentos.js') }}?v=59" defer></script>
+  <script src="{{ url_for('static', filename='js/magias.js') }}?v=59" defer></script>
+  <script src="{{ url_for('static', filename='js/equipamentos.js') }}?v=59" defer></script>
+  <script src="{{ url_for('static', filename='js/perfil.js') }}?v=59" defer></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}?v=59" defer></script>
 </body>
 </html>

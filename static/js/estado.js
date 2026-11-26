@@ -53,7 +53,7 @@
     opcoes: null,
     ultimaFicha: null,
     bioManualExpAutomatica: false,
-    perEstado: { selecionadas: [] },
+    perEstado: { selecionadas: [], idiomasExtras: [] },
     magEstado: { truques: [], magias_n1: [], magias_n2: [], magias_n3: [] },
     eqEstado: { armas_cc: [], armas_dist: [], variados: [] },
     perfilEstado: { familiarHabs: [] },

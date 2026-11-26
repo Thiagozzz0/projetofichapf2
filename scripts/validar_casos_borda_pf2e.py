@@ -254,6 +254,155 @@ def test_idiomas_humano_mago_grimorio_e_regras_especificas() -> None:
             assert r["meta_geracao"]["limite_morrendo"] == 5
             break
 
+    # Escolha manual, híbrida e validações de idiomas extras
+    # Humano Mago INT 18 (mod +4) => 1 + 4 = 5 vagas extras
+    h_m_man = gerar_personagem(
+        "humano",
+        "heranca_versatil",
+        "mago",
+        "mago_evocador_artilharia",
+        seed=15,
+        escolhas_pericias={
+            "modo": "personalizado",
+            "idiomas_extras": ["Élfico", "Dracônico", "Enânico", "Silvestre", "Subterrâneo"],
+        },
+        dados=db,
+    )
+    assert h_m_man["ficha"]["idiomas"] == ["Comum", "Élfico", "Dracônico", "Enânico", "Silvestre", "Subterrâneo"]
+    assert h_m_man["meta_geracao"]["escolhas_idiomas"]["modo"] == "manual"
+    assert h_m_man["meta_geracao"]["escolhas_pericias"]["idiomas_extras"] == [
+        "Élfico",
+        "Dracônico",
+        "Enânico",
+        "Silvestre",
+        "Subterrâneo",
+    ]
+
+    # Híbrido + normalização de acentos/caixa
+    h_m_hib = gerar_personagem(
+        "humano",
+        "heranca_versatil",
+        "mago",
+        "mago_evocador_artilharia",
+        seed=15,
+        escolhas_pericias={"modo": "personalizado", "idiomas_extras": ["elfico", "draconico"]},
+        dados=db,
+    )
+    assert len(h_m_hib["ficha"]["idiomas"]) == 6
+    assert h_m_hib["ficha"]["idiomas"][:3] == ["Comum", "Élfico", "Dracônico"]
+    assert h_m_hib["meta_geracao"]["escolhas_idiomas"]["modo"] == "hibrido"
+
+    # Halfling Nômade (+2 idiomas da herança) + Mago INT 18 (mod +4) => 4 + 2 = 6 extras -> 8 totais
+    hf_nom = gerar_personagem(
+        "halfling",
+        "halfling_nomade",
+        "mago",
+        "mago_evocador_artilharia",
+        seed=21,
+        escolhas_pericias={"modo": "personalizado", "idiomas_extras": ["Élfico", "Goblin", "Dracônico"]},
+        dados=db,
+    )
+    assert hf_nom["meta_geracao"]["escolhas_idiomas"]["qtd_extras"] == 6
+    assert len(hf_nom["ficha"]["idiomas"]) == 8
+    assert {"Comum", "Halfling", "Élfico", "Goblin", "Dracônico"}.issubset(set(hf_nom["ficha"]["idiomas"]))
+
+    # Idioma incomum permitido pela ancestralidade (Anão -> Terran, Elfo -> Celestial)
+    an_ter = gerar_personagem(
+        "anao",
+        "anao_das_rochas",
+        "mago",
+        "mago_evocador_artilharia",
+        seed=7,
+        escolhas_pericias={"modo": "personalizado", "idiomas_extras": ["Terran"]},
+        dados=db,
+    )
+    assert "Terran" in an_ter["ficha"]["idiomas"]
+
+    el_cel = gerar_personagem(
+        "elfo",
+        "elfo_vidente",
+        "mago",
+        "mago_evocador_artilharia",
+        seed=7,
+        escolhas_pericias={"modo": "personalizado", "idiomas_extras": ["Celestial"]},
+        dados=db,
+    )
+    assert "Celestial" in el_cel["ficha"]["idiomas"]
+
+    # Validações negativas (ErroValidacao)
+    casos_invalidos_idiomas = [
+        # Já é idioma inicial
+        ("elfo", "elfo_vidente", "mago", "mago_evocador_artilharia", ["Élfico"]),
+        ("humano", "heranca_versatil", "mago", "mago_evocador_artilharia", ["Comum"]),
+        # Idioma incomum sem acesso pela ancestralidade / desconhecido
+        ("anao", "anao_das_rochas", "mago", "mago_evocador_artilharia", ["Abissal"]),
+        ("humano", "heranca_versatil", "mago", "mago_evocador_artilharia", ["Klingon"]),
+        # Duplicado
+        ("humano", "heranca_versatil", "mago", "mago_evocador_artilharia", ["Dracônico", "draconico"]),
+        # Excede limite (Anão Guerreiro INT 10 = 0 vagas extras)
+        ("anao", "anao_das_rochas", "guerreiro", "guerreiro_muralha_aco", ["Dracônico"]),
+    ]
+    for anc_i, her_i, cls_i, con_i, idm_i in casos_invalidos_idiomas:
+        try:
+            gerar_personagem(
+                anc_i,
+                her_i,
+                cls_i,
+                con_i,
+                seed=9,
+                escolhas_pericias={"modo": "personalizado", "idiomas_extras": idm_i},
+                dados=db,
+            )
+            raise AssertionError(f"Deveria falhar validação de idiomas: {anc_i}/{idm_i}")
+        except ErroValidacao:
+            pass
+
+    # Rota Flask: HTML + /api/opcoes + /api/gerar com idiomas_extras
+    from app import app as flask_app
+
+    client = flask_app.test_client()
+    resp_home = client.get("/")
+    assert resp_home.status_code == 200
+    html_home = resp_home.get_data(as_text=True)
+    assert 'id="grid-idiomas-checkboxes"' in html_home and "?v=59" in html_home
+
+    resp_op = client.get("/api/opcoes")
+    assert resp_op.status_code == 200
+    op_json = resp_op.get_json()
+    assert "catalogo_idiomas" in op_json
+    assert "Comum" in op_json["catalogo_idiomas"]["nomes_comuns"]
+    assert "Abissal" in op_json["catalogo_idiomas"]["nomes_incomuns"]
+    halfling_op = next(a for a in op_json["ancestralidades"] if a["id"] == "halfling")
+    nomade_op = next(h for h in halfling_op["herancas"] if h["id"] == "halfling_nomade")
+    assert nomade_op["idiomas_adicionais"] == 2
+
+    resp_gerar_ok = client.post(
+        "/api/gerar",
+        json={
+            "ancestralidade_id": "anao",
+            "heranca_id": "anao_das_rochas",
+            "classe_id": "mago",
+            "conceito_id": "mago_evocador_artilharia",
+            "seed": 7,
+            "escolhas_pericias": {"modo": "personalizado", "idiomas_extras": ["Terran"]},
+        },
+    )
+    assert resp_gerar_ok.status_code == 200
+    assert "Terran" in resp_gerar_ok.get_json()["ficha"]["idiomas"]
+
+    resp_gerar_err = client.post(
+        "/api/gerar",
+        json={
+            "ancestralidade_id": "anao",
+            "heranca_id": "anao_das_rochas",
+            "classe_id": "mago",
+            "conceito_id": "mago_evocador_artilharia",
+            "seed": 7,
+            "escolhas_pericias": {"modo": "personalizado", "idiomas_extras": ["Abissal"]},
+        },
+    )
+    assert resp_gerar_err.status_code == 400
+
 
 def test_acoes_classe_pagina3_e_zero_descarte_talentos() -> None:
     db = carregar_dados()
@@ -278,20 +427,70 @@ def test_acoes_classe_pagina3_e_zero_descarte_talentos() -> None:
     ac_a = [a["nome"] for a in alq["ficha"]["acoes_e_atividades"] + alq["ficha"]["acoes_livres_e_reacoes"] if a["nome"]]
     assert "Alquimia Rápida" in ac_a and "Retroatividade Mutagênica" in ac_a
 
-    # Zero descarte quando Humano Versátil + Ladino + Ambição Natural gera 3 talentos extras
+    # Zero descarte quando Humano Versátil + Ladino + Ambição Natural gera 3 talentos extras:
+    # talentos da mesma categoria/nível compartilham o mesmo slot sem invadir slots futuros
     for s in range(1, 30):
         lad = gerar_personagem("humano", "heranca_versatil", "ladino", "ladino_sombra_silenciosa", seed=s, dados=db)
         hab = lad["ficha"]["habilidades_e_talentos"]
         if hab["ancestralidade"][2]["nome"] == "Ambição Natural":
-            todos_preenchidos = [
-                x["nome"]
+            itens_individuais = [
+                parte.strip()
                 for k in ("pericia", "gerais", "classe", "bonus")
                 for x in hab[k]
                 if x.get("nome") and x["nome"] != "—"
+                for parte in x["nome"].split(";")
+                if parte.strip()
             ]
-            # Esquiva Ágil + Descobridor de Armadilha + 2 características + 1 perícia bio + 1 perícia ladino N1 + 1 geral versátil >= 7
-            assert len(todos_preenchidos) >= 7, f"Talento descartado: {todos_preenchidos}"
+            # Esquiva Ágil + Descobridor de Armadilha + 3 características + 1 perícia bio + 1 perícia ladino N1 + 1 geral versátil >= 8
+            assert len(itens_individuais) >= 7, f"Talento descartado: {itens_individuais}"
+            assert not hab["classe"][6]["nome"], "Não deve invadir CARACTERÍSTICA 5º no 1º nível"
             break
+
+    # Ladino N4 Humano Versátil + Ambição Natural não invade CARACTERÍSTICA 5º, TALENTO 6º nem Geral 7º
+    lad4 = gerar_personagem(
+        "humano", "heranca_versatil", "ladino", "ladino_sombra_silenciosa",
+        nivel=4, seed=1,
+        escolhas_talentos={"modo": "personalizado", "ancestralidade_id": "ambicao_natural"},
+        dados=db,
+    )
+    hab4 = lad4["ficha"]["habilidades_e_talentos"]
+    assert not hab4["classe"][6]["nome"], f"Nível 4 não pode preencher CARACTERÍSTICA 5º: {hab4['classe'][6]}"
+    assert not hab4["gerais"][1]["nome"], f"Nível 4 não pode preencher Geral 7º: {hab4['gerais'][1]}"
+    assert not hab4["pericia"][3]["nome"], f"Nível 4 não pode preencher Perícia 6º: {hab4['pericia'][3]}"
+    assert ";" in hab4["classe"][2]["nome"] and ";" in hab4["pericia"][0]["nome"]
+
+    # Exportação PDF de Ladino N4 e N5 com talentos agrupados não deve truncar títulos nem perder descrições na Referência Completa
+    import pymupdf
+    from motor.exportacao import exportar_ficha_pdf
+
+    pdf_lad4 = exportar_ficha_pdf(lad4)
+    with pymupdf.open(stream=pdf_lad4, filetype="pdf") as doc4:
+        txt_p2_lad4 = doc4[1].get_text()
+        txt_ref_lad4 = "\n".join(doc4[i].get_text() for i in range(4, len(doc4)))
+    for parte in hab4["classe"][2]["nome"].split(";"):
+        nome_t = parte.strip()
+        assert nome_t in txt_p2_lad4 and f"{nome_t}..." not in txt_p2_lad4, f"Título cortado na Pág. 2 PDF: {nome_t!r}"
+        assert nome_t in txt_ref_lad4, f"Talento agrupado ausente na Referência Completa PDF: {nome_t!r}"
+    for parte in hab4["pericia"][0]["nome"].split(";"):
+        nome_p = parte.strip()
+        assert nome_p in txt_p2_lad4 and f"{nome_p}..." not in txt_p2_lad4, f"Perícia cortada na Pág. 2 PDF: {nome_p!r}"
+        assert nome_p in txt_ref_lad4, f"Talento de perícia agrupado ausente na Referência Completa PDF: {nome_p!r}"
+
+    lad5 = gerar_personagem(
+        "humano", "heranca_versatil", "ladino", "ladino_sombra_silenciosa",
+        nivel=5, seed=1,
+        escolhas_talentos={"modo": "personalizado", "ancestralidade_id": "ambicao_natural"},
+        dados=db,
+    )
+    hab5 = lad5["ficha"]["habilidades_e_talentos"]
+    assert not hab5["pericia"][3]["nome"], f"Nível 5 não pode preencher Perícia 6º: {hab5['pericia'][3]}"
+    assert not hab5["gerais"][1]["nome"], f"Nível 5 não pode preencher Geral 7º: {hab5['gerais'][1]}"
+    assert ";" in hab5["bonus"][1]["nome"]  # Perícia N3 e Perícia N5 agrupadas no slot Bônus 2
+    pdf_lad5 = exportar_ficha_pdf(lad5)
+    with pymupdf.open(stream=pdf_lad5, filetype="pdf") as doc5:
+        txt_p2_lad5 = doc5[1].get_text()
+        for parte in hab5["bonus"][1]["nome"].split(";"):
+            assert parte.strip() in txt_p2_lad5, f"Faltando talento N3/N5 agrupado na Pág. 2 PDF: {parte}"
 
 
 def test_divindades_reais_e_companheiros_familiares() -> None:
@@ -902,13 +1101,16 @@ def test_curadoria_e_selecao_manual_talentos() -> None:
     assert esc_t["gerais_ids"] == ["iniciativa_incrivel", "veloz"]
     assert guerr_2g["ficha"]["velocidade"]["metros"] == 9.0  # 7.5m + 1.5m (Veloz)
     nomes_hab_g = [
-        x["nome"]
+        parte.strip()
         for cat in guerr_2g["ficha"]["habilidades_e_talentos"].values()
         for x in cat
         if x.get("nome") and x["nome"] != "—"
+        for parte in x["nome"].split(";")
+        if parte.strip()
     ]
     assert "Treinamento Geral" in nomes_hab_g and "Ataque Poderoso" in nomes_hab_g
     assert "Iniciativa Incrível" in nomes_hab_g and "Veloz" in nomes_hab_g
+    assert guerr_2g["ficha"]["habilidades_e_talentos"]["bonus"][0]["nome"] == "Iniciativa Incrível; Veloz"
 
     # 2. Vínculo dinâmico: Ambição Natural em Clérigo (sem slot base N1) libera 1 talento de classe N1 manual
     cler_amb = gerar_personagem(
@@ -925,9 +1127,9 @@ def test_curadoria_e_selecao_manual_talentos() -> None:
     assert cler_amb["meta_geracao"]["escolhas_talentos"]["slots_disponiveis"]["classe"] == 1
     assert cler_amb["meta_geracao"]["escolhas_talentos"]["classe_ids"] == ["maos_curandeiras"]
     hab_c = cler_amb["ficha"]["habilidades_e_talentos"]
-    nomes_cls_c = [x["nome"] for x in hab_c["classe"] if x.get("nome")]
-    nomes_bon_c = [x["nome"] for x in hab_c["bonus"] if x.get("nome")]
-    assert "Iniciado no Domínio" in nomes_cls_c and "Mãos Curandeiras" in nomes_bon_c
+    nomes_cls_c = " | ".join(x["nome"] for x in hab_c["classe"] if x.get("nome"))
+    assert "Iniciado no Domínio" in nomes_cls_c and "Mãos Curandeiras" in nomes_cls_c
+    assert "Mãos Curandeiras" in hab_c["classe"][2]["nome"] and "Iniciado no Domínio" in hab_c["classe"][2]["nome"]
 
     # 3. Bloqueios estritos de nível/classe/ancestralidade/duplicidade devem levantar ErroValidacao
     # Clérigo sem Ambição Natural tentando pegar talento de classe no 1º nível

@@ -215,13 +215,11 @@ def main() -> None:
             assert feit["ficha"]["conjuracao"]["tradicoes_marcadas"]["primal"] is True
     assert linhagens_vistas == {"draconica", "elemental"}, f"Esperadas ambas linhagens, vistas: {linhagens_vistas}"
 
-    # Bárbaro Instinto do Furor ganha 2 talentos de classe de 1º nível
+    # Bárbaro Instinto do Furor ganha 2 talentos de classe de 1º nível (agrupados no mesmo slot TALENTO 1º)
     furor = gerar_personagem("anao", "anao_das_rochas", "barbaro", "barbaro_incursor_vanguarda", seed=12, dados=dados)
     assert furor["meta_geracao"]["subclasse_oficial_id"] == "instinto_do_furor"
-    assert furor["ficha"]["habilidades_e_talentos"]["classe"][2]["nome"] == "Investida Súbita"
-    assert any(
-        b["nome"] == "Arremessador Enfurecido" for b in furor["ficha"]["habilidades_e_talentos"]["bonus"]
-    )
+    assert "Investida Súbita" in furor["ficha"]["habilidades_e_talentos"]["classe"][2]["nome"]
+    assert "Arremessador Enfurecido" in furor["ficha"]["habilidades_e_talentos"]["classe"][2]["nome"]
 
     # Clérigo Ceifador Sombrio usa Fonte de Ferimento e tendência neutra
     ceifador = gerar_personagem("humano", "heranca_perita", "clerigo", "clerigo_ceifador_sombrio", seed=19, dados=dados)

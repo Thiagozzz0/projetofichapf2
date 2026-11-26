@@ -440,14 +440,37 @@ def _pdf_preencher_talentos_grupo(
     x0: float,
     x1: float,
 ) -> None:
+    """Preenche a coluna de talentos/habilidades na Pág. 2 reduzindo a fonte (até caber sem cortar títulos)."""
     for slot, y0 in zip(slots, ys):
         nome = (slot.get("nome") or "").strip()
         if not nome or nome == "—":
             continue
-        _pdf_inserir_linha(
-            page, pymupdf, x0, y0 + 0.6, x1, y0 + 15.0,
-            nome, fontsize=8.0, bold=True, min_fontsize=5.0,
-        )
+        txt = _pdf_sanitizar_texto(nome)
+        max_w = max(4.0, (x1 - x0) - 3.0)
+        # Tenta primeiro linha única reduzindo até 4.8pt; se ainda passar, reduz até 3.2pt
+        # para não truncar nomes compostos no mesmo espaço.
+        fs_alvo = 8.0
+        if _pdf_largura_texto(pymupdf, txt, fontname="hebo", fontsize=fs_alvo) <= max_w:
+            _pdf_inserir_linha(
+                page, pymupdf, x0, y0 + 0.6, x1, y0 + 15.0,
+                txt, fontsize=8.0, bold=True, min_fontsize=5.0,
+            )
+            continue
+
+        fs = 7.6
+        while fs > 3.2 and _pdf_largura_texto(pymupdf, txt, fontname="hebo", fontsize=fs) > max_w:
+            fs = round(fs - 0.2, 2)
+        if _pdf_largura_texto(pymupdf, txt, fontname="hebo", fontsize=fs) <= max_w:
+            _pdf_inserir_linha(
+                page, pymupdf, x0, y0 + 0.6, x1, y0 + 15.0,
+                txt, fontsize=fs, bold=True, min_fontsize=3.2,
+            )
+        else:
+            # Fallback em 2 linhas caso haja título extremamente longo (evita qualquer corte "...")
+            _pdf_inserir_bloco(
+                page, pymupdf, x0 + 1.0, y0 + 0.8, x1 - 1.0, y0 + 14.8,
+                txt, fontsize=5.6, bold=True, min_fontsize=3.6,
+            )
 
 
 def _pdf_quebrar_linhas_simples(
@@ -1160,13 +1183,14 @@ def _pdf_coletar_secoes_referencia(
             for t in db.talentos_mesticos.get("meio_orc") or []:
                 pool_tal_anc.setdefault(normalizar(t.get("nome")), t)
 
+    def _partes_nomes_slot(nome_bruto: str) -> list[str]:
+        return [p.strip() for p in str(nome_bruto or "").split(";") if p.strip() and p.strip() != "—"]
+
     for slot in (hab.get("ancestralidade") or [])[2:]:
-        nome_s = (slot.get("nome") or "").strip()
-        if not nome_s or nome_s == "—":
-            continue
-        t_obj = pool_tal_anc.get(normalizar(nome_s))
-        desc_t = _formatar_detalhes_habilidade(t_obj) if t_obj else (slot.get("resumo") or "")
-        _add_item(itens_raca, vistos_raca, nome_s, desc_t)
+        for nome_s in _partes_nomes_slot(slot.get("nome") or ""):
+            t_obj = pool_tal_anc.get(normalizar(nome_s))
+            desc_t = _formatar_detalhes_habilidade(t_obj) if t_obj else (slot.get("resumo") or "")
+            _add_item(itens_raca, vistos_raca, nome_s, desc_t)
 
     # 2. Perícias (Talentos de Perícia da Biografia e Bônus de Perícia)
     itens_pericias: list[dict[str, str]] = []
@@ -1179,23 +1203,21 @@ def _pdf_coletar_secoes_referencia(
         return db.resolver_talento_geral_pericia(nome_tal)
 
     for slot in hab.get("pericia") or []:
-        nome_s = (slot.get("nome") or "").strip()
-        if not nome_s or nome_s == "—":
-            continue
-        t_obj = _resolver_talento_geral_ou_pericia(nome_s)
-        desc_t = _formatar_detalhes_habilidade(t_obj) if t_obj else (slot.get("resumo") or "")
-        _add_item(itens_pericias, vistos_pericias, nome_s, desc_t)
-
-    for slot in hab.get("bonus") or []:
-        nome_s = (slot.get("nome") or "").strip()
-        if not nome_s or nome_s == "—":
-            continue
-        t_obj = _resolver_talento_geral_ou_pericia(nome_s)
-        origem_norm = normalizar(slot.get("origem_regra") or "")
-        eh_pericia = (t_obj and t_obj.get("categoria") == "pericia") or ("pericia" in origem_norm)
-        if eh_pericia:
+        for nome_s in _partes_nomes_slot(slot.get("nome") or ""):
+            t_obj = _resolver_talento_geral_ou_pericia(nome_s)
             desc_t = _formatar_detalhes_habilidade(t_obj) if t_obj else (slot.get("resumo") or "")
             _add_item(itens_pericias, vistos_pericias, nome_s, desc_t)
+
+    for slot in hab.get("bonus") or []:
+        origem_norm = normalizar(slot.get("origem_regra") or "")
+        for nome_s in _partes_nomes_slot(slot.get("nome") or ""):
+            t_obj = _resolver_talento_geral_ou_pericia(nome_s)
+            eh_pericia = (t_obj and t_obj.get("categoria") == "pericia") or (
+                t_obj is None and "pericia" in origem_norm
+            )
+            if eh_pericia:
+                desc_t = _formatar_detalhes_habilidade(t_obj) if t_obj else (slot.get("resumo") or "")
+                _add_item(itens_pericias, vistos_pericias, nome_s, desc_t)
 
     # 3. Talentos e Habilidades (Subclasse, Tese, Características de Classe N1, Talentos de Classe, Gerais e Ações)
     itens_talentos: list[dict[str, str]] = []
@@ -1247,30 +1269,24 @@ def _pdf_coletar_secoes_referencia(
     for slot in (hab.get("classe") or [])[2:]:
         if "caracter" in normalizar(slot.get("rotulo_oficial") or ""):
             continue
-        nome_s = (slot.get("nome") or "").strip()
-        if not nome_s or nome_s == "—":
-            continue
-        t_obj = tal_cls_por_nome.get(normalizar(nome_s))
-        desc_t = _formatar_detalhes_habilidade(t_obj) if t_obj else (slot.get("resumo") or "")
-        _add_item(itens_talentos, vistos_talentos, nome_s, desc_t)
+        for nome_s in _partes_nomes_slot(slot.get("nome") or ""):
+            t_obj = tal_cls_por_nome.get(normalizar(nome_s))
+            desc_t = _formatar_detalhes_habilidade(t_obj) if t_obj else (slot.get("resumo") or "")
+            _add_item(itens_talentos, vistos_talentos, nome_s, desc_t)
 
     for slot in hab.get("gerais") or []:
-        nome_s = (slot.get("nome") or "").strip()
-        if not nome_s or nome_s == "—":
-            continue
-        t_obj = _resolver_talento_geral_ou_pericia(nome_s)
-        desc_t = _formatar_detalhes_habilidade(t_obj) if t_obj else (slot.get("resumo") or "")
-        _add_item(itens_talentos, vistos_talentos, nome_s, desc_t)
+        for nome_s in _partes_nomes_slot(slot.get("nome") or ""):
+            t_obj = _resolver_talento_geral_ou_pericia(nome_s)
+            desc_t = _formatar_detalhes_habilidade(t_obj) if t_obj else (slot.get("resumo") or "")
+            _add_item(itens_talentos, vistos_talentos, nome_s, desc_t)
 
     for slot in hab.get("bonus") or []:
-        nome_s = (slot.get("nome") or "").strip()
-        if not nome_s or nome_s == "—":
-            continue
-        if normalizar(nome_s) in vistos_pericias:
-            continue
-        t_obj = tal_cls_por_nome.get(normalizar(nome_s)) or _resolver_talento_geral_ou_pericia(nome_s)
-        desc_t = _formatar_detalhes_habilidade(t_obj) if t_obj else (slot.get("resumo") or "")
-        _add_item(itens_talentos, vistos_talentos, nome_s, desc_t)
+        for nome_s in _partes_nomes_slot(slot.get("nome") or ""):
+            if normalizar(nome_s) in vistos_pericias:
+                continue
+            t_obj = tal_cls_por_nome.get(normalizar(nome_s)) or _resolver_talento_geral_ou_pericia(nome_s)
+            desc_t = _formatar_detalhes_habilidade(t_obj) if t_obj else (slot.get("resumo") or "")
+            _add_item(itens_talentos, vistos_talentos, nome_s, desc_t)
 
     if any("bloqueio com escudo" in normalizar(s.get("nome")) for s in (hab.get("classe") or [])):
         be = db.talentos_gerais_pericia.get("bloqueio_com_escudo")
