@@ -21,7 +21,8 @@
       if (abrir) abriuCard = card;
     });
     if (abriuCard && forcarEstado === true) {
-      abriuCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      const mobile = window.matchMedia("(max-width: 640px)").matches;
+      abriuCard.scrollIntoView({ behavior: "smooth", block: mobile ? "start" : "nearest" });
     }
   }
 
@@ -309,6 +310,9 @@
       app.ultimaFicha = dados;
       renderizarFicha(dados);
       setStatus(`Ficha gerada com sucesso (Seed ${dados.meta_geracao.seed}).`, "ok");
+      if (window.matchMedia("(max-width: 640px)").matches) {
+        document.getElementById("area-ficha")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     } catch (err) {
       setStatus(`Falha na comunicação com o servidor: ${err.message}`, "erro");
     }
@@ -487,7 +491,18 @@
   document.getElementById("btn-imprimir")?.addEventListener("click", () => window.print());
 
   document.querySelectorAll(".aba-btn").forEach((btn) => {
-    btn.addEventListener("click", () => aplicarAba(btn.dataset.aba));
+    btn.addEventListener("click", () => aplicarAba(btn.dataset.aba, { porUsuario: true }));
+  });
+  document.getElementById("btn-mobile-gerar")?.addEventListener("click", () => gerarFichaAtual(false));
+  document.getElementById("btn-mobile-sortear")?.addEventListener("click", () => {
+    document.getElementById("nome").value = "";
+    gerarFichaAtual(true);
+  });
+  document.getElementById("btn-mobile-ir-ficha")?.addEventListener("click", () => {
+    document.getElementById("area-ficha")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  document.getElementById("btn-mobile-topo")?.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
   });
   document.querySelectorAll("[data-preset]").forEach((btn) => {
     btn.addEventListener("click", () => aplicarPreset(btn.dataset.preset));

@@ -3,6 +3,7 @@
 
   let ABA_ATIVA = "todas";
   let TEM_PAGINA_5 = false;
+  let USUARIO_ESCOLHEU_ABA = false;
 
   const NOMES_ATRIBUTOS = {
     for: ["FOR", "Força"],
@@ -127,6 +128,12 @@
     document.getElementById("btn-docx").disabled = false;
     document.getElementById("btn-txt").disabled = false;
     document.getElementById("btn-imprimir").disabled = false;
+    const btnMobFicha = document.getElementById("btn-mobile-ir-ficha");
+    if (btnMobFicha) btnMobFicha.disabled = false;
+
+    if (!USUARIO_ESCOLHEU_ABA && window.matchMedia("(max-width: 640px)").matches) {
+      ABA_ATIVA = "1";
+    }
 
     const cab = f.cabecalho;
     const heroPips = [1, 2, 3]
@@ -613,12 +620,19 @@
     aplicarAba(!TEM_PAGINA_5 && ABA_ATIVA === "5" ? "todas" : ABA_ATIVA);
   }
 
-  function aplicarAba(aba) {
+  function aplicarAba(aba, { porUsuario = false } = {}) {
+    if (porUsuario) USUARIO_ESCOLHEU_ABA = true;
     const alvo = aba === "5" && !TEM_PAGINA_5 ? "todas" : aba;
     ABA_ATIVA = alvo;
+    let btnAtivo = null;
     document.querySelectorAll(".aba-btn").forEach((b) => {
-      b.classList.toggle("ativa", b.dataset.aba === alvo);
+      const ehAtiva = b.dataset.aba === alvo;
+      b.classList.toggle("ativa", ehAtiva);
+      if (ehAtiva) btnAtivo = b;
     });
+    if (btnAtivo && window.matchMedia("(max-width: 640px)").matches) {
+      btnAtivo.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+    }
     document.querySelectorAll(".pagina-ficha").forEach((pag) => {
       if (pag.dataset.pagina === "5" && !TEM_PAGINA_5) {
         pag.classList.add("oculta");

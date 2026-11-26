@@ -1994,7 +1994,8 @@ body {
     background: #fff;
     padding: 0;
   }
-  .nao-imprimir {
+  .nao-imprimir,
+  .barra-mobile-fixa {
     display: none !important;
   }
   .pagina-ficha {
@@ -2299,28 +2300,43 @@ body {
   color: var(--warn-fg);
 }
 
+/* Barra fixa inferior exclusiva para celular (oculta no desktop) */
+.barra-mobile-fixa {
+  display: none;
+}
+
 /* =========================================================
-   Refino Mobile (Celulares <= 640px e <= 420px)
+   Refino Mobile (Celulares <= 640px e <= 480px)
    ========================================================= */
 @media screen and (max-width: 640px) {
+  html,
   body {
-    padding: 8px;
+    overflow-x: clip;
+    max-width: 100%;
+  }
+
+  body {
+    padding: 8px 8px calc(74px + env(safe-area-inset-bottom, 0px));
   }
 
   .topbar {
-    padding: 14px;
-    margin-bottom: 12px;
+    padding: 10px 12px;
+    margin-bottom: 10px;
     border-radius: 8px;
   }
 
   .topbar h1 {
-    font-size: 1.08rem;
+    font-size: 1rem;
     line-height: 1.25;
   }
 
   .topbar p {
-    font-size: 0.8rem;
-    line-height: 1.35;
+    font-size: 0.74rem;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .painel-controle,
@@ -2340,15 +2356,41 @@ body {
     margin-bottom: 10px;
   }
 
-  /* Evita zoom automático forçado no iOS/Android ao focar campos */
+  /* Evita zoom automático forçado no iOS/Android e garante área de toque confortável */
   .campo-grupo select,
   .campo-grupo input,
   .regras-casa-controle select,
   .input-senha-regras-casa,
   .mag-busca-wrap input[type="search"],
-  .grid-perfil-bio input[type="text"] {
+  .grid-perfil-bio input[type="text"],
+  .card-tal-cat select,
+  .card-eq-cat select,
+  .card-eq-cat input,
+  .subcard-tal-demais select {
     font-size: 16px;
+    min-height: 44px;
     padding: 8px 10px;
+  }
+
+  .btn,
+  .btn-regras-casa-cadeado {
+    min-height: 44px;
+  }
+
+  .pericia-check-card,
+  .regra-casa-check-card,
+  .mag-circulo-header {
+    min-height: 44px;
+  }
+
+  .btn-mag-info,
+  .desc-preview-fechar,
+  .btn-rem-eq {
+    min-width: 32px;
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .painel-regras-casa {
@@ -2482,21 +2524,100 @@ body {
   }
 
   .barra-abas {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
     gap: 6px;
+    padding: 8px;
+    margin: 0 -8px 12px -8px;
+    background: rgba(237, 229, 213, 0.96);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .barra-abas::-webkit-scrollbar {
+    display: none;
   }
 
   .aba-btn {
-    width: 100%;
-    text-align: center;
-    padding: 8px 6px;
+    flex: 0 0 auto;
+    width: auto;
+    white-space: nowrap;
+    min-height: 40px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    line-height: 1.2;
+  }
+
+  .barra-mobile-fixa {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px));
+    background: rgba(252, 249, 242, 0.96);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.12);
+  }
+
+  .barra-mobile-fixa .btn {
+    min-height: 44px;
     font-size: 0.78rem;
-    line-height: 1.25;
+    justify-content: center;
+    text-align: center;
+    padding: 6px 8px;
+    white-space: nowrap;
+  }
+
+  .barra-mobile-btn-principal {
+    flex: 1.35;
+  }
+
+  .barra-mobile-fixa .btn-secundario {
+    flex: 1;
+  }
+
+  .barra-mobile-btn-topo {
+    flex: 0 0 42px;
+    padding: 0;
+    font-size: 1rem;
+  }
+
+  .pagina-topo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
   }
 
   .pagina-topo h2 {
     font-size: 1rem;
+  }
+
+  .slot-item,
+  .acao-card,
+  .golpe-card,
+  .campo-ficha .val,
+  .desc-preview-box,
+  .pericia-check-card,
+  .regra-casa-check-card {
+    overflow-wrap: anywhere;
+  }
+
+  .bloco {
+    overflow-x: auto;
+    max-width: 100%;
   }
 
   .pagina-ref {

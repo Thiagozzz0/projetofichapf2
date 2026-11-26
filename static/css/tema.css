@@ -470,24 +470,38 @@ html[data-tema="escuro"] .regra-casa-check-info strong {
 
 @media screen and (max-width: 640px) {
   .topbar-inner {
-    gap: 10px;
+    gap: 8px;
   }
 
   .topbar-marca {
     min-width: 0;
-    gap: 10px;
+    gap: 9px;
     align-items: flex-start;
   }
 
   .topbar-logo {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
   }
 
   .btn-tema {
     width: 100%;
     text-align: center;
-    padding: 7px 12px;
+    min-height: 38px;
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+
+  html[data-tema="escuro"] .barra-abas {
+    background: rgba(18, 16, 14, 0.96);
+    border-bottom-color: var(--border);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+  }
+
+  html[data-tema="escuro"] .barra-mobile-fixa {
+    background: rgba(22, 19, 17, 0.96);
+    border-top-color: var(--border);
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.48);
   }
 }
 
