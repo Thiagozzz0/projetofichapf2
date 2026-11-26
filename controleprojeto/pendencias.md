@@ -22,21 +22,15 @@ Lista viva e priorizada das entregas, melhorias e expansões que ainda precisam 
 
 ---
 
-## 3. Lacunas de Customização do 1º Nível (Motor + UI)
+## 3. Lacunas de Customização (Motor + UI)
 
-- [x] **Escolha Manual de Idiomas Extras** *(concluído em `26/11/2026` — Etapa 59)*
-  - Permitir escolher manualmente os idiomas adicionais concedidos por Inteligência, Ancestralidade e Herança (`motor/biografia_pericias.py`, `motor/gerador.py`, API `/api/opcoes` e Etapa 2 da UI com modo manual, híbrido e procedural).
 - [ ] **Customização de Conceitos pelo Usuário** *(sugestão de melhoria)*
-  - Permitir criar e salvar conceitos/nortes próprios (ex.: `dados/conceitos_customizados.json` ou via UI) além dos `56` conceitos padrão.
+  - Permitir criar e salvar conceitos/nortes próprios (ex.: `dados/conceitos_customizados.json` ou via UI) além dos conceitos padrão.
 
 ---
 
-## 4. Refatoração Arquitetural e Qualidade (Pré-Níveis 2–20)
+## 4. Refatoração Arquitetural e Qualidade
 
-- [x] **Desacoplar Contratos Fixados em 1º Nível no Motor** *(concluído em `25/11/2026` — Etapa 56)*
-  - Generalizar funções e constantes presas ao 1º nível (`listar_catalogo_talentos`, `listar_catalogo_magias`, `resumo_conjuracao_classe` com `progressao_por_nivel`, `espacos_por_circulo`, `magias_por_circulo`, `caracteristicas_classe`, `ORCAMENTO_POR_NIVEL_PC`) mantendo aliases `*_n1` retrocompatíveis e preparando a evolução para os níveis `1` a `5`.
-- [x] **Avaliador de Pré-requisitos Completo para Níveis 2+** *(concluído até N5 em `25/11/2026` — Etapa 57)*
-  - Expandido `atende_prerequisitos()` em `motor/talentos.py` para listas com vírgulas, alternativas `" ou "`, talentos prévios, atributos, esquemas, linhagens, fontes, capacidades de conjuração (`N3+`) e graus `Especialista`/`Mestre`/`Lendário`.
 - [ ] **Validação Automatizada de Contratos Front-End ↔ API** *(sugestão de melhoria)*
   - Ampliar os scripts de validação para checar automaticamente a consistência entre o payload de `/api/opcoes` e os seletores/IDs consumidos pelos módulos JS (`estado.js`, `atributos.js`, `pericias.js`, `talentos.js`, `magias.js`, `equipamentos.js`).
 
@@ -63,7 +57,5 @@ Lista viva e priorizada das entregas, melhorias e expansões que ainda precisam 
 
 ## 6. Gestão de Regras da Casa e Acesso do Mestre
 
-- [x] **Padrão "Regras da Casa" e Controle por Senha por Alteração (`dados_houserules/acesso_mestre.json`)** *(concluído em `24/11/2026` — Etapa 51)*
-  - Site inicia sempre em `Regras da Casa` com o seletor bloqueado, solicita a senha `"9930"` (lida de `dados_houserules/acesso_mestre.json`) via `/api/regras-casa/validar-senha` antes de liberar a escolha e bloqueia novamente após cada troca.
 - [ ] **Persistência Global no Servidor (`dados_houserules/config_ativa.json`)** *(opcional / futuro)*
   - Caso deseje que a troca feita pelo Mestre passe a valer automaticamente para todos os dispositivos sem exibir seletor para os jogadores, salvar o estado ativo em `dados_houserules/config_ativa.json`.
