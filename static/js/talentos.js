@@ -2,7 +2,194 @@
   "use strict";
 
   const app = window.PF2EApp;
+  const { esc } = window.PF2EFichaUI || { esc: (s) => String(s || "") };
   const { CLASSES_CONJURADORAS_UI, IDS_TAL_CLASSE, IDS_TAL_GERAIS, normTxt } = app;
+
+  let _modalAncCtx = null;
+
+  function _limparAncestralidadeAdotadaUI() {
+    if (!app.talEstado) return;
+    app.talEstado.ancestralidadeAdotadaId = null;
+    app.talEstado.ancestralidadeAdotadaNome = "";
+    app.talEstado.talentoAdotadoId = null;
+    app.talEstado.talentoAdotadoNome = "";
+    app.talEstado.slotOrigemId = null;
+    _atualizarResumoAncAdotadaUI();
+  }
+
+  function _slotComAncestralidadeAdotada() {
+    return IDS_TAL_GERAIS.find((id) => {
+      const el = document.getElementById(id);
+      return el && !el.disabled && !el.closest(".oculto") && el.value === "ancestralidade_adotada";
+    }) || null;
+  }
+
+  function _atualizarResumoAncAdotadaUI() {
+    const box = document.getElementById("box-anc-adotada-resumo");
+    const txt = document.getElementById("txt-anc-adotada-resumo");
+    if (!box || !txt) return;
+    const slotAtivo = _slotComAncestralidadeAdotada();
+    const st = app.talEstado;
+    if (slotAtivo && st?.ancestralidadeAdotadaId && st?.talentoAdotadoId) {
+      txt.textContent = `${st.ancestralidadeAdotadaNome} → ${st.talentoAdotadoNome}`;
+      box.classList.remove("oculto");
+    } else {
+      txt.textContent = "";
+      box.classList.add("oculto");
+    }
+  }
+
+  function _personagemPossuiSentidosUI() {
+    const ancId = document.getElementById("ancestralidade")?.value || "aleatorio";
+    const herId = document.getElementById("heranca")?.value || "aleatorio";
+    const talAncVal = document.getElementById("tal-ancestralidade")?.value || "procedural";
+    const ancObj = app.opcoes?.ancestralidades?.find((a) => a.id === ancId);
+    const temEscuro =
+      talAncVal === "visao_orquica" ||
+      (ancObj?.habilidades_especiais || []).some((h) => normTxt(h.nome).includes("escuro")) ||
+      (ancObj?.herancas || []).some((h) => h.id === herId && (h.sentidos_concedidos || []).some((s) => normTxt(s).includes("escuro")));
+    const temPenumbra =
+      temEscuro ||
+      herId === "meio_elfo" ||
+      herId === "meio_orc" ||
+      (ancObj?.habilidades_especiais || []).some((h) => normTxt(h.nome).includes("penumbra"));
+    return { temEscuro, temPenumbra, ancDefinida: Boolean(ancObj && ancId !== "aleatorio") };
+  }
+
+  function _motivoBloqueioTalentoAdotadoUI(t) {
+    const clsId = document.getElementById("classe")?.value || "aleatorio";
+    const talAncVal = document.getElementById("tal-ancestralidade")?.value || "procedural";
+    if (t.id === talAncVal) return "Já escolhido em Ancestralidade";
+    if (t.id === "truque_magico_adaptado" && clsId !== "aleatorio" && !CLASSES_CONJURADORAS_UI.has(clsId)) {
+      return "Requer conjuração plena";
+    }
+    const req = normTxt(t.pre_requisitos || "");
+    if (req) {
+      const sentidos = _personagemPossuiSentidosUI();
+      if (req.includes("pelo menos 100 anos") && (document.getElementById("ancestralidade")?.value || "aleatorio") !== "elfo") {
+        return "Requer ancestralidade Elfo (100+ anos)";
+      }
+      if (sentidos.ancDefinida) {
+        if (req.includes("visao no escuro") && !sentidos.temEscuro) return "Requer Visão no Escuro";
+        if (req.includes("visao na penumbra") && !sentidos.temPenumbra) return "Requer Visão na Penumbra";
+      }
+    }
+    return null;
+  }
+
+  function _mostrarTelaRacasModalAnc() {
+    const etapaRacas = document.getElementById("modal-anc-etapa-racas");
+    const etapaTals = document.getElementById("modal-anc-etapa-talentos");
+    const grid = document.getElementById("modal-anc-lista-racas");
+    const titulo = document.getElementById("modal-anc-adotada-titulo");
+    if (etapaRacas) etapaRacas.classList.remove("oculto");
+    if (etapaTals) etapaTals.classList.add("oculto");
+    if (titulo) titulo.textContent = "Ancestralidade Adotada — Escolha a Ancestralidade";
+    if (!grid || !app.opcoes) return;
+
+    const ancAtualId = document.getElementById("ancestralidade")?.value || "aleatorio";
+    const cat = app.opcoes.catalogo_talentos || {};
+    const racas = (app.opcoes.ancestralidades || []).filter((a) => a.id !== ancAtualId);
+
+    grid.innerHTML = racas
+      .map((a) => {
+        const qtd = (cat.ancestralidade_por_id?.[a.id] || []).length;
+        return (
+          `<button type="button" class="modal-anc-raca-btn" data-anc-adotada-raca="${esc(a.id)}">` +
+          `<span><span class="modal-anc-raca-nome">${esc(a.nome)}</span>` +
+          `<span class="modal-anc-raca-qtd">${qtd} talento${qtd === 1 ? "" : "s"} de 1º nível</span></span>` +
+          `<span class="modal-anc-raca-seta" aria-hidden="true">→</span>` +
+          `</button>`
+        );
+      })
+      .join("");
+  }
+
+  function _mostrarTelaTalentosModalAnc(ancId) {
+    const etapaRacas = document.getElementById("modal-anc-etapa-racas");
+    const etapaTals = document.getElementById("modal-anc-etapa-talentos");
+    const listaEl = document.getElementById("modal-anc-lista-talentos");
+    const titulo = document.getElementById("modal-anc-adotada-titulo");
+    const pillRaca = document.getElementById("modal-anc-raca-atual");
+    const ancObj = (app.opcoes?.ancestralidades || []).find((a) => a.id === ancId);
+    if (!ancObj || !listaEl) return;
+
+    if (_modalAncCtx) _modalAncCtx.racaVisualizadaId = ancId;
+    const talentosN1 = app.opcoes?.catalogo_talentos?.ancestralidade_por_id?.[ancId] || [];
+
+    if (etapaRacas) etapaRacas.classList.add("oculto");
+    if (etapaTals) etapaTals.classList.remove("oculto");
+    if (titulo) titulo.textContent = `Talentos de ${ancObj.nome} (1º Nível)`;
+    if (pillRaca) pillRaca.textContent = `${ancObj.nome} • ${talentosN1.length} opções`;
+
+    listaEl.innerHTML = talentosN1
+      .map((t) => {
+        const motivo = _motivoBloqueioTalentoAdotadoUI(t);
+        const reqBadge = t.pre_requisitos ? `<span class="modal-anc-talento-req">Req: ${esc(t.pre_requisitos)}</span>` : "";
+        const avisoHtml = motivo ? `<span class="modal-anc-talento-aviso">${esc(motivo)}</span>` : "";
+        return (
+          `<div class="modal-anc-talento-card">` +
+          `<div class="modal-anc-talento-topo">` +
+          `<span class="modal-anc-talento-nome">${esc(t.nome)}</span>${reqBadge}` +
+          `</div>` +
+          `<p class="modal-anc-talento-desc">${esc(t.resumo || "Sem descrição disponível.")}</p>` +
+          `<div class="modal-anc-talento-rodape">${avisoHtml}` +
+          `<button type="button" class="btn btn-primario btn-compacto" data-anc-adotada-talento="${esc(t.id)}" ${motivo ? "disabled" : ""}>Escolher este Talento</button>` +
+          `</div>` +
+          `</div>`
+        );
+      })
+      .join("");
+    listaEl.scrollTop = 0;
+  }
+
+  function _abrirModalAncAdotada({ slotId, editando = false }) {
+    const modal = document.getElementById("modal-anc-adotada");
+    if (!modal) return;
+    _modalAncCtx = { slotId, editando, racaVisualizadaId: null };
+    _mostrarTelaRacasModalAnc();
+    modal.hidden = false;
+    modal.classList.remove("oculto");
+  }
+
+  function _fecharModalAncAdotada({ cancelou = false } = {}) {
+    const modal = document.getElementById("modal-anc-adotada");
+    const ctx = _modalAncCtx;
+    _modalAncCtx = null;
+    if (modal) {
+      modal.hidden = true;
+      modal.classList.add("oculto");
+    }
+    if (cancelou && ctx && !ctx.editando) {
+      const sel = document.getElementById(ctx.slotId);
+      if (sel && sel.value === "ancestralidade_adotada") {
+        sel.value = "procedural";
+      }
+      _limparAncestralidadeAdotadaUI();
+      sincronizarExclusaoTalentos();
+      app.atualizarResumosEtapasUI?.();
+    }
+  }
+
+  function _confirmarTalentoAncAdotada(ancId, talId) {
+    const ancObj = (app.opcoes?.ancestralidades || []).find((a) => a.id === ancId);
+    const talObj = (app.opcoes?.catalogo_talentos?.ancestralidade_por_id?.[ancId] || []).find((t) => t.id === talId);
+    if (!ancObj || !talObj || _motivoBloqueioTalentoAdotadoUI(talObj)) return;
+
+    const slotId = _modalAncCtx?.slotId || _slotComAncestralidadeAdotada();
+    app.talEstado.ancestralidadeAdotadaId = ancObj.id;
+    app.talEstado.ancestralidadeAdotadaNome = ancObj.nome;
+    app.talEstado.talentoAdotadoId = talObj.id;
+    app.talEstado.talentoAdotadoNome = talObj.nome;
+    app.talEstado.slotOrigemId = slotId;
+
+    _fecharModalAncAdotada({ cancelou: false });
+    _atualizarResumoAncAdotadaUI();
+    app.atualizarCatalogoEquipamentosUI?.();
+    app.atualizarCatalogoPericiasUI?.();
+    app.atualizarPerfilUI?.();
+    app.atualizarResumosEtapasUI?.();
+  }
 
   function _preencherSelectTalento(sel, lista, { textoProcedural, preservar = true, disabledTexto = null, verificarOpcao = null } = {}) {
     if (!sel) return;
@@ -363,6 +550,12 @@
     }
 
     sincronizarExclusaoTalentos();
+    const slotAdotadoAtivo = _slotComAncestralidadeAdotada();
+    if (!slotAdotadoAtivo || app.talEstado?.ancestralidadeAdotadaId === ancId) {
+      _limparAncestralidadeAdotadaUI();
+    } else {
+      _atualizarResumoAncAdotadaUI();
+    }
     app.atualizarCatalogoPericiasUI?.();
     app.atualizarCatalogoMagiasUI?.();
     app.atualizarCatalogoEquipamentosUI?.();
@@ -373,6 +566,7 @@
   function atualizarVisibilidadeTalentosUI() {
     const modo = document.getElementById("modo-talentos")?.value || "procedural";
     document.getElementById("painel-talentos-custom")?.classList.toggle("oculto", modo !== "personalizado");
+    _atualizarResumoAncAdotadaUI();
     app.atualizarCatalogoPericiasUI?.();
     app.atualizarCatalogoEquipamentosUI?.();
     app.atualizarPerfilUI?.();
@@ -386,6 +580,7 @@
       const el = document.getElementById(id);
       if (el) el.value = "procedural";
     });
+    _limparAncestralidadeAdotadaUI();
     atualizarCatalogoTalentosUI();
     atualizarVisibilidadeTalentosUI();
   }
@@ -403,7 +598,7 @@
     const perEl = document.getElementById("tal-pericia-1");
     const perVals = perEl && !perEl.disabled ? [perEl.value || "procedural"] : "procedural";
     const gerVals = selAtivos(IDS_TAL_GERAIS);
-    return {
+    const payload = {
       modo: "personalizado",
       ancestralidade_id: document.getElementById("tal-ancestralidade")?.disabled
         ? "procedural"
@@ -412,18 +607,66 @@
       pericia_ids: perVals,
       gerais_ids: gerVals.length ? gerVals : "procedural",
     };
+    if (gerVals.includes("ancestralidade_adotada") && app.talEstado?.ancestralidadeAdotadaId && app.talEstado?.talentoAdotadoId) {
+      payload.ancestralidade_adotada_id = app.talEstado.ancestralidadeAdotadaId;
+      payload.talento_ancestral_adotado_id = app.talEstado.talentoAdotadoId;
+    }
+    return payload;
   }
 
   function registrarEventosTalentos() {
     document.getElementById("modo-talentos")?.addEventListener("change", atualizarVisibilidadeTalentosUI);
     document.getElementById("tal-ancestralidade")?.addEventListener("change", atualizarCatalogoTalentosUI);
-    [...IDS_TAL_CLASSE, ...IDS_TAL_GERAIS].forEach((id) => {
+    IDS_TAL_CLASSE.forEach((id) => {
       document.getElementById(id)?.addEventListener("change", () => {
         sincronizarExclusaoTalentos();
         app.atualizarCatalogoEquipamentosUI?.();
         app.atualizarPerfilUI?.();
         app.atualizarResumosEtapasUI?.();
       });
+    });
+    IDS_TAL_GERAIS.forEach((id) => {
+      document.getElementById(id)?.addEventListener("change", (e) => {
+        const val = e.currentTarget.value;
+        sincronizarExclusaoTalentos();
+        if (val === "ancestralidade_adotada") {
+          _abrirModalAncAdotada({ slotId: id, editando: false });
+        } else if (app.talEstado?.slotOrigemId === id || !_slotComAncestralidadeAdotada()) {
+          _limparAncestralidadeAdotadaUI();
+        }
+        app.atualizarCatalogoEquipamentosUI?.();
+        app.atualizarPerfilUI?.();
+        app.atualizarResumosEtapasUI?.();
+      });
+    });
+    document.getElementById("btn-alterar-anc-adotada")?.addEventListener("click", () => {
+      const slotId = _slotComAncestralidadeAdotada();
+      if (slotId) _abrirModalAncAdotada({ slotId, editando: true });
+    });
+    document.getElementById("modal-anc-lista-racas")?.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-anc-adotada-raca]");
+      if (btn) _mostrarTelaTalentosModalAnc(btn.dataset.ancAdotadaRaca);
+    });
+    document.getElementById("modal-anc-lista-talentos")?.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-anc-adotada-talento]");
+      if (btn && !btn.disabled && _modalAncCtx?.racaVisualizadaId) {
+        _confirmarTalentoAncAdotada(_modalAncCtx.racaVisualizadaId, btn.dataset.ancAdotadaTalento);
+      }
+    });
+    document.getElementById("btn-modal-anc-voltar")?.addEventListener("click", _mostrarTelaRacasModalAnc);
+    document.getElementById("btn-modal-anc-voltar-topo")?.addEventListener("click", _mostrarTelaRacasModalAnc);
+    ["btn-modal-anc-fechar", "btn-modal-anc-cancelar-1", "btn-modal-anc-cancelar-2"].forEach((idBtn) => {
+      document.getElementById(idBtn)?.addEventListener("click", () => _fecharModalAncAdotada({ cancelou: true }));
+    });
+    const modalAnc = document.getElementById("modal-anc-adotada");
+    modalAnc?.addEventListener("click", (e) => {
+      if (e.target === modalAnc) _fecharModalAncAdotada({ cancelou: true });
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && _modalAncCtx) {
+        e.preventDefault();
+        _fecharModalAncAdotada({ cancelou: true });
+      }
     });
     document.getElementById("tal-pericia-1")?.addEventListener("change", () => app.atualizarResumosEtapasUI?.());
     document.getElementById("btn-tal-reset-procedural")?.addEventListener("click", () => {

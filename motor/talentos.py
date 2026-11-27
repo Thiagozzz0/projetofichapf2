@@ -534,6 +534,8 @@ def selecionar_talentos(
 
     anc_escolha_id = _norm_escolha_talento(esc_bruta.get("ancestralidade_id")) if usar_personalizado else None
     anc_n5_escolha_id = _norm_escolha_talento(esc_bruta.get("ancestralidade_n5_id")) if usar_personalizado else None
+    anc_adotada_req_id = _norm_escolha_talento(esc_bruta.get("ancestralidade_adotada_id")) if usar_personalizado else None
+    tal_adotado_req_id = _norm_escolha_talento(esc_bruta.get("talento_ancestral_adotado_id")) if usar_personalizado else None
     classe_escolhas_req = _norm_lista_escolhas_talentos(esc_bruta.get("classe_ids")) if usar_personalizado else []
     pericia_escolhas_req = _norm_lista_escolhas_talentos(esc_bruta.get("pericia_ids")) if usar_personalizado else []
     gerais_escolhas_req = _norm_lista_escolhas_talentos(esc_bruta.get("gerais_ids")) if usar_personalizado else []
@@ -967,6 +969,64 @@ def selecionar_talentos(
             if niv_geral >= 3:
                 talentos_gerais_progressao.append(reg_g)
 
+    # Talento de Ancestralidade Adotada (1º Nível de outra ancestralidade escolhida pelo jogador)
+    anc_adotada_id_aplicada: str | None = None
+    tal_adotado_id_aplicado: str | None = None
+    if "ancestralidade_adotada" in talentos_gerais_ativos and (anc_adotada_req_id or tal_adotado_req_id):
+        if not anc_adotada_req_id:
+            raise ValueError("Selecione a ancestralidade adotada para escolher o talento correspondente.")
+        anc_adotada_obj = dados.ancestralidades.get(anc_adotada_req_id)
+        if not anc_adotada_obj:
+            raise ValueError(f"Ancestralidade adotada inválida: '{anc_adotada_req_id}'.")
+        if anc_adotada_req_id == ancestralidade["id"]:
+            raise ValueError(
+                f"Ancestralidade Adotada exige escolher uma ancestralidade diferente da sua ({ancestralidade['nome']})."
+            )
+        anc_adotada_id_aplicada = anc_adotada_req_id
+
+        for reg_b in talentos_bonus_slots:
+            if (reg_b.get("dados_completos") or {}).get("id") == "ancestralidade_adotada":
+                reg_b["nome"] = f"Ancestralidade Adotada ({anc_adotada_obj['nome']})"
+
+        if tal_adotado_req_id:
+            pool_adotado_n1 = {
+                t["id"]: t
+                for t in anc_adotada_obj.get("talentos_ancestralidade", [])
+                if int(t.get("nivel", 1)) == 1
+            }
+            cand_adotado = pool_adotado_n1.get(tal_adotado_req_id)
+            if cand_adotado is None:
+                raise ValueError(
+                    f"Talento '{tal_adotado_req_id}' não pertence aos talentos de 1º nível de {anc_adotada_obj['nome']}."
+                )
+            if cand_adotado["id"] in talentos_possuidos_ids:
+                raise ValueError(
+                    f"O talento adotado '{cand_adotado['nome']}' já está selecionado em outro slot do personagem."
+                )
+            if not atende_prerequisitos(cand_adotado.get("pre_requisitos"), ctx):
+                raise ValueError(
+                    f"O personagem não atende ao pré-requisito do talento adotado '{cand_adotado['nome']}': "
+                    f"{cand_adotado.get('pre_requisitos')}."
+                )
+
+            _registrar_talento_possuido(cand_adotado)
+            if cand_adotado["id"] == "visao_orquica":
+                ctx["visao_no_escuro"] = True
+            origem_adotada = f"Ancestralidade Adotada ({anc_adotada_obj['nome']})"
+            talentos_ancestrais.append(dict(cand_adotado, nivel_slot=1, origem=origem_adotada))
+            talentos_bonus_slots.append(
+                {
+                    "nome": f"{cand_adotado['nome']} ({anc_adotada_obj['nome']})",
+                    "categoria": "ancestralidade_adotada",
+                    "nivel_slot": 1,
+                    "origem_regra": origem_adotada,
+                    "pagina": None,
+                    "resumo": cand_adotado.get("descricao", ""),
+                    "dados_completos": cand_adotado,
+                }
+            )
+            tal_adotado_id_aplicado = cand_adotado["id"]
+
     # Talento de Ancestralidade de 5º Nível
     talento_ancestral_n5: dict[str, Any] | None = None
     if nivel_alvo >= 5:
@@ -1090,6 +1150,8 @@ def selecionar_talentos(
         else "procedural",
         "ancestralidade_id": talento_ancestral["id"],
         "ancestralidade_n5_id": talento_ancestral_n5["id"] if talento_ancestral_n5 else None,
+        "ancestralidade_adotada_id": anc_adotada_id_aplicada,
+        "talento_ancestral_adotado_id": tal_adotado_id_aplicado,
         "ancestralidade_procedural": anc_escolha_id is None,
         "classe_ids": [item["id"] for item in classe_selecionaveis_aplicados],
         "classe_origens": [item["origem"] for item in classe_selecionaveis_aplicados],

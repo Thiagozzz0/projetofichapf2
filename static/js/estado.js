@@ -56,6 +56,13 @@
     perEstado: { selecionadas: [], idiomasExtras: [] },
     magEstado: { truques: [], magias_n1: [], magias_n2: [], magias_n3: [] },
     eqEstado: { armas_cc: [], armas_dist: [], variados: [] },
+    talEstado: {
+      ancestralidadeAdotadaId: null,
+      ancestralidadeAdotadaNome: "",
+      talentoAdotadoId: null,
+      talentoAdotadoNome: "",
+      slotOrigemId: null,
+    },
     perfilEstado: { familiarHabs: [] },
     mapaEq: { armaduras: {}, escudos: {}, armas_cc: {}, armas_dist: {}, variados: {} },
 

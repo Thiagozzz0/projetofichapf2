@@ -504,6 +504,39 @@ html[data-tema="escuro"] .modal-eq-qtd-aviso {
   border-color: #8e3834;
 }
 
+html[data-tema="escuro"] .box-anc-adotada-resumo,
+html[data-tema="escuro"] .modal-anc-raca-btn,
+html[data-tema="escuro"] .modal-anc-talento-card {
+  background: #2b241f;
+  border-color: var(--border);
+  color: var(--ink);
+}
+
+html[data-tema="escuro"] .modal-anc-raca-btn:hover {
+  border-color: var(--gold);
+  background: var(--tint);
+}
+
+html[data-tema="escuro"] .box-anc-adotada-info strong,
+html[data-tema="escuro"] .modal-anc-raca-nome,
+html[data-tema="escuro"] .modal-anc-talento-nome,
+html[data-tema="escuro"] .modal-anc-raca-pill {
+  color: #eab971;
+}
+
+html[data-tema="escuro"] .modal-anc-raca-pill,
+html[data-tema="escuro"] .modal-anc-talento-req {
+  background: var(--tint-strong);
+}
+
+html[data-tema="escuro"] .modal-anc-talento-desc {
+  color: #d6cbbd;
+}
+
+html[data-tema="escuro"] .modal-anc-talento-aviso {
+  color: #f08a7e;
+}
+
 @media screen and (max-width: 640px) {
   .topbar-inner {
     gap: 8px;

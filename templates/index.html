@@ -512,6 +512,13 @@
                               <select id="tal-geral-2" name="tal_geral_2"></select>
                             </div>
                           </div>
+                          <div id="box-anc-adotada-resumo" class="box-anc-adotada-resumo oculto">
+                            <div class="box-anc-adotada-info">
+                              <strong>Ancestralidade Adotada:</strong>
+                              <span id="txt-anc-adotada-resumo"></span>
+                            </div>
+                            <button type="button" id="btn-alterar-anc-adotada" class="btn btn-sutil btn-compacto">Alterar</button>
+                          </div>
                           <small id="nota-tal-geral" class="nota-campo"></small>
                         </div>
                       </div>
@@ -978,6 +985,35 @@
       <div class="modal-eq-qtd-acoes">
         <button type="button" id="btn-modal-eq-cancelar" class="btn btn-sutil">Cancelar</button>
         <button type="button" id="btn-modal-eq-confirmar" class="btn btn-primario">✓ Adicionar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-anc-adotada" class="modal-eq-qtd modal-anc-adotada oculto nao-imprimir" role="dialog" aria-modal="true" aria-labelledby="modal-anc-adotada-titulo" hidden>
+    <div class="modal-eq-qtd-card modal-anc-adotada-card">
+      <div class="modal-eq-qtd-topo">
+        <h3 id="modal-anc-adotada-titulo">Ancestralidade Adotada</h3>
+        <button type="button" id="btn-modal-anc-fechar" class="desc-preview-fechar" aria-label="Fechar">×</button>
+      </div>
+
+      <div id="modal-anc-etapa-racas" class="modal-anc-etapa">
+        <p class="modal-eq-qtd-meta">Escolha outra ancestralidade para explorar e selecionar um talento de ancestralidade de 1º nível:</p>
+        <div id="modal-anc-lista-racas" class="modal-anc-grid-racas"></div>
+        <div class="modal-eq-qtd-acoes modal-anc-acoes">
+          <button type="button" id="btn-modal-anc-cancelar-1" class="btn btn-sutil">Cancelar</button>
+        </div>
+      </div>
+
+      <div id="modal-anc-etapa-talentos" class="modal-anc-etapa oculto">
+        <div class="modal-anc-nav-topo">
+          <button type="button" id="btn-modal-anc-voltar-topo" class="btn btn-sutil btn-compacto">← Voltar às Ancestralidades</button>
+          <span id="modal-anc-raca-atual" class="modal-anc-raca-pill"></span>
+        </div>
+        <div id="modal-anc-lista-talentos" class="modal-anc-lista-talentos"></div>
+        <div class="modal-eq-qtd-acoes modal-anc-acoes">
+          <button type="button" id="btn-modal-anc-voltar" class="btn btn-secundario">← Voltar</button>
+          <button type="button" id="btn-modal-anc-cancelar-2" class="btn btn-sutil">Cancelar</button>
+        </div>
       </div>
     </div>
   </div>
