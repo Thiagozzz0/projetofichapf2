@@ -1,6 +1,6 @@
 """Pacote `motor` — Motor procedural de geração de fichas Pathfinder 2E."""
 
-from .dados import BaseDados, carregar_dados
+from .dados import BaseDados, carregar_dados, limpar_cache_dados, listar_expansoes_disponiveis
 from .divindades import CLASSES_DIVINDADE_OBRIGATORIA, divindades_compativeis_conceito
 from .exportacao import exportar_ficha_docx, exportar_ficha_pdf, exportar_ficha_txt, nome_arquivo_seguro
 from .gerador import (
@@ -26,6 +26,8 @@ __all__ = [
     "exportar_ficha_pdf",
     "exportar_ficha_txt",
     "gerar_personagem",
+    "limpar_cache_dados",
+    "listar_expansoes_disponiveis",
     "listar_opcoes_criacao",
     "listar_opcoes_regras_casa",
     "nome_arquivo_seguro",

@@ -2,8 +2,8 @@
   "use strict";
 
   const app = window.PF2EApp;
-  const { NOMES_ATRIBUTOS, esc, fmtMod } = window.PF2EFichaUI;
-  const { ORDEM_ATRIBUTOS, IDS_LIVRES_N1 } = app;
+  const { NOMES_ATRIBUTOS, fmtMod } = window.PF2EFichaUI;
+  const { esc, ORDEM_ATRIBUTOS, IDS_LIVRES_N1 } = app;
 
   function _aplicarBonusSeguro(valores, attrId, delta) {
     if (!attrId || !(attrId in valores)) return;

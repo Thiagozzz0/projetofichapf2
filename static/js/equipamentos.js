@@ -2,8 +2,7 @@
   "use strict";
 
   const app = window.PF2EApp;
-  const { esc } = window.PF2EFichaUI;
-  const { CLASSES_CONJURADORAS_UI, IDS_TAL_CLASSE, IDS_TAL_GERAIS, normTxt, criarOptgroup, fmtPrecoEq } = app;
+  const { esc, CLASSES_CONJURADORAS_UI, IDS_TAL_CLASSE, IDS_TAL_GERAIS, normTxt, criarOptgroup, fmtPrecoEq } = app;
 
   function _custoVariadoSelectPc() {
     const varId = document.getElementById("eq-variado-select")?.value || "procedural";

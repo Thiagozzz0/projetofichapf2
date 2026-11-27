@@ -8,6 +8,16 @@
     el.className = `mensagem-status ${tipo}`.trim();
   }
 
+  function esc(valor) {
+    if (valor === null || valor === undefined) return "";
+    return String(valor)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
   function normTxt(txt) {
     return String(txt || "")
       .normalize("NFD")
@@ -54,7 +64,14 @@
     ultimaFicha: null,
     bioManualExpAutomatica: false,
     perEstado: { selecionadas: [], idiomasExtras: [] },
-    magEstado: { truques: [], magias_n1: [], magias_n2: [], magias_n3: [], truqueInatoAncestralId: "procedural" },
+    magEstado: {
+      truques: [],
+      magias_n1: [],
+      magias_n2: [],
+      magias_n3: [],
+      truqueInatoAncestralId: "procedural",
+      truqueInatoHerancaId: "procedural",
+    },
     eqEstado: { armas_cc: [], armas_dist: [], variados: [] },
     talEstado: {
       ancestralidadeAdotadaId: null,
@@ -81,6 +98,7 @@
       saber_halfling: { extras: 0, fixas: ["acrobatismo", "furtividade"] },
     },
 
+    esc,
     setStatus,
     normTxt,
     criarOptgroup,

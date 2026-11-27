@@ -2,8 +2,8 @@
   "use strict";
 
   const app = window.PF2EApp;
-  const { NOMES_ATRIBUTOS, esc } = window.PF2EFichaUI;
-  const { ORDEM_ATRIBUTOS, IDS_LIVRES_N1 } = app;
+  const { NOMES_ATRIBUTOS } = window.PF2EFichaUI;
+  const { esc, ORDEM_ATRIBUTOS, IDS_LIVRES_N1 } = app;
 
   function preencherSelectAtributo(sel, listaIds, { textoProcedural, textoAleatorio, rotuloExtras = {}, preservar = true } = {}) {
     if (!sel) return;

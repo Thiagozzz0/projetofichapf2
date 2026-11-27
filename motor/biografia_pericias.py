@@ -474,8 +474,8 @@ def calcular_pericias(
 
 
 def listar_catalogo_idiomas(dados: BaseDados) -> dict[str, Any]:
-    """Retorna o catálogo de idiomas comuns e incomuns do Livro Básico."""
-    idiomas_blk = dados.json("ancestralidades_biografias.json").get("idiomas", {})
+    """Retorna o catálogo de idiomas comuns e incomuns (Livro Básico + expansões ativas)."""
+    idiomas_blk = dados.idiomas
     comuns = [
         {
             "nome": item["idioma"],
