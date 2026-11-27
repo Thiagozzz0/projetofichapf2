@@ -7,17 +7,17 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=60">
-  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=60">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}?v=60">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/tema.css') }}?v=60">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=61">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=61">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}?v=61">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/tema.css') }}?v=61">
 </head>
 <body>
   <div class="app-container">
     <header class="topbar nao-imprimir">
       <div class="topbar-inner">
         <div class="topbar-marca">
-          <img class="topbar-logo" src="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=60" alt="Pathfinder 2ª Edição">
+          <img class="topbar-logo" src="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=61" alt="Pathfinder 2ª Edição">
           <div>
             <h1>Gerador Procedural de Personagens — Pathfinder 2ª Edição</h1>
             <p>Monte fichas completas (níveis 1 a 5) guiadas por conceito/subclasse com matemática ABCD, equipamentos por nível (15–270 po), magias e exportação em PDF (Livro), DOCX e TXT.</p>
@@ -727,9 +727,9 @@
 
                     <div class="card-eq-cat card-eq-wide" id="card-eq-variados">
                       <label for="eq-variado-select">5. Equipamentos Variados (Aventura &amp; Munições)</label>
-                      <div class="linha-compra-eq linha-compra-qtd">
+                      <div class="linha-compra-eq">
                         <select id="eq-variado-select" name="eq_variado"></select>
-                        <input id="eq-variado-qtd" type="number" min="1" max="99" value="1" aria-label="Quantidade">
+                        <input id="eq-variado-qtd" class="oculto" type="number" min="1" max="99" value="1" aria-label="Quantidade">
                         <button type="button" id="btn-add-variado" class="btn btn-secundario btn-compacto">+ Adicionar Outro</button>
                       </div>
                       <div id="desc-eq-variado" class="desc-preview-box oculto"></div>
@@ -958,6 +958,30 @@
     <button type="button" id="btn-mobile-topo" class="btn btn-sutil barra-mobile-btn-topo" aria-label="Voltar ao topo" title="Voltar ao topo">↑</button>
   </div>
 
+  <div id="modal-eq-qtd" class="modal-eq-qtd oculto nao-imprimir" role="dialog" aria-modal="true" aria-labelledby="modal-eq-qtd-titulo" hidden>
+    <div class="modal-eq-qtd-card">
+      <div class="modal-eq-qtd-topo">
+        <h3 id="modal-eq-qtd-titulo">Quantidade do Item</h3>
+        <button type="button" id="btn-modal-eq-fechar" class="desc-preview-fechar" aria-label="Fechar">×</button>
+      </div>
+      <p id="modal-eq-qtd-meta" class="modal-eq-qtd-meta"></p>
+      <div class="modal-eq-qtd-controle">
+        <button type="button" id="btn-modal-eq-menos" class="btn btn-secundario modal-eq-qtd-step" aria-label="Diminuir quantidade">−</button>
+        <input type="number" id="modal-eq-qtd-input" class="modal-eq-qtd-input" inputmode="numeric" min="1" max="99" value="1" aria-label="Quantidade">
+        <button type="button" id="btn-modal-eq-mais" class="btn btn-secundario modal-eq-qtd-step" aria-label="Aumentar quantidade">+</button>
+      </div>
+      <div id="modal-eq-qtd-resumo" class="modal-eq-qtd-resumo">
+        <span>Subtotal: <strong id="modal-eq-qtd-subtotal">0 pc</strong></span>
+        <span>Saldo restante: <strong id="modal-eq-qtd-saldo">0 pc</strong></span>
+      </div>
+      <p id="modal-eq-qtd-aviso" class="modal-eq-qtd-aviso oculto" role="alert"></p>
+      <div class="modal-eq-qtd-acoes">
+        <button type="button" id="btn-modal-eq-cancelar" class="btn btn-sutil">Cancelar</button>
+        <button type="button" id="btn-modal-eq-confirmar" class="btn btn-primario">✓ Adicionar</button>
+      </div>
+    </div>
+  </div>
+
   <div id="overlay-download" class="overlay-download oculto nao-imprimir" role="status" aria-live="polite" aria-busy="true" hidden>
     <div class="overlay-download-card">
       <div class="overlay-spinner-wrap">
@@ -970,22 +994,22 @@
           <circle class="overlay-anel-fundo" cx="60" cy="60" r="50" />
           <path class="overlay-arco-seta" d="M 60 10 A 50 50 0 1 1 24.6 95.4" marker-end="url(#overlay-seta-ponta)" />
         </svg>
-        <img class="overlay-logo-img" src="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=60" alt="Processando seu arquivo">
+        <img class="overlay-logo-img" src="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=61" alt="Processando seu arquivo">
       </div>
       <p id="overlay-download-texto" class="overlay-download-texto">Processando seu arquivo</p>
     </div>
   </div>
 
-  <script src="{{ url_for('static', filename='js/tema.js') }}?v=60" defer></script>
-  <script src="{{ url_for('static', filename='js/render_ficha.js') }}?v=60" defer></script>
-  <script src="{{ url_for('static', filename='js/estado.js') }}?v=60" defer></script>
-  <script src="{{ url_for('static', filename='js/atributos.js') }}?v=60" defer></script>
-  <script src="{{ url_for('static', filename='js/previa_atributos.js') }}?v=60" defer></script>
-  <script src="{{ url_for('static', filename='js/pericias.js') }}?v=60" defer></script>
-  <script src="{{ url_for('static', filename='js/talentos.js') }}?v=60" defer></script>
-  <script src="{{ url_for('static', filename='js/magias.js') }}?v=60" defer></script>
-  <script src="{{ url_for('static', filename='js/equipamentos.js') }}?v=60" defer></script>
-  <script src="{{ url_for('static', filename='js/perfil.js') }}?v=60" defer></script>
-  <script src="{{ url_for('static', filename='js/app.js') }}?v=60" defer></script>
+  <script src="{{ url_for('static', filename='js/tema.js') }}?v=61" defer></script>
+  <script src="{{ url_for('static', filename='js/render_ficha.js') }}?v=61" defer></script>
+  <script src="{{ url_for('static', filename='js/estado.js') }}?v=61" defer></script>
+  <script src="{{ url_for('static', filename='js/atributos.js') }}?v=61" defer></script>
+  <script src="{{ url_for('static', filename='js/previa_atributos.js') }}?v=61" defer></script>
+  <script src="{{ url_for('static', filename='js/pericias.js') }}?v=61" defer></script>
+  <script src="{{ url_for('static', filename='js/talentos.js') }}?v=61" defer></script>
+  <script src="{{ url_for('static', filename='js/magias.js') }}?v=61" defer></script>
+  <script src="{{ url_for('static', filename='js/equipamentos.js') }}?v=61" defer></script>
+  <script src="{{ url_for('static', filename='js/perfil.js') }}?v=61" defer></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}?v=61" defer></script>
 </body>
 </html>

@@ -364,7 +364,7 @@ def test_idiomas_humano_mago_grimorio_e_regras_especificas() -> None:
     resp_home = client.get("/")
     assert resp_home.status_code == 200
     html_home = resp_home.get_data(as_text=True)
-    assert 'id="grid-idiomas-checkboxes"' in html_home and "?v=60" in html_home
+    assert 'id="grid-idiomas-checkboxes"' in html_home and "?v=61" in html_home
 
     resp_op = client.get("/api/opcoes")
     assert resp_op.status_code == 200

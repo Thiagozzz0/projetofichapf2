@@ -468,6 +468,42 @@ html[data-tema="escuro"] .regra-casa-check-info strong {
   color: #eab971;
 }
 
+html[data-tema="escuro"] .btn-edit-eq-qtd {
+  color: var(--ink);
+}
+
+html[data-tema="escuro"] .btn-edit-eq-qtd:hover {
+  color: #eab971;
+}
+
+html[data-tema="escuro"] .modal-eq-qtd-card {
+  background: var(--paper);
+  border-color: var(--gold);
+  color: var(--ink);
+}
+
+html[data-tema="escuro"] .modal-eq-qtd-topo h3 {
+  color: #eab971;
+}
+
+html[data-tema="escuro"] .modal-eq-qtd-input {
+  background: #171411;
+  border-color: var(--border-dark);
+  color: var(--ink);
+}
+
+html[data-tema="escuro"] .modal-eq-qtd-resumo {
+  background: var(--tint);
+  border-color: var(--border);
+  color: var(--ink);
+}
+
+html[data-tema="escuro"] .modal-eq-qtd-aviso {
+  background: var(--warn-bg);
+  color: #f08a7e;
+  border-color: #8e3834;
+}
+
 @media screen and (max-width: 640px) {
   .topbar-inner {
     gap: 8px;

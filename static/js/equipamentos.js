@@ -27,18 +27,18 @@
       gasto += app.mapaEq.armas_cc[ccId].preco_pc;
     }
     app.eqEstado.armas_cc.forEach((w) => {
-      gasto += w.preco_pc;
+      gasto += w.preco_pc * (w.quantidade || 1);
     });
     const distId = document.getElementById("eq-arma-dist-select")?.value || "procedural";
     if (app.mapaEq.armas_dist[distId]) {
       gasto += app.mapaEq.armas_dist[distId].preco_pc;
     }
     app.eqEstado.armas_dist.forEach((w) => {
-      gasto += w.preco_pc;
+      gasto += w.preco_pc * (w.quantidade || 1);
     });
     gasto += _custoVariadoSelectPc();
     app.eqEstado.variados.forEach((it) => {
-      gasto += it.preco_pc * it.quantidade;
+      gasto += it.preco_pc * (it.quantidade || 1);
     });
     return gasto;
   }
@@ -52,11 +52,11 @@
     }
     ul.innerHTML = lista
       .map((item, idx) => {
-        const qtd = item.quantidade ? `${item.quantidade}× ` : "";
-        const custo = item.preco_pc * (item.quantidade || 1);
+        const qtd = Math.max(1, item.quantidade || 1);
+        const custo = item.preco_pc * qtd;
         return (
           `<li class="item-eq-chip">` +
-          `<span>${esc(qtd)}${esc(item.nome)} (${esc(fmtPrecoEq(custo))})</span>` +
+          `<button type="button" class="btn-edit-eq-qtd" data-eq-edit="${tipoChave}" data-idx="${idx}" title="Clique para alterar a quantidade">${esc(qtd)}× ${esc(item.nome)} (${esc(fmtPrecoEq(custo))})</button>` +
           `<button type="button" class="btn-rem-eq" data-eq-rem="${tipoChave}" data-idx="${idx}" title="Remover e estornar">×</button>` +
           `</li>`
         );
@@ -275,6 +275,10 @@
     app.eqEstado.armas_cc = [];
     app.eqEstado.armas_dist = [];
     app.eqEstado.variados = [];
+    ["eq-arma-cc-select", "eq-arma-dist-select", "eq-variado-select"].forEach((id) => {
+      const sel = document.getElementById(id);
+      if (sel) sel.dataset.prevVal = sel.value || "procedural";
+    });
     const notaHib = document.getElementById("eq-nota-hibrida");
     if (notaHib) {
       notaHib.textContent = 'Categorias deixadas em "Procedural" usarão automaticamente o saldo restante ao gerar a ficha.';
@@ -702,6 +706,10 @@
     }
 
     atualizarOrcamentoEquipamentosUI();
+    ["eq-arma-cc-select", "eq-arma-dist-select", "eq-variado-select"].forEach((id) => {
+      const sel = document.getElementById(id);
+      if (sel) sel.dataset.prevVal = sel.value || "procedural";
+    });
   }
 
   function inicializarCatalogoEquipamentosUI() {
@@ -717,14 +725,22 @@
     const ccVal = document.getElementById("eq-arma-cc-select")?.value || "procedural";
     let armasCcPayload = "procedural";
     if (app.eqEstado.armas_cc.length || ccVal !== "procedural") {
-      armasCcPayload = app.eqEstado.armas_cc.map((w) => w.id);
+      armasCcPayload = [];
+      app.eqEstado.armas_cc.forEach((w) => {
+        const q = Math.max(1, parseInt(w.quantidade || 1, 10) || 1);
+        for (let i = 0; i < q; i += 1) armasCcPayload.push(w.id);
+      });
       if (app.mapaEq.armas_cc[ccVal]) armasCcPayload.push(ccVal);
     }
 
     const distVal = document.getElementById("eq-arma-dist-select")?.value || "procedural";
     let armasDistPayload = "procedural";
     if (app.eqEstado.armas_dist.length || distVal !== "procedural") {
-      armasDistPayload = app.eqEstado.armas_dist.map((w) => w.id);
+      armasDistPayload = [];
+      app.eqEstado.armas_dist.forEach((w) => {
+        const q = Math.max(1, parseInt(w.quantidade || 1, 10) || 1);
+        for (let i = 0; i < q; i += 1) armasDistPayload.push(w.id);
+      });
       if (app.mapaEq.armas_dist[distVal]) armasDistPayload.push(distVal);
     }
 
@@ -750,33 +766,204 @@
     };
   }
 
-  function _adicionarItemListaEq(tipo) {
-    if (tipo === "cc" || tipo === "dist") {
-      const selId = tipo === "cc" ? "eq-arma-cc-select" : "eq-arma-dist-select";
-      const mapa = tipo === "cc" ? app.mapaEq.armas_cc : app.mapaEq.armas_dist;
-      const lista = tipo === "cc" ? app.eqEstado.armas_cc : app.eqEstado.armas_dist;
-      const sel = document.getElementById(selId);
-      const item = mapa[sel?.value];
-      if (!item) return;
-      lista.push(item);
-      if (sel) sel.value = "nenhuma";
-    } else if (tipo === "var") {
-      const sel = document.getElementById("eq-variado-select");
-      const qtdEl = document.getElementById("eq-variado-qtd");
-      const qtd = Math.max(1, parseInt(qtdEl?.value || "1", 10) || 1);
-      const item = app.mapaEq.variados[sel?.value];
-      if (!item) return;
-      const existente = app.eqEstado.variados.find((x) => x.id === item.id);
-      if (existente) {
-        existente.quantidade += qtd;
-      } else {
-        app.eqEstado.variados.push({ ...item, quantidade: qtd });
-      }
-      if (sel) sel.value = "nenhum";
-      if (qtdEl) qtdEl.value = "1";
+  let _modalQtdCtx = null;
+
+  function _obterListaEMapaEq(tipo) {
+    if (tipo === "cc") {
+      return {
+        lista: app.eqEstado.armas_cc,
+        mapa: app.mapaEq.armas_cc,
+        selId: "eq-arma-cc-select",
+        valVazio: "nenhuma",
+      };
+    }
+    if (tipo === "dist") {
+      return {
+        lista: app.eqEstado.armas_dist,
+        mapa: app.mapaEq.armas_dist,
+        selId: "eq-arma-dist-select",
+        valVazio: "nenhuma",
+      };
+    }
+    return {
+      lista: app.eqEstado.variados,
+      mapa: app.mapaEq.variados,
+      selId: "eq-variado-select",
+      valVazio: "nenhum",
+    };
+  }
+
+  function _calcularSaldoDisponivelModal(ctx) {
+    const orcPc = obterOrcamentoAtualPc();
+    const gastoAtual = gastoManualEquipamentosPc();
+    const saldoBase = orcPc - gastoAtual;
+    if (!ctx || !ctx.item) return saldoBase;
+    if (ctx.modo === "editar") {
+      const qtdAnt = Math.max(1, parseInt(ctx.item.quantidade || 1, 10) || 1);
+      return saldoBase + ctx.item.preco_pc * qtdAnt;
+    }
+    const qtdSelVar = ctx.tipo === "var"
+      ? Math.max(1, parseInt(document.getElementById("eq-variado-qtd")?.value || "1", 10) || 1)
+      : 1;
+    return saldoBase + ctx.item.preco_pc * qtdSelVar;
+  }
+
+  function _atualizarResumoModalQtdEq() {
+    if (!_modalQtdCtx) return;
+    const input = document.getElementById("modal-eq-qtd-input");
+    const elSub = document.getElementById("modal-eq-qtd-subtotal");
+    const elSaldo = document.getElementById("modal-eq-qtd-saldo");
+    const elAviso = document.getElementById("modal-eq-qtd-aviso");
+    const btnMenos = document.getElementById("btn-modal-eq-menos");
+    const btnMais = document.getElementById("btn-modal-eq-mais");
+    const btnConfirmar = document.getElementById("btn-modal-eq-confirmar");
+
+    const raw = (input?.value || "").trim();
+    const qtdParsed = Number(raw);
+    const qtdValida = Number.isInteger(qtdParsed) && qtdParsed >= 1 && qtdParsed <= 99;
+    const qtdExib = qtdValida ? qtdParsed : Math.max(1, Math.min(99, parseInt(raw || "1", 10) || 1));
+
+    const precoUnit = Number(_modalQtdCtx.item?.preco_pc || 0);
+    const saldoDisp = _calcularSaldoDisponivelModal(_modalQtdCtx);
+    const subtotal = precoUnit * qtdExib;
+    const saldoPos = saldoDisp - subtotal;
+
+    if (elSub) elSub.textContent = fmtPrecoEq(subtotal);
+    if (elSaldo) {
+      elSaldo.textContent = saldoPos >= 0 ? fmtPrecoEq(saldoPos) : `Excedido em ${fmtPrecoEq(Math.abs(saldoPos))}`;
+      elSaldo.className = saldoPos < 0 ? "saldo-alerta" : "saldo-ok";
     }
 
+    let msgErro = "";
+    if (!qtdValida) {
+      msgErro = "Informe uma quantidade inteira entre 1 e 99.";
+    } else if (saldoPos < 0) {
+      msgErro = `Saldo insuficiente para ${qtdExib}× (faltam ${fmtPrecoEq(Math.abs(saldoPos))}).`;
+    }
+
+    if (elAviso) {
+      elAviso.textContent = msgErro;
+      elAviso.classList.toggle("oculto", !msgErro);
+    }
+    if (btnMenos) btnMenos.disabled = qtdExib <= 1;
+    if (btnMais) btnMais.disabled = qtdExib >= 99 || (qtdExib + 1) * precoUnit > saldoDisp;
+    if (btnConfirmar) {
+      btnConfirmar.disabled = Boolean(msgErro);
+      const acaoTxt = _modalQtdCtx.modo === "editar" ? "Atualizar" : "Adicionar";
+      btnConfirmar.textContent = `✓ ${acaoTxt} (${qtdExib}×)`;
+    }
+  }
+
+  function _abrirModalQtdEq(ctx) {
+    const modal = document.getElementById("modal-eq-qtd");
+    if (!modal || !ctx || !ctx.item) return;
+
+    const infoTipo = _obterListaEMapaEq(ctx.tipo);
+    _modalQtdCtx = { ...infoTipo, ...ctx };
+
+    const tituloEl = document.getElementById("modal-eq-qtd-titulo");
+    const metaEl = document.getElementById("modal-eq-qtd-meta");
+    const input = document.getElementById("modal-eq-qtd-input");
+
+    if (tituloEl) tituloEl.textContent = _modalQtdCtx.item.nome;
+    if (metaEl) {
+      const partes = [`Unitário: ${fmtPrecoEq(_modalQtdCtx.item.preco_pc)}`];
+      if (_modalQtdCtx.item.volume) partes.push(`Vol. ${_modalQtdCtx.item.volume}`);
+      if (_modalQtdCtx.item.dano) partes.push(`Dano ${_modalQtdCtx.item.dano}`);
+      if (_modalQtdCtx.item.quantidade_pacote > 1) partes.push(`${_modalQtdCtx.item.quantidade_pacote} un./pacote`);
+      metaEl.textContent = partes.join(" • ");
+    }
+
+    if (input) {
+      input.value = String(_modalQtdCtx.modo === "editar" ? Math.max(1, _modalQtdCtx.item.quantidade || 1) : 1);
+    }
+
+    modal.hidden = false;
+    modal.classList.remove("oculto");
+    _atualizarResumoModalQtdEq();
+
+    if (input) {
+      setTimeout(() => {
+        input.focus();
+        input.select();
+      }, 20);
+    }
+  }
+
+  function _fecharModalQtdEq({ restaurarSelect = false } = {}) {
+    const modal = document.getElementById("modal-eq-qtd");
+    const ctx = _modalQtdCtx;
+    _modalQtdCtx = null;
+
+    if (modal) {
+      modal.hidden = true;
+      modal.classList.add("oculto");
+    }
+
+    if (restaurarSelect && ctx && ctx.modo === "adicionar") {
+      const sel = document.getElementById(ctx.selId);
+      if (sel) {
+        const fallback = ctx.lista.length ? ctx.valVazio : "procedural";
+        const alvo = ctx.valorAnterior && ctx.valorAnterior !== ctx.item?.id ? ctx.valorAnterior : fallback;
+        sel.value = Array.from(sel.options).some((o) => o.value === alvo) ? alvo : fallback;
+        sel.dataset.prevVal = sel.value;
+      }
+      atualizarOrcamentoEquipamentosUI();
+    }
+  }
+
+  function _confirmarModalQtdEq() {
+    if (!_modalQtdCtx) return;
+    const input = document.getElementById("modal-eq-qtd-input");
+    const qtd = Number((input?.value || "").trim());
+    if (!Number.isInteger(qtd) || qtd < 1 || qtd > 99) {
+      _atualizarResumoModalQtdEq();
+      return;
+    }
+    const saldoDisp = _calcularSaldoDisponivelModal(_modalQtdCtx);
+    if (Number(_modalQtdCtx.item.preco_pc || 0) * qtd > saldoDisp) {
+      _atualizarResumoModalQtdEq();
+      return;
+    }
+
+    const ctx = _modalQtdCtx;
+    if (ctx.modo === "editar") {
+      if (ctx.lista[ctx.idx]) {
+        ctx.lista[ctx.idx].quantidade = qtd;
+      }
+    } else {
+      const existente = ctx.lista.find((x) => x.id === ctx.item.id);
+      if (existente) {
+        existente.quantidade = Math.min(99, (existente.quantidade || 1) + qtd);
+      } else {
+        ctx.lista.push({ ...ctx.item, quantidade: qtd });
+      }
+      const sel = document.getElementById(ctx.selId);
+      if (sel) {
+        sel.value = ctx.valVazio;
+        sel.dataset.prevVal = ctx.valVazio;
+      }
+      if (ctx.tipo === "var") {
+        const qtdEl = document.getElementById("eq-variado-qtd");
+        if (qtdEl) qtdEl.value = "1";
+      }
+    }
+
+    _fecharModalQtdEq({ restaurarSelect: false });
     atualizarOrcamentoEquipamentosUI();
+  }
+
+  function _adicionarItemListaEq(tipo) {
+    const info = _obterListaEMapaEq(tipo);
+    const sel = document.getElementById(info.selId);
+    const item = info.mapa[sel?.value];
+    if (!item) return;
+    _abrirModalQtdEq({
+      modo: "adicionar",
+      tipo,
+      item,
+      valorAnterior: sel?.dataset.prevVal || (info.lista.length ? info.valVazio : "procedural"),
+    });
   }
 
   const STORAGE_REGRAS_CASA_LEGADO = "pf2e_regras_casa_v1";
@@ -1007,11 +1194,35 @@
         app.setStatus?.(`Sistema de Regras alterado para "${rotulo}". Seletor bloqueado novamente.`, "ok");
       }
     });
-    ["modo-equipamentos", "eq-armadura", "eq-escudo", "eq-arma-cc-select", "eq-arma-dist-select", "eq-variado-select"].forEach(
-      (id) => {
-        document.getElementById(id)?.addEventListener("change", atualizarVisibilidadeEquipamentosUI);
-      }
-    );
+    ["modo-equipamentos", "eq-armadura", "eq-escudo"].forEach((id) => {
+      document.getElementById(id)?.addEventListener("change", atualizarVisibilidadeEquipamentosUI);
+    });
+    [
+      ["eq-arma-cc-select", "cc"],
+      ["eq-arma-dist-select", "dist"],
+      ["eq-variado-select", "var"],
+    ].forEach(([selId, tipo]) => {
+      const sel = document.getElementById(selId);
+      if (!sel) return;
+      sel.dataset.prevVal = sel.value || "procedural";
+      const guardarAnterior = () => {
+        sel.dataset.prevVal = sel.value || "procedural";
+      };
+      sel.addEventListener("focus", guardarAnterior);
+      sel.addEventListener("mousedown", guardarAnterior);
+      sel.addEventListener("change", () => {
+        const info = _obterListaEMapaEq(tipo);
+        const item = info.mapa[sel.value];
+        const prevVal = sel.dataset.prevVal || (info.lista.length ? info.valVazio : "procedural");
+        if (item) {
+          atualizarOrcamentoEquipamentosUI();
+          _abrirModalQtdEq({ modo: "adicionar", tipo, item, valorAnterior: prevVal });
+        } else {
+          sel.dataset.prevVal = sel.value || "procedural";
+          atualizarVisibilidadeEquipamentosUI();
+        }
+      });
+    });
     document.getElementById("eq-variado-qtd")?.addEventListener("input", atualizarOrcamentoEquipamentosUI);
     document.getElementById("eq-filtro-busca")?.addEventListener("input", atualizarCatalogoEquipamentosUI);
     document.getElementById("btn-eq-limpar-busca")?.addEventListener("click", () => {
@@ -1032,6 +1243,15 @@
     document.getElementById("btn-add-arma-dist")?.addEventListener("click", () => _adicionarItemListaEq("dist"));
     document.getElementById("btn-add-variado")?.addEventListener("click", () => _adicionarItemListaEq("var"));
     document.getElementById("painel-equipamentos-custom")?.addEventListener("click", (e) => {
+      const btnEdit = e.target.closest("[data-eq-edit]");
+      if (btnEdit) {
+        const tipo = btnEdit.dataset.eqEdit;
+        const idx = Number(btnEdit.dataset.idx);
+        const info = _obterListaEMapaEq(tipo);
+        const item = info.lista[idx];
+        if (item) _abrirModalQtdEq({ modo: "editar", tipo, item, idx });
+        return;
+      }
       const btn = e.target.closest("[data-eq-rem]");
       if (!btn) return;
       const tipo = btn.dataset.eqRem;
@@ -1040,6 +1260,44 @@
       else if (tipo === "dist") app.eqEstado.armas_dist.splice(idx, 1);
       else if (tipo === "var") app.eqEstado.variados.splice(idx, 1);
       atualizarOrcamentoEquipamentosUI();
+    });
+
+    const modalQtd = document.getElementById("modal-eq-qtd");
+    document.getElementById("btn-modal-eq-menos")?.addEventListener("click", () => {
+      const input = document.getElementById("modal-eq-qtd-input");
+      if (!input) return;
+      const atual = Math.max(1, parseInt(input.value || "1", 10) || 1);
+      input.value = String(Math.max(1, atual - 1));
+      _atualizarResumoModalQtdEq();
+    });
+    document.getElementById("btn-modal-eq-mais")?.addEventListener("click", () => {
+      const input = document.getElementById("modal-eq-qtd-input");
+      if (!input) return;
+      const atual = Math.max(1, parseInt(input.value || "1", 10) || 1);
+      input.value = String(Math.min(99, atual + 1));
+      _atualizarResumoModalQtdEq();
+    });
+    document.getElementById("modal-eq-qtd-input")?.addEventListener("input", _atualizarResumoModalQtdEq);
+    document.getElementById("modal-eq-qtd-input")?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        _confirmarModalQtdEq();
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        _fecharModalQtdEq({ restaurarSelect: true });
+      }
+    });
+    document.getElementById("btn-modal-eq-confirmar")?.addEventListener("click", _confirmarModalQtdEq);
+    document.getElementById("btn-modal-eq-cancelar")?.addEventListener("click", () => _fecharModalQtdEq({ restaurarSelect: true }));
+    document.getElementById("btn-modal-eq-fechar")?.addEventListener("click", () => _fecharModalQtdEq({ restaurarSelect: true }));
+    modalQtd?.addEventListener("click", (e) => {
+      if (e.target === modalQtd) _fecharModalQtdEq({ restaurarSelect: true });
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && _modalQtdCtx) {
+        e.preventDefault();
+        _fecharModalQtdEq({ restaurarSelect: true });
+      }
     });
   }
 
