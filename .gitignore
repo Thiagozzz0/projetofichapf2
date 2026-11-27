@@ -1,5 +1,4 @@
 # Bytecode e cache Python
-# Bytecode e cache Python
 __pycache__/
 *.py[cod]
 *$py.class
@@ -36,38 +35,8 @@ dist/
 Thumbs.db
 .vscode/
 .idea/
-*.py[cod]
-*$py.class
 
-# Ambientes virtuais
-.venv/
-venv/
-ENV/
-env/
-
-# Variáveis de ambiente locais
-.env
-.env.*
-!.env.example
-
-# Testes, cobertura e linters
-.pytest_cache/
-.ruff_cache/
-.mypy_cache/
-.coverage
-htmlcov/
-
-# Empacotamento e build
-build/
-dist/
-*.egg-info/
-
-# Logs e temporários
-*.log
-*.tmp
-
-# Sistema operacional e IDEs
-.DS_Store
-Thumbs.db
-.vscode/
-.idea/
+# Materiais de referência e capturas locais (não usados em runtime/produção)
+pdf_fonte/
+ref/
+Print de erro/

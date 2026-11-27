@@ -7,17 +7,17 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=61">
-  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=61">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}?v=61">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/tema.css') }}?v=61">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/pf2e-logo.png') }}?v={{ asset_v }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/pf2e-logo.png') }}?v={{ asset_v }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/ficha.css') }}?v={{ asset_v }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/tema.css') }}?v={{ asset_v }}">
 </head>
 <body>
   <div class="app-container">
     <header class="topbar nao-imprimir">
       <div class="topbar-inner">
         <div class="topbar-marca">
-          <img class="topbar-logo" src="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=61" alt="Pathfinder 2ª Edição">
+          <img class="topbar-logo" src="{{ url_for('static', filename='img/pf2e-logo.png') }}?v={{ asset_v }}" alt="Pathfinder 2ª Edição">
           <div>
             <h1>Gerador Procedural de Personagens — Pathfinder 2ª Edição</h1>
             <p>Monte fichas completas (níveis 1 a 5) guiadas por conceito/subclasse com matemática ABCD, equipamentos por nível (15–270 po), magias e exportação em PDF (Livro), DOCX e TXT.</p>
@@ -994,22 +994,22 @@
           <circle class="overlay-anel-fundo" cx="60" cy="60" r="50" />
           <path class="overlay-arco-seta" d="M 60 10 A 50 50 0 1 1 24.6 95.4" marker-end="url(#overlay-seta-ponta)" />
         </svg>
-        <img class="overlay-logo-img" src="{{ url_for('static', filename='img/pf2e-logo.png') }}?v=61" alt="Processando seu arquivo">
+        <img class="overlay-logo-img" src="{{ url_for('static', filename='img/pf2e-logo.png') }}?v={{ asset_v }}" alt="Processando seu arquivo">
       </div>
       <p id="overlay-download-texto" class="overlay-download-texto">Processando seu arquivo</p>
     </div>
   </div>
 
-  <script src="{{ url_for('static', filename='js/tema.js') }}?v=61" defer></script>
-  <script src="{{ url_for('static', filename='js/render_ficha.js') }}?v=61" defer></script>
-  <script src="{{ url_for('static', filename='js/estado.js') }}?v=61" defer></script>
-  <script src="{{ url_for('static', filename='js/atributos.js') }}?v=61" defer></script>
-  <script src="{{ url_for('static', filename='js/previa_atributos.js') }}?v=61" defer></script>
-  <script src="{{ url_for('static', filename='js/pericias.js') }}?v=61" defer></script>
-  <script src="{{ url_for('static', filename='js/talentos.js') }}?v=61" defer></script>
-  <script src="{{ url_for('static', filename='js/magias.js') }}?v=61" defer></script>
-  <script src="{{ url_for('static', filename='js/equipamentos.js') }}?v=61" defer></script>
-  <script src="{{ url_for('static', filename='js/perfil.js') }}?v=61" defer></script>
-  <script src="{{ url_for('static', filename='js/app.js') }}?v=61" defer></script>
+  <script src="{{ url_for('static', filename='js/tema.js') }}?v={{ asset_v }}" defer></script>
+  <script src="{{ url_for('static', filename='js/render_ficha.js') }}?v={{ asset_v }}" defer></script>
+  <script src="{{ url_for('static', filename='js/estado.js') }}?v={{ asset_v }}" defer></script>
+  <script src="{{ url_for('static', filename='js/atributos.js') }}?v={{ asset_v }}" defer></script>
+  <script src="{{ url_for('static', filename='js/previa_atributos.js') }}?v={{ asset_v }}" defer></script>
+  <script src="{{ url_for('static', filename='js/pericias.js') }}?v={{ asset_v }}" defer></script>
+  <script src="{{ url_for('static', filename='js/talentos.js') }}?v={{ asset_v }}" defer></script>
+  <script src="{{ url_for('static', filename='js/magias.js') }}?v={{ asset_v }}" defer></script>
+  <script src="{{ url_for('static', filename='js/equipamentos.js') }}?v={{ asset_v }}" defer></script>
+  <script src="{{ url_for('static', filename='js/perfil.js') }}?v={{ asset_v }}" defer></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}?v={{ asset_v }}" defer></script>
 </body>
 </html>

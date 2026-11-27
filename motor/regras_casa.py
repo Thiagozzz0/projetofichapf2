@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hmac
 import json
+import os
 import threading
 from copy import deepcopy
 from pathlib import Path
@@ -59,27 +60,30 @@ def carregar_acesso_mestre(diretorio: Path | str | None = None) -> dict[str, Any
         "exigir_senha_a_cada_troca": True,
         "senha": "",
     }
-    if not arq_acesso.exists():
-        return padrao
-    try:
-        dados = json.loads(arq_acesso.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return padrao
-    if not isinstance(dados, dict):
-        return padrao
-    return {
-        "versao": dados.get("versao", 1),
-        "padrao_modo": str(dados.get("padrao_modo") or "regras_da_casa"),
-        "exigir_senha_a_cada_troca": bool(dados.get("exigir_senha_a_cada_troca", True)),
-        "senha": str(dados.get("senha") or ""),
-    }
+    resultado = dict(padrao)
+    if arq_acesso.exists():
+        try:
+            dados = json.loads(arq_acesso.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            dados = None
+        if isinstance(dados, dict):
+            resultado = {
+                "versao": dados.get("versao", 1),
+                "padrao_modo": str(dados.get("padrao_modo") or "regras_da_casa"),
+                "exigir_senha_a_cada_troca": bool(dados.get("exigir_senha_a_cada_troca", True)),
+                "senha": str(dados.get("senha") or ""),
+            }
+    senha_env = os.environ.get("PF2E_SENHA_MESTRE", "").strip()
+    if senha_env:
+        resultado["senha"] = senha_env
+    return resultado
 
 
 def validar_senha_regras_casa(
     senha_informada: str | None,
     diretorio: Path | str | None = None,
 ) -> bool:
-    """Valida a senha do mestre contra `dados_houserules/acesso_mestre.json`."""
+    """Valida a senha do mestre (`PF2E_SENHA_MESTRE` com precedência sobre `acesso_mestre.json`)."""
     acesso = carregar_acesso_mestre(diretorio)
     senha_esperada = str(acesso.get("senha") or "").strip()
     tentativa = str(senha_informada or "").strip()

@@ -23,11 +23,17 @@ from motor import (
 )
 
 _DEBUG_ATIVO = os.environ.get("FLASK_DEBUG", "0").strip().lower() in {"1", "true", "yes"}
+ASSET_VERSION = "61"
 app = Flask(__name__, static_folder="static", static_url_path="/static")
 app.json.ensure_ascii = False
 if _DEBUG_ATIVO:
     app.config["TEMPLATES_AUTO_RELOAD"] = True
     app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
+
+
+@app.context_processor
+def _injetar_variaveis_template() -> dict[str, Any]:
+    return {"asset_v": ASSET_VERSION}
 
 
 def _extrair_payload() -> dict[str, Any] | None:
