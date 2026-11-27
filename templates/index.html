@@ -513,11 +513,14 @@
                             </div>
                           </div>
                           <div id="box-anc-adotada-resumo" class="box-anc-adotada-resumo oculto">
-                            <div class="box-anc-adotada-info">
-                              <strong>Ancestralidade Adotada:</strong>
-                              <span id="txt-anc-adotada-resumo"></span>
+                            <div class="box-anc-adotada-topo">
+                              <div class="box-anc-adotada-info">
+                                <strong>Ancestralidade Adotada:</strong>
+                                <span id="txt-anc-adotada-resumo"></span>
+                              </div>
+                              <button type="button" id="btn-alterar-anc-adotada" class="btn btn-sutil btn-compacto">Alterar</button>
                             </div>
-                            <button type="button" id="btn-alterar-anc-adotada" class="btn btn-sutil btn-compacto">Alterar</button>
+                            <div id="box-anc-adotada-ganho" class="box-anc-adotada-ganho oculto"></div>
                           </div>
                           <small id="nota-tal-geral" class="nota-campo"></small>
                         </div>
@@ -551,19 +554,30 @@
             </button>
             <div id="corpo-etapa-magias" class="etapa-corpo oculto">
               <div class="campo-grupo subgrupo-atb-etapa-d" id="grupo-magias">
-                <div class="etapa-d-topo">
-                  <div>
-                    <label for="modo-magias" class="etapa-d-titulo">G — Conjuração e Magias (1º Nível)</label>
-                    <small class="nota-campo">Escolha entre seleção procedural (sinérgica com o conceito), sorteio aleatório na tradição ou seleção manual respeitando tradição, espaços e magias fixas de subclasse.</small>
+                <div id="box-magia-inata-ancestral" class="box-ganho-adotado oculto">
+                  <div class="box-ganho-adotado-topo">
+                    <strong id="lbl-magia-inata-ancestral">Truque Mágico Inato</strong>
+                    <span id="badge-magia-inata-ancestral" class="badge-tal-liberado">Ancestralidade Adotada</span>
                   </div>
+                  <small id="nota-magia-inata-ancestral" class="nota-campo"></small>
+                  <select id="sel-truque-inato-ancestral" name="truque_inato_ancestral"></select>
+                  <div id="desc-truque-inato-ancestral" class="desc-preview-box oculto"></div>
                 </div>
-                <select id="modo-magias" name="modo_magias">
-                  <option value="procedural" selected>Procedural (truques e magias recomendados pelo conceito)</option>
-                  <option value="aleatorio">Aleatório (sortear truques e magias válidos da tradição)</option>
-                  <option value="personalizado">Personalizar / Manual (escolher truques e magias de 1º círculo)</option>
-                </select>
 
-                <div id="painel-magias-custom" class="painel-pericias-custom oculto">
+                <div id="bloco-magias-classe">
+                  <div class="etapa-d-topo">
+                    <div>
+                      <label for="modo-magias" class="etapa-d-titulo">G — Conjuração e Magias (1º Nível)</label>
+                      <small class="nota-campo">Escolha entre seleção procedural (sinérgica com o conceito), sorteio aleatório na tradição ou seleção manual respeitando tradição, espaços e magias fixas de subclasse.</small>
+                    </div>
+                  </div>
+                  <select id="modo-magias" name="modo_magias">
+                    <option value="procedural" selected>Procedural (truques e magias recomendados pelo conceito)</option>
+                    <option value="aleatorio">Aleatório (sortear truques e magias válidos da tradição)</option>
+                    <option value="personalizado">Personalizar / Manual (escolher truques e magias de 1º círculo)</option>
+                  </select>
+
+                  <div id="painel-magias-custom" class="painel-pericias-custom oculto">
                   <div class="barra-orcamento-eq">
                     <div class="orc-metricas">
                       <span id="mag-resumo-tradicao">Tradição: —</span>
@@ -635,6 +649,7 @@
                     </div>
                   </div>
                   <div id="desc-magia-detalhe" class="desc-preview-box oculto" aria-live="polite"></div>
+                  </div>
                 </div>
               </div>
 

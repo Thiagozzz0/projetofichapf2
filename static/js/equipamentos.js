@@ -314,9 +314,10 @@
       especificasIds: new Set(),
       especificasNomes: [...(base.armas?.especificas_nomes || [])],
       armasAncestrais: new Set(),
-      tracoAncestral: null,
+      tracosAncestrais: new Set(),
       armamentoNaoConvencional: false,
       armasTracoMonge: false,
+      armasAdotadaNome: null,
     };
 
     const subId = conObj?.subclasse_oficial_id || "";
@@ -353,14 +354,28 @@
         const el = document.getElementById(id);
         return el && !el.disabled && !el.closest(".oculto") ? el.value : "procedural";
       };
-      const talAnc = selAtivoVal("tal-ancestralidade");
       const famMap = cat?.familiaridade_armas_ancestral || {};
-      if (famMap[talAnc]) {
-        (famMap[talAnc].armas || []).forEach((w) => armas.armasAncestrais.add(normTxt(w)));
-        armas.tracoAncestral = famMap[talAnc].traco || null;
-      }
-      if (talAnc === "armamento_nao_convencional") {
-        armas.armamentoNaoConvencional = true;
+      const aplicarTalentoAncArmas = (tid, ehAdotado = false) => {
+        if (!tid || tid === "procedural") return;
+        let liberou = false;
+        if (famMap[tid]) {
+          (famMap[tid].armas || []).forEach((w) => armas.armasAncestrais.add(normTxt(w)));
+          if (famMap[tid].traco) armas.tracosAncestrais.add(famMap[tid].traco);
+          liberou = true;
+        }
+        if (tid === "armamento_nao_convencional") {
+          armas.armamentoNaoConvencional = true;
+          liberou = true;
+        }
+        if (ehAdotado && liberou) {
+          armas.armasAdotadaNome = app.talEstado?.talentoAdotadoNome || "Ancestralidade Adotada";
+        }
+      };
+
+      aplicarTalentoAncArmas(selAtivoVal("tal-ancestralidade"), false);
+      const talsGer = IDS_TAL_GERAIS.map(selAtivoVal);
+      if (talsGer.includes("ancestralidade_adotada") && app.talEstado?.talentoAdotadoId) {
+        aplicarTalentoAncArmas(app.talEstado.talentoAdotadoId, true);
       }
 
       const talsCls = IDS_TAL_CLASSE.map(selAtivoVal);
@@ -407,7 +422,7 @@
     if (a.especificas.has(nomeNorm) || a.especificasIds.has(w.id)) {
       return true;
     }
-    if (a.tracoAncestral && tracosNorm.includes(a.tracoAncestral)) {
+    if (a.tracosAncestrais && Array.from(a.tracosAncestrais).some((tr) => tracosNorm.includes(tr))) {
       if (catNorm.includes("marcial")) return a.simples;
       if (catNorm.includes("avancada")) return a.marcial;
       return a.simples;
@@ -701,7 +716,10 @@
         if (profs.armas.avancada) catsArma.push("Avançadas");
         if (profs.armas.especificasNomes.length) catsArma.push(`Específicas (${profs.armas.especificasNomes.join(", ")})`);
         const txtArma = `Armas: ${catsArma.join(" + ") || "Nenhuma"}`;
-        elCurEq.textContent = `Filtro da Classe (${profs.clsNome}): ${txtArm} • ${txtArma}.`;
+        const extraAdotada = profs.armas.armasAdotadaNome
+          ? ` • + Armas via Ancestralidade Adotada (${profs.armas.armasAdotadaNome})`
+          : "";
+        elCurEq.textContent = `Filtro da Classe (${profs.clsNome}): ${txtArm} • ${txtArma}.${extraAdotada}`;
       }
     }
 

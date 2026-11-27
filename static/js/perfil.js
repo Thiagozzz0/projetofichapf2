@@ -3,7 +3,7 @@
 
   const app = window.PF2EApp;
   const { esc, fmtMod, renderSeloAcao } = window.PF2EFichaUI;
-  const { CLASSES_CONJURADORAS_UI, IDS_TAL_CLASSE } = app;
+  const { CLASSES_CONJURADORAS_UI, IDS_TAL_CLASSE, IDS_TAL_GERAIS } = app;
 
   const TENDENCIAS_LABELS = [
     ["OB", "Ordeiro e Bom (OB)"],
@@ -71,10 +71,16 @@
 
     const modoTal = document.getElementById("modo-talentos")?.value || "procedural";
     let talAnc = "procedural";
+    let talAdotado = null;
     let talsCls = [];
     if (modoTal === "personalizado") {
       const elAnc = document.getElementById("tal-ancestralidade");
       if (elAnc && !elAnc.disabled && !elAnc.closest(".oculto")) talAnc = elAnc.value;
+      const temAdotada = (IDS_TAL_GERAIS || []).some((id) => {
+        const el = document.getElementById(id);
+        return el && !el.disabled && !el.closest(".oculto") && el.value === "ancestralidade_adotada";
+      });
+      if (temAdotada) talAdotado = app.talEstado?.talentoAdotadoId || null;
       talsCls = IDS_TAL_CLASSE.map((id) => {
         const el = document.getElementById(id);
         return el && !el.disabled && !el.closest(".oculto") ? el.value : "procedural";
@@ -102,6 +108,9 @@
     } else if (talAnc === "cumplice_animal") {
       tipo = "familiar";
       origem = "Talento Ancestral (Cúmplice Animal)";
+    } else if (talAdotado === "cumplice_animal") {
+      tipo = "familiar";
+      origem = `Ancestralidade Adotada (${app.talEstado?.ancestralidadeAdotadaNome || "Gnomo"} • Cúmplice Animal)`;
     } else if (modoTal === "procedural" && conObj?.companheiro_padrao_conceito) {
       tipo = conObj.companheiro_padrao_conceito;
       origem = `Conceito (${conObj.nome})`;

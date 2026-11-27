@@ -54,7 +54,7 @@
     ultimaFicha: null,
     bioManualExpAutomatica: false,
     perEstado: { selecionadas: [], idiomasExtras: [] },
-    magEstado: { truques: [], magias_n1: [], magias_n2: [], magias_n3: [] },
+    magEstado: { truques: [], magias_n1: [], magias_n2: [], magias_n3: [], truqueInatoAncestralId: "procedural" },
     eqEstado: { armas_cc: [], armas_dist: [], variados: [] },
     talEstado: {
       ancestralidadeAdotadaId: null,
@@ -77,6 +77,7 @@
       saber_enanico: { extras: 0, fixas: ["manufatura", "religiao"] },
       saber_elfico: { extras: 0, fixas: ["arcanismo", "natureza"] },
       saber_gnomico: { extras: 0, fixas: ["ocultismo", "natureza"] },
+      saber_goblin: { extras: 0, fixas: ["natureza", "furtividade"] },
       saber_goblinoide: { extras: 0, fixas: ["natureza", "furtividade"] },
       saber_halfling: { extras: 0, fixas: ["acrobatismo", "furtividade"] },
     },

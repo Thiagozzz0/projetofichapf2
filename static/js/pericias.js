@@ -3,7 +3,7 @@
 
   const app = window.PF2EApp;
   const { esc } = window.PF2EFichaUI;
-  const { ORDEM_ATRIBUTOS, IDS_LIVRES_N1, TALENTOS_PERICIAS_ANC_UI } = app;
+  const { ORDEM_ATRIBUTOS, IDS_LIVRES_N1, IDS_TAL_GERAIS, TALENTOS_PERICIAS_ANC_UI } = app;
 
   function _calcularModIntAtualUI() {
     const ancId = document.getElementById("ancestralidade")?.value || "aleatorio";
@@ -203,7 +203,7 @@
       }
     }
 
-    // 5. Talentos Ancestrais (se o jogador já selecionou na Etapa 3)
+    // 5. Talentos Ancestrais (principal e via Ancestralidade Adotada na Etapa 3)
     let extrasTalento = 0;
     if ((document.getElementById("modo-talentos")?.value || "procedural") === "personalizado") {
       const elTalAnc = document.getElementById("tal-ancestralidade");
@@ -212,6 +212,17 @@
       if (regTal) {
         extrasTalento += regTal.extras;
         regTal.fixas.forEach((pid) => concederFixa(pid, "Talento Ancestral"));
+      }
+      const temAdotada = (IDS_TAL_GERAIS || []).some((id) => {
+        const el = document.getElementById(id);
+        return el && !el.disabled && !el.closest(".oculto") && el.value === "ancestralidade_adotada";
+      });
+      const talAdotadoId = temAdotada ? app.talEstado?.talentoAdotadoId : null;
+      const regAdotado = talAdotadoId ? TALENTOS_PERICIAS_ANC_UI[talAdotadoId] : null;
+      if (regAdotado) {
+        const origAdotada = `Ancestralidade Adotada (${app.talEstado?.ancestralidadeAdotadaNome || "Outra"})`;
+        extrasTalento += regAdotado.extras;
+        regAdotado.fixas.forEach((pid) => concederFixa(pid, origAdotada));
       }
     }
 

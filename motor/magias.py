@@ -411,13 +411,23 @@ def gerar_conjuracao(
         if isinstance(talento_ancestral_id, (list, tuple, set))
         else ({str(talento_ancestral_id)} if talento_ancestral_id else set())
     )
+    esc_mag = escolhas_magias if isinstance(escolhas_magias, dict) else {}
+    truque_inato_req = str(esc_mag.get("truque_inato_ancestral_id") or "").strip()
+    if truque_inato_req.lower() in {"", "procedural", "aleatorio", "aleatoria", "random"}:
+        truque_inato_req = ""
+
     inatas_ids = {m["id"] for m in inatas}
     if "magia_extraterrena" in tal_anc_set:
         pool_ext = [
             m for m in dados.magias.values()
             if "arcana" in m.get("tradicoes", []) and "Truque Mágico" in m.get("tracos", []) and m["id"] not in inatas_ids
         ]
-        escolhido_ext = _escolher_truque_por_conceito(pool_ext, conceito, "arcana", rng)
+        if truque_inato_req:
+            escolhido_ext = next((m for m in pool_ext if m["id"] == truque_inato_req), None)
+            if not escolhido_ext:
+                raise ValueError(f"Truque mágico inato '{truque_inato_req}' inválido para a tradição Arcana (Magia Extraterrena).")
+        else:
+            escolhido_ext = _escolher_truque_por_conceito(pool_ext, conceito, "arcana", rng)
         if escolhido_ext:
             inatas.append(dict(escolhido_ext, frequencia="À vontade (Talento Ancestral)"))
             tradicao_inata = tradicao_inata or "arcana"
@@ -426,7 +436,12 @@ def gerar_conjuracao(
             m for m in dados.magias.values()
             if "primal" in m.get("tradicoes", []) and "Truque Mágico" in m.get("tracos", []) and m["id"] not in inatas_ids
         ]
-        escolhido_pm = _escolher_truque_por_conceito(pool_pm, conceito, "primal", rng)
+        if truque_inato_req:
+            escolhido_pm = next((m for m in pool_pm if m["id"] == truque_inato_req), None)
+            if not escolhido_pm:
+                raise ValueError(f"Truque mágico inato '{truque_inato_req}' inválido para a tradição Primal (Magia do Primeiro Mundo).")
+        else:
+            escolhido_pm = _escolher_truque_por_conceito(pool_pm, conceito, "primal", rng)
         if escolhido_pm:
             inatas.append(dict(escolhido_pm, frequencia="À vontade (Talento Ancestral)"))
             tradicao_inata = tradicao_inata or "primal"

@@ -1415,11 +1415,54 @@ body {
   border-radius: 6px;
   background: #fffdf8;
   display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.82rem;
+}
+
+.box-anc-adotada-topo {
+  display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
-  font-size: 0.82rem;
+}
+
+.box-anc-adotada-ganho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-top: 7px;
+  border-top: 1px dashed var(--border);
+  font-size: 0.79rem;
+  color: var(--ink);
+}
+
+.box-ganho-adotado {
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--gold);
+  border-left: 4px solid var(--accent);
+  border-radius: 8px;
+  background: #fffdf8;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.box-ganho-adotado-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.box-ganho-adotado-topo strong {
+  font-size: 0.86rem;
+  color: var(--accent-dark);
 }
 
 .box-anc-adotada-info {
@@ -3080,6 +3123,17 @@ body {
   .modal-anc-talento-rodape .btn {
     width: 100%;
     justify-content: center;
+  }
+
+  .box-anc-adotada-ganho .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .box-ganho-adotado select {
+    font-size: 16px;
+    min-height: 44px;
+    padding: 8px 10px;
   }
 }
 

@@ -84,14 +84,17 @@
 
     const elMag = document.getElementById("resumo-etapa-magias");
     if (elMag) {
-      const modoMag = document.getElementById("modo-magias")?.value || "procedural";
-      if (modoMag === "procedural") {
-        elMag.textContent = "Procedural";
-      } else if (modoMag === "aleatorio") {
-        elMag.textContent = "Aleatório";
+      const stMag = app.calcularEstadoMagiasUI?.();
+      const resumoInato = app.obterResumoMagiaInataUI?.();
+      if (stMag && !stMag.ehConjurador) {
+        elMag.textContent = resumoInato || "Procedural";
       } else {
-        const stMag = app.calcularEstadoMagiasUI?.();
-        if (!stMag || !stMag.disponivel) {
+        const modoMag = document.getElementById("modo-magias")?.value || "procedural";
+        if (modoMag === "procedural") {
+          elMag.textContent = resumoInato ? `Procedural • ${resumoInato}` : "Procedural";
+        } else if (modoMag === "aleatorio") {
+          elMag.textContent = resumoInato ? `Aleatório • ${resumoInato}` : "Aleatório";
+        } else if (!stMag || !stMag.disponivel) {
           elMag.textContent = "Manual (aguardando linhagem)";
         } else {
           const partesMag = [`T:${app.magEstado.truques.length}/${stMag.vagasLivresTruques}`, `N1:${app.magEstado.magias_n1.length}/${stMag.vagasLivresN1}`];

@@ -505,11 +505,21 @@ html[data-tema="escuro"] .modal-eq-qtd-aviso {
 }
 
 html[data-tema="escuro"] .box-anc-adotada-resumo,
+html[data-tema="escuro"] .box-ganho-adotado,
 html[data-tema="escuro"] .modal-anc-raca-btn,
 html[data-tema="escuro"] .modal-anc-talento-card {
   background: #2b241f;
   border-color: var(--border);
   color: var(--ink);
+}
+
+html[data-tema="escuro"] .box-anc-adotada-ganho {
+  border-top-color: var(--border);
+  color: var(--ink);
+}
+
+html[data-tema="escuro"] .box-ganho-adotado-topo strong {
+  color: #eab971;
 }
 
 html[data-tema="escuro"] .modal-anc-raca-btn:hover {

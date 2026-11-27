@@ -9,12 +9,16 @@
 
   function _limparAncestralidadeAdotadaUI() {
     if (!app.talEstado) return;
+    const tinhaAdotado = Boolean(app.talEstado.talentoAdotadoId);
     app.talEstado.ancestralidadeAdotadaId = null;
     app.talEstado.ancestralidadeAdotadaNome = "";
     app.talEstado.talentoAdotadoId = null;
     app.talEstado.talentoAdotadoNome = "";
     app.talEstado.slotOrigemId = null;
     _atualizarResumoAncAdotadaUI();
+    if (tinhaAdotado) {
+      app.atualizarCatalogoMagiasUI?.();
+    }
   }
 
   function _slotComAncestralidadeAdotada() {
@@ -24,18 +28,87 @@
     }) || null;
   }
 
+  function _descreverGanhoTalentoAdotado(talId, ancNome) {
+    if (!talId) return null;
+    if (talId === "magia_extraterrena") {
+      return {
+        texto: "Libera 1 Truque Mágico Arcano inato na aba Magias.",
+        etapa: "magias",
+        alvoId: "box-magia-inata-ancestral",
+        btnLabel: "Escolher em Magias →",
+      };
+    }
+    if (talId === "magia_do_primeiro_mundo") {
+      return {
+        texto: "Libera 1 Truque Mágico Primal inato na aba Magias.",
+        etapa: "magias",
+        alvoId: "box-magia-inata-ancestral",
+        btnLabel: "Escolher em Magias →",
+      };
+    }
+    if (talId === "cumplice_animal") {
+      return {
+        texto: "Concede um Familiar configurável em Criação Inicial.",
+        etapa: "criacao",
+        alvoId: "card-companheiro-inicial",
+        btnLabel: "Configurar Familiar →",
+      };
+    }
+    const regPer = app.TALENTOS_PERICIAS_ANC_UI?.[talId];
+    if (regPer) {
+      const catPer = app.opcoes?.catalogo_pericias || [];
+      const nomesFixas = regPer.fixas.map((pid) => catPer.find((p) => p.id === pid)?.nome || pid);
+      const texto = regPer.extras > 0
+        ? `Concede +${regPer.extras} perícia(s) treinada(s) extra(s) na aba Perícias.`
+        : `Concede treinamento automático em ${nomesFixas.join(" e ")} na aba Perícias.`;
+      return {
+        texto,
+        etapa: "pericias",
+        alvoId: "painel-pericias-custom",
+        btnLabel: "Ver em Perícias →",
+      };
+    }
+    const famMap = app.opcoes?.catalogo_equipamentos?.familiaridade_armas_ancestral || {};
+    if (famMap[talId] || talId === "armamento_nao_convencional") {
+      return {
+        texto: `Libera novas armas de ${ancNome || "outra ancestralidade"} para compra em Equipamentos.`,
+        etapa: "equipamentos",
+        alvoId: "card-eq-arma-cc",
+        btnLabel: "Ver em Equipamentos →",
+      };
+    }
+    return null;
+  }
+
   function _atualizarResumoAncAdotadaUI() {
     const box = document.getElementById("box-anc-adotada-resumo");
     const txt = document.getElementById("txt-anc-adotada-resumo");
+    const ganhoBox = document.getElementById("box-anc-adotada-ganho");
     if (!box || !txt) return;
     const slotAtivo = _slotComAncestralidadeAdotada();
     const st = app.talEstado;
     if (slotAtivo && st?.ancestralidadeAdotadaId && st?.talentoAdotadoId) {
       txt.textContent = `${st.ancestralidadeAdotadaNome} → ${st.talentoAdotadoNome}`;
       box.classList.remove("oculto");
+      if (ganhoBox) {
+        const ganho = _descreverGanhoTalentoAdotado(st.talentoAdotadoId, st.ancestralidadeAdotadaNome);
+        if (ganho) {
+          ganhoBox.innerHTML =
+            `<span>✨ ${esc(ganho.texto)}</span>` +
+            `<button type="button" class="btn btn-secundario btn-compacto" data-atalho-adotado-etapa="${esc(ganho.etapa)}" data-atalho-adotado-alvo="${esc(ganho.alvoId)}">${esc(ganho.btnLabel)}</button>`;
+          ganhoBox.classList.remove("oculto");
+        } else {
+          ganhoBox.innerHTML = "";
+          ganhoBox.classList.add("oculto");
+        }
+      }
     } else {
       txt.textContent = "";
       box.classList.add("oculto");
+      if (ganhoBox) {
+        ganhoBox.innerHTML = "";
+        ganhoBox.classList.add("oculto");
+      }
     }
   }
 
@@ -187,6 +260,7 @@
     _atualizarResumoAncAdotadaUI();
     app.atualizarCatalogoEquipamentosUI?.();
     app.atualizarCatalogoPericiasUI?.();
+    app.atualizarCatalogoMagiasUI?.();
     app.atualizarPerfilUI?.();
     app.atualizarResumosEtapasUI?.();
   }
@@ -568,6 +642,7 @@
     document.getElementById("painel-talentos-custom")?.classList.toggle("oculto", modo !== "personalizado");
     _atualizarResumoAncAdotadaUI();
     app.atualizarCatalogoPericiasUI?.();
+    app.atualizarCatalogoMagiasUI?.();
     app.atualizarCatalogoEquipamentosUI?.();
     app.atualizarPerfilUI?.();
     app.atualizarResumosEtapasUI?.();
@@ -635,9 +710,23 @@
           _limparAncestralidadeAdotadaUI();
         }
         app.atualizarCatalogoEquipamentosUI?.();
+        app.atualizarCatalogoPericiasUI?.();
+        app.atualizarCatalogoMagiasUI?.();
         app.atualizarPerfilUI?.();
         app.atualizarResumosEtapasUI?.();
       });
+    });
+    document.getElementById("box-anc-adotada-ganho")?.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-atalho-adotado-etapa]");
+      if (!btn) return;
+      const etapa = btn.dataset.atalhoAdotadoEtapa;
+      const alvoId = btn.dataset.atalhoAdotadoAlvo;
+      if (etapa) app.alternarEtapaAcordeao?.(etapa, true);
+      if (alvoId) {
+        setTimeout(() => {
+          document.getElementById(alvoId)?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }, 80);
+      }
     });
     document.getElementById("btn-alterar-anc-adotada")?.addEventListener("click", () => {
       const slotId = _slotComAncestralidadeAdotada();
