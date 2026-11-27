@@ -383,7 +383,6 @@
         armas.armasTracoMonge = true;
       }
 
-      const talsGer = IDS_TAL_GERAIS.map(selAtivoVal);
       if (talsGer.includes("proficiencia_com_armaduras")) {
         if (!armaduras.leve) armaduras.leve = true;
         else if (!armaduras.media) armaduras.media = true;
