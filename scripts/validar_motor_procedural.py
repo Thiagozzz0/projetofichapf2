@@ -288,9 +288,12 @@ def main() -> None:
     ):
         assert id_dom in html_idx
 
-    assert client.get("/static/css/ficha.css").status_code == 200
-    assert client.get("/static/js/render_ficha.js").status_code == 200
-    assert client.get("/static/js/app.js").status_code == 200
+    with client.get("/static/css/ficha.css") as r_css:
+        assert r_css.status_code == 200
+    with client.get("/static/js/render_ficha.js") as r_rf:
+        assert r_rf.status_code == 200
+    with client.get("/static/js/app.js") as r_app:
+        assert r_app.status_code == 200
 
     req_txt = RAIZ_PROJETO / "requirements.txt"
     assert req_txt.exists(), "requirements.txt ausente na raiz do projeto"

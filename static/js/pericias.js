@@ -224,6 +224,15 @@
         extrasTalento += regAdotado.extras;
         regAdotado.fixas.forEach((pid) => concederFixa(pid, origAdotada));
       }
+      // Talentos de classe que concedem +1 perícia extra (sincronizado com motor/talentos.py)
+      const idsTalCls = app.IDS_TAL_CLASSE || [];
+      idsTalCls.forEach((idSlot) => {
+        const elSlot = document.getElementById(idSlot);
+        if (!elSlot || elSlot.disabled || elSlot.closest(".oculto")) return;
+        if (elSlot.value === "evolucao_arcana" || elSlot.value === "evolucao_ocultista") {
+          extrasTalento += 1;
+        }
+      });
     }
 
     // 6. Matemática das vagas livres: max(0, base + mod_int) + Herança Perita + Sobreposições + Talentos

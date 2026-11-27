@@ -84,6 +84,27 @@ def melhor_grau(*graus: str) -> str:
     return max(graus, key=lambda g: GRAUS.index(g))
 
 
+def subir_grau(atual: str, alvo: str) -> str:
+    """Promove o grau de proficiência apenas se `alvo` for superior ao `atual`."""
+    if atual not in GRAUS or alvo not in GRAUS:
+        return atual
+    return alvo if GRAUS.index(alvo) > GRAUS.index(atual) else atual
+
+
+def chave_categoria_armadura(categoria_texto: str) -> str:
+    """Normaliza a categoria textual de armadura para chave interna (`sem_armadura`, `leve`, `media`, `pesada`)."""
+    c = normalizar(categoria_texto)
+    if "sem armadura" in c:
+        return "sem_armadura"
+    if "leve" in c:
+        return "leve"
+    if "media" in c:
+        return "media"
+    if "pesada" in c:
+        return "pesada"
+    return "sem_armadura"
+
+
 def bonus_proficiencia(grau: str, nivel: int) -> int:
     """Destreinado = 0; demais = bônus do grau + nível."""
     if grau == "destreinado":

@@ -358,13 +358,13 @@ def test_idiomas_humano_mago_grimorio_e_regras_especificas() -> None:
             pass
 
     # Rota Flask: HTML + /api/opcoes + /api/gerar com idiomas_extras
-    from app import app as flask_app
+    from app import ASSET_VERSION, app as flask_app
 
     client = flask_app.test_client()
     resp_home = client.get("/")
     assert resp_home.status_code == 200
     html_home = resp_home.get_data(as_text=True)
-    assert 'id="grid-idiomas-checkboxes"' in html_home and "?v=64" in html_home
+    assert 'id="grid-idiomas-checkboxes"' in html_home and f"?v={ASSET_VERSION}" in html_home
 
     resp_op = client.get("/api/opcoes")
     assert resp_op.status_code == 200

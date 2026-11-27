@@ -41,7 +41,7 @@ from .magias import (
 )
 from .regras_atributos import calcular_atributos, normalizar_escolha_atributo, opcoes_atributo_classe
 from .regras_casa import listar_opcoes_regras_casa, resolver_configuracao_regras_casa
-from .talentos import listar_catalogo_talentos, listar_catalogo_talentos_n1, selecionar_talentos
+from .talentos import listar_catalogo_talentos, selecionar_talentos
 from .util import ATRIBUTOS, atributo_id, formatar_preco, normalizar
 
 

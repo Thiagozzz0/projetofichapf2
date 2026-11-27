@@ -7,7 +7,7 @@ import random
 from typing import Any
 
 from .dados import BaseDados
-from .util import atributo_id, bonus_proficiencia, normalizar, slugify
+from .util import atributo_id, bonus_proficiencia, normalizar
 
 
 _CLASSES_FOCO_CAR = {"campeao"}
