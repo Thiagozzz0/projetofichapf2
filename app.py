@@ -7,6 +7,15 @@ from typing import Any
 
 from flask import Flask, Response, jsonify, render_template, request
 
+from motor_cc import (
+    exportar_ficha_cc_docx,
+    exportar_ficha_cc_pdf,
+    exportar_ficha_cc_txt,
+    gerar_ficha_cc,
+    nome_arquivo_seguro_cc,
+    obter_opcoes_criacao,
+    rolar_atributos,
+)
 from motor_pf2 import (
     CLASSES_DIVINDADE_OBRIGATORIA,
     ErroValidacao,
@@ -361,6 +370,122 @@ def api_exportar_pdf():
         return jsonify({"erro": str(exc)}), 400
 
     return _resposta_download(conteudo_pdf, "application/pdf", "pdf", resultado)
+
+
+# ---------------------------------------------------------------------------
+# API REST — Castles & Crusades (/api/cc/*)
+# ---------------------------------------------------------------------------
+
+
+def _resolver_ficha_cc_para_exportacao(payload: dict[str, Any]) -> dict[str, Any]:
+    candidato = payload.get("ficha") if isinstance(payload.get("ficha"), dict) else payload
+    if isinstance(candidato, dict) and isinstance(candidato.get("cabecalho"), dict) and isinstance(candidato.get("atributos"), dict):
+        return candidato
+    return gerar_ficha_cc(payload)
+
+
+def _resposta_download_cc(
+    conteudo: str | bytes,
+    mimetype: str,
+    extensao: str,
+    ficha: dict[str, Any],
+) -> Response:
+    cab = ficha["cabecalho"]
+    nome_arq = nome_arquivo_seguro_cc(
+        cab.get("nome"),
+        cab.get("classe_nome") or cab.get("classe_id"),
+        int(cab.get("nivel") or 1),
+        extensao,
+    )
+    resp = Response(conteudo, mimetype=mimetype)
+    resp.headers["Content-Disposition"] = f'attachment; filename="{nome_arq}"'
+    return resp
+
+
+@app.get("/api/cc/opcoes")
+def api_cc_opcoes():
+    """Retorna todas as opções de criação de personagens de Castles & Crusades."""
+    return jsonify(obter_opcoes_criacao())
+
+
+@app.post("/api/cc/rolar-atributos")
+def api_cc_rolar_atributos():
+    """Rola atributos conforme o método C&C selecionado (old_school_3d6_ordem, classico_3d6_livre, heroico_4d6, distribuido_62)."""
+    payload = _extrair_payload()
+    if payload is None:
+        return jsonify({"erro": "Corpo da requisição inválido; esperado objeto JSON."}), 400
+
+    metodo = str(payload.get("metodo") or "classico_3d6_livre").strip()
+    seed = payload.get("seed")
+    try:
+        resultado = rolar_atributos(metodo=metodo, seed=seed)
+    except (ValueError, TypeError) as exc:
+        return jsonify({"erro": str(exc)}), 400
+    return jsonify(resultado), 200
+
+
+@app.post("/api/cc/gerar")
+def api_cc_gerar():
+    """Gera a ficha completa de Castles & Crusades em JSON."""
+    payload = _extrair_payload()
+    if payload is None:
+        return jsonify({"erro": "Corpo da requisição inválido; esperado objeto JSON."}), 400
+
+    try:
+        ficha = gerar_ficha_cc(payload)
+    except (ValueError, TypeError) as exc:
+        return jsonify({"erro": str(exc)}), 400
+    return jsonify(ficha), 200
+
+
+@app.post("/api/cc/exportar/txt")
+def api_cc_exportar_txt():
+    """Exporta a ficha C&C em texto plano `.txt` UTF-8."""
+    payload = _extrair_payload()
+    if payload is None:
+        return jsonify({"erro": "Corpo da requisição inválido; esperado objeto JSON."}), 400
+
+    try:
+        ficha = _resolver_ficha_cc_para_exportacao(payload)
+        conteudo_txt = exportar_ficha_cc_txt(ficha)
+    except (ValueError, KeyError, TypeError) as exc:
+        return jsonify({"erro": str(exc)}), 400
+    return _resposta_download_cc(conteudo_txt, "text/plain; charset=utf-8", "txt", ficha)
+
+
+@app.post("/api/cc/exportar/docx")
+def api_cc_exportar_docx():
+    """Exporta a ficha C&C em documento `.docx` (OOXML)."""
+    payload = _extrair_payload()
+    if payload is None:
+        return jsonify({"erro": "Corpo da requisição inválido; esperado objeto JSON."}), 400
+
+    try:
+        ficha = _resolver_ficha_cc_para_exportacao(payload)
+        conteudo_docx = exportar_ficha_cc_docx(ficha)
+    except (ValueError, KeyError, TypeError) as exc:
+        return jsonify({"erro": str(exc)}), 400
+    return _resposta_download_cc(
+        conteudo_docx,
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "docx",
+        ficha,
+    )
+
+
+@app.post("/api/cc/exportar/pdf")
+def api_cc_exportar_pdf():
+    """Exporta a ficha C&C preenchida no template PDF oficial do livro."""
+    payload = _extrair_payload()
+    if payload is None:
+        return jsonify({"erro": "Corpo da requisição inválido; esperado objeto JSON."}), 400
+
+    try:
+        ficha = _resolver_ficha_cc_para_exportacao(payload)
+        conteudo_pdf = exportar_ficha_cc_pdf(ficha)
+    except (ValueError, FileNotFoundError, KeyError, TypeError) as exc:
+        return jsonify({"erro": str(exc)}), 400
+    return _resposta_download_cc(conteudo_pdf, "application/pdf", "pdf", ficha)
 
 
 if __name__ == "__main__":

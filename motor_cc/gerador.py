@@ -72,6 +72,7 @@ def obter_opcoes_criacao() -> dict[str, Any]:
                 "conjurador": bool(c.get("conjurador", False)),
                 "tradicao": c.get("conjuracao", {}).get("tradicao") if c.get("conjurador") else None,
                 "atributo_conjuracao": c.get("conjuracao", {}).get("atributo_conjuracao") if c.get("conjurador") else None,
+                "conjuracao": c.get("conjuracao") if c.get("conjurador") else None,
                 "ouro_inicial": eq.get("moedas", {}).get("ouro_inicial_por_classe", {}).get(c["id"]),
             }
             for c in listar_classes()

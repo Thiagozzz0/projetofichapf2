@@ -1,0 +1,777 @@
+/* Castles & Crusades (1ª Ed. Brasileira) — Estilos isolados da interface /cc e visualização/impressão */
+
+:root {
+  --cc-bg: #f3ece0;
+  --cc-bg-card: #fcf8f1;
+  --cc-bg-soft: #efe5d4;
+  --cc-bg-input: #ffffff;
+  --cc-text: #1f242b;
+  --cc-text-muted: #565f6d;
+  --cc-accent: #1c3d5a;
+  --cc-accent-dark: #12293e;
+  --cc-accent-soft: #e3ecf5;
+  --cc-gold: #b88a3b;
+  --cc-border: #d5c8b2;
+  --cc-border-strong: #9f8c6c;
+  --cc-ok: #1d6b43;
+  --cc-warn: #9b4b12;
+  --cc-err: #9c2424;
+  --cc-shadow: 0 6px 20px rgba(24, 30, 38, 0.08);
+}
+
+html[data-tema="escuro"] {
+  --cc-bg: #13171d;
+  --cc-bg-card: #1b212a;
+  --cc-bg-soft: #232b36;
+  --cc-bg-input: #141920;
+  --cc-text: #e7ebf0;
+  --cc-text-muted: #9aa5b5;
+  --cc-accent: #5893c9;
+  --cc-accent-dark: #3b74a8;
+  --cc-accent-soft: #1d2c3d;
+  --cc-gold: #d4a652;
+  --cc-border: #313b4a;
+  --cc-border-strong: #4a576c;
+  --cc-ok: #4cc38a;
+  --cc-warn: #ebb057;
+  --cc-err: #f06d6d;
+  --cc-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body.cc-page {
+  margin: 0;
+  background: var(--cc-bg);
+  color: var(--cc-text);
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+}
+
+h1, h2, h3, .cc-titulo-serif {
+  font-family: "Cinzel", Georgia, "Times New Roman", serif;
+}
+
+.oculto {
+  display: none !important;
+}
+
+/* Topbar */
+.cc-topbar {
+  background: linear-gradient(135deg, #16293d, #1c3d5a 65%, #274c6b);
+  color: #f8f6f0;
+  border-bottom: 3px solid var(--cc-gold);
+  padding: 14px 20px;
+}
+
+.cc-topbar-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.cc-marca {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.cc-logo {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px;
+}
+
+.cc-marca h1 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #fff;
+}
+
+.cc-marca p {
+  margin: 2px 0 0;
+  font-size: 0.85rem;
+  color: #d6e2ee;
+}
+
+.cc-topbar-acoes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-tema {
+  background: rgba(255, 250, 240, 0.14);
+  color: #fdf8ef;
+  border: 1px solid rgba(212, 175, 106, 0.65);
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-tema:hover {
+  background: rgba(255, 250, 240, 0.24);
+}
+
+/* Main container */
+.cc-main {
+  max-width: 1180px;
+  margin: 20px auto 48px;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Etapas Cards */
+.cc-painel-montador {
+  background: var(--cc-bg-card);
+  border: 1px solid var(--cc-border);
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: var(--cc-shadow);
+}
+
+.cc-painel-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.cc-painel-cabecalho h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--cc-accent);
+}
+
+.cc-nota {
+  margin: 4px 0 0;
+  color: var(--cc-text-muted);
+  font-size: 0.88rem;
+}
+
+.cc-etapas {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cc-etapa-card {
+  border: 1px solid var(--cc-border);
+  border-radius: 12px;
+  background: var(--cc-bg-card);
+  overflow: hidden;
+}
+
+.cc-etapa-header {
+  width: 100%;
+  background: var(--cc-bg-soft);
+  border: none;
+  border-bottom: 1px solid var(--cc-border);
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  color: var(--cc-text);
+  text-align: left;
+}
+
+.cc-etapa-header:hover {
+  filter: brightness(0.98);
+}
+
+.cc-etapa-esq {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cc-etapa-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--cc-accent);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cc-etapa-titulo {
+  display: block;
+  font-family: "Cinzel", Georgia, serif;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.cc-etapa-sub {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--cc-text-muted);
+}
+
+.cc-etapa-dir {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cc-resumo-pill {
+  background: var(--cc-accent-soft);
+  color: var(--cc-accent);
+  border: 1px solid var(--cc-border-strong);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.cc-etapa-corpo {
+  padding: 16px;
+}
+
+/* Form grids e inputs */
+.cc-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 14px;
+}
+
+.cc-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+}
+
+.cc-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.cc-campo label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--cc-text-muted);
+}
+
+.cc-campo input[type="text"],
+.cc-campo input[type="number"],
+.cc-campo select,
+.cc-campo textarea {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--cc-border-strong);
+  background: var(--cc-bg-input);
+  color: var(--cc-text);
+  font-family: inherit;
+  font-size: 0.9rem;
+}
+
+/* Métodos de atributos */
+.cc-metodos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.cc-metodo-card {
+  border: 2px solid var(--cc-border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: var(--cc-bg-input);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.cc-metodo-card.ativo {
+  border-color: var(--cc-accent);
+  background: var(--cc-accent-soft);
+}
+
+.cc-metodo-card strong {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 3px;
+}
+
+.cc-metodo-card span {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--cc-text-muted);
+}
+
+.cc-attr-barra {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--cc-bg-soft);
+  border: 1px solid var(--cc-border);
+}
+
+.cc-atributos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(165px, 1fr));
+  gap: 10px;
+}
+
+.cc-attr-box {
+  border: 1px solid var(--cc-border-strong);
+  border-radius: 10px;
+  padding: 10px;
+  background: var(--cc-bg-input);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cc-attr-box.primario {
+  border-color: var(--cc-gold);
+  box-shadow: 0 0 0 1px var(--cc-gold);
+}
+
+.cc-attr-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+}
+
+.cc-attr-sigla {
+  font-family: "Cinzel", serif;
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+.cc-badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.cc-badge-primario {
+  background: #f8e9c8;
+  color: #6b4708;
+  border: 1px solid #d4a652;
+}
+
+.cc-badge-secundario {
+  background: var(--cc-bg-soft);
+  color: var(--cc-text-muted);
+  border: 1px solid var(--cc-border);
+}
+
+.cc-attr-controles {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cc-attr-controles input {
+  width: 62px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 1rem;
+  padding: 5px;
+  border-radius: 6px;
+  border: 1px solid var(--cc-border-strong);
+  background: var(--cc-bg-card);
+  color: var(--cc-text);
+}
+
+.cc-attr-meta {
+  font-size: 0.78rem;
+  color: var(--cc-text-muted);
+  display: flex;
+  justify-content: space-between;
+}
+
+.cc-sugestoes-box {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--cc-accent-soft);
+  border: 1px solid var(--cc-border-strong);
+}
+
+.cc-sugestoes-lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+/* Botões */
+.cc-btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 0.86rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cc-btn-primario {
+  background: var(--cc-accent);
+  color: #fff;
+}
+
+.cc-btn-primario:hover {
+  background: var(--cc-accent-dark);
+}
+
+.cc-btn-secundario {
+  background: var(--cc-bg-soft);
+  color: var(--cc-text);
+  border-color: var(--cc-border-strong);
+}
+
+.cc-btn-secundario:hover {
+  filter: brightness(0.95);
+}
+
+.cc-btn-mini {
+  padding: 4px 8px;
+  font-size: 0.76rem;
+  border-radius: 6px;
+}
+
+.cc-acoes-gerar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+/* Equipamentos e Feitiços */
+.cc-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.cc-chip {
+  background: var(--cc-accent-soft);
+  color: var(--cc-text);
+  border: 1px solid var(--cc-border-strong);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cc-chip button {
+  background: none;
+  border: none;
+  color: var(--cc-err);
+  font-weight: 800;
+  cursor: pointer;
+  padding: 0 2px;
+}
+
+.cc-catalogo-lista {
+  max-height: 220px;
+  overflow-y: auto;
+  border: 1px solid var(--cc-border);
+  border-radius: 8px;
+  background: var(--cc-bg-input);
+  margin-top: 6px;
+}
+
+.cc-catalogo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--cc-border);
+  font-size: 0.82rem;
+}
+
+.cc-catalogo-item:last-child {
+  border-bottom: none;
+}
+
+.cc-primarios-lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.cc-check-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--cc-border-strong);
+  border-radius: 8px;
+  background: var(--cc-bg-input);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cc-circulos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.cc-circulo-box {
+  border: 1px solid var(--cc-border);
+  border-radius: 10px;
+  padding: 10px;
+  background: var(--cc-bg-input);
+}
+
+.cc-circulo-box h4 {
+  margin: 0 0 8px;
+  font-size: 0.88rem;
+  color: var(--cc-accent);
+  display: flex;
+  justify-content: space-between;
+}
+
+.cc-status-msg {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.cc-status-msg.erro {
+  background: rgba(156, 36, 36, 0.12);
+  border: 1px solid var(--cc-err);
+  color: var(--cc-err);
+}
+
+.cc-status-msg.aviso {
+  background: rgba(155, 75, 18, 0.12);
+  border: 1px solid var(--cc-warn);
+  color: var(--cc-warn);
+}
+
+/* Ficha Pronta Renderizada */
+.cc-ficha-pronta {
+  background: var(--cc-bg-card);
+  border: 2px solid var(--cc-border-strong);
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: var(--cc-shadow);
+}
+
+.cc-ficha-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-bottom: 14px;
+  margin-bottom: 16px;
+  border-bottom: 2px solid var(--cc-border);
+}
+
+.cc-ficha-export-acoes {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cc-ficha-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+  border-bottom: 2px solid var(--cc-accent);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.cc-ficha-header h2 {
+  margin: 0;
+  font-size: 1.55rem;
+  color: var(--cc-accent);
+}
+
+.cc-metodo-pill {
+  background: var(--cc-accent);
+  color: #fff;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.cc-ficha-id-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.cc-dado-cell {
+  background: var(--cc-bg-soft);
+  border: 1px solid var(--cc-border);
+  border-radius: 8px;
+  padding: 7px 10px;
+}
+
+.cc-dado-cell small {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--cc-text-muted);
+  font-weight: 700;
+}
+
+.cc-dado-cell strong {
+  font-size: 0.92rem;
+}
+
+.cc-ficha-colunas {
+  display: grid;
+  grid-template-columns: 310px 1fr;
+  gap: 18px;
+}
+
+@media (max-width: 860px) {
+  .cc-ficha-colunas {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cc-secao-box {
+  border: 1px solid var(--cc-border);
+  border-radius: 10px;
+  padding: 12px;
+  background: var(--cc-bg-input);
+  margin-bottom: 14px;
+}
+
+.cc-secao-box h3 {
+  margin: 0 0 10px;
+  font-size: 0.96rem;
+  color: var(--cc-accent);
+  border-bottom: 1px solid var(--cc-border);
+  padding-bottom: 4px;
+}
+
+.cc-attr-linha-ficha {
+  display: grid;
+  grid-template-columns: 22px 46px 38px 42px 1fr;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--cc-border);
+  font-size: 0.84rem;
+}
+
+.cc-attr-linha-ficha:last-child {
+  border-bottom: none;
+}
+
+.cc-bolinha {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--cc-accent);
+  display: inline-block;
+}
+
+.cc-bolinha.cheia {
+  background: var(--cc-accent);
+}
+
+.cc-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+}
+
+.cc-tabela th,
+.cc-tabela td {
+  border: 1px solid var(--cc-border);
+  padding: 6px 8px;
+  text-align: left;
+}
+
+.cc-tabela th {
+  background: var(--cc-bg-soft);
+  color: var(--cc-accent);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.cc-lista-limpa {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 0.85rem;
+}
+
+.cc-lista-limpa li {
+  margin-bottom: 5px;
+}
+
+@media print {
+  body.cc-page {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .nao-imprimir {
+    display: none !important;
+  }
+  .cc-ficha-pronta {
+    border: none;
+    box-shadow: none;
+    padding: 0;
+  }
+  .cc-secao-box,
+  .cc-dado-cell {
+    break-inside: avoid;
+  }
+}

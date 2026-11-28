@@ -3,47 +3,297 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Castle and Crusades — Gerador de Fichas</title>
+  <title>Castles &amp; Crusades (1ª Ed. Brasileira) — Gerador de Fichas</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/icone-cc.png') }}?v={{ asset_v }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/hub.css') }}?v={{ asset_v }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/cc.css') }}?v={{ asset_v }}">
 </head>
-<body class="hub-page">
-  <header class="hub-topbar">
-    <div class="hub-topbar-inner">
-      <div class="hub-marca">
-        <span class="hub-marca-selo" aria-hidden="true">⚔️</span>
+<body class="cc-page">
+  <header class="cc-topbar nao-imprimir">
+    <div class="cc-topbar-inner">
+      <div class="cc-marca">
+        <img class="cc-logo" src="{{ url_for('static', filename='img/icone-cc.png') }}?v={{ asset_v }}" alt="Castles &amp; Crusades">
         <div>
-          <p class="hub-marca-titulo">Castle and Crusades</p>
-          <p class="hub-marca-sub">Gerador de Fichas de Personagem</p>
+          <h1>Gerador de Personagens — Castles &amp; Crusades</h1>
+          <p>Castle and Crusades (1ª Edição Brasileira) • 4 modos de geração de atributos, 7 raças, 13 classes (N1–N24), Sobrecarga SB, 378 magias e exportação em PDF Oficial, DOCX e TXT.</p>
         </div>
       </div>
-      <div class="hub-topbar-acoes">
-        <a href="{{ url_for('index') }}" class="hub-btn-voltar">← Trocar Sistema</a>
+      <div class="cc-topbar-acoes">
+        <a href="{{ url_for('index') }}" class="btn-tema">← Sistemas</a>
         <button type="button" id="btn-alternar-tema" class="btn-tema" aria-pressed="false">🌙 Grimório Noturno</button>
       </div>
     </div>
   </header>
 
-  <main class="hub-main">
-    <section class="cc-painel">
-      <div class="cc-painel-emblema">
-        <img src="{{ url_for('static', filename='img/icone-cc.png') }}?v={{ asset_v }}" alt="Castle and Crusades">
+  <main class="cc-main">
+    <section class="cc-painel-montador nao-imprimir">
+      <div class="cc-painel-cabecalho">
+        <div>
+          <h2>Montador de Personagem (C&amp;C)</h2>
+          <p class="cc-nota">Siga a ordem tradicional do Livro do Jogador: comece pelo método de Atributos e depois escolha Raça, Classe, Primários, Equipamentos e Magias.</p>
+        </div>
       </div>
-      <span class="cc-badge-status">Em Preparação</span>
-      <h1>Castle and Crusades</h1>
-      <div class="hub-divisor" aria-hidden="true"></div>
-      <p>O espaço para o gerador de fichas de <strong>Castle and Crusades</strong> já está pronto e conectado à pasta <code>dados/dadosc&amp;c/</code>. Assim que estruturarmos as raças, classes, atributos e equipamentos do sistema, o montador completo aparecerá aqui.</p>
-      <a href="{{ url_for('index') }}" class="cc-btn-principal">← Voltar para Escolha de Sistemas</a>
+
+      <form id="form-cc-gerador">
+        <div class="cc-etapas">
+          <!-- Etapa 1: Atributos -->
+          <div class="cc-etapa-card">
+            <button type="button" class="cc-etapa-header" data-cc-toggle="cc-corpo-atributos" aria-expanded="true" aria-controls="cc-corpo-atributos">
+              <span class="cc-etapa-esq">
+                <span class="cc-etapa-num">1</span>
+                <span>
+                  <span class="cc-etapa-titulo">Atributos &amp; Método de Geração</span>
+                  <span class="cc-etapa-sub">Old School (3d6 em ordem), Clássico (3d6 livre), Heróico (4d6) ou Distribuído (62 pts)</span>
+                </span>
+              </span>
+              <span class="cc-etapa-dir">
+                <span id="resumo-cc-atributos" class="cc-resumo-pill">Clássico: 3d6</span>
+                <span aria-hidden="true">▾</span>
+              </span>
+            </button>
+            <div id="cc-corpo-atributos" class="cc-etapa-corpo">
+              <div id="cc-metodos-grid" class="cc-metodos-grid"></div>
+
+              <div class="cc-attr-barra">
+                <span id="cc-attr-status-texto" class="cc-nota" style="margin: 0"></span>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap">
+                  <button type="button" id="btn-cc-rolar-atributos" class="cc-btn cc-btn-primario cc-btn-mini">🎲 Rolar Dados</button>
+                  <button type="button" id="btn-cc-otimizar-classe" class="cc-btn cc-btn-secundario cc-btn-mini">⚡ Otimizar p/ Classe</button>
+                </div>
+              </div>
+
+              <div id="cc-atributos-grid" class="cc-atributos-grid"></div>
+
+              <div id="cc-sugestoes-old-school" class="cc-sugestoes-box oculto">
+                <strong style="font-size: 0.84rem">Classes recomendadas pelos dados sorteados (Old School):</strong>
+                <div id="cc-sugestoes-lista" class="cc-sugestoes-lista"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Etapa 2: Identificação, Raça e Classe -->
+          <div class="cc-etapa-card">
+            <button type="button" class="cc-etapa-header" data-cc-toggle="cc-corpo-raca-classe" aria-expanded="true" aria-controls="cc-corpo-raca-classe">
+              <span class="cc-etapa-esq">
+                <span class="cc-etapa-num">2</span>
+                <span>
+                  <span class="cc-etapa-titulo">Identificação, Raça, Classe &amp; Pontos de Vida</span>
+                  <span class="cc-etapa-sub">Nome, Raça (com linhagem de Meio-Elfo), Classe, Nível (1–24), Disposição e regra de PV</span>
+                </span>
+              </span>
+              <span class="cc-etapa-dir">
+                <span id="resumo-cc-raca-classe" class="cc-resumo-pill">Humano • Combatente Nv. 1</span>
+                <span aria-hidden="true">▾</span>
+              </span>
+            </button>
+            <div id="cc-corpo-raca-classe" class="cc-etapa-corpo">
+              <div class="cc-grid-3" style="margin-bottom: 12px">
+                <div class="cc-campo">
+                  <label for="cc-nome">Nome do Personagem</label>
+                  <input type="text" id="cc-nome" value="Aldric de Castelhano" placeholder="Ex.: Sir Roland">
+                </div>
+                <div class="cc-campo">
+                  <label for="cc-titulos">Títulos</label>
+                  <input type="text" id="cc-titulos" placeholder="Ex.: Campeão da Fronteira">
+                </div>
+                <div class="cc-campo">
+                  <label for="cc-jogador">Jogador</label>
+                  <input type="text" id="cc-jogador" placeholder="Seu nome">
+                </div>
+              </div>
+
+              <div class="cc-grid-3">
+                <div class="cc-campo">
+                  <label for="cc-raca">Raça</label>
+                  <select id="cc-raca"></select>
+                </div>
+                <div class="cc-campo">
+                  <label for="cc-classe">Classe</label>
+                  <select id="cc-classe"></select>
+                </div>
+                <div class="cc-campo">
+                  <label for="cc-nivel">Nível (1–24)</label>
+                  <input type="number" id="cc-nivel" min="1" max="24" value="1">
+                </div>
+                <div class="cc-campo">
+                  <label for="cc-disposicao">Disposição</label>
+                  <select id="cc-disposicao"></select>
+                </div>
+                <div class="cc-campo">
+                  <label for="cc-regra-pv">Regra de Pontos de Vida</label>
+                  <select id="cc-regra-pv"></select>
+                </div>
+              </div>
+
+              <div id="cc-box-meio-elfo" class="cc-grid-2 oculto" style="margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--cc-border)">
+                <div class="cc-campo">
+                  <label for="cc-meio-elfo-linhagem">Linhagem do Meio-Elfo</label>
+                  <select id="cc-meio-elfo-linhagem">
+                    <option value="elfica">Linhagem Élfica (+1 DES, -1 CON, Sentidos Aprimorados)</option>
+                    <option value="humana">Linhagem Humana (+2 em testes de 1 Atributo Secundário)</option>
+                  </select>
+                </div>
+                <div id="cc-box-meio-elfo-secundario" class="cc-campo oculto">
+                  <label for="cc-meio-elfo-secundario">Atributo Secundário (+2 em testes)</label>
+                  <select id="cc-meio-elfo-secundario"></select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Etapa 3: Atributos Primários (SIEGE) -->
+          <div class="cc-etapa-card">
+            <button type="button" class="cc-etapa-header" data-cc-toggle="cc-corpo-primarios" aria-expanded="true" aria-controls="cc-corpo-primarios">
+              <span class="cc-etapa-esq">
+                <span class="cc-etapa-num">3</span>
+                <span>
+                  <span class="cc-etapa-titulo">Atributos Primários (Sistema SIEGE)</span>
+                  <span class="cc-etapa-sub">Primários usam CB 12 nos testes; Secundários usam CB 18</span>
+                </span>
+              </span>
+              <span class="cc-etapa-dir">
+                <span id="resumo-cc-primarios" class="cc-resumo-pill">3 Primários</span>
+                <span aria-hidden="true">▾</span>
+              </span>
+            </button>
+            <div id="cc-corpo-primarios" class="cc-etapa-corpo">
+              <p id="cc-primarios-info" class="cc-nota" style="margin-top: 0"></p>
+              <div id="cc-primarios-container" class="cc-primarios-lista"></div>
+            </div>
+          </div>
+
+          <!-- Etapa 4: Equipamentos, Ouro e Sobrecarga -->
+          <div class="cc-etapa-card">
+            <button type="button" class="cc-etapa-header" data-cc-toggle="cc-corpo-equipamentos" aria-expanded="false" aria-controls="cc-corpo-equipamentos">
+              <span class="cc-etapa-esq">
+                <span class="cc-etapa-num">4</span>
+                <span>
+                  <span class="cc-etapa-titulo">Equipamentos, Ouro &amp; Sobrecarga (SB)</span>
+                  <span class="cc-etapa-sub">Armaduras, escudos, elmos, armas, catálogo de equipamentos e notas</span>
+                </span>
+              </span>
+              <span class="cc-etapa-dir">
+                <span id="resumo-cc-equipamentos" class="cc-resumo-pill">0 itens</span>
+                <span aria-hidden="true">▾</span>
+              </span>
+            </button>
+            <div id="cc-corpo-equipamentos" class="cc-etapa-corpo oculto">
+              <div id="cc-equip-resumo-ao-vivo" class="cc-attr-barra"></div>
+
+              <div class="cc-grid-3" style="margin-bottom: 12px">
+                <div class="cc-campo">
+                  <label for="cc-modo-ouro">Ouro Inicial</label>
+                  <select id="cc-modo-ouro">
+                    <option value="media">Média da Classe</option>
+                    <option value="rolar">Rolar Dados Oficiais</option>
+                    <option value="maximo">Máximo da Classe</option>
+                    <option value="manual">Informar Ouro Manualmente (po)</option>
+                  </select>
+                </div>
+                <div id="cc-box-ouro-manual" class="cc-campo oculto">
+                  <label for="cc-ouro-manual">Ouro Manual (po)</label>
+                  <input type="number" id="cc-ouro-manual" min="0" step="1" value="100">
+                </div>
+              </div>
+
+              <div class="cc-grid-3" style="margin-bottom: 14px">
+                <div class="cc-campo">
+                  <label for="cc-armadura">Armadura</label>
+                  <select id="cc-armadura"></select>
+                </div>
+                <div class="cc-campo">
+                  <label for="cc-escudo">Escudo</label>
+                  <select id="cc-escudo"></select>
+                </div>
+                <div class="cc-campo">
+                  <label for="cc-elmo">Elmo</label>
+                  <select id="cc-elmo"></select>
+                </div>
+              </div>
+
+              <div class="cc-grid-2">
+                <div>
+                  <div class="cc-campo">
+                    <label for="cc-select-arma">Adicionar Arma (Corpo a Corpo / Projétil)</label>
+                    <div style="display: flex; gap: 8px">
+                      <select id="cc-select-arma" style="flex: 1"></select>
+                      <button type="button" id="btn-cc-add-arma" class="cc-btn cc-btn-secundario cc-btn-mini">+ Arma</button>
+                    </div>
+                  </div>
+                  <div id="cc-armas-chips" class="cc-chips"></div>
+                </div>
+
+                <div>
+                  <div class="cc-campo">
+                    <label for="cc-busca-item">Buscar Itens Gerais, Roupas e Provisões</label>
+                    <input type="text" id="cc-busca-item" placeholder="Ex.: Mochila, Corda, Tocha, Ração...">
+                  </div>
+                  <div id="cc-catalogo-itens" class="cc-catalogo-lista"></div>
+                  <div id="cc-itens-chips" class="cc-chips"></div>
+                </div>
+              </div>
+
+              <div class="cc-grid-3" style="margin-top: 14px">
+                <div class="cc-campo">
+                  <label for="cc-itens-magicos">Itens Mágicos (separados por vírgula)</label>
+                  <input type="text" id="cc-itens-magicos" placeholder="Ex.: Anel de Proteção +1">
+                </div>
+                <div class="cc-campo">
+                  <label for="cc-pocoes">Poções (separadas por vírgula)</label>
+                  <input type="text" id="cc-pocoes" placeholder="Ex.: Poção de Cura">
+                </div>
+                <div class="cc-campo">
+                  <label for="cc-anotacoes">Anotações / Recursos de Viagem</label>
+                  <input type="text" id="cc-anotacoes" placeholder="Notas livres do personagem">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Etapa 5: Feitiços (apenas para classes conjuradoras) -->
+          <div id="cc-etapa-magias" class="cc-etapa-card oculto">
+            <button type="button" class="cc-etapa-header" data-cc-toggle="cc-corpo-magias" aria-expanded="false" aria-controls="cc-corpo-magias">
+              <span class="cc-etapa-esq">
+                <span class="cc-etapa-num">5</span>
+                <span>
+                  <span class="cc-etapa-titulo">Feitiços Conhecidos / Preparados</span>
+                  <span class="cc-etapa-sub">Espaços diários da classe + feitiços bônus por INT/SAB</span>
+                </span>
+              </span>
+              <span class="cc-etapa-dir">
+                <span id="resumo-cc-magias" class="cc-resumo-pill">Automático</span>
+                <span aria-hidden="true">▾</span>
+              </span>
+            </button>
+            <div id="cc-corpo-magias" class="cc-etapa-corpo oculto">
+              <label class="cc-check-pill">
+                <input type="checkbox" id="cc-auto-feiticos" checked>
+                <span>Completar feitiços disponíveis automaticamente conforme os espaços diários</span>
+              </label>
+              <div id="cc-magias-selecao" class="oculto"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="cc-erro-geracao" class="cc-status-msg erro oculto" role="alert"></div>
+
+        <div class="cc-acoes-gerar">
+          <button type="submit" id="btn-cc-gerar" class="cc-btn cc-btn-primario" style="padding: 11px 22px; font-size: 0.95rem">
+            ⚔️ Gerar Ficha de Castles &amp; Crusades
+          </button>
+        </div>
+      </form>
     </section>
+
+    <section id="cc-ficha-pronta" class="cc-ficha-pronta oculto" aria-live="polite"></section>
   </main>
 
-  <footer class="hub-footer">
-    Portal de Fichas RPG — Castle and Crusades
-  </footer>
-
   <script src="{{ url_for('static', filename='js/tema.js') }}?v={{ asset_v }}"></script>
+  <script src="{{ url_for('static', filename='js/cc/estado.js') }}?v={{ asset_v }}"></script>
+  <script src="{{ url_for('static', filename='js/cc/atributos.js') }}?v={{ asset_v }}"></script>
+  <script src="{{ url_for('static', filename='js/cc/render_ficha.js') }}?v={{ asset_v }}"></script>
+  <script src="{{ url_for('static', filename='js/cc/app.js') }}?v={{ asset_v }}"></script>
 </body>
 </html>

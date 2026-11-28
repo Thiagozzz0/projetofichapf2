@@ -18,18 +18,18 @@ Lista viva e priorizada das etapas para construir o gerador de fichas de **Castl
 - [x] **Aplicação de Raça, Classe, PV, CA, Bônus de Ataque Base e Habilidades** (`motor_cc/combate.py` e `motor_cc/gerador.py` — níveis 1–24, 3 regras oficiais de PV + média fixa)
 - [x] **Compra/alocação de Equipamentos, Moedas e Carga (EV / Peso)** (`motor_cc/equipamentos.py` — ouro inicial, conversão pc/pp/po e Sobrecarga SB/CS)
 - [x] **Seleção de Magias para Classes Conjuradoras** (`motor_cc/magias.py` — espaços diários + feitiços bônus cumulativos por INT/SAB 13–19 e validação das listas)
-- [ ] **Endpoints REST no Flask (`/api/cc/opcoes`, `/api/cc/gerar`, `/api/cc/exportar/*`)**
+- [x] **Endpoints REST no Flask (`/api/cc/opcoes`, `/api/cc/rolar-atributos`, `/api/cc/gerar`, `/api/cc/exportar/*`)** (`app.py`)
 
 ---
 
 ## 3. Interface Web (`/cc`) e Exportadores
 
-- [ ] **Montador interativo de fichas em `templates/cc.html` + `static/js/cc/`**
-- [ ] **Visualização da ficha pronta e impressão (`@media print`)**
-- [ ] **Exportadores `.txt`, `.docx` e `.pdf` para Castles & Crusades**
+- [x] **Montador interativo de fichas em `templates/cc.html` + `static/js/cc/`** (`static/css/cc.css`, `estado.js`, `atributos.js`, `render_ficha.js`, `app.js`)
+- [x] **Visualização da ficha pronta e impressão (`@media print`)** (`#cc-ficha-pronta` + `@media print` em `static/css/cc.css`)
+- [x] **Exportadores `.txt`, `.docx` e `.pdf` para Castles & Crusades** (`motor_cc/exportacao/` com preenchimento vetorial de `ficha_oficial_cc.pdf`)
 
 ---
 
 ## 4. Qualidade e Testes Automatizados
 
-- [ ] **Suíte de testes `tests/test_cc_*.py`** cobrindo todas as raças, classes, cálculos matemáticos, casos de borda, rotas Flask e exportadores.
+- [x] **Suíte de testes `tests/test_cc_*.py`** (`tests/test_cc_motor.py` + `tests/test_cc_api_exportacao.py`: `12/12` testes cobrindo raças, classes, 4 modos de atributos, PV/CA/SB, magias, rotas Flask, UI e exportadores)
