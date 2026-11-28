@@ -8,7 +8,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from motor.dados import (
+from motor_pf2.dados import (
     DIR_DADOS_PADRAO,
     FONTE_BASE_ID,
     carregar_dados,

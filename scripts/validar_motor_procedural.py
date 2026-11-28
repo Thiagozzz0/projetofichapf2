@@ -14,8 +14,8 @@ if str(RAIZ_PROJETO) not in sys.path:
     sys.path.insert(0, str(RAIZ_PROJETO))
 
 from app import app
-from motor import carregar_dados, gerar_personagem, listar_opcoes_criacao
-from motor.util import ATRIBUTOS, modificador, normalizar
+from motor_pf2 import carregar_dados, gerar_personagem, listar_opcoes_criacao
+from motor_pf2.util import ATRIBUTOS, modificador, normalizar
 
 
 def verificar_contrato_e_matematica(res: dict, dados) -> None:

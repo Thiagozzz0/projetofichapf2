@@ -7,7 +7,7 @@ from typing import Any
 
 from flask import Flask, Response, jsonify, render_template, request
 
-from motor import (
+from motor_pf2 import (
     CLASSES_DIVINDADE_OBRIGATORIA,
     ErroValidacao,
     carregar_dados,

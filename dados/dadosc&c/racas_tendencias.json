@@ -1,0 +1,677 @@
+{
+  "metadados": {
+    "sistema": "Castles & Crusades",
+    "edicao": "1ª Edição Brasileira (Livro do Jogador)",
+    "arquivo_fonte": "ref/cc/Raças e Tendências.pdf",
+    "paginas_livro": "86–103",
+    "total_paginas_pdf": 18,
+    "versao_schema": 1,
+    "idioma": "pt-BR"
+  },
+  "regras_gerais_racas": {
+    "idiomas_adicionais": "Personagens com Inteligência elevada aprendem idiomas adicionais em quantidade igual ao modificador de Inteligência (positivo).",
+    "categorias_tamanho": {
+      "pequeno": "Altura entre 1,0 m e 1,35 m",
+      "medio": "Altura entre 1,35 m e 2,06 m"
+    },
+    "movimento_multiplicadores": {
+      "normal": 1,
+      "marchar": 2,
+      "correr_ou_disparar": 4
+    }
+  },
+  "racas": [
+    {
+      "id": "anao",
+      "nome": "Anão",
+      "paginas_livro": "87–88",
+      "tamanho": "pequeno",
+      "movimento_m": 6,
+      "total_atributos_primarios": 2,
+      "primarios_escolha_jogador": 1,
+      "modificadores_atributos": {
+        "constituicao": 1,
+        "destreza": -1
+      },
+      "modificadores_classe": {
+        "encontrar_armadilhas_estruturas": 2
+      },
+      "idiomas": [
+        "Comum",
+        "Anão",
+        "Gnomo",
+        "Goblinóide",
+        "Pequenino",
+        "Élfico",
+        "Ogro",
+        "Gigante",
+        "Troll"
+      ],
+      "classes_tipicas": [
+        "combatente",
+        "trapaceiro",
+        "barbaro",
+        "clerigo",
+        "bardo"
+      ],
+      "idade": {
+        "meia_idade": 225,
+        "idoso": 350,
+        "veneravel": 550,
+        "limite": "+2d%"
+      },
+      "altura": "1,15 a 1,55 m",
+      "peso": "63–68 kg",
+      "descricao": "Povo resistente, orgulhoso, leal e honrado das profundezas montanhosas, renomado por sua maestria em pedra, metal e batalha.",
+      "tracos": [
+        {
+          "id": "animosidade_elfos",
+          "nome": "Animosidade (Elfos)",
+          "atributo_teste": null,
+          "descricao": "Sofre penalidade de -2 em testes de Carisma ao lidar com elfos sem relacionamento próximo."
+        },
+        {
+          "id": "visao_nas_profundezas",
+          "nome": "Visão nas Profundezas",
+          "atributo_teste": null,
+          "descricao": "Enxerga na escuridão completa em tons de cinza até 36 m (precisa de 1 min para adaptar os olhos após extinção de luz brilhante)."
+        },
+        {
+          "id": "determinar_profundidade_e_direcao",
+          "nome": "Determinar Profundidade e Direção",
+          "atributo_teste": null,
+          "descricao": "Sente naturalmente sua profundidade aproximada e direção no subsolo."
+        },
+        {
+          "id": "inimizade_goblins_orcs",
+          "nome": "Inimizade (Goblins/Orcs)",
+          "atributo_teste": null,
+          "descricao": "+1 para acertar contra goblins ou orcs; -4 em testes de Carisma ao interagir com meio-orcs, goblins e orcs."
+        },
+        {
+          "id": "pericia_defensiva_gigantes_ogros",
+          "nome": "Perícia Defensiva (Gigantes/Ogros)",
+          "atributo_teste": null,
+          "descricao": "+4 na Classe de Armadura ao lutar contra gigantes ou ogros."
+        },
+        {
+          "id": "resistente_magia_arcana",
+          "nome": "Resistente à Magia Arcana",
+          "atributo_teste": null,
+          "descricao": "+3 em todas as jogadas de proteção contra feitiços arcanos e efeitos semelhantes."
+        },
+        {
+          "id": "resistente_ao_medo",
+          "nome": "Resistente ao Medo",
+          "atributo_teste": null,
+          "descricao": "+2 em todas as jogadas de proteção contra o medo."
+        },
+        {
+          "id": "resistente_a_venenos",
+          "nome": "Resistente a Venenos",
+          "atributo_teste": null,
+          "descricao": "+2 em todas as jogadas de proteção contra venenos."
+        },
+        {
+          "id": "escultor",
+          "nome": "Escultor",
+          "atributo_teste": "sabedoria",
+          "descricao": "Identifica construções incomuns, paredes deslizantes, armadilhas de pedra e portas secretas em pedra: teste de Sabedoria com +2 ao passar a 3 m (+4 procurando ativamente); revela raça criadora, idade e valor aproximado."
+        }
+      ]
+    },
+    {
+      "id": "elfo",
+      "nome": "Elfo",
+      "paginas_livro": "89–90",
+      "tamanho": "medio",
+      "movimento_m": 9,
+      "total_atributos_primarios": 2,
+      "primarios_escolha_jogador": 1,
+      "modificadores_atributos": {
+        "destreza": 1,
+        "constituicao": -1
+      },
+      "modificadores_classe": {
+        "ouvir": 2,
+        "mover_se_em_silencio": 2,
+        "encontrar_armadilhas": 2
+      },
+      "idiomas": [
+        "Comum",
+        "Élfico",
+        "Anão",
+        "Gnomo",
+        "Goblinóide",
+        "Pequenino",
+        "Orc"
+      ],
+      "classes_tipicas": [
+        "combatente",
+        "explorador",
+        "trapaceiro",
+        "mago",
+        "druida",
+        "cavaleiro",
+        "bardo"
+      ],
+      "idade": {
+        "meia_idade": 500,
+        "idoso": 1000,
+        "veneravel": 1500,
+        "limite": "+6d%"
+      },
+      "altura": "1,10 a 1,85 m",
+      "peso": "45–62 kg",
+      "descricao": "Raça antiga, ágil e quase atemporal, de graça etérea, sentidos aguçados e profunda sintonia com a beleza e a magia.",
+      "treinamento_armas_opcoes": [
+        "Arco Longo Composto",
+        "Arco Curto Composto",
+        "Arco Longo",
+        "Arco Curto",
+        "Espada Longa",
+        "Espada Curta"
+      ],
+      "tracos": [
+        {
+          "id": "sentidos_aprimorados_elfo",
+          "nome": "Sentidos Aprimorados",
+          "atributo_teste": null,
+          "descricao": "Enxerga detalhes a até 3 km ao ar livre durante o dia e recebe +2 em todos os testes envolvendo audição."
+        },
+        {
+          "id": "visao_crepuscular_elfo",
+          "nome": "Visão Crepuscular",
+          "atributo_teste": null,
+          "descricao": "Distingue cores e detalhes sob luz das estrelas, luar ou tochas por até 1 km ao ar livre."
+        },
+        {
+          "id": "mover_se_em_silencio_elfo",
+          "nome": "Mover-se em Silêncio",
+          "atributo_teste": "destreza",
+          "descricao": "Move-se silenciosamente em áreas selvagens (até 1/2 vel. sem penalidade, até máxima -5, correndo/atacando -20)."
+        },
+        {
+          "id": "resistencia_a_magia_elfo",
+          "nome": "Resistência à Magia",
+          "atributo_teste": null,
+          "descricao": "+10 em jogadas de proteção contra feitiços/efeitos que encantam ou causam sono não natural (permite JP mesmo contra sono)."
+        },
+        {
+          "id": "detectar_portas_ocultas_elfo",
+          "nome": "Detectar Portas Ocultas",
+          "atributo_teste": "sabedoria",
+          "descricao": "Teste de Sabedoria ao passar a 1,5 m de portas secretas/ocultas (+2 procurando ativamente)."
+        },
+        {
+          "id": "treinamento_com_armas_elfo",
+          "nome": "Treinamento com Armas",
+          "atributo_teste": null,
+          "descricao": "+1 para acertar com 1 arma escolhida dentre: arco longo composto, arco curto composto, arco longo, arco curto, espada longa ou espada curta."
+        }
+      ]
+    },
+    {
+      "id": "gnomo",
+      "nome": "Gnomo",
+      "paginas_livro": "91–92",
+      "tamanho": "pequeno",
+      "movimento_m": 6,
+      "total_atributos_primarios": 2,
+      "primarios_escolha_jogador": 1,
+      "modificadores_atributos": {
+        "inteligencia": 1,
+        "forca": -1
+      },
+      "modificadores_classe": {
+        "ouvir": 3
+      },
+      "idiomas": [
+        "Comum",
+        "Anão",
+        "Élfico",
+        "Gnomo",
+        "Goblinóide",
+        "Kobold"
+      ],
+      "classes_tipicas": [
+        "trapaceiro",
+        "ilusionista",
+        "druida",
+        "bardo"
+      ],
+      "idade": {
+        "meia_idade": 175,
+        "idoso": 260,
+        "veneravel": 350,
+        "limite": "+3d%"
+      },
+      "altura": "1,05 a 1,45 m",
+      "peso": "31–41 kg",
+      "descricao": "Povo pequeno, curioso, inteligente e ligado aos feéricos, famoso por sua alegria, artesanato, festivais e magia inata.",
+      "feiticos_inatos": [
+        "Orbes Dançantes",
+        "Som Fantasma",
+        "Prestidigitação"
+      ],
+      "tracos": [
+        {
+          "id": "empatia_animal",
+          "nome": "Empatia Animal",
+          "atributo_teste": null,
+          "descricao": "Comunica-se empaticamente/telepaticamente de forma simples com mamíferos subterrâneos (texugo, raposa, toupeira, coelho etc.)."
+        },
+        {
+          "id": "pericia_combate_goblins_kobolds",
+          "nome": "Perícia em Combate (Goblins, Kobolds)",
+          "atributo_teste": null,
+          "descricao": "+1 para acertar contra kobolds e goblins usando armas de mão em combate corpo a corpo (não se aplica a projéteis)."
+        },
+        {
+          "id": "visao_no_escuro_gnomo",
+          "nome": "Visão no Escuro",
+          "atributo_teste": null,
+          "descricao": "Enxerga na escuridão completa em tons de cinza por até 15 m (1 min de adaptação após luz brilhante)."
+        },
+        {
+          "id": "audicao_aprimorada",
+          "nome": "Audição Aprimorada",
+          "atributo_teste": null,
+          "descricao": "+3 em todos os testes de audição."
+        },
+        {
+          "id": "feiticos_inatos_gnomo",
+          "nome": "Feitiços Inatos",
+          "atributo_teste": null,
+          "descricao": "Conjura 1x/dia como conjurador de nível 1: Orbes Dançantes, Som Fantasma e Prestidigitação (adicionais aos feitiços de classe)."
+        }
+      ]
+    },
+    {
+      "id": "humano",
+      "nome": "Humano",
+      "paginas_livro": "93",
+      "tamanho": "medio",
+      "movimento_m": 9,
+      "total_atributos_primarios": 3,
+      "primarios_escolha_jogador": 2,
+      "modificadores_atributos": {},
+      "modificadores_classe": {},
+      "idiomas": [
+        "Comum"
+      ],
+      "classes_tipicas": [
+        "qualquer"
+      ],
+      "idade": {
+        "meia_idade": 35,
+        "idoso": 53,
+        "veneravel": 70,
+        "limite": "+2d20"
+      },
+      "altura": "1,42 a 2,05 m",
+      "peso": "45–90 kg",
+      "descricao": "A raça mais diversa e adaptável, impulsionada por ambição, versatilidade e determinação para moldar o mundo.",
+      "tracos": [
+        {
+          "id": "atributos_primarios_humano",
+          "nome": "Atributos Primários Adicionais",
+          "atributo_teste": null,
+          "descricao": "Escolhe 1 atributo primário adicional além do padrão, totalizando 3 atributos primários (1 da classe + 2 livres)."
+        }
+      ]
+    },
+    {
+      "id": "meio_elfo",
+      "nome": "Meio-Elfo",
+      "paginas_livro": "94–95",
+      "tamanho": "medio",
+      "movimento_m": 9,
+      "total_atributos_primarios": 2,
+      "primarios_escolha_jogador": 1,
+      "modificadores_atributos": {},
+      "modificadores_classe": {
+        "encontrar_armadilhas": 2,
+        "mover_se_em_silencio": 2
+      },
+      "idiomas": [
+        "Comum",
+        "Élfico"
+      ],
+      "idiomas_escolha_qtd": 3,
+      "idiomas_escolha_opcoes": [
+        "Anão",
+        "Gnomo",
+        "Goblinóide",
+        "Pequenino",
+        "Orc"
+      ],
+      "classes_tipicas": [
+        "qualquer"
+      ],
+      "idade": {
+        "meia_idade": 100,
+        "idoso": 150,
+        "veneravel": 200,
+        "limite": "+1d%"
+      },
+      "altura": "1,25 a 1,87 m",
+      "peso": "40–80 kg",
+      "descricao": "Raros descendentes de humanos e elfos, perspicazes e empáticos, divididos entre duas culturas e com traços definidos pela linhagem proeminente.",
+      "linhagens": {
+        "humana": {
+          "id": "humana",
+          "nome": "Linhagem Humana",
+          "modificadores_atributos": {},
+          "modificadores_classe": {},
+          "tracos": [
+            {
+              "id": "bonus_teste_atributo_secundario",
+              "nome": "Bônus do Teste de Atributo",
+              "atributo_teste": null,
+              "descricao": "Escolhe 1 atributo secundário e recebe +2 em todos os testes desse atributo."
+            },
+            {
+              "id": "resistencia_magia_meio_elfo_humano",
+              "nome": "Resistência à Magia",
+              "atributo_teste": null,
+              "descricao": "+2 em jogadas de proteção contra feitiços/efeitos que encantam ou causam sono não natural."
+            }
+          ]
+        },
+        "elfica": {
+          "id": "elfica",
+          "nome": "Linhagem Élfica",
+          "modificadores_atributos": {
+            "destreza": 1,
+            "constituicao": -1
+          },
+          "modificadores_classe": {
+            "ouvir": 2
+          },
+          "tracos": [
+            {
+              "id": "sentidos_aprimorados_meio_elfo",
+              "nome": "Sentidos Aprimorados",
+              "atributo_teste": null,
+              "descricao": "Enxerga detalhes a até 3 km ao ar livre durante o dia e recebe +2 em testes envolvendo audição."
+            },
+            {
+              "id": "resistencia_magia_meio_elfo_elfico",
+              "nome": "Resistência à Magia",
+              "atributo_teste": null,
+              "descricao": "+4 em jogadas de proteção contra feitiços/efeitos que encantam ou causam sono não natural (permite JP contra sono)."
+            }
+          ]
+        }
+      },
+      "tracos": [
+        {
+          "id": "empatia_meio_elfo",
+          "nome": "Empatia",
+          "atributo_teste": null,
+          "descricao": "+2 em todos os testes de Carisma (combinável com a modificação do teste de atributo)."
+        },
+        {
+          "id": "mover_se_em_silencio_meio_elfo",
+          "nome": "Mover-se em Silêncio",
+          "atributo_teste": "destreza",
+          "descricao": "Move-se silenciosamente em áreas selvagens (até 1/2 vel. sem penalidade, até máxima -5, mais rápido -20)."
+        },
+        {
+          "id": "detectar_portas_escondidas_meio_elfo",
+          "nome": "Detectar Portas Escondidas",
+          "atributo_teste": "sabedoria",
+          "descricao": "Teste de Sabedoria ao passar a 1,5 m de portas secretas/ocultas (+1 procurando ativamente)."
+        }
+      ]
+    },
+    {
+      "id": "meio_orc",
+      "nome": "Meio-Orc",
+      "paginas_livro": "96–97",
+      "tamanho": "medio",
+      "movimento_m": 9,
+      "total_atributos_primarios": 2,
+      "primarios_escolha_jogador": 1,
+      "modificadores_atributos": {
+        "constituicao": 1,
+        "forca": 1,
+        "carisma": -2
+      },
+      "modificadores_classe": {
+        "rastrear": 2
+      },
+      "idiomas": [
+        "Comum",
+        "Goblinóide",
+        "Orc"
+      ],
+      "classes_tipicas": [
+        "combatente",
+        "explorador",
+        "trapaceiro",
+        "assassino",
+        "barbaro",
+        "lutador",
+        "clerigo",
+        "cavaleiro"
+      ],
+      "idade": {
+        "meia_idade": 30,
+        "idoso": 45,
+        "veneravel": 60,
+        "limite": "+2d10"
+      },
+      "altura": "1,47 a 1,95 m",
+      "peso": "55–82 kg",
+      "descricao": "Guerreiros vigorosos e resistentes nascidos entre humanos e orcs, acostumados à vida dura nas margens da sociedade.",
+      "tracos": [
+        {
+          "id": "visao_no_escuro_meio_orc",
+          "nome": "Visão no Escuro",
+          "atributo_teste": null,
+          "descricao": "Enxerga na escuridão completa em tons de cinza por até 18 m (1 min de adaptação após luz brilhante)."
+        },
+        {
+          "id": "olfato_aprimorado",
+          "nome": "Olfato Aprimorado",
+          "atributo_teste": null,
+          "descricao": "Detecta presença de criaturas de 9 m até 18 m a favor do vento (2× para cheiros fortes, 3× para muito fortes) e reconhece cheiros familiares."
+        },
+        {
+          "id": "proeza_marcial",
+          "nome": "Proeza Marcial",
+          "atributo_teste": null,
+          "descricao": "+1 na Classe de Armadura sempre que não estiver usando armadura (acumula com itens mágicos e CA sem armadura do Lutador)."
+        },
+        {
+          "id": "resistente_a_doencas",
+          "nome": "Resistente a Doenças",
+          "atributo_teste": null,
+          "descricao": "+2 em todas as jogadas de proteção contra doenças."
+        }
+      ]
+    },
+    {
+      "id": "pequenino",
+      "nome": "Pequenino",
+      "paginas_livro": "98–99",
+      "tamanho": "pequeno",
+      "movimento_m": 6,
+      "total_atributos_primarios": 2,
+      "primarios_escolha_jogador": 1,
+      "modificadores_atributos": {
+        "destreza": 1,
+        "forca": -1
+      },
+      "modificadores_classe": {
+        "ocultar": 2,
+        "esconder_se": 2,
+        "mover_se_em_silencio": 2
+      },
+      "idiomas": [
+        "Pequenino",
+        "Comum",
+        "Anão",
+        "Gnomo",
+        "Élfico",
+        "Silvestre",
+        "Goblinóide"
+      ],
+      "classes_tipicas": [
+        "combatente",
+        "explorador",
+        "trapaceiro",
+        "clerigo",
+        "druida",
+        "bardo"
+      ],
+      "idade": {
+        "meia_idade": 50,
+        "idoso": 75,
+        "veneravel": 100,
+        "limite": "+5d20"
+      },
+      "altura": "0,90 a 1,38 m",
+      "peso": "20–31 kg",
+      "descricao": "Povo agrário, hospitaleiro e surpreendentemente corajoso, de pés ligeiros, discrição natural e coração destemido.",
+      "tracos": [
+        {
+          "id": "destemido",
+          "nome": "Destemido",
+          "atributo_teste": null,
+          "descricao": "+2 em todas as jogadas de proteção contra o medo."
+        },
+        {
+          "id": "esconder_se_pequenino",
+          "nome": "Esconder-se",
+          "atributo_teste": "destreza",
+          "descricao": "Oculta-se em ambientes externos (-5 movendo até 1/2 vel., -10 até vel. máxima, -10 se observador distraído)."
+        },
+        {
+          "id": "mover_se_em_silencio_pequenino",
+          "nome": "Mover-se em Silêncio",
+          "atributo_teste": "destreza",
+          "descricao": "Move-se silenciosamente (até 1/2 vel. sem penalidade, até máxima -5, correndo/atacando -20)."
+        },
+        {
+          "id": "visao_crepuscular_pequenino",
+          "nome": "Visão Crepuscular",
+          "atributo_teste": null,
+          "descricao": "Enxerga sob luz das estrelas e da lua com clareza de crepúsculo (sem visão aprimorada em subterrâneos/tochas)."
+        },
+        {
+          "id": "resistente_pequenino",
+          "nome": "Resistente",
+          "atributo_teste": null,
+          "descricao": "+1 em todas as jogadas de proteção de Constituição."
+        }
+      ]
+    }
+  ],
+  "disposicoes": {
+    "paginas_livro": "100–102",
+    "regra_estrutura": "Castles & Crusades divide a disposição em três categorias (Lei/Caos, Bem/Mal e Neutro) com disposição primária e opcionalmente secundária (ex.: Lei/Bem indica primariamente Leal com tendências Boas; Bem/Lei indica primariamente Bom com tendências Leais).",
+    "eixos": {
+      "etica": {
+        "lei": "Honra, confiabilidade, obediência à autoridade legítima e respeito à tradição.",
+        "neutro": "Respeito equilibrado pela autoridade sem compulsão para obedecer ou rebelar-se.",
+        "caos": "Liberdade individual, adaptabilidade, flexibilidade e consciência acima da tradição."
+      },
+      "moral": {
+        "bem": "Altruísmo, respeito à vida, proteção aos inocentes e dignidade dos seres sencientes.",
+        "neutro": "Equilíbrio entre altruísmo e interesse próprio; comprometimento por laços pessoais.",
+        "mal": "Egoísmo, opressão, crueldade ou desprezo pela vida inocente."
+      }
+    },
+    "combinacoes": [
+      {
+        "id": "lei_bem",
+        "nome": "Lei/Bem ou Bem/Lei",
+        "variantes": [
+          "Lei/Bem",
+          "Bem/Lei"
+        ],
+        "resumo": "Dedicados à lei, ordem, verdade, honra e ao benefício moral da sociedade."
+      },
+      {
+        "id": "lei_neutro",
+        "nome": "Lei/Neutro ou Neutro/Lei",
+        "variantes": [
+          "Lei/Neutro",
+          "Neutro/Lei"
+        ],
+        "resumo": "Valorizam primariamente a ordem, estrutura e regulação acima de bem ou mal."
+      },
+      {
+        "id": "lei_mal",
+        "nome": "Lei/Mal ou Mal/Lei",
+        "variantes": [
+          "Lei/Mal",
+          "Mal/Lei"
+        ],
+        "resumo": "Usam estrutura, lei e controle rígido para impor seus ideais e poder sem limites morais."
+      },
+      {
+        "id": "neutro_bem",
+        "nome": "Neutro/Bem ou Bem/Neutro",
+        "variantes": [
+          "Neutro/Bem",
+          "Bem/Neutro"
+        ],
+        "resumo": "Respeitam lei e liberdade buscando equilíbrio, misericórdia e combate ao mal."
+      },
+      {
+        "id": "neutro",
+        "nome": "Neutro",
+        "variantes": [
+          "Neutro"
+        ],
+        "resumo": "Buscam equilíbrio entre lei/caos e bem/mal, ou seguem a ordem natural ou código próprio."
+      },
+      {
+        "id": "neutro_mal",
+        "nome": "Neutro/Mal ou Mal/Neutro",
+        "variantes": [
+          "Neutro/Mal",
+          "Mal/Neutro"
+        ],
+        "resumo": "Puro egoísmo e busca por benefício próprio, desprezando tanto lei quanto caos."
+      },
+      {
+        "id": "caos_bem",
+        "nome": "Caos/Bem ou Bem/Caos",
+        "variantes": [
+          "Caos/Bem",
+          "Bem/Caos"
+        ],
+        "resumo": "Defendem a liberdade individual e a felicidade/bem-estar de todos acima de regras rígidas."
+      },
+      {
+        "id": "caos_neutro",
+        "nome": "Caos/Neutro ou Neutro/Caos",
+        "variantes": [
+          "Caos/Neutro",
+          "Neutro/Caos"
+        ],
+        "resumo": "Valorizam liberdade pessoal, acaso e rejeição a amarras sociais ou autoridade."
+      },
+      {
+        "id": "caos_mal",
+        "nome": "Caos/Mal ou Mal/Caos",
+        "variantes": [
+          "Caos/Mal",
+          "Mal/Caos"
+        ],
+        "resumo": "Desprezo por regras e vidas, buscando destruição, poder arbitrário e capricho dos fortes."
+      }
+    ]
+  },
+  "finalizando_personagem": {
+    "paginas_livro": "100, 102–103",
+    "identidade": "Definir aparência física, maneirismos, traços de personalidade, objetivos, histórico e medos.",
+    "divindade": "Escolha opcional para a maioria das classes; obrigatória/central para Clérigos e Druidas (com símbolos sagrados e possível arma favorecida pelo GC).",
+    "nomes": "Devem refletir cultura, raça, classe e personalidade do personagem."
+  }
+}

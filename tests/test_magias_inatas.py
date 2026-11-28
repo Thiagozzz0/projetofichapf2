@@ -5,7 +5,7 @@ from __future__ import annotations
 import unittest
 
 from app import ASSET_VERSION, app as flask_app
-from motor import ErroValidacao, carregar_dados, gerar_personagem
+from motor_pf2 import ErroValidacao, carregar_dados, gerar_personagem
 
 
 class DuplaMagiaInataTests(unittest.TestCase):

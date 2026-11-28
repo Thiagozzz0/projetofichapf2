@@ -26,7 +26,7 @@ RAIZ_PROJETO = Path(__file__).resolve().parent.parent
 if str(RAIZ_PROJETO) not in sys.path:
     sys.path.insert(0, str(RAIZ_PROJETO))
 
-from motor.equipamentos import calcular_proficiencias_combate, grau_arma
+from motor_pf2.equipamentos import calcular_proficiencias_combate, grau_arma
 
 DIR_DADOS = RAIZ_PROJETO / "dados" / "dadospf2"
 CAMINHO_SAIDA = DIR_DADOS / "conceitos_subclasses.json"

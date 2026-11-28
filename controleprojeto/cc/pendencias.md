@@ -6,7 +6,6 @@ Lista viva e priorizada das etapas para construir o gerador de fichas de **Castl
 
 ## 1. Materiais de Referência e Conversão para JSON (`ref/cc/` → `dados/dadosc&c/`)
 
-- [ ] **Converter Raças** → `dados/dadosc&c/racas.json` *(aguardando PDF recortado em `ref/cc/`)*
 - [ ] **Converter Equipamentos (Armas, Armaduras, Escudos, Itens e Carga)** → `dados/dadosc&c/equipamentos.json` *(aguardando PDF em `ref/cc/`)*
 - [ ] **Converter Magias (Listas por Classe e Descrições)** → `dados/dadosc&c/magias.json` *(aguardando PDF em `ref/cc/`)*
 - [ ] **Mapear a Ficha Oficial de C&C** → `dados/dadosc&c/estrutura_ficha.json` *(aguardando PDF em `ref/cc/`)*

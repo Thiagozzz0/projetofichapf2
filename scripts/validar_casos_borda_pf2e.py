@@ -14,7 +14,7 @@ RAIZ_PROJETO = Path(__file__).resolve().parent.parent
 if str(RAIZ_PROJETO) not in sys.path:
     sys.path.insert(0, str(RAIZ_PROJETO))
 
-from motor import (
+from motor_pf2 import (
     ErroValidacao,
     carregar_acesso_mestre,
     carregar_dados,
@@ -24,21 +24,21 @@ from motor import (
     resolver_configuracao_regras_casa,
     validar_senha_regras_casa,
 )
-from motor.biografia_pericias import calcular_idiomas, calcular_pericias
-from motor.combate_matematica import calcular_matematica_final
-from motor.companheiros import gerar_companheiro_ou_familiar
-from motor.equipamentos import (
+from motor_pf2.biografia_pericias import calcular_idiomas, calcular_pericias
+from motor_pf2.combate_matematica import calcular_matematica_final
+from motor_pf2.companheiros import gerar_companheiro_ou_familiar
+from motor_pf2.equipamentos import (
     calcular_proficiencias_combate,
     comprar_equipamentos,
     grau_arma,
     listar_catalogo_equipamentos_loja,
 )
-from motor.exportacao import exportar_ficha_docx, exportar_ficha_pdf, exportar_ficha_txt
-from motor.exportacao.exportar_pdf import _pdf_coletar_secoes_referencia
-from motor.magias import gerar_conjuracao
-from motor.regras_atributos import calcular_atributos
-from motor.talentos import selecionar_talentos
-from motor.util import normalizar
+from motor_pf2.exportacao import exportar_ficha_docx, exportar_ficha_pdf, exportar_ficha_txt
+from motor_pf2.exportacao.exportar_pdf import _pdf_coletar_secoes_referencia
+from motor_pf2.magias import gerar_conjuracao
+from motor_pf2.regras_atributos import calcular_atributos
+from motor_pf2.talentos import selecionar_talentos
+from motor_pf2.util import normalizar
 
 
 def test_ca_limite_destreza_e_sem_armadura() -> None:
@@ -207,7 +207,7 @@ def test_armas_acuidade_ladrao_propulsiva_posturas_e_anao_mago() -> None:
     assert golpe_lad["dano"]["for"] == lad["ficha"]["atributos"]["des"]["modificador"]
 
     # Propulsiva com FOR positiva (+3 -> +1) vs negativa (-1 -> -1)
-    from motor.combate_matematica import _preencher_golpe
+    from motor_pf2.combate_matematica import _preencher_golpe
     arco_comp = db.armas["arco_longo_composto"]
     slot_pos = {"arma": "", "ataque": {}, "dano": {}}
     _preencher_golpe(slot_pos, arco_comp, True, "especialista", 1, {"for": 3, "des": 4}, "guerreiro", "arqueiro")
@@ -466,7 +466,7 @@ def test_acoes_classe_pagina3_e_zero_descarte_talentos() -> None:
 
     # Exportação PDF de Ladino N4 e N5 com talentos agrupados não deve truncar títulos nem perder descrições na Referência Completa
     import pymupdf
-    from motor.exportacao import exportar_ficha_pdf
+    from motor_pf2.exportacao import exportar_ficha_pdf
 
     pdf_lad4 = exportar_ficha_pdf(lad4)
     with pymupdf.open(stream=pdf_lad4, filetype="pdf") as doc4:
@@ -1558,7 +1558,7 @@ def test_personalizacao_companheiro_familiar_e_perfil() -> None:
 
     # 4. Catálogo completo de estatísticas N1 e Página 5 automática no PDF (5 pág. c/ companheiro ou familiar, 4 pág. sem)
     import pymupdf
-    from motor.companheiros import listar_catalogo_companheiros_familiares
+    from motor_pf2.companheiros import listar_catalogo_companheiros_familiares
 
     cat_cf = listar_catalogo_companheiros_familiares(db)
     assert len(cat_cf["companheiros_animais"]) == 8
