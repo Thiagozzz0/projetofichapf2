@@ -1,0 +1,4266 @@
+{
+  "metadados": {
+    "sistema": "Castles & Crusades",
+    "edicao": "1ª Edição Brasileira (Livro do Jogador)",
+    "arquivo_fonte": "ref/cc/Equipamentos_e_Sobrecarga_C&C.pdf",
+    "paginas_livro": "104–111",
+    "total_paginas_pdf": 8,
+    "versao_schema": 1,
+    "idioma": "pt-BR"
+  },
+  "moedas": {
+    "conversao": {
+      "1_platina_em_ouro": 10,
+      "1_ouro_em_prata": 10,
+      "1_prata_em_cobre": 10,
+      "valores_em_pc": {
+        "pc": 1,
+        "pp": 10,
+        "po": 100,
+        "pl": 1000
+      }
+    },
+    "peso_e_sobrecarga": {
+      "peso_por_moeda_g": 28,
+      "moedas_por_450g": 16,
+      "moedas_por_1_sb": 160,
+      "regra": "450 g (16 moedas) não têm SB apreciável; 4,5 kg (160 moedas) equivalem a 1 SB."
+    },
+    "ouro_inicial_por_classe": {
+      "combatente": {
+        "rolagem": "3d8x10",
+        "min_po": 30,
+        "max_po": 240
+      },
+      "explorador": {
+        "rolagem": "3d8x10",
+        "min_po": 30,
+        "max_po": 240
+      },
+      "trapaceiro": {
+        "rolagem": "3d4x10",
+        "min_po": 30,
+        "max_po": 120
+      },
+      "assassino": {
+        "rolagem": "3d4x10",
+        "min_po": 30,
+        "max_po": 120
+      },
+      "bardo": {
+        "rolagem": "3d4x10",
+        "min_po": 30,
+        "max_po": 120
+      },
+      "barbaro": {
+        "rolagem": "2d4x10",
+        "min_po": 20,
+        "max_po": 80
+      },
+      "lutador": {
+        "rolagem": "2d4x10",
+        "min_po": 20,
+        "max_po": 80
+      },
+      "mago": {
+        "rolagem": "1d10x10",
+        "min_po": 10,
+        "max_po": 100
+      },
+      "ilusionista": {
+        "rolagem": "1d10x10",
+        "min_po": 10,
+        "max_po": 100
+      },
+      "clerigo": {
+        "rolagem": "2d10x10",
+        "min_po": 20,
+        "max_po": 200
+      },
+      "druida": {
+        "rolagem": "2d10x10",
+        "min_po": 20,
+        "max_po": 200
+      },
+      "cavaleiro": {
+        "rolagem": "6d4x10",
+        "min_po": 60,
+        "max_po": 240
+      },
+      "paladino": {
+        "rolagem": "6d4x10",
+        "min_po": 60,
+        "max_po": 240
+      }
+    }
+  },
+  "notas_tabelas": {
+    "elmos": "Os ajustes de CA dos elmos aplicam-se apenas a ataques direcionados à cabeça, não afetando a CA geral. Elmos incluídos sem custo adicional: Cota de Escamas (Coifa de Couro), Cota de Malha (Coifa de Malha), Armadura de Placas (Elmo Normal), Armadura Completa e Hussarda Polonesa (Elmo Grande).",
+    "armaduras": {
+      "1": "Grego: grevas de bronze, braçais, peitoral e elmo médio.",
+      "2": "Grego: grevas, braçais, peitoral e elmo médio, de ferro.",
+      "3": "Romano: armadura de escamas, grevas e braçais de cobre, elmo de cobre.",
+      "4": "Romano: armadura segmentada, grevas e braçais de ferro, elmo de ferro."
+    },
+    "escudos": {
+      "1": "Bônus de CA aplicado apenas contra 1 oponente por turno.",
+      "2": "Bônus de CA aplicado apenas contra 2 oponentes por turno.",
+      "3": "Bônus de CA aplicado apenas contra 3 oponentes por turno.",
+      "4": "Pavis: apoiado no chão como parede móvel; bônus de CA (+6) afeta todos os inimigos à frente."
+    },
+    "armas_corpo_a_corpo": {
+      "1": "Armas corpo a corpo com alcance podem ser usadas como armas de arremesso/projétil.",
+      "2": "+2 para acertar contra armaduras de malha, placas ou escamas.",
+      "3": "Pode funcionar como arma corpo a corpo ou conceder +1 na CA (escolhido no início do turno).",
+      "4": "Pode prender inimigos médios ou pequenos (declarado antes; superar CA 15 + nível; alvo livre com teste DES sofrendo 1d4 dano).",
+      "5": "+3 para desarmar oponentes (se proficiente).",
+      "6": "Corpo a corpo, desarmar ou subjugar (+3 para desarmar/subjugar, declarado antes).",
+      "7": "Causa o dobro do dano em investida montada.",
+      "8": "Causa o dobro do dano se firmada para receber uma investida.",
+      "9": "Causa 1d12 de dano quando empunhada com as duas mãos.",
+      "10": "Deve ser usada com as duas mãos.",
+      "11": "Alcance estendido de 3 metros.",
+      "12": "Considerada arma de haste."
+    },
+    "cota_montaria_ponei": "Para pônei, custa metade do preço, tem 2/3 do peso e reduz a SB em 1 ponto.",
+    "equipamento_geral": {
+      "*": "Sem SB apreciável; se carregar mais de 10 unidades, conte 1 SB a cada 10 itens.",
+      "1": "SB listada para o item cheio; se vazio, reduza a SB em 2 (mínimo 1).",
+      "2": "Personagem de tamanho humano pode levar no cinto no máximo 2 bolsas grandes e 1 bolsa pequena."
+    }
+  },
+  "elmos": [
+    {
+      "id": "armete",
+      "nome": "Armete",
+      "custo": "10 po",
+      "custo_pc": 1000,
+      "ca": 6,
+      "ca_texto": "6",
+      "peso": "3 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "notas": []
+    },
+    {
+      "id": "barbuta",
+      "nome": "Barbuta",
+      "custo": "15 po",
+      "custo_pc": 1500,
+      "ca": 4,
+      "ca_texto": "4",
+      "peso": "3 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "notas": []
+    },
+    {
+      "id": "benin",
+      "nome": "Benin",
+      "custo": "8 po",
+      "custo_pc": 800,
+      "ca": 2,
+      "ca_texto": "2",
+      "peso": "2,2 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "notas": []
+    },
+    {
+      "id": "casquete",
+      "nome": "Casquete",
+      "custo": "10 po",
+      "custo_pc": 1000,
+      "ca": 2,
+      "ca_texto": "2",
+      "peso": "3,6 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "notas": []
+    },
+    {
+      "id": "chapeu_de_guerra",
+      "nome": "Chapéu de Guerra",
+      "custo": "7 po",
+      "custo_pc": 700,
+      "ca": 2,
+      "ca_texto": "2",
+      "peso": "2,7 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "notas": []
+    },
+    {
+      "id": "coifa_cota_de_malha",
+      "nome": "Coifa, Cota de Malha",
+      "custo": "15 po",
+      "custo_pc": 1500,
+      "ca": 4,
+      "ca_texto": "4",
+      "peso": "2,2 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "notas": []
+    },
+    {
+      "id": "coifa_de_couro",
+      "nome": "Coifa de Couro",
+      "custo": "4 po",
+      "custo_pc": 400,
+      "ca": 1,
+      "ca_texto": "1",
+      "peso": "1 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "notas": []
+    },
+    {
+      "id": "elmo_grande",
+      "nome": "Elmo grande",
+      "custo": "20 po",
+      "custo_pc": 2000,
+      "ca": 7,
+      "ca_texto": "7",
+      "peso": "3,6 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "notas": []
+    },
+    {
+      "id": "elmo_normal",
+      "nome": "Elmo normal",
+      "custo": "10 po",
+      "custo_pc": 1000,
+      "ca": 5,
+      "ca_texto": "5",
+      "peso": "2 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "notas": []
+    },
+    {
+      "id": "elmo_normando",
+      "nome": "Elmo normando",
+      "custo": "8 po",
+      "custo_pc": 800,
+      "ca": 3,
+      "ca_texto": "3",
+      "peso": "3 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "notas": []
+    },
+    {
+      "id": "elmo_de_pote",
+      "nome": "Elmo de Pote",
+      "custo": "5 po",
+      "custo_pc": 500,
+      "ca": 2,
+      "ca_texto": "2",
+      "peso": "2,7 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "notas": []
+    }
+  ],
+  "armaduras": [
+    {
+      "id": "armadura_acolchoada",
+      "nome": "Armadura Acolchoada",
+      "custo": "5 po",
+      "custo_pc": 500,
+      "ca": 1,
+      "ca_texto": "1",
+      "peso": "4,5 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "notas": []
+    },
+    {
+      "id": "armadura_completa",
+      "nome": "Armadura Completa",
+      "custo": "1000 po",
+      "custo_pc": 100000,
+      "ca": 8,
+      "ca_texto": "8",
+      "peso": "22 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": []
+    },
+    {
+      "id": "armadura_de_couro",
+      "nome": "Armadura de Couro",
+      "custo": "10 po",
+      "custo_pc": 1000,
+      "ca": 2,
+      "ca_texto": "2",
+      "peso": "7 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "notas": []
+    },
+    {
+      "id": "armadura_de_placas",
+      "nome": "Armadura de Placas",
+      "custo": "600 po",
+      "custo_pc": 60000,
+      "ca": 7,
+      "ca_texto": "7",
+      "peso": "20 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": []
+    },
+    {
+      "id": "brigandina",
+      "nome": "Brigandina",
+      "custo": "85 po",
+      "custo_pc": 8500,
+      "ca": 4,
+      "ca_texto": "4",
+      "peso": "11 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": []
+    },
+    {
+      "id": "camisa_de_cota_de_malha",
+      "nome": "Camisa de Cota de Malha",
+      "custo": "100 po",
+      "custo_pc": 10000,
+      "ca": 4,
+      "ca_texto": "4",
+      "peso": "11 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "notas": []
+    },
+    {
+      "id": "casaco_de_couro",
+      "nome": "Casaco de Couro",
+      "custo": "7 po",
+      "custo_pc": 700,
+      "ca": 1,
+      "ca_texto": "1",
+      "peso": "4,5 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "notas": []
+    },
+    {
+      "id": "conjunto_completo",
+      "nome": "Conjunto Completo (4)",
+      "custo": "650 po",
+      "custo_pc": 65000,
+      "ca": 7,
+      "ca_texto": "7",
+      "peso": "20 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": [
+        4
+      ]
+    },
+    {
+      "id": "conjunto_grego",
+      "nome": "Conjunto Grego (1)",
+      "custo": "120 po",
+      "custo_pc": 12000,
+      "ca": 5,
+      "ca_texto": "5",
+      "peso": "18 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": [
+        1
+      ]
+    },
+    {
+      "id": "conjunto_grego_2",
+      "nome": "Conjunto Grego (2)",
+      "custo": "230 po",
+      "custo_pc": 23000,
+      "ca": 6,
+      "ca_texto": "6",
+      "peso": "22 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": [
+        2
+      ]
+    },
+    {
+      "id": "conjunto_romano",
+      "nome": "Conjunto Romano (3)",
+      "custo": "240 po",
+      "custo_pc": 24000,
+      "ca": 6,
+      "ca_texto": "6",
+      "peso": "14 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": [
+        3
+      ]
+    },
+    {
+      "id": "cota_de_aneis",
+      "nome": "Cota de Anéis",
+      "custo": "30 po",
+      "custo_pc": 3000,
+      "ca": 3,
+      "ca_texto": "3",
+      "peso": "9 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "notas": []
+    },
+    {
+      "id": "cota_de_bandas",
+      "nome": "Cota de Bandas",
+      "custo": "250 po",
+      "custo_pc": 25000,
+      "ca": 6,
+      "ca_texto": "6",
+      "peso": "18 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": []
+    },
+    {
+      "id": "cota_de_escamas",
+      "nome": "Cota de Escamas",
+      "custo": "50 po",
+      "custo_pc": 5000,
+      "ca": 4,
+      "ca_texto": "4",
+      "peso": "14 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": []
+    },
+    {
+      "id": "cota_de_malha_completa",
+      "nome": "Cota de Malha Completa",
+      "custo": "200 po",
+      "custo_pc": 20000,
+      "ca": 6,
+      "ca_texto": "6",
+      "peso": "20 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": []
+    },
+    {
+      "id": "cota_de_placas",
+      "nome": "Cota de Placas",
+      "custo": "100 po",
+      "custo_pc": 10000,
+      "ca": 5,
+      "ca_texto": "5",
+      "peso": "20 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": []
+    },
+    {
+      "id": "cota_de_talas",
+      "nome": "Cota de Talas",
+      "custo": "200 po",
+      "custo_pc": 20000,
+      "ca": 6,
+      "ca_texto": "6",
+      "peso": "20 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": []
+    },
+    {
+      "id": "couro_cozido",
+      "nome": "Couro Cozido",
+      "custo": "45 po",
+      "custo_pc": 4500,
+      "ca": 4,
+      "ca_texto": "4",
+      "peso": "11 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": []
+    },
+    {
+      "id": "couro_tachado",
+      "nome": "Couro Tachado",
+      "custo": "25 po",
+      "custo_pc": 2500,
+      "ca": 3,
+      "ca_texto": "3",
+      "peso": "9 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "notas": []
+    },
+    {
+      "id": "hussarda_polonesa",
+      "nome": "Hussarda Polonesa",
+      "custo": "1750 po",
+      "custo_pc": 175000,
+      "ca": 8,
+      "ca_texto": "8",
+      "peso": "22 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "notas": []
+    },
+    {
+      "id": "laminar_de_couro",
+      "nome": "Laminar de Couro",
+      "custo": "55 po",
+      "custo_pc": 5500,
+      "ca": 3,
+      "ca_texto": "3",
+      "peso": "11 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "notas": []
+    },
+    {
+      "id": "loriga_de_cota_de_malha",
+      "nome": "Loriga de Cota de Malha",
+      "custo": "150 po",
+      "custo_pc": 15000,
+      "ca": 5,
+      "ca_texto": "5",
+      "peso": "16 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": []
+    },
+    {
+      "id": "peitoral_de_aco",
+      "nome": "Peitoral de Aço",
+      "custo": "300 po",
+      "custo_pc": 30000,
+      "ca": 5,
+      "ca_texto": "5",
+      "peso": "14 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "notas": []
+    },
+    {
+      "id": "peitoral_de_bronze",
+      "nome": "Peitoral de Bronze",
+      "custo": "95 po",
+      "custo_pc": 9500,
+      "ca": 4,
+      "ca_texto": "4",
+      "peso": "9 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "notas": []
+    },
+    {
+      "id": "peles",
+      "nome": "Peles",
+      "custo": "20 po",
+      "custo_pc": 2000,
+      "ca": 3,
+      "ca_texto": "3",
+      "peso": "11 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": []
+    }
+  ],
+  "escudos": [
+    {
+      "id": "broquel",
+      "nome": "Broquel",
+      "custo": "2 po",
+      "custo_pc": 200,
+      "ca": 1,
+      "ca_texto": "+1 (1)",
+      "peso": "2 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "notas": [
+        1
+      ]
+    },
+    {
+      "id": "escudo_pequeno_de_aco",
+      "nome": "Escudo, pequeno de aço",
+      "custo": "9 po",
+      "custo_pc": 900,
+      "ca": 1,
+      "ca_texto": "+1 (1)",
+      "peso": "2 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "notas": [
+        1
+      ]
+    },
+    {
+      "id": "escudo_pequeno_de_madeira",
+      "nome": "Escudo, pequeno de madeira",
+      "custo": "3 po",
+      "custo_pc": 300,
+      "ca": 1,
+      "ca_texto": "+1 (1)",
+      "peso": "2 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "notas": [
+        1
+      ]
+    },
+    {
+      "id": "escudo_medio_de_aco",
+      "nome": "Escudo, médio de aço",
+      "custo": "15 po",
+      "custo_pc": 1500,
+      "ca": 1,
+      "ca_texto": "+1 (2)",
+      "peso": "4,5 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "notas": [
+        2
+      ]
+    },
+    {
+      "id": "escudo_medio_de_madeira",
+      "nome": "Escudo, médio de madeira",
+      "custo": "5 po",
+      "custo_pc": 500,
+      "ca": 1,
+      "ca_texto": "+1 (2)",
+      "peso": "2 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "notas": [
+        2
+      ]
+    },
+    {
+      "id": "escudo_grande_de_aco",
+      "nome": "Escudo, grande de aço",
+      "custo": "20 po",
+      "custo_pc": 2000,
+      "ca": 1,
+      "ca_texto": "+1 (3)",
+      "peso": "7 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": [
+        3
+      ]
+    },
+    {
+      "id": "escudo_grande_de_madeira",
+      "nome": "Escudo, grande de madeira",
+      "custo": "7 po",
+      "custo_pc": 700,
+      "ca": 1,
+      "ca_texto": "+1 (3)",
+      "peso": "4,5 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": [
+        3
+      ]
+    },
+    {
+      "id": "pavis",
+      "nome": "Pavis",
+      "custo": "55 po",
+      "custo_pc": 5500,
+      "ca": 6,
+      "ca_texto": "+6 (4)",
+      "peso": "41 kg",
+      "sb": 12,
+      "sb_texto": "12",
+      "notas": [
+        4
+      ]
+    }
+  ],
+  "armas_corpo_a_corpo": [
+    {
+      "id": "adaga",
+      "nome": "Adaga",
+      "custo": "2 po",
+      "custo_pc": 200,
+      "dano": "1d4",
+      "alcance": "6 m",
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "notas": [
+        1
+      ],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": true
+    },
+    {
+      "id": "alabarda",
+      "nome": "Alabarda",
+      "custo": "10 po",
+      "custo_pc": 1000,
+      "dano": "1d10",
+      "alcance": null,
+      "peso": "7 kg",
+      "sb": 5,
+      "sb_texto": "5",
+      "notas": [
+        10,
+        12
+      ],
+      "duas_maos": true,
+      "arma_de_haste": true,
+      "arremessavel": false
+    },
+    {
+      "id": "bardiche",
+      "nome": "Bardiche",
+      "custo": "15 po",
+      "custo_pc": 1500,
+      "dano": "2d4",
+      "alcance": null,
+      "peso": "4,5 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": [
+        10,
+        12
+      ],
+      "duas_maos": true,
+      "arma_de_haste": true,
+      "arremessavel": false
+    },
+    {
+      "id": "bico_de_corvo",
+      "nome": "Bico de Corvo",
+      "custo": "12 po",
+      "custo_pc": 1200,
+      "dano": "1d10",
+      "alcance": null,
+      "peso": "2 kg",
+      "sb": 5,
+      "sb_texto": "5",
+      "notas": [
+        2,
+        10,
+        12
+      ],
+      "duas_maos": true,
+      "arma_de_haste": true,
+      "arremessavel": false
+    },
+    {
+      "id": "cajado",
+      "nome": "Cajado",
+      "custo": "—",
+      "custo_pc": null,
+      "dano": "1d6",
+      "alcance": null,
+      "peso": "2 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "cestus",
+      "nome": "Cestus",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "dano": "+1dmg",
+      "alcance": null,
+      "peso": "—",
+      "sb": 1,
+      "sb_texto": "1",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "chicote",
+      "nome": "Chicote",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "dano": "1d2",
+      "alcance": "4,5 m",
+      "peso": "1 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": true
+    },
+    {
+      "id": "clava",
+      "nome": "Clava",
+      "custo": "5 po",
+      "custo_pc": 500,
+      "dano": "1d3",
+      "alcance": "6 m",
+      "peso": "0,5 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "notas": [
+        1
+      ],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": true
+    },
+    {
+      "id": "clava_pesada",
+      "nome": "Clava Pesada",
+      "custo": "15 po",
+      "custo_pc": 1500,
+      "dano": "1d6+1",
+      "alcance": null,
+      "peso": "2,5 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "cutelo",
+      "nome": "Cutelo",
+      "custo": "5 po",
+      "custo_pc": 500,
+      "dano": "1d4",
+      "alcance": null,
+      "peso": "0,5 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "cutelo_longo",
+      "nome": "Cutelo Longo",
+      "custo": "8 po",
+      "custo_pc": 800,
+      "dano": "2d4",
+      "alcance": null,
+      "peso": "2,5 kg",
+      "sb": 5,
+      "sb_texto": "5",
+      "notas": [
+        9,
+        12
+      ],
+      "duas_maos": false,
+      "arma_de_haste": true,
+      "arremessavel": false
+    },
+    {
+      "id": "espada_larga_9_aneis",
+      "nome": "Espada Larga, 9 anéis",
+      "custo": "30 po",
+      "custo_pc": 3000,
+      "dano": "1d10",
+      "alcance": null,
+      "peso": "2 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "espada_bastarda",
+      "nome": "Espada, Bastarda",
+      "custo": "25 po",
+      "custo_pc": 2500,
+      "dano": "1d10",
+      "alcance": null,
+      "peso": "1,5 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": [
+        9
+      ],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "espada_cimitarra",
+      "nome": "Espada, Cimitarra",
+      "custo": "15 po",
+      "custo_pc": 1500,
+      "dano": "1d6",
+      "alcance": null,
+      "peso": "1,5 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "espada_cimitarra_grande",
+      "nome": "Espada, Cimitarra grande",
+      "custo": "55 po",
+      "custo_pc": 5500,
+      "dano": "2d6",
+      "alcance": null,
+      "peso": "2,5 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": [
+        10
+      ],
+      "duas_maos": true,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "espada_curta",
+      "nome": "Espada, Curta",
+      "custo": "10 po",
+      "custo_pc": 1000,
+      "dano": "1d6",
+      "alcance": null,
+      "peso": "2 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "espada_duas_maos",
+      "nome": "Espada, Duas Mãos",
+      "custo": "30 po",
+      "custo_pc": 3000,
+      "dano": "2d6",
+      "alcance": null,
+      "peso": "2,5 kg",
+      "sb": 5,
+      "sb_texto": "5",
+      "notas": [
+        10
+      ],
+      "duas_maos": true,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "espada_falcione",
+      "nome": "Espada, Falcione",
+      "custo": "40 po",
+      "custo_pc": 4000,
+      "dano": "2d4",
+      "alcance": null,
+      "peso": "1,5 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "espada_flamberg",
+      "nome": "Espada, Flamberg",
+      "custo": "75 po",
+      "custo_pc": 7500,
+      "dano": "2d4+2",
+      "alcance": null,
+      "peso": "2 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": [
+        10
+      ],
+      "duas_maos": true,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "espada_gancho",
+      "nome": "Espada, Gancho",
+      "custo": "25 po",
+      "custo_pc": 2500,
+      "dano": "1d4+1",
+      "alcance": null,
+      "peso": "2 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "notas": [
+        6
+      ],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "espada_larga",
+      "nome": "Espada, Larga",
+      "custo": "12 po",
+      "custo_pc": 1200,
+      "dano": "2d4",
+      "alcance": null,
+      "peso": "2 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "espada_longa",
+      "nome": "Espada, Longa",
+      "custo": "15 po",
+      "custo_pc": 1500,
+      "dano": "1d8",
+      "alcance": null,
+      "peso": "2 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "espada_rapieira",
+      "nome": "Espada, Rapieira",
+      "custo": "20 po",
+      "custo_pc": 2000,
+      "dano": "1d6",
+      "alcance": null,
+      "peso": "0,5 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "faca",
+      "nome": "Faca",
+      "custo": "3 pp",
+      "custo_pc": 30,
+      "dano": "1d2",
+      "alcance": "6 m",
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "notas": [
+        1
+      ],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": true
+    },
+    {
+      "id": "fauchard",
+      "nome": "Fauchard",
+      "custo": "6 po",
+      "custo_pc": 600,
+      "dano": "1d6",
+      "alcance": null,
+      "peso": "2,5 kg",
+      "sb": 5,
+      "sb_texto": "5",
+      "notas": [
+        10,
+        11,
+        12
+      ],
+      "duas_maos": true,
+      "arma_de_haste": true,
+      "arremessavel": false
+    },
+    {
+      "id": "flechete_faca_longa",
+      "nome": "Flechete (Faca Longa)",
+      "custo": "5 po",
+      "custo_pc": 500,
+      "dano": "1d6+1",
+      "alcance": null,
+      "peso": "5,5 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "foice_curta",
+      "nome": "Foice Curta",
+      "custo": "6 po",
+      "custo_pc": 600,
+      "dano": "1d4",
+      "alcance": null,
+      "peso": "1,5 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "foice_longa",
+      "nome": "Foice Longa",
+      "custo": "18 po",
+      "custo_pc": 1800,
+      "dano": "2d4",
+      "alcance": null,
+      "peso": "5,5 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "fauchard_2",
+      "nome": "Fauchard",
+      "custo": "15 po",
+      "custo_pc": 1500,
+      "dano": "1d8",
+      "alcance": null,
+      "peso": "2,5 kg",
+      "sb": 5,
+      "sb_texto": "5",
+      "notas": [
+        10,
+        11,
+        12
+      ],
+      "duas_maos": true,
+      "arma_de_haste": true,
+      "arremessavel": false
+    },
+    {
+      "id": "forcado_militar",
+      "nome": "Forcado, Militar",
+      "custo": "10 po",
+      "custo_pc": 1000,
+      "dano": "1d8",
+      "alcance": null,
+      "peso": "3 kg",
+      "sb": 5,
+      "sb_texto": "5",
+      "notas": [
+        10,
+        12
+      ],
+      "duas_maos": true,
+      "arma_de_haste": true,
+      "arremessavel": false
+    },
+    {
+      "id": "gancho_haste",
+      "nome": "Gancho, Haste",
+      "custo": "5 po",
+      "custo_pc": 500,
+      "dano": "1d6",
+      "alcance": null,
+      "peso": "1,5 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": [
+        12
+      ],
+      "duas_maos": false,
+      "arma_de_haste": true,
+      "arremessavel": false
+    },
+    {
+      "id": "gato_de_nove_caudas",
+      "nome": "Gato de Nove Caudas",
+      "custo": "9 po",
+      "custo_pc": 900,
+      "dano": "1d3",
+      "alcance": null,
+      "peso": "0,5 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "glaive",
+      "nome": "Glaive",
+      "custo": "8 po",
+      "custo_pc": 800,
+      "dano": "1d8",
+      "alcance": null,
+      "peso": "7 kg",
+      "sb": 5,
+      "sb_texto": "5",
+      "notas": [
+        10,
+        11
+      ],
+      "duas_maos": true,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "glaive_2",
+      "nome": "Glaive",
+      "custo": "15 po",
+      "custo_pc": 1500,
+      "dano": "2d4",
+      "alcance": null,
+      "peso": "3,5 kg",
+      "sb": 5,
+      "sb_texto": "5",
+      "notas": [
+        10,
+        11,
+        12
+      ],
+      "duas_maos": true,
+      "arma_de_haste": true,
+      "arremessavel": false
+    },
+    {
+      "id": "godentag",
+      "nome": "Godentag",
+      "custo": "15 po",
+      "custo_pc": 1500,
+      "dano": "1d6+3",
+      "alcance": null,
+      "peso": "3 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "notas": [
+        10
+      ],
+      "duas_maos": true,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "guisarme",
+      "nome": "Guisarme",
+      "custo": "10 po",
+      "custo_pc": 1000,
+      "dano": "2d4",
+      "alcance": null,
+      "peso": "7 kg",
+      "sb": 5,
+      "sb_texto": "5",
+      "notas": [
+        10,
+        11,
+        12
+      ],
+      "duas_maos": true,
+      "arma_de_haste": true,
+      "arremessavel": false
+    },
+    {
+      "id": "katar",
+      "nome": "Katar",
+      "custo": "3 po",
+      "custo_pc": 300,
+      "dano": "1d4+1",
+      "alcance": null,
+      "peso": "0,5 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "lanca",
+      "nome": "Lança",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "dano": "1d6",
+      "alcance": "9 m",
+      "peso": "1,5 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "notas": [
+        7
+      ],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": true
+    },
+    {
+      "id": "lanca_de_lobo",
+      "nome": "Lança de Lobo",
+      "custo": "3 po",
+      "custo_pc": 300,
+      "dano": "1d8",
+      "alcance": "6 m",
+      "peso": "2 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "notas": [
+        1
+      ],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": true
+    },
+    {
+      "id": "lanca_leve",
+      "nome": "Lança, Leve",
+      "custo": "6 po",
+      "custo_pc": 600,
+      "dano": "1d6",
+      "alcance": null,
+      "peso": "2 kg",
+      "sb": 5,
+      "sb_texto": "5",
+      "notas": [
+        7
+      ],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "lanca_longa",
+      "nome": "Lança, Longa",
+      "custo": "5 po",
+      "custo_pc": 500,
+      "dano": "1d8",
+      "alcance": null,
+      "peso": "4 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": [
+        1,
+        8,
+        11,
+        12
+      ],
+      "duas_maos": false,
+      "arma_de_haste": true,
+      "arremessavel": true
+    },
+    {
+      "id": "lanca_pesada",
+      "nome": "Lança, Pesada",
+      "custo": "10 po",
+      "custo_pc": 1000,
+      "dano": "1d8",
+      "alcance": null,
+      "peso": "4,5 kg",
+      "sb": 7,
+      "sb_texto": "7",
+      "notas": [
+        7
+      ],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "maca_grande",
+      "nome": "Maça grande",
+      "custo": "25 po",
+      "custo_pc": 2500,
+      "dano": "1d10",
+      "alcance": null,
+      "peso": "2 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": [
+        7
+      ],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "maca_leve",
+      "nome": "Maça, Leve",
+      "custo": "5 po",
+      "custo_pc": 500,
+      "dano": "1d6",
+      "alcance": null,
+      "peso": "2,5 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "maca_pesada",
+      "nome": "Maça, Pesada",
+      "custo": "12 po",
+      "custo_pc": 1200,
+      "dano": "1d8",
+      "alcance": null,
+      "peso": "2,5 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "maca_estrela",
+      "nome": "Maça-Estrela",
+      "custo": "8 po",
+      "custo_pc": 800,
+      "dano": "2d4",
+      "alcance": null,
+      "peso": "3,5 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "machado_de_batalha",
+      "nome": "Machado de Batalha",
+      "custo": "10 po",
+      "custo_pc": 1000,
+      "dano": "1d8",
+      "alcance": null,
+      "peso": "1,5 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "machado_barbado",
+      "nome": "Machado, Barbado",
+      "custo": "20 po",
+      "custo_pc": 2000,
+      "dano": "3d4",
+      "alcance": null,
+      "peso": "3 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": [
+        10
+      ],
+      "duas_maos": true,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "machado_duas_maos",
+      "nome": "Machado, Duas Mãos",
+      "custo": "20 po",
+      "custo_pc": 2000,
+      "dano": "1d12",
+      "alcance": null,
+      "peso": "7 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": [
+        10
+      ],
+      "duas_maos": true,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "machado_mao_arremesso",
+      "nome": "Machado, Mão/Arremesso",
+      "custo": "4 po",
+      "custo_pc": 400,
+      "dano": "1d6",
+      "alcance": "6 m",
+      "peso": "2 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "notas": [
+        1
+      ],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": true
+    },
+    {
+      "id": "machado_perfurador",
+      "nome": "Machado, Perfurador",
+      "custo": "17 po",
+      "custo_pc": 1700,
+      "dano": "1d8+1",
+      "alcance": null,
+      "peso": "3 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "machete",
+      "nome": "Machete",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "dano": "1d4",
+      "alcance": null,
+      "peso": "1 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "main_gauche",
+      "nome": "Main Gauche",
+      "custo": "25 po",
+      "custo_pc": 2500,
+      "dano": "1d4+1",
+      "alcance": null,
+      "peso": "0,5 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "notas": [
+        3
+      ],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "malho",
+      "nome": "Malho",
+      "custo": "12 po",
+      "custo_pc": 1200,
+      "dano": "1d10",
+      "alcance": null,
+      "peso": "7 kg",
+      "sb": 5,
+      "sb_texto": "5",
+      "notas": [
+        10
+      ],
+      "duas_maos": true,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "mangual_leve",
+      "nome": "Mangual, Leve",
+      "custo": "8 po",
+      "custo_pc": 800,
+      "dano": "1d8",
+      "alcance": null,
+      "peso": "2 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "mangual_pesado",
+      "nome": "Mangual, Pesado",
+      "custo": "15 po",
+      "custo_pc": 1500,
+      "dano": "1d10",
+      "alcance": null,
+      "peso": "3,5 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": [
+        10
+      ],
+      "duas_maos": true,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "manopla_farpada",
+      "nome": "Manopla Farpada",
+      "custo": "5 po",
+      "custo_pc": 500,
+      "dano": "1d3",
+      "alcance": null,
+      "peso": "2 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "martelo_de_lucerna",
+      "nome": "Martelo de Lucerna",
+      "custo": "60 po",
+      "custo_pc": 6000,
+      "dano": "1d12",
+      "alcance": null,
+      "peso": "3,5 kg",
+      "sb": 5,
+      "sb_texto": "5",
+      "notas": [
+        10,
+        12
+      ],
+      "duas_maos": true,
+      "arma_de_haste": true,
+      "arremessavel": false
+    },
+    {
+      "id": "martelo_guerra",
+      "nome": "Martelo, Guerra",
+      "custo": "6 po",
+      "custo_pc": 600,
+      "dano": "1d8",
+      "alcance": null,
+      "peso": "3,5 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "martelo_leve",
+      "nome": "Martelo, Leve",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "dano": "1d4",
+      "alcance": "9 m",
+      "peso": "1 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "notas": [
+        1
+      ],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": true
+    },
+    {
+      "id": "partisan",
+      "nome": "Partisan",
+      "custo": "10 po",
+      "custo_pc": 1000,
+      "dano": "1d8",
+      "alcance": null,
+      "peso": "2 kg",
+      "sb": 5,
+      "sb_texto": "5",
+      "notas": [
+        10,
+        11,
+        12
+      ],
+      "duas_maos": true,
+      "arma_de_haste": true,
+      "arremessavel": false
+    },
+    {
+      "id": "pegador",
+      "nome": "Pegador",
+      "custo": "45 po",
+      "custo_pc": 4500,
+      "dano": "1d4",
+      "alcance": null,
+      "peso": "2,5 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": [
+        4,
+        10
+      ],
+      "duas_maos": true,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "picareta_de_guerra",
+      "nome": "Picareta de Guerra",
+      "custo": "15 po",
+      "custo_pc": 1500,
+      "dano": "1d6",
+      "alcance": null,
+      "peso": "2,5 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "picareta_leve",
+      "nome": "Picareta, Leve",
+      "custo": "4 po",
+      "custo_pc": 400,
+      "dano": "1d4",
+      "alcance": null,
+      "peso": "2 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "picareta_pesada",
+      "nome": "Picareta, Pesada",
+      "custo": "8 po",
+      "custo_pc": 800,
+      "dano": "1d6",
+      "alcance": null,
+      "peso": "2,5 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "pique",
+      "nome": "Pique",
+      "custo": "5 po",
+      "custo_pc": 500,
+      "dano": "1d8",
+      "alcance": null,
+      "peso": "6 kg",
+      "sb": 6,
+      "sb_texto": "6",
+      "notas": [
+        8,
+        10,
+        11,
+        12
+      ],
+      "duas_maos": true,
+      "arma_de_haste": true,
+      "arremessavel": false
+    },
+    {
+      "id": "podao_ou_gancho",
+      "nome": "Podão ou Gancho",
+      "custo": "12 po",
+      "custo_pc": 1200,
+      "dano": "2d4",
+      "alcance": null,
+      "peso": "2,5 kg",
+      "sb": 5,
+      "sb_texto": "5",
+      "notas": [
+        10,
+        12
+      ],
+      "duas_maos": true,
+      "arma_de_haste": true,
+      "arremessavel": false
+    },
+    {
+      "id": "poniard",
+      "nome": "Poniard",
+      "custo": "25 po",
+      "custo_pc": 2500,
+      "dano": "1d4+1",
+      "alcance": null,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "porrete",
+      "nome": "Porrete",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "dano": "1d3",
+      "alcance": null,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "punhal",
+      "nome": "Punhal",
+      "custo": "3 po",
+      "custo_pc": 300,
+      "dano": "1d4+1",
+      "alcance": null,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "punho",
+      "nome": "Punho",
+      "custo": "—",
+      "custo_pc": null,
+      "dano": "1d2",
+      "alcance": null,
+      "peso": "—",
+      "sb": null,
+      "sb_texto": "—",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "punhos_de_bronze",
+      "nome": "Punhos de Bronze",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "dano": "1d3",
+      "alcance": null,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "ranseur",
+      "nome": "Ranseur",
+      "custo": "8 po",
+      "custo_pc": 800,
+      "dano": "2d4",
+      "alcance": null,
+      "peso": "7 kg",
+      "sb": 5,
+      "sb_texto": "5",
+      "notas": [
+        10,
+        12
+      ],
+      "duas_maos": true,
+      "arma_de_haste": true,
+      "arremessavel": false
+    },
+    {
+      "id": "sabre",
+      "nome": "Sabre",
+      "custo": "8 po",
+      "custo_pc": 800,
+      "dano": "1d6",
+      "alcance": null,
+      "peso": "1 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "notas": [],
+      "duas_maos": false,
+      "arma_de_haste": false,
+      "arremessavel": false
+    },
+    {
+      "id": "sodegarami",
+      "nome": "Sodegarami",
+      "custo": "17 po",
+      "custo_pc": 1700,
+      "dano": "1d10",
+      "alcance": null,
+      "peso": "3 kg",
+      "sb": 5,
+      "sb_texto": "5",
+      "notas": [
+        5,
+        12
+      ],
+      "duas_maos": false,
+      "arma_de_haste": true,
+      "arremessavel": false
+    },
+    {
+      "id": "tridente",
+      "nome": "Tridente",
+      "custo": "10 po",
+      "custo_pc": 1000,
+      "dano": "1d8",
+      "alcance": "3 m",
+      "peso": "2 kg",
+      "sb": 5,
+      "sb_texto": "5",
+      "notas": [
+        1,
+        11,
+        12
+      ],
+      "duas_maos": false,
+      "arma_de_haste": true,
+      "arremessavel": true
+    }
+  ],
+  "armas_projeteis": [
+    {
+      "id": "aclis",
+      "nome": "Aclis",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "dano": "1d4",
+      "distancia": "6 m",
+      "peso": "0,5 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "municao": false
+    },
+    {
+      "id": "flechas_20",
+      "nome": "Flechas (20)",
+      "custo": "2 po",
+      "custo_pc": 200,
+      "dano": "como Arco",
+      "distancia": null,
+      "peso": "1.5 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "municao": true
+    },
+    {
+      "id": "flechas_12",
+      "nome": "Flechas (12)",
+      "custo": "15 pp",
+      "custo_pc": 150,
+      "dano": "como Arco",
+      "distancia": null,
+      "peso": "1 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "municao": true
+    },
+    {
+      "id": "flechas_prata_2",
+      "nome": "Flechas, Prata (2)",
+      "custo": "2 po",
+      "custo_pc": 200,
+      "dano": "como Arco",
+      "distancia": null,
+      "peso": "0,01 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "municao": true
+    },
+    {
+      "id": "zarabatana",
+      "nome": "Zarabatana",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "dano": "1",
+      "distancia": "3 m",
+      "peso": "0,5 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "municao": false
+    },
+    {
+      "id": "boleadeira",
+      "nome": "Boleadeira",
+      "custo": "5 po",
+      "custo_pc": 500,
+      "dano": "1d4",
+      "distancia": "6 m",
+      "peso": "1 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "municao": false
+    },
+    {
+      "id": "virotes_12",
+      "nome": "Virotes (12)",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "dano": "como Besta",
+      "distancia": null,
+      "peso": "1 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "municao": true
+    },
+    {
+      "id": "arco_longo",
+      "nome": "Arco, Longo",
+      "custo": "75 po",
+      "custo_pc": 7500,
+      "dano": "1d6",
+      "distancia": "30 m",
+      "peso": "1.5 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "municao": false
+    },
+    {
+      "id": "arco_longo_composto",
+      "nome": "Arco, Longo Composto",
+      "custo": "100 po",
+      "custo_pc": 10000,
+      "dano": "1d8",
+      "distancia": "33 m",
+      "peso": "1.5 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "municao": false
+    },
+    {
+      "id": "arco_curto",
+      "nome": "Arco, Curto",
+      "custo": "30 po",
+      "custo_pc": 3000,
+      "dano": "1d6",
+      "distancia": "18 m",
+      "peso": "1 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "municao": false
+    },
+    {
+      "id": "arco_curto_composto",
+      "nome": "Arco, Curto Composto",
+      "custo": "75 po",
+      "custo_pc": 7500,
+      "dano": "1d8",
+      "distancia": "21 m",
+      "peso": "1 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "municao": false
+    },
+    {
+      "id": "besta_leve",
+      "nome": "Besta, Leve",
+      "custo": "35 po",
+      "custo_pc": 3500,
+      "dano": "1d6",
+      "distancia": "24 m",
+      "peso": "2,5 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "municao": false
+    },
+    {
+      "id": "besta_de_mao",
+      "nome": "Besta, de mão",
+      "custo": "100 po",
+      "custo_pc": 10000,
+      "dano": "1d4",
+      "distancia": "9 m",
+      "peso": "1.5 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "municao": false
+    },
+    {
+      "id": "besta_pesada",
+      "nome": "Besta, Pesada",
+      "custo": "50 po",
+      "custo_pc": 5000,
+      "dano": "1d10",
+      "distancia": "36 m",
+      "peso": "4 kg",
+      "sb": 5,
+      "sb_texto": "5",
+      "municao": false
+    },
+    {
+      "id": "dardo",
+      "nome": "Dardo",
+      "custo": "5 pp",
+      "custo_pc": 50,
+      "dano": "1d3",
+      "distancia": "6 m",
+      "peso": "0,2 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "municao": false
+    },
+    {
+      "id": "arpao",
+      "nome": "Arpão",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "dano": "1d6",
+      "distancia": "6 m",
+      "peso": "2 kg",
+      "sb": 5,
+      "sb_texto": "5",
+      "municao": false
+    },
+    {
+      "id": "azagaia",
+      "nome": "Azagaia",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "dano": "1d4",
+      "distancia": "9 m",
+      "peso": "1 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "municao": false
+    },
+    {
+      "id": "pedra",
+      "nome": "Pedra",
+      "custo": "—",
+      "custo_pc": null,
+      "dano": "1d2",
+      "distancia": "9 m",
+      "peso": "—",
+      "sb": null,
+      "sb_texto": "—",
+      "municao": false
+    },
+    {
+      "id": "funda",
+      "nome": "Funda",
+      "custo": "—",
+      "custo_pc": null,
+      "dano": "1d4",
+      "distancia": "15 m",
+      "peso": "—",
+      "sb": 1,
+      "sb_texto": "1",
+      "municao": false
+    }
+  ],
+  "transporte_e_arreios": [
+    {
+      "id": "alforjes",
+      "nome": "Alforjes",
+      "custo": "4 po",
+      "custo_pc": 400,
+      "peso": "3,6 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "notas": []
+    },
+    {
+      "id": "arreio",
+      "nome": "Arreio",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "peso": "1 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "notas": []
+    },
+    {
+      "id": "barco_a_remo",
+      "nome": "Barco a Remo",
+      "custo": "50 po",
+      "custo_pc": 5000,
+      "peso": "34 kg",
+      "sb": 25,
+      "sb_texto": "25",
+      "notas": []
+    },
+    {
+      "id": "barco_longo",
+      "nome": "Barco Longo",
+      "custo": "500 po",
+      "custo_pc": 50000,
+      "peso": "—",
+      "sb": null,
+      "sb_texto": "—",
+      "notas": []
+    },
+    {
+      "id": "biga",
+      "nome": "Biga",
+      "custo": "200 po",
+      "custo_pc": 20000,
+      "peso": "—",
+      "sb": null,
+      "sb_texto": "—",
+      "notas": []
+    },
+    {
+      "id": "boi",
+      "nome": "Boi",
+      "custo": "18 po",
+      "custo_pc": 1800,
+      "peso": "—",
+      "sb": null,
+      "sb_texto": "—",
+      "notas": []
+    },
+    {
+      "id": "bote",
+      "nome": "Bote",
+      "custo": "300 po",
+      "custo_pc": 30000,
+      "peso": "—",
+      "sb": null,
+      "sb_texto": "—",
+      "notas": []
+    },
+    {
+      "id": "bote_pequeno",
+      "nome": "Bote pequeno",
+      "custo": "250 po",
+      "custo_pc": 25000,
+      "peso": "—",
+      "sb": null,
+      "sb_texto": "—",
+      "notas": []
+    },
+    {
+      "id": "burro",
+      "nome": "Burro",
+      "custo": "8 po",
+      "custo_pc": 800,
+      "peso": "—",
+      "sb": null,
+      "sb_texto": "—",
+      "notas": []
+    },
+    {
+      "id": "canoa",
+      "nome": "Canoa",
+      "custo": "35 po",
+      "custo_pc": 3500,
+      "peso": "22 kg",
+      "sb": 23,
+      "sb_texto": "23",
+      "notas": []
+    },
+    {
+      "id": "carroca",
+      "nome": "Carroça",
+      "custo": "15 po",
+      "custo_pc": 1500,
+      "peso": "90 kg",
+      "sb": null,
+      "sb_texto": "—",
+      "notas": []
+    },
+    {
+      "id": "carrocao",
+      "nome": "Carroção",
+      "custo": "35 po",
+      "custo_pc": 3500,
+      "peso": "180 kg",
+      "sb": null,
+      "sb_texto": "—",
+      "notas": []
+    },
+    {
+      "id": "carruagem",
+      "nome": "Carruagem",
+      "custo": "100 po",
+      "custo_pc": 10000,
+      "peso": "160 kg",
+      "sb": null,
+      "sb_texto": "—",
+      "notas": []
+    },
+    {
+      "id": "cavalo_de_guerra_leve",
+      "nome": "Cavalo de Guerra Leve",
+      "custo": "150 po",
+      "custo_pc": 15000,
+      "peso": "—",
+      "sb": null,
+      "sb_texto": "—",
+      "notas": []
+    },
+    {
+      "id": "cavalo_de_guerra_pesado",
+      "nome": "Cavalo de Guerra Pesado",
+      "custo": "400 po",
+      "custo_pc": 40000,
+      "peso": "—",
+      "sb": null,
+      "sb_texto": "—",
+      "notas": []
+    },
+    {
+      "id": "cavalo_de_passeio",
+      "nome": "Cavalo de Passeio",
+      "custo": "75 po",
+      "custo_pc": 7500,
+      "peso": "—",
+      "sb": null,
+      "sb_texto": "—",
+      "notas": []
+    },
+    {
+      "id": "cavalo_de_tracao",
+      "nome": "Cavalo de Tração",
+      "custo": "200 po",
+      "custo_pc": 20000,
+      "peso": "—",
+      "sb": null,
+      "sb_texto": "—",
+      "notas": []
+    },
+    {
+      "id": "cota_de_montaria_couro",
+      "nome": "Cota de Montaria, Couro",
+      "custo": "50 po",
+      "custo_pc": 5000,
+      "peso": "22 kg",
+      "sb": 5,
+      "sb_texto": "5",
+      "notas": [
+        1
+      ]
+    },
+    {
+      "id": "cota_de_montaria_couro_curtido",
+      "nome": "Cota de Montaria, Couro Curtido",
+      "custo": "100 po",
+      "custo_pc": 10000,
+      "peso": "27 kg",
+      "sb": 6,
+      "sb_texto": "6",
+      "notas": [
+        1
+      ]
+    },
+    {
+      "id": "cota_de_montaria_malha",
+      "nome": "Cota de Montaria, Malha",
+      "custo": "500 po",
+      "custo_pc": 50000,
+      "peso": "57 kg",
+      "sb": 6,
+      "sb_texto": "6",
+      "notas": [
+        1
+      ]
+    },
+    {
+      "id": "cota_de_montaria_peles",
+      "nome": "Cota de Montaria, Peles",
+      "custo": "20 po",
+      "custo_pc": 2000,
+      "peso": "11 kg",
+      "sb": 5,
+      "sb_texto": "5",
+      "notas": [
+        1
+      ]
+    },
+    {
+      "id": "cota_de_montaria_placas",
+      "nome": "Cota de Montaria, Placas",
+      "custo": "4,000 po",
+      "custo_pc": 400000,
+      "peso": "113 kg",
+      "sb": 8,
+      "sb_texto": "8",
+      "notas": [
+        1
+      ]
+    },
+    {
+      "id": "freio_e_redeas",
+      "nome": "Freio e Rédeas",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "peso": "0,5 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "notas": []
+    },
+    {
+      "id": "jangada",
+      "nome": "Jangada",
+      "custo": "100 po",
+      "custo_pc": 10000,
+      "peso": "45 kg",
+      "sb": null,
+      "sb_texto": "—",
+      "notas": []
+    },
+    {
+      "id": "manta_de_sela",
+      "nome": "Manta de Sela",
+      "custo": "5 pp",
+      "custo_pc": 50,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "notas": []
+    },
+    {
+      "id": "morsa",
+      "nome": "Morsa",
+      "custo": "350 po",
+      "custo_pc": 35000,
+      "peso": "—",
+      "sb": null,
+      "sb_texto": "—",
+      "notas": []
+    },
+    {
+      "id": "mula",
+      "nome": "Mula",
+      "custo": "25 po",
+      "custo_pc": 2500,
+      "peso": "—",
+      "sb": null,
+      "sb_texto": "—",
+      "notas": []
+    },
+    {
+      "id": "ponei",
+      "nome": "Pônei",
+      "custo": "30 po",
+      "custo_pc": 3000,
+      "peso": "—",
+      "sb": null,
+      "sb_texto": "—",
+      "notas": []
+    },
+    {
+      "id": "ponei_de_guerra",
+      "nome": "Pônei de Guerra",
+      "custo": "100 po",
+      "custo_pc": 10000,
+      "peso": "—",
+      "sb": null,
+      "sb_texto": "—",
+      "notas": []
+    },
+    {
+      "id": "racao_por_dia",
+      "nome": "Ração (por dia)",
+      "custo": "5 pc",
+      "custo_pc": 5,
+      "peso": "4,5 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "notas": []
+    },
+    {
+      "id": "sela",
+      "nome": "Sela",
+      "custo": "20 po",
+      "custo_pc": 2000,
+      "peso": "13 kg",
+      "sb": 5,
+      "sb_texto": "5",
+      "notas": []
+    },
+    {
+      "id": "treno",
+      "nome": "Trenó",
+      "custo": "20 po",
+      "custo_pc": 2000,
+      "peso": "135 kg",
+      "sb": null,
+      "sb_texto": "—",
+      "notas": []
+    }
+  ],
+  "equipamento_geral": [
+    {
+      "id": "agua_benta_frasco",
+      "nome": "Água Benta, Frasco",
+      "custo": "30 po",
+      "custo_pc": 3000,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1 (1)",
+      "capacidade": "1 un.",
+      "notas": [
+        1
+      ]
+    },
+    {
+      "id": "algemas",
+      "nome": "Algemas",
+      "custo": "15 po",
+      "custo_pc": 1500,
+      "peso": "1 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "aljava_duzia",
+      "nome": "Aljava, Dúzia",
+      "custo": "2 po",
+      "custo_pc": 200,
+      "peso": "0,5 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "capacidade": "12 tiros",
+      "notas": []
+    },
+    {
+      "id": "aljava_vinte",
+      "nome": "Aljava, Vinte",
+      "custo": "4 po",
+      "custo_pc": 400,
+      "peso": "0,5 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "capacidade": "20 tiros",
+      "notas": []
+    },
+    {
+      "id": "apito",
+      "nome": "Apito",
+      "custo": "5 pp",
+      "custo_pc": 50,
+      "peso": "—",
+      "sb": 0,
+      "sb_texto": "*",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "armadilha_grande_de_metal",
+      "nome": "Armadilha grande de Metal",
+      "custo": "35 po",
+      "custo_pc": 3500,
+      "peso": "11 kg",
+      "sb": 9,
+      "sb_texto": "9",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "armadilha_media_de_metal",
+      "nome": "Armadilha Média de Metal",
+      "custo": "15 po",
+      "custo_pc": 1500,
+      "peso": "5,5 kg",
+      "sb": 6,
+      "sb_texto": "6",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "armadilha_pequena_de_metal",
+      "nome": "Armadilha pequena de Metal",
+      "custo": "7 po",
+      "custo_pc": 700,
+      "peso": "1,3 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "balde",
+      "nome": "Balde",
+      "custo": "5 pp",
+      "custo_pc": 50,
+      "peso": "1 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "capacidade": "3",
+      "notas": []
+    },
+    {
+      "id": "bandagens_2_ferimentos",
+      "nome": "Bandagens (2 ferimentos)",
+      "custo": "1 pp",
+      "custo_pc": 10,
+      "peso": "0,2 kg",
+      "sb": 0,
+      "sb_texto": "*",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "bandolim",
+      "nome": "Bandolim",
+      "custo": "10 po",
+      "custo_pc": 1000,
+      "peso": "2 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "barril_grande",
+      "nome": "Barril, grande",
+      "custo": "4 po",
+      "custo_pc": 400,
+      "peso": "20 kg",
+      "sb": 9,
+      "sb_texto": "9",
+      "capacidade": "9",
+      "notas": []
+    },
+    {
+      "id": "barril_pequeno",
+      "nome": "Barril, pequeno",
+      "custo": "2 po",
+      "custo_pc": 200,
+      "peso": "13 kg",
+      "sb": 6,
+      "sb_texto": "6",
+      "capacidade": "6",
+      "notas": []
+    },
+    {
+      "id": "bau_de_viagem",
+      "nome": "Baú de Viagem",
+      "custo": "2 po",
+      "custo_pc": 200,
+      "peso": "4,5 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "capacidade": "5",
+      "notas": []
+    },
+    {
+      "id": "bau_grande",
+      "nome": "Baú, grande",
+      "custo": "5 po",
+      "custo_pc": 500,
+      "peso": "20 kg",
+      "sb": 12,
+      "sb_texto": "12",
+      "capacidade": "8",
+      "notas": []
+    },
+    {
+      "id": "bau_pequeno",
+      "nome": "Baú, pequeno",
+      "custo": "2 po",
+      "custo_pc": 200,
+      "peso": "11 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "capacidade": "6",
+      "notas": []
+    },
+    {
+      "id": "bolinhas_saco_com_25",
+      "nome": "Bolinhas (Saco com 25)",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "peso": "5 gr",
+      "sb": 0,
+      "sb_texto": "*",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "cinto_para_componentes",
+      "nome": "Cinto para Componentes",
+      "custo": "10 po",
+      "custo_pc": 1000,
+      "peso": "0,2 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "capacidade": null,
+      "notas": [
+        1
+      ]
+    },
+    {
+      "id": "bolsa_de_cinto_grande",
+      "nome": "Bolsa de Cinto, grande",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": "2",
+      "notas": [
+        1
+      ]
+    },
+    {
+      "id": "bolsa_de_cinto_pequena",
+      "nome": "Bolsa de Cinto, Pequena",
+      "custo": "5 pp",
+      "custo_pc": 50,
+      "peso": "0,2 kg",
+      "sb": 0,
+      "sb_texto": "*",
+      "capacidade": "1",
+      "notas": [
+        2
+      ]
+    },
+    {
+      "id": "cabaca",
+      "nome": "Cabaça",
+      "custo": "3 pp",
+      "custo_pc": 30,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": "1",
+      "notas": []
+    },
+    {
+      "id": "cachimbo",
+      "nome": "Cachimbo",
+      "custo": "5 po",
+      "custo_pc": 500,
+      "peso": "5 gr",
+      "sb": 0,
+      "sb_texto": "*",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "cadeado_e_chave",
+      "nome": "Cadeado e Chave",
+      "custo": "25 po",
+      "custo_pc": 2500,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "caixa_de_fogo_10_usos",
+      "nome": "Caixa de Fogo (10 usos)",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "peso": "2 kg",
+      "sb": 2,
+      "sb_texto": "2 (1)",
+      "capacidade": null,
+      "notas": [
+        1
+      ]
+    },
+    {
+      "id": "caixao",
+      "nome": "Caixão",
+      "custo": "2 po",
+      "custo_pc": 200,
+      "peso": "7 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "capacidade": "6",
+      "notas": []
+    },
+    {
+      "id": "cajado_3_metros",
+      "nome": "Cajado (3 metros)",
+      "custo": "2 pp",
+      "custo_pc": 20,
+      "peso": "3,6 kg",
+      "sb": 5,
+      "sb_texto": "5",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "caneca_ou_caneco",
+      "nome": "Caneca ou Caneco",
+      "custo": "2 pc",
+      "custo_pc": 2,
+      "peso": "0,2 kg",
+      "sb": null,
+      "sb_texto": "—",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "cantil",
+      "nome": "Cantil",
+      "custo": "2 po",
+      "custo_pc": 200,
+      "peso": "1 kg",
+      "sb": 1,
+      "sb_texto": "1 (1)",
+      "capacidade": "1,5 litro",
+      "notas": [
+        1
+      ]
+    },
+    {
+      "id": "cantil_1_5_litros",
+      "nome": "Cantil (1,5 litros)",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "peso": "2 kg",
+      "sb": 3,
+      "sb_texto": "3 (1)",
+      "capacidade": "3,5 litros",
+      "notas": [
+        1
+      ]
+    },
+    {
+      "id": "cavadeira",
+      "nome": "Cavadeira",
+      "custo": "1po",
+      "custo_pc": 100,
+      "peso": "1,5kg",
+      "sb": null,
+      "sb_texto": "—",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "cera_de_lacrar",
+      "nome": "Cera de Lacrar",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "peso": "5 gr",
+      "sb": 0,
+      "sb_texto": "*",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "cesto",
+      "nome": "Cesto",
+      "custo": "4 pp",
+      "custo_pc": 40,
+      "peso": "0,5 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "capacidade": "2",
+      "notas": []
+    },
+    {
+      "id": "chaleira_ferro",
+      "nome": "Chaleira, Ferro",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "peso": "2 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "citara",
+      "nome": "Cítara",
+      "custo": "40 po",
+      "custo_pc": 4000,
+      "peso": "2 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "cobertor_inverno",
+      "nome": "Cobertor, Inverno",
+      "custo": "5 pp",
+      "custo_pc": 50,
+      "peso": "1,3 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "conjunto_de_costura_agulha_linha_etc",
+      "nome": "Conjunto de Costura (agulha, linha, etc.)",
+      "custo": "5 sp",
+      "custo_pc": 50,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "corda_20_metros",
+      "nome": "Corda (20 metros)",
+      "custo": "5 po",
+      "custo_pc": 500,
+      "peso": "0,2 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "corda_de_canhamo_15_metros",
+      "nome": "Corda de Cânhamo (15 Metros)",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "peso": "7 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "corda_de_seda_15_metros",
+      "nome": "Corda de Seda (15 metros)",
+      "custo": "10 po",
+      "custo_pc": 1000,
+      "peso": "2 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "cordao_45_metros",
+      "nome": "Cordão (45 metros)",
+      "custo": "4 pp",
+      "custo_pc": 40,
+      "peso": "0,5 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "corneta",
+      "nome": "Corneta",
+      "custo": "5 po",
+      "custo_pc": 500,
+      "peso": "1,3 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "corrente_6_metros",
+      "nome": "Corrente (6 metros)",
+      "custo": "2 po",
+      "custo_pc": 200,
+      "peso": "2 kg",
+      "sb": 12,
+      "sb_texto": "12",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "cunha_divisao",
+      "nome": "Cunha, Divisão",
+      "custo": "2 pc",
+      "custo_pc": 2,
+      "peso": "2 kg",
+      "sb": 0,
+      "sb_texto": "*",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "equipamento_de_pesca_anzol_linha_etc",
+      "nome": "Equipamento de Pesca (anzol, linha, etc.)",
+      "custo": "5 pp",
+      "custo_pc": 50,
+      "peso": "0,5 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "espelho_pequeno_de_aco",
+      "nome": "Espelho, pequeno de Aço",
+      "custo": "10 po",
+      "custo_pc": 1000,
+      "peso": "0,2 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "estacas_gancho",
+      "nome": "Estacas/Gancho",
+      "custo": "5 pp",
+      "custo_pc": 50,
+      "peso": "1 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": null,
+      "notas": [
+        5
+      ]
+    },
+    {
+      "id": "estojo_para_mapas_pergaminho",
+      "nome": "Estojo para Mapas / Pergaminho",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "peso": "0,2 kg",
+      "sb": 1,
+      "sb_texto": "1 (1)",
+      "capacidade": "10 folhas",
+      "notas": [
+        1
+      ]
+    },
+    {
+      "id": "farol",
+      "nome": "Farol",
+      "custo": "12 po",
+      "custo_pc": 1200,
+      "peso": "1,3 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "ferramentas_de_chaveiro",
+      "nome": "Ferramentas de Chaveiro",
+      "custo": "30 po",
+      "custo_pc": 3000,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "flauta",
+      "nome": "Flauta",
+      "custo": "15 po",
+      "custo_pc": 1500,
+      "peso": "0,2 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "flautas_de_pa",
+      "nome": "Flautas de Pã",
+      "custo": "11 po",
+      "custo_pc": 1100,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "formao",
+      "nome": "Formão",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "peso": "0,2 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "frasco",
+      "nome": "Frasco",
+      "custo": "3 pc",
+      "custo_pc": 3,
+      "peso": "5 gr",
+      "sb": 1,
+      "sb_texto": "1 (1)",
+      "capacidade": "1 un.",
+      "notas": [
+        1
+      ]
+    },
+    {
+      "id": "frasco_30_ml",
+      "nome": "Frasco (30 ml)",
+      "custo": "1 pp",
+      "custo_pc": 10,
+      "peso": "5 gr",
+      "sb": 0,
+      "sb_texto": "*",
+      "capacidade": "30 ml",
+      "notas": []
+    },
+    {
+      "id": "gaita_de_fole",
+      "nome": "Gaita de Fole",
+      "custo": "35 po",
+      "custo_pc": 3500,
+      "peso": "3,6 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "gancho_de_escalada",
+      "nome": "Gancho de Escalada",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "peso": "2 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "gancho_ferro",
+      "nome": "Gancho, Ferro",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "peso": "0,2 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "garrafa",
+      "nome": "Garrafa",
+      "custo": "2 po",
+      "custo_pc": 200,
+      "peso": "0,2 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": "1",
+      "notas": []
+    },
+    {
+      "id": "giz_por_unidade",
+      "nome": "Giz (por unidade)",
+      "custo": "1 pc",
+      "custo_pc": 1,
+      "peso": "0,2 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "gongo",
+      "nome": "Gongo",
+      "custo": "18 po",
+      "custo_pc": 1800,
+      "peso": "1,5 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "graxa_pote_meio_quilo",
+      "nome": "Graxa, Pote (meio quilo)",
+      "custo": "2 pc",
+      "custo_pc": 2,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "harpa",
+      "nome": "Harpa",
+      "custo": "35 po",
+      "custo_pc": 3500,
+      "peso": "2 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "incenso_vareta",
+      "nome": "Incenso, Vareta",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "peso": "—",
+      "sb": 0,
+      "sb_texto": "*",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "lampada_aberta",
+      "nome": "Lâmpada, Aberta",
+      "custo": "3 po",
+      "custo_pc": 300,
+      "peso": "1 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "lanterna_corta_luz",
+      "nome": "Lanterna, Corta Luz",
+      "custo": "7 po",
+      "custo_pc": 700,
+      "peso": "1 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "lenha_por_dia",
+      "nome": "Lenha, por dia",
+      "custo": "1 pc",
+      "custo_pc": 1,
+      "peso": "9 kg",
+      "sb": 8,
+      "sb_texto": "8",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "lima",
+      "nome": "Lima",
+      "custo": "2 po",
+      "custo_pc": 200,
+      "peso": "0,7 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "lima_estreita_metal",
+      "nome": "Lima Estreita, Metal",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "peso": "0,2 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "lima_larga_metal",
+      "nome": "Lima Larga, Metal",
+      "custo": "2 po",
+      "custo_pc": 200,
+      "peso": "0,2 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "magnetita",
+      "nome": "Magnetita",
+      "custo": "25 po",
+      "custo_pc": 2500,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "marreta",
+      "nome": "Marreta",
+      "custo": "6 po",
+      "custo_pc": 600,
+      "peso": "3,6 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "martelo",
+      "nome": "Martelo",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "peso": "1 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "meias_de_la",
+      "nome": "Meias de Lã",
+      "custo": "1 pp",
+      "custo_pc": 10,
+      "peso": "5 gr",
+      "sb": 0,
+      "sb_texto": "*",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "mochila",
+      "nome": "Mochila",
+      "custo": "2 po",
+      "custo_pc": 200,
+      "peso": "1 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "capacidade": "8",
+      "notas": []
+    },
+    {
+      "id": "mochila_de_ombro",
+      "nome": "Mochila de Ombro",
+      "custo": "2 po",
+      "custo_pc": 200,
+      "peso": "1 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "capacidade": "10",
+      "notas": []
+    },
+    {
+      "id": "navalha",
+      "nome": "Navalha",
+      "custo": "5 pp",
+      "custo_pc": 50,
+      "peso": "—",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "oleo_para_armadura_e_arma",
+      "nome": "Óleo para Armadura e Arma",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "oleo_frasco",
+      "nome": "Óleo, Frasco",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1 (1)",
+      "capacidade": "1 un",
+      "notas": [
+        1
+      ]
+    },
+    {
+      "id": "pa",
+      "nome": "Pá",
+      "custo": "2 po",
+      "custo_pc": 200,
+      "peso": "3,6 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "panela",
+      "nome": "Panela",
+      "custo": "3 po",
+      "custo_pc": 300,
+      "peso": "3,6 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "papel_10_folhas",
+      "nome": "Papel (10 folhas)",
+      "custo": "10 po",
+      "custo_pc": 1000,
+      "peso": "—",
+      "sb": 0,
+      "sb_texto": "*",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "pe_de_cabra",
+      "nome": "Pé de Cabra",
+      "custo": "2 po",
+      "custo_pc": 200,
+      "peso": "2,5 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "pederneira_e_isqueiro",
+      "nome": "Pederneira e Isqueiro",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "peso": "0,2 kg",
+      "sb": 0,
+      "sb_texto": "*",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "pedra_de_esmeril",
+      "nome": "Pedra de Esmeril",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "peso": "0,2 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "pena_de_escrever",
+      "nome": "Pena de Escrever",
+      "custo": "1 pp",
+      "custo_pc": 10,
+      "peso": "—",
+      "sb": null,
+      "sb_texto": "—",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "pergaminho_10_folhas",
+      "nome": "Pergaminho (10 folhas)",
+      "custo": "5 po",
+      "custo_pc": 500,
+      "peso": "—",
+      "sb": 0,
+      "sb_texto": "*",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "picareta_de_mineiro",
+      "nome": "Picareta, de Mineiro",
+      "custo": "3 po",
+      "custo_pc": 300,
+      "peso": "4,5 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "pilao_e_almofariz",
+      "nome": "Pilão e Almofariz",
+      "custo": "3 po",
+      "custo_pc": 300,
+      "peso": "1 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "pregos_ferro",
+      "nome": "Pregos, Ferro",
+      "custo": "5 pp",
+      "custo_pc": 50,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": null,
+      "notas": [
+        50
+      ]
+    },
+    {
+      "id": "puncao",
+      "nome": "Punção",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "peso": "0,2 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "rede_de_dormir",
+      "nome": "Rede de Dormir",
+      "custo": "8 po",
+      "custo_pc": 800,
+      "peso": "3,6 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "rosario",
+      "nome": "Rosário",
+      "custo": "2 po",
+      "custo_pc": 200,
+      "peso": "—",
+      "sb": null,
+      "sb_texto": "—",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "sabao_por_barra",
+      "nome": "Sabão (por barra)",
+      "custo": "5 pp",
+      "custo_pc": 50,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "saco_de_dormir",
+      "nome": "Saco de Dormir",
+      "custo": "1 pp",
+      "custo_pc": 10,
+      "peso": "2,2 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "saco_de_po_de_giz",
+      "nome": "Saco de Pó de Giz",
+      "custo": "—",
+      "custo_pc": null,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "saco_grande",
+      "nome": "Saco, grande",
+      "custo": "5 pp",
+      "custo_pc": 50,
+      "peso": "0,5 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "capacidade": "10",
+      "notas": []
+    },
+    {
+      "id": "saco_pequeno",
+      "nome": "Saco, pequeno",
+      "custo": "1 pp",
+      "custo_pc": 10,
+      "peso": "0,2 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": "6",
+      "notas": []
+    },
+    {
+      "id": "serra_metal",
+      "nome": "Serra, Metal",
+      "custo": "5 po",
+      "custo_pc": 500,
+      "peso": "0,5 kg",
+      "sb": 2,
+      "sb_texto": "2",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "simbolo_sagrado_madeira",
+      "nome": "Símbolo Sagrado, Madeira",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "peso": "0,2 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "simbolo_sagrado_prata",
+      "nome": "Símbolo Sagrado, Prata",
+      "custo": "25 po",
+      "custo_pc": 2500,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "tambor",
+      "nome": "Tambor",
+      "custo": "9 po",
+      "custo_pc": 900,
+      "peso": "3,6 kg",
+      "sb": 5,
+      "sb_texto": "5",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "tenazes",
+      "nome": "Tenazes",
+      "custo": "6 pp",
+      "custo_pc": 60,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "tenda_grande",
+      "nome": "Tenda, grande",
+      "custo": "45 po",
+      "custo_pc": 4500,
+      "peso": "22,5 kg",
+      "sb": 10,
+      "sb_texto": "10",
+      "capacidade": "5 pessoas",
+      "notas": []
+    },
+    {
+      "id": "tenda_media",
+      "nome": "Tenda, Média",
+      "custo": "25 po",
+      "custo_pc": 2500,
+      "peso": "13,5 kg",
+      "sb": 7,
+      "sb_texto": "7",
+      "capacidade": "3 pessoas",
+      "notas": []
+    },
+    {
+      "id": "tenda_pequena",
+      "nome": "Tenda, Pequena",
+      "custo": "10 po",
+      "custo_pc": 1000,
+      "peso": "9 kg",
+      "sb": 4,
+      "sb_texto": "4",
+      "capacidade": "1 pessoas",
+      "notas": []
+    },
+    {
+      "id": "tinta_ml",
+      "nome": "Tinta (ml)",
+      "custo": "8 po",
+      "custo_pc": 800,
+      "peso": "5 gr",
+      "sb": 0,
+      "sb_texto": "*",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "tocha",
+      "nome": "Tocha",
+      "custo": "1 pc",
+      "custo_pc": 1,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "vassoura",
+      "nome": "Vassoura",
+      "custo": "5 pc",
+      "custo_pc": 5,
+      "peso": "0,5 kg",
+      "sb": 3,
+      "sb_texto": "3",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "vela_5_unidades",
+      "nome": "Vela (5 unidades)",
+      "custo": "5 pc",
+      "custo_pc": 5,
+      "peso": "5 gr",
+      "sb": 1,
+      "sb_texto": "1",
+      "capacidade": null,
+      "notas": []
+    },
+    {
+      "id": "velino_10_folhas",
+      "nome": "Velino (10 folhas)",
+      "custo": "15 po",
+      "custo_pc": 1500,
+      "peso": "—",
+      "sb": 0,
+      "sb_texto": "*",
+      "capacidade": null,
+      "notas": []
+    }
+  ],
+  "roupas": [
+    {
+      "id": "anel_de_sinete",
+      "nome": "Anel de Sinete",
+      "custo": "15 po",
+      "custo_pc": 1500,
+      "peso": "—",
+      "sb": null,
+      "sb_texto": "—"
+    },
+    {
+      "id": "baldrico",
+      "nome": "Baldrico",
+      "custo": "2 pp",
+      "custo_pc": 20,
+      "peso": "1,5 kg",
+      "sb": 0,
+      "sb_texto": "*"
+    },
+    {
+      "id": "batina",
+      "nome": "Batina",
+      "custo": "5 pp",
+      "custo_pc": 50,
+      "peso": "2 kg",
+      "sb": 2,
+      "sb_texto": "2"
+    },
+    {
+      "id": "bijuterias",
+      "nome": "Bijuterias",
+      "custo": "varia",
+      "custo_pc": null,
+      "peso": "—",
+      "sb": 0,
+      "sb_texto": "*"
+    },
+    {
+      "id": "bone_chapeu",
+      "nome": "Boné/Chapéu",
+      "custo": "4 pp",
+      "custo_pc": 40,
+      "peso": "—",
+      "sb": 0,
+      "sb_texto": "*"
+    },
+    {
+      "id": "botas_macias",
+      "nome": "Botas Macias",
+      "custo": "4 pp",
+      "custo_pc": 40,
+      "peso": "1 kg",
+      "sb": 0,
+      "sb_texto": "*"
+    },
+    {
+      "id": "botas_pesadas",
+      "nome": "Botas Pesadas",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "peso": "2 kg",
+      "sb": 1,
+      "sb_texto": "1"
+    },
+    {
+      "id": "cachecol",
+      "nome": "Cachecol",
+      "custo": "5 pc",
+      "custo_pc": 5,
+      "peso": "0,2 kg",
+      "sb": 0,
+      "sb_texto": "*"
+    },
+    {
+      "id": "calcas",
+      "nome": "Calças",
+      "custo": "4 pp",
+      "custo_pc": 40,
+      "peso": "0,2 kg",
+      "sb": 1,
+      "sb_texto": "1"
+    },
+    {
+      "id": "calcas_justas",
+      "nome": "Calças Justas",
+      "custo": "5 pp",
+      "custo_pc": 50,
+      "peso": "0,2 kg",
+      "sb": 2,
+      "sb_texto": "2"
+    },
+    {
+      "id": "capa",
+      "nome": "Capa",
+      "custo": "8 pp",
+      "custo_pc": 80,
+      "peso": "0,5 kg",
+      "sb": 0,
+      "sb_texto": "*"
+    },
+    {
+      "id": "capuz",
+      "nome": "Capuz",
+      "custo": "2 pp",
+      "custo_pc": 20,
+      "peso": "0,5 kg",
+      "sb": 3,
+      "sb_texto": "3"
+    },
+    {
+      "id": "cinto",
+      "nome": "Cinto",
+      "custo": "6 pp",
+      "custo_pc": 60,
+      "peso": "0,5 kg",
+      "sb": 0,
+      "sb_texto": "*"
+    },
+    {
+      "id": "cinturao",
+      "nome": "Cinturão",
+      "custo": "7 pp",
+      "custo_pc": 70,
+      "peso": "1,5 kg",
+      "sb": 1,
+      "sb_texto": "1"
+    },
+    {
+      "id": "colete",
+      "nome": "Colete",
+      "custo": "2 pp",
+      "custo_pc": 20,
+      "peso": "0,2 kg",
+      "sb": 1,
+      "sb_texto": "1"
+    },
+    {
+      "id": "gibao",
+      "nome": "Gibão",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "peso": "1,5 - 2,5 kg",
+      "sb": 1,
+      "sb_texto": "1"
+    },
+    {
+      "id": "jaleco",
+      "nome": "Jaleco",
+      "custo": "3 pp",
+      "custo_pc": 30,
+      "peso": "0,2 kg",
+      "sb": 1,
+      "sb_texto": "1"
+    },
+    {
+      "id": "kaftan",
+      "nome": "Kaftan",
+      "custo": "3 pp",
+      "custo_pc": 30,
+      "peso": "1 kg",
+      "sb": 1,
+      "sb_texto": "1"
+    },
+    {
+      "id": "luvas_de_couro",
+      "nome": "Luvas de couro",
+      "custo": "8 pp",
+      "custo_pc": 80,
+      "peso": "—",
+      "sb": 0,
+      "sb_texto": "*"
+    },
+    {
+      "id": "luvas_de_tecido",
+      "nome": "Luvas de Tecido",
+      "custo": "2 pp",
+      "custo_pc": 20,
+      "peso": "—",
+      "sb": 0,
+      "sb_texto": "*"
+    },
+    {
+      "id": "manto",
+      "nome": "Manto",
+      "custo": "5 pp",
+      "custo_pc": 50,
+      "peso": "1,5 kg",
+      "sb": 1,
+      "sb_texto": "1"
+    },
+    {
+      "id": "manto_curto",
+      "nome": "Manto Curto",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "peso": "1,5 - 2,5 kg",
+      "sb": 1,
+      "sb_texto": "1"
+    },
+    {
+      "id": "roupas_de_inverno_conjunto",
+      "nome": "Roupas de Inverno, Conjunto",
+      "custo": "5 po",
+      "custo_pc": 500,
+      "peso": "3,0 kg",
+      "sb": 4,
+      "sb_texto": "4"
+    },
+    {
+      "id": "saia",
+      "nome": "Saia",
+      "custo": "4 pp",
+      "custo_pc": 40,
+      "peso": "0,2 kg",
+      "sb": 1,
+      "sb_texto": "1"
+    },
+    {
+      "id": "sapatos_comuns",
+      "nome": "Sapatos Comuns",
+      "custo": "2 pp",
+      "custo_pc": 20,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1"
+    },
+    {
+      "id": "tunica",
+      "nome": "Túnica",
+      "custo": "3 pp",
+      "custo_pc": 30,
+      "peso": "0,2 kg",
+      "sb": 1,
+      "sb_texto": "1"
+    },
+    {
+      "id": "tunica_longa",
+      "nome": "Túnica Longa",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "peso": "2 kg",
+      "sb": 2,
+      "sb_texto": "2"
+    },
+    {
+      "id": "vestido",
+      "nome": "Vestido",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "peso": "3 - 10 kg",
+      "sb": 4,
+      "sb_texto": "4"
+    },
+    {
+      "id": "vestido_de_servico",
+      "nome": "Vestido de Serviço",
+      "custo": "5 pp",
+      "custo_pc": 50,
+      "peso": "0,5 - 14,5 kg",
+      "sb": 2,
+      "sb_texto": "2"
+    }
+  ],
+  "provisoes_e_alojamento": [
+    {
+      "id": "cerveja_ale_caneca",
+      "nome": "Cerveja Ale, Caneca",
+      "custo": "5 pc",
+      "custo_pc": 5,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1"
+    },
+    {
+      "id": "cerveja_caneca",
+      "nome": "Cerveja, Caneca",
+      "custo": "2 pc",
+      "custo_pc": 2,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1"
+    },
+    {
+      "id": "queijo_peca",
+      "nome": "Queijo, Peça",
+      "custo": "2 pp",
+      "custo_pc": 20,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1"
+    },
+    {
+      "id": "graos_saco",
+      "nome": "Grãos, Saco",
+      "custo": "4 pp",
+      "custo_pc": 40,
+      "peso": "2,5 kg",
+      "sb": 3,
+      "sb_texto": "3"
+    },
+    {
+      "id": "licor_barril",
+      "nome": "Licor, Barril",
+      "custo": "25 po+",
+      "custo_pc": null,
+      "peso": "1,5 l",
+      "sb": 5,
+      "sb_texto": "5"
+    },
+    {
+      "id": "licor_dose",
+      "nome": "Licor, Dose",
+      "custo": "2 pp",
+      "custo_pc": 20,
+      "peso": "—",
+      "sb": null,
+      "sb_texto": "—"
+    },
+    {
+      "id": "alojamento_estalagem_comum",
+      "nome": "Alojamento, Estalagem Comum",
+      "custo": "5 pp",
+      "custo_pc": 50,
+      "peso": "—",
+      "sb": null,
+      "sb_texto": "—"
+    },
+    {
+      "id": "alojamento_estalagem_boa",
+      "nome": "Alojamento, Estalagem Boa",
+      "custo": "2 po",
+      "custo_pc": 200,
+      "peso": "—",
+      "sb": null,
+      "sb_texto": "—"
+    },
+    {
+      "id": "alojamento_estalagem_pobre",
+      "nome": "Alojamento, Estalagem Pobre",
+      "custo": "1 pp",
+      "custo_pc": 10,
+      "peso": "—",
+      "sb": null,
+      "sb_texto": "—"
+    },
+    {
+      "id": "hidromel_caneca",
+      "nome": "Hidromel, Caneca",
+      "custo": "2 pp",
+      "custo_pc": 20,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1"
+    },
+    {
+      "id": "racoes_1_dia",
+      "nome": "Rações (1 dia)",
+      "custo": "5 pp",
+      "custo_pc": 50,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1"
+    },
+    {
+      "id": "racoes_1_semana",
+      "nome": "Rações (1 semana)",
+      "custo": "3 po",
+      "custo_pc": 300,
+      "peso": "3 kg",
+      "sb": 4,
+      "sb_texto": "4"
+    },
+    {
+      "id": "refeicao_de_taberna_comum",
+      "nome": "Refeição de Taberna, Comum",
+      "custo": "2 pp",
+      "custo_pc": 20,
+      "peso": "—",
+      "sb": null,
+      "sb_texto": "—"
+    },
+    {
+      "id": "refeicao_de_taberna_boa",
+      "nome": "Refeição de Taberna, Boa",
+      "custo": "1 po",
+      "custo_pc": 100,
+      "peso": "—",
+      "sb": null,
+      "sb_texto": "—"
+    },
+    {
+      "id": "folhas_de_cha_meio_quilo",
+      "nome": "Folhas de Chá, meio quilo",
+      "custo": "1 pp",
+      "custo_pc": 10,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1"
+    },
+    {
+      "id": "tabaco_meio_quilo",
+      "nome": "Tabaco, (meio quilo)",
+      "custo": "5 pp",
+      "custo_pc": 50,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1"
+    },
+    {
+      "id": "vinho_comum_garrafa",
+      "nome": "Vinho Comum (Garrafa)",
+      "custo": "2 pp",
+      "custo_pc": 20,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1"
+    },
+    {
+      "id": "vinho_fino_garrafa",
+      "nome": "Vinho Fino (Garrafa)",
+      "custo": "10 po",
+      "custo_pc": 1000,
+      "peso": "0,5 kg",
+      "sb": 1,
+      "sb_texto": "1"
+    }
+  ],
+  "regras_sobrecarga": {
+    "paginas_livro": "109–111",
+    "formula_categoria_sobrecarga": {
+      "base": "pontuacao_de_forca",
+      "bonus_um_primario_for_ou_con": 3,
+      "bonus_ambos_primarios_for_e_con": 6
+    },
+    "categorias": [
+      {
+        "id": "descarregado",
+        "nome": "Descarregado",
+        "limite": "Até 1× CS",
+        "efeito": "Sem efeitos."
+      },
+      {
+        "id": "carregado",
+        "nome": "Carregado",
+        "limite": "Mais que 1× CS até 3× CS",
+        "efeito": "-3 m no Movimento (mínimo 1,5 m) e +2 no ND de todos os testes baseados em Destreza."
+      },
+      {
+        "id": "sobrecarregado",
+        "nome": "Sobrecarregado",
+        "limite": "Mais que 3× CS",
+        "efeito": "Movimento reduzido para 1,5 m por rodada, falha automática em testes baseados em Destreza e perde o bônus de Destreza na CA."
+      }
+    ],
+    "itens_de_capacidade": "Carregam um número de itens igual à sua Capacidade, desde que cada item interno tenha SB estritamente menor que a Capacidade. Itens dentro de um Item de Capacidade não somam sua SB ao total do personagem — conta-se apenas a SB do próprio recipiente.",
+    "modificadores_itens_nao_listados": {
+      "peso": [
+        {
+          "categoria": "Muito Leve",
+          "modificador": "-2 SB",
+          "nota": "< 0,4 kg"
+        },
+        {
+          "categoria": "Leve",
+          "modificador": "-1 SB",
+          "nota": "até 2,7 kg"
+        },
+        {
+          "categoria": "Pesado",
+          "modificador": "+3 SB",
+          "nota": "até 11 kg"
+        },
+        {
+          "categoria": "Muito Pesado",
+          "modificador": "+5 SB",
+          "nota": "> 11 kg"
+        }
+      ],
+      "volume": [
+        {
+          "categoria": "Equilibrado",
+          "modificador": "-1 SB",
+          "exemplo": "Várias armas"
+        },
+        {
+          "categoria": "Volumoso",
+          "modificador": "×2 SB",
+          "exemplo": "Barril, objetos > metade de um humano"
+        },
+        {
+          "categoria": "Disforme",
+          "modificador": "-1 SB",
+          "exemplo": "Roupas, formas mutáveis"
+        },
+        {
+          "categoria": "Estreito",
+          "modificador": "×½ SB",
+          "exemplo": "< 5 cm de largura"
+        }
+      ]
+    }
+  },
+  "itens_obra_prima": {
+    "armas": {
+      "obra_prima": {
+        "multiplicador_custo": 10,
+        "beneficio": "+1 para acertar OU +1 para dano (não mágico)."
+      },
+      "obra_prima_superior": {
+        "multiplicador_custo": 25,
+        "beneficio": "+1 para acertar E +1 para dano (não mágico)."
+      }
+    },
+    "armaduras": {
+      "obra_prima": {
+        "multiplicador_custo": 10,
+        "beneficio": "+1 na CA."
+      },
+      "obra_prima_superior": {
+        "multiplicador_custo": 25,
+        "beneficio": "Absorve 1 ponto de dano de um único golpe."
+      }
+    }
+  }
+}
