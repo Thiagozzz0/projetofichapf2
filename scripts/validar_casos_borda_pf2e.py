@@ -358,18 +358,18 @@ def test_idiomas_humano_mago_grimorio_e_regras_especificas() -> None:
             pass
 
     # Rota Flask: HTML + /api/opcoes + /api/gerar com idiomas_extras
-    from app import app as flask_app
+    from app import ASSET_VERSION, app as flask_app
 
     client = flask_app.test_client()
     resp_hub = client.get("/")
     assert resp_hub.status_code == 200
     html_hub = resp_hub.get_data(as_text=True)
-    assert "Pathfinder 2e" in html_hub and "Castle and Crusades" in html_hub and "?v=65" in html_hub
+    assert "Pathfinder 2e" in html_hub and "Castle and Crusades" in html_hub and f"?v={ASSET_VERSION}" in html_hub
 
     resp_home = client.get("/pf2")
     assert resp_home.status_code == 200
     html_home = resp_home.get_data(as_text=True)
-    assert 'id="grid-idiomas-checkboxes"' in html_home and "?v=65" in html_home
+    assert 'id="grid-idiomas-checkboxes"' in html_home and f"?v={ASSET_VERSION}" in html_home
 
     resp_op = client.get("/api/opcoes")
     assert resp_op.status_code == 200

@@ -2,8 +2,7 @@
   "use strict";
 
   const app = window.PF2EApp;
-  const { esc } = window.PF2EFichaUI;
-  const { ORDEM_ATRIBUTOS, IDS_LIVRES_N1, IDS_TAL_GERAIS, TALENTOS_PERICIAS_ANC_UI } = app;
+  const { esc, ORDEM_ATRIBUTOS, IDS_LIVRES_N1, IDS_TAL_GERAIS, TALENTOS_PERICIAS_ANC_UI } = app;
 
   function _calcularModIntAtualUI() {
     const ancId = document.getElementById("ancestralidade")?.value || "aleatorio";
@@ -203,16 +202,18 @@
       }
     }
 
-    // 5. Talentos Ancestrais (principal e via Ancestralidade Adotada na Etapa 3)
+    // 5. Talentos Ancestrais (principal N1, N5 e via Ancestralidade Adotada na Etapa 3)
     let extrasTalento = 0;
     if ((document.getElementById("modo-talentos")?.value || "procedural") === "personalizado") {
-      const elTalAnc = document.getElementById("tal-ancestralidade");
-      const talAncVal = elTalAnc && !elTalAnc.disabled && !elTalAnc.closest(".oculto") ? elTalAnc.value : "procedural";
-      const regTal = TALENTOS_PERICIAS_ANC_UI[talAncVal];
-      if (regTal) {
-        extrasTalento += regTal.extras;
-        regTal.fixas.forEach((pid) => concederFixa(pid, "Talento Ancestral"));
-      }
+      ["tal-ancestralidade", "tal-ancestralidade-n5"].forEach((idTalAnc) => {
+        const elTalAnc = document.getElementById(idTalAnc);
+        const talAncVal = elTalAnc && !elTalAnc.disabled && !elTalAnc.closest(".oculto") ? elTalAnc.value : "procedural";
+        const regTal = TALENTOS_PERICIAS_ANC_UI[talAncVal];
+        if (regTal) {
+          extrasTalento += regTal.extras;
+          regTal.fixas.forEach((pid) => concederFixa(pid, "Talento Ancestral"));
+        }
+      });
       const temAdotada = (IDS_TAL_GERAIS || []).some((id) => {
         const el = document.getElementById(id);
         return el && !el.disabled && !el.closest(".oculto") && el.value === "ancestralidade_adotada";
@@ -224,6 +225,15 @@
         extrasTalento += regAdotado.extras;
         regAdotado.fixas.forEach((pid) => concederFixa(pid, origAdotada));
       }
+      // Talentos de classe que concedem +1 perícia extra (sincronizado com motor/talentos.py)
+      const idsTalCls = app.IDS_TAL_CLASSE || [];
+      idsTalCls.forEach((idSlot) => {
+        const elSlot = document.getElementById(idSlot);
+        if (!elSlot || elSlot.disabled || elSlot.closest(".oculto")) return;
+        if (elSlot.value === "evolucao_arcana" || elSlot.value === "evolucao_ocultista") {
+          extrasTalento += 1;
+        }
+      });
     }
 
     // 6. Matemática das vagas livres: max(0, base + mod_int) + Herança Perita + Sobreposições + Talentos

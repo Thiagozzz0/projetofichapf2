@@ -2,8 +2,8 @@
   "use strict";
 
   const app = window.PF2EApp;
-  const { esc, fmtMod, renderSeloAcao } = window.PF2EFichaUI;
-  const { CLASSES_CONJURADORAS_UI, IDS_TAL_CLASSE, IDS_TAL_GERAIS } = app;
+  const { fmtMod, renderSeloAcao } = window.PF2EFichaUI;
+  const { esc, CLASSES_CONJURADORAS_UI, IDS_TAL_CLASSE, IDS_TAL_GERAIS } = app;
 
   const TENDENCIAS_LABELS = [
     ["OB", "Ordeiro e Bom (OB)"],

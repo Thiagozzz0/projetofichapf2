@@ -7,7 +7,15 @@ from typing import Any
 
 from .dados import BaseDados
 from .regras_casa import aplicar_override_item_casa
-from .util import GRAUS, formatar_preco, grau_normalizado, normalizar, pc_para_moedas
+from .util import (
+    GRAUS,
+    chave_categoria_armadura as _chave_categoria_armadura,
+    formatar_preco,
+    grau_normalizado,
+    normalizar,
+    pc_para_moedas,
+    subir_grau as _subir_grau,
+)
 
 
 ORCAMENTO_POR_NIVEL_PC: dict[int, int] = {
@@ -373,13 +381,6 @@ _FAMILIARIDADE_ARMAS_ANCESTRAL: dict[str, tuple[list[str], str]] = {
 }
 
 
-def _subir_grau(atual: str, alvo: str) -> str:
-    """Promove o grau de proficiência apenas se `alvo` for superior ao `atual`."""
-    if atual not in GRAUS or alvo not in GRAUS:
-        return atual
-    return alvo if GRAUS.index(alvo) > GRAUS.index(atual) else atual
-
-
 def calcular_proficiencias_combate(
     classe: dict[str, Any],
     subclasse: dict[str, Any] | None,
@@ -577,19 +578,6 @@ def grau_arma(arma: dict[str, Any], profs_armas: dict[str, Any]) -> str:
         elif "avancada" in cat:
             grau = _subir_grau(grau, "especialista")
     return grau
-
-
-def _chave_categoria_armadura(categoria_texto: str) -> str:
-    c = normalizar(categoria_texto)
-    if "sem armadura" in c:
-        return "sem_armadura"
-    if "leve" in c:
-        return "leve"
-    if "media" in c:
-        return "media"
-    if "pesada" in c:
-        return "pesada"
-    return "sem_armadura"
 
 
 def _municao_para_arma(dados: BaseDados, arma: dict[str, Any]) -> dict[str, Any] | None:

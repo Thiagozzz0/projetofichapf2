@@ -2,31 +2,18 @@
 
 from __future__ import annotations
 
-import re
 from typing import Any
 
 from .equipamentos import grau_arma
-from .util import GRAUS, bonus_proficiencia, formatar_bonus, grau_normalizado, normalizar
-
-
-def _subir_grau(atual: str, alvo: str) -> str:
-    """Promove o grau de proficiência apenas se `alvo` for superior ao `atual`."""
-    if atual not in GRAUS or alvo not in GRAUS:
-        return atual
-    return alvo if GRAUS.index(alvo) > GRAUS.index(atual) else atual
-
-
-def _chave_categoria_armadura(categoria_texto: str) -> str:
-    c = normalizar(categoria_texto)
-    if "sem armadura" in c:
-        return "sem_armadura"
-    if "leve" in c:
-        return "leve"
-    if "media" in c:
-        return "media"
-    if "pesada" in c:
-        return "pesada"
-    return "sem_armadura"
+from .util import (
+    GRAUS,
+    bonus_proficiencia,
+    chave_categoria_armadura as _chave_categoria_armadura,
+    formatar_bonus,
+    grau_normalizado,
+    normalizar,
+    subir_grau as _subir_grau,
+)
 
 
 def _dano_arma_formatado(arma: dict[str, Any], bonus_dano: int) -> str:

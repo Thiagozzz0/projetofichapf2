@@ -7,7 +7,7 @@ import random
 from typing import Any
 
 from .dados import BaseDados
-from .util import atributo_id, bonus_proficiencia, normalizar, slugify
+from .util import atributo_id, bonus_proficiencia, normalizar
 
 
 _CLASSES_FOCO_CAR = {"campeao"}
@@ -385,27 +385,6 @@ def gerar_conjuracao(
     # ------------------------------------------------------------------
     # 1. Magias Inatas de Herança (independente da classe)
     # ------------------------------------------------------------------
-    inatas: list[dict[str, Any]] = []
-    tradicao_inata: str | None = None
-    if heranca["id"] == "elfo_vidente":
-        m = dados.magias.get("detectar_magia")
-        if m:
-            inatas.append(dict(m, frequencia="À vontade (Herança)"))
-            tradicao_inata = "arcana"
-    elif heranca["id"] == "gnomo_tocado_pelas_fadas":
-        pool = [m for m in dados.magias.values() if "primal" in m.get("tradicoes", []) and "Truque Mágico" in m.get("tracos", [])]
-        escolhido = _escolher_truque_por_conceito(pool, conceito, "primal", rng)
-        if escolhido:
-            inatas.append(dict(escolhido, frequencia="À vontade (Fada)"))
-            tradicao_inata = "primal"
-    elif heranca["id"] == "gnomo_manancial":
-        trad_pref = conj_rec.get("tradicao") if conj_rec.get("tradicao") in {"arcana", "divina", "ocultista"} else "arcana"
-        pool = [m for m in dados.magias.values() if trad_pref in m.get("tradicoes", []) and "Truque Mágico" in m.get("tracos", [])]
-        escolhido = _escolher_truque_por_conceito(pool, conceito, trad_pref, rng)
-        if escolhido:
-            inatas.append(dict(escolhido, frequencia="À vontade (Herança)"))
-            tradicao_inata = trad_pref
-
     tal_anc_set = (
         {str(x) for x in talento_ancestral_id if x}
         if isinstance(talento_ancestral_id, (list, tuple, set))
@@ -415,6 +394,80 @@ def gerar_conjuracao(
     truque_inato_req = str(esc_mag.get("truque_inato_ancestral_id") or "").strip()
     if truque_inato_req.lower() in {"", "procedural", "aleatorio", "aleatoria", "random"}:
         truque_inato_req = ""
+    truque_inato_heranca_req = str(esc_mag.get("truque_inato_heranca_id") or "").strip()
+    if truque_inato_heranca_req.lower() in {"", "procedural", "aleatorio", "aleatoria", "random"}:
+        truque_inato_heranca_req = ""
+    tradicao_inata_heranca_req = normalizar(str(esc_mag.get("tradicao_inata_heranca") or ""))
+
+    inatas: list[dict[str, Any]] = []
+    tradicao_inata: str | None = None
+    truque_inato_consumido = False
+    possui_tal_inato_anc = bool(tal_anc_set & {"magia_extraterrena", "magia_do_primeiro_mundo"})
+
+    if heranca["id"] == "elfo_vidente":
+        m = dados.magias.get("detectar_magia")
+        if m:
+            inatas.append(dict(m, frequencia="À vontade (Herança)"))
+            tradicao_inata = "arcana"
+    elif heranca["id"] == "gnomo_tocado_pelas_fadas":
+        pool = [m for m in dados.magias.values() if "primal" in m.get("tradicoes", []) and "Truque Mágico" in m.get("tracos", [])]
+        req_her = truque_inato_heranca_req or (truque_inato_req if not possui_tal_inato_anc else "")
+        if req_her:
+            escolhido = next((m for m in pool if m["id"] == req_her), None)
+            if not escolhido:
+                raise ValueError(
+                    f"Truque mágico inato '{req_her}' inválido para a tradição Primal (Gnomo Tocado pelas Fadas)."
+                )
+            if not truque_inato_heranca_req:
+                truque_inato_consumido = True
+        else:
+            escolhido = _escolher_truque_por_conceito(pool, conceito, "primal", rng)
+        if escolhido:
+            inatas.append(dict(escolhido, frequencia="À vontade (Fada)"))
+            tradicao_inata = "primal"
+    elif heranca["id"] == "gnomo_manancial":
+        tradicoes_manancial = ("arcana", "divina", "ocultista")
+        req_her = truque_inato_heranca_req or (truque_inato_req if not possui_tal_inato_anc else "")
+        if req_her:
+            if tradicao_inata_heranca_req in tradicoes_manancial:
+                pool = [
+                    m for m in dados.magias.values()
+                    if tradicao_inata_heranca_req in m.get("tradicoes", []) and "Truque Mágico" in m.get("tracos", [])
+                ]
+                escolhido = next((m for m in pool if m["id"] == req_her), None)
+                trad_pref = tradicao_inata_heranca_req
+            else:
+                pool = [
+                    m for m in dados.magias.values()
+                    if "Truque Mágico" in m.get("tracos", [])
+                    and any(t in m.get("tradicoes", []) for t in tradicoes_manancial)
+                ]
+                escolhido = next((m for m in pool if m["id"] == req_her), None)
+                trad_pref = (
+                    next((t for t in tradicoes_manancial if t in escolhido.get("tradicoes", [])), "arcana")
+                    if escolhido
+                    else "arcana"
+                )
+            if not escolhido:
+                raise ValueError(
+                    f"Truque mágico inato '{req_her}' inválido para Gnomo Manancial (tradições Arcana, Divina ou Ocultista)."
+                )
+            if not truque_inato_heranca_req:
+                truque_inato_consumido = True
+        else:
+            trad_pref = (
+                tradicao_inata_heranca_req
+                if tradicao_inata_heranca_req in tradicoes_manancial
+                else (conj_rec.get("tradicao") if conj_rec.get("tradicao") in tradicoes_manancial else "arcana")
+            )
+            pool = [
+                m for m in dados.magias.values()
+                if trad_pref in m.get("tradicoes", []) and "Truque Mágico" in m.get("tracos", [])
+            ]
+            escolhido = _escolher_truque_por_conceito(pool, conceito, trad_pref, rng)
+        if escolhido:
+            inatas.append(dict(escolhido, frequencia="À vontade (Herança)"))
+            tradicao_inata = trad_pref
 
     inatas_ids = {m["id"] for m in inatas}
     if "magia_extraterrena" in tal_anc_set:
@@ -422,34 +475,41 @@ def gerar_conjuracao(
             m for m in dados.magias.values()
             if "arcana" in m.get("tradicoes", []) and "Truque Mágico" in m.get("tracos", []) and m["id"] not in inatas_ids
         ]
-        if truque_inato_req:
+        if truque_inato_req and not truque_inato_consumido:
             escolhido_ext = next((m for m in pool_ext if m["id"] == truque_inato_req), None)
-            if not escolhido_ext:
+            if escolhido_ext:
+                truque_inato_consumido = True
+            elif "magia_do_primeiro_mundo" not in tal_anc_set:
                 raise ValueError(f"Truque mágico inato '{truque_inato_req}' inválido para a tradição Arcana (Magia Extraterrena).")
+            else:
+                escolhido_ext = _escolher_truque_por_conceito(pool_ext, conceito, "arcana", rng)
         else:
             escolhido_ext = _escolher_truque_por_conceito(pool_ext, conceito, "arcana", rng)
         if escolhido_ext:
             inatas.append(dict(escolhido_ext, frequencia="À vontade (Talento Ancestral)"))
+            inatas_ids.add(escolhido_ext["id"])
             tradicao_inata = tradicao_inata or "arcana"
     if "magia_do_primeiro_mundo" in tal_anc_set:
         pool_pm = [
             m for m in dados.magias.values()
             if "primal" in m.get("tradicoes", []) and "Truque Mágico" in m.get("tracos", []) and m["id"] not in inatas_ids
         ]
-        if truque_inato_req:
+        if truque_inato_req and not truque_inato_consumido:
             escolhido_pm = next((m for m in pool_pm if m["id"] == truque_inato_req), None)
             if not escolhido_pm:
                 raise ValueError(f"Truque mágico inato '{truque_inato_req}' inválido para a tradição Primal (Magia do Primeiro Mundo).")
+            truque_inato_consumido = True
         else:
             escolhido_pm = _escolher_truque_por_conceito(pool_pm, conceito, "primal", rng)
         if escolhido_pm:
             inatas.append(dict(escolhido_pm, frequencia="À vontade (Talento Ancestral)"))
+            inatas_ids.add(escolhido_pm["id"])
             tradicao_inata = tradicao_inata or "primal"
 
     # ------------------------------------------------------------------
     # 2. Conjurador Pleno vs Foco Marcial vs Não-conjurador
     # ------------------------------------------------------------------
-    conjuracao_plena = classe_id in {"bardo", "clerigo", "druida", "feiticeiro", "mago"}
+    conjuracao_plena = classe_id in CLASSES_CONJURACAO_PLENA
     possui_foco_monge = classe_id == "monge" and any(
         t in talentos_classe_ids for t in ("golpe_de_ki", "disparada_de_ki", "integridade_corporal")
     )

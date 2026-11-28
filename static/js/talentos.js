@@ -2,8 +2,7 @@
   "use strict";
 
   const app = window.PF2EApp;
-  const { esc } = window.PF2EFichaUI || { esc: (s) => String(s || "") };
-  const { CLASSES_CONJURADORAS_UI, IDS_TAL_CLASSE, IDS_TAL_GERAIS, normTxt } = app;
+  const { esc, CLASSES_CONJURADORAS_UI, IDS_TAL_CLASSE, IDS_TAL_GERAIS, normTxt } = app;
 
   let _modalAncCtx = null;
 
@@ -388,14 +387,23 @@
     const clsObj = app.opcoes.classes.find((c) => c.id === clsId);
     const conObj = clsObj ? clsObj.conceitos.find((x) => x.id === conId) : null;
 
-    // 1. Talento de Ancestralidade (1º Nível) — oculto se Ancestralidade estiver Aleatória
+    // 1. Talento de Ancestralidade (1º Nível e 5º Nível) — oculto se Ancestralidade estiver Aleatória
     const selAnc = document.getElementById("tal-ancestralidade");
     const badgeAnc = document.getElementById("badge-tal-ancestralidade");
     const notaAnc = document.getElementById("nota-tal-ancestralidade");
     const cardAnc = document.getElementById("card-tal-ancestralidade");
+    const grupoAncN5 = document.getElementById("grupo-tal-ancestralidade-n5");
+    const selAncN5 = document.getElementById("tal-ancestralidade-n5");
+    const notaAncN5 = document.getElementById("nota-tal-ancestralidade-n5");
+    const nivel = app.obterNivelSelecionadoUI?.() || 1;
+    const ehRandNiv = app.ehNivelAleatorioUI?.() || false;
+    const liberaAncN5 = !ehRandNiv && nivel >= 5 && Boolean(ancObj) && ancId !== "aleatorio";
     let slotsVisiveisTotal = 0;
+
     if (!ancObj || ancId === "aleatorio") {
       _preencherSelectTalento(selAnc, [], { disabledTexto: "Procedural (conforme ancestralidade sorteada)", preservar: false });
+      _preencherSelectTalento(selAncN5, [], { disabledTexto: "Disponível a partir do 5º nível", preservar: false });
+      grupoAncN5?.classList.add("oculto");
       cardAnc?.classList.add("oculto");
     } else {
       cardAnc?.classList.remove("oculto");
@@ -420,7 +428,7 @@
       });
       if (badgeAnc) {
         badgeAnc.className = "badge-tal-liberado";
-        badgeAnc.textContent = "1 Slot Liberado";
+        badgeAnc.textContent = liberaAncN5 ? "2 Slots Liberados (N1 & N5)" : "1 Slot Liberado";
       }
       if (notaAnc) {
         if (selAnc?.value === "ambicao_natural") {
@@ -430,6 +438,61 @@
         } else {
           const extraPool = herId === "meio_elfo" ? " + pool Élfico/Meio-Elfo" : herId === "meio_orc" ? " + pool Meio-Orc" : "";
           notaAnc.textContent = `${poolMap.size} talentos de 1º nível disponíveis para ${ancObj.nome}${extraPool}.`;
+        }
+      }
+
+      if (!liberaAncN5) {
+        grupoAncN5?.classList.add("oculto");
+        _preencherSelectTalento(selAncN5, [], { disabledTexto: "Disponível a partir do 5º nível", preservar: false });
+        if (notaAncN5) notaAncN5.textContent = "";
+      } else {
+        grupoAncN5?.classList.remove("oculto");
+        slotsVisiveisTotal += 1;
+        const poolN5Map = new Map();
+        const addPorNivel = (mapaPorNivel) => {
+          if (!mapaPorNivel) return;
+          ["1", "5"].forEach((nv) => {
+            (mapaPorNivel[nv] || []).forEach((t) => {
+              if (!poolN5Map.has(t.id)) poolN5Map.set(t.id, t);
+            });
+          });
+        };
+        if (cat.ancestralidade_por_nivel?.[ancId]) {
+          addPorNivel(cat.ancestralidade_por_nivel[ancId]);
+        } else {
+          (cat.ancestralidade_por_id[ancId] || []).forEach((t) => poolN5Map.set(t.id, t));
+        }
+        if (herId === "meio_elfo") {
+          addPorNivel(cat.ancestralidade_por_nivel?.elfo);
+          addPorNivel(cat.mesticos_por_nivel?.meio_elfo);
+        } else if (herId === "meio_orc") {
+          addPorNivel(cat.mesticos_por_nivel?.meio_orc);
+        }
+
+        const escolhaN1 = selAnc?.value || "procedural";
+        _preencherSelectTalento(selAncN5, Array.from(poolN5Map.values()), {
+          textoProcedural: "Procedural (melhor p/ conceito N5)",
+          verificarOpcao: (t) => {
+            if (escolhaN1 !== "procedural" && t.id === escolhaN1) {
+              return "já selecionado no 1º nível";
+            }
+            if (t.id === "truque_magico_adaptado" && clsId !== "aleatorio" && !CLASSES_CONJURADORAS_UI.has(clsId)) {
+              return "requer conjuração plena";
+            }
+            if (t.id === "longevidade_ancestral" && ancId !== "elfo") {
+              return "requer ancestralidade Elfo";
+            }
+            if (
+              t.id === "discipulo_adaptativo" &&
+              (escolhaN1 !== "truque_magico_adaptado" || (clsId !== "aleatorio" && !CLASSES_CONJURADORAS_UI.has(clsId)))
+            ) {
+              return "requer Truque Mágico Adaptado e conjuração";
+            }
+            return null;
+          },
+        });
+        if (notaAncN5) {
+          notaAncN5.textContent = `${poolN5Map.size} talentos (N1–N5) disponíveis para o 5º nível de ${ancObj.nome}.`;
         }
       }
     }
@@ -610,13 +673,13 @@
 
     const elNotaProg = document.getElementById("tal-nota-progressao");
     if (elNotaProg) {
-      const nivel = app.obterNivelSelecionadoUI?.() || 1;
-      const ehRandNiv = app.ehNivelAleatorioUI?.() || false;
       if (ehRandNiv || nivel > 1) {
         elNotaProg.classList.remove("oculto");
         elNotaProg.textContent = ehRandNiv
           ? "Slots de progressão N2–N5 (Classe N2/N4, Perícia N2/N4, Geral N3, Ancestralidade N5) são preenchidos automaticamente pelo motor com validação de pré-requisitos."
-          : `Nível ${nivel}: os slots de progressão N2–N${nivel} (Classe, Perícia, Geral e Ancestralidade) são preenchidos automaticamente pelo motor com validação de pré-requisitos.`;
+          : nivel >= 5
+            ? "Nível 5: o Talento Ancestral N5 pode ser escolhido acima; os demais slots de progressão (Classe N2/N4, Perícia N2/N4 e Geral N3) são preenchidos automaticamente pelo motor com validação de pré-requisitos."
+            : `Nível ${nivel}: os slots de progressão N2–N${nivel} (Classe, Perícia e Geral) são preenchidos automaticamente pelo motor com validação de pré-requisitos.`;
       } else {
         elNotaProg.classList.add("oculto");
         elNotaProg.textContent = "";
@@ -651,7 +714,7 @@
   function resetarTalentosProcedural() {
     const modoEl = document.getElementById("modo-talentos");
     if (modoEl) modoEl.value = "procedural";
-    ["tal-ancestralidade", ...IDS_TAL_CLASSE, "tal-pericia-1", ...IDS_TAL_GERAIS].forEach((id) => {
+    ["tal-ancestralidade", "tal-ancestralidade-n5", ...IDS_TAL_CLASSE, "tal-pericia-1", ...IDS_TAL_GERAIS].forEach((id) => {
       const el = document.getElementById(id);
       if (el) el.value = "procedural";
     });
@@ -673,6 +736,7 @@
     const perEl = document.getElementById("tal-pericia-1");
     const perVals = perEl && !perEl.disabled ? [perEl.value || "procedural"] : "procedural";
     const gerVals = selAtivos(IDS_TAL_GERAIS);
+    const selAncN5 = document.getElementById("tal-ancestralidade-n5");
     const payload = {
       modo: "personalizado",
       ancestralidade_id: document.getElementById("tal-ancestralidade")?.disabled
@@ -682,6 +746,9 @@
       pericia_ids: perVals,
       gerais_ids: gerVals.length ? gerVals : "procedural",
     };
+    if (selAncN5 && !selAncN5.disabled && !selAncN5.closest(".oculto")) {
+      payload.ancestralidade_n5_id = selAncN5.value || "procedural";
+    }
     if (gerVals.includes("ancestralidade_adotada") && app.talEstado?.ancestralidadeAdotadaId && app.talEstado?.talentoAdotadoId) {
       payload.ancestralidade_adotada_id = app.talEstado.ancestralidadeAdotadaId;
       payload.talento_ancestral_adotado_id = app.talEstado.talentoAdotadoId;
@@ -692,6 +759,7 @@
   function registrarEventosTalentos() {
     document.getElementById("modo-talentos")?.addEventListener("change", atualizarVisibilidadeTalentosUI);
     document.getElementById("tal-ancestralidade")?.addEventListener("change", atualizarCatalogoTalentosUI);
+    document.getElementById("tal-ancestralidade-n5")?.addEventListener("change", atualizarCatalogoTalentosUI);
     IDS_TAL_CLASSE.forEach((id) => {
       document.getElementById(id)?.addEventListener("change", () => {
         sincronizarExclusaoTalentos();

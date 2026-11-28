@@ -1178,12 +1178,6 @@ body {
   color: #842029;
 }
 
-.painel-equipamentos-custom {
-  margin-top: 10px;
-  background: var(--paper);
-  padding: 12px;
-}
-
 .barra-orcamento-eq {
   display: flex;
   flex-wrap: wrap;
@@ -2961,6 +2955,8 @@ body {
   .bloco {
     overflow-x: auto;
     max-width: 100%;
+    padding: 9px;
+    margin-bottom: 10px;
   }
 
   .pagina-ref {
@@ -2971,11 +2967,6 @@ body {
     padding: 6px 8px;
     font-size: 0.7rem;
     gap: 4px;
-  }
-
-  .bloco {
-    padding: 9px;
-    margin-bottom: 10px;
   }
 
   .bloco-titulo {

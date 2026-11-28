@@ -7,10 +7,8 @@ import re
 from typing import Any
 
 from .dados import BaseDados
+from .magias import CLASSES_CONJURACAO_PLENA as _CLASSES_CONJURADORAS_PLENAS
 from .util import GRAUS, normalizar, slugify
-
-
-_CLASSES_CONJURADORAS_PLENAS = {"bardo", "clerigo", "druida", "feiticeiro", "mago"}
 
 _SABERES_ANCESTRAIS: dict[str, tuple[list[str], str]] = {
     "saber_enanico": (["manufatura", "religiao"], "Saber Enânico"),

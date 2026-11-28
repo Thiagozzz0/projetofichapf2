@@ -2,8 +2,8 @@
   "use strict";
 
   const app = window.PF2EApp;
-  const { esc, renderSeloAcao, renderBadgeTradicao } = window.PF2EFichaUI;
-  const { CLASSES_CONJURADORAS_UI, IDS_TAL_GERAIS, normTxt } = app;
+  const { renderSeloAcao, renderBadgeTradicao } = window.PF2EFichaUI;
+  const { esc, CLASSES_CONJURADORAS_UI, IDS_TAL_GERAIS, normTxt } = app;
 
   const NOMES_TRADICAO = {
     arcana: "Arcana",
@@ -12,12 +12,38 @@
     primal: "Primal",
   };
 
+  function _obterOrigemTruqueInatoHerancaUI() {
+    const ancId = document.getElementById("ancestralidade")?.value || "aleatorio";
+    const herId = document.getElementById("heranca")?.value || "aleatorio";
+    if (ancId === "gnomo" && herId === "gnomo_tocado_pelas_fadas") {
+      return {
+        ativo: true,
+        tradicoes: ["primal"],
+        tradNome: "Primal",
+        herancaId: herId,
+        origemLabel: "Herança (Gnomo Tocado pelas Fadas)",
+      };
+    }
+    if (ancId === "gnomo" && herId === "gnomo_manancial") {
+      return {
+        ativo: true,
+        tradicoes: ["arcana", "divina", "ocultista"],
+        tradNome: "Arcana / Divina / Ocultista",
+        herancaId: herId,
+        origemLabel: "Herança (Gnomo Manancial)",
+      };
+    }
+    return { ativo: false };
+  }
+
   function _obterOrigemTruqueInatoUI() {
     if ((document.getElementById("modo-talentos")?.value || "procedural") !== "personalizado") {
       return { ativo: false };
     }
     const elAnc = document.getElementById("tal-ancestralidade");
     const talAnc = elAnc && !elAnc.disabled && !elAnc.closest(".oculto") ? elAnc.value : "procedural";
+    const elAncN5 = document.getElementById("tal-ancestralidade-n5");
+    const talAncN5 = elAncN5 && !elAncN5.disabled && !elAncN5.closest(".oculto") ? elAncN5.value : "procedural";
     const temAdotada = (IDS_TAL_GERAIS || []).some((id) => {
       const el = document.getElementById(id);
       return el && !el.disabled && !el.closest(".oculto") && el.value === "ancestralidade_adotada";
@@ -27,6 +53,8 @@
     let fonte = null;
     if (talAnc === "magia_extraterrena" || talAnc === "magia_do_primeiro_mundo") {
       fonte = { id: talAnc, ehAdotado: false };
+    } else if (talAncN5 === "magia_extraterrena" || talAncN5 === "magia_do_primeiro_mundo") {
+      fonte = { id: talAncN5, ehAdotado: false };
     } else if (talAdotado === "magia_extraterrena" || talAdotado === "magia_do_primeiro_mundo") {
       fonte = { id: talAdotado, ehAdotado: true };
     }
@@ -43,8 +71,8 @@
     return { ativo: true, tradicao, tradNome, talentoId: fonte.id, talentoNome, origemLabel, ehAdotado: fonte.ehAdotado };
   }
 
-  function _renderPreviewTruqueInatoUI(mid) {
-    const box = document.getElementById("desc-truque-inato-ancestral");
+  function _renderPreviewTruqueInatoElementoUI(boxId, mid) {
+    const box = document.getElementById(boxId);
     if (!box) return;
     const m = mid && mid !== "procedural" ? app.opcoes?.catalogo_magias?.por_id?.[mid] : null;
     if (!m) {
@@ -60,6 +88,75 @@
       `</div>` +
       `<div class="desc-preview-texto">${esc(m.descricao || m.resumo)}</div>`;
     box.classList.remove("oculto");
+  }
+
+  function _renderPreviewTruqueInatoUI(mid) {
+    _renderPreviewTruqueInatoElementoUI("desc-truque-inato-ancestral", mid);
+  }
+
+  function _renderPreviewTruqueInatoHerancaUI(mid) {
+    _renderPreviewTruqueInatoElementoUI("desc-truque-inato-heranca", mid);
+  }
+
+  function _atualizarBlocoMagiaInataHerancaUI() {
+    const box = document.getElementById("box-magia-inata-heranca");
+    const sel = document.getElementById("sel-truque-inato-heranca");
+    const lbl = document.getElementById("lbl-magia-inata-heranca");
+    const badge = document.getElementById("badge-magia-inata-heranca");
+    const nota = document.getElementById("nota-magia-inata-heranca");
+    const inatoHer = _obterOrigemTruqueInatoHerancaUI();
+    const cat = app.opcoes?.catalogo_magias;
+
+    if (!box || !sel || !inatoHer.ativo || !cat) {
+      if (box) box.classList.add("oculto");
+      if (app.magEstado) app.magEstado.truqueInatoHerancaId = "procedural";
+      _renderPreviewTruqueInatoHerancaUI(null);
+      return inatoHer;
+    }
+
+    box.classList.remove("oculto");
+    if (lbl) lbl.textContent = `Truque Mágico Inato — ${inatoHer.tradNome}`;
+    if (badge) badge.textContent = "Herança";
+    if (nota) {
+      nota.textContent = `Concedido por: ${inatoHer.origemLabel}. Escolha 1 truque mágico à vontade (${inatoHer.tradNome}) ou deixe em Procedural.`;
+    }
+
+    const idsSet = new Set();
+    inatoHer.tradicoes.forEach((tr) => {
+      (cat.por_tradicao?.[tr]?.truques || []).forEach((mid) => idsSet.add(mid));
+    });
+    const poolOrdenado = Array.from(idsSet)
+      .map((mid) => cat.por_id?.[mid])
+      .filter(Boolean)
+      .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
+
+    const atual = app.magEstado?.truqueInatoHerancaId || sel.value || "procedural";
+    sel.innerHTML = "";
+    const optProc = document.createElement("option");
+    optProc.value = "procedural";
+    optProc.textContent = `Procedural (melhor truque ${inatoHer.tradNome} p/ o conceito)`;
+    sel.appendChild(optProc);
+
+    const multiTrad = inatoHer.tradicoes.length > 1;
+    poolOrdenado.forEach((m) => {
+      const opt = document.createElement("option");
+      opt.value = m.id;
+      if (multiTrad) {
+        const tradsComp = inatoHer.tradicoes
+          .filter((t) => (m.tradicoes || []).includes(t))
+          .map((t) => NOMES_TRADICAO[t] || t)
+          .join("/");
+        opt.textContent = tradsComp ? `${m.nome} (${tradsComp})` : m.nome;
+      } else {
+        opt.textContent = `${m.nome}${m.escola ? ` (${m.escola})` : ""}`;
+      }
+      sel.appendChild(opt);
+    });
+
+    sel.value = idsSet.has(atual) ? atual : "procedural";
+    if (app.magEstado) app.magEstado.truqueInatoHerancaId = sel.value;
+    _renderPreviewTruqueInatoHerancaUI(sel.value);
+    return inatoHer;
   }
 
   function _atualizarBlocoMagiaInataUI() {
@@ -109,12 +206,28 @@
   }
 
   function obterResumoMagiaInataUI() {
+    const partes = [];
+    const inatoHer = _obterOrigemTruqueInatoHerancaUI();
+    if (inatoHer.ativo) {
+      const midHer = app.magEstado?.truqueInatoHerancaId || document.getElementById("sel-truque-inato-heranca")?.value || "procedural";
+      if (midHer === "procedural") {
+        partes.push("Herança Inata (Proc.)");
+      } else {
+        const mh = app.opcoes?.catalogo_magias?.por_id?.[midHer];
+        partes.push(mh ? `Herança: ${mh.nome}` : "Herança Inata");
+      }
+    }
     const inato = _obterOrigemTruqueInatoUI();
-    if (!inato.ativo) return null;
-    const mid = app.magEstado?.truqueInatoAncestralId || document.getElementById("sel-truque-inato-ancestral")?.value || "procedural";
-    if (mid === "procedural") return `Inata ${inato.tradNome} (Proc.)`;
-    const m = app.opcoes?.catalogo_magias?.por_id?.[mid];
-    return m ? `Inata: ${m.nome}` : `Inata ${inato.tradNome}`;
+    if (inato.ativo) {
+      const mid = app.magEstado?.truqueInatoAncestralId || document.getElementById("sel-truque-inato-ancestral")?.value || "procedural";
+      if (mid === "procedural") {
+        partes.push(`Inata ${inato.tradNome} (Proc.)`);
+      } else {
+        const m = app.opcoes?.catalogo_magias?.por_id?.[mid];
+        partes.push(m ? `Inata: ${m.nome}` : `Inata ${inato.tradNome}`);
+      }
+    }
+    return partes.length ? partes.join(" + ") : null;
   }
 
   function _iconeAcao(acoes) {
@@ -377,8 +490,9 @@
 
   function atualizarCatalogoMagiasUI() {
     const st = calcularEstadoMagiasUI();
+    const inatoHer = _atualizarBlocoMagiaInataHerancaUI();
     const inato = _atualizarBlocoMagiaInataUI();
-    _atualizarNavegacaoEtapaMagias(st.ehConjurador || inato.ativo);
+    _atualizarNavegacaoEtapaMagias(st.ehConjurador || inato.ativo || inatoHer.ativo);
     document.getElementById("bloco-magias-classe")?.classList.toggle("oculto", !st.ehConjurador);
 
     if (!st.ehConjurador) {
@@ -571,9 +685,13 @@
     app.magEstado.magias_n2 = [];
     app.magEstado.magias_n3 = [];
     app.magEstado.truqueInatoAncestralId = "procedural";
+    app.magEstado.truqueInatoHerancaId = "procedural";
     const selInato = document.getElementById("sel-truque-inato-ancestral");
     if (selInato) selInato.value = "procedural";
+    const selInatoHer = document.getElementById("sel-truque-inato-heranca");
+    if (selInatoHer) selInatoHer.value = "procedural";
     _renderPreviewTruqueInatoUI(null);
+    _renderPreviewTruqueInatoHerancaUI(null);
     mostrarDetalheMagiaUI(null);
     atualizarVisibilidadeMagiasUI();
   }
@@ -581,28 +699,32 @@
   function montarPayloadMagiasUI() {
     const st = calcularEstadoMagiasUI();
     const inato = _obterOrigemTruqueInatoUI();
+    const inatoHer = _obterOrigemTruqueInatoHerancaUI();
     const truqInatoVal = document.getElementById("sel-truque-inato-ancestral")?.value || app.magEstado?.truqueInatoAncestralId || "procedural";
+    const truqInatoHerVal = document.getElementById("sel-truque-inato-heranca")?.value || app.magEstado?.truqueInatoHerancaId || "procedural";
+
+    const anexarInatos = (payload) => {
+      if (inato.ativo && truqInatoVal !== "procedural") {
+        payload.truque_inato_ancestral_id = truqInatoVal;
+      }
+      if (inatoHer.ativo && truqInatoHerVal !== "procedural") {
+        payload.truque_inato_heranca_id = truqInatoHerVal;
+      }
+      return payload;
+    };
 
     if (!st.ehConjurador) {
-      if (inato.ativo && truqInatoVal !== "procedural") {
-        return { modo: "procedural", truque_inato_ancestral_id: truqInatoVal };
-      }
-      return { modo: "procedural" };
+      return anexarInatos({ modo: "procedural" });
     }
     const modo = document.getElementById("modo-magias")?.value || "procedural";
     if (modo !== "personalizado") {
-      return inato.ativo && truqInatoVal !== "procedural"
-        ? { modo, truque_inato_ancestral_id: truqInatoVal }
-        : { modo };
+      return anexarInatos({ modo });
     }
-    const payload = {
+    const payload = anexarInatos({
       modo: "personalizado",
       truques_ids: app.magEstado.truques.length ? [...app.magEstado.truques] : "procedural",
       magias_n1_ids: app.magEstado.magias_n1.length ? [...app.magEstado.magias_n1] : "procedural",
-    };
-    if (inato.ativo && truqInatoVal !== "procedural") {
-      payload.truque_inato_ancestral_id = truqInatoVal;
-    }
+    });
     if ((st.espacosPorCirculo?.[2] || 0) > 0 && app.magEstado.magias_n2.length) {
       payload.magias_n2_ids = [...app.magEstado.magias_n2];
     }
@@ -627,6 +749,12 @@
   }
 
   function registrarEventosMagias() {
+    document.getElementById("sel-truque-inato-heranca")?.addEventListener("change", (e) => {
+      const val = e.currentTarget.value || "procedural";
+      if (app.magEstado) app.magEstado.truqueInatoHerancaId = val;
+      _renderPreviewTruqueInatoHerancaUI(val);
+      app.atualizarResumosEtapasUI?.();
+    });
     document.getElementById("sel-truque-inato-ancestral")?.addEventListener("change", (e) => {
       const val = e.currentTarget.value || "procedural";
       if (app.magEstado) app.magEstado.truqueInatoAncestralId = val;

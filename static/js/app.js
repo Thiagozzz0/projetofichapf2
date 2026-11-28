@@ -74,7 +74,7 @@
       if ((document.getElementById("modo-talentos")?.value || "procedural") !== "personalizado") {
         elTal.textContent = "Procedural";
       } else {
-        const manuais = ["tal-ancestralidade", ...IDS_TAL_CLASSE, "tal-pericia-1", ...IDS_TAL_GERAIS].filter((id) => {
+        const manuais = ["tal-ancestralidade", "tal-ancestralidade-n5", ...IDS_TAL_CLASSE, "tal-pericia-1", ...IDS_TAL_GERAIS].filter((id) => {
           const el = document.getElementById(id);
           return el && !el.disabled && !el.closest(".oculto") && el.value !== "procedural";
         }).length;
