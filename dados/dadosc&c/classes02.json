@@ -1,0 +1,2684 @@
+{
+  "metadados": {
+    "sistema": "Castles & Crusades",
+    "edicao": "1ª Edição Brasileira (Livro do Jogador)",
+    "arquivo_fonte": "ref/cc/C&C classes 02.pdf",
+    "paginas_livro": "40–62",
+    "total_paginas_pdf": 23,
+    "leva": 2,
+    "niveis_cobertos": "1–24",
+    "versao_schema": 1,
+    "idioma": "pt-BR"
+  },
+  "classes": [
+    {
+      "id": "druida",
+      "nome": "Druida",
+      "paginas_livro": "40–44",
+      "atributo_principal": "sabedoria",
+      "dado_vida": "d8",
+      "pv_apos_nivel_10": 3,
+      "disposicao": "neutra (qualquer)",
+      "armas": {
+        "qualquer": false,
+        "lista": [
+          "Arco",
+          "Clava",
+          "Adaga",
+          "Dardo",
+          "Machadinha",
+          "Martelos",
+          "Foices",
+          "Funda",
+          "Lanças",
+          "Espada (todas)",
+          "Cajado"
+        ],
+        "observacao": "Usa armas de matérias-primas naturais (madeira, couro, pedra, ferro/cobre forjado a frio; evita aço/bronze forjados)."
+      },
+      "armaduras": {
+        "qualquer": false,
+        "nenhuma": false,
+        "lista": [
+          "Couro Cozido",
+          "Laminar de Couro",
+          "Peles",
+          "Couro",
+          "Cota de Couro",
+          "Couro Batido"
+        ],
+        "observacao": "Apenas armaduras naturais (couro/madeira); escudos de madeira e capuz de couro."
+      },
+      "idiomas_bonus_disponiveis": [
+        "Druídico (secreto)",
+        "Aquan",
+        "Auran",
+        "Élfico",
+        "Fada",
+        "Gigante",
+        "Gnomo",
+        "Silvano",
+        "Terran"
+      ],
+      "conjurador": true,
+      "conjuracao": {
+        "tradicao": "divina_natural",
+        "atributo_conjuracao": "sabedoria",
+        "preparacao": "oracao",
+        "feiticos_bonus_por_atributo": [
+          {
+            "min": 13,
+            "max": 15,
+            "circulo": 1,
+            "quantidade": 1
+          },
+          {
+            "min": 16,
+            "max": 17,
+            "circulo": 2,
+            "quantidade": 1
+          },
+          {
+            "min": 18,
+            "max": 19,
+            "circulo": 3,
+            "quantidade": 1
+          }
+        ],
+        "feiticos_bonus_cumulativos": true,
+        "feiticos_bonus_requer_acesso_circulo": true,
+        "feiticos_diarios": {
+          "1": {
+            "0": 3,
+            "1": 1
+          },
+          "2": {
+            "0": 4,
+            "1": 2
+          },
+          "3": {
+            "0": 4,
+            "1": 2,
+            "2": 1
+          },
+          "4": {
+            "0": 4,
+            "1": 3,
+            "2": 2
+          },
+          "5": {
+            "0": 4,
+            "1": 3,
+            "2": 2,
+            "3": 1
+          },
+          "6": {
+            "0": 5,
+            "1": 3,
+            "2": 3,
+            "3": 2
+          },
+          "7": {
+            "0": 5,
+            "1": 4,
+            "2": 3,
+            "3": 2,
+            "4": 1
+          },
+          "8": {
+            "0": 5,
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 2
+          },
+          "9": {
+            "0": 5,
+            "1": 4,
+            "2": 4,
+            "3": 3,
+            "4": 2,
+            "5": 1
+          },
+          "10": {
+            "0": 5,
+            "1": 4,
+            "2": 4,
+            "3": 3,
+            "4": 3,
+            "5": 2
+          },
+          "11": {
+            "0": 6,
+            "1": 5,
+            "2": 4,
+            "3": 4,
+            "4": 3,
+            "5": 2,
+            "6": 1
+          },
+          "12": {
+            "0": 6,
+            "1": 5,
+            "2": 4,
+            "3": 4,
+            "4": 3,
+            "5": 3,
+            "6": 2
+          },
+          "13": {
+            "0": 6,
+            "1": 5,
+            "2": 5,
+            "3": 4,
+            "4": 4,
+            "5": 3,
+            "6": 2,
+            "7": 1
+          },
+          "14": {
+            "0": 6,
+            "1": 5,
+            "2": 5,
+            "3": 4,
+            "4": 4,
+            "5": 3,
+            "6": 3,
+            "7": 2
+          },
+          "15": {
+            "0": 6,
+            "1": 5,
+            "2": 5,
+            "3": 5,
+            "4": 4,
+            "5": 4,
+            "6": 3,
+            "7": 2,
+            "8": 1
+          },
+          "16": {
+            "0": 6,
+            "1": 6,
+            "2": 5,
+            "3": 5,
+            "4": 4,
+            "5": 4,
+            "6": 3,
+            "7": 3,
+            "8": 2
+          },
+          "17": {
+            "0": 7,
+            "1": 6,
+            "2": 5,
+            "3": 5,
+            "4": 5,
+            "5": 4,
+            "6": 4,
+            "7": 3,
+            "8": 2,
+            "9": 1
+          },
+          "18": {
+            "0": 7,
+            "1": 6,
+            "2": 6,
+            "3": 5,
+            "4": 5,
+            "5": 4,
+            "6": 4,
+            "7": 3,
+            "8": 3,
+            "9": 2
+          },
+          "19": {
+            "0": 7,
+            "1": 6,
+            "2": 6,
+            "3": 5,
+            "4": 5,
+            "5": 5,
+            "6": 4,
+            "7": 4,
+            "8": 3,
+            "9": 2
+          },
+          "20": {
+            "0": 7,
+            "1": 6,
+            "2": 6,
+            "3": 6,
+            "4": 5,
+            "5": 5,
+            "6": 4,
+            "7": 4,
+            "8": 3,
+            "9": 3
+          },
+          "21": {
+            "0": 7,
+            "1": 6,
+            "2": 6,
+            "3": 6,
+            "4": 5,
+            "5": 5,
+            "6": 5,
+            "7": 4,
+            "8": 4,
+            "9": 3
+          },
+          "22": {
+            "0": 7,
+            "1": 7,
+            "2": 6,
+            "3": 6,
+            "4": 6,
+            "5": 5,
+            "6": 5,
+            "7": 4,
+            "8": 4,
+            "9": 3
+          },
+          "23": {
+            "0": 7,
+            "1": 7,
+            "2": 6,
+            "3": 6,
+            "4": 6,
+            "5": 5,
+            "6": 5,
+            "7": 5,
+            "8": 4,
+            "9": 4
+          },
+          "24": {
+            "0": 8,
+            "1": 7,
+            "2": 7,
+            "3": 6,
+            "4": 6,
+            "5": 6,
+            "6": 6,
+            "7": 5,
+            "8": 4,
+            "9": 4
+          }
+        }
+      },
+      "descricao": "Guardiões da ordem natural que comungam com os espíritos da terra, da água, do vento e da vida selvagem.",
+      "habilidades": [
+        {
+          "id": "idiomas_bonus_druida",
+          "nome": "Idiomas Bônus (Druídico)",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "Conhece o idioma secreto Druídico (proibido ensinar a não-druidas). Com INT suficiente, pode aprender Aquan, Auran, Élfico, Fada, Gigante, Gnomo, Silvano e Terran."
+        },
+        {
+          "id": "conhecimento_da_natureza",
+          "nome": "Conhecimento da Natureza",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "sabedoria",
+          "descricao": "Identifica plantas, animais e água contaminada sem teste no bioma nativo (teste de Sabedoria em biomas desconhecidos). Sustenta a si mesmo sem teste; 6 h alimenta 2d4 pessoas (até 3 tentativas/dia: 2ª com teste SAB +2d4, 3ª com SAB -4 +1d4; total 5–20 criaturas)."
+        },
+        {
+          "id": "feiticos_druida",
+          "nome": "Feitiços (Magia Divina)",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "Prepara e conjura feitiços da lista de druida via oração conforme a Tabela de Feitiços por Dia + Feitiços Bônus cumulativos por Sabedoria."
+        },
+        {
+          "id": "resistencia_elemental",
+          "nome": "Resistência Elemental",
+          "nivel_aquisicao": 2,
+          "atributo_teste": null,
+          "descricao": "+2 em JP contra ataques de fogo, água, terra, ar, frio e relâmpagos (evolui para +3 no N13, +4 no N18 e +5 no N22)."
+        },
+        {
+          "id": "passo_silvestre",
+          "nome": "Passo Silvestre",
+          "nivel_aquisicao": 3,
+          "atributo_teste": null,
+          "descricao": "Move-se sem impedimentos por mata densa e vegetação natural sem deixar rastros (não se aplica a vegetação encantada)."
+        },
+        {
+          "id": "forma_do_totem",
+          "nome": "A Forma do Totem",
+          "nivel_aquisicao": 6,
+          "atributo_teste": null,
+          "descricao": "Escolhe forma animal pequena ou média permanente (como polimorfar a si mesmo, cura 1d4 PV; novas formas no N7 e N8). No N12 assume versão Grande 1x/dia curando 5d8 PV. Usos diários aumentam para 2x/dia (N15) e 3x/dia (N18)."
+        },
+        {
+          "id": "conhecimento_avancado_da_natureza",
+          "nome": "Conhecimento Avançado da Natureza",
+          "nivel_aquisicao": 13,
+          "atributo_teste": null,
+          "descricao": "Adiciona uma 2ª região/bioma de especialização no N13 e uma 3ª região/bioma no N21."
+        },
+        {
+          "id": "bonus_de_sabedoria",
+          "nome": "Bônus de Sabedoria",
+          "nivel_aquisicao": 15,
+          "atributo_teste": null,
+          "descricao": "Aumenta permanentemente a pontuação de Sabedoria em +1."
+        },
+        {
+          "id": "dispersar_criaturas_da_mata",
+          "nome": "Dispersar Criaturas da Mata",
+          "nivel_aquisicao": 18,
+          "atributo_teste": "carisma",
+          "descricao": "Teste de Carisma (ND = total de níveis das criaturas) para afugentar animais, bestas, plantas ou pragas nativos das suas regiões; limite diário sem penalidade de (10 + mod. CAR) níveis."
+        },
+        {
+          "id": "recordacao_perfeita",
+          "nome": "Recordação Perfeita",
+          "nivel_aquisicao": 20,
+          "atributo_teste": "sabedoria",
+          "descricao": "Teste de Sabedoria (ND 0) para recordar 1x/dia um feitiço de druida já conjurado de nível 0 (N20) ou de 1º nível (N24)."
+        },
+        {
+          "id": "maestria_elemental",
+          "nome": "Maestria Elemental",
+          "nivel_aquisicao": 20,
+          "atributo_teste": "sabedoria",
+          "descricao": "Imunidade a 1 elemento escolhido (fogo/calor, eletricidade, gelo/frio, terra, água ou ar). Com JP Sabedoria (ND = nível do atacante), redireciona feitiços desse elemento contra outro alvo dentro do alcance."
+        },
+        {
+          "id": "linguagem_das_terras_selvagens",
+          "nome": "Linguagem das Terras Selvagens",
+          "nivel_aquisicao": 21,
+          "atributo_teste": null,
+          "descricao": "Compreende a comunicação natural de todos os pássaros, feras, árvores e plantas."
+        },
+        {
+          "id": "despertar_o_espirito_das_matas",
+          "nome": "Despertar o Espírito das Matas",
+          "nivel_aquisicao": 24,
+          "atributo_teste": null,
+          "descricao": "Após vários dias, desperta consciência comparável à humana em uma planta ou animal (+2 níveis, PV máximos, +2 CA, dano e JP; +1 ser a cada 2 níveis após N24; limite total de 5 × Carisma em níveis)."
+        }
+      ],
+      "progressao": [
+        {
+          "nivel": 1,
+          "pv": "d8",
+          "bpa": 0,
+          "ppe": 0,
+          "habilidades": [
+            {
+              "nome": "Conjuração",
+              "teste": null,
+              "resumo": "Conjura magias divinas (feitiços bônus com Sabedoria 13-15 [1º], 16-17 [2º], 18-19 [3º])."
+            },
+            {
+              "nome": "Idioma Adicional",
+              "teste": null,
+              "resumo": "Aprende Druídico (linguagem secreta dos druidas)."
+            },
+            {
+              "nome": "Conhecimento da Natureza",
+              "teste": "sabedoria",
+              "resumo": "Encontra abrigo, busca comida/água e identifica espécies de plantas e animais."
+            }
+          ]
+        },
+        {
+          "nivel": 2,
+          "pv": "d8",
+          "bpa": 1,
+          "ppe": 2001,
+          "habilidades": [
+            {
+              "nome": "Resistência Elemental",
+              "teste": null,
+              "resumo": "+2 em JP contra ataques de ar, terra, fogo, água, frio e relâmpagos."
+            }
+          ]
+        },
+        {
+          "nivel": 3,
+          "pv": "d8",
+          "bpa": 1,
+          "ppe": 4251,
+          "habilidades": [
+            {
+              "nome": "Passo Silvestre",
+              "teste": null,
+              "resumo": "Move-se pela mata densa sem impedimentos e sem deixar rastros."
+            }
+          ]
+        },
+        {
+          "nivel": 4,
+          "pv": "d8",
+          "bpa": 2,
+          "ppe": 8501,
+          "habilidades": []
+        },
+        {
+          "nivel": 5,
+          "pv": "d8",
+          "bpa": 2,
+          "ppe": 17001,
+          "habilidades": []
+        },
+        {
+          "nivel": 6,
+          "pv": "d8",
+          "bpa": 3,
+          "ppe": 35001,
+          "habilidades": [
+            {
+              "nome": "Forma do Totem",
+              "teste": null,
+              "resumo": "Assume a forma de 1 animal pequeno ou médio (1x/dia, seleção permanente, cura 1d4 PV)."
+            }
+          ]
+        },
+        {
+          "nivel": 7,
+          "pv": "d8",
+          "bpa": 3,
+          "ppe": 70001,
+          "habilidades": [
+            {
+              "nome": "Forma do Totem",
+              "teste": null,
+              "resumo": "Escolhe uma 2ª forma de animal pequeno ou médio (1x/dia, seleção permanente)."
+            }
+          ]
+        },
+        {
+          "nivel": 8,
+          "pv": "d8",
+          "bpa": 4,
+          "ppe": 180001,
+          "habilidades": [
+            {
+              "nome": "Forma do Totem",
+              "teste": null,
+              "resumo": "Escolhe uma 3ª forma de animal pequeno ou médio (1x/dia, seleção permanente)."
+            }
+          ]
+        },
+        {
+          "nivel": 9,
+          "pv": "d8",
+          "bpa": 4,
+          "ppe": 275001,
+          "habilidades": []
+        },
+        {
+          "nivel": 10,
+          "pv": "d8",
+          "bpa": 5,
+          "ppe": 400001,
+          "habilidades": []
+        },
+        {
+          "nivel": 11,
+          "pv": "+3 PV",
+          "bpa": 5,
+          "ppe": 525001,
+          "habilidades": []
+        },
+        {
+          "nivel": 12,
+          "pv": "+3 PV",
+          "bpa": 6,
+          "ppe": 650001,
+          "habilidades": [
+            {
+              "nome": "Forma do Totem",
+              "teste": "sabedoria",
+              "resumo": "1x/dia assume uma das formas de totem em tamanho Grande, curando 5d8 PV."
+            }
+          ]
+        },
+        {
+          "nivel": 13,
+          "pv": "+3 PV",
+          "bpa": 6,
+          "ppe": 825001,
+          "habilidades": [
+            {
+              "nome": "Conhecimento Avançado da Natureza",
+              "teste": null,
+              "resumo": "Expande Conhecimento da Natureza para uma 2ª região/bioma."
+            },
+            {
+              "nome": "Resistência Elemental Avançada",
+              "teste": null,
+              "resumo": "Bônus de Resistência Elemental aumenta para +3."
+            }
+          ]
+        },
+        {
+          "nivel": 14,
+          "pv": "+3 PV",
+          "bpa": 7,
+          "ppe": 1000001,
+          "habilidades": []
+        },
+        {
+          "nivel": 15,
+          "pv": "+3 PV",
+          "bpa": 7,
+          "ppe": 1175001,
+          "habilidades": [
+            {
+              "nome": "Forma do Totem",
+              "teste": null,
+              "resumo": "Pode assumir forma de totem 2x/dia."
+            },
+            {
+              "nome": "Bônus de Sabedoria",
+              "teste": null,
+              "resumo": "Ganha +1 ponto permanente em Sabedoria."
+            }
+          ]
+        },
+        {
+          "nivel": 16,
+          "pv": "+3 PV",
+          "bpa": 8,
+          "ppe": 1350001,
+          "habilidades": []
+        },
+        {
+          "nivel": 17,
+          "pv": "+3 PV",
+          "bpa": 8,
+          "ppe": 1525001,
+          "habilidades": []
+        },
+        {
+          "nivel": 18,
+          "pv": "+3 PV",
+          "bpa": 9,
+          "ppe": 1700001,
+          "habilidades": [
+            {
+              "nome": "Resistência Elemental Avançada",
+              "teste": null,
+              "resumo": "Bônus de Resistência Elemental aumenta para +4."
+            },
+            {
+              "nome": "Dispersar Criaturas da Mata",
+              "teste": "carisma",
+              "resumo": "Dispersa animais, feras, plantas ou pragas da sua região."
+            },
+            {
+              "nome": "Forma do Totem",
+              "teste": null,
+              "resumo": "Pode assumir forma de totem 3x/dia."
+            }
+          ]
+        },
+        {
+          "nivel": 19,
+          "pv": "+3 PV",
+          "bpa": 9,
+          "ppe": 1875001,
+          "habilidades": []
+        },
+        {
+          "nivel": 20,
+          "pv": "+3 PV",
+          "bpa": 10,
+          "ppe": 2050001,
+          "habilidades": [
+            {
+              "nome": "Recordação Perfeita",
+              "teste": "sabedoria",
+              "resumo": "Recorda 1x/dia feitiço de nível 0 conjurado anteriormente (ND 0)."
+            },
+            {
+              "nome": "Maestria Elemental",
+              "teste": null,
+              "resumo": "Imunidade ao dano de 1 elemento escolhido e possibilidade de redirecionar feitiços dele."
+            }
+          ]
+        },
+        {
+          "nivel": 21,
+          "pv": "+3 PV",
+          "bpa": 10,
+          "ppe": 2225001,
+          "habilidades": [
+            {
+              "nome": "Linguagem das Terras Selvagens",
+              "teste": null,
+              "resumo": "Compreende e se comunica com pássaros, feras, árvores e plantas."
+            },
+            {
+              "nome": "Conhecimento Avançado da Natureza",
+              "teste": null,
+              "resumo": "Ganha uma 3ª região/bioma de especialização."
+            }
+          ]
+        },
+        {
+          "nivel": 22,
+          "pv": "+3 PV",
+          "bpa": 11,
+          "ppe": 2400001,
+          "habilidades": [
+            {
+              "nome": "Resistência Elemental Avançada",
+              "teste": null,
+              "resumo": "Bônus de Resistência Elemental aumenta para +5."
+            }
+          ]
+        },
+        {
+          "nivel": 23,
+          "pv": "+3 PV",
+          "bpa": 11,
+          "ppe": 2575001,
+          "habilidades": []
+        },
+        {
+          "nivel": 24,
+          "pv": "+3 PV",
+          "bpa": 12,
+          "ppe": 2750001,
+          "habilidades": [
+            {
+              "nome": "Recordação Perfeita",
+              "teste": "sabedoria",
+              "resumo": "Recorda 1x/dia feitiço de 1º nível conjurado anteriormente (ND 0)."
+            },
+            {
+              "nome": "Despertar o Espírito das Matas",
+              "teste": null,
+              "resumo": "Desperta consciência comparável à humana em plantas e animais."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "explorador",
+      "nome": "Explorador",
+      "paginas_livro": "45–53",
+      "atributo_principal": "forca",
+      "dado_vida": "d10",
+      "pv_apos_nivel_10": 4,
+      "disposicao": "qualquer",
+      "armas": {
+        "qualquer": true,
+        "lista": [
+          "Qualquer"
+        ],
+        "observacao": null
+      },
+      "armaduras": {
+        "qualquer": false,
+        "nenhuma": false,
+        "lista": [
+          "Peitorais",
+          "Cota de Malha",
+          "Camisa de Malha",
+          "Couro Cozido",
+          "Conjunto Grego",
+          "Couro",
+          "Coifa de Malha",
+          "Jaqueta de Couro",
+          "Gibão de Peles",
+          "Cota de Anéis",
+          "Cota de Escamas",
+          "Couro Batido"
+        ],
+        "observacao": "Escudo até médio e elmo até normal; armaduras fora da lista bloqueiam Combate Devastador, Camuflagem, Mover-se em Silêncio, Alpinismo e bônus de combate de Inimigo Predileto."
+      },
+      "conjurador": false,
+      "descricao": "Batedores, caçadores e guardiões das fronteiras selvagens, mestres em rastreamento, sobrevivência e combate contra humanoides e gigantes.",
+      "tabelas_rastreamento": {
+        "penalidade_nao_explorador": -10,
+        "bonus_bastao_rastreamento": 1,
+        "terreno": [
+          {
+            "terreno": "Depressões",
+            "nd": 2
+          },
+          {
+            "terreno": "Deserto",
+            "nd": 2
+          },
+          {
+            "terreno": "Floresta transitória",
+            "nd": 0
+          },
+          {
+            "terreno": "Floresta nortenha ou sulista",
+            "nd": 0
+          },
+          {
+            "terreno": "Terras baixas",
+            "nd": 1
+          },
+          {
+            "terreno": "Montanhas e colinas",
+            "nd": 4
+          },
+          {
+            "terreno": "Rios e leitos",
+            "nd": 3
+          },
+          {
+            "terreno": "Zonas úmidas/pântanos/brejos",
+            "nd": 4
+          }
+        ],
+        "periodo_do_dia": [
+          {
+            "periodo": "Manhã",
+            "nd": -1
+          },
+          {
+            "periodo": "Metade da Manhã",
+            "nd": 0
+          },
+          {
+            "periodo": "Meio Dia",
+            "nd": 1
+          },
+          {
+            "periodo": "Metade da Tarde",
+            "nd": -1
+          },
+          {
+            "periodo": "Fim da Tarde",
+            "nd": 0
+          },
+          {
+            "periodo": "Crepúsculo",
+            "nd": 2
+          },
+          {
+            "periodo": "Noite",
+            "nd": 9
+          }
+        ],
+        "tempo_decorrido": [
+          {
+            "tempo": "6 hrs",
+            "nd": -2
+          },
+          {
+            "tempo": "12 hrs",
+            "nd": 0
+          },
+          {
+            "tempo": "18 hrs",
+            "nd": 2
+          },
+          {
+            "tempo": "24 hrs+",
+            "nd": 4
+          }
+        ],
+        "tamanho_criatura": [
+          {
+            "tamanho": "Minúsculo",
+            "nd": 7
+          },
+          {
+            "tamanho": "Pequeno",
+            "nd": 3
+          },
+          {
+            "tamanho": "Médio",
+            "nd": 0
+          },
+          {
+            "tamanho": "Grande",
+            "nd": -3
+          },
+          {
+            "tamanho": "Enorme",
+            "nd": -5
+          }
+        ],
+        "quantidade_encontrada": [
+          {
+            "quantidade": "1",
+            "nd": 4
+          },
+          {
+            "quantidade": "2-4",
+            "nd": 2
+          },
+          {
+            "quantidade": "5-13",
+            "nd": 1
+          },
+          {
+            "quantidade": "14+",
+            "nd": 0
+          }
+        ],
+        "condicao_climatica": [
+          {
+            "clima": "Seco",
+            "nd": 0
+          },
+          {
+            "clima": "Chuvoso",
+            "nd": -1
+          },
+          {
+            "clima": "Nevado",
+            "nd": -3
+          }
+        ],
+        "tipo_de_solo": [
+          {
+            "condicao": "Brejo",
+            "nd": 4
+          },
+          {
+            "condicao": "Seco",
+            "nd": 0
+          },
+          {
+            "condicao": "Lamacento",
+            "nd": -2
+          },
+          {
+            "condicao": "Pisado",
+            "nd": 1
+          },
+          {
+            "condicao": "Batido",
+            "nd": 1
+          },
+          {
+            "condicao": "Nevado",
+            "nd": -5,
+            "observacao": "Não acumula com clima Nevado (juntos contam como -5)."
+          },
+          {
+            "condicao": "Trilha",
+            "nd": 0
+          }
+        ]
+      },
+      "habilidades": [
+        {
+          "id": "combate_devastador",
+          "nome": "Combate Devastador",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "+1 de dano por nível contra humanoides (bugbears, gnolls, goblins, hobgoblins, kobolds, orcs etc.) e gigantes (gigantes, ogros etc.). Requer armadura permitida."
+        },
+        {
+          "id": "camuflagem",
+          "nome": "Camuflagem (Ocultar)",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "destreza",
+          "descricao": "Oculta-se em áreas selvagens (-10 se observador momentaneamente distraído). A partir do N5 pode mover-se em silêncio simultaneamente com -5 (1/4 do movimento). Requer armadura permitida."
+        },
+        {
+          "id": "retardar_neutralizar_venenos",
+          "nome": "Retardar/Neutralizar Venenos",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "sabedoria",
+          "descricao": "1 rodada, 1 tentativa, com ervas/antídotos para venenos naturais familiares (ou do Inimigo Predileto). Retarda por 1 h/nível; se exceder o alvo em 6+, neutraliza o veneno."
+        },
+        {
+          "id": "mover_se_em_silencio",
+          "nome": "Mover-se em Silêncio",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "destreza",
+          "descricao": "Apenas em áreas selvagens e com armadura permitida: até 1/2 movimento sem penalidade; acima até velocidade normal -5; correndo/investida -20."
+        },
+        {
+          "id": "alpinismo",
+          "nome": "Alpinismo",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "destreza",
+          "descricao": "Escala encostas naturais sem teste; encostas perigosas/invertidas com teste DES a 1/2 movimento (falha por 5+ causa queda). Mãos livres e armadura permitida."
+        },
+        {
+          "id": "armadilhas",
+          "nome": "Armadilhas",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "sabedoria",
+          "descricao": "Detecta armadilhas selvagens não mágicas a 7,5 m (+2 procurando ativamente), desativa armadilhas simples sem teste e constrói laços (até tamanho médio) ou poços (1d4 dano, JP DES metade)."
+        },
+        {
+          "id": "sobrevivencia",
+          "nome": "Sobrevivência",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "sabedoria",
+          "descricao": "Abrigo, comida e água para si sem teste; fogueira em 1d10 min; norte verdadeiro. Em 8 h alimenta 2d4 pessoas sem teste (2ª tentativa de 8 h com teste SAB para +2d4, máx. 2x/dia)."
+        },
+        {
+          "id": "rastrear",
+          "nome": "Rastrear",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "sabedoria",
+          "descricao": "Rastreia ou esconde rastros em áreas selvagens (+2 vs humanoides/gigantes). N1: quantidade geral e categoria; N3: características marcantes; N5: tipo específico de criatura."
+        },
+        {
+          "id": "inimigo_predileto",
+          "nome": "Inimigo Predileto",
+          "nivel_aquisicao": 6,
+          "atributo_teste": null,
+          "descricao": "Escolhe 1 tipo de criatura: +2 ataque, +2 CA (requer armadura permitida), +2 rastrear e pode neutralizar venenos desse inimigo. No N13 os bônus sobem para +3; no N20 pode intimidar até 15 inimigos prediletos (teste CAR, -2 em ataque, dano e testes)."
+        },
+        {
+          "id": "encontrar_o_caminho",
+          "nome": "Encontrar o Caminho",
+          "nivel_aquisicao": 13,
+          "atributo_teste": null,
+          "descricao": "Reduz pela metade penalidades de movimento de terrenos terrestres conhecidos (inclusive escalada); aliados que o sigam reduzem em 1/4."
+        },
+        {
+          "id": "armadilheiro",
+          "nome": "Armadilheiro",
+          "nivel_aquisicao": 13,
+          "atributo_teste": "sabedoria",
+          "descricao": "Evolução de Armadilhas: N13 (+3 procura / 2d4 dano / animais grandes), N18 (+4 procura / 3d4 dano), N24 (+6 procura / 4d4 dano)."
+        },
+        {
+          "id": "instintos_de_sobrevivencia",
+          "nome": "Instintos de Sobrevivência",
+          "nivel_aquisicao": 15,
+          "atributo_teste": "sabedoria",
+          "descricao": "Bônus em testes de Sabedoria contra surpresa: +2 (N15), +3 (N17), +4 (N19), +5 (N21), +6 (N23)."
+        },
+        {
+          "id": "bonus_de_forca",
+          "nome": "Bônus de Força",
+          "nivel_aquisicao": 15,
+          "atributo_teste": null,
+          "descricao": "Aumenta permanentemente a pontuação de Força em +1."
+        },
+        {
+          "id": "rastreamento_avancado",
+          "nome": "Rastreamento Avançado",
+          "nivel_aquisicao": 17,
+          "atributo_teste": "sabedoria",
+          "descricao": "Determina número preciso, composição, armamento, velocidade e hábitos do grupo rastreado, além de testes adicionais para prever rota e destino final."
+        }
+      ],
+      "progressao": [
+        {
+          "nivel": 1,
+          "pv": "d10",
+          "bpa": 0,
+          "ppe": 0,
+          "habilidades": [
+            {
+              "nome": "Combate Devastador",
+              "teste": null,
+              "resumo": "Dano +1 por nível contra humanoides e gigantes (requer armadura permitida)."
+            },
+            {
+              "nome": "Camuflagem (Ocultar)",
+              "teste": "destreza",
+              "resumo": "Oculta-se em áreas selvagens."
+            },
+            {
+              "nome": "Retardar/Neutralizar Venenos",
+              "teste": "sabedoria",
+              "resumo": "Retarda veneno natural por 1 h/nível (ou neutraliza se superar em 6+)."
+            },
+            {
+              "nome": "Mover-se em Silêncio",
+              "teste": "destreza",
+              "resumo": "Move-se silenciosamente em áreas selvagens."
+            },
+            {
+              "nome": "Alpinismo",
+              "teste": "destreza",
+              "resumo": "Escala superfícies naturais sem teste e encostas perigosas com teste."
+            },
+            {
+              "nome": "Armadilhas",
+              "teste": "sabedoria",
+              "resumo": "Detecta (+2 procurando), constrói e desativa armadilhas selvagens simples."
+            },
+            {
+              "nome": "Sobrevivência",
+              "teste": "sabedoria",
+              "resumo": "Encontra abrigo, comida e água para si e grupos (2d4 em 8 h), norte e fogueira."
+            },
+            {
+              "nome": "Rastrear",
+              "teste": "sabedoria",
+              "resumo": "Rastreia criaturas ou esconde rastros (+2 vs humanoides/gigantes)."
+            }
+          ]
+        },
+        {
+          "nivel": 2,
+          "pv": "d10",
+          "bpa": 1,
+          "ppe": 2251,
+          "habilidades": []
+        },
+        {
+          "nivel": 3,
+          "pv": "d10",
+          "bpa": 2,
+          "ppe": 4501,
+          "habilidades": [
+            {
+              "nome": "Rastrear",
+              "teste": "sabedoria",
+              "resumo": "Discerne características marcantes das criaturas rastreadas."
+            }
+          ]
+        },
+        {
+          "nivel": 4,
+          "pv": "d10",
+          "bpa": 3,
+          "ppe": 9001,
+          "habilidades": []
+        },
+        {
+          "nivel": 5,
+          "pv": "d10",
+          "bpa": 4,
+          "ppe": 18001,
+          "habilidades": [
+            {
+              "nome": "Camuflagem (Ocultar)",
+              "teste": "destreza",
+              "resumo": "Pode camuflar-se e mover-se em silêncio ao mesmo tempo com penalidade de -5."
+            },
+            {
+              "nome": "Rastrear",
+              "teste": "sabedoria",
+              "resumo": "Determina o tipo específico das criaturas rastreadas."
+            }
+          ]
+        },
+        {
+          "nivel": 6,
+          "pv": "d10",
+          "bpa": 5,
+          "ppe": 40001,
+          "habilidades": [
+            {
+              "nome": "Inimigo Predileto",
+              "teste": null,
+              "resumo": "+2 na CA, no ataque e no rastreamento contra um tipo específico de criatura; neutraliza seus venenos."
+            }
+          ]
+        },
+        {
+          "nivel": 7,
+          "pv": "d10",
+          "bpa": 6,
+          "ppe": 75001,
+          "habilidades": []
+        },
+        {
+          "nivel": 8,
+          "pv": "d10",
+          "bpa": 7,
+          "ppe": 150001,
+          "habilidades": []
+        },
+        {
+          "nivel": 9,
+          "pv": "d10",
+          "bpa": 8,
+          "ppe": 250001,
+          "habilidades": []
+        },
+        {
+          "nivel": 10,
+          "pv": "d10",
+          "bpa": 9,
+          "ppe": 500001,
+          "habilidades": []
+        },
+        {
+          "nivel": 11,
+          "pv": "+4 PV",
+          "bpa": 10,
+          "ppe": 725001,
+          "habilidades": []
+        },
+        {
+          "nivel": 12,
+          "pv": "+4 PV",
+          "bpa": 11,
+          "ppe": 950001,
+          "habilidades": []
+        },
+        {
+          "nivel": 13,
+          "pv": "+4 PV",
+          "bpa": 12,
+          "ppe": 1175001,
+          "habilidades": [
+            {
+              "nome": "Encontrar o Caminho",
+              "teste": null,
+              "resumo": "Reduz pela metade penalidades de movimento de terreno (1/4 para aliados)."
+            },
+            {
+              "nome": "Armadilheiro",
+              "teste": "sabedoria",
+              "resumo": "Bônus de procura aumenta para +3; armadilhas criadas causam 2d4 de dano."
+            },
+            {
+              "nome": "Inimigo Predileto Avançado",
+              "teste": null,
+              "resumo": "Bônus contra inimigo predileto aumenta para +3 (ataque, CA, rastrear)."
+            }
+          ]
+        },
+        {
+          "nivel": 14,
+          "pv": "+4 PV",
+          "bpa": 13,
+          "ppe": 1400001,
+          "habilidades": []
+        },
+        {
+          "nivel": 15,
+          "pv": "+4 PV",
+          "bpa": 14,
+          "ppe": 1625001,
+          "habilidades": [
+            {
+              "nome": "Instintos de Sobrevivência",
+              "teste": "sabedoria",
+              "resumo": "+2 em testes de Sabedoria contra surpresa."
+            },
+            {
+              "nome": "Bônus de Força",
+              "teste": null,
+              "resumo": "Ganha +1 ponto permanente em Força."
+            }
+          ]
+        },
+        {
+          "nivel": 16,
+          "pv": "+4 PV",
+          "bpa": 15,
+          "ppe": 1850001,
+          "habilidades": []
+        },
+        {
+          "nivel": 17,
+          "pv": "+4 PV",
+          "bpa": 16,
+          "ppe": 2075001,
+          "habilidades": [
+            {
+              "nome": "Instintos de Sobrevivência",
+              "teste": null,
+              "resumo": "+3 em testes de Sabedoria contra surpresa."
+            },
+            {
+              "nome": "Rastreamento Avançado",
+              "teste": "sabedoria",
+              "resumo": "Determina número exato, composição, armamento, velocidade, hábitos e prevê rota/destino."
+            }
+          ]
+        },
+        {
+          "nivel": 18,
+          "pv": "+4 PV",
+          "bpa": 17,
+          "ppe": 2300001,
+          "habilidades": [
+            {
+              "nome": "Armadilheiro",
+              "teste": "sabedoria",
+              "resumo": "Bônus de procura +4; armadilhas criadas causam 3d4 de dano."
+            }
+          ]
+        },
+        {
+          "nivel": 19,
+          "pv": "+4 PV",
+          "bpa": 18,
+          "ppe": 2525001,
+          "habilidades": [
+            {
+              "nome": "Instintos de Sobrevivência",
+              "teste": "sabedoria",
+              "resumo": "+4 em testes de Sabedoria contra surpresa."
+            }
+          ]
+        },
+        {
+          "nivel": 20,
+          "pv": "+4 PV",
+          "bpa": 19,
+          "ppe": 2750001,
+          "habilidades": [
+            {
+              "nome": "Inimigo Predileto Avançado",
+              "teste": "carisma",
+              "resumo": "Intimida até 15 inimigos prediletos (-2 em ataque, dano e testes de atributo)."
+            }
+          ]
+        },
+        {
+          "nivel": 21,
+          "pv": "+4 PV",
+          "bpa": 20,
+          "ppe": 2975001,
+          "habilidades": [
+            {
+              "nome": "Instintos de Sobrevivência",
+              "teste": null,
+              "resumo": "+5 em testes de Sabedoria contra surpresa."
+            }
+          ]
+        },
+        {
+          "nivel": 22,
+          "pv": "+4 PV",
+          "bpa": 21,
+          "ppe": 3200001,
+          "habilidades": []
+        },
+        {
+          "nivel": 23,
+          "pv": "+4 PV",
+          "bpa": 22,
+          "ppe": 3425001,
+          "habilidades": [
+            {
+              "nome": "Instintos de Sobrevivência",
+              "teste": "sabedoria",
+              "resumo": "+6 em testes de Sabedoria contra surpresa."
+            }
+          ]
+        },
+        {
+          "nivel": 24,
+          "pv": "+4 PV",
+          "bpa": 23,
+          "ppe": 3650001,
+          "habilidades": [
+            {
+              "nome": "Armadilheiro",
+              "teste": "sabedoria",
+              "resumo": "Bônus de procura +6; armadilhas criadas causam 4d4 de dano."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ilusionista",
+      "nome": "Ilusionista",
+      "paginas_livro": "54–57",
+      "atributo_principal": "inteligencia",
+      "dado_vida": "d4",
+      "pv_apos_nivel_10": 1,
+      "disposicao": "qualquer",
+      "armas": {
+        "qualquer": false,
+        "lista": [
+          "Clava",
+          "Adaga",
+          "Lança de Mão",
+          "Cajado"
+        ],
+        "observacao": null
+      },
+      "armaduras": {
+        "qualquer": false,
+        "nenhuma": true,
+        "lista": [],
+        "observacao": "Qualquer uso de armadura ou escudo impede o ilusionista de conjurar feitiços."
+      },
+      "conjurador": true,
+      "conjuracao": {
+        "tradicao": "arcana_ilusao",
+        "atributo_conjuracao": "inteligencia",
+        "preparacao": "grimorio",
+        "grimorio_inicial": "Igual ao número total de feitiços que pode conjurar no 1º nível (incluindo feitiços bônus de Inteligência).",
+        "feiticos_bonus_por_atributo": [
+          {
+            "min": 13,
+            "max": 15,
+            "circulo": 1,
+            "quantidade": 1
+          },
+          {
+            "min": 16,
+            "max": 17,
+            "circulo": 2,
+            "quantidade": 1
+          },
+          {
+            "min": 18,
+            "max": 19,
+            "circulo": 3,
+            "quantidade": 1
+          }
+        ],
+        "feiticos_bonus_cumulativos": true,
+        "feiticos_bonus_requer_acesso_circulo": true,
+        "feiticos_diarios": {
+          "1": {
+            "0": 4,
+            "1": 2
+          },
+          "2": {
+            "0": 4,
+            "1": 3
+          },
+          "3": {
+            "0": 4,
+            "1": 3,
+            "2": 1
+          },
+          "4": {
+            "0": 4,
+            "1": 3,
+            "2": 2
+          },
+          "5": {
+            "0": 5,
+            "1": 4,
+            "2": 2,
+            "3": 1
+          },
+          "6": {
+            "0": 5,
+            "1": 4,
+            "2": 3,
+            "3": 2
+          },
+          "7": {
+            "0": 5,
+            "1": 4,
+            "2": 3,
+            "3": 2,
+            "4": 1
+          },
+          "8": {
+            "0": 5,
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 2
+          },
+          "9": {
+            "0": 5,
+            "1": 5,
+            "2": 4,
+            "3": 3,
+            "4": 2,
+            "5": 1
+          },
+          "10": {
+            "0": 6,
+            "1": 5,
+            "2": 4,
+            "3": 3,
+            "4": 3,
+            "5": 2
+          },
+          "11": {
+            "0": 6,
+            "1": 5,
+            "2": 4,
+            "3": 4,
+            "4": 3,
+            "5": 2,
+            "6": 1
+          },
+          "12": {
+            "0": 6,
+            "1": 5,
+            "2": 4,
+            "3": 4,
+            "4": 3,
+            "5": 3,
+            "6": 2
+          },
+          "13": {
+            "0": 6,
+            "1": 5,
+            "2": 5,
+            "3": 4,
+            "4": 4,
+            "5": 3,
+            "6": 2,
+            "7": 1
+          },
+          "14": {
+            "0": 6,
+            "1": 6,
+            "2": 5,
+            "3": 4,
+            "4": 4,
+            "5": 3,
+            "6": 3,
+            "7": 2
+          },
+          "15": {
+            "0": 6,
+            "1": 6,
+            "2": 5,
+            "3": 5,
+            "4": 4,
+            "5": 4,
+            "6": 3,
+            "7": 2,
+            "8": 1
+          },
+          "16": {
+            "0": 7,
+            "1": 6,
+            "2": 5,
+            "3": 5,
+            "4": 4,
+            "5": 4,
+            "6": 3,
+            "7": 3,
+            "8": 2
+          },
+          "17": {
+            "0": 7,
+            "1": 6,
+            "2": 5,
+            "3": 5,
+            "4": 5,
+            "5": 4,
+            "6": 4,
+            "7": 3,
+            "8": 2,
+            "9": 1
+          },
+          "18": {
+            "0": 7,
+            "1": 6,
+            "2": 6,
+            "3": 5,
+            "4": 5,
+            "5": 4,
+            "6": 4,
+            "7": 3,
+            "8": 3,
+            "9": 2
+          },
+          "19": {
+            "0": 7,
+            "1": 6,
+            "2": 6,
+            "3": 5,
+            "4": 5,
+            "5": 5,
+            "6": 4,
+            "7": 4,
+            "8": 3,
+            "9": 2
+          },
+          "20": {
+            "0": 7,
+            "1": 7,
+            "2": 6,
+            "3": 6,
+            "4": 5,
+            "5": 5,
+            "6": 4,
+            "7": 4,
+            "8": 3,
+            "9": 3
+          },
+          "21": {
+            "0": 7,
+            "1": 7,
+            "2": 6,
+            "3": 6,
+            "4": 5,
+            "5": 5,
+            "6": 5,
+            "7": 4,
+            "8": 4,
+            "9": 3
+          },
+          "22": {
+            "0": 7,
+            "1": 7,
+            "2": 6,
+            "3": 6,
+            "4": 6,
+            "5": 5,
+            "6": 5,
+            "7": 4,
+            "8": 4,
+            "9": 3
+          },
+          "23": {
+            "0": 8,
+            "1": 7,
+            "2": 6,
+            "3": 6,
+            "4": 6,
+            "5": 5,
+            "6": 5,
+            "7": 5,
+            "8": 4,
+            "9": 4
+          },
+          "24": {
+            "0": 8,
+            "1": 7,
+            "2": 7,
+            "3": 6,
+            "4": 6,
+            "5": 6,
+            "6": 5,
+            "7": 5,
+            "8": 4,
+            "9": 4
+          }
+        }
+      },
+      "descricao": "Conjuradores arcanos especializados em manipular sentidos, mentes e percepções até confundir ilusão e realidade.",
+      "habilidades": [
+        {
+          "id": "feiticos_ilusionista",
+          "nome": "Feitiços e Grimório",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "Prepara feitiços da lista de ilusionista a partir de seu grimório conforme Tabela de Feitiços por Dia + Feitiços Bônus cumulativos por Inteligência. Grimório inicial contém tantos feitiços quanto pode conjurar no N1."
+        },
+        {
+          "id": "sentidos_agucados",
+          "nome": "Sentidos Aguçados",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "Bônus em todas as jogadas de proteção contra ilusões: +1 (N1), +2 (N4), +3 (N7), +4 (N10), +5 (N13), +6 (N16)."
+        },
+        {
+          "id": "disfarce",
+          "nome": "Disfarce",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "carisma",
+          "descricao": "1d3×10 min (teste secreto pelo GC; altura/peso até ±10%). Modificadores: sexo diferente -2, raça diferente -2, idade -2 a cada 10 anos. Observadores familiarizados ganham +4 (próximos/amigos +8) em INT para perceber."
+        },
+        {
+          "id": "ver_o_invisivel",
+          "nome": "Ver o Invisível",
+          "nivel_aquisicao": 13,
+          "atributo_teste": "inteligencia",
+          "descricao": "N13: percebe localização geral e movimento de alvos invisíveis com teste INT; N18: determina forma e tamanho; N24: segunda visão permanente como Verdade Revelada."
+        },
+        {
+          "id": "bonus_de_inteligencia",
+          "nome": "Bônus de Inteligência",
+          "nivel_aquisicao": 15,
+          "atributo_teste": null,
+          "descricao": "Aumenta permanentemente a pontuação de Inteligência em +1."
+        },
+        {
+          "id": "detectar_magia_ilusionista",
+          "nome": "Detectar Magia",
+          "nivel_aquisicao": 16,
+          "atributo_teste": "inteligencia",
+          "descricao": "Após 5 rodadas de concentração, detecta se um item é mágico e, com teste INT, identifica sua origem (se já conhecida). No N18 determina poder relativo e importância histórica."
+        },
+        {
+          "id": "alterar_se",
+          "nome": "Alterar-se",
+          "nivel_aquisicao": 19,
+          "atributo_teste": null,
+          "descricao": "1x/dia altera sua aparência racial, cheiro, som e sensações táteis até dissipar."
+        },
+        {
+          "id": "recordacao_perfeita",
+          "nome": "Recordação Perfeita",
+          "nivel_aquisicao": 20,
+          "atributo_teste": "inteligencia",
+          "descricao": "Teste de Inteligência (ND 0) para recordar 1x/dia um feitiço já conjurado de nível 0 (N20) ou 1º nível (N24)."
+        },
+        {
+          "id": "magnum_opus",
+          "nome": "Magnum Opus",
+          "nivel_aquisicao": 24,
+          "atributo_teste": null,
+          "descricao": "1x/mês (ritual de 1 dia inteiro). Cria objeto, ser (até metade do nível do ilusionista) ou área de 3×3 m por nível; não pode ser dissipado por 1 dia/nível por conjurador inferior; 1% de chance por nível de tornar-se real permanentemente."
+        }
+      ],
+      "progressao": [
+        {
+          "nivel": 1,
+          "pv": "d4",
+          "bpa": 0,
+          "ppe": 0,
+          "habilidades": [
+            {
+              "nome": "Conjuração",
+              "teste": null,
+              "resumo": "Conjura magias arcanas de ilusão (feitiços bônus com Inteligência 13-15 [1º], 16-17 [2º], 18-19 [3º])."
+            },
+            {
+              "nome": "Disfarce",
+              "teste": "carisma",
+              "resumo": "Disfarça-se e personifica outra pessoa (1d3×10 min)."
+            },
+            {
+              "nome": "Sentidos Aguçados",
+              "teste": null,
+              "resumo": "+1 de bônus em todas as jogadas de proteção contra ilusões."
+            }
+          ]
+        },
+        {
+          "nivel": 2,
+          "pv": "d4",
+          "bpa": 1,
+          "ppe": 2601,
+          "habilidades": []
+        },
+        {
+          "nivel": 3,
+          "pv": "d4",
+          "bpa": 1,
+          "ppe": 5201,
+          "habilidades": []
+        },
+        {
+          "nivel": 4,
+          "pv": "d4",
+          "bpa": 1,
+          "ppe": 10401,
+          "habilidades": [
+            {
+              "nome": "Sentidos Aguçados",
+              "teste": null,
+              "resumo": "+2 de bônus em jogadas de proteção contra ilusões."
+            }
+          ]
+        },
+        {
+          "nivel": 5,
+          "pv": "d4",
+          "bpa": 1,
+          "ppe": 20801,
+          "habilidades": []
+        },
+        {
+          "nivel": 6,
+          "pv": "d4",
+          "bpa": 2,
+          "ppe": 42501,
+          "habilidades": []
+        },
+        {
+          "nivel": 7,
+          "pv": "d4",
+          "bpa": 2,
+          "ppe": 85001,
+          "habilidades": [
+            {
+              "nome": "Sentidos Aguçados",
+              "teste": null,
+              "resumo": "+3 de bônus em jogadas de proteção contra ilusões."
+            }
+          ]
+        },
+        {
+          "nivel": 8,
+          "pv": "d4",
+          "bpa": 2,
+          "ppe": 170001,
+          "habilidades": []
+        },
+        {
+          "nivel": 9,
+          "pv": "d4",
+          "bpa": 2,
+          "ppe": 340001,
+          "habilidades": []
+        },
+        {
+          "nivel": 10,
+          "pv": "d4",
+          "bpa": 3,
+          "ppe": 500001,
+          "habilidades": [
+            {
+              "nome": "Sentidos Aguçados",
+              "teste": null,
+              "resumo": "+4 de bônus em jogadas de proteção contra ilusões."
+            }
+          ]
+        },
+        {
+          "nivel": 11,
+          "pv": "+1 PV",
+          "bpa": 3,
+          "ppe": 750001,
+          "habilidades": []
+        },
+        {
+          "nivel": 12,
+          "pv": "+1 PV",
+          "bpa": 3,
+          "ppe": 900001,
+          "habilidades": []
+        },
+        {
+          "nivel": 13,
+          "pv": "+1 PV",
+          "bpa": 3,
+          "ppe": 1050001,
+          "habilidades": [
+            {
+              "nome": "Ver o Invisível",
+              "teste": "inteligencia",
+              "resumo": "Enxerga localização geral e movimento de pessoas/objetos invisíveis."
+            },
+            {
+              "nome": "Sentidos Aguçados",
+              "teste": null,
+              "resumo": "+5 de bônus em jogadas de proteção contra ilusões."
+            }
+          ]
+        },
+        {
+          "nivel": 14,
+          "pv": "+1 PV",
+          "bpa": 4,
+          "ppe": 1200001,
+          "habilidades": []
+        },
+        {
+          "nivel": 15,
+          "pv": "+1 PV",
+          "bpa": 4,
+          "ppe": 1350001,
+          "habilidades": [
+            {
+              "nome": "Bônus de Inteligência",
+              "teste": null,
+              "resumo": "Ganha +1 ponto permanente em Inteligência."
+            }
+          ]
+        },
+        {
+          "nivel": 16,
+          "pv": "+1 PV",
+          "bpa": 4,
+          "ppe": 1500001,
+          "habilidades": [
+            {
+              "nome": "Detectar Magia",
+              "teste": "inteligencia",
+              "resumo": "Após 5 rodadas de estudo, detecta magia e identifica sua origem."
+            },
+            {
+              "nome": "Sentidos Aguçados",
+              "teste": null,
+              "resumo": "+6 de bônus em jogadas de proteção contra ilusões."
+            }
+          ]
+        },
+        {
+          "nivel": 17,
+          "pv": "+1 PV",
+          "bpa": 4,
+          "ppe": 1650001,
+          "habilidades": []
+        },
+        {
+          "nivel": 18,
+          "pv": "+1 PV",
+          "bpa": 5,
+          "ppe": 1800001,
+          "habilidades": [
+            {
+              "nome": "Detectar Magia",
+              "teste": "inteligencia",
+              "resumo": "Determina o nível de poder relativo do item e sua importância."
+            },
+            {
+              "nome": "Ver o Invisível",
+              "teste": "inteligencia",
+              "resumo": "Determina forma e tamanho de pessoas/objetos invisíveis."
+            }
+          ]
+        },
+        {
+          "nivel": 19,
+          "pv": "+1 PV",
+          "bpa": 5,
+          "ppe": 1950001,
+          "habilidades": [
+            {
+              "nome": "Alterar-se",
+              "teste": null,
+              "resumo": "1x/dia altera aparência, raça, cheiro, som e tato até dissipar."
+            }
+          ]
+        },
+        {
+          "nivel": 20,
+          "pv": "+1 PV",
+          "bpa": 5,
+          "ppe": 2100001,
+          "habilidades": [
+            {
+              "nome": "Recordação Perfeita",
+              "teste": "inteligencia",
+              "resumo": "Recobra 1x/dia magia de nível 0 conjurada anteriormente (ND 0)."
+            }
+          ]
+        },
+        {
+          "nivel": 21,
+          "pv": "+1 PV",
+          "bpa": 5,
+          "ppe": 2250001,
+          "habilidades": []
+        },
+        {
+          "nivel": 22,
+          "pv": "+1 PV",
+          "bpa": 6,
+          "ppe": 2400001,
+          "habilidades": []
+        },
+        {
+          "nivel": 23,
+          "pv": "+1 PV",
+          "bpa": 6,
+          "ppe": 2550001,
+          "habilidades": []
+        },
+        {
+          "nivel": 24,
+          "pv": "+1 PV",
+          "bpa": 6,
+          "ppe": 2700001,
+          "habilidades": [
+            {
+              "nome": "Ver o Invisível",
+              "teste": "inteligencia",
+              "resumo": "Segunda visão permanente equivalente ao feitiço Verdade Revelada."
+            },
+            {
+              "nome": "Recordação Perfeita",
+              "teste": "inteligencia",
+              "resumo": "Recobra 1x/dia feitiço de 1º nível conjurado anteriormente (ND 0)."
+            },
+            {
+              "nome": "Magnum Opus",
+              "teste": null,
+              "resumo": "Ritual de 1 dia (1x/mês) que cria objeto, ser ou área ilusória com 1%/nível de tornar-se real."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lutador",
+      "nome": "Lutador",
+      "paginas_livro": "58–62",
+      "atributo_principal": "constituicao",
+      "dado_vida": "d12",
+      "pv_apos_nivel_10": 5,
+      "disposicao": "qualquer",
+      "armas": {
+        "qualquer": false,
+        "lista": [
+          "Aclis",
+          "Zarabatana",
+          "Bola",
+          "Arcos",
+          "Soco Inglês",
+          "Gato de Nove Caudas",
+          "Cestus",
+          "Cutelo",
+          "Clava",
+          "Adaga",
+          "Lança de Mão",
+          "Punhal",
+          "Falcione",
+          "Gancho com Cabo",
+          "Machado de Mão",
+          "Machadinha",
+          "Espada-Gancho",
+          "Azagaia",
+          "Punhal Katar",
+          "Faca",
+          "Mangual Leve",
+          "Maça Leve",
+          "Espada Larga de Nove Anéis",
+          "Armas de Haste",
+          "Pedra",
+          "Porrete",
+          "Foice",
+          "Cimitarra",
+          "Foice Longa",
+          "Funda",
+          "Lança",
+          "Manopla com Espinhos",
+          "Cajado",
+          "Chicote"
+        ],
+        "observacao": null
+      },
+      "armaduras": {
+        "qualquer": false,
+        "nenhuma": true,
+        "lista": [],
+        "observacao": "Não usa armaduras, escudos nem elmos; confia na CA progressiva corporal."
+      },
+      "conjurador": false,
+      "tabela_habilidades_especiais": [
+        {
+          "nivel": 1,
+          "ca_base": 11,
+          "ataque_primario": "1d4",
+          "ataque_secundario": null,
+          "ataque_terciario": null,
+          "movimento_m": 10.5
+        },
+        {
+          "nivel": 2,
+          "ca_base": 12,
+          "ataque_primario": "1d6",
+          "ataque_secundario": null,
+          "ataque_terciario": null,
+          "movimento_m": 10.5
+        },
+        {
+          "nivel": 3,
+          "ca_base": 12,
+          "ataque_primario": "1d6",
+          "ataque_secundario": null,
+          "ataque_terciario": null,
+          "movimento_m": 12.0
+        },
+        {
+          "nivel": 4,
+          "ca_base": 13,
+          "ataque_primario": "1d8",
+          "ataque_secundario": null,
+          "ataque_terciario": null,
+          "movimento_m": 12.0
+        },
+        {
+          "nivel": 5,
+          "ca_base": 13,
+          "ataque_primario": "1d8",
+          "ataque_secundario": null,
+          "ataque_terciario": null,
+          "movimento_m": 12.0
+        },
+        {
+          "nivel": 6,
+          "ca_base": 13,
+          "ataque_primario": "1d8",
+          "ataque_secundario": "1d4",
+          "ataque_terciario": null,
+          "movimento_m": 13.5
+        },
+        {
+          "nivel": 7,
+          "ca_base": 14,
+          "ataque_primario": "1d10",
+          "ataque_secundario": "1d4",
+          "ataque_terciario": null,
+          "movimento_m": 13.5
+        },
+        {
+          "nivel": 8,
+          "ca_base": 14,
+          "ataque_primario": "1d10",
+          "ataque_secundario": "1d4",
+          "ataque_terciario": null,
+          "movimento_m": 13.5
+        },
+        {
+          "nivel": 9,
+          "ca_base": 14,
+          "ataque_primario": "1d10",
+          "ataque_secundario": "1d6",
+          "ataque_terciario": null,
+          "movimento_m": 13.5
+        },
+        {
+          "nivel": 10,
+          "ca_base": 14,
+          "ataque_primario": "1d10",
+          "ataque_secundario": "1d6",
+          "ataque_terciario": null,
+          "movimento_m": 15.0
+        },
+        {
+          "nivel": 11,
+          "ca_base": 15,
+          "ataque_primario": "1d10",
+          "ataque_secundario": "1d6",
+          "ataque_terciario": null,
+          "movimento_m": 15.0
+        },
+        {
+          "nivel": 12,
+          "ca_base": 15,
+          "ataque_primario": "1d10",
+          "ataque_secundario": "1d6",
+          "ataque_terciario": null,
+          "movimento_m": 15.0
+        },
+        {
+          "nivel": 13,
+          "ca_base": 15,
+          "ataque_primario": "1d10",
+          "ataque_secundario": "1d8",
+          "ataque_terciario": null,
+          "movimento_m": 15.0
+        },
+        {
+          "nivel": 14,
+          "ca_base": 15,
+          "ataque_primario": "1d10",
+          "ataque_secundario": "1d8",
+          "ataque_terciario": null,
+          "movimento_m": 15.0
+        },
+        {
+          "nivel": 15,
+          "ca_base": 16,
+          "ataque_primario": "1d10",
+          "ataque_secundario": "1d8",
+          "ataque_terciario": null,
+          "movimento_m": 15.0
+        },
+        {
+          "nivel": 16,
+          "ca_base": 16,
+          "ataque_primario": "1d10",
+          "ataque_secundario": "1d8",
+          "ataque_terciario": "1d4",
+          "movimento_m": 15.0
+        },
+        {
+          "nivel": 17,
+          "ca_base": 16,
+          "ataque_primario": "1d10",
+          "ataque_secundario": "1d8",
+          "ataque_terciario": "1d4",
+          "movimento_m": 15.0
+        },
+        {
+          "nivel": 18,
+          "ca_base": 16,
+          "ataque_primario": "1d10",
+          "ataque_secundario": "1d10",
+          "ataque_terciario": "1d4",
+          "movimento_m": 15.0
+        },
+        {
+          "nivel": 19,
+          "ca_base": 16,
+          "ataque_primario": "1d10",
+          "ataque_secundario": "1d10",
+          "ataque_terciario": "1d6",
+          "movimento_m": 15.0
+        },
+        {
+          "nivel": 20,
+          "ca_base": 16,
+          "ataque_primario": "1d10",
+          "ataque_secundario": "1d10",
+          "ataque_terciario": "1d6",
+          "movimento_m": 15.0
+        },
+        {
+          "nivel": 21,
+          "ca_base": 17,
+          "ataque_primario": "1d10",
+          "ataque_secundario": "1d10",
+          "ataque_terciario": "1d6",
+          "movimento_m": 15.0
+        },
+        {
+          "nivel": 22,
+          "ca_base": 17,
+          "ataque_primario": "1d10",
+          "ataque_secundario": "1d10",
+          "ataque_terciario": "1d8",
+          "movimento_m": 15.0
+        },
+        {
+          "nivel": 23,
+          "ca_base": 17,
+          "ataque_primario": "1d10",
+          "ataque_secundario": "1d10",
+          "ataque_terciario": "1d8",
+          "movimento_m": 15.0
+        },
+        {
+          "nivel": 24,
+          "ca_base": 17,
+          "ataque_primario": "1d10",
+          "ataque_secundario": "1d10",
+          "ataque_terciario": "1d8",
+          "movimento_m": 15.0
+        }
+      ],
+      "descricao": "Artistas marciais devotados à perfeição do corpo e da mente, transformando o próprio corpo em arma letal.",
+      "habilidades": [
+        {
+          "id": "movimento_rapido",
+          "nome": "Movimento Rápido",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "Velocidade progressiva de 10,5 m (N1) até 15 m (N10+). Carga média ou pesada reduz para 9 m."
+        },
+        {
+          "id": "combate_corpo_a_corpo",
+          "nome": "Combate Corpo a Corpo",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "CA base progressiva (11 a 17), dano desarmado normal ou contundente (primário 1d4→1d10, secundário no N6 1d4→1d10, terciário no N16 1d4→1d8) e +2 em agarrar/subjugar."
+        },
+        {
+          "id": "corpo_de_ferro",
+          "nome": "Corpo de Ferro",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "Bônus em JP contra doença, veneno, paralisia, polimorfia, petrificação e morte: +1 (N1), +2 (N3), +3 (N6; texto diz N4), +4 (N10), +5 (N15)."
+        },
+        {
+          "id": "ataque_atordoante",
+          "nome": "Ataque Atordoante",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "Declarado antes do ataque primário (1x/rodada, 1x/nível por dia). Causa dano normal; alvo faz JP CON ou fica atordoado por 1d4 rodadas."
+        },
+        {
+          "id": "desviar_projeteis",
+          "nome": "Desviar Projéteis",
+          "nivel_aquisicao": 2,
+          "atributo_teste": "destreza",
+          "descricao": "Com mão livre e ciente do ataque, desvia projéteis não mágicos (não armas de cerco). Usos/rodada: 1 (N2), 2 (N6), 3 (N11), 4 (N16), 5 (N20+). Conta como ataque primário (3+ consome secundário)."
+        },
+        {
+          "id": "punhos_de_ferro",
+          "nome": "Punhos de Ferro",
+          "nivel_aquisicao": 3,
+          "atributo_teste": null,
+          "descricao": "Ataques desarmados atingem criaturas vulneráveis apenas a armas mágicas (sem dar bônus real de ataque/dano): +1 (N3), +2 (N5), +3 (N8), +4 (N12), +5 (N17)."
+        },
+        {
+          "id": "queda_lenta",
+          "nome": "Queda Lenta",
+          "nivel_aquisicao": 4,
+          "atributo_teste": null,
+          "descricao": "A até 3 m de superfície vertical, reduz altura efetiva da queda em: 6 m (N4), 7,5 m (N6), 9 m (N9), 10,5 m (N13), 12 m (N18)."
+        },
+        {
+          "id": "fingir_de_morto",
+          "nome": "Fingir de Morto",
+          "nivel_aquisicao": 6,
+          "atributo_teste": null,
+          "descricao": "Reduz funções vitais aparentando estar morto por 1 minuto por nível."
+        },
+        {
+          "id": "cura_rapida",
+          "nome": "Cura Rápida (Acelerada)",
+          "nivel_aquisicao": 7,
+          "atributo_teste": null,
+          "descricao": "Cura 1d4+1 PV por nível a cada dia mediante 12 h de sono + 6 h de descanso calmo com comida e água."
+        },
+        {
+          "id": "mente_de_ferro",
+          "nome": "Mente de Ferro",
+          "nivel_aquisicao": 9,
+          "atributo_teste": null,
+          "descricao": "Bônus em JP contra confusão, encantamento, medo e efeitos mentais: +3 (N9; texto menciona N7), +4 (N11), +5 (N14)."
+        },
+        {
+          "id": "golpe_mortal",
+          "nome": "Golpe Mortal",
+          "nivel_aquisicao": 10,
+          "atributo_teste": null,
+          "descricao": "1x/semana contra alvo de nível inferior (declarado antes). Se causar dano, alvo faz JP CON ou morre instantaneamente. No N12 pode atrasar a morte em até 1 rodada/nível ou liberar por toque."
+        },
+        {
+          "id": "desviar_golpe",
+          "nome": "Desviar Golpe",
+          "nivel_aquisicao": 13,
+          "atributo_teste": "destreza",
+          "descricao": "Desvia um golpe corpo a corpo com teste DES (ND >= BpA do oponente), consumindo o ataque primário."
+        },
+        {
+          "id": "bonus_de_constituicao",
+          "nome": "Bônus de Constituição",
+          "nivel_aquisicao": 15,
+          "atributo_teste": null,
+          "descricao": "Aumenta permanentemente a pontuação de Constituição em +1."
+        },
+        {
+          "id": "agarrar_arma",
+          "nome": "Agarrar Arma",
+          "nivel_aquisicao": 17,
+          "atributo_teste": "destreza",
+          "descricao": "1x/rodada faz ataque usando DES contra CA (15 + BpA do oponente) para agarrar a arma; na rodada seguinte pode tentar arrancar com teste de CON."
+        },
+        {
+          "id": "reacao_rapida",
+          "nome": "Reação Rápida",
+          "nivel_aquisicao": 18,
+          "atributo_teste": null,
+          "descricao": "+1 em iniciativa no N18 (+2 no N24; com resultado 11+ após N24 ganha uma ação adicional no final de cada rodada)."
+        },
+        {
+          "id": "maestria_em_armas",
+          "nome": "Maestria em Armas",
+          "nivel_aquisicao": 20,
+          "atributo_teste": null,
+          "descricao": "Escolhe 1 arma: +1 em ataque, dano e testes de atributo ao usá-la, podendo executar atordoar, desviar projéteis, queda lenta e Golpe Mortal com ela."
+        }
+      ],
+      "progressao": [
+        {
+          "nivel": 1,
+          "pv": "d12",
+          "bpa": 0,
+          "ppe": 0,
+          "habilidades": [
+            {
+              "nome": "Movimento Rápido",
+              "teste": null,
+              "resumo": "Move-se 10,5 m por rodada (com carga leve)."
+            },
+            {
+              "nome": "Corpo de Ferro",
+              "teste": null,
+              "resumo": "+1 em JP contra doença, veneno, paralisia, polimorfia, petrificação e morte."
+            },
+            {
+              "nome": "Ataque Atordoante",
+              "teste": null,
+              "resumo": "Atordoa por 1d4 rodadas (JP CON); 1x/rodada, 1x/nível por dia."
+            },
+            {
+              "nome": "Combate Corpo a Corpo",
+              "teste": null,
+              "resumo": "CA base 11, ataque desarmado 1d4 e +2 para agarrar/subjugar."
+            }
+          ]
+        },
+        {
+          "nivel": 2,
+          "pv": "d12",
+          "bpa": 1,
+          "ppe": 1751,
+          "habilidades": [
+            {
+              "nome": "Desviar Projéteis",
+              "teste": "destreza",
+              "resumo": "Desvia projéteis não mágicos 1x/rodada."
+            }
+          ]
+        },
+        {
+          "nivel": 3,
+          "pv": "d12",
+          "bpa": 2,
+          "ppe": 4001,
+          "habilidades": [
+            {
+              "nome": "Movimento Rápido",
+              "teste": null,
+              "resumo": "Move-se 12 m por rodada."
+            },
+            {
+              "nome": "Corpo de Ferro",
+              "teste": null,
+              "resumo": "+2 contra toxinas, paralisia, polimorfia, petrificação e morte."
+            },
+            {
+              "nome": "Punhos de Ferro",
+              "teste": null,
+              "resumo": "Ataques desarmados atingem como arma mágica +1."
+            }
+          ]
+        },
+        {
+          "nivel": 4,
+          "pv": "d12",
+          "bpa": 3,
+          "ppe": 8501,
+          "habilidades": [
+            {
+              "nome": "Queda Lenta",
+              "teste": null,
+              "resumo": "Reduz dano de queda em 6 m próximo a parede/superfície."
+            }
+          ]
+        },
+        {
+          "nivel": 5,
+          "pv": "d12",
+          "bpa": 4,
+          "ppe": 20001,
+          "habilidades": [
+            {
+              "nome": "Punhos de Ferro",
+              "teste": null,
+              "resumo": "Ataques desarmados atingem como arma mágica +2."
+            }
+          ]
+        },
+        {
+          "nivel": 6,
+          "pv": "d12",
+          "bpa": 5,
+          "ppe": 40001,
+          "habilidades": [
+            {
+              "nome": "Movimento Rápido",
+              "teste": null,
+              "resumo": "Move-se 13,5 m por rodada."
+            },
+            {
+              "nome": "Fingir de Morto",
+              "teste": null,
+              "resumo": "Diminui funções vitais para parecer morto (1 min/nível)."
+            },
+            {
+              "nome": "Corpo de Ferro",
+              "teste": null,
+              "resumo": "+3 contra toxinas, paralisia, polimorfia, petrificação e morte."
+            },
+            {
+              "nome": "Desviar Projéteis",
+              "teste": "destreza",
+              "resumo": "Desvia projéteis 2x/rodada."
+            },
+            {
+              "nome": "Combate Corpo a Corpo",
+              "teste": null,
+              "resumo": "Ganha ataque secundário desarmado (1d4)."
+            },
+            {
+              "nome": "Queda Lenta",
+              "teste": null,
+              "resumo": "Reduz dano de queda em 7,5 m."
+            }
+          ]
+        },
+        {
+          "nivel": 7,
+          "pv": "d12",
+          "bpa": 6,
+          "ppe": 80001,
+          "habilidades": [
+            {
+              "nome": "Cura Rápida (Acelerada)",
+              "teste": null,
+              "resumo": "Cura 1d4+1 PV por nível a cada dia com descanso completo."
+            }
+          ]
+        },
+        {
+          "nivel": 8,
+          "pv": "d12",
+          "bpa": 7,
+          "ppe": 160001,
+          "habilidades": [
+            {
+              "nome": "Punhos de Ferro",
+              "teste": null,
+              "resumo": "Ataques desarmados atingem como arma mágica +3."
+            }
+          ]
+        },
+        {
+          "nivel": 9,
+          "pv": "d12",
+          "bpa": 8,
+          "ppe": 325001,
+          "habilidades": [
+            {
+              "nome": "Mente de Ferro",
+              "teste": null,
+              "resumo": "+3 em JP contra confusão, encantamento, medo e efeitos mentais."
+            },
+            {
+              "nome": "Queda Lenta",
+              "teste": null,
+              "resumo": "Reduz dano de queda em 9 m."
+            }
+          ]
+        },
+        {
+          "nivel": 10,
+          "pv": "d12",
+          "bpa": 9,
+          "ppe": 550001,
+          "habilidades": [
+            {
+              "nome": "Movimento Rápido",
+              "teste": null,
+              "resumo": "Move-se 15 m por rodada."
+            },
+            {
+              "nome": "Corpo de Ferro",
+              "teste": null,
+              "resumo": "+4 contra toxinas, paralisia, polimorfia, petrificação e morte."
+            },
+            {
+              "nome": "Golpe Mortal",
+              "teste": null,
+              "resumo": "1x/semana: ataque contra alvo de nível inferior pode causar morte instantânea (JP CON)."
+            }
+          ]
+        },
+        {
+          "nivel": 11,
+          "pv": "+5 PV",
+          "bpa": 10,
+          "ppe": 750001,
+          "habilidades": [
+            {
+              "nome": "Desviar Projéteis",
+              "teste": "destreza",
+              "resumo": "Desvia projéteis 3x/rodada."
+            },
+            {
+              "nome": "Mente de Ferro",
+              "teste": null,
+              "resumo": "+4 contra confusão, encantamento, medo e efeitos mentais."
+            }
+          ]
+        },
+        {
+          "nivel": 12,
+          "pv": "+5 PV",
+          "bpa": 11,
+          "ppe": 1250001,
+          "habilidades": [
+            {
+              "nome": "Punhos de Ferro",
+              "teste": null,
+              "resumo": "Ataques desarmados atingem como arma mágica +4."
+            },
+            {
+              "nome": "Golpe Mortal",
+              "teste": null,
+              "resumo": "Pode atrasar a morte da vítima em até 1 rodada por nível (ou liberá-la por toque)."
+            }
+          ]
+        },
+        {
+          "nivel": 13,
+          "pv": "+5 PV",
+          "bpa": 12,
+          "ppe": 1500001,
+          "habilidades": [
+            {
+              "nome": "Desviar Golpe",
+              "teste": "destreza",
+              "resumo": "Desvia um golpe corpo a corpo com teste DES (ND = BpA do oponente)."
+            },
+            {
+              "nome": "Queda Lenta",
+              "teste": null,
+              "resumo": "Reduz dano de queda em 10,5 m."
+            }
+          ]
+        },
+        {
+          "nivel": 14,
+          "pv": "+5 PV",
+          "bpa": 13,
+          "ppe": 1750001,
+          "habilidades": [
+            {
+              "nome": "Mente de Ferro",
+              "teste": null,
+              "resumo": "+5 contra confusão, encantamento, medo e efeitos mentais."
+            }
+          ]
+        },
+        {
+          "nivel": 15,
+          "pv": "+5 PV",
+          "bpa": 14,
+          "ppe": 2000001,
+          "habilidades": [
+            {
+              "nome": "Bônus de Constituição",
+              "teste": null,
+              "resumo": "Ganha +1 ponto permanente em Constituição."
+            },
+            {
+              "nome": "Corpo de Ferro",
+              "teste": null,
+              "resumo": "+5 contra toxinas, paralisia, polimorfia, petrificação e morte."
+            }
+          ]
+        },
+        {
+          "nivel": 16,
+          "pv": "+5 PV",
+          "bpa": 15,
+          "ppe": 2250001,
+          "habilidades": [
+            {
+              "nome": "Desviar Projéteis",
+              "teste": "destreza",
+              "resumo": "Desvia projéteis 4x/rodada."
+            }
+          ]
+        },
+        {
+          "nivel": 17,
+          "pv": "+5 PV",
+          "bpa": 16,
+          "ppe": 2500001,
+          "habilidades": [
+            {
+              "nome": "Agarrar Arma",
+              "teste": "destreza",
+              "resumo": "1x/rodada agarra arma do oponente usando ataque de Destreza contra CA 15 + BpA."
+            },
+            {
+              "nome": "Punhos de Ferro",
+              "teste": null,
+              "resumo": "Ataques desarmados atingem como arma mágica +5."
+            }
+          ]
+        },
+        {
+          "nivel": 18,
+          "pv": "+5 PV",
+          "bpa": 17,
+          "ppe": 2750001,
+          "habilidades": [
+            {
+              "nome": "Reação Rápida",
+              "teste": null,
+              "resumo": "+1 em jogadas de iniciativa."
+            },
+            {
+              "nome": "Queda Lenta",
+              "teste": null,
+              "resumo": "Reduz dano de queda em 12 m."
+            }
+          ]
+        },
+        {
+          "nivel": 19,
+          "pv": "+5 PV",
+          "bpa": 18,
+          "ppe": 3000001,
+          "habilidades": []
+        },
+        {
+          "nivel": 20,
+          "pv": "+5 PV",
+          "bpa": 19,
+          "ppe": 3250001,
+          "habilidades": [
+            {
+              "nome": "Desviar Projéteis",
+              "teste": "destreza",
+              "resumo": "Desvia projéteis 5x/rodada."
+            },
+            {
+              "nome": "Maestria em Armas",
+              "teste": null,
+              "resumo": "Escolhe 1 arma: +1 ataque, dano e testes de atributo, estendendo habilidades marciais."
+            }
+          ]
+        },
+        {
+          "nivel": 21,
+          "pv": "+5 PV",
+          "bpa": 20,
+          "ppe": 3500001,
+          "habilidades": []
+        },
+        {
+          "nivel": 22,
+          "pv": "+5 PV",
+          "bpa": 21,
+          "ppe": 3750001,
+          "habilidades": []
+        },
+        {
+          "nivel": 23,
+          "pv": "+5 PV",
+          "bpa": 22,
+          "ppe": 4000001,
+          "habilidades": []
+        },
+        {
+          "nivel": 24,
+          "pv": "+5 PV",
+          "bpa": 23,
+          "ppe": 4250001,
+          "habilidades": [
+            {
+              "nome": "Reação Rápida",
+              "teste": null,
+              "resumo": "+2 iniciativa; com resultado 11+ ganha ação extra no fim da rodada."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

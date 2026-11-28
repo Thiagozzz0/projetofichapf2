@@ -1,0 +1,2309 @@
+{
+  "metadados": {
+    "sistema": "Castles & Crusades",
+    "edicao": "1ª Edição Brasileira (Livro do Jogador)",
+    "arquivo_fonte": "ref/cc/C&C Classes 01.pdf",
+    "paginas_livro": "16–39",
+    "total_paginas_pdf": 24,
+    "leva": 1,
+    "niveis_cobertos": "1–24",
+    "versao_schema": 1,
+    "idioma": "pt-BR"
+  },
+  "classes": [
+    {
+      "id": "barbaro",
+      "nome": "Bárbaro",
+      "paginas_livro": "16–20",
+      "atributo_principal": "constituicao",
+      "dado_vida": "d12",
+      "pv_apos_nivel_10": 5,
+      "disposicao": "qualquer",
+      "armas": {
+        "qualquer": true,
+        "lista": [
+          "Qualquer"
+        ],
+        "observacao": null
+      },
+      "armaduras": {
+        "qualquer": true,
+        "nenhuma": false,
+        "lista": [
+          "Qualquer"
+        ],
+        "observacao": "Escalar/nadar e Instinto Primitivo limitam armadura a 11 kg."
+      },
+      "conjurador": false,
+      "descricao": "Guerreiros livres das fronteiras além da civilização, guiados por força, instinto primordial e resistência sobre-humana.",
+      "habilidades": [
+        {
+          "id": "senso_de_combate",
+          "nome": "Senso de Combate",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "+2 em testes de surpresa; atacantes não recebem bônus ao flanquear; bônus de ataques pelas costas/retaguarda (como Ataque pelas Costas do Trapaceiro) são reduzidos pela metade."
+        },
+        {
+          "id": "cacador_de_cervos",
+          "nome": "Caçador de Cervos",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "Encontra abrigo, comida e água para si em 1d6+2 horas sem teste; acende fogueira em 1d10 min; determina o norte verdadeiro; escala encostas naturais e nada em rios a metade do movimento sem teste (armadura/acessórios até 11 kg)."
+        },
+        {
+          "id": "intimidacao",
+          "nome": "Intimidação",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "constituicao",
+          "descricao": "Declarada antes da iniciativa com teste de Constituição (1x/combate, raio 4,5 m). Criaturas de nível igual ou inferior sofrem -2 em todas as rolagens (iniciativa, ataque, dano, testes). Alvos: 1 (N1), 2 (N3), 4 (N6), 8 (N10), 16 (N15). Termina para um alvo se o bárbaro errar ataque contra ele."
+        },
+        {
+          "id": "instinto_primitivo",
+          "nome": "Instinto Primitivo",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "Ao lançar-se ao combate sem hesitar/fugir (armadura até 11 kg), recebe +4 em testes de atributo físico (FOR, DES ou CON). Também permite prender a respiração por rodadas iguais à pontuação de CON, suportar climas extremos por +1 dia e dobrar a distância de corrida diária."
+        },
+        {
+          "id": "turbilhao",
+          "nome": "Turbilhão",
+          "nivel_aquisicao": 4,
+          "atributo_teste": null,
+          "descricao": "1x/combate, substitui o ataque normal (anunciado antes de atacar, sem recuar). Permite atacar múltiplos oponentes a até 1,5 m com até metade do nível do bárbaro: 2 oponentes (N4), 3 (N6) e 4 (N10)."
+        },
+        {
+          "id": "vontade_primitiva",
+          "nome": "Vontade Primitiva",
+          "nivel_aquisicao": 6,
+          "atributo_teste": null,
+          "descricao": "1x/dia. Quando reduzido a 12 PV ou menos (N6–9), 18 PV (N10–14) ou 24 PV (N15+), ganha imediatamente 12 PV temporários para o combate. Ativa automaticamente se cair a 0 ou negativo (exceto -10 ou menos); a remoção posterior não reduz abaixo de 1 PV."
+        },
+        {
+          "id": "chamado_ancestral",
+          "nome": "Chamado Ancestral",
+          "nivel_aquisicao": 10,
+          "atributo_teste": null,
+          "descricao": "1x/semana. Concede a até (2 × nível) aliados de nível igual ou menor PV extras iguais ao máximo de um nível adicional da criatura, durando até 1 dia ou conclusão da tarefa."
+        },
+        {
+          "id": "tendoes_de_ferro",
+          "nome": "Tendões de Ferro",
+          "nivel_aquisicao": 13,
+          "atributo_teste": null,
+          "descricao": "Permite atingir com arma não mágica criaturas que exigem armas mágicas até o bônus do modificador de Constituição do bárbaro (nota: texto menciona N10, tabela de progressão lista N13)."
+        },
+        {
+          "id": "bonus_de_constituicao",
+          "nome": "Bônus de Constituição",
+          "nivel_aquisicao": 15,
+          "atributo_teste": null,
+          "descricao": "Aumenta permanentemente a pontuação de Constituição em +1."
+        },
+        {
+          "id": "forca_da_natureza",
+          "nome": "Força da Natureza",
+          "nivel_aquisicao": 16,
+          "atributo_teste": null,
+          "descricao": "Concede Resistência à Magia (RM) natural de 2 (ou +2 em RM existente) no N16, aumentando em +1 a cada 3 níveis (RM 3 no N19, RM 4 no N22)."
+        },
+        {
+          "id": "senhor_da_guerra",
+          "nome": "Senhor da Guerra",
+          "nivel_aquisicao": 20,
+          "atributo_teste": null,
+          "descricao": "1x/mês em região que conheça sua reputação (500 habitantes por 10 guerreiros). Convoca 10–100 bárbaros N1 (CA 13) e 1 bárbaro N3 a cada 20, lutando por até 30 dias sem pagamento."
+        }
+      ],
+      "progressao": [
+        {
+          "nivel": 1,
+          "pv": "d12",
+          "bpa": 0,
+          "ppe": 0,
+          "habilidades": [
+            {
+              "nome": "Senso de Combate",
+              "teste": null,
+              "resumo": "+2 de bônus para testes de surpresa e reduz pela metade bônus de ataque pelas costas."
+            },
+            {
+              "nome": "Caçador de Cervos",
+              "teste": null,
+              "resumo": "Sobrevivência em ambientes naturais, determinar direções, encontrar abrigo e comida, escalar e nadar."
+            },
+            {
+              "nome": "Intimidação",
+              "teste": "constituicao",
+              "resumo": "-2 para testes de combate, testes de atributos e jogadas de proteção de 1 oponente."
+            },
+            {
+              "nome": "Instinto Primitivo",
+              "teste": null,
+              "resumo": "Ação imediata garante +4 em qualquer teste físico."
+            }
+          ]
+        },
+        {
+          "nivel": 2,
+          "pv": "d12",
+          "bpa": 1,
+          "ppe": 2101,
+          "habilidades": []
+        },
+        {
+          "nivel": 3,
+          "pv": "d12",
+          "bpa": 2,
+          "ppe": 4701,
+          "habilidades": [
+            {
+              "nome": "Intimidação",
+              "teste": "constituicao",
+              "resumo": "-2 para testes de combate, testes de atributos e jogadas de proteção de 2 oponentes."
+            }
+          ]
+        },
+        {
+          "nivel": 4,
+          "pv": "d12",
+          "bpa": 3,
+          "ppe": 9401,
+          "habilidades": [
+            {
+              "nome": "Turbilhão",
+              "teste": null,
+              "resumo": "Ataque dois oponentes com até metade do nível do bárbaro."
+            }
+          ]
+        },
+        {
+          "nivel": 5,
+          "pv": "d12",
+          "bpa": 4,
+          "ppe": 20001,
+          "habilidades": []
+        },
+        {
+          "nivel": 6,
+          "pv": "d12",
+          "bpa": 5,
+          "ppe": 40001,
+          "habilidades": [
+            {
+              "nome": "Intimidação",
+              "teste": "constituicao",
+              "resumo": "-2 para testes de combate, testes de atributos e jogadas de proteção de 4 oponentes."
+            },
+            {
+              "nome": "Turbilhão",
+              "teste": null,
+              "resumo": "Ataque três oponentes com até metade do nível do bárbaro."
+            },
+            {
+              "nome": "Vontade Primitiva",
+              "teste": null,
+              "resumo": "Quando ferido, ganha imediatamente 12 pontos de vida temporários."
+            }
+          ]
+        },
+        {
+          "nivel": 7,
+          "pv": "d12",
+          "bpa": 6,
+          "ppe": 80001,
+          "habilidades": []
+        },
+        {
+          "nivel": 8,
+          "pv": "d12",
+          "bpa": 7,
+          "ppe": 170001,
+          "habilidades": []
+        },
+        {
+          "nivel": 9,
+          "pv": "d12",
+          "bpa": 8,
+          "ppe": 340001,
+          "habilidades": []
+        },
+        {
+          "nivel": 10,
+          "pv": "d12",
+          "bpa": 9,
+          "ppe": 600001,
+          "habilidades": [
+            {
+              "nome": "Intimidação",
+              "teste": "constituicao",
+              "resumo": "-2 para testes de combate, testes de atributos e jogadas de proteção de 8 oponentes."
+            },
+            {
+              "nome": "Turbilhão",
+              "teste": null,
+              "resumo": "Ataque quatro oponentes com até metade do nível do bárbaro."
+            },
+            {
+              "nome": "Chamado Ancestral",
+              "teste": null,
+              "resumo": "Concede pontos de vida extras aos aliados."
+            }
+          ]
+        },
+        {
+          "nivel": 11,
+          "pv": "+5 PV",
+          "bpa": 10,
+          "ppe": 800001,
+          "habilidades": []
+        },
+        {
+          "nivel": 12,
+          "pv": "+5 PV",
+          "bpa": 11,
+          "ppe": 1000001,
+          "habilidades": []
+        },
+        {
+          "nivel": 13,
+          "pv": "+5 PV",
+          "bpa": 12,
+          "ppe": 1200001,
+          "habilidades": [
+            {
+              "nome": "Tendões de Ferro",
+              "teste": null,
+              "resumo": "Pode usar armas não mágicas para atingir criaturas que exigem armas mágicas (até o mod. de Constituição)."
+            }
+          ]
+        },
+        {
+          "nivel": 14,
+          "pv": "+5 PV",
+          "bpa": 13,
+          "ppe": 1400001,
+          "habilidades": []
+        },
+        {
+          "nivel": 15,
+          "pv": "+5 PV",
+          "bpa": 14,
+          "ppe": 1600001,
+          "habilidades": [
+            {
+              "nome": "Bônus de Constituição",
+              "teste": null,
+              "resumo": "Ganha +1 ponto permanente em Constituição."
+            },
+            {
+              "nome": "Intimidação",
+              "teste": "constituicao",
+              "resumo": "-2 para testes de combate, testes de atributos e jogadas de proteção de 16 oponentes."
+            }
+          ]
+        },
+        {
+          "nivel": 16,
+          "pv": "+5 PV",
+          "bpa": 15,
+          "ppe": 1800001,
+          "habilidades": [
+            {
+              "nome": "Força da Natureza",
+              "teste": null,
+              "resumo": "Ganha RM 2 natural (ou +2 em RM existente)."
+            }
+          ]
+        },
+        {
+          "nivel": 17,
+          "pv": "+5 PV",
+          "bpa": 16,
+          "ppe": 2000001,
+          "habilidades": []
+        },
+        {
+          "nivel": 18,
+          "pv": "+5 PV",
+          "bpa": 17,
+          "ppe": 2200001,
+          "habilidades": []
+        },
+        {
+          "nivel": 19,
+          "pv": "+5 PV",
+          "bpa": 18,
+          "ppe": 2400001,
+          "habilidades": [
+            {
+              "nome": "Força da Natureza",
+              "teste": null,
+              "resumo": "Ganha +1 ponto de RM (total RM 3)."
+            }
+          ]
+        },
+        {
+          "nivel": 20,
+          "pv": "+5 PV",
+          "bpa": 19,
+          "ppe": 2600001,
+          "habilidades": [
+            {
+              "nome": "Senhor da Guerra",
+              "teste": null,
+              "resumo": "Convoca 10–100 seguidores bárbaros de nível 1 (1 de nível 3 para cada 20)."
+            }
+          ]
+        },
+        {
+          "nivel": 21,
+          "pv": "+5 PV",
+          "bpa": 20,
+          "ppe": 2800001,
+          "habilidades": []
+        },
+        {
+          "nivel": 22,
+          "pv": "+5 PV",
+          "bpa": 21,
+          "ppe": 3000001,
+          "habilidades": [
+            {
+              "nome": "Força da Natureza",
+              "teste": null,
+              "resumo": "Ganha +1 ponto de RM (total RM 4)."
+            }
+          ]
+        },
+        {
+          "nivel": 23,
+          "pv": "+5 PV",
+          "bpa": 22,
+          "ppe": 3200001,
+          "habilidades": []
+        },
+        {
+          "nivel": 24,
+          "pv": "+5 PV",
+          "bpa": 23,
+          "ppe": 3400001,
+          "habilidades": []
+        }
+      ]
+    },
+    {
+      "id": "bardo",
+      "nome": "Bardo",
+      "paginas_livro": "21–25",
+      "atributo_principal": "carisma",
+      "dado_vida": "d10",
+      "pv_apos_nivel_10": 4,
+      "disposicao": "qualquer",
+      "armas": {
+        "qualquer": false,
+        "lista": [
+          "Espada Larga",
+          "Arcos",
+          "Clava",
+          "Adaga",
+          "Dardo",
+          "Machado de Mão",
+          "Martelos",
+          "Espada Longa",
+          "Florete",
+          "Cimitarra",
+          "Espada Curta",
+          "Funda",
+          "Lança",
+          "Bastão"
+        ],
+        "observacao": null
+      },
+      "armaduras": {
+        "qualquer": false,
+        "nenhuma": false,
+        "lista": [
+          "Peitorais",
+          "Camisa de Cota de Malha",
+          "Couro Cozido",
+          "Conjunto Grego",
+          "Peles",
+          "Laminar de Couro",
+          "Couro",
+          "Jaqueta de Couro",
+          "Acolchoada",
+          "Cota de Anéis",
+          "Couro Tachado"
+        ],
+        "observacao": null
+      },
+      "conjurador": false,
+      "descricao": "Guerreiros-poetas, cronistas e oradores que inspiram aliados, preservam lendas e dobram corações através da voz e da música.",
+      "habilidades": [
+        {
+          "id": "decifrar_escrita",
+          "nome": "Decifrar Escrita",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "inteligencia",
+          "descricao": "Decifra idiomas desconhecidos, textos arcaicos ou códigos (10 min/página, 1 tentativa por escrito). Pode usar pergaminho arcano com penalidade de -10 no teste (não funciona com pergaminhos divinos)."
+        },
+        {
+          "id": "exaltar",
+          "nome": "Exaltar",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "carisma",
+          "descricao": "1x/dia por nível, duração de rodadas igual ao nível, raio 18 m. Concede bônus em testes de atributo, habilidade e JP (não afeta ataque): +2 (N1), +3 (N6), +4 (N12), +5 (N18)."
+        },
+        {
+          "id": "conhecimento_de_lendas",
+          "nome": "Conhecimento de Lendas",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "carisma",
+          "descricao": "Recorda ou pesquisa informações sobre locais, notáveis, itens lendários ou idiomas secretos (gíria dos trapaceiros, druídico, sinais dos exploradores). Categorias de ND: Comum, Incomum, Obscuro e Extremamente Obscuro."
+        },
+        {
+          "id": "fascinar",
+          "nome": "Fascinar",
+          "nivel_aquisicao": 4,
+          "atributo_teste": null,
+          "descricao": "3x/dia, dura rodadas iguais ao nível (requer concentração). Alvo faz JP de Carisma; em falha fica em transe (tratado como caído, -4 JP, -5 CA). Alvos = nível - 2 (N4: 2, N6: 4, N12: 10). Efeitos extras em fascinados: N5 Encantar Humanoide, N8 Sugestão, N12 Antipatia/Simpatia, N18 Sugestão em Área."
+        },
+        {
+          "id": "inspirar_grandeza",
+          "nome": "Inspirar Grandeza",
+          "nivel_aquisicao": 9,
+          "atributo_teste": null,
+          "descricao": "Raio 9 m, dura 6 rodadas (+1 rodada por nível acima de 9). Concede +2 para acertar e PV temporários equivalentes a 2 níveis extras (+ mod CON). Afeta 1 aliado no N9 e +1 a cada 2 níveis (N11: 2, N13: 3, ..., N23: 8)."
+        },
+        {
+          "id": "influenciar_multidao",
+          "nome": "Influenciar Multidão",
+          "nivel_aquisicao": 13,
+          "atributo_teste": null,
+          "descricao": "Ouvintes fazem JP Carisma ou ficam em êxtase enquanto o bardo se apresenta + 1 rodada/nível depois. Afeta até 20 níveis de alvos (N13), dobrando a cada 3 níveis (N16: 40, N19: 80, N22: 160)."
+        },
+        {
+          "id": "bonus_de_carisma",
+          "nome": "Bônus de Carisma",
+          "nivel_aquisicao": 15,
+          "atributo_teste": null,
+          "descricao": "Aumenta permanentemente a pontuação de Carisma em +1."
+        },
+        {
+          "id": "palavras_de_poder",
+          "nome": "Palavras de Poder",
+          "nivel_aquisicao": 17,
+          "atributo_teste": null,
+          "descricao": "1x/dia (JP Carisma): nível <=4 Morte; 5-7 Paralisia (1d10 rod), Cegueira (2d4), Surdez (1d4); 8-11 Cegueira/Surdez; >=12 Surdez. No N24 (1x/semana): Esfera Antimagia (12 m) ou corroer ilusões com JP Inteligência.",
+          "tabela_efeitos": [
+            {
+              "nivel_alvo": "4 ou menor",
+              "efeito": "Morte"
+            },
+            {
+              "nivel_alvo": "5-7",
+              "efeito": "Paralisia, Cegueira, Surdez"
+            },
+            {
+              "nivel_alvo": "8-11",
+              "efeito": "Cegueira, Surdez"
+            },
+            {
+              "nivel_alvo": "12 ou maior",
+              "efeito": "Surdez"
+            }
+          ]
+        },
+        {
+          "id": "reunir",
+          "nome": "Reunir",
+          "nivel_aquisicao": 18,
+          "atributo_teste": null,
+          "descricao": "1x/dia. Aliados ao alcance da voz ganham nova JP contra medo ou moral (incluindo medo de dragão) e ficam imunes por 1 rodada por nível do bardo."
+        },
+        {
+          "id": "missao",
+          "nome": "Missão",
+          "nivel_aquisicao": 20,
+          "atributo_teste": null,
+          "descricao": "Alvo faz JP Carisma ou recebe uma obrigação idêntica ao feitiço Obrigação."
+        },
+        {
+          "id": "mudar_disposicao",
+          "nome": "Mudar Disposição",
+          "nivel_aquisicao": 22,
+          "atributo_teste": null,
+          "descricao": "Convivendo 1 h/dia por 1 mês com um PNJ disposto, impõe teste de Carisma (ND = nível do bardo) para mudar a disposição em 1 passo (nota: texto menciona N22, tabela lista N24)."
+        }
+      ],
+      "progressao": [
+        {
+          "nivel": 1,
+          "pv": "d10",
+          "bpa": 0,
+          "ppe": 0,
+          "habilidades": [
+            {
+              "nome": "Decifrar Escrita",
+              "teste": "inteligencia",
+              "resumo": "Decifra escrita desconhecida, arcaica ou em código (10 min/página)."
+            },
+            {
+              "nome": "Exaltar",
+              "teste": "carisma",
+              "resumo": "Inspira companheiros a até 18 m: +2 em testes de atributo/proteção/habilidade (1x/dia por nível)."
+            },
+            {
+              "nome": "Conhecimento de Lendas",
+              "teste": "carisma",
+              "resumo": "Verifica fatos, lendas, itens lendários ou idiomas secretos."
+            }
+          ]
+        },
+        {
+          "nivel": 2,
+          "pv": "d10",
+          "bpa": 1,
+          "ppe": 1501,
+          "habilidades": []
+        },
+        {
+          "nivel": 3,
+          "pv": "d10",
+          "bpa": 2,
+          "ppe": 3251,
+          "habilidades": []
+        },
+        {
+          "nivel": 4,
+          "pv": "d10",
+          "bpa": 3,
+          "ppe": 7501,
+          "habilidades": [
+            {
+              "nome": "Fascinar",
+              "teste": null,
+              "resumo": "Fascina até 2 criaturas, 3x/dia (JP Carisma)."
+            }
+          ]
+        },
+        {
+          "nivel": 5,
+          "pv": "d10",
+          "bpa": 4,
+          "ppe": 15001,
+          "habilidades": [
+            {
+              "nome": "Fascinar",
+              "teste": null,
+              "resumo": "Pode usar Encantar Humanoide em criatura fascinada."
+            }
+          ]
+        },
+        {
+          "nivel": 6,
+          "pv": "d10",
+          "bpa": 5,
+          "ppe": 30001,
+          "habilidades": [
+            {
+              "nome": "Fascinar",
+              "teste": null,
+              "resumo": "Fascina até 4 criaturas."
+            },
+            {
+              "nome": "Exaltar",
+              "teste": "carisma",
+              "resumo": "Bônus de exaltação aumenta para +3."
+            }
+          ]
+        },
+        {
+          "nivel": 7,
+          "pv": "d10",
+          "bpa": 6,
+          "ppe": 60001,
+          "habilidades": []
+        },
+        {
+          "nivel": 8,
+          "pv": "d10",
+          "bpa": 7,
+          "ppe": 120001,
+          "habilidades": [
+            {
+              "nome": "Fascinar",
+              "teste": null,
+              "resumo": "Pode implantar Sugestão em criatura fascinada."
+            }
+          ]
+        },
+        {
+          "nivel": 9,
+          "pv": "d10",
+          "bpa": 8,
+          "ppe": 240001,
+          "habilidades": [
+            {
+              "nome": "Inspirar Grandeza",
+              "teste": null,
+              "resumo": "1 companheiro a até 9 m recebe +2 para acertar e 2 níveis temporários de PV."
+            }
+          ]
+        },
+        {
+          "nivel": 10,
+          "pv": "d10",
+          "bpa": 9,
+          "ppe": 450001,
+          "habilidades": []
+        },
+        {
+          "nivel": 11,
+          "pv": "+4 PV",
+          "bpa": 10,
+          "ppe": 625001,
+          "habilidades": [
+            {
+              "nome": "Inspirar Grandeza",
+              "teste": null,
+              "resumo": "2 companheiros recebem +2 para acertar e 2 níveis temporários."
+            }
+          ]
+        },
+        {
+          "nivel": 12,
+          "pv": "+4 PV",
+          "bpa": 11,
+          "ppe": 800001,
+          "habilidades": [
+            {
+              "nome": "Fascinar",
+              "teste": null,
+              "resumo": "Pode tentar Antipatia/Simpatia; fascina até 10 criaturas."
+            },
+            {
+              "nome": "Exaltar",
+              "teste": "carisma",
+              "resumo": "Bônus de exaltação aumenta para +4."
+            }
+          ]
+        },
+        {
+          "nivel": 13,
+          "pv": "+4 PV",
+          "bpa": 12,
+          "ppe": 975001,
+          "habilidades": [
+            {
+              "nome": "Inspirar Grandeza",
+              "teste": null,
+              "resumo": "3 companheiros recebem +2 para acertar e 2 níveis temporários."
+            },
+            {
+              "nome": "Influenciar Multidão",
+              "teste": null,
+              "resumo": "Deixa em êxtase uma plateia de até 20 níveis."
+            }
+          ]
+        },
+        {
+          "nivel": 14,
+          "pv": "+4 PV",
+          "bpa": 13,
+          "ppe": 1150001,
+          "habilidades": []
+        },
+        {
+          "nivel": 15,
+          "pv": "+4 PV",
+          "bpa": 14,
+          "ppe": 1325001,
+          "habilidades": [
+            {
+              "nome": "Bônus de Carisma",
+              "teste": null,
+              "resumo": "Ganha +1 ponto permanente em Carisma."
+            },
+            {
+              "nome": "Inspirar Grandeza",
+              "teste": null,
+              "resumo": "4 companheiros recebem +2 para acertar e 2 níveis temporários."
+            }
+          ]
+        },
+        {
+          "nivel": 16,
+          "pv": "+4 PV",
+          "bpa": 15,
+          "ppe": 1500001,
+          "habilidades": [
+            {
+              "nome": "Influenciar Multidão",
+              "teste": null,
+              "resumo": "Deixa em êxtase uma plateia de até 40 níveis."
+            }
+          ]
+        },
+        {
+          "nivel": 17,
+          "pv": "+4 PV",
+          "bpa": 16,
+          "ppe": 1675001,
+          "habilidades": [
+            {
+              "nome": "Inspirar Grandeza",
+              "teste": null,
+              "resumo": "5 companheiros recebem +2 para acertar e 2 níveis temporários."
+            },
+            {
+              "nome": "Palavras de Poder",
+              "teste": null,
+              "resumo": "1x/dia: mata, paralisa, cega ou ensurdece alvo conforme nível (JP Carisma)."
+            }
+          ]
+        },
+        {
+          "nivel": 18,
+          "pv": "+4 PV",
+          "bpa": 17,
+          "ppe": 1850001,
+          "habilidades": [
+            {
+              "nome": "Exaltar",
+              "teste": null,
+              "resumo": "Bônus de exaltação aumenta para +5."
+            },
+            {
+              "nome": "Fascinar",
+              "teste": null,
+              "resumo": "Pode tentar Sugestão em Área em criaturas fascinadas."
+            },
+            {
+              "nome": "Reunir",
+              "teste": null,
+              "resumo": "1x/dia: concede nova JP contra medo/moral a aliados ao alcance da voz."
+            }
+          ]
+        },
+        {
+          "nivel": 19,
+          "pv": "+4 PV",
+          "bpa": 18,
+          "ppe": 2025001,
+          "habilidades": [
+            {
+              "nome": "Inspirar Grandeza",
+              "teste": null,
+              "resumo": "6 companheiros recebem +2 para acertar e 2 níveis temporários."
+            },
+            {
+              "nome": "Influenciar Multidão",
+              "teste": null,
+              "resumo": "Deixa em êxtase uma plateia de até 80 níveis."
+            }
+          ]
+        },
+        {
+          "nivel": 20,
+          "pv": "+4 PV",
+          "bpa": 19,
+          "ppe": 2200001,
+          "habilidades": [
+            {
+              "nome": "Missão",
+              "teste": null,
+              "resumo": "Impõe uma missão (como feitiço Obrigação; JP Carisma)."
+            }
+          ]
+        },
+        {
+          "nivel": 21,
+          "pv": "+4 PV",
+          "bpa": 20,
+          "ppe": 2375001,
+          "habilidades": [
+            {
+              "nome": "Inspirar Grandeza",
+              "teste": null,
+              "resumo": "7 companheiros recebem +2 para acertar e 2 níveis temporários."
+            }
+          ]
+        },
+        {
+          "nivel": 22,
+          "pv": "+4 PV",
+          "bpa": 21,
+          "ppe": 2550001,
+          "habilidades": [
+            {
+              "nome": "Influenciar Multidão",
+              "teste": null,
+              "resumo": "Deixa em êxtase uma plateia de até 160 níveis."
+            }
+          ]
+        },
+        {
+          "nivel": 23,
+          "pv": "+4 PV",
+          "bpa": 22,
+          "ppe": 2725001,
+          "habilidades": [
+            {
+              "nome": "Inspirar Grandeza",
+              "teste": null,
+              "resumo": "8 companheiros recebem +2 para acertar e 2 níveis temporários."
+            }
+          ]
+        },
+        {
+          "nivel": 24,
+          "pv": "+4 PV",
+          "bpa": 23,
+          "ppe": 2900001,
+          "habilidades": [
+            {
+              "nome": "Mudar Disposição",
+              "teste": null,
+              "resumo": "Pode alterar a disposição de um PNJ ao longo de 1 mês de convivência."
+            },
+            {
+              "nome": "Palavras de Poder",
+              "teste": null,
+              "resumo": "1x/semana: cria Esfera Antimagia (12 m) ou corrói ilusões com a voz."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cavaleiro",
+      "nome": "Cavaleiro",
+      "paginas_livro": "26–31",
+      "atributo_principal": "carisma",
+      "dado_vida": "d10",
+      "pv_apos_nivel_10": 4,
+      "disposicao": "qualquer",
+      "armas": {
+        "qualquer": true,
+        "lista": [
+          "Qualquer (exceto limitadas pelo Código de Conduta)"
+        ],
+        "observacao": "Não pode usar chicotes, porrete, correntes ou armas associadas a covardia; arcos raramente usados (a critério do GC)."
+      },
+      "armaduras": {
+        "qualquer": true,
+        "nenhuma": false,
+        "lista": [
+          "Qualquer"
+        ],
+        "observacao": "Ao menos 10% da renda deve ser dada como tributo ao senhor ou ordem."
+      },
+      "conjurador": false,
+      "descricao": "Líderes militares profissionais e guerreiros montados guiados por um rigoroso código de conduta e honra.",
+      "montarias_estatisticas": [
+        {
+          "nome": "Cavalo de Montaria",
+          "pv": "2d8+2",
+          "ca": 13,
+          "movimento": "18 m",
+          "primarios": "físicos",
+          "ataques": "2 cascos (1d4+1)"
+        },
+        {
+          "nome": "Cavalo de Guerra Leve",
+          "pv": "3d10",
+          "ca": 14,
+          "movimento": "18 m",
+          "primarios": "físicos",
+          "ataques": "2 cascos (1d4+2) ou 1 mordida (1d4)"
+        }
+      ],
+      "codigo_de_honra_virtudes": [
+        "Coragem",
+        "Defesa",
+        "Discrição",
+        "Excelência",
+        "Fé",
+        "Honra",
+        "Humildade",
+        "Justiça",
+        "Generosidade",
+        "Lealdade",
+        "Nobreza",
+        "Valor"
+      ],
+      "habilidades": [
+        {
+          "id": "montaria_herdada",
+          "nome": "Montaria Herdada",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "Começa com cavalo de montaria totalmente equipado (sela, manta, alforjes, freio, bridão, arreio, ferraduras e comida) com 2d8+2 PV, além do dinheiro inicial."
+        },
+        {
+          "id": "equitacao",
+          "nome": "Equitação",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "destreza",
+          "descricao": "Sem teste: selar, montar, lutar montado sem penalidade, guiar com joelhos, avaliar cavalos e ordenar ataque de cavalo de guerra. Com teste (renunciando a ataque): Cobertura (+6 CA), Desviar (+4 CA cavaleiro / +2 CA montaria), Queda Suave (evita 1d6), Saltar (até 2/3 da altura do cavalo) e Investida (dano triplo com lança)."
+        },
+        {
+          "id": "inspirar",
+          "nome": "Inspirar",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "1x/dia, dura rodadas iguais ao nível. Aliados ganham mod. CAR para acertar: 12 (N1), 25 (N3), 50 (N5), 250 (N7), 1.000 (N9), 5.000 (N12), 20.000 (N16). Não acumula com Encorajar/Desmoralizar antes do N8."
+        },
+        {
+          "id": "encorajar",
+          "nome": "Encorajar",
+          "nivel_aquisicao": 3,
+          "atributo_teste": null,
+          "descricao": "1x/dia, raio 9 m, dura rodadas iguais ao nível. Aliados ganham +1 em JP de FOR/CON/DES/INT e +2 em JP de SAB/CAR."
+        },
+        {
+          "id": "desmoralizar",
+          "nome": "Desmoralizar",
+          "nivel_aquisicao": 5,
+          "atributo_teste": null,
+          "descricao": "1x/dia, dura rodadas iguais ao nível. Inimigos sofrem -4 em testes de Carisma e devem passar em JP contra medo (-4) ou sofrer -1 para acertar. Alvos: 25 (N5), 100 (N7), 250 (N9), 1.000 (N12), 5.000 (N16)."
+        },
+        {
+          "id": "dominio_do_campo_de_batalha",
+          "nome": "Domínio do Campo de Batalha",
+          "nivel_aquisicao": 8,
+          "atributo_teste": null,
+          "descricao": "Pode usar Inspirar, Encorajar e Desmoralizar na mesma rodada (adicional aos usos normais)."
+        },
+        {
+          "id": "chamado_as_armas",
+          "nome": "Chamado às Armas",
+          "nivel_aquisicao": 10,
+          "atributo_teste": null,
+          "descricao": "Ao estabelecer fortaleza, atrai 2d10 seguidores N0/mês (2 po/mês). A cada 40 seguidores chega 1 cavaleiro N1 (100 po/mês); a cada 80 chega 1 cavaleiro N5 (100 po/nível/mês)."
+        },
+        {
+          "id": "especialista_em_armas",
+          "nome": "Especialista em Armas",
+          "nivel_aquisicao": 13,
+          "atributo_teste": null,
+          "descricao": "Sob seu comando, aliados a até 12 m recebem ±1 em manobras de combate (±2 no N17)."
+        },
+        {
+          "id": "bonus_de_carisma",
+          "nome": "Bônus de Carisma",
+          "nivel_aquisicao": 15,
+          "atributo_teste": null,
+          "descricao": "Aumenta permanentemente a pontuação de Carisma em +1."
+        },
+        {
+          "id": "golpe_de_honra",
+          "nome": "Golpe de Honra",
+          "nivel_aquisicao": 17,
+          "atributo_teste": null,
+          "descricao": "1x/dia por alvo em combate formal/individual sem recuar. Reduz a CA do oponente pelo mod. CAR, soma mod. CAR no ataque e causa dano dobrado."
+        },
+        {
+          "id": "senhor_da_batalha",
+          "nome": "Senhor da Batalha",
+          "nivel_aquisicao": 20,
+          "atributo_teste": null,
+          "descricao": "Em combate em massa (não afeta PJs), tropas que o vejam somam mod. CAR em ataque, dano e moral, e +1 CA (+2× CAR, +2 CA e +2 moral no N24)."
+        },
+        {
+          "id": "conversao_para_cavalaria",
+          "nome": "Conversão para Cavalaria",
+          "nivel_aquisicao": 21,
+          "atributo_teste": null,
+          "descricao": "Confere cavalaria a PNJs escolhidos; PNJs sem classe tornam-se cavaleiros N1 com +1 permanente em ataque e CA."
+        },
+        {
+          "id": "caminho_da_grandeza",
+          "nome": "Caminho da Grandeza",
+          "nivel_aquisicao": 24,
+          "atributo_teste": null,
+          "descricao": "Escolha permanente: nunca pode recuar; recebe a diferença de nível em ataque/dano contra inimigos mais fortes; inimigos com <= metade do nível evitam/fogem; 1x/mês Controlar Atmosfera (N10); aliados não sofrem moral baixa. Covardia faz perder todas as habilidades de cavaleiro."
+        }
+      ],
+      "progressao": [
+        {
+          "nivel": 1,
+          "pv": "d10",
+          "bpa": 0,
+          "ppe": 0,
+          "habilidades": [
+            {
+              "nome": "Montaria Herdada",
+              "teste": null,
+              "resumo": "Começa com um cavalo de montaria totalmente equipado."
+            },
+            {
+              "nome": "Equitação",
+              "teste": "destreza",
+              "resumo": "Combate montado e manobras: cobertura, desviar, queda suave, saltar e investida."
+            },
+            {
+              "nome": "Inspirar",
+              "teste": null,
+              "resumo": "Até 12 aliados recebem o modificador de Carisma do cavaleiro para acertar."
+            }
+          ]
+        },
+        {
+          "nivel": 2,
+          "pv": "d10",
+          "bpa": 1,
+          "ppe": 2251,
+          "habilidades": []
+        },
+        {
+          "nivel": 3,
+          "pv": "d10",
+          "bpa": 2,
+          "ppe": 4501,
+          "habilidades": [
+            {
+              "nome": "Encorajar",
+              "teste": null,
+              "resumo": "Aliados num raio de 9 m recebem +1 em JP físicas/INT e +2 em JP SAB/CAR."
+            },
+            {
+              "nome": "Inspirar",
+              "teste": null,
+              "resumo": "Até 25 aliados recebem o modificador de Carisma para acertar."
+            }
+          ]
+        },
+        {
+          "nivel": 4,
+          "pv": "d10",
+          "bpa": 3,
+          "ppe": 9001,
+          "habilidades": []
+        },
+        {
+          "nivel": 5,
+          "pv": "d10",
+          "bpa": 4,
+          "ppe": 18001,
+          "habilidades": [
+            {
+              "nome": "Desmoralizar",
+              "teste": null,
+              "resumo": "Até 25 oponentes sofrem -4 em testes de Carisma e JP medo (-1 ataque se falhar)."
+            },
+            {
+              "nome": "Inspirar",
+              "teste": null,
+              "resumo": "Até 50 aliados recebem o modificador de Carisma para acertar."
+            }
+          ]
+        },
+        {
+          "nivel": 6,
+          "pv": "d10",
+          "bpa": 5,
+          "ppe": 36001,
+          "habilidades": []
+        },
+        {
+          "nivel": 7,
+          "pv": "d10",
+          "bpa": 6,
+          "ppe": 72001,
+          "habilidades": [
+            {
+              "nome": "Inspirar",
+              "teste": null,
+              "resumo": "Até 250 aliados recebem o modificador de Carisma para acertar."
+            },
+            {
+              "nome": "Desmoralizar",
+              "teste": null,
+              "resumo": "Desmoraliza até 100 oponentes."
+            }
+          ]
+        },
+        {
+          "nivel": 8,
+          "pv": "d10",
+          "bpa": 7,
+          "ppe": 150001,
+          "habilidades": [
+            {
+              "nome": "Domínio do Campo de Batalha",
+              "teste": null,
+              "resumo": "Pode usar Inspirar, Encorajar e Desmoralizar na mesma rodada."
+            }
+          ]
+        },
+        {
+          "nivel": 9,
+          "pv": "d10",
+          "bpa": 8,
+          "ppe": 300001,
+          "habilidades": [
+            {
+              "nome": "Inspirar",
+              "teste": null,
+              "resumo": "Até 1.000 aliados recebem o modificador de Carisma para acertar."
+            },
+            {
+              "nome": "Desmoralizar",
+              "teste": null,
+              "resumo": "Desmoraliza até 250 oponentes."
+            }
+          ]
+        },
+        {
+          "nivel": 10,
+          "pv": "d10",
+          "bpa": 9,
+          "ppe": 600001,
+          "habilidades": [
+            {
+              "nome": "Chamado às Armas",
+              "teste": null,
+              "resumo": "Atrai 2d10 seguidores de nível 0 por mês ao estabelecer fortaleza."
+            }
+          ]
+        },
+        {
+          "nivel": 11,
+          "pv": "+4 PV",
+          "bpa": 10,
+          "ppe": 725001,
+          "habilidades": []
+        },
+        {
+          "nivel": 12,
+          "pv": "+4 PV",
+          "bpa": 11,
+          "ppe": 900001,
+          "habilidades": [
+            {
+              "nome": "Inspirar",
+              "teste": null,
+              "resumo": "Até 5.000 aliados recebem o modificador de Carisma para acertar."
+            },
+            {
+              "nome": "Desmoralizar",
+              "teste": null,
+              "resumo": "Desmoraliza até 1.000 oponentes."
+            }
+          ]
+        },
+        {
+          "nivel": 13,
+          "pv": "+4 PV",
+          "bpa": 12,
+          "ppe": 1075001,
+          "habilidades": [
+            {
+              "nome": "Especialista em Armas",
+              "teste": null,
+              "resumo": "Aliados a até 12 m ganham ±1 em manobras de combate sob seu comando."
+            }
+          ]
+        },
+        {
+          "nivel": 14,
+          "pv": "+4 PV",
+          "bpa": 13,
+          "ppe": 1250001,
+          "habilidades": []
+        },
+        {
+          "nivel": 15,
+          "pv": "+4 PV",
+          "bpa": 14,
+          "ppe": 1425001,
+          "habilidades": [
+            {
+              "nome": "Bônus de Carisma",
+              "teste": null,
+              "resumo": "Ganha +1 ponto permanente em Carisma."
+            }
+          ]
+        },
+        {
+          "nivel": 16,
+          "pv": "+4 PV",
+          "bpa": 15,
+          "ppe": 1600001,
+          "habilidades": [
+            {
+              "nome": "Inspirar",
+              "teste": null,
+              "resumo": "Até 20.000 aliados recebem o modificador de Carisma para acertar."
+            },
+            {
+              "nome": "Desmoralizar",
+              "teste": null,
+              "resumo": "Desmoraliza até 5.000 oponentes."
+            }
+          ]
+        },
+        {
+          "nivel": 17,
+          "pv": "+4 PV",
+          "bpa": 16,
+          "ppe": 1775001,
+          "habilidades": [
+            {
+              "nome": "Golpe de Honra",
+              "teste": null,
+              "resumo": "Em duelo formal, reduz CA do oponente pelo mod. CAR, soma CAR no ataque e causa dano dobrado."
+            },
+            {
+              "nome": "Especialista em Armas",
+              "teste": null,
+              "resumo": "Aliados a até 12 m ganham ±2 em manobras de combate."
+            }
+          ]
+        },
+        {
+          "nivel": 18,
+          "pv": "+4 PV",
+          "bpa": 17,
+          "ppe": 1950001,
+          "habilidades": []
+        },
+        {
+          "nivel": 19,
+          "pv": "+4 PV",
+          "bpa": 18,
+          "ppe": 2125001,
+          "habilidades": []
+        },
+        {
+          "nivel": 20,
+          "pv": "+4 PV",
+          "bpa": 19,
+          "ppe": 2300001,
+          "habilidades": [
+            {
+              "nome": "Senhor da Batalha",
+              "teste": null,
+              "resumo": "Tropas em combate em massa somam mod. CAR em ataque/dano/moral e +1 CA."
+            }
+          ]
+        },
+        {
+          "nivel": 21,
+          "pv": "+4 PV",
+          "bpa": 20,
+          "ppe": 2475001,
+          "habilidades": [
+            {
+              "nome": "Conversão para Cavalaria",
+              "teste": null,
+              "resumo": "Pode conferir cavalaria a PNJs escolhidos (tornam-se cavaleiros N1)."
+            }
+          ]
+        },
+        {
+          "nivel": 22,
+          "pv": "+4 PV",
+          "bpa": 21,
+          "ppe": 2650001,
+          "habilidades": []
+        },
+        {
+          "nivel": 23,
+          "pv": "+4 PV",
+          "bpa": 22,
+          "ppe": 2825001,
+          "habilidades": []
+        },
+        {
+          "nivel": 24,
+          "pv": "+4 PV",
+          "bpa": 23,
+          "ppe": 3000001,
+          "habilidades": [
+            {
+              "nome": "Senhor da Batalha",
+              "teste": null,
+              "resumo": "Bônus de combate em massa dobra (2× mod. CAR), +2 CA e +2 moral."
+            },
+            {
+              "nome": "Caminho da Grandeza",
+              "teste": null,
+              "resumo": "Escolha lendária: bônus contra oponentes mais fortes, controlar atmosfera 1x/mês e imunidade a moral baixa para aliados."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "clerigo",
+      "nome": "Clérigo",
+      "paginas_livro": "32–35",
+      "atributo_principal": "sabedoria",
+      "dado_vida": "d8",
+      "pv_apos_nivel_10": 3,
+      "disposicao": "qualquer",
+      "armas": {
+        "qualquer": false,
+        "lista": [
+          "Especial (arma da divindade)",
+          "Clava",
+          "Picareta de Guerra",
+          "Adaga",
+          "Mangual Leve",
+          "Mangual Pesado",
+          "Martelo Leve",
+          "Maça Leve",
+          "Maça Pesada",
+          "Maça-Estrela",
+          "Bordão",
+          "Martelo de Guerra"
+        ],
+        "observacao": "Pode adicionar a arma principal da divindade adorada via Seleção de Armas."
+      },
+      "armaduras": {
+        "qualquer": true,
+        "nenhuma": false,
+        "lista": [
+          "Qualquer"
+        ],
+        "observacao": null
+      },
+      "conjurador": true,
+      "conjuracao": {
+        "tradicao": "divina",
+        "atributo_conjuracao": "sabedoria",
+        "preparacao": "oracao_contemplacao_estudo",
+        "feiticos_bonus_por_atributo": [
+          {
+            "min": 13,
+            "max": 15,
+            "circulo": 1,
+            "quantidade": 1
+          },
+          {
+            "min": 16,
+            "max": 17,
+            "circulo": 2,
+            "quantidade": 1
+          },
+          {
+            "min": 18,
+            "max": 19,
+            "circulo": 3,
+            "quantidade": 1
+          }
+        ],
+        "feiticos_bonus_cumulativos": true,
+        "feiticos_bonus_requer_acesso_circulo": true,
+        "feiticos_diarios": {
+          "1": {
+            "0": 3,
+            "1": 1
+          },
+          "2": {
+            "0": 4,
+            "1": 2
+          },
+          "3": {
+            "0": 4,
+            "1": 2,
+            "2": 1
+          },
+          "4": {
+            "0": 4,
+            "1": 3,
+            "2": 2
+          },
+          "5": {
+            "0": 4,
+            "1": 3,
+            "2": 2,
+            "3": 1
+          },
+          "6": {
+            "0": 5,
+            "1": 3,
+            "2": 3,
+            "3": 2
+          },
+          "7": {
+            "0": 5,
+            "1": 4,
+            "2": 3,
+            "3": 2,
+            "4": 1
+          },
+          "8": {
+            "0": 5,
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 2
+          },
+          "9": {
+            "0": 5,
+            "1": 4,
+            "2": 4,
+            "3": 3,
+            "4": 2,
+            "5": 1
+          },
+          "10": {
+            "0": 5,
+            "1": 4,
+            "2": 4,
+            "3": 3,
+            "4": 3,
+            "5": 2
+          },
+          "11": {
+            "0": 6,
+            "1": 5,
+            "2": 4,
+            "3": 4,
+            "4": 3,
+            "5": 2,
+            "6": 1
+          },
+          "12": {
+            "0": 6,
+            "1": 5,
+            "2": 4,
+            "3": 4,
+            "4": 3,
+            "5": 3,
+            "6": 2
+          },
+          "13": {
+            "0": 6,
+            "1": 5,
+            "2": 5,
+            "3": 4,
+            "4": 4,
+            "5": 3,
+            "6": 2,
+            "7": 1
+          },
+          "14": {
+            "0": 6,
+            "1": 5,
+            "2": 5,
+            "3": 4,
+            "4": 4,
+            "5": 3,
+            "6": 3,
+            "7": 2
+          },
+          "15": {
+            "0": 6,
+            "1": 5,
+            "2": 5,
+            "3": 5,
+            "4": 4,
+            "5": 4,
+            "6": 3,
+            "7": 2,
+            "8": 1
+          },
+          "16": {
+            "0": 6,
+            "1": 6,
+            "2": 5,
+            "3": 5,
+            "4": 4,
+            "5": 4,
+            "6": 3,
+            "7": 3,
+            "8": 2
+          },
+          "17": {
+            "0": 7,
+            "1": 6,
+            "2": 5,
+            "3": 5,
+            "4": 5,
+            "5": 4,
+            "6": 4,
+            "7": 3,
+            "8": 2,
+            "9": 1
+          },
+          "18": {
+            "0": 7,
+            "1": 6,
+            "2": 6,
+            "3": 5,
+            "4": 5,
+            "5": 4,
+            "6": 4,
+            "7": 3,
+            "8": 3,
+            "9": 2
+          },
+          "19": {
+            "0": 7,
+            "1": 6,
+            "2": 6,
+            "3": 5,
+            "4": 5,
+            "5": 5,
+            "6": 4,
+            "7": 4,
+            "8": 3,
+            "9": 2
+          },
+          "20": {
+            "0": 7,
+            "1": 6,
+            "2": 6,
+            "3": 6,
+            "4": 5,
+            "5": 5,
+            "6": 4,
+            "7": 4,
+            "8": 3,
+            "9": 3
+          },
+          "21": {
+            "0": 7,
+            "1": 6,
+            "2": 6,
+            "3": 6,
+            "4": 5,
+            "5": 5,
+            "6": 5,
+            "7": 4,
+            "8": 4,
+            "9": 3
+          },
+          "22": {
+            "0": 7,
+            "1": 7,
+            "2": 6,
+            "3": 6,
+            "4": 6,
+            "5": 5,
+            "6": 5,
+            "7": 4,
+            "8": 4,
+            "9": 3
+          },
+          "23": {
+            "0": 7,
+            "1": 7,
+            "2": 6,
+            "3": 6,
+            "4": 6,
+            "5": 5,
+            "6": 5,
+            "7": 5,
+            "8": 4,
+            "9": 4
+          },
+          "24": {
+            "0": 8,
+            "1": 7,
+            "2": 7,
+            "3": 6,
+            "4": 6,
+            "5": 6,
+            "6": 6,
+            "7": 5,
+            "8": 4,
+            "9": 4
+          }
+        }
+      },
+      "descricao": "Sacerdotes-guerreiros devotados a uma divindade ou panteão, canalizando magia divina e poder marcial no campo de batalha.",
+      "habilidades": [
+        {
+          "id": "usar_magia_divina",
+          "nome": "Feitiços (Magia Divina)",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "Prepara e conjura feitiços divinos por oração conforme a Tabela de Feitiços Diários + Feitiços Bônus cumulativos por Sabedoria elevada (13-15: +1 de 1º; 16-17: +1 de 2º; 18-19: +1 de 3º)."
+        },
+        {
+          "id": "afastar_mortos_vivos",
+          "nome": "Afastar Mortos-Vivos",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "sabedoria",
+          "descricao": "Ação especial de 1 rodada exibindo símbolo sagrado (alcance 18 m). Afeta 1d12 + mod. CAR mortos-vivos; destrói (ou controla, se maligno) quando 5+ níveis acima. Clérigos malignos também podem afastar paladinos."
+        },
+        {
+          "id": "selecao_de_armas",
+          "nome": "Seleção de Armas",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "Permite escolher uma arma fora da lista padrão caso seja a arma principal da divindade adorada."
+        },
+        {
+          "id": "bonus_de_sabedoria",
+          "nome": "Bônus de Sabedoria",
+          "nivel_aquisicao": 15,
+          "atributo_teste": null,
+          "descricao": "Aumenta permanentemente a pontuação de Sabedoria em +1."
+        },
+        {
+          "id": "campanha_sagrada",
+          "nome": "Campanha Sagrada",
+          "nivel_aquisicao": 18,
+          "atributo_teste": null,
+          "descricao": "Convoca adeptos armados (d8 PV) e desarmados (d4 PV) por até 1 semana/ponto de CAR com +1 nos testes (N19: dobro e +2; N23: quádruplo e +3 com líderes N1–N3)."
+        },
+        {
+          "id": "recordacao_perfeita",
+          "nome": "Recordação Perfeita",
+          "nivel_aquisicao": 20,
+          "atributo_teste": "sabedoria",
+          "descricao": "Teste de Sabedoria (ND 0) para recordar e relançar 1x/dia um feitiço já conjurado de nível 0 (N20) ou de 1º nível (N24)."
+        },
+        {
+          "id": "banir",
+          "nome": "Banir",
+          "nivel_aquisicao": 21,
+          "atributo_teste": "sabedoria",
+          "descricao": "Age como Afastar Mortos-Vivos contra criaturas extraplanares (1d12 menores, 1d6 superiores ou 1 senhor demônio/arquidiabo), expulsando por dias iguais ao nível do clérigo."
+        },
+        {
+          "id": "monolito_divino",
+          "nome": "Monólito Divino",
+          "nivel_aquisicao": 22,
+          "atributo_teste": null,
+          "descricao": "Aura permanente (texto: N21 / raio 6 m; tabela: N22 / raio 4 m): imune a ataques de morte, +3 em testes de afastar dentro do raio e +2 em testes, JP e atributos."
+        },
+        {
+          "id": "marca_do_santo",
+          "nome": "Marca do Santo",
+          "nivel_aquisicao": 23,
+          "atributo_teste": null,
+          "descricao": "Atrai 1d10 seguidores/SAB (com líderes clérigos N1/N4/N8/N10 se possuir templo). Sem oração: 1x/semana Curar, Restaurar Visão, Remover Enfermidade e Ressurreição; 1x/dia Criar Água Benta e Palavra Sagrada/Profana."
+        }
+      ],
+      "progressao": [
+        {
+          "nivel": 1,
+          "pv": "d8",
+          "bpa": 0,
+          "ppe": 0,
+          "habilidades": [
+            {
+              "nome": "Usar Magia",
+              "teste": null,
+              "resumo": "Conjura feitiços divinos (feitiços bônus com Sabedoria 13-15 [1º], 16-17 [2º], 18-19 [3º])."
+            },
+            {
+              "nome": "Afastar Mortos-Vivos",
+              "teste": "sabedoria",
+              "resumo": "Afasta (1d12 + mod. CAR) ou destrói (5+ níveis acima) mortos-vivos a até 18 m."
+            },
+            {
+              "nome": "Seleção de Armas",
+              "teste": null,
+              "resumo": "Pode escolher uma arma especial favorita da sua divindade."
+            }
+          ]
+        },
+        {
+          "nivel": 2,
+          "pv": "d8",
+          "bpa": 1,
+          "ppe": 2251,
+          "habilidades": []
+        },
+        {
+          "nivel": 3,
+          "pv": "d8",
+          "bpa": 1,
+          "ppe": 5001,
+          "habilidades": []
+        },
+        {
+          "nivel": 4,
+          "pv": "d8",
+          "bpa": 2,
+          "ppe": 9001,
+          "habilidades": []
+        },
+        {
+          "nivel": 5,
+          "pv": "d8",
+          "bpa": 2,
+          "ppe": 18001,
+          "habilidades": []
+        },
+        {
+          "nivel": 6,
+          "pv": "d8",
+          "bpa": 3,
+          "ppe": 35001,
+          "habilidades": []
+        },
+        {
+          "nivel": 7,
+          "pv": "d8",
+          "bpa": 3,
+          "ppe": 70001,
+          "habilidades": []
+        },
+        {
+          "nivel": 8,
+          "pv": "d8",
+          "bpa": 4,
+          "ppe": 140001,
+          "habilidades": []
+        },
+        {
+          "nivel": 9,
+          "pv": "d8",
+          "bpa": 4,
+          "ppe": 300001,
+          "habilidades": []
+        },
+        {
+          "nivel": 10,
+          "pv": "d8",
+          "bpa": 5,
+          "ppe": 425001,
+          "habilidades": []
+        },
+        {
+          "nivel": 11,
+          "pv": "+3 PV",
+          "bpa": 5,
+          "ppe": 650001,
+          "habilidades": []
+        },
+        {
+          "nivel": 12,
+          "pv": "+3 PV",
+          "bpa": 6,
+          "ppe": 900001,
+          "habilidades": []
+        },
+        {
+          "nivel": 13,
+          "pv": "+3 PV",
+          "bpa": 6,
+          "ppe": 1150001,
+          "habilidades": []
+        },
+        {
+          "nivel": 14,
+          "pv": "+3 PV",
+          "bpa": 7,
+          "ppe": 1400001,
+          "habilidades": []
+        },
+        {
+          "nivel": 15,
+          "pv": "+3 PV",
+          "bpa": 7,
+          "ppe": 1650001,
+          "habilidades": [
+            {
+              "nome": "Bônus de Sabedoria",
+              "teste": null,
+              "resumo": "Ganha +1 ponto permanente em Sabedoria."
+            }
+          ]
+        },
+        {
+          "nivel": 16,
+          "pv": "+3 PV",
+          "bpa": 8,
+          "ppe": 1900001,
+          "habilidades": []
+        },
+        {
+          "nivel": 17,
+          "pv": "+3 PV",
+          "bpa": 8,
+          "ppe": 2150001,
+          "habilidades": []
+        },
+        {
+          "nivel": 18,
+          "pv": "+3 PV",
+          "bpa": 9,
+          "ppe": 2400001,
+          "habilidades": [
+            {
+              "nome": "Campanha Sagrada",
+              "teste": null,
+              "resumo": "Convoca adeptos armados (d8 PV) e desarmados (d4 PV) com +1 nos testes."
+            }
+          ]
+        },
+        {
+          "nivel": 19,
+          "pv": "+3 PV",
+          "bpa": 9,
+          "ppe": 2650001,
+          "habilidades": [
+            {
+              "nome": "Campanha Sagrada",
+              "teste": null,
+              "resumo": "Dobra o número de seguidores convocados e aumenta bônus para +2."
+            }
+          ]
+        },
+        {
+          "nivel": 20,
+          "pv": "+3 PV",
+          "bpa": 10,
+          "ppe": 2900001,
+          "habilidades": [
+            {
+              "nome": "Recordação Perfeita",
+              "teste": "sabedoria",
+              "resumo": "Recorda feitiços de nível 0 já conjurados no dia (ND 0, 1x por feitiço)."
+            }
+          ]
+        },
+        {
+          "nivel": 21,
+          "pv": "+3 PV",
+          "bpa": 10,
+          "ppe": 3150001,
+          "habilidades": [
+            {
+              "nome": "Banir",
+              "teste": "sabedoria",
+              "resumo": "Expulsa criaturas extraplanares do plano material por dias iguais ao nível."
+            }
+          ]
+        },
+        {
+          "nivel": 22,
+          "pv": "+3 PV",
+          "bpa": 11,
+          "ppe": 3400001,
+          "habilidades": [
+            {
+              "nome": "Monólito Divino",
+              "teste": null,
+              "resumo": "Irradia aura permanente: imune a ataques de morte, +3 afastar e +2 em testes/JP."
+            }
+          ]
+        },
+        {
+          "nivel": 23,
+          "pv": "+3 PV",
+          "bpa": 11,
+          "ppe": 3650001,
+          "habilidades": [
+            {
+              "nome": "Campanha Sagrada",
+              "teste": null,
+              "resumo": "Quadruplica seguidores convocados, com líderes N1–N3 e bônus +3."
+            },
+            {
+              "nome": "Marca do Santo",
+              "teste": null,
+              "resumo": "Atrai 1d10 seguidores/SAB + líderes clérigos; concede feitiços extras sagrados."
+            }
+          ]
+        },
+        {
+          "nivel": 24,
+          "pv": "+3 PV",
+          "bpa": 12,
+          "ppe": 3900001,
+          "habilidades": [
+            {
+              "nome": "Recordação Perfeita",
+              "teste": "sabedoria",
+              "resumo": "Recorda feitiços de 1º nível já conjurados no dia (ND 0)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "combatente",
+      "nome": "Combatente",
+      "paginas_livro": "36–39",
+      "atributo_principal": "forca",
+      "dado_vida": "d10",
+      "pv_apos_nivel_10": 4,
+      "disposicao": "qualquer",
+      "armas": {
+        "qualquer": true,
+        "lista": [
+          "Qualquer"
+        ],
+        "observacao": null
+      },
+      "armaduras": {
+        "qualquer": true,
+        "nenhuma": false,
+        "lista": [
+          "Qualquer"
+        ],
+        "observacao": null
+      },
+      "conjurador": false,
+      "descricao": "O guerreiro arquetípico, superior em maestria marcial, especialização de armas e domínio do combate armado.",
+      "habilidades": [
+        {
+          "id": "especializacao_em_armas",
+          "nome": "Especialização em Armas",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "Escolhe permanentemente 1 arma (corpo a corpo ou distância): +1 ataque/dano (N1–6), +2/+2 (N7–18), +3/+3 (N19+)."
+        },
+        {
+          "id": "dominio_de_combate",
+          "nome": "Domínio de Combate",
+          "nivel_aquisicao": 4,
+          "atributo_teste": null,
+          "descricao": "Ataques extras corpo a corpo contra inimigos de nível 1 ou menos (todos os ataques da rodada devem visar alvos qualificados; não combina com Ataque Extra): +1 (N4), +2 (N8), +3 (N12), +4 (N16), +5 (N20), +6 (N24)."
+        },
+        {
+          "id": "ataque_extra",
+          "nome": "Ataque Extra",
+          "nivel_aquisicao": 10,
+          "atributo_teste": null,
+          "descricao": "+1 ataque adicional por rodada com qualquer arma (corpo a corpo ou distância). Não combina com Domínio de Combate."
+        },
+        {
+          "id": "espaco_de_batalha",
+          "nome": "Espaço de Batalha (Consciência Tática)",
+          "nivel_aquisicao": 13,
+          "atributo_teste": null,
+          "descricao": "+1 CA usando segunda arma/escudo/objeto defensivo (não se aplica com arma de duas mãos; acumula com escudo). No N17: esquiva +3, desengajar -1, evasão +5, flanquear +2, ataque pelas costas +3. No N22: +4 / 0 / +6 / +3 / +4."
+        },
+        {
+          "id": "especializacao_avancada_em_armas",
+          "nome": "Especialização Avançada em Armas",
+          "nivel_aquisicao": 13,
+          "atributo_teste": null,
+          "descricao": "Segunda especialização em arma (+1/+1 no N13, +2/+2 no N19). Pode acumular na 1ª arma (total +3/+3 no N13 e +5/+5 no N19)."
+        },
+        {
+          "id": "golpe_de_escudo",
+          "nome": "Golpe de Escudo",
+          "nivel_aquisicao": 14,
+          "atributo_teste": null,
+          "descricao": "Ataca com escudo de metal médio (1d4) ou grande (1d6) sem penalidade (perde bônus de CA do escudo quando usado ofensivamente). Acumula com Ataque Extra (até 3 ataques/rodada), mas não com Domínio de Combate."
+        },
+        {
+          "id": "bonus_de_forca",
+          "nome": "Bônus de Força",
+          "nivel_aquisicao": 15,
+          "atributo_teste": null,
+          "descricao": "Aumenta permanentemente a pontuação de Força em +1."
+        },
+        {
+          "id": "dominio_de_combate_avancado",
+          "nome": "Domínio de Combate Avançado",
+          "nivel_aquisicao": 16,
+          "atributo_teste": null,
+          "descricao": "Estende Domínio de Combate para criaturas de nível 2 (N16: +1; N20: +2; N24: +3), nível 3 (N20: +1; N24: +2) e nível 4 (N24: +1)."
+        },
+        {
+          "id": "bonus_de_atributo",
+          "nome": "Bônus de Atributo",
+          "nivel_aquisicao": 19,
+          "atributo_teste": null,
+          "descricao": "Aumenta permanentemente Força ou Destreza em +1."
+        }
+      ],
+      "progressao": [
+        {
+          "nivel": 1,
+          "pv": "d10",
+          "bpa": 1,
+          "ppe": 0,
+          "habilidades": [
+            {
+              "nome": "Especialização em Armas",
+              "teste": null,
+              "resumo": "Escolhe 1 arma: +1 para ataque e dano."
+            }
+          ]
+        },
+        {
+          "nivel": 2,
+          "pv": "d10",
+          "bpa": 2,
+          "ppe": 2001,
+          "habilidades": []
+        },
+        {
+          "nivel": 3,
+          "pv": "d10",
+          "bpa": 3,
+          "ppe": 4001,
+          "habilidades": []
+        },
+        {
+          "nivel": 4,
+          "pv": "d10",
+          "bpa": 4,
+          "ppe": 8501,
+          "habilidades": [
+            {
+              "nome": "Domínio de Combate",
+              "teste": null,
+              "resumo": "1 ataque extra corpo a corpo contra monstros de nível 1 ou menos."
+            }
+          ]
+        },
+        {
+          "nivel": 5,
+          "pv": "d10",
+          "bpa": 5,
+          "ppe": 17001,
+          "habilidades": []
+        },
+        {
+          "nivel": 6,
+          "pv": "d10",
+          "bpa": 6,
+          "ppe": 34001,
+          "habilidades": []
+        },
+        {
+          "nivel": 7,
+          "pv": "d10",
+          "bpa": 7,
+          "ppe": 68001,
+          "habilidades": [
+            {
+              "nome": "Especialização em Armas",
+              "teste": null,
+              "resumo": "Bônus com a arma escolhida aumenta para +2 em ataque e dano."
+            }
+          ]
+        },
+        {
+          "nivel": 8,
+          "pv": "d10",
+          "bpa": 8,
+          "ppe": 136001,
+          "habilidades": [
+            {
+              "nome": "Domínio de Combate",
+              "teste": null,
+              "resumo": "2 ataques extras corpo a corpo contra monstros de nível 1 ou menos."
+            }
+          ]
+        },
+        {
+          "nivel": 9,
+          "pv": "d10",
+          "bpa": 9,
+          "ppe": 272001,
+          "habilidades": []
+        },
+        {
+          "nivel": 10,
+          "pv": "d10",
+          "bpa": 10,
+          "ppe": 500001,
+          "habilidades": [
+            {
+              "nome": "Ataque Extra",
+              "teste": null,
+              "resumo": "1 ataque adicional por rodada com qualquer arma (não combina com Domínio de Combate)."
+            }
+          ]
+        },
+        {
+          "nivel": 11,
+          "pv": "+4 PV",
+          "bpa": 11,
+          "ppe": 750001,
+          "habilidades": []
+        },
+        {
+          "nivel": 12,
+          "pv": "+4 PV",
+          "bpa": 12,
+          "ppe": 1000001,
+          "habilidades": [
+            {
+              "nome": "Domínio de Combate",
+              "teste": null,
+              "resumo": "3 ataques extras corpo a corpo contra monstros de nível 1 ou menos."
+            }
+          ]
+        },
+        {
+          "nivel": 13,
+          "pv": "+4 PV",
+          "bpa": 13,
+          "ppe": 1250001,
+          "habilidades": [
+            {
+              "nome": "Especialização Avançada em Armas",
+              "teste": null,
+              "resumo": "Segunda especialização em arma (+1/+1; pode acumular na 1ª arma)."
+            },
+            {
+              "nome": "Espaço de Batalha (Consciência Tática)",
+              "teste": null,
+              "resumo": "+1 na CA enquanto não usar arma de duas mãos (acumula com escudo)."
+            }
+          ]
+        },
+        {
+          "nivel": 14,
+          "pv": "+4 PV",
+          "bpa": 14,
+          "ppe": 1500001,
+          "habilidades": [
+            {
+              "nome": "Golpe de Escudo",
+              "teste": null,
+              "resumo": "Usa escudo médio (1d4) ou grande (1d6) de metal como ataque extra sem penalidade."
+            }
+          ]
+        },
+        {
+          "nivel": 15,
+          "pv": "+4 PV",
+          "bpa": 15,
+          "ppe": 1750001,
+          "habilidades": [
+            {
+              "nome": "Bônus de Força",
+              "teste": null,
+              "resumo": "Ganha +1 ponto permanente em Força."
+            }
+          ]
+        },
+        {
+          "nivel": 16,
+          "pv": "+4 PV",
+          "bpa": 16,
+          "ppe": 2000001,
+          "habilidades": [
+            {
+              "nome": "Domínio de Combate",
+              "teste": null,
+              "resumo": "4 ataques extras contra monstros de nível 1 ou menor."
+            },
+            {
+              "nome": "Domínio de Combate Avançado",
+              "teste": null,
+              "resumo": "1 ataque extra contra monstros de nível 2."
+            }
+          ]
+        },
+        {
+          "nivel": 17,
+          "pv": "+4 PV",
+          "bpa": 17,
+          "ppe": 2250001,
+          "habilidades": [
+            {
+              "nome": "Espaço de Batalha (Consciência Tática)",
+              "teste": null,
+              "resumo": "Bônus de manobras: esquiva +3, desengajar -1, evasão +5, flanquear +2, ataque pelas costas +3."
+            }
+          ]
+        },
+        {
+          "nivel": 18,
+          "pv": "+4 PV",
+          "bpa": 18,
+          "ppe": 2500001,
+          "habilidades": []
+        },
+        {
+          "nivel": 19,
+          "pv": "+4 PV",
+          "bpa": 19,
+          "ppe": 2750001,
+          "habilidades": [
+            {
+              "nome": "Especialização em Armas",
+              "teste": null,
+              "resumo": "Bônus da 1ª arma aumenta para +3 em ataque e dano."
+            },
+            {
+              "nome": "Especialização Avançada em Armas",
+              "teste": null,
+              "resumo": "Bônus da 2ª especialização aumenta para +2 em ataque e dano."
+            },
+            {
+              "nome": "Bônus de Atributo",
+              "teste": null,
+              "resumo": "Ganha +1 ponto permanente em Força ou Destreza."
+            }
+          ]
+        },
+        {
+          "nivel": 20,
+          "pv": "+4 PV",
+          "bpa": 20,
+          "ppe": 3000001,
+          "habilidades": [
+            {
+              "nome": "Domínio de Combate",
+              "teste": null,
+              "resumo": "5 ataques extras contra monstros de nível 1 ou menor."
+            },
+            {
+              "nome": "Domínio de Combate Avançado",
+              "teste": null,
+              "resumo": "2 ataques extras contra monstros N2 e 1 ataque extra contra monstros N3."
+            }
+          ]
+        },
+        {
+          "nivel": 21,
+          "pv": "+4 PV",
+          "bpa": 21,
+          "ppe": 3250001,
+          "habilidades": []
+        },
+        {
+          "nivel": 22,
+          "pv": "+4 PV",
+          "bpa": 22,
+          "ppe": 3500001,
+          "habilidades": [
+            {
+              "nome": "Espaço de Batalha (Consciência Tática)",
+              "teste": null,
+              "resumo": "Bônus de manobras: esquiva +4, desengajar 0, evasão +6, flanquear +3, ataque pelas costas +4."
+            }
+          ]
+        },
+        {
+          "nivel": 23,
+          "pv": "+4 PV",
+          "bpa": 23,
+          "ppe": 3750001,
+          "habilidades": []
+        },
+        {
+          "nivel": 24,
+          "pv": "+4 PV",
+          "bpa": 24,
+          "ppe": 4000001,
+          "habilidades": [
+            {
+              "nome": "Domínio de Combate",
+              "teste": null,
+              "resumo": "6 ataques extras contra monstros de nível 1 ou menor."
+            },
+            {
+              "nome": "Domínio de Combate Avançado",
+              "teste": null,
+              "resumo": "3 ataques extras vs N2, 2 ataques extras vs N3 e 1 ataque extra vs N4."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

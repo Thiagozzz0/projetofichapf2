@@ -1,0 +1,2238 @@
+{
+  "metadados": {
+    "sistema": "Castles & Crusades",
+    "edicao": "1ª Edição Brasileira (Livro do Jogador)",
+    "arquivo_fonte": "ref/cc/C&C classes 03.pdf",
+    "paginas_livro": "63–85",
+    "total_paginas_pdf": 23,
+    "leva": 3,
+    "niveis_cobertos": "1–24",
+    "versao_schema": 1,
+    "idioma": "pt-BR"
+  },
+  "classes": [
+    {
+      "id": "mago",
+      "nome": "Mago",
+      "paginas_livro": "63–66",
+      "atributo_principal": "inteligencia",
+      "dado_vida": "d4",
+      "pv_apos_nivel_10": 1,
+      "disposicao": "qualquer",
+      "armas": {
+        "qualquer": false,
+        "lista": [
+          "Clava",
+          "Adaga",
+          "Lança de Mão",
+          "Cajado"
+        ],
+        "observacao": null
+      },
+      "armaduras": {
+        "qualquer": false,
+        "nenhuma": true,
+        "lista": [],
+        "observacao": "Qualquer uso de armadura ou escudo impede o mago de conjurar feitiços."
+      },
+      "conjurador": true,
+      "conjuracao": {
+        "tradicao": "arcana",
+        "atributo_conjuracao": "inteligencia",
+        "preparacao": "grimorio",
+        "grimorio_inicial": "Igual ao número total de feitiços que pode conjurar no 1º nível (incluindo feitiços bônus de Inteligência).",
+        "feiticos_bonus_por_atributo": [
+          {
+            "min": 13,
+            "max": 15,
+            "circulo": 1,
+            "quantidade": 1
+          },
+          {
+            "min": 16,
+            "max": 17,
+            "circulo": 2,
+            "quantidade": 1
+          },
+          {
+            "min": 18,
+            "max": 19,
+            "circulo": 3,
+            "quantidade": 1
+          }
+        ],
+        "feiticos_bonus_cumulativos": true,
+        "feiticos_bonus_requer_acesso_circulo": true,
+        "feiticos_diarios": {
+          "1": {
+            "0": 4,
+            "1": 2
+          },
+          "2": {
+            "0": 4,
+            "1": 3
+          },
+          "3": {
+            "0": 4,
+            "1": 3,
+            "2": 1
+          },
+          "4": {
+            "0": 4,
+            "1": 3,
+            "2": 2
+          },
+          "5": {
+            "0": 5,
+            "1": 4,
+            "2": 2,
+            "3": 1
+          },
+          "6": {
+            "0": 5,
+            "1": 4,
+            "2": 3,
+            "3": 2
+          },
+          "7": {
+            "0": 5,
+            "1": 4,
+            "2": 3,
+            "3": 2,
+            "4": 1
+          },
+          "8": {
+            "0": 5,
+            "1": 4,
+            "2": 3,
+            "3": 3,
+            "4": 2
+          },
+          "9": {
+            "0": 5,
+            "1": 5,
+            "2": 4,
+            "3": 3,
+            "4": 2,
+            "5": 1
+          },
+          "10": {
+            "0": 6,
+            "1": 5,
+            "2": 4,
+            "3": 3,
+            "4": 3,
+            "5": 2
+          },
+          "11": {
+            "0": 6,
+            "1": 5,
+            "2": 4,
+            "3": 4,
+            "4": 3,
+            "5": 2,
+            "6": 1
+          },
+          "12": {
+            "0": 6,
+            "1": 5,
+            "2": 4,
+            "3": 4,
+            "4": 3,
+            "5": 3,
+            "6": 2
+          },
+          "13": {
+            "0": 6,
+            "1": 5,
+            "2": 5,
+            "3": 4,
+            "4": 4,
+            "5": 3,
+            "6": 2,
+            "7": 1
+          },
+          "14": {
+            "0": 6,
+            "1": 6,
+            "2": 5,
+            "3": 4,
+            "4": 4,
+            "5": 3,
+            "6": 3,
+            "7": 2
+          },
+          "15": {
+            "0": 6,
+            "1": 6,
+            "2": 5,
+            "3": 5,
+            "4": 4,
+            "5": 4,
+            "6": 3,
+            "7": 2,
+            "8": 1
+          },
+          "16": {
+            "0": 7,
+            "1": 6,
+            "2": 5,
+            "3": 5,
+            "4": 4,
+            "5": 4,
+            "6": 3,
+            "7": 3,
+            "8": 2
+          },
+          "17": {
+            "0": 7,
+            "1": 6,
+            "2": 5,
+            "3": 5,
+            "4": 5,
+            "5": 4,
+            "6": 4,
+            "7": 3,
+            "8": 2,
+            "9": 1
+          },
+          "18": {
+            "0": 7,
+            "1": 6,
+            "2": 6,
+            "3": 5,
+            "4": 5,
+            "5": 4,
+            "6": 4,
+            "7": 3,
+            "8": 3,
+            "9": 2
+          },
+          "19": {
+            "0": 7,
+            "1": 6,
+            "2": 6,
+            "3": 5,
+            "4": 5,
+            "5": 5,
+            "6": 4,
+            "7": 4,
+            "8": 3,
+            "9": 2
+          },
+          "20": {
+            "0": 7,
+            "1": 7,
+            "2": 6,
+            "3": 6,
+            "4": 5,
+            "5": 5,
+            "6": 4,
+            "7": 4,
+            "8": 3,
+            "9": 3
+          },
+          "21": {
+            "0": 7,
+            "1": 7,
+            "2": 7,
+            "3": 6,
+            "4": 6,
+            "5": 5,
+            "6": 5,
+            "7": 4,
+            "8": 4,
+            "9": 3
+          },
+          "22": {
+            "0": 7,
+            "1": 7,
+            "2": 7,
+            "3": 6,
+            "4": 6,
+            "5": 5,
+            "6": 5,
+            "7": 4,
+            "8": 4,
+            "9": 3
+          },
+          "23": {
+            "0": 8,
+            "1": 8,
+            "2": 7,
+            "3": 7,
+            "4": 6,
+            "5": 6,
+            "6": 5,
+            "7": 5,
+            "8": 4,
+            "9": 4
+          },
+          "24": {
+            "0": 8,
+            "1": 8,
+            "2": 7,
+            "3": 7,
+            "4": 6,
+            "5": 6,
+            "6": 5,
+            "7": 5,
+            "8": 4,
+            "9": 4
+          }
+        }
+      },
+      "descricao": "Estudiosos arquetípicos da magia arcana, capazes de moldar a realidade através do conhecimento de antigos tomos e grimórios.",
+      "habilidades": [
+        {
+          "id": "feiticos_mago",
+          "nome": "Feitiços e Grimório",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "Prepara feitiços arcanos a partir de seu grimório conforme Tabela de Feitiços por Dia + Feitiços Bônus cumulativos por Inteligência."
+        },
+        {
+          "id": "detectar_magia_mago",
+          "nome": "Detectar Magia",
+          "nivel_aquisicao": 13,
+          "atributo_teste": "inteligencia",
+          "descricao": "Após 5 rodadas de concentração em um item, detecta se é mágico e, com teste INT, identifica sua origem (se já conhecida). No N18 determina poder e importância histórica."
+        },
+        {
+          "id": "bonus_de_inteligencia",
+          "nome": "Bônus de Inteligência",
+          "nivel_aquisicao": 15,
+          "atributo_teste": null,
+          "descricao": "Aumenta permanentemente a pontuação de Inteligência em +1."
+        },
+        {
+          "id": "contrafeitico",
+          "nome": "Contrafeitiço",
+          "nivel_aquisicao": 17,
+          "atributo_teste": "inteligencia",
+          "descricao": "Teste de Inteligência (ND = nível do conjurador) para reconhecer feitiço lançado contra si por outro mago/ilusionista e conjurar contrafeitiço vencendo a iniciativa."
+        },
+        {
+          "id": "recordacao_perfeita",
+          "nome": "Recordação Perfeita",
+          "nivel_aquisicao": 20,
+          "atributo_teste": "inteligencia",
+          "descricao": "Teste de Inteligência para recordar 1x/dia um feitiço já conjurado de nível 0 (N20, ND 0) ou 1º nível (N24, ND 1)."
+        }
+      ],
+      "progressao": [
+        {
+          "nivel": 1,
+          "pv": "d4",
+          "bpa": 0,
+          "ppe": 0,
+          "habilidades": [
+            {
+              "nome": "Conjuração",
+              "teste": null,
+              "resumo": "Conjura feitiços arcanos (feitiços bônus com Inteligência 13-15 [1º], 16-17 [2º], 18-19 [3º])."
+            }
+          ]
+        },
+        {
+          "nivel": 2,
+          "pv": "d4",
+          "bpa": 1,
+          "ppe": 2601,
+          "habilidades": []
+        },
+        {
+          "nivel": 3,
+          "pv": "d4",
+          "bpa": 1,
+          "ppe": 5201,
+          "habilidades": []
+        },
+        {
+          "nivel": 4,
+          "pv": "d4",
+          "bpa": 1,
+          "ppe": 10401,
+          "habilidades": []
+        },
+        {
+          "nivel": 5,
+          "pv": "d4",
+          "bpa": 1,
+          "ppe": 20801,
+          "habilidades": []
+        },
+        {
+          "nivel": 6,
+          "pv": "d4",
+          "bpa": 2,
+          "ppe": 42501,
+          "habilidades": []
+        },
+        {
+          "nivel": 7,
+          "pv": "d4",
+          "bpa": 2,
+          "ppe": 85001,
+          "habilidades": []
+        },
+        {
+          "nivel": 8,
+          "pv": "d4",
+          "bpa": 2,
+          "ppe": 170001,
+          "habilidades": []
+        },
+        {
+          "nivel": 9,
+          "pv": "d4",
+          "bpa": 2,
+          "ppe": 340001,
+          "habilidades": []
+        },
+        {
+          "nivel": 10,
+          "pv": "d4",
+          "bpa": 3,
+          "ppe": 500001,
+          "habilidades": []
+        },
+        {
+          "nivel": 11,
+          "pv": "+1 PV",
+          "bpa": 3,
+          "ppe": 750001,
+          "habilidades": []
+        },
+        {
+          "nivel": 12,
+          "pv": "+1 PV",
+          "bpa": 3,
+          "ppe": 1000001,
+          "habilidades": []
+        },
+        {
+          "nivel": 13,
+          "pv": "+1 PV",
+          "bpa": 3,
+          "ppe": 1250001,
+          "habilidades": [
+            {
+              "nome": "Detectar Magia",
+              "teste": "inteligencia",
+              "resumo": "Após 5 rodadas de estudo, detecta magia e identifica sua origem."
+            }
+          ]
+        },
+        {
+          "nivel": 14,
+          "pv": "+1 PV",
+          "bpa": 4,
+          "ppe": 1500001,
+          "habilidades": []
+        },
+        {
+          "nivel": 15,
+          "pv": "+1 PV",
+          "bpa": 4,
+          "ppe": 1750001,
+          "habilidades": [
+            {
+              "nome": "Bônus de Inteligência",
+              "teste": null,
+              "resumo": "Ganha +1 ponto permanente em Inteligência."
+            }
+          ]
+        },
+        {
+          "nivel": 16,
+          "pv": "+1 PV",
+          "bpa": 4,
+          "ppe": 2000001,
+          "habilidades": []
+        },
+        {
+          "nivel": 17,
+          "pv": "+1 PV",
+          "bpa": 4,
+          "ppe": 2250001,
+          "habilidades": [
+            {
+              "nome": "Contrafeitiço",
+              "teste": "inteligencia",
+              "resumo": "Identifica feitiço lançado contra si por outro mago/ilusionista e tenta neutralizá-lo."
+            }
+          ]
+        },
+        {
+          "nivel": 18,
+          "pv": "+1 PV",
+          "bpa": 5,
+          "ppe": 2500001,
+          "habilidades": [
+            {
+              "nome": "Detectar Magia",
+              "teste": "inteligencia",
+              "resumo": "Determina o poder do item e sua importância histórica/cultural."
+            }
+          ]
+        },
+        {
+          "nivel": 19,
+          "pv": "+1 PV",
+          "bpa": 5,
+          "ppe": 2750001,
+          "habilidades": []
+        },
+        {
+          "nivel": 20,
+          "pv": "+1 PV",
+          "bpa": 5,
+          "ppe": 3000001,
+          "habilidades": [
+            {
+              "nome": "Recordação Perfeita",
+              "teste": "inteligencia",
+              "resumo": "Recorda 1x/dia feitiço de nível 0 lançado anteriormente (ND 0)."
+            }
+          ]
+        },
+        {
+          "nivel": 21,
+          "pv": "+1 PV",
+          "bpa": 5,
+          "ppe": 3250001,
+          "habilidades": []
+        },
+        {
+          "nivel": 22,
+          "pv": "+1 PV",
+          "bpa": 6,
+          "ppe": 3500001,
+          "habilidades": []
+        },
+        {
+          "nivel": 23,
+          "pv": "+1 PV",
+          "bpa": 6,
+          "ppe": 3750001,
+          "habilidades": []
+        },
+        {
+          "nivel": 24,
+          "pv": "+1 PV",
+          "bpa": 6,
+          "ppe": 4000001,
+          "habilidades": [
+            {
+              "nome": "Recordação Perfeita",
+              "teste": "inteligencia",
+              "resumo": "Recorda 1x/dia feitiço de 1º nível lançado anteriormente (ND 1)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "paladino",
+      "nome": "Paladino",
+      "paginas_livro": "67–71",
+      "atributo_principal": "carisma",
+      "dado_vida": "d10",
+      "pv_apos_nivel_10": 4,
+      "disposicao": "Lei/Bem ou Bem/Lei",
+      "armas": {
+        "qualquer": true,
+        "lista": [
+          "Qualquer"
+        ],
+        "observacao": "Evita armas associadas a ladrões/covardia e geralmente evita armas de longo alcance."
+      },
+      "armaduras": {
+        "qualquer": true,
+        "nenhuma": false,
+        "lista": [
+          "Qualquer"
+        ],
+        "observacao": "Violar o código ou cometer ato maligno voluntário faz perder todas as habilidades até expiação."
+      },
+      "conjurador": false,
+      "descricao": "Guerreiros sagrados devotados à lei, à virtude e à erradicação do mal, abençoados com aura protetora e poderes divinos.",
+      "habilidades": [
+        {
+          "id": "curar_doencas",
+          "nome": "Curar Doenças",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "Cura qualquer doença: 1x/semana (N1), 2x/semana (N6), 3x/semana (N12)."
+        },
+        {
+          "id": "detectar_o_mal",
+          "nome": "Detectar o Mal",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "Habilidade inata (à vontade, concentrando 1 rodada) com alcance de 18 m, como o feitiço."
+        },
+        {
+          "id": "aura_divina",
+          "nome": "Aura Divina",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "Permanente: +2 CA e +2 JP contra criaturas malignas; impede contato corporal de criaturas invocadas/conjuradas (exceto elementais/extradimensionais bons)."
+        },
+        {
+          "id": "saude_divina",
+          "nome": "Saúde Divina",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "Imunidade total a doenças de qualquer origem."
+        },
+        {
+          "id": "imposicao_de_maos",
+          "nome": "Imposição de Mãos",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "1x/dia cura 2 PV por nível do paladino em si mesmo ou em outro alvo único."
+        },
+        {
+          "id": "afastar_mortos_vivos_paladino",
+          "nome": "Afastar Mortos-Vivos",
+          "nivel_aquisicao": 3,
+          "atributo_teste": "sabedoria",
+          "descricao": "Afasta mortos-vivos como um clérigo de nível igual ao (nível do paladino - 2)."
+        },
+        {
+          "id": "montaria_divina",
+          "nome": "Montaria Divina",
+          "nivel_aquisicao": 4,
+          "atributo_teste": null,
+          "descricao": "Convoca cavalo de guerra pesado (Médio) ou pônei de guerra (Pequeno). Se morrer, aguarda 1 ano e 1 dia para chamar outra."
+        },
+        {
+          "id": "aura_de_coragem",
+          "nome": "Aura de Coragem",
+          "nivel_aquisicao": 6,
+          "atributo_teste": null,
+          "descricao": "Imune ao medo; aliados recebem +4 em JP contra medo num raio de 3 m (N6), 9 m (N15) e 15 m (N20)."
+        },
+        {
+          "id": "destruir_o_mal",
+          "nome": "Destruir o Mal",
+          "nivel_aquisicao": 9,
+          "atributo_teste": null,
+          "descricao": "Em 1 ataque contra criatura maligna: +mod. CAR para acertar e +1 dano por nível. Usos: 1x/dia (N9), 2x/dia (N15), 3x/dia (N20)."
+        },
+        {
+          "id": "cura_divina",
+          "nome": "Cura Divina",
+          "nivel_aquisicao": 12,
+          "atributo_teste": null,
+          "descricao": "1x/semana cura simultaneamente todo dano de PV, doenças, cegueira, surdez, venenos, dano temporário de atributo, Ruína da Razão e distúrbios mentais."
+        },
+        {
+          "id": "legado_virtuoso",
+          "nome": "Legado Virtuoso",
+          "nivel_aquisicao": 13,
+          "atributo_teste": null,
+          "descricao": "1 item/dia (máx. nível itens ativos; perde 1 CON por 1 dia, ou permanente para virtude permanente). Dobra cura em repouso até 1/2 PV do paladino, estanca sangramento e traz alvos negativos a 0 PV em 24 h: até -5 PV (N13), -7 PV (N18), -9 PV (N20)."
+        },
+        {
+          "id": "intervencao_divina",
+          "nome": "Intervenção Divina",
+          "nivel_aquisicao": 13,
+          "atributo_teste": null,
+          "descricao": "1x/semana (N13), 2x/semana (N17), 3x/semana (N22): (1) refazer 1 rolagem; (2) +4 ataque e dano dobrado por 1 rodada; ou (3) reduzir pela metade todo dano sofrido na rodada."
+        },
+        {
+          "id": "bonus_de_carisma",
+          "nome": "Bônus de Carisma",
+          "nivel_aquisicao": 15,
+          "atributo_teste": null,
+          "descricao": "Aumenta permanentemente a pontuação de Carisma em +1."
+        },
+        {
+          "id": "vontade_divina",
+          "nome": "Vontade Divina",
+          "nivel_aquisicao": 20,
+          "atributo_teste": null,
+          "descricao": "1x/mês compele ouvintes não malignos/não PJs (JP CAR, ND = nível) como Obrigação por dias iguais ao nível do paladino."
+        },
+        {
+          "id": "limpar_alma",
+          "nome": "Limpar Alma",
+          "nivel_aquisicao": 24,
+          "atributo_teste": "carisma",
+          "descricao": "Restringindo o alvo por rodadas iguais ao nível dele + teste CAR (ND = nível) + superar RM: revela disposição, ilusões e pensamentos; pode exorcizar o mal (JP CAR ou destruição/cura). Exige descanso imediato de 1 h por nível do alvo."
+        }
+      ],
+      "progressao": [
+        {
+          "nivel": 1,
+          "pv": "d10",
+          "bpa": 0,
+          "ppe": 0,
+          "habilidades": [
+            {
+              "nome": "Curar Doenças",
+              "teste": null,
+              "resumo": "Cura qualquer doença 1x/semana."
+            },
+            {
+              "nome": "Detectar o Mal",
+              "teste": null,
+              "resumo": "Detecta o mal a até 18 m concentrando-se por 1 rodada (à vontade)."
+            },
+            {
+              "nome": "Aura Divina",
+              "teste": null,
+              "resumo": "Aura permanente: +2 CA e +2 JP contra o Mal; bloqueia contato de criaturas invocadas/conjuradas."
+            },
+            {
+              "nome": "Saúde Divina",
+              "teste": null,
+              "resumo": "Imunidade a doenças de todas as origens."
+            },
+            {
+              "nome": "Imposição de Mãos",
+              "teste": null,
+              "resumo": "1x/dia cura 2 PV por nível em um único alvo."
+            }
+          ]
+        },
+        {
+          "nivel": 2,
+          "pv": "d10",
+          "bpa": 1,
+          "ppe": 2701,
+          "habilidades": []
+        },
+        {
+          "nivel": 3,
+          "pv": "d10",
+          "bpa": 2,
+          "ppe": 5501,
+          "habilidades": [
+            {
+              "nome": "Afastar Mortos-Vivos",
+              "teste": "sabedoria",
+              "resumo": "Afasta mortos-vivos como um clérigo de nível (nível do paladino - 2)."
+            }
+          ]
+        },
+        {
+          "nivel": 4,
+          "pv": "d10",
+          "bpa": 3,
+          "ppe": 12001,
+          "habilidades": [
+            {
+              "nome": "Montaria Divina",
+              "teste": null,
+              "resumo": "Chama um cavalo de guerra pesado divino (ou pônei de guerra se Pequeno)."
+            }
+          ]
+        },
+        {
+          "nivel": 5,
+          "pv": "d10",
+          "bpa": 4,
+          "ppe": 24001,
+          "habilidades": []
+        },
+        {
+          "nivel": 6,
+          "pv": "d10",
+          "bpa": 5,
+          "ppe": 48001,
+          "habilidades": [
+            {
+              "nome": "Aura de Coragem",
+              "teste": null,
+              "resumo": "Imunidade ao medo; aliados a até 3 m recebem +4 em JP contra medo."
+            },
+            {
+              "nome": "Curar Doenças",
+              "teste": null,
+              "resumo": "Cura doenças 2x/semana."
+            }
+          ]
+        },
+        {
+          "nivel": 7,
+          "pv": "d10",
+          "bpa": 6,
+          "ppe": 95001,
+          "habilidades": []
+        },
+        {
+          "nivel": 8,
+          "pv": "d10",
+          "bpa": 7,
+          "ppe": 180001,
+          "habilidades": []
+        },
+        {
+          "nivel": 9,
+          "pv": "d10",
+          "bpa": 8,
+          "ppe": 360001,
+          "habilidades": [
+            {
+              "nome": "Destruir o Mal",
+              "teste": null,
+              "resumo": "1x/dia em 1 ataque contra criatura maligna: +mod. CAR no ataque e +1 dano/nível."
+            }
+          ]
+        },
+        {
+          "nivel": 10,
+          "pv": "d10",
+          "bpa": 9,
+          "ppe": 700001,
+          "habilidades": []
+        },
+        {
+          "nivel": 11,
+          "pv": "+4 PV",
+          "bpa": 10,
+          "ppe": 1000001,
+          "habilidades": []
+        },
+        {
+          "nivel": 12,
+          "pv": "+4 PV",
+          "bpa": 11,
+          "ppe": 1300001,
+          "habilidades": [
+            {
+              "nome": "Curar Doenças",
+              "teste": null,
+              "resumo": "Cura doenças 3x/semana."
+            },
+            {
+              "nome": "Cura Divina",
+              "teste": null,
+              "resumo": "1x/semana cura todo dano, doenças, cegueira, surdez, venenos e distúrbios mentais."
+            }
+          ]
+        },
+        {
+          "nivel": 13,
+          "pv": "+4 PV",
+          "bpa": 12,
+          "ppe": 1600001,
+          "habilidades": [
+            {
+              "nome": "Legado Virtuoso",
+              "teste": null,
+              "resumo": "Encanta item (1/dia, custo temporário de -1 CON): dobra cura em repouso e recupera alvos até -5 PV para 0 PV em 24 h."
+            },
+            {
+              "nome": "Intervenção Divina",
+              "teste": null,
+              "resumo": "1x/semana: refazer rolagem, +4 ataque e dano dobrado por 1 rodada, ou reduzir dano sofrido pela metade."
+            }
+          ]
+        },
+        {
+          "nivel": 14,
+          "pv": "+4 PV",
+          "bpa": 13,
+          "ppe": 1900001,
+          "habilidades": []
+        },
+        {
+          "nivel": 15,
+          "pv": "+4 PV",
+          "bpa": 14,
+          "ppe": 2200001,
+          "habilidades": [
+            {
+              "nome": "Destruir o Mal Avançado",
+              "teste": null,
+              "resumo": "Pode usar Destruir o Mal 2x/dia."
+            },
+            {
+              "nome": "Aura de Coragem Avançada",
+              "teste": null,
+              "resumo": "Alcance da Aura de Coragem aumenta para 9 m."
+            },
+            {
+              "nome": "Bônus de Carisma",
+              "teste": null,
+              "resumo": "Ganha +1 ponto permanente em Carisma."
+            }
+          ]
+        },
+        {
+          "nivel": 16,
+          "pv": "+4 PV",
+          "bpa": 15,
+          "ppe": 2500001,
+          "habilidades": []
+        },
+        {
+          "nivel": 17,
+          "pv": "+4 PV",
+          "bpa": 16,
+          "ppe": 2800001,
+          "habilidades": [
+            {
+              "nome": "Intervenção Divina",
+              "teste": null,
+              "resumo": "Pode usar Intervenção Divina 2x/semana."
+            }
+          ]
+        },
+        {
+          "nivel": 18,
+          "pv": "+4 PV",
+          "bpa": 17,
+          "ppe": 3100001,
+          "habilidades": [
+            {
+              "nome": "Legado Virtuoso",
+              "teste": null,
+              "resumo": "Estende recuperação de negativos até -7 PV."
+            }
+          ]
+        },
+        {
+          "nivel": 19,
+          "pv": "+4 PV",
+          "bpa": 18,
+          "ppe": 3400001,
+          "habilidades": []
+        },
+        {
+          "nivel": 20,
+          "pv": "+4 PV",
+          "bpa": 19,
+          "ppe": 3700001,
+          "habilidades": [
+            {
+              "nome": "Legado Virtuoso",
+              "teste": null,
+              "resumo": "Estende recuperação de negativos até -9 PV."
+            },
+            {
+              "nome": "Destruir o Mal Avançado",
+              "teste": null,
+              "resumo": "Pode usar Destruir o Mal 3x/dia."
+            },
+            {
+              "nome": "Vontade Divina",
+              "teste": null,
+              "resumo": "1x/mês impele ouvintes (JP CAR) a aderir a causa sagrada como Obrigação."
+            },
+            {
+              "nome": "Aura de Coragem Avançada",
+              "teste": null,
+              "resumo": "Alcance da Aura de Coragem aumenta para 15 m."
+            }
+          ]
+        },
+        {
+          "nivel": 21,
+          "pv": "+4 PV",
+          "bpa": 20,
+          "ppe": 4000001,
+          "habilidades": []
+        },
+        {
+          "nivel": 22,
+          "pv": "+4 PV",
+          "bpa": 21,
+          "ppe": 4300001,
+          "habilidades": [
+            {
+              "nome": "Intervenção Divina",
+              "teste": null,
+              "resumo": "Pode usar Intervenção Divina 3x/semana."
+            }
+          ]
+        },
+        {
+          "nivel": 23,
+          "pv": "+4 PV",
+          "bpa": 22,
+          "ppe": 4600001,
+          "habilidades": []
+        },
+        {
+          "nivel": 24,
+          "pv": "+4 PV",
+          "bpa": 23,
+          "ppe": 4900001,
+          "habilidades": [
+            {
+              "nome": "Limpar Alma",
+              "teste": null,
+              "resumo": "Revela enganos, ilusões e disposição, lê mentes, dissipa magia e pode exorcizar o mal."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "trapaceiro",
+      "nome": "Trapaceiro",
+      "paginas_livro": "72–77",
+      "atributo_principal": "destreza",
+      "dado_vida": "d6",
+      "pv_apos_nivel_10": 2,
+      "disposicao": "qualquer",
+      "armas": {
+        "qualquer": false,
+        "lista": [
+          "Zarabatana",
+          "Espada Larga",
+          "Gato de Nove Caudas",
+          "Cestus",
+          "Clava",
+          "Adaga",
+          "Lança de Mão",
+          "Martelo",
+          "Machadinha",
+          "Besta de Mão",
+          "Azagaia",
+          "Faca",
+          "Besta Leve",
+          "Espada Longa",
+          "Maça",
+          "Main Gauche",
+          "Bastão",
+          "Paieira",
+          "Porrete",
+          "Arco Curto",
+          "Espada Curta",
+          "Foice Curta",
+          "Manopla com Cravos",
+          "Funda",
+          "Chicote",
+          "Sodegarami"
+        ],
+        "observacao": null
+      },
+      "armaduras": {
+        "qualquer": false,
+        "nenhuma": false,
+        "lista": [
+          "Couro",
+          "Jaqueta de Couro",
+          "Gibão de Peles",
+          "Acolchoada"
+        ],
+        "observacao": "Escudo pequeno e elmo de couro sem penalidade. Outras armaduras: -1 por ponto de CA acima de 12; elmos/escudos restritos: -1 cumulativo."
+      },
+      "conjurador": false,
+      "descricao": "Ladrões, infiltradores e oportunistas ágeis, especialistas em furtividade, armadilhas, fechaduras e golpes pelas costas.",
+      "habilidades": [
+        {
+          "id": "especial_armaduras_trapaceiro",
+          "nome": "Especial (Penalidade de Armadura)",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "Usa couro, casaco de couro, acolchoada, escudo pequeno e elmo de couro sem penalidade. Outras armaduras impõem -1 por ponto de CA acima de 12 nas habilidades afetadas (+ -1 por escudo/elmo restrito)."
+        },
+        {
+          "id": "ataque_pelas_costas",
+          "nome": "Ataque pelas Costas",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "Com arma corpo a corpo menor que o braço, após Mover-se em Silêncio ou Esconder-se atrás de alvo com costas discerníveis (não acumula com Ataque Furtivo): +4/×2 (N1), +4/×3 (N5), +4/×4 (N9), +6/×5 (N14), +7/×6 (N20)."
+        },
+        {
+          "id": "a_giria",
+          "nome": "A Gíria",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "Linguagem codificada de rua composta por palavras-código e gestos."
+        },
+        {
+          "id": "escalar",
+          "nome": "Escalar",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "destreza",
+          "descricao": "Escala paredes, tetos e superfícies difíceis a 1/2 velocidade (mãos livres; falha por 5+ cai). Encostas naturais/degraus sem teste."
+        },
+        {
+          "id": "decifrar_escrita_trapaceiro",
+          "nome": "Decifrar Escrita",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "inteligencia",
+          "descricao": "2d8 min/página, 1 tentativa por escrito. Pode ler escritas arcanas com -10 (sem conjurar); não funciona com pergaminhos divinos."
+        },
+        {
+          "id": "esconder_se",
+          "nome": "Esconder-se",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "destreza",
+          "descricao": "Oculta-se com cobertura/sombras (até 1/2 vel. sem penalidade, normal -5, correndo/atacando -20, observador distraído -10). N3: combina com Mover-se em Silêncio (-5, 1/4 vel.). N17–24: penalidade acima de 1/2 vel. reduz de -4 até 0."
+        },
+        {
+          "id": "ouvir",
+          "nome": "Ouvir",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "sabedoria",
+          "descricao": "Detecta sons suaves a até 9 m ou adjacente a portas (parede de pedra -10; 1x/rodada; afetado por elmo grande/metal)."
+        },
+        {
+          "id": "mover_se_em_silencio_trapaceiro",
+          "nome": "Mover-se em Silêncio (Passos Leves)",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "destreza",
+          "descricao": "Ambientes fechados e abertos: até 1/2 vel. sem penalidade, até máxima -5, correndo/atacando -20."
+        },
+        {
+          "id": "abrir_fechadura",
+          "nome": "Abrir Fechadura",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "destreza",
+          "descricao": "Abre fechaduras mecânicas com ferramentas de ladrão (1 tentativa por fechadura por nível; afetado por luvas pesadas/metal)."
+        },
+        {
+          "id": "surrupiar",
+          "nome": "Surrupiar (Furtar Bolsos)",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "destreza",
+          "descricao": "Furta bolsos/bolsas (penalidade = nível da vítima) e faz prestidigitação (penalidade = mod. SAB de observador atento)."
+        },
+        {
+          "id": "armadilhas_trapaceiro",
+          "nome": "Armadilhas",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "inteligencia",
+          "descricao": "Encontra (1 rodada ponto específico / 1 min área 3×3 m), desarma (1d4 rodadas, falha aciona) ou arma/rearma (+5) armadilhas mundanas e mágicas."
+        },
+        {
+          "id": "ataque_furtivo_trapaceiro",
+          "nome": "Ataque Furtivo",
+          "nivel_aquisicao": 4,
+          "atributo_teste": null,
+          "descricao": "Contra alvo que não suspeita de ataque (distância até 9 m; alvo só rola iniciativa na rodada seguinte; não acumula com Ataque pelas Costas): +2/+4 (N4), +3/+6 (N13), +4/+7 (N18), +5/+9 (N23)."
+        },
+        {
+          "id": "sexto_sentido",
+          "nome": "Sexto Sentido",
+          "nivel_aquisicao": 14,
+          "atributo_teste": null,
+          "descricao": "Bônus em testes de Sabedoria contra surpresa: +1 (N14), +2 (N18), +3 (N22)."
+        },
+        {
+          "id": "detectar_portas_ocultas_e_secretas",
+          "nome": "Detectar Portas Ocultas e Secretas",
+          "nivel_aquisicao": 15,
+          "atributo_teste": "sabedoria",
+          "descricao": "Teste ao passar a 3 m de porta oculta ou 1,5 m de porta secreta (+2 procurando ativamente)."
+        },
+        {
+          "id": "bonus_de_destreza",
+          "nome": "Bônus de Destreza",
+          "nivel_aquisicao": 15,
+          "atributo_teste": null,
+          "descricao": "Aumenta permanentemente a pontuação de Destreza em +1."
+        },
+        {
+          "id": "reacao_rapida_trapaceiro",
+          "nome": "Reação Rápida",
+          "nivel_aquisicao": 18,
+          "atributo_teste": null,
+          "descricao": "+1 iniciativa (N18), +2 iniciativa (N24; resultado 11+ concede ação extra no final da rodada)."
+        },
+        {
+          "id": "manobra_evasiva",
+          "nome": "Manobra Evasiva",
+          "nivel_aquisicao": 20,
+          "atributo_teste": null,
+          "descricao": "+4 na CA em combate corpo a corpo sem prejudicar ataques (não funciona com armas à distância, usando habilidades de trapaceiro ou surpreso)."
+        }
+      ],
+      "progressao": [
+        {
+          "nivel": 1,
+          "pv": "d6",
+          "bpa": 0,
+          "ppe": 0,
+          "habilidades": [
+            {
+              "nome": "Especial (Armaduras)",
+              "teste": null,
+              "resumo": "Usa couro, casaco de couro, gibão de peles/acolchoada, escudo pequeno e elmo de couro sem penalidade (-1 por ponto de CA acima de 12)."
+            },
+            {
+              "nome": "Ataque pelas Costas",
+              "teste": null,
+              "resumo": "+4 para acertar e dano ×2 após Mover-se em Silêncio ou Esconder-se."
+            },
+            {
+              "nome": "A Gíria",
+              "teste": null,
+              "resumo": "Linguagem codificada de rua com palavras e gestos."
+            },
+            {
+              "nome": "Escalar",
+              "teste": "destreza",
+              "resumo": "Escala superfícies difíceis a metade da velocidade."
+            },
+            {
+              "nome": "Decifrar Escrita",
+              "teste": "inteligencia",
+              "resumo": "Decifra escritos/códigos (2d8 min/pág; arcanos com -10)."
+            },
+            {
+              "nome": "Esconder-se",
+              "teste": "destreza",
+              "resumo": "Oculta-se atrás de cobertura ou sombras."
+            },
+            {
+              "nome": "Ouvir",
+              "teste": "sabedoria",
+              "resumo": "Ouve ruídos suaves a até 9 m ou através de portas."
+            },
+            {
+              "nome": "Mover-se em Silêncio (Passos Leves)",
+              "teste": "destreza",
+              "resumo": "Desloca-se silenciosamente em ambientes fechados e abertos."
+            },
+            {
+              "nome": "Abrir Fechaduras",
+              "teste": "destreza",
+              "resumo": "Destranca fechaduras mecânicas com ferramentas de ladrão."
+            },
+            {
+              "nome": "Surrupiar (Furtar Bolsos)",
+              "teste": "destreza",
+              "resumo": "Furta bolsos/bolsas e executa prestidigitação."
+            },
+            {
+              "nome": "Encontrar/Desarmar Armadilhas",
+              "teste": "inteligencia",
+              "resumo": "Encontra, desarma ou arma armadilhas (inclusive mágicas)."
+            }
+          ]
+        },
+        {
+          "nivel": 2,
+          "pv": "d6",
+          "bpa": 1,
+          "ppe": 1251,
+          "habilidades": []
+        },
+        {
+          "nivel": 3,
+          "pv": "d6",
+          "bpa": 1,
+          "ppe": 2501,
+          "habilidades": [
+            {
+              "nome": "Esconder-se",
+              "teste": "destreza",
+              "resumo": "Pode usar Mover-se em Silêncio enquanto escondido com penalidade de -5 (1/4 deslocamento)."
+            }
+          ]
+        },
+        {
+          "nivel": 4,
+          "pv": "d6",
+          "bpa": 1,
+          "ppe": 6001,
+          "habilidades": [
+            {
+              "nome": "Ataque Furtivo",
+              "teste": null,
+              "resumo": "+2 para acertar e +4 de dano contra alvo desprevenido (distância até 9 m)."
+            }
+          ]
+        },
+        {
+          "nivel": 5,
+          "pv": "d6",
+          "bpa": 2,
+          "ppe": 12001,
+          "habilidades": [
+            {
+              "nome": "Ataque pelas Costas",
+              "teste": null,
+              "resumo": "+4 para acertar e dano ×3."
+            }
+          ]
+        },
+        {
+          "nivel": 6,
+          "pv": "d6",
+          "bpa": 2,
+          "ppe": 24001,
+          "habilidades": []
+        },
+        {
+          "nivel": 7,
+          "pv": "d6",
+          "bpa": 2,
+          "ppe": 48001,
+          "habilidades": []
+        },
+        {
+          "nivel": 8,
+          "pv": "d6",
+          "bpa": 3,
+          "ppe": 80001,
+          "habilidades": []
+        },
+        {
+          "nivel": 9,
+          "pv": "d6",
+          "bpa": 3,
+          "ppe": 120001,
+          "habilidades": [
+            {
+              "nome": "Ataque pelas Costas",
+              "teste": null,
+              "resumo": "+4 para acertar e dano ×4."
+            }
+          ]
+        },
+        {
+          "nivel": 10,
+          "pv": "d6",
+          "bpa": 3,
+          "ppe": 175001,
+          "habilidades": []
+        },
+        {
+          "nivel": 11,
+          "pv": "+2 PV",
+          "bpa": 4,
+          "ppe": 325001,
+          "habilidades": []
+        },
+        {
+          "nivel": 12,
+          "pv": "+2 PV",
+          "bpa": 4,
+          "ppe": 450001,
+          "habilidades": []
+        },
+        {
+          "nivel": 13,
+          "pv": "+2 PV",
+          "bpa": 4,
+          "ppe": 575001,
+          "habilidades": [
+            {
+              "nome": "Ataque Furtivo",
+              "teste": null,
+              "resumo": "Bônus aumenta para +3 ataque e +6 dano."
+            }
+          ]
+        },
+        {
+          "nivel": 14,
+          "pv": "+2 PV",
+          "bpa": 5,
+          "ppe": 700001,
+          "habilidades": [
+            {
+              "nome": "Ataque pelas Costas",
+              "teste": null,
+              "resumo": "Bônus aumenta para +6 ataque e dano ×5."
+            },
+            {
+              "nome": "Sexto Sentido",
+              "teste": null,
+              "resumo": "+1 em testes de Sabedoria contra surpresa."
+            }
+          ]
+        },
+        {
+          "nivel": 15,
+          "pv": "+2 PV",
+          "bpa": 5,
+          "ppe": 825001,
+          "habilidades": [
+            {
+              "nome": "Detectar Portas Secretas e Ocultas",
+              "teste": "sabedoria",
+              "resumo": "Percebe portas ocultas a 3 m ou secretas a 1,5 m (+2 procurando)."
+            },
+            {
+              "nome": "Bônus de Destreza",
+              "teste": null,
+              "resumo": "Ganha +1 ponto permanente em Destreza."
+            }
+          ]
+        },
+        {
+          "nivel": 16,
+          "pv": "+2 PV",
+          "bpa": 5,
+          "ppe": 950001,
+          "habilidades": []
+        },
+        {
+          "nivel": 17,
+          "pv": "+2 PV",
+          "bpa": 6,
+          "ppe": 1075001,
+          "habilidades": [
+            {
+              "nome": "Esconder-se e Mover-se em Silêncio",
+              "teste": "destreza",
+              "resumo": "Sem penalidade até metade do deslocamento; -4 acima da metade."
+            }
+          ]
+        },
+        {
+          "nivel": 18,
+          "pv": "+2 PV",
+          "bpa": 6,
+          "ppe": 1200001,
+          "habilidades": [
+            {
+              "nome": "Ataque Furtivo",
+              "teste": null,
+              "resumo": "Bônus aumenta para +4 ataque e +7 dano."
+            },
+            {
+              "nome": "Sexto Sentido",
+              "teste": null,
+              "resumo": "+2 em testes de Sabedoria contra surpresa."
+            },
+            {
+              "nome": "Reação Rápida",
+              "teste": null,
+              "resumo": "+1 em jogadas de iniciativa."
+            }
+          ]
+        },
+        {
+          "nivel": 19,
+          "pv": "+2 PV",
+          "bpa": 6,
+          "ppe": 1325001,
+          "habilidades": [
+            {
+              "nome": "Esconder-se e Mover-se em Silêncio",
+              "teste": "destreza",
+              "resumo": "Penalidade acima da metade reduzida para -3."
+            }
+          ]
+        },
+        {
+          "nivel": 20,
+          "pv": "+2 PV",
+          "bpa": 7,
+          "ppe": 1450001,
+          "habilidades": [
+            {
+              "nome": "Ataque pelas Costas",
+              "teste": null,
+              "resumo": "Bônus aumenta para +7 ataque e dano ×6."
+            },
+            {
+              "nome": "Manobra Evasiva",
+              "teste": null,
+              "resumo": "+4 na CA durante combate corpo a corpo (não pode estar surpreso)."
+            }
+          ]
+        },
+        {
+          "nivel": 21,
+          "pv": "+2 PV",
+          "bpa": 7,
+          "ppe": 1575001,
+          "habilidades": [
+            {
+              "nome": "Esconder-se e Mover-se em Silêncio",
+              "teste": "destreza",
+              "resumo": "Penalidade acima da metade reduzida para -2."
+            }
+          ]
+        },
+        {
+          "nivel": 22,
+          "pv": "+2 PV",
+          "bpa": 7,
+          "ppe": 1700001,
+          "habilidades": [
+            {
+              "nome": "Esconder-se e Mover-se em Silêncio",
+              "teste": "destreza",
+              "resumo": "Penalidade acima da metade reduzida para -1."
+            },
+            {
+              "nome": "Sexto Sentido",
+              "teste": null,
+              "resumo": "+3 em testes de Sabedoria contra surpresa."
+            }
+          ]
+        },
+        {
+          "nivel": 23,
+          "pv": "+2 PV",
+          "bpa": 8,
+          "ppe": 1825001,
+          "habilidades": [
+            {
+              "nome": "Ataque Furtivo",
+              "teste": null,
+              "resumo": "Bônus aumenta para +5 ataque e +9 dano."
+            }
+          ]
+        },
+        {
+          "nivel": 24,
+          "pv": "+2 PV",
+          "bpa": 8,
+          "ppe": 1950001,
+          "habilidades": [
+            {
+              "nome": "Esconder-se e Mover-se em Silêncio",
+              "teste": "destreza",
+              "resumo": "Esconde-se e move-se em silêncio sem nenhuma penalidade."
+            },
+            {
+              "nome": "Reação Rápida",
+              "teste": null,
+              "resumo": "+2 iniciativa; resultado 11+ concede ação adicional no final da rodada."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "assassino",
+      "nome": "Assassino",
+      "classe_expandida": true,
+      "paginas_livro": "78–82",
+      "atributo_principal": "destreza",
+      "dado_vida": "d6",
+      "pv_apos_nivel_10": 2,
+      "disposicao": "qualquer uma não boa",
+      "armas": {
+        "qualquer": true,
+        "lista": [
+          "Qualquer"
+        ],
+        "observacao": null
+      },
+      "armaduras": {
+        "qualquer": false,
+        "nenhuma": false,
+        "lista": [
+          "Couro",
+          "Jaqueta de Couro",
+          "Acolchoada",
+          "Gibão de Peles"
+        ],
+        "observacao": "Escudo pequeno e elmo de couro sem penalidade. Outras armaduras: -1 por ponto de CA acima de 12 (+ -1 escudo/elmo restrito)."
+      },
+      "conjurador": false,
+      "tabela_venenos": [
+        {
+          "tipo": "I",
+          "categoria": "Venenos leves (irritação, sonolência, náuseas)",
+          "custo_po": 5,
+          "nd": 2,
+          "sucesso_jp": "Sem efeito",
+          "duracao_sucesso": "Não se aplica",
+          "falha_jp": "-1 atributos físicos e -1 iniciativa",
+          "duracao_falha": "1–3 dias"
+        },
+        {
+          "tipo": "II",
+          "categoria": "Poções que alteram a mente (alucinações, confusão, perda de memória)",
+          "custo_po": 15,
+          "nd": 2,
+          "sucesso_jp": "Sem efeito",
+          "duracao_sucesso": "Não se aplica",
+          "falha_jp": "-1 atributos mentais e -1 iniciativa",
+          "duracao_falha": "1–3 dias"
+        },
+        {
+          "tipo": "III",
+          "categoria": "Venenos que prejudicam habilidades e causam danos pequenos",
+          "custo_po": 45,
+          "nd": 4,
+          "sucesso_jp": "1d4 de dano, -1 em todos os atributos secundários",
+          "duracao_sucesso": "1–2 dias",
+          "falha_jp": "1d8 de dano, -2 em todos os atributos primários",
+          "duracao_falha": "2–6 dias"
+        },
+        {
+          "tipo": "IV",
+          "categoria": "Toxinas que incapacitam, aleijam ou causam danos maiores",
+          "custo_po": 150,
+          "nd": 8,
+          "sucesso_jp": "1d8 de dano, -1 em todos os testes de atributo",
+          "duracao_sucesso": "2–4 dias",
+          "falha_jp": "2d8 de dano, estado comatoso",
+          "duracao_falha": "3–9 dias"
+        },
+        {
+          "tipo": "V",
+          "categoria": "Venenos mortais que causam danos permanentes ou matam",
+          "custo_po": 900,
+          "nd": 12,
+          "sucesso_jp": "1d10 de dano, perda permanente de 1 ponto do atributo secundário da classe",
+          "duracao_sucesso": "1–6 dias",
+          "falha_jp": "Morte (2ª JP CON) ou 2d12 de dano e perda permanente de 2 pontos do atributo primário da classe",
+          "duracao_falha": "2 semanas"
+        },
+        {
+          "tipo": "VI",
+          "categoria": "Substâncias raras que causam danos permanentes massivos ou matam",
+          "custo_po": 1800,
+          "nd": 16,
+          "sucesso_jp": "4d10 de dano, perda permanente de 1 ponto em todos os primários e 2 em todos os secundários",
+          "duracao_sucesso": "Instantâneo",
+          "falha_jp": "Morte",
+          "duracao_falha": "Permanente"
+        }
+      ],
+      "descricao": "Matadores especializados que caminham nas sombras usando furtividade, disfarce, venenos e ataques mortais precisos.",
+      "habilidades": [
+        {
+          "id": "especial_armaduras_assassino",
+          "nome": "Especial (Penalidade de Armadura)",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "Usa couro, casaco de couro, acolchoada, escudo pequeno e elmo de couro sem penalidade. Outras armaduras: -1 por ponto acima de CA 12 (+ -1 escudo/elmo restrito)."
+        },
+        {
+          "id": "avaliar_alvo",
+          "nome": "Avaliar Alvo",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "sabedoria",
+          "descricao": "Observa alvo por 1d3×10 min para descobrir nível aproximado (±10%), disposição, armas ocultas, hábitos e maneirismos (afetado por elmos)."
+        },
+        {
+          "id": "escalar_assassino",
+          "nome": "Escalar",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "destreza",
+          "descricao": "Escala superfícies difíceis a 1/2 velocidade (mãos livres; falha por 5+ cai). Encostas naturais/degraus sem teste."
+        },
+        {
+          "id": "ataque_mortal",
+          "nome": "Ataque Mortal",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "Estuda vítima desavisada por 3 rodadas e ataca nas próximas 3 rodadas com Ataque Furtivo. Se causar dano, alvo faz JP CON ou morre instantaneamente (se passar, sofre dano normal de Ataque Furtivo)."
+        },
+        {
+          "id": "disfarces_assassino",
+          "nome": "Disfarces",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "carisma",
+          "descricao": "Geral: 1d3×10 min; indivíduo específico: 1 mês (altura/peso ±10%; teste secreto pelo GC; sexo -2, raça -2, idade -2/10 anos). Observador que conhece o alvo ganha +4/+8/+12 em INT."
+        },
+        {
+          "id": "esconder_se_assassino",
+          "nome": "Esconder-se",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "destreza",
+          "descricao": "Oculta-se com cobertura/sombras. A partir do N3 combina com Mover-se em Silêncio com -5 (1/4 velocidade)."
+        },
+        {
+          "id": "ouvir_assassino",
+          "nome": "Ouvir",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "sabedoria",
+          "descricao": "Detecta sons suaves a 9 m ou adjacente a portas (parede de pedra -10; afetado por elmo grande/metal)."
+        },
+        {
+          "id": "mover_se_em_silencio_assassino",
+          "nome": "Mover-se em Silêncio",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "destreza",
+          "descricao": "Ambientes internos e externos: até 1/2 vel. sem penalidade, até máxima -5, correndo/atacando -20."
+        },
+        {
+          "id": "venenos",
+          "nome": "Venenos",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "inteligencia",
+          "descricao": "Identifica e fabrica venenos/antídotos (matéria-prima custa 1/3 do preço de rua), sem risco ao aplicar em lâmina. Ganha +1 em JP contra venenos no N3."
+        },
+        {
+          "id": "ataque_furtivo_assassino",
+          "nome": "Ataque Furtivo",
+          "nivel_aquisicao": 1,
+          "atributo_teste": null,
+          "descricao": "Contra alvo desavisado (distância até 9 m; alvo só rola iniciativa na rodada seguinte): +2/+4 (N1), +3/+6 (N13), +4/+7 (N19), +5/+9 (N23)."
+        },
+        {
+          "id": "armadilhas_assassino",
+          "nome": "Armadilhas",
+          "nivel_aquisicao": 1,
+          "atributo_teste": "inteligencia",
+          "descricao": "Encontra, desarma (1d4 rodadas, falha aciona) e arma/rearma (+5) armadilhas mundanas e mágicas."
+        },
+        {
+          "id": "surpresa",
+          "nome": "Surpresa",
+          "nivel_aquisicao": 13,
+          "atributo_teste": null,
+          "descricao": "Impõe penalidade no teste de Sabedoria de surpresa dos oponentes: -1 (N13), -2 (N18), -3 (N23)."
+        },
+        {
+          "id": "marca_do_carrasco",
+          "nome": "Marca do Carrasco",
+          "nivel_aquisicao": 15,
+          "atributo_teste": null,
+          "descricao": "Escolhe estilo de assinatura (arma, veneno ou tática); aumenta o ND da JP CON do Ataque Mortal em +2."
+        },
+        {
+          "id": "bonus_de_destreza",
+          "nome": "Bônus de Destreza",
+          "nivel_aquisicao": 15,
+          "atributo_teste": null,
+          "descricao": "Aumenta permanentemente a pontuação de Destreza em +1."
+        },
+        {
+          "id": "reacao_rapida_assassino",
+          "nome": "Reação Rápida",
+          "nivel_aquisicao": 18,
+          "atributo_teste": null,
+          "descricao": "+1 iniciativa (N18), +2 iniciativa (N24; resultado 11+ concede ação extra no final da rodada)."
+        },
+        {
+          "id": "morte_lenta",
+          "nome": "Morte Lenta",
+          "nivel_aquisicao": 20,
+          "atributo_teste": null,
+          "descricao": "Atacando antes do alvo (acumula com Ataque Furtivo, até 4x por alvo; não afeta criaturas que não sangram): causa hemorragia de 1d6/rodada. No N24 reduz cura pela metade e pode incapacitar 1 membro (JP CON)."
+        }
+      ],
+      "progressao": [
+        {
+          "nivel": 1,
+          "pv": "d6",
+          "bpa": 0,
+          "ppe": 0,
+          "habilidades": [
+            {
+              "nome": "Armaduras (Especial)",
+              "teste": null,
+              "resumo": "Usa couro, jaqueta de couro, gibão de peles/acolchoada, escudo pequeno e elmo de couro sem penalidade."
+            },
+            {
+              "nome": "Avaliar Alvo",
+              "teste": "sabedoria",
+              "resumo": "Observa por 1d3×10 min para descobrir nível (±10%), disposição, armas ocultas e hábitos."
+            },
+            {
+              "nome": "Escalar",
+              "teste": "destreza",
+              "resumo": "Escala superfícies difíceis a metade da velocidade."
+            },
+            {
+              "nome": "Ataque Mortal",
+              "teste": null,
+              "resumo": "Após estudar alvo por 3 rodadas, ataque furtivo pode matar instantaneamente (JP CON)."
+            },
+            {
+              "nome": "Disfarce",
+              "teste": "carisma",
+              "resumo": "Personifica tipos gerais (1d3×10 min) ou indivíduos específicos (1 mês)."
+            },
+            {
+              "nome": "Esconder-se",
+              "teste": "destreza",
+              "resumo": "Oculta-se com cobertura ou sombras (no N3 combina com Mover-se em Silêncio com -5)."
+            },
+            {
+              "nome": "Ouvir",
+              "teste": "sabedoria",
+              "resumo": "Ouve sons suaves a até 9 m ou através de portas."
+            },
+            {
+              "nome": "Mover-se em Silêncio",
+              "teste": "destreza",
+              "resumo": "Move-se silenciosamente em ambientes abertos ou fechados."
+            },
+            {
+              "nome": "Venenos",
+              "teste": "inteligencia",
+              "resumo": "Identifica e fabrica venenos/antídotos (1/3 do preço) sem risco de autoenvenenamento; +1 JP venenos no N3."
+            },
+            {
+              "nome": "Ataque Furtivo",
+              "teste": null,
+              "resumo": "+2 para acertar e +4 de dano contra alvo desavisado (distância até 9 m)."
+            },
+            {
+              "nome": "Armadilhas",
+              "teste": "inteligencia",
+              "resumo": "Encontra, desarma ou arma armadilhas mundanas e mágicas."
+            }
+          ]
+        },
+        {
+          "nivel": 2,
+          "pv": "d6",
+          "bpa": 1,
+          "ppe": 1751,
+          "habilidades": []
+        },
+        {
+          "nivel": 3,
+          "pv": "d6",
+          "bpa": 1,
+          "ppe": 3501,
+          "habilidades": []
+        },
+        {
+          "nivel": 4,
+          "pv": "d6",
+          "bpa": 1,
+          "ppe": 7001,
+          "habilidades": []
+        },
+        {
+          "nivel": 5,
+          "pv": "d6",
+          "bpa": 2,
+          "ppe": 14001,
+          "habilidades": []
+        },
+        {
+          "nivel": 6,
+          "pv": "d6",
+          "bpa": 2,
+          "ppe": 25001,
+          "habilidades": []
+        },
+        {
+          "nivel": 7,
+          "pv": "d6",
+          "bpa": 2,
+          "ppe": 50001,
+          "habilidades": []
+        },
+        {
+          "nivel": 8,
+          "pv": "d6",
+          "bpa": 3,
+          "ppe": 90001,
+          "habilidades": []
+        },
+        {
+          "nivel": 9,
+          "pv": "d6",
+          "bpa": 3,
+          "ppe": 150001,
+          "habilidades": []
+        },
+        {
+          "nivel": 10,
+          "pv": "d6",
+          "bpa": 3,
+          "ppe": 200001,
+          "habilidades": []
+        },
+        {
+          "nivel": 11,
+          "pv": "+2 PV",
+          "bpa": 4,
+          "ppe": 350001,
+          "habilidades": []
+        },
+        {
+          "nivel": 12,
+          "pv": "+2 PV",
+          "bpa": 4,
+          "ppe": 500001,
+          "habilidades": []
+        },
+        {
+          "nivel": 13,
+          "pv": "+2 PV",
+          "bpa": 4,
+          "ppe": 650001,
+          "habilidades": [
+            {
+              "nome": "Surpresa",
+              "teste": null,
+              "resumo": "Oponentes sofrem -1 em testes de Sabedoria contra surpresa."
+            },
+            {
+              "nome": "Ataque Furtivo",
+              "teste": null,
+              "resumo": "Bônus aumenta para +3 ataque e +6 dano."
+            }
+          ]
+        },
+        {
+          "nivel": 14,
+          "pv": "+2 PV",
+          "bpa": 5,
+          "ppe": 800001,
+          "habilidades": []
+        },
+        {
+          "nivel": 15,
+          "pv": "+2 PV",
+          "bpa": 5,
+          "ppe": 950001,
+          "habilidades": [
+            {
+              "nome": "Bônus de Destreza",
+              "teste": null,
+              "resumo": "Ganha +1 ponto permanente em Destreza."
+            },
+            {
+              "nome": "Marca do Carrasco",
+              "teste": null,
+              "resumo": "Estilo de assinatura aumenta o ND do Ataque Mortal em +2."
+            }
+          ]
+        },
+        {
+          "nivel": 16,
+          "pv": "+2 PV",
+          "bpa": 5,
+          "ppe": 1100001,
+          "habilidades": []
+        },
+        {
+          "nivel": 17,
+          "pv": "+2 PV",
+          "bpa": 6,
+          "ppe": 1250001,
+          "habilidades": []
+        },
+        {
+          "nivel": 18,
+          "pv": "+2 PV",
+          "bpa": 6,
+          "ppe": 1400001,
+          "habilidades": [
+            {
+              "nome": "Surpresa",
+              "teste": null,
+              "resumo": "Oponentes sofrem -2 em testes de Sabedoria contra surpresa."
+            },
+            {
+              "nome": "Reação Rápida",
+              "teste": null,
+              "resumo": "+1 em jogadas de iniciativa."
+            }
+          ]
+        },
+        {
+          "nivel": 19,
+          "pv": "+2 PV",
+          "bpa": 6,
+          "ppe": 1550001,
+          "habilidades": [
+            {
+              "nome": "Ataque Furtivo",
+              "teste": null,
+              "resumo": "Bônus aumenta para +4 ataque e +7 dano."
+            }
+          ]
+        },
+        {
+          "nivel": 20,
+          "pv": "+2 PV",
+          "bpa": 7,
+          "ppe": 1700001,
+          "habilidades": [
+            {
+              "nome": "Morte Lenta",
+              "teste": null,
+              "resumo": "Causa hemorragia de 1d6/rodada (cumulativo até 4 golpes) ao atacar antes do alvo."
+            }
+          ]
+        },
+        {
+          "nivel": 21,
+          "pv": "+2 PV",
+          "bpa": 7,
+          "ppe": 1850001,
+          "habilidades": []
+        },
+        {
+          "nivel": 22,
+          "pv": "+2 PV",
+          "bpa": 7,
+          "ppe": 2000001,
+          "habilidades": []
+        },
+        {
+          "nivel": 23,
+          "pv": "+2 PV",
+          "bpa": 8,
+          "ppe": 2150001,
+          "habilidades": [
+            {
+              "nome": "Surpresa",
+              "teste": null,
+              "resumo": "Oponentes sofrem -3 em testes de Sabedoria contra surpresa."
+            },
+            {
+              "nome": "Ataque Furtivo",
+              "teste": null,
+              "resumo": "Bônus aumenta para +5 ataque e +9 dano."
+            }
+          ]
+        },
+        {
+          "nivel": 24,
+          "pv": "+2 PV",
+          "bpa": 8,
+          "ppe": 2300001,
+          "habilidades": [
+            {
+              "nome": "Reação Rápida",
+              "teste": null,
+              "resumo": "+2 iniciativa; resultado 11+ concede ação adicional."
+            },
+            {
+              "nome": "Morte Lenta",
+              "teste": null,
+              "resumo": "Ferimentos curam metade do normal (mesmo magicamente) e podem incapacitar membro (JP CON)."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "multiclasse_e_classe_e_meia": {
+    "paginas_livro": "83–85",
+    "multiclasse": {
+      "limites_classes": {
+        "humano": 3,
+        "nao_humano": 2
+      },
+      "decisao": "Deve ser escolhida na criação do personagem (sujeita à aprovação do Guardião do Castelo).",
+      "atributos_principais": "Deve possuir como primários os atributos principais de todas as classes combinadas.",
+      "disposicao": "Classes não podem ter disposições conflitantes (salvo liberação do GC).",
+      "armas": "Usa qualquer arma permitida por qualquer uma das classes combinadas sem penalidade.",
+      "armadura": "Pode usar armaduras de qualquer uma das classes, mantendo penalidades de habilidades específicas. Magos/Ilusionistas de armadura podem conjurar, mas alvos ganham bônus na JP igual ao bônus de CA base da armadura.",
+      "ouro_inicial": "Rola para cada classe, soma e divide por 2 ou 3 (conforme número de classes).",
+      "bpa": "Usa o BpA mais favorável entre as classes escolhidas.",
+      "tabela_dado_vida": {
+        "d4/1": {
+          "d4/1": "d4/1",
+          "d6/2": "d6/2",
+          "d8/3": "d6/2",
+          "d10/4": "d6/2",
+          "d12/5": "d8/3"
+        },
+        "d6/2": {
+          "d4/1": "d6/2",
+          "d6/2": "d6/2",
+          "d8/3": "d6/2",
+          "d10/4": "d8/3",
+          "d12/5": "d8/3"
+        },
+        "d8/3": {
+          "d4/1": "d6/2",
+          "d6/2": "d6/2",
+          "d8/3": "d8/3",
+          "d10/4": "d8/3",
+          "d12/5": "d10/4"
+        },
+        "d10/4": {
+          "d4/1": "d6/2",
+          "d6/2": "d8/3",
+          "d8/3": "d8/3",
+          "d10/4": "d10/4",
+          "d12/5": "d10/4"
+        },
+        "d12/5": {
+          "d4/1": "d8/3",
+          "d6/2": "d8/3",
+          "d8/3": "d10/4",
+          "d10/4": "d10/4",
+          "d12/5": "d12/5"
+        }
+      },
+      "xp_adicional_por_nivel": [
+        {
+          "nivel": "2",
+          "duas_classes": 200,
+          "tres_classes": 300
+        },
+        {
+          "nivel": "3",
+          "duas_classes": 400,
+          "tres_classes": 600
+        },
+        {
+          "nivel": "4",
+          "duas_classes": 600,
+          "tres_classes": 900
+        },
+        {
+          "nivel": "5",
+          "duas_classes": 800,
+          "tres_classes": 1200
+        },
+        {
+          "nivel": "6",
+          "duas_classes": 1000,
+          "tres_classes": 1500
+        },
+        {
+          "nivel": "7",
+          "duas_classes": 1200,
+          "tres_classes": 1800
+        },
+        {
+          "nivel": "8",
+          "duas_classes": 1400,
+          "tres_classes": 2100
+        },
+        {
+          "nivel": "9",
+          "duas_classes": 1600,
+          "tres_classes": 2400
+        },
+        {
+          "nivel": "10",
+          "duas_classes": 1800,
+          "tres_classes": 2700
+        },
+        {
+          "nivel": "11",
+          "duas_classes": 2000,
+          "tres_classes": 3000
+        },
+        {
+          "nivel": "12",
+          "duas_classes": 2200,
+          "tres_classes": 3300
+        },
+        {
+          "nivel": "13+",
+          "duas_classes": 2400,
+          "tres_classes": 3600
+        }
+      ]
+    },
+    "classe_e_meia": {
+      "conceito": "Combina uma Classe Principal com uma Classe de Apoio (que evolui à metade da taxa da principal), tratada como uma única classe aprimorada.",
+      "xp_regra": "XP da classe principal + metade do XP da classe de apoio.",
+      "atributo_primario": "Exige apenas o atributo primário da classe principal.",
+      "bpa_e_armas": "Usa o melhor BpA e a melhor lista de proficiências em armas.",
+      "escudo": "Só pode usar escudo se permitido pela classe principal.",
+      "habilidades_apoio_nivel_0": "Conjuradores conjuram 2 feitiços de nível 0; habilidades com teste de atributo usam bônus de nível +0; habilidades sem teste só são obtidas no nível 1 de apoio.",
+      "tabela_progressao_niveis": [
+        {
+          "nivel": 1,
+          "classe_principal": 1,
+          "classe_apoio": 0
+        },
+        {
+          "nivel": 2,
+          "classe_principal": 2,
+          "classe_apoio": 1
+        },
+        {
+          "nivel": 3,
+          "classe_principal": 3,
+          "classe_apoio": 1
+        },
+        {
+          "nivel": 4,
+          "classe_principal": 4,
+          "classe_apoio": 2
+        },
+        {
+          "nivel": 5,
+          "classe_principal": 5,
+          "classe_apoio": 2
+        },
+        {
+          "nivel": 6,
+          "classe_principal": 6,
+          "classe_apoio": 3
+        },
+        {
+          "nivel": 7,
+          "classe_principal": 7,
+          "classe_apoio": 3
+        },
+        {
+          "nivel": 8,
+          "classe_principal": 8,
+          "classe_apoio": 4
+        },
+        {
+          "nivel": 9,
+          "classe_principal": 9,
+          "classe_apoio": 4
+        },
+        {
+          "nivel": 10,
+          "classe_principal": 10,
+          "classe_apoio": 5
+        }
+      ],
+      "tabela_dado_vida_principal_apoio": {
+        "d4/1": {
+          "d4/1": "d4/1",
+          "d6/2": "d4/1",
+          "d8/3": "d6/2",
+          "d10/4": "d6/2",
+          "d12/5": "d8/3"
+        },
+        "d6/2": {
+          "d4/1": "d6/2",
+          "d6/2": "d6/2",
+          "d8/3": "d6/2",
+          "d10/4": "d8/3",
+          "d12/5": "d8/3"
+        },
+        "d8/3": {
+          "d4/1": "d6/2",
+          "d6/2": "d8/3",
+          "d8/3": "d8/3",
+          "d10/4": "d8/3",
+          "d12/5": "d10/4"
+        },
+        "d10/4": {
+          "d4/1": "d8/3",
+          "d6/2": "d8/3",
+          "d8/3": "d10/4",
+          "d10/4": "d10/4",
+          "d12/5": "d10/4"
+        },
+        "d12/5": {
+          "d4/1": "d8/3",
+          "d6/2": "d10/4",
+          "d8/3": "d10/4",
+          "d10/4": "d12/5",
+          "d12/5": "d12/5"
+        }
+      },
+      "habilidades_como_apoio": {
+        "todas": [
+          "trapaceiro",
+          "assassino",
+          "clerigo",
+          "mago",
+          "ilusionista"
+        ],
+        "combatente": "Ganha Especialização em Armas (em arma permitida pela classe principal); não ganha Domínio de Combate nem Ataque Extra.",
+        "explorador": "Ganha todas as habilidades, exceto Combate Devastador e Inimigo Predileto.",
+        "barbaro": "Ganha apenas Senso de Combate, Caçador de Cervos e Instinto Primitivo.",
+        "lutador": "Ganha apenas Combate Corpo a Corpo (incluindo ataques secundários), Ataque Atordoante e Punhos de Ferro.",
+        "druida": "Ganha todas, exceto Forma do Totem (salvo com Explorador ou Bárbaro) e não aprende Druídico.",
+        "cavaleiro": "Ganha apenas Equitação (sem vínculo a virtudes/código).",
+        "paladino": "Só pode ser escolhido como classe principal.",
+        "bardo": "Não ganha Fascinar nem Inspirar Grandeza."
+      },
+      "restricoes_combinacao": [
+        "Combatente, Explorador, Clérigo, Bardo e Lutador podem se alinhar com qualquer outra classe.",
+        "Trapaceiro e Assassino não podem apoiar Cavaleiro ou Paladino.",
+        "Bárbaro não pode apoiar Cavaleiro nem se alinhar com Mago ou Ilusionista.",
+        "Mago, Ilusionista ou Druida só podem apoiar Cavaleiro ou Paladino se o personagem for Elfo ou Meio-Elfo de linhagem élfica."
+      ]
+    }
+  }
+}
