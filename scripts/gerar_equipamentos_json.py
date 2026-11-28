@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Any
 
 RAIZ_PROJETO = Path(__file__).resolve().parent.parent
-CAMINHO_SAIDA = RAIZ_PROJETO / "dados" / "equipamentos.json"
+CAMINHO_SAIDA = RAIZ_PROJETO / "dados" / "dadospf2" / "equipamentos.json"
 
 MULTIPLICADORES_MOEDA_PC = {
     "pc": 1,

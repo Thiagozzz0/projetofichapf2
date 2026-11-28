@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any
 
 RAIZ_PROJETO = Path(__file__).resolve().parent.parent
-DIR_DADOS = RAIZ_PROJETO / "dados"
+DIR_DADOS = RAIZ_PROJETO / "dados" / "dadospf2"
 CAMINHO_SAIDA = DIR_DADOS / "regras_especificas.json"
 
 

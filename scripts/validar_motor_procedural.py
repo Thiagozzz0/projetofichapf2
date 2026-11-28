@@ -244,7 +244,18 @@ def main() -> None:
     # ------------------------------------------------------------------
     client = app.test_client()
 
-    r_idx = client.get("/")
+    r_hub = client.get("/")
+    assert r_hub.status_code == 200
+    html_hub = r_hub.get_data(as_text=True)
+    assert "Pathfinder 2e" in html_hub and "Castle and Crusades" in html_hub
+    assert "icone-pf2.png" in html_hub and "icone-cc.png" in html_hub
+    assert "hub.css" in html_hub
+
+    r_cc = client.get("/cc")
+    assert r_cc.status_code == 200
+    assert "Castle and Crusades" in r_cc.get_data(as_text=True)
+
+    r_idx = client.get("/pf2")
     assert r_idx.status_code == 200
     html_idx = r_idx.get_data(as_text=True)
     assert "Pathfinder 2" in html_idx

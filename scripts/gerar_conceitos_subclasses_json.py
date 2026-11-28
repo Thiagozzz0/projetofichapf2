@@ -28,7 +28,7 @@ if str(RAIZ_PROJETO) not in sys.path:
 
 from motor.equipamentos import calcular_proficiencias_combate, grau_arma
 
-DIR_DADOS = RAIZ_PROJETO / "dados"
+DIR_DADOS = RAIZ_PROJETO / "dados" / "dadospf2"
 CAMINHO_SAIDA = DIR_DADOS / "conceitos_subclasses.json"
 
 

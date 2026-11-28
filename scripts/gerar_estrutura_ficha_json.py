@@ -19,8 +19,8 @@ from typing import Any
 
 
 RAIZ_PROJETO = Path(__file__).resolve().parent.parent
-CAMINHO_SAIDA = RAIZ_PROJETO / "dados" / "estrutura_ficha.json"
-CAMINHO_PERICIAS = RAIZ_PROJETO / "dados" / "pericias.json"
+CAMINHO_SAIDA = RAIZ_PROJETO / "dados" / "dadospf2" / "estrutura_ficha.json"
+CAMINHO_PERICIAS = RAIZ_PROJETO / "dados" / "dadospf2" / "pericias.json"
 
 NIVEIS_PROFICIENCIA = ["T", "E", "M", "L"]
 

@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Any
 
 RAIZ_PROJETO = Path(__file__).resolve().parent.parent
-CAMINHO_SAIDA = RAIZ_PROJETO / "dados" / "classes01.json"
+CAMINHO_SAIDA = RAIZ_PROJETO / "dados" / "dadospf2" / "classes01.json"
 
 
 def slugify(texto: str) -> str:

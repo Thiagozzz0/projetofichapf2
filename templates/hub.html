@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerador de Fichas RPG — Escolha o Sistema</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/icone-pf2.png') }}?v={{ asset_v }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/hub.css') }}?v={{ asset_v }}">
+</head>
+<body class="hub-page">
+  <header class="hub-topbar">
+    <div class="hub-topbar-inner">
+      <div class="hub-marca">
+        <span class="hub-marca-selo" aria-hidden="true">📜</span>
+        <div>
+          <p class="hub-marca-titulo">Portal de Fichas RPG</p>
+          <p class="hub-marca-sub">Criação procedural e interativa de personagens</p>
+        </div>
+      </div>
+      <div class="hub-topbar-acoes">
+        <button type="button" id="btn-alternar-tema" class="btn-tema" aria-pressed="false">🌙 Grimório Noturno</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="hub-main">
+    <section class="hub-intro">
+      <span class="hub-eyebrow">Escolha sua Mesa</span>
+      <h1>Selecione o Sistema de Jogo</h1>
+      <div class="hub-divisor" aria-hidden="true"></div>
+      <p>Escolha abaixo qual sistema deseja acessar para criar, configurar e exportar a ficha do seu personagem.</p>
+    </section>
+
+    <section class="hub-grid" aria-label="Sistemas de RPG disponíveis">
+      <a href="{{ url_for('pf2_index') }}" class="hub-card" id="card-sistema-pf2">
+        <div class="hub-card-emblema hub-card-emblema--pf2">
+          <img
+            class="hub-card-icone"
+            src="{{ url_for('static', filename='img/icone-pf2.png') }}?v={{ asset_v }}"
+            alt="Ícone Pathfinder 2e"
+          >
+        </div>
+        <h2 class="hub-card-nome">Pathfinder 2e</h2>
+        <p class="hub-card-desc">Fichas completas do 1º ao 5º nível com sistema ABCD, magias, equipamentos e exportação em PDF, DOCX e TXT.</p>
+        <span class="hub-card-cta">Entrar no Sistema →</span>
+      </a>
+
+      <a href="{{ url_for('cc_index') }}" class="hub-card" id="card-sistema-cc">
+        <div class="hub-card-emblema hub-card-emblema--cc">
+          <img
+            class="hub-card-icone"
+            src="{{ url_for('static', filename='img/icone-cc.png') }}?v={{ asset_v }}"
+            alt="Ícone Castle and Crusades"
+          >
+        </div>
+        <h2 class="hub-card-nome">Castle and Crusades</h2>
+        <p class="hub-card-desc">Ambiente dedicado ao sistema Castle and Crusades com base de dados própria em preparação.</p>
+        <span class="hub-card-cta">Entrar no Sistema →</span>
+      </a>
+    </section>
+  </main>
+
+  <footer class="hub-footer">
+    Selecione um sistema acima para começar sua aventura.
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/tema.js') }}?v={{ asset_v }}"></script>
+</body>
+</html>

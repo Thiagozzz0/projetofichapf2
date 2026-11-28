@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Castle and Crusades — Gerador de Fichas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/icone-cc.png') }}?v={{ asset_v }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/hub.css') }}?v={{ asset_v }}">
+</head>
+<body class="hub-page">
+  <header class="hub-topbar">
+    <div class="hub-topbar-inner">
+      <div class="hub-marca">
+        <span class="hub-marca-selo" aria-hidden="true">⚔️</span>
+        <div>
+          <p class="hub-marca-titulo">Castle and Crusades</p>
+          <p class="hub-marca-sub">Gerador de Fichas de Personagem</p>
+        </div>
+      </div>
+      <div class="hub-topbar-acoes">
+        <a href="{{ url_for('index') }}" class="hub-btn-voltar">← Trocar Sistema</a>
+        <button type="button" id="btn-alternar-tema" class="btn-tema" aria-pressed="false">🌙 Grimório Noturno</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="hub-main">
+    <section class="cc-painel">
+      <div class="cc-painel-emblema">
+        <img src="{{ url_for('static', filename='img/icone-cc.png') }}?v={{ asset_v }}" alt="Castle and Crusades">
+      </div>
+      <span class="cc-badge-status">Em Preparação</span>
+      <h1>Castle and Crusades</h1>
+      <div class="hub-divisor" aria-hidden="true"></div>
+      <p>O espaço para o gerador de fichas de <strong>Castle and Crusades</strong> já está pronto e conectado à pasta <code>dados/dadosc&amp;c/</code>. Assim que estruturarmos as raças, classes, atributos e equipamentos do sistema, o montador completo aparecerá aqui.</p>
+      <a href="{{ url_for('index') }}" class="cc-btn-principal">← Voltar para Escolha de Sistemas</a>
+    </section>
+  </main>
+
+  <footer class="hub-footer">
+    Portal de Fichas RPG — Castle and Crusades
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/tema.js') }}?v={{ asset_v }}"></script>
+</body>
+</html>

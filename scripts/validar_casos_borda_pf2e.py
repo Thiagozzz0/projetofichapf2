@@ -361,10 +361,15 @@ def test_idiomas_humano_mago_grimorio_e_regras_especificas() -> None:
     from app import app as flask_app
 
     client = flask_app.test_client()
-    resp_home = client.get("/")
+    resp_hub = client.get("/")
+    assert resp_hub.status_code == 200
+    html_hub = resp_hub.get_data(as_text=True)
+    assert "Pathfinder 2e" in html_hub and "Castle and Crusades" in html_hub and "?v=65" in html_hub
+
+    resp_home = client.get("/pf2")
     assert resp_home.status_code == 200
     html_home = resp_home.get_data(as_text=True)
-    assert 'id="grid-idiomas-checkboxes"' in html_home and "?v=64" in html_home
+    assert 'id="grid-idiomas-checkboxes"' in html_home and "?v=65" in html_home
 
     resp_op = client.get("/api/opcoes")
     assert resp_op.status_code == 200
@@ -700,10 +705,10 @@ def test_revisao_geral_etapa_23() -> None:
     assert fam_cump is not None and fam_cump["categoria"] == "Familiar"
 
     # 7. Arquivo regras_especificas.json em ASCII + magias01/02 sem hífens quebrados nem tokens em inglês
-    assert (RAIZ_PROJETO / "dados" / "regras_especificas.json").exists()
-    assert not (RAIZ_PROJETO / "dados" / "regras_específicas.json").exists()
+    assert (RAIZ_PROJETO / "dados" / "dadospf2" / "regras_especificas.json").exists()
+    assert not (RAIZ_PROJETO / "dados" / "dadospf2" / "regras_específicas.json").exists()
     for fn in ("magias01.json", "magias02.json"):
-        dados_mg = json.loads((RAIZ_PROJETO / "dados" / fn).read_text(encoding="utf-8"))
+        dados_mg = json.loads((RAIZ_PROJETO / "dados" / "dadospf2" / fn).read_text(encoding="utf-8"))
         for grupo in (dados_mg["magias"], (dados_mg.get("magias_de_foco") or {}).get("lista", [])):
             txt_grp = json.dumps(grupo, ensure_ascii=False)
             assert "[one-action]" not in txt_grp and "[two-actions]" not in txt_grp and "[three-actions]" not in txt_grp and "[free-action]" not in txt_grp
@@ -1929,8 +1934,8 @@ def test_exportadores_e_ui_niveis_2_a_5() -> None:
 
     client = flask_app.test_client()
 
-    # 1. GET / deve expor opções de nível 1..5 e aleatório, além dos acordeões de 2º e 3º círculos
-    resp_home = client.get("/")
+    # 1. GET /pf2 deve expor opções de nível 1..5 e aleatório, além dos acordeões de 2º e 3º círculos
+    resp_home = client.get("/pf2")
     assert resp_home.status_code == 200
     html = resp_home.get_data(as_text=True)
     for niv in ("1", "2", "3", "4", "5", "aleatorio"):

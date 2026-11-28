@@ -1,4 +1,4 @@
-"""Exportador PDF oficial da ficha PF2E (sobreposto em `dados/templates/ficha_oficial_pf2e.pdf` + `estrutura_ficha.json`)."""
+"""Exportador PDF oficial da ficha PF2E (sobreposto em `dados/dadospf2/templates/ficha_oficial_pf2e.pdf` + `estrutura_ficha.json`)."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ from .comum import _formatar_custo_acao, _formatar_item_inventario, _tem_conjura
 
 
 _RAIZ_PROJETO = Path(__file__).resolve().parent.parent.parent
-_TEMPLATE_PDF_DADOS = _RAIZ_PROJETO / "dados" / "templates" / "ficha_oficial_pf2e.pdf"
+_TEMPLATE_PDF_DADOS = _RAIZ_PROJETO / "dados" / "dadospf2" / "templates" / "ficha_oficial_pf2e.pdf"
 _TEMPLATE_PDF_OFICIAL = _TEMPLATE_PDF_DADOS if _TEMPLATE_PDF_DADOS.exists() else (_RAIZ_PROJETO / "ref" / "Sheet Update.pdf")
 
 _PDF_COR_TINTA = (0.06, 0.09, 0.22)

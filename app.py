@@ -23,7 +23,7 @@ from motor import (
 )
 
 _DEBUG_ATIVO = os.environ.get("FLASK_DEBUG", "0").strip().lower() in {"1", "true", "yes"}
-ASSET_VERSION = "64"
+ASSET_VERSION = "65"
 app = Flask(__name__, static_folder="static", static_url_path="/static")
 app.json.ensure_ascii = False
 if _DEBUG_ATIVO:
@@ -173,8 +173,22 @@ def _resposta_download(
 
 @app.get("/")
 def index():
-    """Interface principal da Etapa 4 (Criação e Ficha Oficial PF2E)."""
+    """Portal inicial de seleção do sistema de RPG (Pathfinder 2e / Castle and Crusades)."""
+    return render_template("hub.html")
+
+
+@app.get("/pf2")
+@app.get("/pf2e")
+def pf2_index():
+    """Interface principal do Gerador Procedural de Fichas Pathfinder 2E."""
     return render_template("index.html")
+
+
+@app.get("/cc")
+@app.get("/castle-and-crusades")
+def cc_index():
+    """Interface do sistema Castle and Crusades."""
+    return render_template("cc.html")
 
 
 @app.get("/api/saude")

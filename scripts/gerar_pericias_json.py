@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Any
 
 RAIZ_PROJETO = Path(__file__).resolve().parent.parent
-CAMINHO_SAIDA = RAIZ_PROJETO / "dados" / "pericias.json"
+CAMINHO_SAIDA = RAIZ_PROJETO / "dados" / "dadospf2" / "pericias.json"
 
 SIGLAS_ATRIBUTO = {
     "Força": "For",

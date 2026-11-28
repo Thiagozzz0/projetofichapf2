@@ -1,4 +1,4 @@
-"""Carregamento, cache e indexação dos arquivos JSON de `dados/`."""
+"""Carregamento, cache e indexação dos arquivos JSON de `dados/dadospf2/`."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from typing import Any
 
 from .util import normalizar, slugify
 
-DIR_DADOS_PADRAO = Path(__file__).resolve().parent.parent / "dados"
+DIR_DADOS_PADRAO = Path(__file__).resolve().parent.parent / "dados" / "dadospf2"
 
 _cache_lock = threading.Lock()
 _cache_instancias: dict[Path, "BaseDados"] = {}

@@ -12,8 +12,8 @@ from typing import Any
 
 RAIZ_PROJETO = Path(__file__).resolve().parent.parent
 CAMINHO_PDF = RAIZ_PROJETO / "ref" / "Enchacent02.pdf"
-CAMINHO_MAGIAS_01 = RAIZ_PROJETO / "dados" / "magias01.json"
-CAMINHO_SAIDA = RAIZ_PROJETO / "dados" / "magias02.json"
+CAMINHO_MAGIAS_01 = RAIZ_PROJETO / "dados" / "dadospf2" / "magias01.json"
+CAMINHO_SAIDA = RAIZ_PROJETO / "dados" / "dadospf2" / "magias02.json"
 
 DESLOCAMENTO_PAGINA_LIVRO = 359  # Índice 0 do PDF corresponde à pág. 359 do Livro Básico
 
