@@ -15,7 +15,7 @@ O sistema deve cobrir desde a **definição de Atributos (Primários e Secundár
 ## 2. Stack Tecnológica e Estrutura de Pastas (C&C)
 
 - **Backend & Motor de Regras:** Python 3 + Flask (`motor_cc/`, integrado ao `app.py` via rotas `/cc` e `/api/cc/*`).
-- **Front-End:** `templates/cc.html`, `static/css/` e `static/js/cc/`, seguindo a identidade visual suave em pergaminho bege, vermelho sangue e ouro antigo (com suporte a Modo Escuro).
+- **Front-End:** `templates/cc.html`, `static/css/cc.css` e `static/js/cc/`, seguindo estética **Old School (AD&D)** em pergaminho, couro escuro, lacre carmesim e ouro envelhecido (com suporte a Modo Escuro) e design **Mobile-First** otimizado para celulares.
 - **Base de Dados em JSON (`dados/dadosc&c/`):** Todas as regras, tabelas, raças, classes, magias, equipamentos e mapeamento da ficha convertidos para arquivos `.json` estruturados e validados.
 - **Materiais de Referência (`pdf_fonte/cc/` e `ref/cc/`):**
   - `pdf_fonte/cc/` — Livro completo do Jogador (1ª Edição Brasileira) para referência local (ignorado pelo Git).
@@ -36,3 +36,10 @@ O sistema deve cobrir desde a **definição de Atributos (Primários e Secundár
 | **Fase 3** | Interface Web (`/cc`) e Visualização da Ficha | Montador interativo passo a passo + visualização limpa e imprimível da ficha de Castles & Crusades. |
 | **Fase 4** | Exportadores (`.txt`, `.docx` e `.pdf`) | Geração de arquivos prontos para mesa (texto, documento editável e PDF preenchido). |
 | **Fase 5** | Suíte de Testes Integrados e Casos de Borda C&C | Cobertura completa em `tests/test_cc_*.py` validando matemática, raças, classes, rotas Flask e exportadores. |
+
+---
+
+## 4. Regras Operacionais e Versionamento Git Automático
+
+- **Atributos e Rastreabilidade:** Os 4 modos de geração de atributos (`Old School: 3d6 em ordem`, `Clássico: 3d6`, `Heróico: 4d6` e `Distribuído: 62 pontos`) devem sempre imprimir o método utilizado no cabeçalho da ficha gerada (Web, `.txt`, `.docx` e `.pdf`).
+- **Versionamento Automático (espelhado em `AGENTS.md`):** Sempre que qualquer alteração for concluída e validada no projeto, executar automaticamente `git add .`, `git commit -m "<descrição clara do que foi criado/atualizado/alterado>"` e `git push`.

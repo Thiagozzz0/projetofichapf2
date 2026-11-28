@@ -143,15 +143,30 @@
             </span>
           </div>
           <div class="cc-attr-controles">
-            <input
-              type="number"
-              min="3"
-              max="18"
-              value="${base}"
-              data-attr-input="${attr}"
-              ${isOldSchool ? "readonly" : ""}
-              aria-label="${escapeHtml(NOMES_ATRIBUTOS[attr])} base"
-            >
+            ${
+              isDistribuido
+                ? `<div class="cc-stepper">
+                    <button type="button" class="cc-btn cc-btn-secundario cc-stepper-btn" data-attr-step="${attr}:-1" aria-label="Diminuir ${escapeHtml(NOMES_ATRIBUTOS[attr])}">-</button>
+                    <input
+                      type="number"
+                      min="3"
+                      max="18"
+                      value="${base}"
+                      data-attr-input="${attr}"
+                      aria-label="${escapeHtml(NOMES_ATRIBUTOS[attr])} base"
+                    >
+                    <button type="button" class="cc-btn cc-btn-secundario cc-stepper-btn" data-attr-step="${attr}:1" aria-label="Aumentar ${escapeHtml(NOMES_ATRIBUTOS[attr])}">+</button>
+                  </div>`
+                : `<input
+                    type="number"
+                    min="3"
+                    max="18"
+                    value="${base}"
+                    data-attr-input="${attr}"
+                    ${isOldSchool ? "readonly" : ""}
+                    aria-label="${escapeHtml(NOMES_ATRIBUTOS[attr])} base"
+                  >`
+            }
             <span>→ <strong>${finalV}</strong> (${fmtMod(modF)})</span>
           </div>
           <div class="cc-attr-meta">
@@ -176,6 +191,20 @@
           if (Number.isNaN(val)) val = 10;
           val = Math.max(3, Math.min(18, val));
           estado.valoresBase[attr] = val;
+          renderizarGridAtributos(onMudancaValores);
+          if (onMudancaValores) onMudancaValores();
+        });
+      });
+
+      grid.querySelectorAll("[data-attr-step]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const [attr, deltaStr] = (btn.getAttribute("data-attr-step") || "").split(":");
+          const delta = parseInt(deltaStr, 10) || 0;
+          if (!attr || !delta) return;
+          const atual = Number(estado.valoresBase[attr]) || 10;
+          const novo = Math.max(3, Math.min(18, atual + delta));
+          if (novo === atual) return;
+          estado.valoresBase[attr] = novo;
           renderizarGridAtributos(onMudancaValores);
           if (onMudancaValores) onMudancaValores();
         });

@@ -12,3 +12,7 @@ Este diretório centraliza a governança, o escopo, as pendências e o históric
 ---
 
 > **Regra de Registro:** Cada sistema mantém sua própria numeração sequencial de entregas concluídas dentro de `controleprojeto/<sistema>/finalizado/` (`01.md`, `02.md`, ...), sempre com data, hora, resumo e arquivos afetados.
+
+## Regra de Versionamento Git Automático
+
+- Conforme definido também em [`AGENTS.md`](../AGENTS.md) na raiz do repositório: sempre que houver alterações validadas no projeto, executar automaticamente `git add .`, `git commit -m "<mensagem clara em pt-BR refletindo o que foi criado/atualizado/alterado>"` e `git push`.

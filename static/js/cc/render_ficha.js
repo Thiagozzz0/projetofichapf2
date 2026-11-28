@@ -40,7 +40,7 @@
           <strong>${escapeHtml(a.sigla)}</strong>
           <span><strong>${a.valor}</strong></span>
           <span>(${fmtMod(a.modificador)})</span>
-          <small style="color: var(--cc-text-muted)">
+          <small class="cc-attr-jp-texto">
             CB ${a.classe_base_siege}${escapeHtml(bonusMe)} — JP: ${escapeHtml((a.jogadas_protecao || []).join(", "))}
           </small>
         </div>
@@ -54,27 +54,29 @@
     const ataquesHtml =
       comb.ataques && comb.ataques.length
         ? `
-          <table class="cc-tabela">
-            <thead>
-              <tr><th>Arma</th><th>BpA</th><th>Mod</th><th>Total</th><th>Dano</th><th>Alcance</th></tr>
-            </thead>
-            <tbody>
-              ${comb.ataques
-                .map(
-                  (atq) => `
-                  <tr>
-                    <td><strong>${escapeHtml(atq.nome)}</strong></td>
-                    <td>${fmtMod(atq.bpa)}</td>
-                    <td>${fmtMod(atq.mod_ataque)}</td>
-                    <td><strong>${fmtMod(atq.total_ataque)}</strong></td>
-                    <td><strong>${escapeHtml(atq.total_dano)}</strong></td>
-                    <td>${escapeHtml(atq.alcance)}</td>
-                  </tr>
-                `
-                )
-                .join("")}
-            </tbody>
-          </table>
+          <div class="cc-tabela-wrap">
+            <table class="cc-tabela">
+              <thead>
+                <tr><th>Arma</th><th>BpA</th><th>Mod</th><th>Total</th><th>Dano</th><th>Alcance</th></tr>
+              </thead>
+              <tbody>
+                ${comb.ataques
+                  .map(
+                    (atq) => `
+                    <tr>
+                      <td><strong>${escapeHtml(atq.nome)}</strong></td>
+                      <td>${fmtMod(atq.bpa)}</td>
+                      <td>${fmtMod(atq.mod_ataque)}</td>
+                      <td><strong>${fmtMod(atq.total_ataque)}</strong></td>
+                      <td><strong>${escapeHtml(atq.total_dano)}</strong></td>
+                      <td>${escapeHtml(atq.alcance)}</td>
+                    </tr>
+                  `
+                  )
+                  .join("")}
+              </tbody>
+            </table>
+          </div>
         `
         : `<p class="cc-nota">Nenhuma arma equipada.</p>`;
 
@@ -122,10 +124,12 @@
       magiasHtml = `
         <div class="cc-secao-box">
           <h3>Feitiços Conhecidos / Preparados (${escapeHtml(String(magias.tradicao || "").toUpperCase())} — ${escapeHtml(String(magias.atributo_conjuracao || "").toUpperCase())} ${magias.valor_atributo_conjuracao})</h3>
-          <table class="cc-tabela">
-            <thead><tr><th>Círculo</th><th>Espaços</th><th>Feitiços</th></tr></thead>
-            <tbody>${linhasMag}</tbody>
-          </table>
+          <div class="cc-tabela-wrap">
+            <table class="cc-tabela">
+              <thead><tr><th>Círculo</th><th>Espaços</th><th>Feitiços</th></tr></thead>
+              <tbody>${linhasMag}</tbody>
+            </table>
+          </div>
         </div>
       `;
     }

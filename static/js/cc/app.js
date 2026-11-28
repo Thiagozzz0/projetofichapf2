@@ -14,6 +14,13 @@
   } = window.CCApp;
 
   function setupAcordeao() {
+    if (window.matchMedia && window.matchMedia("(max-width: 640px)").matches) {
+      ["cc-corpo-raca-classe", "cc-corpo-primarios"].forEach((id) => {
+        document.getElementById(id)?.classList.add("oculto");
+        const hdr = document.querySelector(`[data-cc-toggle="${id}"]`);
+        if (hdr) hdr.setAttribute("aria-expanded", "false");
+      });
+    }
     document.querySelectorAll("[data-cc-toggle]").forEach((btn) => {
       btn.addEventListener("click", () => {
         const alvoId = btn.getAttribute("data-cc-toggle");
