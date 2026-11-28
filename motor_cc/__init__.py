@@ -1,7 +1,13 @@
-"""Motor de regras e gerador de fichas para Castles & Crusades (1ª Edição Brasileira)."""
+"""Motor de regras de Castles & Crusades (1ª Edição Brasileira)."""
 
-from __future__ import annotations
+from motor_cc.atributos import METODOS_GERACAO, rolar_atributos
+from motor_cc.combate import REGRAS_PV
+from motor_cc.gerador import gerar_ficha_cc, obter_opcoes_criacao
 
-from pathlib import Path
-
-DIR_DADOS_CC = Path(__file__).resolve().parent.parent / "dados" / "dadosc&c"
+__all__ = [
+    "METODOS_GERACAO",
+    "REGRAS_PV",
+    "gerar_ficha_cc",
+    "obter_opcoes_criacao",
+    "rolar_atributos",
+]

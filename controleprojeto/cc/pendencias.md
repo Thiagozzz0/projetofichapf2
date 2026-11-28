@@ -7,17 +7,17 @@ Lista viva e priorizada das etapas para construir o gerador de fichas de **Castl
 ## 1. Materiais de Referência e Conversão para JSON (`ref/cc/` → `dados/dadosc&c/`)
 
 - [x] **Converter Magias (Regras, Listas 0–9 e Descrições A–V)** → `dados/dadosc&c/magias01.json`, `magias02.json` e `magias03.json` *(378/378 feitiços validados)*
-- [ ] **Mapear a Ficha Oficial de C&C** → `dados/dadosc&c/estrutura_ficha.json` *(aguardando PDF em `ref/cc/`)*
+- [x] **Mapear a Ficha Oficial de C&C** → `dados/dadosc&c/estrutura_ficha.json` e `dados/dadosc&c/templates/ficha_oficial_cc.pdf` *(página única US Letter mapeada com coordenadas vetoriais)*
 
 ---
 
 ## 2. Motor de Regras (`motor_cc/`) e API (`/api/cc/*`)
 
-- [ ] **Carregador e cache da base (`motor_cc/dados.py`)**
-- [ ] **Regras de Atributos, Primários/Secundários e Sistema SIEGE**
-- [ ] **Aplicação de Raça, Classe, PV, CA, Bônus de Ataque Base e Habilidades**
-- [ ] **Compra/alocação de Equipamentos, Moedas e Carga (EV / Peso)**
-- [ ] **Seleção de Magias para Classes Conjuradoras**
+- [x] **Carregador e cache da base (`motor_cc/dados.py`)**
+- [x] **Regras de Atributos, Primários/Secundários e Sistema SIEGE** (`motor_cc/atributos.py` — 4 métodos de geração, tabela oficial C&C, modificadores raciais e linhagens do Meio-Elfo)
+- [x] **Aplicação de Raça, Classe, PV, CA, Bônus de Ataque Base e Habilidades** (`motor_cc/combate.py` e `motor_cc/gerador.py` — níveis 1–24, 3 regras oficiais de PV + média fixa)
+- [x] **Compra/alocação de Equipamentos, Moedas e Carga (EV / Peso)** (`motor_cc/equipamentos.py` — ouro inicial, conversão pc/pp/po e Sobrecarga SB/CS)
+- [x] **Seleção de Magias para Classes Conjuradoras** (`motor_cc/magias.py` — espaços diários + feitiços bônus cumulativos por INT/SAB 13–19 e validação das listas)
 - [ ] **Endpoints REST no Flask (`/api/cc/opcoes`, `/api/cc/gerar`, `/api/cc/exportar/*`)**
 
 ---

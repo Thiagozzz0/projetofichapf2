@@ -1,0 +1,1264 @@
+{
+  "meta": {
+    "titulo": "Castles & Crusades — Estrutura Oficial da Ficha de Personagem",
+    "sistema": "Castles & Crusades (1ª Edição Brasileira)",
+    "fonte_pdf": "ref/cc/C&C_ficha.pdf",
+    "template_pdf": "dados/dadosc&c/templates/ficha_oficial_cc.pdf",
+    "total_paginas": 1,
+    "dimensoes_pt": {
+      "largura": 612.0,
+      "altura": 792.0
+    },
+    "tipo_formulario": "estatico_vetorial_sem_acroform",
+    "observacoes": [
+      "Ficha oficial de página única (US Letter 612 x 792 pt), sem campos AcroForm; preenchimento via coordenadas vetoriais [x0, y0, x1, y1].",
+      "Na seção Feitiços Conhecidos há espaço impresso para Níveis 0 a 3 (7 linhas com losango de preparação cada); personagens com feitiços de níveis 4–9 podem usar folha anexa no exportador.",
+      "Na seção PV há 12 quadrinhos individuais (1º ao 12º nível); personagens de nível 13+ registram o total na caixa PV e o detalhamento no resumo textual."
+    ]
+  },
+  "paginas": [
+    {
+      "numero_pagina_pdf": 1,
+      "titulo": "Ficha Completa de Personagem — Castles & Crusades",
+      "blocos": {
+        "cabecalho": {
+          "rotulo_oficial": "IDENTIFICAÇÃO DO PERSONAGEM",
+          "campos": [
+            {
+              "id": "nome",
+              "rotulo": "Nome:",
+              "tipo": "texto",
+              "rect": [
+                230.7,
+                36.9,
+                390.0,
+                48.8
+              ]
+            },
+            {
+              "id": "titulos",
+              "rotulo": "Títulos:",
+              "tipo": "texto",
+              "rect": [
+                431.9,
+                36.9,
+                562.2,
+                48.8
+              ]
+            },
+            {
+              "id": "raca",
+              "rotulo": "Raça:",
+              "tipo": "texto",
+              "rect": [
+                228.2,
+                54.0,
+                315.2,
+                65.9
+              ]
+            },
+            {
+              "id": "classe",
+              "rotulo": "Classe:",
+              "tipo": "texto",
+              "rect": [
+                353.5,
+                55.5,
+                440.6,
+                67.3
+              ]
+            },
+            {
+              "id": "nivel",
+              "rotulo": "Nível:",
+              "tipo": "numero",
+              "rect": [
+                473.8,
+                54.6,
+                564.5,
+                65.9
+              ]
+            },
+            {
+              "id": "disposicao",
+              "rotulo": "Disposição:",
+              "tipo": "texto",
+              "rect": [
+                254.1,
+                70.8,
+                328.2,
+                83.1
+              ]
+            },
+            {
+              "id": "idiomas",
+              "rotulo": "Idiomas:",
+              "tipo": "texto",
+              "rect": [
+                370.3,
+                72.2,
+                561.2,
+                84.5
+              ]
+            },
+            {
+              "id": "movimento",
+              "rotulo": "Movimento:",
+              "tipo": "texto",
+              "rect": [
+                255.0,
+                88.5,
+                300.0,
+                101.0
+              ]
+            },
+            {
+              "id": "exp",
+              "rotulo": "Exp:",
+              "tipo": "numero",
+              "rect": [
+                343.7,
+                88.8,
+                417.8,
+                101.0
+              ]
+            },
+            {
+              "id": "prox_exp",
+              "rotulo": "Próx:",
+              "tipo": "numero",
+              "rect": [
+                464.1,
+                88.8,
+                559.5,
+                100.7
+              ]
+            }
+          ]
+        },
+        "atributos": {
+          "rotulo_oficial": "ATRIBUTOS",
+          "formula_siege": "d20 + Nv + Modificador",
+          "campos": [
+            {
+              "id": "forca",
+              "sigla": "FOR",
+              "rotulo": "Força",
+              "jogadas_protecao": [
+                "Paralisia",
+                "Constrição"
+              ],
+              "primario_circulo_rect": [
+                50.7,
+                160.4,
+                57.5,
+                167.2
+              ],
+              "valor_rect": [
+                116.0,
+                153.8,
+                144.0,
+                173.8
+              ],
+              "modificador_rect": [
+                147.0,
+                153.8,
+                174.0,
+                173.8
+              ]
+            },
+            {
+              "id": "destreza",
+              "sigla": "DES",
+              "rotulo": "Destreza",
+              "jogadas_protecao": [
+                "Arma de Sopro",
+                "Armadilhas"
+              ],
+              "primario_circulo_rect": [
+                50.7,
+                202.3,
+                57.5,
+                209.1
+              ],
+              "valor_rect": [
+                116.0,
+                195.7,
+                144.0,
+                215.7
+              ],
+              "modificador_rect": [
+                147.0,
+                195.7,
+                174.0,
+                215.7
+              ]
+            },
+            {
+              "id": "constituicao",
+              "sigla": "CON",
+              "rotulo": "Constituição",
+              "jogadas_protecao": [
+                "Doenças",
+                "Dreno de Energia",
+                "Veneno"
+              ],
+              "primario_circulo_rect": [
+                50.7,
+                250.3,
+                57.5,
+                257.1
+              ],
+              "valor_rect": [
+                116.0,
+                243.7,
+                144.0,
+                263.7
+              ],
+              "modificador_rect": [
+                147.0,
+                243.7,
+                174.0,
+                263.7
+              ]
+            },
+            {
+              "id": "inteligencia",
+              "sigla": "INT",
+              "rotulo": "Inteligência",
+              "jogadas_protecao": [
+                "Magia Arcana",
+                "Ilusões"
+              ],
+              "primario_circulo_rect": [
+                50.7,
+                297.3,
+                57.5,
+                304.1
+              ],
+              "valor_rect": [
+                116.0,
+                290.7,
+                144.0,
+                310.7
+              ],
+              "modificador_rect": [
+                147.0,
+                290.7,
+                174.0,
+                310.7
+              ]
+            },
+            {
+              "id": "sabedoria",
+              "sigla": "SAB",
+              "rotulo": "Sabedoria",
+              "jogadas_protecao": [
+                "Confusão",
+                "Ataques Visuais",
+                "Magia Divina",
+                "Petrificação",
+                "Polimorfia"
+              ],
+              "primario_circulo_rect": [
+                50.7,
+                345.3,
+                57.5,
+                352.1
+              ],
+              "valor_rect": [
+                116.0,
+                338.7,
+                144.0,
+                358.7
+              ],
+              "modificador_rect": [
+                147.0,
+                338.7,
+                174.0,
+                358.7
+              ]
+            },
+            {
+              "id": "carisma",
+              "sigla": "CAR",
+              "rotulo": "Carisma",
+              "jogadas_protecao": [
+                "Ataques Mortais",
+                "Encantamento",
+                "Medo"
+              ],
+              "primario_circulo_rect": [
+                50.7,
+                402.7,
+                57.5,
+                409.5
+              ],
+              "valor_rect": [
+                116.0,
+                396.1,
+                144.0,
+                416.1
+              ],
+              "modificador_rect": [
+                147.0,
+                396.1,
+                174.0,
+                416.1
+              ]
+            }
+          ]
+        },
+        "classe_armadura": {
+          "rotulo_oficial": "CA",
+          "formula": "10 + Armadura + Escudo + Mod + Magia + Var",
+          "ca_total_rect": [
+            184.7,
+            124.9,
+            230.8,
+            156.1
+          ],
+          "parcelas": [
+            {
+              "id": "armadura",
+              "rotulo": "Armadura",
+              "rect": [
+                267.7,
+                134.0,
+                291.6,
+                149.2
+              ]
+            },
+            {
+              "id": "escudo",
+              "rotulo": "Escudo",
+              "rect": [
+                304.6,
+                133.9,
+                328.5,
+                149.2
+              ]
+            },
+            {
+              "id": "mod_destreza",
+              "rotulo": "Mod",
+              "rect": [
+                342.2,
+                134.0,
+                366.1,
+                149.2
+              ]
+            },
+            {
+              "id": "magia",
+              "rotulo": "Magia",
+              "rect": [
+                379.1,
+                133.7,
+                403.0,
+                148.9
+              ]
+            },
+            {
+              "id": "var",
+              "rotulo": "Var",
+              "rect": [
+                415.7,
+                133.7,
+                439.6,
+                148.9
+              ]
+            }
+          ],
+          "ferimentos_e_condicoes_rect": [
+            449.6,
+            109.3,
+            559.5,
+            152.4
+          ],
+          "equipamento_defensivo": {
+            "faixa_rect": [
+              179.2,
+              161.6,
+              561.2,
+              176.8
+            ],
+            "armadura_rect": [
+              222.0,
+              162.5,
+              330.0,
+              176.0
+            ],
+            "escudo_rect": [
+              365.0,
+              162.5,
+              438.0,
+              176.0
+            ],
+            "elmo_rect": [
+              468.0,
+              162.5,
+              559.0,
+              176.0
+            ]
+          }
+        },
+        "pontos_de_vida": {
+          "rotulo_oficial": "PV",
+          "pv_total_rect": [
+            212.0,
+            184.0,
+            286.0,
+            210.0
+          ],
+          "por_nivel": [
+            {
+              "nivel": 1,
+              "rotulo": "1º",
+              "rect": [
+                296.4,
+                190.3,
+                315.7,
+                205.6
+              ]
+            },
+            {
+              "nivel": 2,
+              "rotulo": "2º",
+              "rect": [
+                318.5,
+                190.4,
+                337.8,
+                205.6
+              ]
+            },
+            {
+              "nivel": 3,
+              "rotulo": "3º",
+              "rect": [
+                340.1,
+                190.3,
+                359.4,
+                205.6
+              ]
+            },
+            {
+              "nivel": 4,
+              "rotulo": "4º",
+              "rect": [
+                362.2,
+                190.4,
+                381.5,
+                205.6
+              ]
+            },
+            {
+              "nivel": 5,
+              "rotulo": "5º",
+              "rect": [
+                383.9,
+                190.3,
+                403.2,
+                205.6
+              ]
+            },
+            {
+              "nivel": 6,
+              "rotulo": "6º",
+              "rect": [
+                406.0,
+                190.4,
+                425.3,
+                205.6
+              ]
+            },
+            {
+              "nivel": 7,
+              "rotulo": "7º",
+              "rect": [
+                427.6,
+                190.3,
+                446.9,
+                205.6
+              ]
+            },
+            {
+              "nivel": 8,
+              "rotulo": "8º",
+              "rect": [
+                449.7,
+                190.4,
+                469.0,
+                205.6
+              ]
+            },
+            {
+              "nivel": 9,
+              "rotulo": "9º",
+              "rect": [
+                471.4,
+                190.4,
+                490.7,
+                205.6
+              ]
+            },
+            {
+              "nivel": 10,
+              "rotulo": "10º",
+              "rect": [
+                493.5,
+                190.4,
+                512.8,
+                205.6
+              ]
+            },
+            {
+              "nivel": 11,
+              "rotulo": "11º",
+              "rect": [
+                515.1,
+                190.4,
+                534.4,
+                205.6
+              ]
+            },
+            {
+              "nivel": 12,
+              "rotulo": "12º",
+              "rect": [
+                537.2,
+                190.4,
+                556.5,
+                205.6
+              ]
+            }
+          ]
+        },
+        "armas": {
+          "rotulo_oficial": "ARMAS",
+          "slots": [
+            {
+              "indice": 1,
+              "box_rect": [
+                178.7,
+                218.3,
+                560.7,
+                245.2
+              ],
+              "campos": {
+                "nome_arma": [
+                  182.0,
+                  230.3,
+                  265.0,
+                  245.2
+                ],
+                "bpa": [
+                  268.0,
+                  230.3,
+                  286.0,
+                  245.2
+                ],
+                "mod_ataque": [
+                  294.0,
+                  230.3,
+                  312.0,
+                  245.2
+                ],
+                "var_ataque": [
+                  318.0,
+                  230.3,
+                  336.0,
+                  245.2
+                ],
+                "magia_ataque": [
+                  344.0,
+                  230.3,
+                  366.0,
+                  245.2
+                ],
+                "total_ataque": [
+                  373.0,
+                  230.3,
+                  398.0,
+                  245.2
+                ],
+                "dano_base": [
+                  404.0,
+                  230.3,
+                  434.0,
+                  245.2
+                ],
+                "mod_dano": [
+                  442.0,
+                  230.3,
+                  462.0,
+                  245.2
+                ],
+                "var_dano": [
+                  472.0,
+                  230.3,
+                  492.0,
+                  245.2
+                ],
+                "magia_dano": [
+                  500.0,
+                  230.3,
+                  524.0,
+                  245.2
+                ],
+                "total_dano": [
+                  531.0,
+                  230.3,
+                  558.0,
+                  245.2
+                ]
+              }
+            },
+            {
+              "indice": 2,
+              "box_rect": [
+                178.7,
+                249.9,
+                560.7,
+                276.8
+              ],
+              "campos": {
+                "nome_arma": [
+                  182.0,
+                  261.9,
+                  265.0,
+                  276.8
+                ],
+                "bpa": [
+                  268.0,
+                  261.9,
+                  286.0,
+                  276.8
+                ],
+                "mod_ataque": [
+                  294.0,
+                  261.9,
+                  312.0,
+                  276.8
+                ],
+                "var_ataque": [
+                  318.0,
+                  261.9,
+                  336.0,
+                  276.8
+                ],
+                "magia_ataque": [
+                  344.0,
+                  261.9,
+                  366.0,
+                  276.8
+                ],
+                "total_ataque": [
+                  373.0,
+                  261.9,
+                  398.0,
+                  276.8
+                ],
+                "dano_base": [
+                  404.0,
+                  261.9,
+                  434.0,
+                  276.8
+                ],
+                "mod_dano": [
+                  442.0,
+                  261.9,
+                  462.0,
+                  276.8
+                ],
+                "var_dano": [
+                  472.0,
+                  261.9,
+                  492.0,
+                  276.8
+                ],
+                "magia_dano": [
+                  500.0,
+                  261.9,
+                  524.0,
+                  276.8
+                ],
+                "total_dano": [
+                  531.0,
+                  261.9,
+                  558.0,
+                  276.8
+                ]
+              }
+            }
+          ]
+        },
+        "habilidades": {
+          "habilidades_raca": {
+            "rotulo_oficial": "Habilidades da Raça",
+            "rect": [
+              213.0,
+              302.1,
+              420.7,
+              401.1
+            ]
+          },
+          "habilidades_classe": {
+            "rotulo_oficial": "Habilidades da Classe",
+            "rect": [
+              212.4,
+              409.6,
+              420.0,
+              513.3
+            ]
+          }
+        },
+        "equipamentos_e_moedas": {
+          "itens_e_equipamentos": {
+            "rotulo_oficial": "Itens e Equipamentos",
+            "rect": [
+              37.5,
+              468.7,
+              173.9,
+              672.3
+            ]
+          },
+          "itens_magicos": {
+            "rotulo_oficial": "Itens Mágicos",
+            "rect": [
+              184.1,
+              541.9,
+              299.5,
+              635.1
+            ]
+          },
+          "pocoes": {
+            "rotulo_oficial": "Poções",
+            "rect": [
+              307.5,
+              541.9,
+              422.8,
+              635.1
+            ]
+          },
+          "recursos_viagem": {
+            "rotulo_oficial": "Recursos de Viagem",
+            "agua_quadrinhos": 42,
+            "comida_quadrinhos": 42,
+            "notas_rect": [
+              332.7,
+              656.5,
+              427.4,
+              741.0
+            ]
+          },
+          "moedas": [
+            {
+              "id": "ouro",
+              "rotulo": "Ouro:",
+              "rect": [
+                72.0,
+                682.1,
+                179.6,
+                694.8
+              ]
+            },
+            {
+              "id": "prata",
+              "rotulo": "Prata:",
+              "rect": [
+                72.3,
+                702.2,
+                179.8,
+                714.9
+              ]
+            },
+            {
+              "id": "cobre",
+              "rotulo": "Cobre:",
+              "rect": [
+                72.3,
+                722.7,
+                179.8,
+                735.5
+              ]
+            }
+          ]
+        },
+        "feiticos_conhecidos": {
+          "rotulo_oficial": "Feitiços Conhecidos",
+          "niveis": [
+            {
+              "nivel": 0,
+              "rotulo": "Nível 0",
+              "espacos_dia_rect": [
+                488.0,
+                298.0,
+                545.0,
+                310.0
+              ],
+              "linhas": [
+                {
+                  "linha": 1,
+                  "preparado_losango_rect": [
+                    433.9,
+                    316.8,
+                    441.9,
+                    324.8
+                  ],
+                  "nome_rect": [
+                    451.0,
+                    315.3,
+                    558.8,
+                    326.3
+                  ]
+                },
+                {
+                  "linha": 2,
+                  "preparado_losango_rect": [
+                    433.9,
+                    329.9,
+                    441.9,
+                    337.8
+                  ],
+                  "nome_rect": [
+                    451.0,
+                    328.4,
+                    558.8,
+                    339.3
+                  ]
+                },
+                {
+                  "linha": 3,
+                  "preparado_losango_rect": [
+                    433.9,
+                    342.9,
+                    441.9,
+                    350.9
+                  ],
+                  "nome_rect": [
+                    451.0,
+                    341.4,
+                    558.8,
+                    352.4
+                  ]
+                },
+                {
+                  "linha": 4,
+                  "preparado_losango_rect": [
+                    433.9,
+                    356.0,
+                    441.9,
+                    363.9
+                  ],
+                  "nome_rect": [
+                    451.0,
+                    354.5,
+                    558.8,
+                    365.4
+                  ]
+                },
+                {
+                  "linha": 5,
+                  "preparado_losango_rect": [
+                    433.9,
+                    368.6,
+                    441.9,
+                    376.6
+                  ],
+                  "nome_rect": [
+                    451.0,
+                    367.1,
+                    558.8,
+                    378.1
+                  ]
+                },
+                {
+                  "linha": 6,
+                  "preparado_losango_rect": [
+                    433.9,
+                    379.7,
+                    441.9,
+                    387.6
+                  ],
+                  "nome_rect": [
+                    451.0,
+                    378.2,
+                    558.8,
+                    389.1
+                  ]
+                },
+                {
+                  "linha": 7,
+                  "preparado_losango_rect": [
+                    433.9,
+                    392.8,
+                    441.9,
+                    400.7
+                  ],
+                  "nome_rect": [
+                    451.0,
+                    391.3,
+                    558.8,
+                    402.2
+                  ]
+                }
+              ]
+            },
+            {
+              "nivel": 1,
+              "rotulo": "Nível 1",
+              "espacos_dia_rect": [
+                488.0,
+                414.0,
+                545.0,
+                426.0
+              ],
+              "linhas": [
+                {
+                  "linha": 1,
+                  "preparado_losango_rect": [
+                    434.0,
+                    432.9,
+                    441.9,
+                    440.8
+                  ],
+                  "nome_rect": [
+                    451.0,
+                    431.4,
+                    558.8,
+                    442.3
+                  ]
+                },
+                {
+                  "linha": 2,
+                  "preparado_losango_rect": [
+                    434.0,
+                    446.0,
+                    441.9,
+                    453.9
+                  ],
+                  "nome_rect": [
+                    451.0,
+                    444.5,
+                    558.8,
+                    455.4
+                  ]
+                },
+                {
+                  "linha": 3,
+                  "preparado_losango_rect": [
+                    434.0,
+                    459.0,
+                    441.9,
+                    466.9
+                  ],
+                  "nome_rect": [
+                    451.0,
+                    457.5,
+                    558.8,
+                    468.4
+                  ]
+                },
+                {
+                  "linha": 4,
+                  "preparado_losango_rect": [
+                    434.0,
+                    472.0,
+                    441.9,
+                    480.0
+                  ],
+                  "nome_rect": [
+                    451.0,
+                    470.5,
+                    558.8,
+                    481.5
+                  ]
+                },
+                {
+                  "linha": 5,
+                  "preparado_losango_rect": [
+                    434.0,
+                    484.7,
+                    441.9,
+                    492.6
+                  ],
+                  "nome_rect": [
+                    451.0,
+                    483.2,
+                    558.8,
+                    494.1
+                  ]
+                },
+                {
+                  "linha": 6,
+                  "preparado_losango_rect": [
+                    434.0,
+                    495.8,
+                    441.9,
+                    503.7
+                  ],
+                  "nome_rect": [
+                    451.0,
+                    494.3,
+                    558.8,
+                    505.2
+                  ]
+                },
+                {
+                  "linha": 7,
+                  "preparado_losango_rect": [
+                    434.0,
+                    508.8,
+                    441.9,
+                    516.8
+                  ],
+                  "nome_rect": [
+                    451.0,
+                    507.3,
+                    558.8,
+                    518.3
+                  ]
+                }
+              ]
+            },
+            {
+              "nivel": 2,
+              "rotulo": "Nível 2",
+              "espacos_dia_rect": [
+                488.0,
+                525.0,
+                545.0,
+                537.0
+              ],
+              "linhas": [
+                {
+                  "linha": 1,
+                  "preparado_losango_rect": [
+                    434.1,
+                    544.0,
+                    442.1,
+                    552.0
+                  ],
+                  "nome_rect": [
+                    451.0,
+                    542.5,
+                    558.8,
+                    553.5
+                  ]
+                },
+                {
+                  "linha": 2,
+                  "preparado_losango_rect": [
+                    434.1,
+                    557.1,
+                    442.1,
+                    565.0
+                  ],
+                  "nome_rect": [
+                    451.0,
+                    555.6,
+                    558.8,
+                    566.5
+                  ]
+                },
+                {
+                  "linha": 3,
+                  "preparado_losango_rect": [
+                    434.1,
+                    570.1,
+                    442.1,
+                    578.1
+                  ],
+                  "nome_rect": [
+                    451.0,
+                    568.6,
+                    558.8,
+                    579.6
+                  ]
+                },
+                {
+                  "linha": 4,
+                  "preparado_losango_rect": [
+                    434.1,
+                    583.2,
+                    442.1,
+                    591.1
+                  ],
+                  "nome_rect": [
+                    451.0,
+                    581.7,
+                    558.8,
+                    592.6
+                  ]
+                },
+                {
+                  "linha": 5,
+                  "preparado_losango_rect": [
+                    434.1,
+                    595.8,
+                    442.1,
+                    603.8
+                  ],
+                  "nome_rect": [
+                    451.0,
+                    594.3,
+                    558.8,
+                    605.3
+                  ]
+                },
+                {
+                  "linha": 6,
+                  "preparado_losango_rect": [
+                    434.1,
+                    606.9,
+                    442.1,
+                    614.9
+                  ],
+                  "nome_rect": [
+                    451.0,
+                    605.4,
+                    558.8,
+                    616.4
+                  ]
+                },
+                {
+                  "linha": 7,
+                  "preparado_losango_rect": [
+                    434.1,
+                    620.0,
+                    442.1,
+                    627.9
+                  ],
+                  "nome_rect": [
+                    451.0,
+                    618.5,
+                    558.8,
+                    629.4
+                  ]
+                }
+              ]
+            },
+            {
+              "nivel": 3,
+              "rotulo": "Nível 3",
+              "espacos_dia_rect": [
+                488.0,
+                637.0,
+                545.0,
+                649.0
+              ],
+              "linhas": [
+                {
+                  "linha": 1,
+                  "preparado_losango_rect": [
+                    434.6,
+                    655.4,
+                    442.6,
+                    663.3
+                  ],
+                  "nome_rect": [
+                    451.0,
+                    653.9,
+                    558.8,
+                    664.8
+                  ]
+                },
+                {
+                  "linha": 2,
+                  "preparado_losango_rect": [
+                    434.6,
+                    668.5,
+                    442.6,
+                    676.4
+                  ],
+                  "nome_rect": [
+                    451.0,
+                    667.0,
+                    558.8,
+                    677.9
+                  ]
+                },
+                {
+                  "linha": 3,
+                  "preparado_losango_rect": [
+                    434.6,
+                    681.5,
+                    442.6,
+                    689.4
+                  ],
+                  "nome_rect": [
+                    451.0,
+                    680.0,
+                    558.8,
+                    690.9
+                  ]
+                },
+                {
+                  "linha": 4,
+                  "preparado_losango_rect": [
+                    434.6,
+                    694.5,
+                    442.6,
+                    702.5
+                  ],
+                  "nome_rect": [
+                    451.0,
+                    693.0,
+                    558.8,
+                    704.0
+                  ]
+                },
+                {
+                  "linha": 5,
+                  "preparado_losango_rect": [
+                    434.6,
+                    707.2,
+                    442.6,
+                    715.1
+                  ],
+                  "nome_rect": [
+                    451.0,
+                    705.7,
+                    558.8,
+                    716.6
+                  ]
+                },
+                {
+                  "linha": 6,
+                  "preparado_losango_rect": [
+                    434.6,
+                    718.3,
+                    442.6,
+                    726.2
+                  ],
+                  "nome_rect": [
+                    451.0,
+                    716.8,
+                    558.8,
+                    727.7
+                  ]
+                },
+                {
+                  "linha": 7,
+                  "preparado_losango_rect": [
+                    434.6,
+                    731.3,
+                    442.6,
+                    739.3
+                  ],
+                  "nome_rect": [
+                    451.0,
+                    729.8,
+                    558.8,
+                    740.8
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
