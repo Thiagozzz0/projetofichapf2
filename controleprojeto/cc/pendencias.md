@@ -6,14 +6,13 @@ Lista viva e priorizada das etapas para construir o gerador de fichas de **Castl
 
 ## 1. Materiais de Referência e Conversão para JSON (`ref/cc/` → `dados/dadosc&c/`)
 
-- [ ] **Receber e mapear os PDFs recortados em `ref/cc/`**
-  - Organizar os recortes temáticos da 1ª Edição Brasileira (Atributos/Regras Básicas, Raças, Classes, Equipamentos, Magias e Ficha Oficial) para conversão gradual, um arquivo por vez.
-- [ ] **Converter Atributos, Sistema SIEGE e Regras Básicas** → `dados/dadosc&c/regras_basicas.json`
-- [ ] **Converter Raças** → `dados/dadosc&c/racas.json`
-- [ ] **Converter Classes** → `dados/dadosc&c/classes.json` (ou dividido por leva, se necessário)
-- [ ] **Converter Equipamentos (Armas, Armaduras, Escudos, Itens e Carga)** → `dados/dadosc&c/equipamentos.json`
-- [ ] **Converter Magias (Listas por Classe e Descrições)** → `dados/dadosc&c/magias.json`
-- [ ] **Mapear a Ficha Oficial de C&C** → `dados/dadosc&c/estrutura_ficha.json` (e template PDF, se aplicável)
+- [ ] **Converter Classes — Parte 1 (`ref/cc/C&C Classes 01.pdf`)** → `dados/dadosc&c/classes01.json`
+- [ ] **Converter Classes — Parte 2 (`ref/cc/C&C classes 02.pdf`)** → `dados/dadosc&c/classes02.json`
+- [ ] **Converter Classes — Parte 3 (`ref/cc/C&C classes 03.pdf`)** → `dados/dadosc&c/classes03.json`
+- [ ] **Converter Raças** → `dados/dadosc&c/racas.json` *(aguardando PDF recortado em `ref/cc/`)*
+- [ ] **Converter Equipamentos (Armas, Armaduras, Escudos, Itens e Carga)** → `dados/dadosc&c/equipamentos.json` *(aguardando PDF em `ref/cc/`)*
+- [ ] **Converter Magias (Listas por Classe e Descrições)** → `dados/dadosc&c/magias.json` *(aguardando PDF em `ref/cc/`)*
+- [ ] **Mapear a Ficha Oficial de C&C** → `dados/dadosc&c/estrutura_ficha.json` *(aguardando PDF em `ref/cc/`)*
 
 ---
 

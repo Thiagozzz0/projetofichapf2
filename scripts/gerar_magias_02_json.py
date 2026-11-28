@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Any
 
 RAIZ_PROJETO = Path(__file__).resolve().parent.parent
-CAMINHO_PDF = RAIZ_PROJETO / "ref" / "Enchacent02.pdf"
+CAMINHO_PDF = RAIZ_PROJETO / "ref" / "pf2" / "Enchacent02.pdf"
 CAMINHO_MAGIAS_01 = RAIZ_PROJETO / "dados" / "dadospf2" / "magias01.json"
 CAMINHO_SAIDA = RAIZ_PROJETO / "dados" / "dadospf2" / "magias02.json"
 

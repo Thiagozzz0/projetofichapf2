@@ -11,7 +11,7 @@ import pymupdf
 
 
 RAIZ_PROJETO = Path(__file__).resolve().parent.parent
-CAMINHO_PDF = RAIZ_PROJETO / "ref" / "Enchanced 01.pdf"
+CAMINHO_PDF = RAIZ_PROJETO / "ref" / "pf2" / "Enchanced 01.pdf"
 CAMINHO_SAIDA = RAIZ_PROJETO / "dados" / "dadospf2" / "magias01.json"
 
 DESLOCAMENTO_PAGINA_LIVRO = 297  # Índice 0 do PDF corresponde à pág. 297 do Livro Básico
